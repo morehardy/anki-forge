@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-acceptance-with-actual-rebuild",
+  "status": "passed",
+  "commit": "89e4ae7056938b2e357f0e93fef20889130e7f9f",
+  "inputSha256": "046cebcb87a544f0c5321627f32856bbba30322804288c68b281abf754a29d4b",
+  "sourceChange": "Task-oriented page openings, descriptions and quickstart titles (3cf5aed), the zh-CN Python quickstart description restoring zh-CN-core-03 (89e4ae7), and check:examples resolving the inspector crates from the workspace lock (05dbba1).",
+  "releaseLocales": [
+    "en",
+    "zh-CN"
+  ],
+  "topicsPerLocale": 34,
+  "normalHtml": 68,
+  "markdown": 62,
+  "llms": 2,
+  "unitTests": {
+    "passed": 144,
+    "failed": 0
+  },
+  "astro": {
+    "files": 123,
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "docExamples": {
+    "executions": 14,
+    "apkgOutputs": 23,
+    "log": {
+      "path": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/engineering/doc-examples.log",
+      "sha256": "0c3de9cd430f7047c8e569c9bbd0be0ecac1de5a4231b3d1a8ef444ccfe44d06"
+    }
+  },
+  "actualRebuildFilesPerConfiguration": 133,
+  "browserTestsPerConfiguration": 16,
+  "actualUsageTasks": 24,
+  "independentAiMachineReadTasks": 16,
+  "search": {
+    "en": {
+      "core": "12/12",
+      "positive": "25/25",
+      "negative": "5/5"
+    },
+    "zh-CN": {
+      "core": "12/12",
+      "positive": "24/25",
+      "negative": "5/5"
+    }
+  },
+  "sourceReview": {
+    "rounds": [
+      {
+        "round": "task-descriptions",
+        "candidate": {
+          "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-task-descriptions-34.json",
+          "sha256": "c90a215e990eb6e1d4b5b40ab95e725b9d02adad9531ff93dff4a2972fc2be4e"
+        },
+        "technicalAudit": {
+          "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-34-audit.json",
+          "sha256": "a802efe2c1911942077ed3a98a23f29e6a8e70cd82351e0e2fab1d41767c8e5d"
+        },
+        "linguisticDelta": {
+          "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-task-descriptions-review.json",
+          "sha256": "e6469cc63b2507a99bec1c7eaf5159ac1552dd84a66f23957c6f8afcb6f68918"
+        },
+        "records": 58
+      },
+      {
+        "round": "python-qa",
+        "candidate": {
+          "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-python-qa-34.json",
+          "sha256": "019c3aa6f68418075b48da8bde9e4bb94597dfe4b97738fd6951664ae024f243"
+        },
+        "technicalAudit": {
+          "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-audit.json",
+          "sha256": "08dc7ec78750439641d5545b745d4248f327a99f2f4561fb3b1c8431c2ec7e5b"
+        },
+        "linguisticDelta": {
+          "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-python-qa-review.json",
+          "sha256": "95a2b7e8b906b5592f3d87b0a1616ca3103a3e2cee2a6c11acb9c76448a8ef75"
+        },
+        "records": 1
+      }
+    ],
+    "technical": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review.json",
+      "sha256": "dca0c765ef68fb90b19984bb3109d6e6ae4c6a10939da0e5e5d754d7dd2587f3"
+    },
+    "linguistic": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-source-review.json",
+      "sha256": "e9345a1635b58748b1fd999e6715c92c59d1bd42f705f198363bd25133d79ee9"
+    },
+    "recordsCurrent": 68
+  },
+  "reusedExecutions": {
+    "note": "SDK executions from 2026-10-29 against published ankiforge 0.3.1, reused because every bound source and dependency file has identical bytes.",
+    "inputs": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/execution-inputs.json",
+      "sha256": "eac34c08559670f7758e563ade4e358d10c8053f23713b6fb5e1c7dd129e6303"
+    },
+    "publicRecipeLog": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-recipe.log",
+      "sha256": "93778954b0e88e66d8d3ac38502727f39164b9ea8f2135303d34d45d54bbed37"
+    }
+  },
+  "rejectedIntermediate": {
+    "path": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/rejected-search-regression/engineering/prefix/release-evidence.json",
+    "sha256": "1239421114543bdf25bb83517cb11a7296a57945a82a8d0d42c222f3c644f29f",
+    "reason": "check:search failed: zh-CN-core-03 lost the Python quickstart after 3cf5aed; fixed in 89e4ae7."
+  },
+  "knownMinorLimitations": [
+    "zh-CN-variant-03 remains a recorded miss within the fixed at-least 23/25 positive threshold.",
+    "Earlier minor linguistic observations remain, plus nine new minor wording observations from the task-descriptions round; no major/critical.",
+    "English links to API sections land with the heading under the fixed header (pre-existing scroll-padding-top: 28px).",
+    "Machine-read reviewers recorded minor documentation observations (stale \"from source\" headings, updates page source-checkout commands, media page lacking API links); none blocks a task."
+  ],
+  "engineering": {
+    "root": {
+      "path": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/engineering/root/release-evidence.json",
+      "sha256": "ca965acf861488071bdcceb287a3f5fbb2f48f45a3b7b2ad25d71659ec32f8f4",
+      "manifestSha256": "8c5cc5b995b4b8cce59a7f9ec48140706f931311aa413d51de2c46ba2093447f",
+      "artifactSha256": "e0305f511bb567ddf74051f449a0dc3fdff901c38948f05a219a4ad55783e520",
+      "status": "passed",
+      "actualRebuildScopeFiles": 133,
+      "rebuild": {
+        "path": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/engineering/root/rebuild-results.json",
+        "sha256": "f4fb60d92cf6e0207163882670c3d04dd671101d5572b3274b478b9d1f485611"
+      },
+      "checks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "postBuildReviews": [
+        {
+          "kind": "usage-tasks",
+          "path": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/usage-tasks-root.json",
+          "sha256": "a38611106383c8afd74d5c55a10d0cfc2fa301898d7705cb2bc7c09496493a54",
+          "reviewerRun": "independent-usage-review-task-descriptions-root-2026-10-29"
+        },
+        {
+          "kind": "machine-read",
+          "path": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/machine-read-root.json",
+          "sha256": "1da07d055a4247e6f889e71390d7a4511e1f6928ec0627d5294c50cb6dbd4eff",
+          "reviewerRun": "independent-machine-read-task-descriptions-root-2026-10-29"
+        }
+      ]
+    },
+    "prefix": {
+      "path": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/engineering/prefix/release-evidence.json",
+      "sha256": "cce50ede193a61320a9f613ff2083adbdd373b05d4412dc5fa5f3e1ceded4bb2",
+      "manifestSha256": "7912e426c181423092aeabff2ca13a02a674136430ec3a3607ff6644cb74afc7",
+      "artifactSha256": "e6e0e4802a39adfa99f683b86a34b085d91ae9515bce5444b4d76c2baeea0cc1",
+      "status": "passed",
+      "actualRebuildScopeFiles": 133,
+      "rebuild": {
+        "path": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/engineering/prefix/rebuild-results.json",
+        "sha256": "12be5baf207fd1611364d1dcda744d717ec5225436ab33d27fd0ddbb54ee9216"
+      },
+      "checks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "postBuildReviews": [
+        {
+          "kind": "usage-tasks",
+          "path": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/usage-tasks-prefix.json",
+          "sha256": "4987c40e9b5724c95065827dfd1e6e4212018eeecc8f870c334f845e1fc75d45",
+          "reviewerRun": "independent-usage-review-task-descriptions-prefix-2026-10-29"
+        },
+        {
+          "kind": "machine-read",
+          "path": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/machine-read-prefix.json",
+          "sha256": "d3ab14465004b310110eb393035970abfc68c42c6073f5a29e63102575dd964b",
+          "reviewerRun": "independent-machine-read-task-descriptions-prefix-2026-10-29"
+        }
+      ]
+    }
+  },
+  "notClaimed": [
+    "CI execution for this change",
+    "production deployment or new production machine-resource MIME verification",
+    "search-engine ranking, traffic or external AI recommendation improvement",
+    "new Anki GUI import execution"
+  ]
+}
