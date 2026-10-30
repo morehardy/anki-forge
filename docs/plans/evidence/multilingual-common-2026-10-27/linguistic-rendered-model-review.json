@@ -1,0 +1,2536 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/rendered-label-model-closed",
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-rendered-model-34-closed.json",
+    "sha256": "09458a78501e5e767e0c01db94017b733ca9782a07507e6d8e987c2d7729e7f9"
+  },
+  "prior68TopicReview": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-source-review-before-rendered-model.json",
+    "sha256": "262bae48af524c94424dc6835c6cc5f81205a30f272f8651ec6343e5293eadf8"
+  },
+  "method": {
+    "actualRead": "Read the complete current site/locale/release models; Header/Footer/LanguageSwitcher/HomePage and sidebar configuration; structured-data builder; and the final bounded parser/implementation projection. Independently inspect the resolved runtime label data and actual existing HTML/JSON-LD context in both languages.",
+    "reuse": "All current product inputs that existed in the immutable prior snapshots have identical bytes. Reuse their genuine prior full 68-topic prose/code review explicitly; do not substitute this targeted data review for full-body reading.",
+    "renderedContextLimit": "Existing dist files were read for real string/context inspection only. Their HTML digests are retained below; this report does not assert they are a fresh artifact for the changed review-input algorithm, and does not claim browser/deployment/search-task acceptance.",
+    "parserScope": "Supported literal model arrays plus explicit sidebar/article mappings are projected. Remaining variable/function/import/export implementation is fingerprinted, not executed/interpreted by the review parser. No arbitrary-JavaScript semantic-support claim."
+  },
+  "reusedUnchangedInputFiles": [
+    "anki_forge/examples/docs_publication.rs",
+    "anki_forge/examples/docs_workflow.rs",
+    "anki_forge/examples/json_to_anki.rs",
+    "anki_forge/examples/target_api_basic.rs",
+    "anki_forge/examples/target_api_custom_notetype.rs",
+    "anki_forge/examples/website_showcase.rs",
+    "bindings/node/examples/json_to_anki.mts",
+    "bindings/node/examples/quickstart.mjs",
+    "bindings/python/MIGRATION.md",
+    "bindings/python/examples/csv_to_anki.py",
+    "bindings/python/examples/json_to_anki.py",
+    "bindings/python/examples/quickstart.py",
+    "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+    "docs/ai-anki-cards.md",
+    "docs/ai-quickstart.json",
+    "docs/anki-forge-vs-genanki.md",
+    "docs/api-overview.md",
+    "docs/benchmark-presentation.json",
+    "docs/build-guarantees.md",
+    "docs/cards.md",
+    "docs/compatibility.md",
+    "docs/concepts.md",
+    "docs/csv-to-anki.md",
+    "docs/custom-notetypes.md",
+    "docs/image-occlusion.md",
+    "docs/installation.md",
+    "docs/json-to-anki.md",
+    "docs/media.md",
+    "docs/node/api.md",
+    "docs/node/quick-start.md",
+    "docs/performance/20261008/comparison.csv",
+    "docs/python/api.md",
+    "docs/python/diagnostics.md",
+    "docs/python/genanki-migration.md",
+    "docs/python/quick-start.md",
+    "docs/recipes/csv-to-anki/cards.csv",
+    "docs/rust-api.md",
+    "docs/rust-guide.md",
+    "docs/source-builds.md",
+    "docs/template-bundles.md",
+    "docs/troubleshooting.md",
+    "docs/updates.md",
+    "docs/zh-cn/ai-anki-cards.md",
+    "docs/zh-cn/anki-forge-vs-genanki.md",
+    "docs/zh-cn/api.md",
+    "docs/zh-cn/build-guarantees.md",
+    "docs/zh-cn/cards.md",
+    "docs/zh-cn/compatibility.md",
+    "docs/zh-cn/concepts.md",
+    "docs/zh-cn/csv-to-anki.md",
+    "docs/zh-cn/custom-notetypes.md",
+    "docs/zh-cn/development.md",
+    "docs/zh-cn/genanki-migration.md",
+    "docs/zh-cn/image-occlusion.md",
+    "docs/zh-cn/index.md",
+    "docs/zh-cn/installation.md",
+    "docs/zh-cn/json-to-anki.md",
+    "docs/zh-cn/languages.md",
+    "docs/zh-cn/media.md",
+    "docs/zh-cn/node-api.md",
+    "docs/zh-cn/node-quickstart.md",
+    "docs/zh-cn/python-api.md",
+    "docs/zh-cn/python-diagnostics.md",
+    "docs/zh-cn/python-migration.md",
+    "docs/zh-cn/python-quickstart.md",
+    "docs/zh-cn/quickstart.md",
+    "docs/zh-cn/rust-api.md",
+    "docs/zh-cn/rust-guide.md",
+    "docs/zh-cn/templates.md",
+    "docs/zh-cn/troubleshooting.md",
+    "docs/zh-cn/updates.md",
+    "website/language-briefs.json",
+    "website/legacy-sections.json",
+    "website/locale-model.mjs",
+    "website/scripts/benchmark-presentation.mjs",
+    "website/scripts/search-documents.mjs",
+    "website/search-concepts.json",
+    "website/search-terms.json",
+    "website/search.config.mjs",
+    "website/section-contracts.json",
+    "website/site-model.mjs",
+    "website/src/components/AiQuickstart.astro",
+    "website/src/components/ArticlePage.astro",
+    "website/src/components/BlogPage.astro",
+    "website/src/components/BrandMark.astro",
+    "website/src/components/CardPreview.astro",
+    "website/src/components/CodeBlock.astro",
+    "website/src/components/CopyBlock.astro",
+    "website/src/components/DocsFooter.astro",
+    "website/src/components/DocsHeader.astro",
+    "website/src/components/DocsSearch.astro",
+    "website/src/components/ExampleWorkbench.astro",
+    "website/src/components/ExamplesPage.astro",
+    "website/src/components/Footer.astro",
+    "website/src/components/Header.astro",
+    "website/src/components/HomePage.astro",
+    "website/src/components/HomeShowcase.astro",
+    "website/src/components/Icon.astro",
+    "website/src/components/InstallCommand.astro",
+    "website/src/components/LanguageSwitcher.astro",
+    "website/src/components/PerformanceEvidence.astro",
+    "website/src/components/PostCard.astro",
+    "website/src/components/ThemeControl.astro",
+    "website/src/components/UpdateDemo.astro",
+    "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+    "website/src/content/blog/your-first-anki-deck.mdx",
+    "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+    "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+    "website/src/content/docs/docs/index.mdx",
+    "website/src/content/docs/docs/languages.mdx",
+    "website/src/content/docs/docs/quickstart.mdx",
+    "website/src/content/i18n/en.json",
+    "website/src/content/i18n/zh-CN.json",
+    "website/src/i18n/client-messages.mjs",
+    "website/src/i18n/en.json",
+    "website/src/i18n/format-message.mjs",
+    "website/src/i18n/messages.mjs",
+    "website/src/i18n/zh-CN.json",
+    "website/src/layouts/SiteLayout.astro",
+    "website/src/lib/ai-quickstart.mjs",
+    "website/src/lib/examples.ts",
+    "website/src/lib/search-terms.mjs",
+    "website/src/lib/search.mjs",
+    "website/src/route-middleware.ts",
+    "website/src/scripts/docs-search.ts",
+    "website/src/scripts/site.ts"
+  ],
+  "newlyDeclaredInputFilesActuallyRead": [
+    "website/locale-model.mjs",
+    "website/release-locales.json"
+  ],
+  "productInputByteChangesSincePreviousReview": [],
+  "files": {
+    "website/site-model.mjs": {
+      "sha256": "7cfab12d586121fea3cc862d0efafe70a2bb8f7563715c90010b6909bd96a24d",
+      "text": "import { catalogs } from './src/i18n/messages.mjs';\n\nimport { configuredLocales, locales, localeIds, localePath, resolveLocalePath } from './locale-model.mjs';\nexport { configuredLocales, locales, localeIds, releaseLocales, stripBase } from './locale-model.mjs';\n\n// Public topic identities are independent of translated titles and URL prefixes.\nconst documents = [\n  {\n    \"name\": \"docs\",\n    \"source\": \"website/src/content/docs/docs/index.mdx\",\n    \"route\": \"/docs/\",\n    \"title\": \"Build Anki decks from code\",\n    \"description\": \"Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.\",\n    \"zhTitle\": \"用代码生成 Anki 牌组\",\n    \"zhDescription\": \"选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。\"\n  },\n  {\n    \"name\": \"languages\",\n    \"source\": \"website/src/content/docs/docs/languages.mdx\",\n    \"route\": \"/docs/languages/\",\n    \"title\": \"Choose your language\",\n    \"description\": \"Install the public Rust, Node or Python package and export your first Anki deck.\",\n    \"zhTitle\": \"选择开发语言\",\n    \"zhDescription\": \"安装公开 Rust、Node 或 Python 包，导出第一个 Anki 牌组。\"\n  },\n  {\n    \"name\": \"quickstart\",\n    \"source\": \"website/src/content/docs/docs/quickstart.mdx\",\n    \"route\": \"/docs/quickstart/\",\n    \"title\": \"Generate an Anki APKG with Rust\",\n    \"description\": \"Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.\",\n    \"zhTitle\": \"用 Rust 生成 Anki APKG\",\n    \"zhDescription\": \"安装公开 Rust 包，编写西班牙语卡片并导出持久保存的 APKG。\"\n  },\n  {\n    \"source\": \"docs/json-to-anki.md\",\n    \"route\": \"/docs/json-to-anki/\",\n    \"name\": \"json-to-anki\",\n    \"title\": \"Generate and update Anki decks from JSON\",\n    \"description\": \"Read JSON with Rust, Python or TypeScript, package images and audio, then review an answer-only APKG update.\",\n    \"zhTitle\": \"用 JSON 数据生成并更新 Anki 牌组\",\n    \"zhDescription\": \"用 Rust、Node 或 Python 读取 JSON，打包图片和音频，再检查仅修改答案的更新。\"\n  },\n  {\n    \"source\": \"docs/csv-to-anki.md\",\n    \"route\": \"/docs/csv-to-anki/\",\n    \"name\": \"csv-to-anki\",\n    \"title\": \"CSV to Anki: generate flashcards with Python\",\n    \"description\": \"Convert a UTF-8 vocabulary spreadsheet to an Anki APKG with a complete Python script, sample CSV, stable note IDs and import checks.\",\n    \"zhTitle\": \"CSV 转 Anki：用 Python 批量生成卡片\",\n    \"zhDescription\": \"用完整 Python 脚本将 UTF-8 CSV 词汇表转换为 Anki APKG，包含示例数据、稳定笔记 ID 和导入检查步骤。\"\n  },\n  {\n    \"source\": \"docs/ai-anki-cards.md\",\n    \"route\": \"/docs/ai-anki-cards/\",\n    \"name\": \"ai-anki-cards\",\n    \"title\": \"AI-assisted Anki flashcards: from notes to APKG\",\n    \"description\": \"Draft Anki cards with an AI assistant, review the answers, then export an APKG using Anki Forge. Follow a CSV workflow or use a coding-assistant brief.\",\n    \"zhTitle\": \"AI 辅助生成 Anki 卡片：从笔记到 APKG\",\n    \"zhDescription\": \"让 AI 助手根据笔记起草卡片，核对答案后用 Anki Forge 导出 APKG。提供 CSV 制卡流程和编程助手任务说明入口。\"\n  },\n  {\n    \"source\": \"docs/anki-forge-vs-genanki.md\",\n    \"route\": \"/docs/anki-forge-vs-genanki/\",\n    \"name\": \"anki-forge-vs-genanki\",\n    \"title\": \"Anki Forge vs genanki: choose for your workflow\",\n    \"description\": \"Compare Anki APKG authoring workflows, runtime requirements, update review and migration costs.\",\n    \"zhTitle\": \"Anki Forge 与 genanki：如何选择\",\n    \"zhDescription\": \"比较 Anki APKG 编写流程、运行环境、更新检查和迁移成本。\"\n  },\n  {\n    \"source\": \"docs/source-builds.md\",\n    \"route\": \"/docs/development/\",\n    \"name\": \"development\",\n    \"title\": \"Build SDKs from source\",\n    \"description\": \"Build SDKs and examples from a source checkout.\",\n    \"zhTitle\": \"从源码构建 SDK\",\n    \"zhDescription\": \"从仓库源码构建 SDK，运行示例并区分公开包与源码功能。\"\n  },\n  {\n    \"source\": \"docs/rust-guide.md\",\n    \"route\": \"/docs/rust-guide/\",\n    \"name\": \"rust-guide\",\n    \"title\": \"Rust authoring guide\",\n    \"description\": \"Projects, validation, media and updates through the supported Rust API.\",\n    \"zhTitle\": \"Rust 编写指南\",\n    \"zhDescription\": \"通过受支持的 Rust API 创建 Project、校验内容、处理媒体与更新。\"\n  },\n  {\n    \"source\": \"docs/template-bundles.md\",\n    \"route\": \"/docs/templates/\",\n    \"name\": \"templates\",\n    \"title\": \"Reusable Anki card templates, CSS and media\",\n    \"description\": \"Import complete reusable Cloze and normal templates, CSS and media.\",\n    \"zhTitle\": \"复用 Anki 卡片模板、CSS 与媒体\",\n    \"zhDescription\": \"导入完整的普通与 Cloze 模板、CSS 和媒体。\"\n  },\n  {\n    \"source\": \"docs/api-overview.md\",\n    \"route\": \"/docs/api/\",\n    \"name\": \"api\",\n    \"title\": \"Public API overview\",\n    \"description\": \"Find Rust, Python and Node APIs for authoring, media, diagnostics and updates.\",\n    \"zhTitle\": \"公开 API 总览\",\n    \"zhDescription\": \"查找 Rust、Node 和 Python 的内容编写、媒体、诊断与更新 API。\"\n  },\n  {\n    \"source\": \"docs/installation.md\",\n    \"route\": \"/docs/installation/\",\n    \"name\": \"installation\",\n    \"title\": \"Add to your application\",\n    \"description\": \"Integrate the Rust crate, configure Cargo dependencies and choose the next guide.\",\n    \"zhTitle\": \"集成到应用\",\n    \"zhDescription\": \"安装公开 Rust 包，配置 Cargo 依赖并选择下一步指南。\"\n  },\n  {\n    \"source\": \"docs/concepts.md\",\n    \"route\": \"/docs/concepts/\",\n    \"name\": \"concepts\",\n    \"title\": \"Core concepts\",\n    \"description\": \"Projects, owned notes and media, stable keys, text and update identity.\",\n    \"zhTitle\": \"核心概念\",\n    \"zhDescription\": \"理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。\"\n  },\n  {\n    \"source\": \"docs/cards.md\",\n    \"route\": \"/docs/cards/\",\n    \"name\": \"cards\",\n    \"title\": \"Generate Anki Basic and Cloze flashcards\",\n    \"description\": \"Build two notes and three cards with a complete verified Rust example.\",\n    \"zhTitle\": \"生成 Anki 问答卡片与 Cloze 填空卡片\",\n    \"zhDescription\": \"运行完整 Rust 示例，用两个笔记生成三张卡片。\"\n  },\n  {\n    \"source\": \"docs/custom-notetypes.md\",\n    \"route\": \"/docs/custom-notetypes/\",\n    \"name\": \"custom-notetypes\",\n    \"title\": \"Custom note types\",\n    \"description\": \"Declare fields, card templates and generation rules for your own content.\",\n    \"zhTitle\": \"自定义笔记类型\",\n    \"zhDescription\": \"为自己的内容定义字段、卡片模板与生成规则。\"\n  },\n  {\n    \"source\": \"docs/media.md\",\n    \"route\": \"/docs/media/\",\n    \"name\": \"media\",\n    \"title\": \"Add images and audio to Anki cards\",\n    \"description\": \"Import images and audio, compose typed content, and manage export names, MIME types and media budgets.\",\n    \"zhTitle\": \"为 Anki 卡片添加图片与音频\",\n    \"zhDescription\": \"导入图片和音频，组合类型化内容，并管理导出名称、MIME 类型与媒体预算。\"\n  },\n  {\n    \"source\": \"docs/image-occlusion.md\",\n    \"route\": \"/docs/image-occlusion/\",\n    \"name\": \"image-occlusion\",\n    \"title\": \"Generate Anki Image Occlusion cards\",\n    \"description\": \"Create rectangle-based image questions in both occlusion modes.\",\n    \"zhTitle\": \"生成 Anki 图片遮挡卡片\",\n    \"zhDescription\": \"用矩形区域创建图像问题，了解两种遮挡模式。\"\n  },\n  {\n    \"source\": \"docs/updates.md\",\n    \"route\": \"/docs/updates/\",\n    \"name\": \"updates\",\n    \"title\": \"Update Anki decks with stable note IDs\",\n    \"description\": \"Compare and build releases using verified original APKG baselines.\",\n    \"zhTitle\": \"用稳定笔记 ID 更新 Anki 牌组\",\n    \"zhDescription\": \"以原始 APKG 为基线比较并构建新版本。\"\n  },\n  {\n    \"source\": \"docs/build-guarantees.md\",\n    \"route\": \"/docs/build-guarantees/\",\n    \"name\": \"build-guarantees\",\n    \"title\": \"Build and output guarantees\",\n    \"description\": \"Understand temporary artifacts, path protection and candidate publication.\",\n    \"zhTitle\": \"构建与输出保证\",\n    \"zhDescription\": \"理解临时产物、路径保护和候选版本发布。\"\n  },\n  {\n    \"source\": \"docs/troubleshooting.md\",\n    \"route\": \"/docs/troubleshooting/\",\n    \"name\": \"troubleshooting\",\n    \"title\": \"Troubleshooting\",\n    \"description\": \"Resolve installation, media, template, identity and output errors.\",\n    \"zhTitle\": \"排查问题\",\n    \"zhDescription\": \"解决安装、媒体、模板、身份与输出错误。\"\n  },\n  {\n    \"source\": \"docs/compatibility.md\",\n    \"route\": \"/docs/compatibility/\",\n    \"name\": \"compatibility\",\n    \"title\": \"Compatibility and releases\",\n    \"description\": \"Published packages, verified environments and Anki client conditions.\",\n    \"zhTitle\": \"兼容性与发布\",\n    \"zhDescription\": \"查看公开包、已验证运行环境和 Anki 客户端条件。\"\n  },\n  {\n    \"source\": \"docs/rust-api.md\",\n    \"route\": \"/docs/rust-api/\",\n    \"name\": \"rust-api\",\n    \"title\": \"Rust API guide\",\n    \"description\": \"Find public authoring methods, build defaults, reports and diagnostic behavior.\",\n    \"zhTitle\": \"Rust API 指南\",\n    \"zhDescription\": \"查找内容编写方法、构建默认值、报告和诊断行为。\"\n  },\n  {\n    \"source\": \"docs/node/quick-start.md\",\n    \"route\": \"/docs/node-quickstart/\",\n    \"name\": \"node-quickstart\",\n    \"title\": \"Generate an Anki APKG with Node.js\",\n    \"description\": \"Install the public Node package and export your first deck.\",\n    \"zhTitle\": \"用 Node.js 生成 Anki APKG\",\n    \"zhDescription\": \"安装公开 Node 包并导出第一个牌组。\"\n  },\n  {\n    \"source\": \"docs/node/api.md\",\n    \"route\": \"/docs/node-api/\",\n    \"name\": \"node-api\",\n    \"title\": \"Node and TypeScript API\",\n    \"description\": \"Public methods, async behavior, build options and reports.\",\n    \"zhTitle\": \"Node 与 TypeScript API\",\n    \"zhDescription\": \"公开方法、异步行为、构建选项和报告。\"\n  },\n  {\n    \"source\": \"docs/python/quick-start.md\",\n    \"route\": \"/docs/python-quickstart/\",\n    \"name\": \"python-quickstart\",\n    \"title\": \"Generate an Anki APKG with Python\",\n    \"description\": \"Install the public Python wheel and generate your first Anki APKG.\",\n    \"zhTitle\": \"用 Python 生成 Anki APKG\",\n    \"zhDescription\": \"安装公开 Python wheel 并生成第一个 Anki APKG。\"\n  },\n  {\n    \"source\": \"docs/python/api.md\",\n    \"route\": \"/docs/python-api/\",\n    \"name\": \"python-api\",\n    \"title\": \"Python API\",\n    \"description\": \"Project, media, build options, reports and temporary artifact ownership.\",\n    \"zhTitle\": \"Python API\",\n    \"zhDescription\": \"Project、媒体、构建选项、报告和临时产物的所有权。\"\n  },\n  {\n    \"source\": \"docs/python/diagnostics.md\",\n    \"route\": \"/docs/python-diagnostics/\",\n    \"name\": \"python-diagnostics\",\n    \"title\": \"Python diagnostics\",\n    \"description\": \"Understand native authoring errors, build reports and update evidence.\",\n    \"zhTitle\": \"Python 诊断\",\n    \"zhDescription\": \"理解原生内容编写错误、构建报告和更新证据。\"\n  },\n  {\n    \"source\": \"bindings/python/MIGRATION.md\",\n    \"route\": \"/docs/python-migration/\",\n    \"name\": \"python-migration\",\n    \"title\": \"Python API transition\",\n    \"description\": \"Use the current owned-value SDK and understand the clean-slate boundary.\",\n    \"zhTitle\": \"Python API 迁移\",\n    \"zhDescription\": \"使用当前拥有值所有权的 SDK，理解新版 API 的迁移边界。\"\n  },\n  {\n    \"source\": \"docs/python/genanki-migration.md\",\n    \"route\": \"/docs/genanki-migration/\",\n    \"name\": \"genanki-migration\",\n    \"title\": \"Move from genanki\",\n    \"description\": \"Understand content, template and media behavior when moving to Anki Forge.\",\n    \"zhTitle\": \"从 genanki 迁移\",\n    \"zhDescription\": \"了解迁入 Anki Forge 时内容、模板与媒体行为的变化。\"\n  }\n];\n\nexport const docGroups = [\n  { label: 'Start here', zh: '从这里开始', ids: ['docs', 'languages', 'quickstart', 'installation', 'concepts', 'anki-forge-vs-genanki'] },\n  { label: 'Guides', zh: '使用指南', ids: ['csv-to-anki', 'json-to-anki', 'ai-anki-cards', 'cards', 'media', 'custom-notetypes', 'templates', 'image-occlusion', 'updates'] },\n  { label: 'Language guides', zh: '开发语言指南', ids: ['rust-guide', 'node-quickstart', 'python-quickstart', 'python-migration', 'genanki-migration'] },\n  { label: 'Reference', zh: '参考', collapsed: true, ids: ['api', 'rust-api', 'node-api', 'python-api', 'build-guarantees', 'compatibility'] },\n  { label: 'Help', zh: '帮助', ids: ['troubleshooting', 'python-diagnostics', 'development'] },\n].map(group => ({ ...group, labels: { en: group.label, 'zh-CN': group.zh } }));\n/** @type {{ id: string, label: Record<string, string> }[]} */\nexport const navigation = [\n  { id: 'docs', label: { en: 'Guide', 'zh-CN': '指南' } },\n  { id: 'examples', label: { en: 'Examples', 'zh-CN': '示例' } },\n  { id: 'blog', label: { en: 'Blog', 'zh-CN': '博客' } },\n];\nexport const footerNavigation = [\n  { id: 'articles', pageId: 'blog', resource: '', label: 'footer.articles' },\n  { id: 'feed', pageId: '', resource: 'feed', label: 'footer.rss' },\n  { id: 'license', pageId: '', resource: 'license', label: 'footer.license' },\n  { id: 'repository', pageId: '', resource: 'repository', label: 'nav.repository' },\n];\nexport const nextTasks = [\n  { pageId: 'json-to-anki', label: 'home.json', primary: true },\n  { pageId: 'csv-to-anki', label: 'home.csv', primary: false },\n  { pageId: 'ai-anki-cards', label: 'home.aiCards', primary: false },\n  { pageId: 'anki-forge-vs-genanki', label: 'home.compare', primary: false },\n];\nexport const homepageModules = ['hero', 'install', 'ai-quickstart', 'performance', 'examples', 'updates', 'features', 'next'];\nconst common = [\n  { id: 'home', route: '/', type: 'home', section: 'home', source: 'website/src/components/HomePage.astro', capabilities: homepageModules },\n  { id: 'examples', route: '/examples/', type: 'examples', section: 'examples', source: 'website/src/components/ExamplesPage.astro', capabilities: ['gallery', 'updates'] },\n  { id: 'blog', route: '/blog/', type: 'blog-list', section: 'blog', source: 'website/src/components/BlogPage.astro', capabilities: ['articles', 'feed'] },\n];\nconst articles = ['your-first-anki-deck', 'stable-ids-and-deck-updates'].map(id => ({\n  id: `blog:${id}`, route: `/blog/${id}/`, type: 'article', section: 'blog',\n  sources: Object.fromEntries(Object.entries(configuredLocales).map(([locale, config]) => [locale, `website/src/content/blog/${config.prefix ? config.prefix.slice(1) + '/' : ''}${id}.mdx`])),\n  capabilities: ['article', 'date'], metadata: { source: 'frontmatter', title: 'title', description: 'description' },\n}));\nexport const pages = [\n  ...common,\n  ...documents.map(doc => ({\n    id: doc.name, route: doc.route, type: 'docs', section: 'docs', sources: Object.fromEntries(Object.entries(configuredLocales).map(([locale, config]) => [locale, locale === 'en' ? doc.source : `docs${config.prefix}/${doc.name === 'docs' ? 'index' : doc.name}.md`])),\n    title: { en: doc.title, 'zh-CN': doc.zhTitle },\n    description: { en: doc.description, 'zh-CN': doc.zhDescription },\n    capabilities: ['sidebar', 'search', 'toc', 'pagination', 'edit', 'code-copy'],\n  })),\n  ...articles,\n].map((page, order) => {\n  const title = ['home', 'examples', 'blog'].includes(page.id)\n    ? Object.fromEntries(localeIds.map(locale => [locale, catalogs[locale]?.[`${page.id}.title`]])) : page.title;\n  const description = ['home', 'examples', 'blog'].includes(page.id)\n    ? Object.fromEntries(localeIds.map(locale => [locale, catalogs[locale]?.[`${page.id}.description`]])) : page.description;\n  const sources = page.sources ?? Object.fromEntries(localeIds.map(locale => [locale, page.source]));\n  return {\n    ...page, title, description, sources, order,\n    // Kept as compatibility views for downstream consumers during migration.\n    source: sources.en, en: page.route, zh: localePath(page.route, 'zh-CN'),\n    metadata: Object.fromEntries(localeIds.map(locale => [locale, { title: title?.[locale], description: description?.[locale] }])),\n  };\n});\nexport const docPages = pages.filter(page => page.type === 'docs');\n\nexport function pagePath(id, locale = 'en', section = '') {\n  const page = pages.find(page => page.id === id);\n  if (!page || !Object.hasOwn(locales, locale)) throw new Error(`Unknown page or release locale: ${id}/${locale}`);\n  return `${localePath(page.route, locale)}${section ? `#${section}` : ''}`;\n}\nexport function resolvePage(pathname, base = '/') {\n  const resolved = resolveLocalePath(pathname, base);\n  if (!resolved) return null;\n  const page = pages.find(page => page.route === resolved.route);\n  return page ? { page, locale: resolved.locale, path: localePath(page.route, resolved.locale) } : null;\n}\nexport function pagePair(pathname, base = '/') {\n  return resolvePage(pathname, base)?.page;\n}\nexport function localeFromPath(pathname, base = '/') {\n  return resolveLocalePath(pathname, base)?.locale ?? 'en';\n}\nexport function documentationEntries(active = localeIds) {\n  return docPages.flatMap(page => active.filter(locale => !page.sources[locale]?.startsWith('website/')).map(locale => ({\n    id: page.id, name: page.id === 'docs' ? 'index' : page.id, locale,\n    source: page.sources[locale], route: pagePath(page.id, locale),\n    title: page.title[locale], description: page.description[locale],\n    output: `src/content/docs${locales[locale].prefix}/docs/${page.id === 'docs' ? 'index' : page.id}.md`,\n  })));\n}\nexport const importedDocs = documentationEntries().filter(entry => entry.locale === 'en');\n// This compatibility name now covers every non-English release locale.\nexport const translatedDocs = documentationEntries().filter(entry => entry.locale !== 'en');\n"
+    },
+    "website/locale-model.mjs": {
+      "sha256": "e357763d9ba16adc611f8f49ce6742fc37e783f2fbbbcada934f5990ab4fa8c7",
+      "text": "import release from './release-locales.json' with { type: 'json' };\n\n// Configuration is deliberately separate from the set selected for a release.\nexport const configuredLocales = {\n  en: { prefix: '', lang: 'en', og: 'en_US', label: 'English', format: 'en-US', starlightKey: 'root', dir: 'ltr' },\n  'zh-CN': { prefix: '/zh-cn', lang: 'zh-CN', og: 'zh_CN', label: '简体中文', format: 'zh-CN', starlightKey: 'zh-cn', dir: 'ltr' },\n  es: { prefix: '/es', lang: 'es', og: 'es_ES', label: 'Español', format: 'es', starlightKey: 'es', dir: 'ltr' },\n  'pt-BR': { prefix: '/pt-br', lang: 'pt-BR', og: 'pt_BR', label: 'Português do Brasil', format: 'pt-BR', starlightKey: 'pt-br', dir: 'ltr' },\n  ja: { prefix: '/ja', lang: 'ja', og: 'ja_JP', label: '日本語', format: 'ja-JP', starlightKey: 'ja', dir: 'ltr' },\n  de: { prefix: '/de', lang: 'de', og: 'de_DE', label: 'Deutsch', format: 'de-DE', starlightKey: 'de', dir: 'ltr' },\n  fr: { prefix: '/fr', lang: 'fr', og: 'fr_FR', label: 'Français', format: 'fr', starlightKey: 'fr', dir: 'ltr' },\n  ru: { prefix: '/ru', lang: 'ru', og: 'ru_RU', label: 'Русский', format: 'ru-RU', starlightKey: 'ru', dir: 'ltr' },\n};\n\nexport function validateReleaseLocales(snapshot, registry = configuredLocales, published = []) {\n  if (snapshot?.schemaVersion !== 1 || !Array.isArray(snapshot.locales) || snapshot.locales[0] !== 'en') throw new Error('Release locales must use schemaVersion 1 and start with en');\n  if (new Set(snapshot.locales).size !== snapshot.locales.length) throw new Error('Duplicate release locale');\n  for (const id of snapshot.locales) if (!Object.hasOwn(registry, id)) throw new Error(`Unknown release locale: ${id}`);\n  for (const id of published) if (!snapshot.locales.includes(id)) throw new Error(`Release cannot remove published locale: ${id}`);\n  return Object.freeze([...snapshot.locales]);\n}\n\nexport const releaseLocales = validateReleaseLocales(release);\nexport const localeIds = releaseLocales;\nexport const locales = Object.freeze(Object.fromEntries(releaseLocales.map(id => [id, configuredLocales[id]])));\nexport const starlightLocales = Object.fromEntries(releaseLocales.map(id => [configuredLocales[id].starlightKey, { label: configuredLocales[id].label, lang: id }]));\n\nexport function localePath(route, locale, registry = configuredLocales) {\n  if (!Object.hasOwn(registry, locale)) throw new Error(`Unknown locale: ${locale}`);\n  if (!route.startsWith('/') || route.startsWith('//')) throw new Error(`Expected site-relative route: ${route}`);\n  return `${registry[locale].prefix}${route}`;\n}\n\nexport function stripBase(pathname, base = '/') {\n  const prefix = base.replace(/\\/$/, '');\n  if (!prefix) return pathname;\n  if (pathname === prefix) return '/';\n  return pathname.startsWith(`${prefix}/`) ? pathname.slice(prefix.length) : null;\n}\n\nexport function resolveLocalePath(pathname, base = '/', active = releaseLocales, registry = configuredLocales) {\n  const route = stripBase(pathname, base);\n  if (route === null) return null;\n  const translated = Object.entries(registry).find(([, locale]) => locale.prefix && (route === locale.prefix || route.startsWith(`${locale.prefix}/`)));\n  if (translated) {\n    const [locale, config] = translated;\n    if (!active.includes(locale)) return null;\n    return { locale, route: route.slice(config.prefix.length) || '/' };\n  }\n  return active.includes('en') ? { locale: 'en', route } : null;\n}\n\nexport function socialImagePath(locale) {\n  if (!Object.hasOwn(locales, locale)) throw new Error(`Unknown release locale: ${locale}`);\n  return `/generated/og${configuredLocales[locale].prefix.replaceAll('/', '-')}.png`;\n}\n"
+    },
+    "website/release-locales.json": {
+      "sha256": "fbbeda31c5c7b0104034586844d44b50e034db8d5bdae1b091408970000572f1",
+      "text": "{\n  \"schemaVersion\": 1,\n  \"locales\": [\"en\", \"zh-CN\"]\n}\n"
+    },
+    "website/scripts/content-review-inputs.mjs": {
+      "sha256": "e22eb2351b6d8bede6b6619e089565f3ac33db0d93cdc75ad503aaa993cb4a21",
+      "text": "import { createHash } from 'node:crypto';\nimport { readFile } from 'node:fs/promises';\nimport path from 'node:path';\nimport { fileURLToPath } from 'node:url';\nimport ts from 'typescript';\n\nexport const digest = value => createHash('sha256').update(value).digest('hex');\nexport const rubricVersion = 'anki-forge-language-quality-v1';\nexport const glossaryVersion = 'anki-forge-technical-terms-v1';\nconst templates = {\n  home: ['HomePage', 'HomeShowcase', 'AiQuickstart', 'InstallCommand', 'PerformanceEvidence', 'ExampleWorkbench', 'CardPreview', 'UpdateDemo', 'CopyBlock'],\n  examples: ['ExamplesPage', 'CardPreview', 'CodeBlock', 'UpdateDemo'],\n  'blog-list': ['BlogPage', 'PostCard'],\n  article: ['ArticlePage', 'CodeBlock'],\n  docs: ['DocsHeader', 'DocsFooter', 'DocsSearch', 'CodeBlock', 'CopyBlock'],\n};\nconst technicalFiles = ['docs/ai-quickstart.json', 'anki_forge/examples/website_showcase.rs', 'anki_forge/examples/docs_workflow.rs', 'anki_forge/examples/json_to_anki.rs', 'bindings/python/examples/json_to_anki.py', 'bindings/node/examples/json_to_anki.mts'];\nconst renderFiles = ['website/src/i18n/messages.mjs', 'website/src/i18n/format-message.mjs', 'website/src/i18n/client-messages.mjs', 'website/src/lib/ai-quickstart.mjs', 'website/src/lib/examples.ts', 'website/src/lib/search-terms.mjs', 'website/src/scripts/site.ts'];\nconst searchFiles = ['website/src/scripts/docs-search.ts', 'website/src/lib/search.mjs', 'website/search.config.mjs', 'website/scripts/search-documents.mjs'];\nconst repository = fileURLToPath(new URL('../../', import.meta.url));\n\n// Read literal model data from the requested root, without executing its modules\n// or reusing the main checkout's cached imports. Comments are not review inputs.\nfunction modelDeclarations(source, filename) {\n  const parsed = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);\n  if (parsed.statements.some(statement => ![\n    ts.isImportDeclaration, ts.isExportDeclaration, ts.isVariableStatement, ts.isFunctionDeclaration, ts.isEmptyStatement,\n  ].some(allowed => allowed(statement)))) throw new Error(`Review model must not mutate declaration data outside supported declarations: ${filename}`);\n  return new Map(parsed.statements.filter(ts.isVariableStatement).flatMap(statement =>\n    statement.declarationList.declarations.map(declaration => [declaration.name.getText(parsed), declaration.initializer])));\n}\n\nfunction modelImplementation(source, filename, projectedNames) {\n  const parsed = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);\n  const printer = ts.createPrinter({ removeComments: true });\n  return parsed.statements.flatMap(statement => {\n    if (ts.isVariableStatement(statement)) return statement.declarationList.declarations\n      .filter(declaration => !projectedNames.includes(declaration.name.getText(parsed)))\n      .map(declaration => printer.printNode(ts.EmitHint.Unspecified, declaration, parsed));\n    if (ts.isFunctionDeclaration(statement) || ts.isImportDeclaration(statement) || ts.isExportDeclaration(statement)) return [printer.printNode(ts.EmitHint.Unspecified, statement, parsed)];\n    return [];\n  });\n}\n\nfunction literal(node) {\n  if (node && (ts.isStringLiteral(node) || ts.isNumericLiteral(node))) return ts.isStringLiteral(node) ? node.text : Number(node.text);\n  if (node?.kind === ts.SyntaxKind.TrueKeyword) return true;\n  if (node?.kind === ts.SyntaxKind.FalseKeyword) return false;\n  if (node?.kind === ts.SyntaxKind.NullKeyword) return null;\n  if (node && ts.isArrayLiteralExpression(node)) return node.elements.map(literal);\n  if (node && ts.isObjectLiteralExpression(node)) return Object.fromEntries(node.properties.map(property => {\n    if (!ts.isPropertyAssignment(property) || (!ts.isIdentifier(property.name) && !ts.isStringLiteral(property.name))) throw new Error('Review model data must use literal property names');\n    return [property.name.text, literal(property.initializer)];\n  }));\n  throw new Error('Review model data must use literals');\n}\n\nfunction property(node, name) {\n  if (!node || !ts.isObjectLiteralExpression(node)) throw new Error(`Missing review model object: ${name}`);\n  return node.properties.find(item => ts.isPropertyAssignment(item) && item.name.text === name)?.initializer;\n}\n\nfunction modelArray(declarations, name, allowTransform = false) {\n  let node = declarations.get(name);\n  let transform, mapper;\n  if (node && ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && node.expression.name.text === 'map') {\n    if (!allowTransform) throw new Error(`Review model array must remain literal: ${name}`);\n    transform = ts.createPrinter({ removeComments: true }).printList(ts.ListFormat.CommaListElements, node.arguments, node.getSourceFile());\n    mapper = node.arguments[0];\n    node = node.expression.expression;\n  }\n  if (!node || !ts.isArrayLiteralExpression(node)) throw new Error(`Missing literal review model array: ${name}`);\n  return { nodes: node.elements, transform, mapper };\n}\n\nfunction renderedModelInputs(files, page, locale) {\n  const model = modelDeclarations(files['website/site-model.mjs'], 'site-model.mjs');\n  const registry = modelDeclarations(files['website/locale-model.mjs'], 'locale-model.mjs').get('configuredLocales');\n  const selected = JSON.parse(files['website/release-locales.json']).locales;\n  const localeData = id => literal(property(registry, id));\n  const current = localeData(locale);\n  const documents = modelArray(model, 'documents').nodes.map(literal);\n  const common = modelArray(model, 'common').nodes.map(node => ({ id: literal(property(node, 'id')), type: literal(property(node, 'type')), route: literal(property(node, 'route')) }));\n  const routes = new Map([...common.map(item => [item.id, item.route]), ...documents.map(item => [item.name, item.route])]);\n  const articles = modelArray(model, 'articles', true);\n  const destination = id => {\n    const route = routes.get(id);\n    if (route) return { id, route: current.prefix + route };\n    if (articles.nodes.some(node => `blog:${literal(node)}` === id)) return { id, prefix: current.prefix, articleRouteDefinition: articles.transform };\n    throw new Error(`Unknown review model destination: ${id}`);\n  };\n  const values = name => modelArray(model, name).nodes.map(literal);\n  const ownDocument = documents.find(document => document.name === page.id);\n  const ownCommon = common.find(item => item.id === page.id);\n  const catalog = JSON.parse(files[`website/src/i18n/${locale}.json`]);\n  const localized = (document, field) => locale === 'en' ? document[field]\n    : locale === 'zh-CN' ? document[`zh${field[0].toUpperCase()}${field.slice(1)}`]\n      : document[`${field}s`]?.[locale];\n  const result = {\n    implementation: {\n      site: modelImplementation(files['website/site-model.mjs'], 'site-model.mjs', ['documents', 'common', 'navigation', 'footerNavigation', 'nextTasks', 'docGroups', 'articles']),\n      locales: modelImplementation(files['website/locale-model.mjs'], 'locale-model.mjs', ['configuredLocales']),\n    },\n    metadata: {\n      id: page.id, type: ownDocument ? 'docs' : ownCommon?.type ?? 'article', destination: destination(page.id),\n      // Article metadata is already part of its exact source/frontmatter bytes.\n      title: ownDocument ? localized(ownDocument, 'title') : ownCommon ? catalog[`${page.id}.title`] : undefined,\n      description: ownDocument ? localized(ownDocument, 'description') : ownCommon ? catalog[`${page.id}.description`] : undefined,\n    },\n    locale: { current, menu: selected.map(id => { const entry = localeData(id); return { id, label: entry.label, prefix: entry.prefix, lang: entry.lang, dir: entry.dir }; }) },\n    wordmark: destination('home'),\n    navigation: values('navigation').map(item => ({ ...destination(item.id), label: item.label[locale] })),\n    footer: values('footerNavigation').map(item => ({ ...item, ...(item.pageId ? { destination: destination(item.pageId) } : {}) })),\n  };\n  if (page.type === 'home') result.nextTasks = values('nextTasks').map(item => ({ ...item, destination: destination(item.pageId) }));\n  if (page.type === 'docs') {\n    const groups = modelArray(model, 'docGroups', true);\n    const body = groups.mapper?.body;\n    const labels = property(body && ts.isParenthesizedExpression(body) ? body.expression : body, 'labels');\n    const label = property(labels, locale);\n    if (!label) throw new Error(`Missing review sidebar label mapping: ${locale}`);\n    result.sidebar = { transform: groups.transform, groups: groups.nodes.map(literal).map(group => ({\n      label: ts.isPropertyAccessExpression(label) && ts.isIdentifier(label.expression) && label.expression.text === groups.mapper.parameters[0]?.name.text ? group[label.name.text] : literal(label),\n      collapsed: group.collapsed ?? false,\n      items: group.ids.map(id => {\n        const document = documents.find(item => item.name === id);\n        if (!document) throw new Error(`Unknown review sidebar document: ${id}`);\n        return { ...destination(id), label: locale === 'en' ? document.title : locale === 'zh-CN' ? document.zhTitle : document.titles?.[locale] };\n      }),\n    })) };\n  }\n  return result;\n}\n\nfunction repositoryReference(value) {\n  const filename = value.split('#')[0];\n  if (path.isAbsolute(filename) || filename.split('/').includes('..') || !filename) throw new Error(`Review input must be a repository file: ${value}`);\n  return filename;\n}\n\nfunction sourceReferences(source) {\n  const references = [];\n  let fence;\n  for (const line of source.split(/\\r?\\n/)) {\n    const delimiter = line.match(/^ {0,3}(`{3,}|~{3,})/);\n    if (delimiter) {\n      if (!fence) fence = delimiter[1];\n      else if (delimiter[1][0] === fence[0] && delimiter[1].length >= fence.length && /^ {0,3}(?:`+|~+)\\s*$/.test(line)) fence = undefined;\n      continue;\n    }\n    if (!fence) {\n      const directive = line.match(/^\\s*<!-- source: ([^\\s]+) -->\\s*$/);\n      if (directive) references.push(repositoryReference(directive[1]));\n    }\n  }\n  return references;\n}\n\nasync function astroClosure(initial, root) {\n  const seen = new Set();\n  async function visit(filename) {\n    if (seen.has(filename)) return;\n    seen.add(filename);\n    const source = await readFile(path.join(root, filename), 'utf8');\n    for (const match of source.matchAll(/\\bimport\\s+(?:[^;\\n]+?\\s+from\\s+)?['\"]([^'\"]+\\.astro)['\"]/g)) {\n      if (!match[1].startsWith('.')) continue;\n      const target = path.posix.normalize(path.posix.join(path.posix.dirname(filename), match[1]));\n      repositoryReference(target);\n      await visit(target);\n    }\n  }\n  for (const filename of initial) await visit(filename);\n  return [...seen];\n}\n\nexport async function reviewInputFiles(page, locale, root = repository) {\n  const sources = [...new Set([page.sources.en, page.sources[locale]])];\n  const references = (await Promise.all(sources.map(async filename => sourceReferences(await readFile(path.join(root, filename), 'utf8'))))).flat();\n  const templateFiles = await astroClosure([\n    'website/src/layouts/SiteLayout.astro', 'website/src/components/Header.astro', 'website/src/components/Footer.astro',\n    ...(templates[page.type] || []).map(name => `website/src/components/${name}.astro`),\n  ], root);\n  const targetedTechnical = [];\n  if (['quickstart', 'blog:your-first-anki-deck'].includes(page.id)) targetedTechnical.push('anki_forge/examples/target_api_basic.rs');\n  if (page.type === 'home') {\n    const benchmark = JSON.parse(await readFile(path.join(root, 'docs/benchmark-presentation.json'), 'utf8'));\n    if (!/^docs\\/performance\\/\\d{8}\\/comparison\\.csv$/.test(benchmark.dataFile)) throw new Error('Invalid benchmark review data file');\n    targetedTechnical.push('docs/benchmark-presentation.json', benchmark.dataFile, 'website/scripts/benchmark-presentation.mjs');\n  }\n  return [...new Set([\n    ...sources, 'website/src/i18n/en.json', `website/src/i18n/${locale}.json`,\n    'website/site-model.mjs', 'website/locale-model.mjs', 'website/release-locales.json', 'website/search-terms.json', 'website/section-contracts.json', 'website/legacy-sections.json', 'website/language-briefs.json',\n    ...templateFiles,\n    ...(page.type === 'docs' ? ['website/src/route-middleware.ts', 'website/src/content/i18n/en.json', `website/src/content/i18n/${locale}.json`, 'website/search-concepts.json', ...searchFiles] : []),\n    ...technicalFiles, ...renderFiles, ...targetedTechnical, ...references,\n  ])].sort();\n}\n\n// Source review hashes intentionally exclude review records and build outputs.\n// Artifact-specific search/browser/machine evidence is attached after building.\nexport async function reviewInputs(page, locale, root) {\n  const read = name => readFile(path.join(root, name), 'utf8');\n  const files = Object.fromEntries(await Promise.all((await reviewInputFiles(page, locale, root)).map(async name => [name, await read(name)])));\n  const sections = JSON.parse(files['website/section-contracts.json']).entries[page.id] || null;\n  const sourceModel = renderedModelInputs(files, page, 'en');\n  const targetModel = locale === 'en' ? sourceModel : renderedModelInputs(files, page, locale);\n  const searchTerms = JSON.parse(files['website/search-terms.json']);\n  const searchConcepts = files['website/search-concepts.json'] ? JSON.parse(files['website/search-concepts.json']).locales : {};\n  const sourceHash = digest(JSON.stringify({ source: files[page.sources.en], metadata: sourceModel.metadata, model: sourceModel, catalog: files['website/src/i18n/en.json'], frameworkCatalog: files['website/src/content/i18n/en.json'], searchTerms: searchTerms.locales.en?.[page.id], searchConcepts: searchConcepts.en }));\n  const targetHash = digest(JSON.stringify({ source: files[page.sources[locale]], metadata: targetModel.metadata, model: targetModel, catalog: files[`website/src/i18n/${locale}.json`], frameworkCatalog: files[`website/src/content/i18n/${locale}.json`], searchTerms: searchTerms.locales[locale]?.[page.id], searchConcepts: searchConcepts[locale], templates: Object.entries(files).filter(([name]) => name.endsWith('.astro') || name.endsWith('route-middleware.ts') || renderFiles.includes(name) || searchFiles.includes(name)) }));\n  const briefs = JSON.parse(files['website/language-briefs.json']);\n  if (!briefs[locale] || briefs.version !== glossaryVersion) throw new Error(`${locale}: missing or stale language brief`);\n  const references = new Set([...sourceReferences(files[page.sources.en]), ...sourceReferences(files[page.sources[locale]])]);\n  const technicalInputs = Object.keys(files).filter(name => technicalFiles.includes(name) || name === 'anki_forge/examples/target_api_basic.rs' || name === 'docs/benchmark-presentation.json' || name === 'website/scripts/benchmark-presentation.mjs' || /^docs\\/performance\\//.test(name) || references.has(name));\n  const technicalDependencyHash = digest(JSON.stringify({ sections, legacy: JSON.parse(files['website/legacy-sections.json'])[page.id] || null, brief: briefs[locale], technical: technicalInputs.map(name => [name, digest(files[name])]) }));\n  return { sourceHash, targetHash, technicalDependencyHash };\n}\n"
+    },
+    "website/scripts/content-contract.test.mjs": {
+      "sha256": "4f32de9b6c9a20946faf2777dc776a8b34df3f399cec89fa074395280f1598e9",
+      "text": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { mkdtemp, mkdir, copyFile, readFile, writeFile, rm } from 'node:fs/promises';\nimport { execFileSync } from 'node:child_process';\nimport path from 'node:path';\nimport os from 'node:os';\nimport { fileURLToPath } from 'node:url';\nimport { pages, localeIds } from '../site-model.mjs';\nimport { reviewInputFiles, reviewInputs, rubricVersion, glossaryVersion, digest } from './content-review-inputs.mjs';\nconst root = fileURLToPath(new URL('../../', import.meta.url));\nconst command = fileURLToPath(new URL('./check-content.mjs', import.meta.url));\nasync function fixture(t) {\n  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-i18n-'));\n  t.after(() => rm(directory, { recursive: true, force: true }));\n  const inputs = (await Promise.all(pages.flatMap(page => localeIds.map(locale => reviewInputFiles(page, locale, root))))).flat();\n  const files = new Set([...inputs, 'website/content-reviews.json', 'website/legacy-sections.json', ...localeIds.flatMap(locale => [`website/src/i18n/${locale}.json`, `website/src/content/i18n/${locale}.json`])]);\n  for (const file of files) { await mkdir(path.dirname(path.join(directory, file)), { recursive: true }); await copyFile(path.join(root, file), path.join(directory, file)); }\n  // Synthetic evidence is confined to this disposable fixture, never production.\n  const records = { schemaVersion: 2, entries: {} };\n  const report = { schemaVersion: 1, reviewerType: 'ai', reviewerRun: 'synthetic-unit-test-only', entries: {} };\n  for (const page of pages) {\n    records.entries[page.id] = {}; report.entries[page.id] = {};\n    for (const locale of localeIds) {\n      const inputs = await reviewInputs(page, locale, directory);\n      const entry = { ...inputs, technical: { status: 'reviewed', evidence: ['Synthetic gate fixture'], openIssues: [] }, linguistic: { status: 'reviewed', evidence: ['Synthetic gate fixture'], openIssues: [], score: { terminology: 4, syntax: 4, register: 4, usability: 4 } } };\n      report.entries[page.id][locale] = entry;\n      records.entries[page.id][locale] = { ...inputs, rubricVersion, glossaryVersion, technical: { ...entry.technical, reviewerType: 'ai', reviewerRun: report.reviewerRun }, linguistic: { ...entry.linguistic, reviewerType: 'ai', reviewerRun: report.reviewerRun } };\n    }\n  }\n  const evidencePath = 'docs/plans/evidence/unit-fixture/reviews.json';\n  const bytes = JSON.stringify(report);\n  await mkdir(path.dirname(path.join(directory, evidencePath)), { recursive: true });\n  await writeFile(path.join(directory, evidencePath), bytes);\n  for (const entries of Object.values(records.entries)) for (const entry of Object.values(entries)) for (const axis of ['technical','linguistic']) entry[axis].evidence = { path: evidencePath, sha256: digest(bytes) };\n  await writeFile(path.join(directory, 'website/content-reviews.json'), JSON.stringify(records));\n  return directory;\n}\nconst run = directory => execFileSync(process.execPath, [command, directory], { encoding: 'utf8', stdio: 'pipe' });\ntest('the content gate accepts reviewed genuine translations', async t => {\n  assert.match(run(await fixture(t)), /paired topics/);\n});\ntest('the content gate rejects missing translations and unregistered sources', async t => {\n  const directory = await fixture(t);\n  await rm(path.join(directory, 'docs/zh-cn/media.md'));\n  assert.throws(() => run(directory), /Unregistered or missing zh-CN documentation/);\n  await copyFile(path.join(root, 'docs/zh-cn/media.md'), path.join(directory, 'docs/zh-cn/media.md'));\n  await writeFile(path.join(directory, 'docs/zh-cn/extra-topic.md'), '# 额外主题\\n');\n  assert.throws(() => run(directory), /Unregistered or missing zh-CN documentation/);\n});\ntest('unregistered drafts are not treated as public topics', async t => {\n  const directory = await fixture(t);\n  await writeFile(path.join(directory, 'website/src/content/blog/future.mdx'), '---\\ndraft: true\\n---\\nA draft.\\n');\n  await writeFile(path.join(directory, 'website/src/content/docs/docs/future.mdx'), '---\\ndraft: true\\n---\\nA draft.\\n');\n  await writeFile(path.join(directory, 'docs/zh-cn/future.md'), '---\\ndraft: true\\n---\\n草稿。\\n');\n  assert.match(run(directory), /paired topics/);\n});\ntest('the content gate rejects incomplete messages and mismatched interpolation', async t => {\n  const directory = await fixture(t);\n  const file = path.join(directory, 'website/src/i18n/zh-CN.json');\n  const original = JSON.parse(await readFile(file, 'utf8'));\n  const missing = { ...original }; delete missing['card.answer'];\n  await writeFile(file, JSON.stringify(missing));\n  assert.throws(() => run(directory), /message keys/);\n  await writeFile(file, JSON.stringify({ ...original, 'card.answer': '答案：{wrong}' }));\n  assert.throws(() => run(directory), /mismatched message parameters/);\n});\ntest('technical edits require a paired translation review and fallback is rejected', async t => {\n  const directory = await fixture(t);\n  const source = path.join(directory, 'docs/concepts.md');\n  await writeFile(source, (await readFile(source, 'utf8')) + '\\nChanged technical guidance.\\n');\n  assert.throws(() => run(directory), /sourceHash changed; independent source review required/);\n  await copyFile(path.join(root, 'docs/concepts.md'), source);\n  await copyFile(source, path.join(directory, 'docs/zh-cn/concepts.md'));\n  assert.throws(() => run(directory), /fallback/);\n});\n\ntest('source-ready review records cannot substitute for their actual evidence', async t => {\n  const directory = await fixture(t);\n  const file = path.join(directory, 'docs/plans/evidence/unit-fixture/reviews.json');\n  await writeFile(file, (await readFile(file, 'utf8')) + '\\n');\n  assert.throws(() => run(directory), /evidence digest changed/);\n});\ntest('a source review cannot be refreshed by changing only the top-level hash', async t => {\n  const directory = await fixture(t);\n  const source = path.join(directory, 'docs/concepts.md');\n  await writeFile(source, (await readFile(source, 'utf8')) + '\\nChanged technical guidance.\\n');\n  const file = path.join(directory, 'website/content-reviews.json');\n  const records = JSON.parse(await readFile(file, 'utf8'));\n  const page = pages.find(page => page.id === 'concepts');\n  for (const locale of localeIds) Object.assign(records.entries.concepts[locale], await reviewInputs(page, locale, directory));\n  await writeFile(file, JSON.stringify(records));\n  assert.throws(() => run(directory), /evidence used stale sourceHash/);\n});\n\ntest('framework translations and dynamic quickstart sources invalidate only their affected inputs', async t => {\n  const directory = await fixture(t);\n  const quickstart = pages.find(page => page.id === 'quickstart');\n  const article = pages.find(page => page.id === 'blog:your-first-anki-deck');\n  const home = pages.find(page => page.type === 'home');\n  const api = pages.find(page => page.id === 'api');\n  const before = Object.fromEntries(await Promise.all([quickstart, article, home, api].map(async page => [page.id, await reviewInputs(page, 'zh-CN', directory)])));\n  const framework = path.join(directory, 'website/src/content/i18n/zh-CN.json');\n  const catalog = JSON.parse(await readFile(framework, 'utf8'));\n  catalog['pagefind.searching'] = '正在查找“[SEARCH_TERM]”…';\n  await writeFile(framework, JSON.stringify(catalog));\n  assert.notEqual((await reviewInputs(quickstart, 'zh-CN', directory)).targetHash, before.quickstart.targetHash);\n  assert.equal((await reviewInputs(home, 'zh-CN', directory)).targetHash, before.home.targetHash);\n  const basic = path.join(directory, 'anki_forge/examples/target_api_basic.rs');\n  await writeFile(basic, (await readFile(basic, 'utf8')) + '\\n// Changed raw example.\\n');\n  assert.notEqual((await reviewInputs(quickstart, 'zh-CN', directory)).technicalDependencyHash, before.quickstart.technicalDependencyHash);\n  assert.notEqual((await reviewInputs(article, 'zh-CN', directory)).technicalDependencyHash, before[article.id].technicalDependencyHash);\n  assert.equal((await reviewInputs(api, 'zh-CN', directory)).technicalDependencyHash, before.api.technicalDependencyHash);\n});\n\ntest('homepage review follows benchmark config, current CSV and converter without invalidating API pages', async t => {\n  const directory = await fixture(t);\n  const home = pages.find(page => page.type === 'home');\n  const api = pages.find(page => page.id === 'api');\n  const before = await reviewInputs(home, 'en', directory);\n  const apiBefore = await reviewInputs(api, 'en', directory);\n  const configPath = path.join(directory, 'docs/benchmark-presentation.json');\n  const config = JSON.parse(await readFile(configPath, 'utf8'));\n  const csv = await readFile(path.join(directory, config.dataFile), 'utf8');\n  config.dataFile = 'docs/performance/20261009/comparison.csv';\n  await mkdir(path.dirname(path.join(directory, config.dataFile)), { recursive: true });\n  await writeFile(path.join(directory, config.dataFile), csv);\n  await writeFile(configPath, JSON.stringify(config));\n  assert.ok((await reviewInputFiles(home, 'en', directory)).includes(config.dataFile));\n  const changedConfig = await reviewInputs(home, 'en', directory);\n  assert.notEqual(changedConfig.technicalDependencyHash, before.technicalDependencyHash);\n  await writeFile(path.join(directory, config.dataFile), csv + '\\n');\n  const changedCsv = await reviewInputs(home, 'en', directory);\n  assert.notEqual(changedCsv.technicalDependencyHash, changedConfig.technicalDependencyHash);\n  const converter = path.join(directory, 'website/scripts/benchmark-presentation.mjs');\n  await writeFile(converter, (await readFile(converter, 'utf8')) + '\\n// Changed presentation.\\n');\n  assert.notEqual((await reviewInputs(home, 'en', directory)).technicalDependencyHash, changedCsv.technicalDependencyHash);\n  assert.deepEqual(await reviewInputs(api, 'en', directory), apiBefore);\n});\n\ntest('explicit source directives and nested Astro templates belong to the review closure', async t => {\n  const directory = await fixture(t);\n  const page = pages.find(page => page.id === 'templates');\n  const before = await reviewInputs(page, 'en', directory);\n  const files = await reviewInputFiles(page, 'en', directory);\n  const source = 'contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml';\n  assert.ok(files.includes(source));\n  assert.ok(files.includes('website/site-model.mjs'));\n  assert.ok(files.includes('website/locale-model.mjs'));\n  assert.ok(files.includes('website/release-locales.json'));\n  assert.ok(files.includes('website/src/components/ThemeControl.astro'));\n  await writeFile(path.join(directory, source), (await readFile(path.join(directory, source), 'utf8')) + '\\n# Changed source fixture.\\n');\n  const changedSource = await reviewInputs(page, 'en', directory);\n  assert.notEqual(changedSource.technicalDependencyHash, before.technicalDependencyHash);\n  const model = path.join(directory, 'website/site-model.mjs');\n  await writeFile(model, (await readFile(model, 'utf8')) + '\\n// Context-only comment.\\n');\n  assert.deepEqual(await reviewInputs(page, 'en', directory), changedSource, 'raw model text must not invalidate unrelated per-page metadata');\n});\n\nasync function modelSamples(directory) {\n  const ids = ['home', 'examples', 'blog', 'concepts', 'blog:your-first-anki-deck'];\n  return Object.fromEntries(await Promise.all(ids.flatMap(id => localeIds.map(async locale =>\n    [`${id}/${locale}`, await reviewInputs(pages.find(page => page.id === id), locale, directory)]))));\n}\n\ntest('header and footer model data invalidate reviews across page types and destinations', async t => {\n  const directory = await fixture(t);\n  const model = path.join(directory, 'website/site-model.mjs');\n  const original = await readFile(model, 'utf8');\n  const before = await modelSamples(directory);\n  await writeFile(model, original.replace(\"label: { en: 'Guide'\", \"label: { en: 'Browse the guide'\"));\n  const header = await modelSamples(directory);\n  for (const key of Object.keys(before)) {\n    if (key.endsWith('/en')) assert.notEqual(header[key].targetHash, before[key].targetHash, key);\n    else assert.equal(header[key].targetHash, before[key].targetHash, 'English header wording is not Chinese target wording');\n  }\n  for (const [from, to] of [\n    [\"{ id: 'docs', label:\", \"{ id: 'languages', label:\"],\n    [\"{ id: 'articles', pageId: 'blog'\", \"{ id: 'articles', pageId: 'examples'\"],\n    [\"id: 'examples', route: '/examples/'\", \"id: 'examples', route: '/sample-decks/'\"],\n    [\"id: 'home', route: '/'\", \"id: 'home', route: '/start/'\"],\n  ]) {\n    assert.ok(original.includes(from));\n    await writeFile(model, original.replace(from, to));\n    const after = await modelSamples(directory);\n    for (const key of Object.keys(before)) assert.notEqual(after[key].targetHash, before[key].targetHash, `${from}: ${key}`);\n  }\n});\n\ntest('current-page metadata uses the supplied root without invalidating unrelated page descriptions', async t => {\n  const directory = await fixture(t);\n  const model = path.join(directory, 'website/site-model.mjs');\n  const original = await readFile(model, 'utf8');\n  const before = await modelSamples(directory);\n  const page = pages.find(page => page.id === 'concepts');\n  for (const [field, value, locale] of [\n    ['description', page.description.en, 'en'],\n    ['zhDescription', page.description['zh-CN'], 'zh-CN'],\n  ]) {\n    const from = `\"${field}\": ${JSON.stringify(value)}`;\n    assert.ok(original.includes(from));\n    await writeFile(model, original.replace(from, `\"${field}\": \"Changed current-page metadata in this supplied root.\"`));\n    const after = await modelSamples(directory);\n    for (const key of Object.keys(before)) {\n      if (key === `concepts/${locale}`) assert.notEqual(after[key].targetHash, before[key].targetHash, key);\n      else assert.equal(after[key].targetHash, before[key].targetHash, `unrelated target: ${key}`);\n      if (locale === 'en' && key.startsWith('concepts/')) assert.notEqual(after[key].sourceHash, before[key].sourceHash, key);\n      else assert.equal(after[key].sourceHash, before[key].sourceHash, `unrelated source: ${key}`);\n    }\n  }\n});\n\ntest('sidebar and next-task model changes invalidate only the page types that render them', async t => {\n  const directory = await fixture(t);\n  const model = path.join(directory, 'website/site-model.mjs');\n  const original = await readFile(model, 'utf8');\n  const before = await modelSamples(directory);\n  for (const [from, to, affected] of [\n    [\"'docs', 'languages', 'quickstart'\", \"'docs', 'quickstart', 'languages'\", key => key.startsWith('concepts/')],\n    [\"zh: '从这里开始'\", \"zh: '开始使用'\", key => key === 'concepts/zh-CN'],\n    ['\"title\": \"Choose your language\"', '\"title\": \"Select your SDK\"', key => key === 'concepts/en'],\n    [\"{ pageId: 'json-to-anki', label: 'home.json'\", \"{ pageId: 'media', label: 'home.json'\", key => key.startsWith('home/')],\n  ]) {\n    assert.ok(original.includes(from));\n    await writeFile(model, original.replace(from, to));\n    const after = await modelSamples(directory);\n    for (const key of Object.keys(before)) {\n      if (affected(key)) assert.notEqual(after[key].targetHash, before[key].targetHash, `${from}: ${key}`);\n      else assert.equal(after[key].targetHash, before[key].targetHash, `${from}: unrelated ${key}`);\n    }\n  }\n  await writeFile(model, original.replace('\"description\": \"Install the public Rust, Node or Python package', '\"description\": \"An unrelated description: install the public Rust, Node or Python package') + '\\n// Context-only model comment.\\n');\n  assert.deepEqual(await modelSamples(directory), before, 'unrendered page descriptions and comments are not shared UI dependencies');\n});\n\ntest('release language menus fingerprint active locale data without reading planned translations', async t => {\n  const directory = await fixture(t);\n  const model = path.join(directory, 'website/locale-model.mjs');\n  const original = await readFile(model, 'utf8');\n  const before = await modelSamples(directory);\n  for (const [from, to] of [[\"label: '简体中文'\", \"label: '中文（简体）'\"], [\"prefix: '/zh-cn'\", \"prefix: '/chinese'\"], [\"lang: 'zh-CN'\", \"lang: 'zh-Hans'\"]]) {\n    assert.ok(original.includes(from));\n    await writeFile(model, original.replace(from, to));\n    const after = await modelSamples(directory);\n    for (const key of Object.keys(before)) assert.notEqual(after[key].targetHash, before[key].targetHash, `${from}: ${key}`);\n  }\n  await writeFile(model, original.replace(\"label: 'Español'\", \"label: 'Español revisado'\").replace(\"  es: {\", \"  it: { prefix: '/it', lang: 'it', label: 'Italiano', dir: 'ltr' },\\n  es: {\") + '\\n// No planned-language source files exist in this fixture.\\n');\n  assert.deepEqual(await modelSamples(directory), before, 'inactive locale records do not change selected-language review inputs');\n});\n\ntest('review model rejects untracked transformations and top-level data mutations', async t => {\n  const directory = await fixture(t);\n  const model = path.join(directory, 'website/site-model.mjs');\n  const original = await readFile(model, 'utf8');\n  const home = pages.find(page => page.id === 'home');\n  for (const name of ['documents', 'common', 'navigation', 'footerNavigation', 'nextTasks']) {\n    const start = original.indexOf(`const ${name} = [`);\n    const end = original.indexOf('];', start);\n    assert.ok(start >= 0 && end > start);\n    await writeFile(model, original.slice(0, end) + '].map(item => ({ ...item, label: \"Changed at render time\" }));' + original.slice(end + 2));\n    await assert.rejects(reviewInputs(home, 'en', directory), /must remain literal/);\n  }\n  await writeFile(model, original + '\\nnavigation.push({ id: \"docs\", label: { en: \"Unreviewed\" } });\\n');\n  await assert.rejects(reviewInputs(home, 'en', directory), /must not mutate/);\n  await writeFile(model, original + '\\nif (navigation.length) navigation[0].label.en = \"Unreviewed\";\\n');\n  await assert.rejects(reviewInputs(home, 'en', directory), /must not mutate/);\n  await writeFile(model, original);\n  const before = await reviewInputs(home, 'zh-CN', directory);\n  await writeFile(model, original + '\\nconst unintendedNavigationMutation = (navigation[0].label[\"zh-CN\"] = \"新指南标签\");\\n');\n  assert.notEqual((await reviewInputs(home, 'zh-CN', directory)).targetHash, before.targetHash, 'unprojected initializer logic belongs to the review fingerprint');\n  await writeFile(model, original);\n  const registry = path.join(directory, 'website/locale-model.mjs');\n  await writeFile(registry, (await readFile(registry, 'utf8')) + '\\nconfiguredLocales.en.label = \"Unreviewed\";\\n');\n  await assert.rejects(reviewInputs(home, 'en', directory), /must not mutate/);\n});\n"
+    },
+    "website/src/components/Header.astro": {
+      "sha256": "d960ef3f5e55f89625b45d4fcffb8770bb84154aeb053b6599f3dc541ca45ea3",
+      "text": "---\nimport LanguageSwitcher from './LanguageSwitcher.astro';\nimport Icon from './Icon.astro';\nimport BrandMark from './BrandMark.astro';\nimport ThemeControl from './ThemeControl.astro';\nimport { repository, sitePath } from '../lib/site';\nimport { navigation, pagePath, pagePair } from '../../site-model.mjs';\nimport { createTranslator } from '../i18n/messages.mjs';\ninterface Props { locale?: string }\nconst { locale = 'en' } = Astro.props;\nconst t = createTranslator(locale);\nconst links = navigation.map(link => {\n  const label = link.label[locale];\n  if (!label) throw new Error(`${locale}: missing navigation label ${link.id}`);\n  return { ...link, label };\n});\nconst section = pagePair(Astro.url.pathname, import.meta.env.BASE_URL)?.section;\n---\n<header class=\"site-header container\">\n  <a class=\"wordmark\" href={sitePath(pagePath('home', locale))} aria-label={t('nav.home')}><BrandMark /><span>ankiforge</span></a>\n  <nav class=\"desktop-nav\" aria-label={t('nav.main')}>\n    {links.map(link => <a data-section={link.id} href={sitePath(pagePath(link.id, locale))} aria-current={section === link.id ? 'page' : undefined}>{link.label}</a>)}\n    <a class=\"github-link\" href={repository} aria-label={t('nav.repository')} title=\"GitHub\"><Icon name=\"githubLogo\" /></a>\n  </nav>\n  <div class=\"header-tools\">\n    <LanguageSwitcher />\n    <ThemeControl locale={locale} />\n    <details class=\"mobile-menu\">\n      <summary>{t('nav.menu')}</summary>\n      <nav aria-label={t('nav.mobile')}>\n        {links.map(link => <a data-section={link.id} href={sitePath(pagePath(link.id, locale))} aria-current={section === link.id ? 'page' : undefined}>{link.label}</a>)}\n        <a class=\"github-link\" href={repository} aria-label={t('nav.repository')} title=\"GitHub\"><Icon name=\"githubLogo\" /></a>\n      </nav>\n    </details>\n  </div>\n  <slot />\n</header>\n"
+    },
+    "website/src/components/Footer.astro": {
+      "sha256": "320057dbcae7f74003f143530ba4629c5ad0aed324605db3e1c68fb5e8b038b3",
+      "text": "---\nimport Icon from './Icon.astro';\nimport { repository, sitePath } from '../lib/site';\nimport { footerNavigation, pagePath, locales } from '../../site-model.mjs';\nimport { createTranslator } from '../i18n/messages.mjs';\nimport { llmsUrl } from '../lib/machine-urls.mjs';\nimport { siteConfig } from '../../site.config.mjs';\ninterface Props { locale?: string; showAiIndex?: boolean }\nconst { locale = 'en', showAiIndex = true } = Astro.props;\nconst t = createTranslator(locale);\nconst resources: Record<string, string> = { feed: sitePath(`${locales[locale].prefix}/rss.xml`), license: `${repository}/blob/main/LICENSE`, repository };\n---\n<noscript><p class=\"container\">{t('copy.noScript')}</p></noscript>\n<footer class=\"site-footer container\">\n  <p>{t('footer.description')}</p>\n  <nav aria-label={t('footer.label')}>{footerNavigation.map(link => <a href={link.pageId ? sitePath(pagePath(link.pageId, locale)) : resources[link.resource]} class:list={{ 'github-link': link.id === 'repository' }} aria-label={link.id === 'repository' ? t(link.label) : undefined} title={link.id === 'repository' ? 'GitHub' : undefined}>{link.id === 'repository' ? <Icon name=\"githubLogo\" /> : t(link.label)}</a>)}{showAiIndex && <a href={llmsUrl(locale, siteConfig)}>{t('machine.aiIndex')}</a>}</nav>\n</footer>\n"
+    },
+    "website/src/components/LanguageSwitcher.astro": {
+      "sha256": "9d3c5658fc3c42fe5162f5f1883dde73f6aa23a11a4adcc2ca7955a1a1050c57",
+      "text": "---\nimport { resolvePage, pagePath } from '../../site-model.mjs';\nimport { localeIds, locales } from '../../locale-model.mjs';\nimport { sitePath } from '../lib/site';\nimport sections from '../generated/sections.json';\nconst resolved = resolvePage(Astro.url.pathname, import.meta.env.BASE_URL);\nconst page = resolved?.page;\nconst current = resolved?.locale ?? 'en';\nconst sectionMaps = sections as Record<string, Record<string, Record<string, string>>>;\nconst sourceMap = page ? sectionMaps[page.id]?.[current] ?? {} : {};\nconst targets = localeIds.filter(locale => locale !== current).map(locale => ({\n  locale, label: locales[locale].label,\n  href: page ? sitePath(pagePath(page.id, locale)) : '',\n  mapping: sourceMap,\n  targetIds: Object.entries(page ? sectionMaps[page.id]?.[locale] ?? {} : {}).flat(),\n}));\nconst common = page && !['docs', 'article'].includes(page.type);\n---\n{page && (targets.length === 1 ? targets.map(target => <a class=\"language-switch\" data-language-switch data-section-map={JSON.stringify(target.mapping)} data-section-ids={JSON.stringify(target.targetIds)} data-common-sections={common || undefined} href={target.href} hreflang={target.locale} lang={target.locale}>{target.label}</a>) : <details class=\"language-menu\">\n  <summary lang={current}>{locales[current].label}</summary>\n  <ul>{targets.map(target => <li><a class=\"language-switch\" data-language-switch data-section-map={JSON.stringify(target.mapping)} data-section-ids={JSON.stringify(target.targetIds)} data-common-sections={common || undefined} href={target.href} hreflang={target.locale} lang={target.locale}>{target.label}</a></li>)}</ul>\n</details>)}\n<style>\n  .language-switch { white-space: nowrap; font-size: 0.875rem; }\n  .language-menu { position: relative; font-size: 0.875rem; }\n  .language-menu summary { cursor: pointer; white-space: nowrap; }\n  .language-menu ul { position: absolute; top: 100%; right: 0; z-index: 20; min-width: max-content; margin: 8px 0 0; padding: 8px 12px; list-style: none; border: 1px solid var(--af-line); border-radius: 8px; background: var(--af-paper); }\n  .language-menu li + li { margin-top: 8px; }\n</style>\n<script>\n  document.querySelectorAll<HTMLAnchorElement>('[data-language-switch]').forEach(link => {\n    const target = new URL(link.href);\n    const mapping: Record<string, string> = JSON.parse(link.dataset.sectionMap || '{}');\n    const targetIds = new Set<string>(JSON.parse(link.dataset.sectionIds || '[]'));\n    function update() {\n      target.search = location.search;\n      let id = '';\n      try { id = decodeURIComponent(location.hash.slice(1)); } catch { /* Ignore malformed fragments. */ }\n      const mapped = mapping[id] ?? id;\n      const shared = link.hasAttribute('data-common-sections') && !!document.getElementById(id);\n      target.hash = mapped !== '_top' && (targetIds.has(mapped) || shared) ? mapped : '';\n      link.href = target.href;\n    }\n    // Preparation validates the section inventory; switching does not fetch every translation.\n    update();\n    window.addEventListener('hashchange', update);\n  });\n</script>\n"
+    },
+    "website/src/components/HomePage.astro": {
+      "sha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439",
+      "text": "---\nimport SiteLayout from '../layouts/SiteLayout.astro';\nimport HomeShowcase from './HomeShowcase.astro';\nimport PerformanceEvidence from './PerformanceEvidence.astro';\nimport ExampleWorkbench from './ExampleWorkbench.astro';\nimport UpdateDemo from './UpdateDemo.astro';\nimport Icon from './Icon.astro';\nimport AiQuickstart from './AiQuickstart.astro';\nimport InstallCommand from './InstallCommand.astro';\nimport aiQuickstart from '../generated/ai-quickstart.json';\nimport { sitePath } from '../lib/site';\nimport '../styles/home.css';\nimport { pagePath, nextTasks } from '../../site-model.mjs';\nimport { createTranslator } from '../i18n/messages.mjs';\ninterface Props { locale?: string }\nconst { locale = 'en' } = Astro.props;\nconst t = createTranslator(locale);\nconst href = (id: string, section = '') => sitePath(pagePath(id, locale, section));\n\n---\n<SiteLayout locale={locale} title={t('home.title')} description={t('home.description')}>\n  <div class=\"container\">\n    <section class=\"home-hero\" data-module=\"hero\" aria-labelledby=\"hero-title\">\n      <div class=\"home-hero-copy\">\n        <h1 id=\"hero-title\">{t('home.hero1')}<br /><span>{t('home.hero2')}</span></h1>\n        <p>{t('home.intro')}</p>\n        <div class=\"hero-actions\"><a class=\"button\" href={href('languages')}>{t('home.first')} <Icon name=\"arrowRight\" /></a><a class=\"text-link\" href={href('json-to-anki')}>{t('home.json')} <Icon name=\"arrowRight\" /></a></div>\n      </div>\n      <HomeShowcase locale={locale} />\n    </section>\n    <section class=\"home-install\" data-module=\"install\" aria-labelledby=\"install-heading\">\n      <div><h2 id=\"install-heading\">{t('home.choose')}</h2><p>{t('home.install', { version: aiQuickstart.publicVersion })}</p></div>\n      <div class=\"home-language-grid\">\n        {(['rust', 'node', 'python'] as const).map(key => [key, aiQuickstart.languages[key]] as const).map(([key, language]) => (\n          <article>\n            <h3>{language.label}</h3>\n            <InstallCommand command={language.install} runtime={language.runtime} locale={locale} />\n            <a class=\"text-link\" href={href(key === 'rust' ? 'quickstart' : `${key}-quickstart`)}>{t('home.buildWith', { language: language.label })} <Icon name=\"arrowRight\" /></a>\n          </article>\n        ))}\n      </div>\n    </section>\n    <AiQuickstart locale={locale} />\n    <PerformanceEvidence locale={locale} />\n\n    <section class=\"home-examples\" data-module=\"examples\" aria-labelledby=\"examples-heading\">\n      <div class=\"home-examples-heading\"><h2 id=\"examples-heading\">{t('home.try')}</h2><p>{t('home.tryDescription')}</p></div>\n      <ExampleWorkbench locale={locale} />\n      <div class=\"home-more-cards\"><span>{t('home.further')}</span><a href={href('custom-notetypes')}>{t('home.templates')} <Icon name=\"arrowRight\" /></a><a href={href('image-occlusion')}>{t('home.occlusion')} <Icon name=\"arrowRight\" /></a><a href={href('media')}>{t('home.media')} <Icon name=\"arrowRight\" /></a></div>\n    </section>\n\n    <section class=\"section identity-section\" data-module=\"updates\" aria-labelledby=\"identity-heading\" data-reveal>\n      <div class=\"section-copy\">\n        <h2 id=\"identity-heading\">{t('home.evolve1')}<br />{t('home.evolve2')}</h2>\n        <p>{t('home.evolveDescription')}</p>\n        <a class=\"text-link\" href={href('updates')}>{t('home.updates')} <Icon name=\"arrowRight\" /></a>\n      </div>\n      <UpdateDemo locale={locale} />\n    </section>\n\n    <section class=\"features\" data-module=\"features\" aria-label={t('home.features')} data-reveal>\n      <div class=\"feature\"><Icon name=\"scan\" /><div><h3>{t('home.validateTitle')}</h3><p>{t('home.validateDescription')}</p><a class=\"text-link\" href={href('rust-guide', 'projects-and-diagnostics')}>{t('home.validation')} <Icon name=\"arrowRight\" /></a></div></div>\n      <div class=\"feature\"><Icon name=\"palette\" /><div><h3>{t('home.templateTitle')}</h3><p>{t('home.templateDescription')}</p><a class=\"text-link\" href={href('templates')}>{t('home.templateLink')} <Icon name=\"arrowRight\" /></a></div></div>\n    </section>\n\n    <section class=\"section\" data-module=\"next\" aria-labelledby=\"next-heading\">\n      <span id=\"workflow-heading\" data-section-alias=\"next-heading\"></span>\n      <h2 id=\"next-heading\">{t('home.nextTitle')}</h2><p>{t('home.nextDescription')}</p>\n      <div class=\"hero-actions\">{nextTasks.map(task => <a class={task.primary ? 'button' : 'text-link'} href={href(task.pageId)}>{t(task.label)} <Icon name=\"arrowRight\" /></a>)}</div>\n    </section>\n  </div>\n</SiteLayout>\n"
+    },
+    "website/astro.config.mjs": {
+      "sha256": "ddb68f8f3cf680bb1ff86444ea82bdb1fbb04ec2e95c61e7de02a5a1c3ab66d8",
+      "text": "import { defineConfig } from 'astro/config';\nimport starlight from '@astrojs/starlight';\nimport { docGroups, docPages } from './site-model.mjs';\nimport { repository, siteConfig, withBase } from './site.config.mjs';\nimport { publishedPages } from './scripts/published-pages.mjs';\nimport { searchOptions } from './search.config.mjs';\nimport { starlightLocales, localeIds } from './locale-model.mjs';\n\nconst publicTopics = new Set((await publishedPages()).map(page => page.id));\n\nexport default defineConfig({\n  site: siteConfig.site,\n  base: siteConfig.base,\n  trailingSlash: 'always',\n  output: 'static',\n  devToolbar: { enabled: false },\n  integrations: [\n    starlight({\n      title: 'Anki Forge',\n      locales: starlightLocales,\n      defaultLocale: 'root',\n      pagefind: searchOptions,\n      routeMiddleware: './src/route-middleware.ts',\n      components: { Header: './src/components/DocsHeader.astro', Footer: './src/components/DocsFooter.astro', LanguageSelect: './src/components/LanguageSwitcher.astro', ThemeSelect: './src/components/ThemeControl.astro' },\n      logo: { light: '../docs/assets/brand/ankiforge.svg', dark: '../docs/assets/brand/ankiforge-dark.svg', alt: '', replacesTitle: false },\n      description: 'Build Basic, Cloze, Image Occlusion and custom Anki cards with Rust, TypeScript or Python.',\n      favicon: '/favicon.svg',\n      disable404Route: true,\n      social: [{ icon: 'github', label: 'GitHub', href: repository }],\n      editLink: { baseUrl: `${repository}/edit/main/website/` },\n      customCss: ['./src/styles/docs.css'],\n      head: [\n        { tag: 'meta', attrs: { property: 'og:image', content: new URL(withBase('/generated/og.png', siteConfig.base), siteConfig.site).href } },\n        { tag: 'meta', attrs: { property: 'og:image:alt', content: 'Anki Forge. Anki decks, built from code.' } },\n        { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },\n        {\n          tag: 'script',\n          attrs: {\n            type: 'module',\n            src: 'https://static.cloudflareinsights.com/beacon.min.js',\n            'data-cf-beacon': JSON.stringify({ token: 'ab8936f615cc40e7a31bb7db4366b73b' }),\n          },\n        },\n      ],\n      sidebar: docGroups.map(group => ({\n        label: group.label, translations: Object.fromEntries(localeIds.filter(locale => locale !== 'en').map(locale => [locale, group.labels[locale]])), collapsed: group.collapsed ?? false,\n        items: group.ids.filter(id => publicTopics.has(id)).map(id => {\n          const page = docPages.find(page => page.id === id);\n          return { slug: page.route.slice(1, -1), label: page.title.en, translations: Object.fromEntries(localeIds.filter(locale => locale !== 'en').map(locale => [locale, page.title[locale]])) };\n        }),\n      })),\n    }),\n  ],\n});\n"
+    },
+    "website/src/lib/structured-data.mjs": {
+      "sha256": "746a4c5bc85eb1fc13cfb22a0ff4b2f7653e4e64bd06ea275aea2417a9321966",
+      "text": "import { canonicalUrl, entityIds, markdownUrl } from './machine-urls.mjs';\nimport { localeIds } from '../../locale-model.mjs';\n\nexport function buildStructuredData(page, context) {\n  const { siteConfig, repository, publicInstall, homeDescription } = context;\n  const buildLocales = context.buildLocales ?? localeIds;\n  if (!buildLocales.includes(page.locale)) throw new Error(`Page locale is outside the build: ${page.locale}`);\n  const ids = entityIds(page, siteConfig);\n  const root = ids.website.slice(0, -'#website'.length);\n  const software = { '@id': ids.software, '@type': 'SoftwareApplication', name: 'Anki Forge' };\n  const website = { '@id': ids.website, '@type': 'WebSite', name: 'Anki Forge', url: root, inLanguage: [...buildLocales] };\n  const collection = page.type === 'blog-list' || page.type === 'examples' || (page.type === 'docs' && page.id === 'docs');\n  const webpage = {\n    '@id': ids.webpage, '@type': collection ? 'CollectionPage' : 'WebPage', name: page.title,\n    description: page.description, url: page.canonical, inLanguage: page.locale,\n    isPartOf: { '@id': ids.website }, about: { '@id': ids.software },\n  };\n  const graph = [website, webpage];\n  const isArticle = page.type === 'article' || (page.type === 'docs' && page.id !== 'docs');\n  if (page.type === 'home') {\n    webpage.mainEntity = { '@id': ids.software };\n    Object.assign(software, {\n      url: root, applicationCategory: 'DeveloperApplication', softwareVersion: publicInstall.publicVersion,\n      license: `${repository}/blob/main/LICENSE`, softwareHelp: canonicalUrl('docs', page.locale, siteConfig, buildLocales),\n      description: homeDescription,\n    });\n    graph.push(software, { '@id': ids.source, '@type': 'SoftwareSourceCode', name: 'Anki Forge', codeRepository: repository, license: `${repository}/blob/main/LICENSE`, targetProduct: { '@id': ids.software } });\n  } else if (isArticle) {\n    webpage.mainEntity = { '@id': ids.article };\n    const article = {\n      '@id': ids.article, '@type': page.type === 'article' ? 'BlogPosting' : 'TechArticle',\n      headline: page.title, description: page.description, url: page.canonical, inLanguage: page.locale,\n      mainEntityOfPage: { '@id': ids.webpage }, about: { '@id': ids.software },\n      encoding: { '@type': 'MediaObject', contentUrl: markdownUrl(page), encodingFormat: 'text/markdown', inLanguage: page.locale },\n    };\n    if (page.type === 'article') {\n      if (!page.publishedAt || !page.category) throw new Error(`${page.id}/${page.locale}: missing blog metadata`);\n      article.datePublished = page.publishedAt;\n      article.articleSection = page.category;\n    }\n    graph.push(article, software);\n  } else graph.push(software);\n  return { '@context': 'https://schema.org', '@graph': graph };\n}\n\nexport function serializeJsonLd(graph) {\n  return JSON.stringify(graph).replace(/</g, '\\\\u003c').replace(/\\u2028/g, '\\\\u2028').replace(/\\u2029/g, '\\\\u2029');\n}\n"
+    },
+    "website/src/i18n/en.json": {
+      "sha256": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848",
+      "text": "{\n  \"home.title\": \"Anki flashcard generator for developers\",\n  \"home.description\": \"Generate Anki flashcards and APKG decks with open-source Python, Node.js and Rust APIs. Start with CSV, JSON or an AI-assisted workflow.\",\n  \"home.hero1\": \"Generate Anki flashcards\",\n  \"home.hero2\": \"from your data.\",\n  \"home.intro\": \"Anki Forge is an open-source Anki APKG generation library with a Rust core and Rust, Python and Node.js interfaces. Package media, use custom templates and review updates before distribution.\",\n  \"home.first\": \"Build your first deck\",\n  \"home.json\": \"Build from JSON\",\n  \"home.choose\": \"Choose your language.\",\n  \"home.install\": \"Export spanish.apkg with the public {version} package. Normal export needs no Anki installation.\",\n  \"home.buildWith\": \"Build with {language}\",\n  \"home.try\": \"See the code. Try the card.\",\n  \"home.tryDescription\": \"Switch between runnable Rust examples, flip the previews, and download the decks they produce.\",\n  \"home.further\": \"Go further\",\n  \"home.templates\": \"Custom templates\",\n  \"home.occlusion\": \"Occlusion modes\",\n  \"home.media\": \"Media and video\",\n  \"home.evolve1\": \"Let your notes evolve.\",\n  \"home.evolve2\": \"Keep their identity.\",\n  \"home.evolveDescription\": \"Correct a definition or add an example. Stable IDs and a previous build help Anki Forge match existing notes when you export again.\",\n  \"home.updates\": \"Understand deck updates\",\n  \"home.features\": \"More ways to build\",\n  \"home.validateTitle\": \"Catch problems before export.\",\n  \"home.validateDescription\": \"Inspect diagnostics for missing fields, media, and template problems. Make validation part of your build.\",\n  \"home.validation\": \"Explore validation\",\n  \"home.templateTitle\": \"Your cards. Your templates.\",\n  \"home.templateDescription\": \"Start with Basic and Cloze, or define your own note types. Keep HTML, CSS, and media in reusable template bundles.\",\n  \"home.templateLink\": \"Explore templates\",\n  \"home.nextTitle\": \"From your first deck to the next update\",\n  \"home.nextDescription\": \"Start with a CSV spreadsheet, JSON data or cards drafted with an AI assistant. Follow a complete export recipe, then add media and review updates.\",\n  \"home.compare\": \"Compare with genanki\",\n  \"nav.home\": \"Anki Forge home\",\n  \"nav.main\": \"Main navigation\",\n  \"nav.mobile\": \"Mobile navigation\",\n  \"nav.menu\": \"Menu\",\n  \"nav.repository\": \"GitHub repository\",\n  \"nav.theme\": \"Color theme\",\n  \"nav.auto\": \"System\",\n  \"nav.light\": \"Light\",\n  \"nav.dark\": \"Dark\",\n  \"nav.skip\": \"Skip to content\",\n  \"footer.description\": \"Anki Forge. Open source Anki APKG generation, powered by Rust.\",\n  \"footer.label\": \"Footer\",\n  \"footer.articles\": \"Articles\",\n  \"footer.license\": \"MIT license\",\n  \"workbench.label\": \"Code and card examples\",\n  \"workbench.tabs\": \"Card type\",\n  \"workbench.hint\": \"Rust source → browser preview\",\n  \"workbench.source\": \"Full source ↗\",\n  \"workbench.output\": \"Output\",\n  \"workbench.note\": \"Browser previews of exported content; import the APKG to check it in Anki.\",\n  \"workbench.noScript\": \"This is the Basic example. View all card examples and download their decks.\",\n  \"card.basic\": \"Basic\",\n  \"card.cloze\": \"Cloze\",\n  \"card.media\": \"Media\",\n  \"card.occlusion\": \"Image Occlusion\",\n  \"card.direction\": \"Spanish → English\",\n  \"card.meaning\": \"What does this mean?\",\n  \"card.sentence\": \"Complete the sentence\",\n  \"card.ear\": \"Ear training\",\n  \"card.waveform\": \"Illustrative waveform of a synthesized tone\",\n  \"card.cell\": \"Cell anatomy\",\n  \"card.hiddenCell\": \"Animal cell cross section with one structure hidden\",\n  \"card.greeting\": \"A greeting in Spanish.\",\n  \"card.sine\": \"A synthesized sine tone\",\n  \"card.concert\": \"One second of concert A.\",\n  \"card.revealedCell\": \"Animal cell cross section showing its coral-colored nucleus\",\n  \"card.play\": \"Play the example pitch\",\n  \"card.audioFallback\": \"Your browser does not support audio.\",\n  \"card.downloadTone\": \"Download the tone.\",\n  \"card.showAnswer\": \"Show answer\",\n  \"card.showQuestion\": \"Show question\",\n  \"card.questionShown\": \"Question shown.\",\n  \"card.answer\": \"Answer: {answer}\",\n  \"update.id\": \"Stable note ID\",\n  \"update.front\": \"Front\",\n  \"update.back\": \"Back\",\n  \"update.try\": \"Try a content change.\",\n  \"update.change\": \"Update the answer\",\n  \"update.reset\": \"Reset example\",\n  \"update.changed\": \"Content changed. Same note ID.\",\n  \"update.comparison\": \"Actual comparison\",\n  \"update.none\": \"No findings\",\n  \"update.policy\": \"Publication policy\",\n  \"update.allowed\": \"allows this change\",\n  \"update.blocked\": \"blocks this change\",\n  \"update.v1\": \"Download v1\",\n  \"update.v2\": \"Download v2\",\n  \"update.report\": \"Comparison report\",\n  \"update.warning\": \"Keep the original distribution APKG. Import settings and newer local edits affect updates.\",\n  \"update.guide\": \"Update guide\",\n  \"copy.button\": \"Copy\",\n  \"copy.install\": \"Copy install command\",\n  \"copy.success\": \"Command copied.\",\n  \"copy.fallback\": \"Command selected. Copy it with your keyboard.\",\n  \"copy.copied\": \"Copied\",\n  \"copy.code\": \"Copy code\",\n  \"copy.codeSuccess\": \"Code copied.\",\n  \"copy.codeFallback\": \"Code selected. Copy it with your keyboard.\",\n  \"copy.codeLabel\": \"{language} code\",\n  \"blog.title\": \"Blog\",\n  \"blog.description\": \"Practical guides and engineering decisions behind Anki Forge.\",\n  \"blog.heading\": \"Notes on making notes.\",\n  \"blog.rss\": \"Follow with RSS ↗\",\n  \"blog.all\": \"← All articles\",\n  \"blog.continue\": \"Continue with the guide →\",\n  \"blog.read\": \"Read article\",\n  \"blog.readLabel\": \"Read article: {title}\",\n  \"blog.Tutorial\": \"Tutorial\",\n  \"blog.Engineering\": \"Engineering\",\n  \"blog.feedTitle\": \"Anki Forge Blog\",\n  \"error.title\": \"Page not found\",\n  \"error.description\": \"This page could not be found. Return to Anki Forge or browse the authoring guide.\",\n  \"error.heading\": \"This page is missing.\",\n  \"error.explanation\": \"The link may have changed. You can return home or find what you need in the guide.\",\n  \"error.home\": \"Back home\",\n  \"error.guide\": \"Browse the guide →\",\n  \"examples.title\": \"Card examples\",\n  \"examples.description\": \"Explore Basic, Cloze, media, and Image Occlusion cards built with Anki Forge. Read their Rust source and download the generated Anki decks.\",\n  \"examples.heading1\": \"A little code.\",\n  \"examples.heading2\": \"Something to remember.\",\n  \"examples.intro\": \"Explore the source, flip the cards, and open the generated decks in Anki. These web previews use the same fields as the downloads.\",\n  \"examples.combined\": \"Download the four-card deck\",\n  \"examples.fullSource\": \"Read the complete source\",\n  \"examples.excerpt\": \"Rust excerpt\",\n  \"examples.download\": \"Download {file}\",\n  \"examples.counts\": \"{notes} · {cards} · {media}\",\n  \"examples.updateTitle\": \"One note, two versions.\",\n  \"examples.updateDescription\": \"The second build changes the answer from “hello” to “hello; hi”. It compares against the first package and checks that the note identity is preserved.\",\n  \"examples.workflow\": \"Read the update workflow\",\n  \"examples.limitations\": \"Anki’s import settings and local edits affect how updates are applied. The previews show content and identity; card styling and review behavior come from Anki.\",\n  \"examples.basic\": \"A Spanish greeting with a question, an answer, and an explicit stable ID. Start here for simple front-and-back cards.\",\n  \"examples.cloze\": \"Hide a word in context with Anki’s cloze syntax. This note has one deletion, so it generates one card.\",\n  \"examples.media\": \"An image and a playable tone, packaged with the note. This excerpt uses an ear-training note type defined in the full source.\",\n  \"examples.occlusion\": \"A keyed rectangle hides the nucleus in an illustrated cell cross section. The downloadable deck uses the same image and mask as this preview.\",\n  \"ai.title\": \"Use Anki Forge with AI.\",\n  \"ai.description\": \"Choose a language, describe your task, then paste the brief into your AI coding assistant.\",\n  \"ai.request\": \"What should the deck do?\",\n  \"ai.placeholder\": \"Create a Spanish vocabulary deck with audio.\",\n  \"ai.privacy\": \"Optional. Your request is kept only in this page.\",\n  \"ai.skillQuestion\": \"Your coding assistant supports Skills?\",\n  \"ai.skillLink\": \"Open the Anki Forge Skill\",\n  \"ai.noScript\": \"Copy a language template below and replace the task placeholder. The installation commands and Skill are also available without JavaScript.\",\n  \"ai.language\": \"Application language\",\n  \"ai.brief\": \"AI brief\",\n  \"ai.copy\": \"Copy prompt for AI\",\n  \"ai.copied\": \"Prompt copied. Paste it into your AI coding assistant.\",\n  \"ai.fallback\": \"Prompt selected. Copy it with your keyboard, then paste it into your AI coding assistant.\",\n  \"ai.install\": \"Copy install command\",\n  \"search.loading\": \"Loading search…\",\n  \"search.error\": \"Search could not load. Check your connection and try again.\",\n  \"copy.noScript\": \"Without JavaScript, select code or commands and copy them with your keyboard.\",\n  \"hero.description\": \"Basic, Cloze, Media and Image Occlusion cards flip and combine into an APKG deck.\",\n  \"hero.front\": \"Front\",\n  \"hero.back\": \"Back\",\n  \"hero.english\": \"English\",\n  \"hero.spanish\": \"Spanish\",\n  \"hero.gap\": \"Fill the gap.\",\n  \"hero.media\": \"Image + audio\",\n  \"hero.deck\": \"Anki deck\",\n  \"hero.cards\": \"cards\",\n  \"hero.files\": \"media\",\n  \"hero.caption\": \"Four card types. \",\n  \"hero.oneDeck\": \"One Anki deck.\",\n  \"performance.title\": \"The export, measured.\",\n  \"performance.workload\": \"1,000 Basic notes per workload\",\n  \"performance.export\": \"Export {notes} text-only notes\",\n  \"performance.range\": \"Less export time across five measured workloads\",\n  \"performance.medians\": \"10-run medians\",\n  \"performance.media\": \"Text, images, audio.\",\n  \"performance.faster\": \"Faster in all five tests.\",\n  \"performance.description\": \"Each workload contains {notes} Basic notes, covering text-only, unique media and shared mixed media. Rust used {minimum}–{maximum}% less export time than genanki.\",\n  \"performance.chart\": \"Median export times in milliseconds\",\n  \"performance.less\": \"{value}% less time\",\n  \"performance.more\": \"{value}% more time\",\n  \"performance.basic-mixed-text-v1\": \"Text only\",\n  \"performance.basic-image-unique-v2\": \"Unique images\",\n  \"performance.basic-audio-unique-v2\": \"Unique audio\",\n  \"performance.basic-mixed-unique-v2\": \"Mixed, unique media\",\n  \"performance.basic-mixed-shared-v2\": \"Mixed, shared media\",\n  \"site.title\": \"Anki Forge | Build Anki decks from code\",\n  \"site.socialAlt\": \"Anki Forge. Anki decks, built from code. A Spanish flashcard: hola, hello.\",\n  \"social.line1\": \"Anki decks,\",\n  \"social.line2\": \"built from code.\",\n  \"social.description\": \"Write notes. Build decks. Keep their identity.\",\n  \"social.languages\": \"Spanish → English\",\n  \"social.footer\": \"Open source · Rust · Anki\",\n  \"performance.method\": \"Method and original measurements\",\n  \"performance.limitations\": \"These results measure deck generation, not Anki import or review speed; other hardware and workloads may differ.\",\n  \"footer.rss\": \"RSS\",\n  \"machine.viewMarkdown\": \"View Markdown\",\n  \"machine.aiIndex\": \"AI documentation index\",\n  \"machine.intro\": \"Anki Forge generates Anki APKG decks from code using Rust, Node / TypeScript or Python.\",\n  \"machine.version\": \"Current public package version: {version}.\",\n  \"machine.constraints\": \"Normal export does not require Anki. Published package APIs differ from source builds. Keep the original previous distribution APKG for updates; Anki import settings and newer local edits can affect the result.\",\n  \"machine.start\": \"Start here\",\n  \"machine.quickstarts\": \"Quickstarts\",\n  \"machine.api\": \"API references\",\n  \"machine.tasks\": \"Task guides\",\n  \"machine.constraintsGroup\": \"Constraints\",\n  \"machine.optional\": \"Optional\",\n  \"machine.sourceBuild\": \"Development/source environment.\",\n  \"machine.history\": \"Historical article, published {date}.\",\n  \"machine.repository\": \"Source repository and development resources.\",\n  \"machine.otherLanguage\": \"{language} AI documentation index.\",\n  \"hero.counts\": \"{cards} / {media}\",\n  \"count.notes\": {\n    \"type\": \"plural\",\n    \"variable\": \"count\",\n    \"forms\": {\n      \"one\": \"{count} note\",\n      \"other\": \"{count} notes\"\n    }\n  },\n  \"count.cards\": {\n    \"type\": \"plural\",\n    \"variable\": \"count\",\n    \"forms\": {\n      \"one\": \"{count} card\",\n      \"other\": \"{count} cards\"\n    }\n  },\n  \"count.media\": {\n    \"type\": \"plural\",\n    \"variable\": \"count\",\n    \"forms\": {\n      \"one\": \"{count} media file\",\n      \"other\": \"{count} media files\"\n    }\n  },\n  \"home.csv\": \"Convert CSV to Anki\",\n  \"home.aiCards\": \"Create cards with AI\"\n}\n"
+    },
+    "website/src/i18n/zh-CN.json": {
+      "sha256": "f2cd71a222b1cf4370662a8e46726a1c238977c4bbe57dccc2b900ce7449c093",
+      "text": "{\n  \"home.title\": \"开源 Anki 卡片生成工具：用代码批量制卡\",\n  \"home.description\": \"用 Python、Node.js 或 Rust 批量生成 Anki 卡片并导出 APKG。开源生成库提供 CSV、JSON 和 AI 辅助制卡流程，支持媒体与牌组更新。\",\n  \"home.hero1\": \"从你的数据\",\n  \"home.hero2\": \"批量生成 Anki 卡片。\",\n  \"home.intro\": \"Anki Forge 是开源 Anki APKG 生成库，以 Rust 为核心，提供 Rust、Python 和 Node.js 接口。打包媒体、使用自定义模板，并在分发前检查更新。\",\n  \"home.first\": \"生成第一个牌组\",\n  \"home.json\": \"从 JSON 开始\",\n  \"home.choose\": \"选择开发语言\",\n  \"home.install\": \"使用公开版本 {version} 导出 spanish.apkg。普通导出不需要安装 Anki。\",\n  \"home.buildWith\": \"用 {language} 开始\",\n  \"home.try\": \"阅读代码，试用卡片。\",\n  \"home.tryDescription\": \"切换可运行的 Rust 示例、翻转卡片预览，并下载对应牌组。\",\n  \"home.further\": \"继续探索\",\n  \"home.templates\": \"自定义模板\",\n  \"home.occlusion\": \"遮挡模式\",\n  \"home.media\": \"媒体与视频\",\n  \"home.evolve1\": \"让笔记持续完善，\",\n  \"home.evolve2\": \"保留原有身份。\",\n  \"home.evolveDescription\": \"修正定义或补充示例。稳定 ID 与上一次构建的产物，帮助 Anki Forge 在再次导出时匹配已有笔记。\",\n  \"home.updates\": \"了解牌组更新\",\n  \"home.features\": \"更多构建方式\",\n  \"home.validateTitle\": \"导出前发现问题。\",\n  \"home.validateDescription\": \"通过诊断检查缺失字段、媒体和模板问题，让校验成为构建流程的一部分。\",\n  \"home.validation\": \"了解校验\",\n  \"home.templateTitle\": \"你的卡片，你的模板。\",\n  \"home.templateDescription\": \"从 Basic 和 Cloze 开始，或定义自己的笔记类型。把 HTML、CSS 和媒体放入可复用的模板包。\",\n  \"home.templateLink\": \"了解模板\",\n  \"home.nextTitle\": \"从第一个牌组到下一次更新\",\n  \"home.nextDescription\": \"从 CSV 表格、JSON 数据或 AI 起草的卡片开始，按完整教程导出牌组，再添加媒体并检查更新。\",\n  \"home.compare\": \"与 genanki 比较\",\n  \"nav.home\": \"Anki Forge 首页\",\n  \"nav.main\": \"主导航\",\n  \"nav.mobile\": \"移动导航\",\n  \"nav.menu\": \"菜单\",\n  \"nav.repository\": \"GitHub 仓库\",\n  \"nav.theme\": \"配色\",\n  \"nav.auto\": \"跟随系统\",\n  \"nav.light\": \"浅色\",\n  \"nav.dark\": \"深色\",\n  \"nav.skip\": \"跳到正文\",\n  \"footer.description\": \"Anki Forge：以 Rust 为核心的开源 Anki 牌组生成库。\",\n  \"footer.label\": \"页脚导航\",\n  \"footer.articles\": \"文章\",\n  \"footer.license\": \"MIT 许可证\",\n  \"workbench.label\": \"代码与卡片示例\",\n  \"workbench.tabs\": \"卡片类型\",\n  \"workbench.hint\": \"Rust 源码 → 浏览器预览\",\n  \"workbench.source\": \"完整源码 ↗\",\n  \"workbench.output\": \"输出\",\n  \"workbench.note\": \"这里是导出内容的浏览器预览；导入 APKG 后可在 Anki 中检查。\",\n  \"workbench.noScript\": \"这里展示 Basic 示例。查看全部卡片示例并下载对应牌组。\",\n  \"card.basic\": \"基础问答\",\n  \"card.cloze\": \"填空\",\n  \"card.media\": \"媒体\",\n  \"card.occlusion\": \"图片遮挡\",\n  \"card.direction\": \"西班牙语 → 英语\",\n  \"card.meaning\": \"它是什么意思？\",\n  \"card.sentence\": \"补全句子\",\n  \"card.ear\": \"听音训练\",\n  \"card.waveform\": \"合成音的示意波形\",\n  \"card.cell\": \"细胞结构\",\n  \"card.hiddenCell\": \"隐藏一处结构的动物细胞剖面图\",\n  \"card.greeting\": \"西班牙语问候语。\",\n  \"card.sine\": \"合成正弦音\",\n  \"card.concert\": \"一秒钟的标准音 A。\",\n  \"card.revealedCell\": \"显示珊瑚色细胞核的动物细胞剖面图\",\n  \"card.play\": \"播放示例音高\",\n  \"card.audioFallback\": \"浏览器不支持音频播放。\",\n  \"card.downloadTone\": \"下载音频。\",\n  \"card.showAnswer\": \"显示答案\",\n  \"card.showQuestion\": \"显示问题\",\n  \"card.questionShown\": \"已显示问题。\",\n  \"card.answer\": \"答案：{answer}\",\n  \"update.id\": \"稳定笔记 ID\",\n  \"update.front\": \"正面\",\n  \"update.back\": \"背面\",\n  \"update.try\": \"试着修改内容。\",\n  \"update.change\": \"更新答案\",\n  \"update.reset\": \"重置示例\",\n  \"update.changed\": \"内容已更新，笔记 ID 保持不变。\",\n  \"update.comparison\": \"实际比较\",\n  \"update.none\": \"无发现项\",\n  \"update.policy\": \"发布策略\",\n  \"update.allowed\": \"允许本次更改\",\n  \"update.blocked\": \"阻止本次更改\",\n  \"update.v1\": \"下载 v1\",\n  \"update.v2\": \"下载 v2\",\n  \"update.report\": \"比较报告\",\n  \"update.warning\": \"请保留原始分发 APKG。导入设置与较新的本地编辑会影响更新。\",\n  \"update.guide\": \"更新指南\",\n  \"copy.button\": \"复制\",\n  \"copy.install\": \"复制安装命令\",\n  \"copy.success\": \"命令已复制。\",\n  \"copy.fallback\": \"命令已选中，请用键盘复制。\",\n  \"copy.copied\": \"已复制\",\n  \"copy.code\": \"复制代码\",\n  \"copy.codeSuccess\": \"代码已复制。\",\n  \"copy.codeFallback\": \"代码已选中，请用键盘复制。\",\n  \"copy.codeLabel\": \"{language} 代码\",\n  \"blog.title\": \"博客\",\n  \"blog.description\": \"Anki Forge 的实用指南与工程决策。\",\n  \"blog.heading\": \"Anki 牌组制作与开发实践。\",\n  \"blog.rss\": \"通过 RSS 订阅 ↗\",\n  \"blog.all\": \"← 全部文章\",\n  \"blog.continue\": \"继续阅读指南 →\",\n  \"blog.read\": \"阅读文章\",\n  \"blog.readLabel\": \"阅读文章：{title}\",\n  \"blog.Tutorial\": \"教程\",\n  \"blog.Engineering\": \"工程\",\n  \"blog.feedTitle\": \"Anki Forge 博客\",\n  \"error.title\": \"未找到页面\",\n  \"error.description\": \"未找到此页面。返回 Anki Forge 首页或浏览编写指南。\",\n  \"error.heading\": \"此页面不存在。\",\n  \"error.explanation\": \"链接可能已经变更。可以返回首页，或在指南中查找需要的内容。\",\n  \"error.home\": \"返回首页\",\n  \"error.guide\": \"浏览指南 →\",\n  \"examples.title\": \"卡片示例\",\n  \"examples.description\": \"探索用 Anki Forge 制作的 Basic、Cloze、媒体和图片遮挡卡片，阅读 Rust 源码并下载生成的 Anki 牌组。\",\n  \"examples.heading1\": \"一点代码，\",\n  \"examples.heading2\": \"留住值得记忆的内容。\",\n  \"examples.intro\": \"阅读源码、翻转卡片，在 Anki 中打开生成的牌组。网页预览与下载文件使用相同字段。\",\n  \"examples.combined\": \"下载四张卡片的牌组\",\n  \"examples.fullSource\": \"阅读完整源码\",\n  \"examples.excerpt\": \"Rust 代码片段\",\n  \"examples.download\": \"下载 {file}\",\n  \"examples.counts\": \"{notes} · {cards} · {media}\",\n  \"examples.updateTitle\": \"一条笔记，两个版本。\",\n  \"examples.updateDescription\": \"第二次构建把答案从“hello”改为“hello; hi”，与第一个包比较并检查笔记身份是否保留。\",\n  \"examples.workflow\": \"阅读更新流程\",\n  \"examples.limitations\": \"Anki 的导入设置和本地编辑会影响更新方式。预览展示内容与身份；实际卡片样式和复习行为由 Anki 决定。\",\n  \"examples.basic\": \"西班牙语问候语，包含问题、答案和显式稳定 ID。简单的正反面卡片可从这里开始。\",\n  \"examples.cloze\": \"使用 Anki 填空语法隐藏上下文中的一个单词。此笔记只有一处填空，因此生成一张卡片。\",\n  \"examples.media\": \"把图片和可播放的音频与笔记一起打包。片段使用的听音训练笔记类型在完整源码中定义。\",\n  \"examples.occlusion\": \"带稳定键的矩形遮住细胞剖面图中的细胞核。下载牌组与此预览使用相同图像和遮罩。\",\n  \"ai.title\": \"让 AI 帮你编写牌组程序\",\n  \"ai.description\": \"选择开发语言、描述任务，再把提示复制给 AI 编码助手。\",\n  \"ai.request\": \"你想生成什么牌组？\",\n  \"ai.placeholder\": \"生成一个带音频的西班牙语词汇牌组。\",\n  \"ai.privacy\": \"可选填写，内容只保留在本页。\",\n  \"ai.skillQuestion\": \"编码助手支持 Skill？\",\n  \"ai.skillLink\": \"查看 Anki Forge Skill\",\n  \"ai.noScript\": \"复制下方对应语言的模板，并替换任务占位符。安装命令和 Skill 也可以直接使用。\",\n  \"ai.language\": \"开发语言\",\n  \"ai.brief\": \"AI 提示\",\n  \"ai.copy\": \"复制 AI 提示\",\n  \"ai.copied\": \"提示已复制，可以粘贴给 AI 编码助手。\",\n  \"ai.fallback\": \"提示已选中，请用键盘复制，再粘贴给 AI 编码助手。\",\n  \"ai.install\": \"复制安装命令\",\n  \"search.loading\": \"正在加载搜索…\",\n  \"search.error\": \"无法加载搜索。请检查网络连接后重试。\",\n  \"copy.noScript\": \"未启用 JavaScript 时，请选中代码或命令并用键盘复制。\",\n  \"hero.description\": \"基础问答、填空、媒体和图片遮挡卡片翻转后合成一个 APKG 牌组。\",\n  \"hero.front\": \"问题\",\n  \"hero.back\": \"答案\",\n  \"hero.english\": \"英语\",\n  \"hero.spanish\": \"西班牙语\",\n  \"hero.gap\": \"补全空缺\",\n  \"hero.media\": \"图片 + 音频\",\n  \"hero.deck\": \"Anki 牌组\",\n  \"hero.cards\": \"张卡片\",\n  \"hero.files\": \"个媒体文件\",\n  \"hero.caption\": \"四种卡片，\",\n  \"hero.oneDeck\": \"一个 Anki 牌组。\",\n  \"performance.title\": \"导出耗时实测\",\n  \"performance.workload\": \"每组 1,000 条 Basic 笔记\",\n  \"performance.export\": \"导出 {notes} 条纯文本笔记\",\n  \"performance.range\": \"五个实测工作负载的耗时降幅\",\n  \"performance.medians\": \"10 次运行中位数\",\n  \"performance.media\": \"文本、图片、音频，\",\n  \"performance.faster\": \"五种场景都更快。\",\n  \"performance.description\": \"每组 {notes} 条 Basic 笔记，覆盖纯文本、不重复媒体和共享混合媒体。Rust 导出耗时比 genanki 低 {minimum}–{maximum}%。\",\n  \"performance.chart\": \"导出耗时中位数，单位为毫秒\",\n  \"performance.less\": \"耗时低 {value}%\",\n  \"performance.more\": \"耗时高 {value}%\",\n  \"performance.basic-mixed-text-v1\": \"纯文本\",\n  \"performance.basic-image-unique-v2\": \"不重复图片\",\n  \"performance.basic-audio-unique-v2\": \"不重复音频\",\n  \"performance.basic-mixed-unique-v2\": \"不重复混合媒体\",\n  \"performance.basic-mixed-shared-v2\": \"共享混合媒体\",\n  \"site.title\": \"Anki Forge | 用代码生成 Anki 牌组\",\n  \"site.socialAlt\": \"Anki Forge：用代码生成 Anki 牌组。西班牙语示例卡片：hola、hello。\",\n  \"social.line1\": \"Anki 牌组，\",\n  \"social.line2\": \"用代码生成。\",\n  \"social.description\": \"编写笔记，生成牌组，保留身份。\",\n  \"social.languages\": \"西班牙语 → 英语\",\n  \"social.footer\": \"开源 · Rust · Anki\",\n  \"performance.method\": \"测量方法与原始数据（英文）\",\n  \"performance.limitations\": \"这些结果测量牌组生成，不代表 Anki 导入或复习速度；其他硬件与工作负载可能不同。\",\n  \"footer.rss\": \"RSS\",\n  \"machine.viewMarkdown\": \"查看 Markdown\",\n  \"machine.aiIndex\": \"AI 文档索引\",\n  \"machine.intro\": \"Anki Forge 使用 Rust、Node / TypeScript 或 Python 从代码生成 Anki APKG 牌组。\",\n  \"machine.version\": \"当前公开包版本：{version}。\",\n  \"machine.constraints\": \"正常导出无需安装 Anki。公开包 API 与源码构建不同。更新时保留上一份原始分发 APKG；Anki 导入设置和较新的本地修改可能影响结果。\",\n  \"machine.start\": \"从这里开始\",\n  \"machine.quickstarts\": \"快速开始\",\n  \"machine.api\": \"API 参考\",\n  \"machine.tasks\": \"任务指南\",\n  \"machine.constraintsGroup\": \"限制与保障\",\n  \"machine.optional\": \"Optional\",\n  \"machine.sourceBuild\": \"开发/源码环境。\",\n  \"machine.history\": \"历史文章，发布于 {date}。\",\n  \"machine.repository\": \"源码仓库与开发资源。\",\n  \"machine.otherLanguage\": \"{language} AI 文档索引。\",\n  \"hero.counts\": \"{cards} / {media}\",\n  \"count.notes\": {\n    \"type\": \"plural\",\n    \"variable\": \"count\",\n    \"forms\": {\n      \"other\": \"{count} 条笔记\"\n    }\n  },\n  \"count.cards\": {\n    \"type\": \"plural\",\n    \"variable\": \"count\",\n    \"forms\": {\n      \"other\": \"{count} 张卡片\"\n    }\n  },\n  \"count.media\": {\n    \"type\": \"plural\",\n    \"variable\": \"count\",\n    \"forms\": {\n      \"other\": \"{count} 个媒体文件\"\n    }\n  },\n  \"home.csv\": \"CSV 批量制卡\",\n  \"home.aiCards\": \"AI 辅助生成卡片\"\n}\n"
+    }
+  },
+  "resolvedCurrentLanguageModels": {
+    "zh-CN": {
+      "currentLocale": {
+        "prefix": "/zh-cn",
+        "lang": "zh-CN",
+        "og": "zh_CN",
+        "label": "简体中文",
+        "format": "zh-CN",
+        "starlightKey": "zh-cn",
+        "dir": "ltr"
+      },
+      "menu": [
+        {
+          "id": "en",
+          "label": "English",
+          "prefix": "",
+          "lang": "en",
+          "dir": "ltr"
+        },
+        {
+          "id": "zh-CN",
+          "label": "简体中文",
+          "prefix": "/zh-cn",
+          "lang": "zh-CN",
+          "dir": "ltr"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "指南",
+          "destination": "/zh-cn/docs/"
+        },
+        {
+          "label": "示例",
+          "destination": "/zh-cn/examples/"
+        },
+        {
+          "label": "博客",
+          "destination": "/zh-cn/blog/"
+        }
+      ],
+      "footer": [
+        {
+          "id": "articles",
+          "label": "文章",
+          "destination": "/zh-cn/blog/"
+        },
+        {
+          "id": "feed",
+          "label": "RSS",
+          "destination": "feed"
+        },
+        {
+          "id": "license",
+          "label": "MIT 许可证",
+          "destination": "license"
+        },
+        {
+          "id": "repository",
+          "label": "GitHub 仓库",
+          "destination": "repository"
+        }
+      ],
+      "homeNext": [
+        {
+          "label": "从 JSON 开始",
+          "destination": "/zh-cn/docs/json-to-anki/",
+          "primary": true
+        },
+        {
+          "label": "CSV 批量制卡",
+          "destination": "/zh-cn/docs/csv-to-anki/",
+          "primary": false
+        },
+        {
+          "label": "AI 辅助生成卡片",
+          "destination": "/zh-cn/docs/ai-anki-cards/",
+          "primary": false
+        },
+        {
+          "label": "与 genanki 比较",
+          "destination": "/zh-cn/docs/anki-forge-vs-genanki/",
+          "primary": false
+        }
+      ],
+      "sidebar": [
+        {
+          "label": "从这里开始",
+          "collapsed": false,
+          "items": [
+            {
+              "label": "用代码生成 Anki 牌组",
+              "destination": "/zh-cn/docs/"
+            },
+            {
+              "label": "选择开发语言",
+              "destination": "/zh-cn/docs/languages/"
+            },
+            {
+              "label": "用 Rust 生成 Anki APKG",
+              "destination": "/zh-cn/docs/quickstart/"
+            },
+            {
+              "label": "集成到应用",
+              "destination": "/zh-cn/docs/installation/"
+            },
+            {
+              "label": "核心概念",
+              "destination": "/zh-cn/docs/concepts/"
+            },
+            {
+              "label": "Anki Forge 与 genanki：如何选择",
+              "destination": "/zh-cn/docs/anki-forge-vs-genanki/"
+            }
+          ]
+        },
+        {
+          "label": "使用指南",
+          "collapsed": false,
+          "items": [
+            {
+              "label": "CSV 转 Anki：用 Python 批量生成卡片",
+              "destination": "/zh-cn/docs/csv-to-anki/"
+            },
+            {
+              "label": "用 JSON 数据生成并更新 Anki 牌组",
+              "destination": "/zh-cn/docs/json-to-anki/"
+            },
+            {
+              "label": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+              "destination": "/zh-cn/docs/ai-anki-cards/"
+            },
+            {
+              "label": "生成 Anki 问答卡片与 Cloze 填空卡片",
+              "destination": "/zh-cn/docs/cards/"
+            },
+            {
+              "label": "为 Anki 卡片添加图片与音频",
+              "destination": "/zh-cn/docs/media/"
+            },
+            {
+              "label": "自定义笔记类型",
+              "destination": "/zh-cn/docs/custom-notetypes/"
+            },
+            {
+              "label": "复用 Anki 卡片模板、CSS 与媒体",
+              "destination": "/zh-cn/docs/templates/"
+            },
+            {
+              "label": "生成 Anki 图片遮挡卡片",
+              "destination": "/zh-cn/docs/image-occlusion/"
+            },
+            {
+              "label": "用稳定笔记 ID 更新 Anki 牌组",
+              "destination": "/zh-cn/docs/updates/"
+            }
+          ]
+        },
+        {
+          "label": "开发语言指南",
+          "collapsed": false,
+          "items": [
+            {
+              "label": "Rust 编写指南",
+              "destination": "/zh-cn/docs/rust-guide/"
+            },
+            {
+              "label": "用 Node.js 生成 Anki APKG",
+              "destination": "/zh-cn/docs/node-quickstart/"
+            },
+            {
+              "label": "用 Python 生成 Anki APKG",
+              "destination": "/zh-cn/docs/python-quickstart/"
+            },
+            {
+              "label": "Python API 迁移",
+              "destination": "/zh-cn/docs/python-migration/"
+            },
+            {
+              "label": "从 genanki 迁移",
+              "destination": "/zh-cn/docs/genanki-migration/"
+            }
+          ]
+        },
+        {
+          "label": "参考",
+          "collapsed": true,
+          "items": [
+            {
+              "label": "公开 API 总览",
+              "destination": "/zh-cn/docs/api/"
+            },
+            {
+              "label": "Rust API 指南",
+              "destination": "/zh-cn/docs/rust-api/"
+            },
+            {
+              "label": "Node 与 TypeScript API",
+              "destination": "/zh-cn/docs/node-api/"
+            },
+            {
+              "label": "Python API",
+              "destination": "/zh-cn/docs/python-api/"
+            },
+            {
+              "label": "构建与输出保证",
+              "destination": "/zh-cn/docs/build-guarantees/"
+            },
+            {
+              "label": "兼容性与发布",
+              "destination": "/zh-cn/docs/compatibility/"
+            }
+          ]
+        },
+        {
+          "label": "帮助",
+          "collapsed": false,
+          "items": [
+            {
+              "label": "排查问题",
+              "destination": "/zh-cn/docs/troubleshooting/"
+            },
+            {
+              "label": "Python 诊断",
+              "destination": "/zh-cn/docs/python-diagnostics/"
+            },
+            {
+              "label": "从源码构建 SDK",
+              "destination": "/zh-cn/docs/development/"
+            }
+          ]
+        }
+      ]
+    },
+    "en": {
+      "currentLocale": {
+        "prefix": "",
+        "lang": "en",
+        "og": "en_US",
+        "label": "English",
+        "format": "en-US",
+        "starlightKey": "root",
+        "dir": "ltr"
+      },
+      "menu": [
+        {
+          "id": "en",
+          "label": "English",
+          "prefix": "",
+          "lang": "en",
+          "dir": "ltr"
+        },
+        {
+          "id": "zh-CN",
+          "label": "简体中文",
+          "prefix": "/zh-cn",
+          "lang": "zh-CN",
+          "dir": "ltr"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Guide",
+          "destination": "/docs/"
+        },
+        {
+          "label": "Examples",
+          "destination": "/examples/"
+        },
+        {
+          "label": "Blog",
+          "destination": "/blog/"
+        }
+      ],
+      "footer": [
+        {
+          "id": "articles",
+          "label": "Articles",
+          "destination": "/blog/"
+        },
+        {
+          "id": "feed",
+          "label": "RSS",
+          "destination": "feed"
+        },
+        {
+          "id": "license",
+          "label": "MIT license",
+          "destination": "license"
+        },
+        {
+          "id": "repository",
+          "label": "GitHub repository",
+          "destination": "repository"
+        }
+      ],
+      "homeNext": [
+        {
+          "label": "Build from JSON",
+          "destination": "/docs/json-to-anki/",
+          "primary": true
+        },
+        {
+          "label": "Convert CSV to Anki",
+          "destination": "/docs/csv-to-anki/",
+          "primary": false
+        },
+        {
+          "label": "Create cards with AI",
+          "destination": "/docs/ai-anki-cards/",
+          "primary": false
+        },
+        {
+          "label": "Compare with genanki",
+          "destination": "/docs/anki-forge-vs-genanki/",
+          "primary": false
+        }
+      ],
+      "sidebar": [
+        {
+          "label": "Start here",
+          "collapsed": false,
+          "items": [
+            {
+              "label": "Build Anki decks from code",
+              "destination": "/docs/"
+            },
+            {
+              "label": "Choose your language",
+              "destination": "/docs/languages/"
+            },
+            {
+              "label": "Generate an Anki APKG with Rust",
+              "destination": "/docs/quickstart/"
+            },
+            {
+              "label": "Add to your application",
+              "destination": "/docs/installation/"
+            },
+            {
+              "label": "Core concepts",
+              "destination": "/docs/concepts/"
+            },
+            {
+              "label": "Anki Forge vs genanki: choose for your workflow",
+              "destination": "/docs/anki-forge-vs-genanki/"
+            }
+          ]
+        },
+        {
+          "label": "Guides",
+          "collapsed": false,
+          "items": [
+            {
+              "label": "CSV to Anki: generate flashcards with Python",
+              "destination": "/docs/csv-to-anki/"
+            },
+            {
+              "label": "Generate and update Anki decks from JSON",
+              "destination": "/docs/json-to-anki/"
+            },
+            {
+              "label": "AI-assisted Anki flashcards: from notes to APKG",
+              "destination": "/docs/ai-anki-cards/"
+            },
+            {
+              "label": "Generate Anki Basic and Cloze flashcards",
+              "destination": "/docs/cards/"
+            },
+            {
+              "label": "Add images and audio to Anki cards",
+              "destination": "/docs/media/"
+            },
+            {
+              "label": "Custom note types",
+              "destination": "/docs/custom-notetypes/"
+            },
+            {
+              "label": "Reusable Anki card templates, CSS and media",
+              "destination": "/docs/templates/"
+            },
+            {
+              "label": "Generate Anki Image Occlusion cards",
+              "destination": "/docs/image-occlusion/"
+            },
+            {
+              "label": "Update Anki decks with stable note IDs",
+              "destination": "/docs/updates/"
+            }
+          ]
+        },
+        {
+          "label": "Language guides",
+          "collapsed": false,
+          "items": [
+            {
+              "label": "Rust authoring guide",
+              "destination": "/docs/rust-guide/"
+            },
+            {
+              "label": "Generate an Anki APKG with Node.js",
+              "destination": "/docs/node-quickstart/"
+            },
+            {
+              "label": "Generate an Anki APKG with Python",
+              "destination": "/docs/python-quickstart/"
+            },
+            {
+              "label": "Python API transition",
+              "destination": "/docs/python-migration/"
+            },
+            {
+              "label": "Move from genanki",
+              "destination": "/docs/genanki-migration/"
+            }
+          ]
+        },
+        {
+          "label": "Reference",
+          "collapsed": true,
+          "items": [
+            {
+              "label": "Public API overview",
+              "destination": "/docs/api/"
+            },
+            {
+              "label": "Rust API guide",
+              "destination": "/docs/rust-api/"
+            },
+            {
+              "label": "Node and TypeScript API",
+              "destination": "/docs/node-api/"
+            },
+            {
+              "label": "Python API",
+              "destination": "/docs/python-api/"
+            },
+            {
+              "label": "Build and output guarantees",
+              "destination": "/docs/build-guarantees/"
+            },
+            {
+              "label": "Compatibility and releases",
+              "destination": "/docs/compatibility/"
+            }
+          ]
+        },
+        {
+          "label": "Help",
+          "collapsed": false,
+          "items": [
+            {
+              "label": "Troubleshooting",
+              "destination": "/docs/troubleshooting/"
+            },
+            {
+              "label": "Python diagnostics",
+              "destination": "/docs/python-diagnostics/"
+            },
+            {
+              "label": "Build SDKs from source",
+              "destination": "/docs/development/"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "actualRenderedContext": [
+    {
+      "locale": "zh-CN",
+      "filename": "dist/zh-cn/index.html",
+      "htmlSha256": "7a4d82346341a5f0c0d8e17a9403beee9af6f3cef58f06427d76910c109cd584",
+      "h1": "从你的数据\n批量生成 Anki 卡片。",
+      "nav": [
+        {
+          "text": "指南",
+          "href": "/zh-cn/docs/"
+        },
+        {
+          "text": "示例",
+          "href": "/zh-cn/examples/"
+        },
+        {
+          "text": "博客",
+          "href": "/zh-cn/blog/"
+        },
+        {
+          "text": "GitHub 仓库",
+          "href": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "languageMenu": [
+        {
+          "text": "English",
+          "lang": "en",
+          "href": "/"
+        }
+      ],
+      "footer": [
+        {
+          "text": "文章",
+          "href": "/zh-cn/blog/"
+        },
+        {
+          "text": "RSS",
+          "href": "/zh-cn/rss.xml"
+        },
+        {
+          "text": "MIT 许可证",
+          "href": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "text": "GitHub 仓库",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "AI 文档索引",
+          "href": "https://ankiforge.dev/zh-cn/llms.txt"
+        }
+      ],
+      "sidebar": [],
+      "next": "从第一个牌组到下一次更新从 CSV 表格、JSON 数据或 AI 起草的卡片开始，按完整教程导出牌组，再添加媒体并检查更新。从 JSON 开始 CSV 批量制卡 AI 辅助生成卡片 与 genanki 比较",
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://ankiforge.dev/#website",
+              "@type": "WebSite",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": [
+                "en",
+                "zh-CN"
+              ]
+            },
+            {
+              "@id": "https://ankiforge.dev/zh-cn/#webpage",
+              "@type": "WebPage",
+              "name": "开源 Anki 卡片生成工具：用代码批量制卡",
+              "description": "用 Python、Node.js 或 Rust 批量生成 Anki 卡片并导出 APKG。开源生成库提供 CSV、JSON 和 AI 辅助制卡流程，支持媒体与牌组更新。",
+              "url": "https://ankiforge.dev/zh-cn/",
+              "inLanguage": "zh-CN",
+              "isPartOf": {
+                "@id": "https://ankiforge.dev/#website"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              },
+              "mainEntity": {
+                "@id": "https://ankiforge.dev/#software"
+              }
+            },
+            {
+              "@id": "https://ankiforge.dev/#software",
+              "@type": "SoftwareApplication",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "applicationCategory": "DeveloperApplication",
+              "softwareVersion": "0.3.1",
+              "license": "https://github.com/morehardy/anki-forge/blob/main/LICENSE",
+              "softwareHelp": "https://ankiforge.dev/zh-cn/docs/",
+              "description": "Anki Forge 是开源 Anki APKG 生成库，以 Rust 为核心，提供 Rust、Python 和 Node.js 接口。打包媒体、使用自定义模板，并在分发前检查更新。"
+            },
+            {
+              "@id": "https://ankiforge.dev/#source",
+              "@type": "SoftwareSourceCode",
+              "name": "Anki Forge",
+              "codeRepository": "https://github.com/morehardy/anki-forge",
+              "license": "https://github.com/morehardy/anki-forge/blob/main/LICENSE",
+              "targetProduct": {
+                "@id": "https://ankiforge.dev/#software"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "filename": "dist/zh-cn/docs/index.html",
+      "htmlSha256": "46ef188499ba5bcf0277ac15ff5d79bb499916c8034ea40462d5d08d099005fa",
+      "h1": "用代码生成 Anki 牌组",
+      "nav": [
+        {
+          "text": "指南",
+          "href": "/zh-cn/docs/"
+        },
+        {
+          "text": "示例",
+          "href": "/zh-cn/examples/"
+        },
+        {
+          "text": "博客",
+          "href": "/zh-cn/blog/"
+        },
+        {
+          "text": "GitHub 仓库",
+          "href": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "languageMenu": [
+        {
+          "text": "English",
+          "lang": "en",
+          "href": "/docs/"
+        },
+        {
+          "text": "English",
+          "lang": "en",
+          "href": "/docs/"
+        }
+      ],
+      "footer": [
+        {
+          "text": "文章",
+          "href": "/zh-cn/blog/"
+        },
+        {
+          "text": "RSS",
+          "href": "/zh-cn/rss.xml"
+        },
+        {
+          "text": "MIT 许可证",
+          "href": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "text": "GitHub 仓库",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "AI 文档索引",
+          "href": "https://ankiforge.dev/zh-cn/llms.txt"
+        }
+      ],
+      "sidebar": [
+        {
+          "text": "从这里开始"
+        },
+        {
+          "text": "用代码生成 Anki 牌组",
+          "href": "/zh-cn/docs/"
+        },
+        {
+          "text": "选择开发语言",
+          "href": "/zh-cn/docs/languages/"
+        },
+        {
+          "text": "用 Rust 生成 Anki APKG",
+          "href": "/zh-cn/docs/quickstart/"
+        },
+        {
+          "text": "集成到应用",
+          "href": "/zh-cn/docs/installation/"
+        },
+        {
+          "text": "核心概念",
+          "href": "/zh-cn/docs/concepts/"
+        },
+        {
+          "text": "Anki Forge 与 genanki：如何选择",
+          "href": "/zh-cn/docs/anki-forge-vs-genanki/"
+        },
+        {
+          "text": "使用指南"
+        },
+        {
+          "text": "CSV 转 Anki：用 Python 批量生成卡片",
+          "href": "/zh-cn/docs/csv-to-anki/"
+        },
+        {
+          "text": "用 JSON 数据生成并更新 Anki 牌组",
+          "href": "/zh-cn/docs/json-to-anki/"
+        },
+        {
+          "text": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+          "href": "/zh-cn/docs/ai-anki-cards/"
+        },
+        {
+          "text": "生成 Anki 问答卡片与 Cloze 填空卡片",
+          "href": "/zh-cn/docs/cards/"
+        },
+        {
+          "text": "为 Anki 卡片添加图片与音频",
+          "href": "/zh-cn/docs/media/"
+        },
+        {
+          "text": "自定义笔记类型",
+          "href": "/zh-cn/docs/custom-notetypes/"
+        },
+        {
+          "text": "复用 Anki 卡片模板、CSS 与媒体",
+          "href": "/zh-cn/docs/templates/"
+        },
+        {
+          "text": "生成 Anki 图片遮挡卡片",
+          "href": "/zh-cn/docs/image-occlusion/"
+        },
+        {
+          "text": "用稳定笔记 ID 更新 Anki 牌组",
+          "href": "/zh-cn/docs/updates/"
+        },
+        {
+          "text": "开发语言指南"
+        },
+        {
+          "text": "Rust 编写指南",
+          "href": "/zh-cn/docs/rust-guide/"
+        },
+        {
+          "text": "用 Node.js 生成 Anki APKG",
+          "href": "/zh-cn/docs/node-quickstart/"
+        },
+        {
+          "text": "用 Python 生成 Anki APKG",
+          "href": "/zh-cn/docs/python-quickstart/"
+        },
+        {
+          "text": "Python API 迁移",
+          "href": "/zh-cn/docs/python-migration/"
+        },
+        {
+          "text": "从 genanki 迁移",
+          "href": "/zh-cn/docs/genanki-migration/"
+        },
+        {
+          "text": "参考"
+        },
+        {
+          "text": "公开 API 总览",
+          "href": "/zh-cn/docs/api/"
+        },
+        {
+          "text": "Rust API 指南",
+          "href": "/zh-cn/docs/rust-api/"
+        },
+        {
+          "text": "Node 与 TypeScript API",
+          "href": "/zh-cn/docs/node-api/"
+        },
+        {
+          "text": "Python API",
+          "href": "/zh-cn/docs/python-api/"
+        },
+        {
+          "text": "构建与输出保证",
+          "href": "/zh-cn/docs/build-guarantees/"
+        },
+        {
+          "text": "兼容性与发布",
+          "href": "/zh-cn/docs/compatibility/"
+        },
+        {
+          "text": "帮助"
+        },
+        {
+          "text": "排查问题",
+          "href": "/zh-cn/docs/troubleshooting/"
+        },
+        {
+          "text": "Python 诊断",
+          "href": "/zh-cn/docs/python-diagnostics/"
+        },
+        {
+          "text": "从源码构建 SDK",
+          "href": "/zh-cn/docs/development/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "English",
+          "href": "/docs/"
+        }
+      ],
+      "next": "",
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://ankiforge.dev/#website",
+              "@type": "WebSite",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": [
+                "en",
+                "zh-CN"
+              ]
+            },
+            {
+              "@id": "https://ankiforge.dev/zh-cn/docs/#webpage",
+              "@type": "CollectionPage",
+              "name": "用代码生成 Anki 牌组",
+              "description": "选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。",
+              "url": "https://ankiforge.dev/zh-cn/docs/",
+              "inLanguage": "zh-CN",
+              "isPartOf": {
+                "@id": "https://ankiforge.dev/#website"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              }
+            },
+            {
+              "@id": "https://ankiforge.dev/#software",
+              "@type": "SoftwareApplication",
+              "name": "Anki Forge"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "filename": "dist/zh-cn/examples/index.html",
+      "htmlSha256": "22dddc84df0f2851e6c38e0d13849a572179b65a1fc9299442fdbc59ba1d7399",
+      "h1": "一点代码，\n留住值得记忆的内容。",
+      "nav": [
+        {
+          "text": "指南",
+          "href": "/zh-cn/docs/"
+        },
+        {
+          "text": "示例",
+          "href": "/zh-cn/examples/"
+        },
+        {
+          "text": "博客",
+          "href": "/zh-cn/blog/"
+        },
+        {
+          "text": "GitHub 仓库",
+          "href": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "languageMenu": [
+        {
+          "text": "English",
+          "lang": "en",
+          "href": "/examples/"
+        }
+      ],
+      "footer": [
+        {
+          "text": "文章",
+          "href": "/zh-cn/blog/"
+        },
+        {
+          "text": "RSS",
+          "href": "/zh-cn/rss.xml"
+        },
+        {
+          "text": "MIT 许可证",
+          "href": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "text": "GitHub 仓库",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "AI 文档索引",
+          "href": "https://ankiforge.dev/zh-cn/llms.txt"
+        }
+      ],
+      "sidebar": [],
+      "next": "",
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://ankiforge.dev/#website",
+              "@type": "WebSite",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": [
+                "en",
+                "zh-CN"
+              ]
+            },
+            {
+              "@id": "https://ankiforge.dev/zh-cn/examples/#webpage",
+              "@type": "CollectionPage",
+              "name": "卡片示例",
+              "description": "探索用 Anki Forge 制作的 Basic、Cloze、媒体和图片遮挡卡片，阅读 Rust 源码并下载生成的 Anki 牌组。",
+              "url": "https://ankiforge.dev/zh-cn/examples/",
+              "inLanguage": "zh-CN",
+              "isPartOf": {
+                "@id": "https://ankiforge.dev/#website"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              }
+            },
+            {
+              "@id": "https://ankiforge.dev/#software",
+              "@type": "SoftwareApplication",
+              "name": "Anki Forge"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "filename": "dist/zh-cn/blog/index.html",
+      "htmlSha256": "25de8acbba2422367e79d75e0db35c2392d58894c10398ace5bca50555b6245c",
+      "h1": "Anki 牌组制作与开发实践。",
+      "nav": [
+        {
+          "text": "指南",
+          "href": "/zh-cn/docs/"
+        },
+        {
+          "text": "示例",
+          "href": "/zh-cn/examples/"
+        },
+        {
+          "text": "博客",
+          "href": "/zh-cn/blog/"
+        },
+        {
+          "text": "GitHub 仓库",
+          "href": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "languageMenu": [
+        {
+          "text": "English",
+          "lang": "en",
+          "href": "/blog/"
+        }
+      ],
+      "footer": [
+        {
+          "text": "文章",
+          "href": "/zh-cn/blog/"
+        },
+        {
+          "text": "RSS",
+          "href": "/zh-cn/rss.xml"
+        },
+        {
+          "text": "MIT 许可证",
+          "href": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "text": "GitHub 仓库",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "AI 文档索引",
+          "href": "https://ankiforge.dev/zh-cn/llms.txt"
+        }
+      ],
+      "sidebar": [],
+      "next": "",
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://ankiforge.dev/#website",
+              "@type": "WebSite",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": [
+                "en",
+                "zh-CN"
+              ]
+            },
+            {
+              "@id": "https://ankiforge.dev/zh-cn/blog/#webpage",
+              "@type": "CollectionPage",
+              "name": "博客",
+              "description": "Anki Forge 的实用指南与工程决策。",
+              "url": "https://ankiforge.dev/zh-cn/blog/",
+              "inLanguage": "zh-CN",
+              "isPartOf": {
+                "@id": "https://ankiforge.dev/#website"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              }
+            },
+            {
+              "@id": "https://ankiforge.dev/#software",
+              "@type": "SoftwareApplication",
+              "name": "Anki Forge"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "filename": "dist/zh-cn/blog/your-first-anki-deck/index.html",
+      "htmlSha256": "2db8991e36b60a9de6c2256a932c837199a470424274540adb7b0d1c96659b13",
+      "h1": "用 Rust 构建第一个 Anki 牌组",
+      "nav": [
+        {
+          "text": "指南",
+          "href": "/zh-cn/docs/"
+        },
+        {
+          "text": "示例",
+          "href": "/zh-cn/examples/"
+        },
+        {
+          "text": "博客",
+          "href": "/zh-cn/blog/"
+        },
+        {
+          "text": "GitHub 仓库",
+          "href": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "languageMenu": [
+        {
+          "text": "English",
+          "lang": "en",
+          "href": "/blog/your-first-anki-deck/"
+        }
+      ],
+      "footer": [
+        {
+          "text": "文章",
+          "href": "/zh-cn/blog/"
+        },
+        {
+          "text": "RSS",
+          "href": "/zh-cn/rss.xml"
+        },
+        {
+          "text": "MIT 许可证",
+          "href": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "text": "GitHub 仓库",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "AI 文档索引",
+          "href": "https://ankiforge.dev/zh-cn/llms.txt"
+        }
+      ],
+      "sidebar": [],
+      "next": "",
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://ankiforge.dev/#website",
+              "@type": "WebSite",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": [
+                "en",
+                "zh-CN"
+              ]
+            },
+            {
+              "@id": "https://ankiforge.dev/zh-cn/blog/your-first-anki-deck/#webpage",
+              "@type": "WebPage",
+              "name": "用 Rust 构建第一个 Anki 牌组",
+              "description": "从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。",
+              "url": "https://ankiforge.dev/zh-cn/blog/your-first-anki-deck/",
+              "inLanguage": "zh-CN",
+              "isPartOf": {
+                "@id": "https://ankiforge.dev/#website"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              },
+              "mainEntity": {
+                "@id": "https://ankiforge.dev/zh-cn/blog/your-first-anki-deck/#article"
+              }
+            },
+            {
+              "@id": "https://ankiforge.dev/zh-cn/blog/your-first-anki-deck/#article",
+              "@type": "BlogPosting",
+              "headline": "用 Rust 构建第一个 Anki 牌组",
+              "description": "从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。",
+              "url": "https://ankiforge.dev/zh-cn/blog/your-first-anki-deck/",
+              "inLanguage": "zh-CN",
+              "mainEntityOfPage": {
+                "@id": "https://ankiforge.dev/zh-cn/blog/your-first-anki-deck/#webpage"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              },
+              "encoding": {
+                "@type": "MediaObject",
+                "contentUrl": "https://ankiforge.dev/zh-cn/blog/your-first-anki-deck/index.md",
+                "encodingFormat": "text/markdown",
+                "inLanguage": "zh-CN"
+              },
+              "datePublished": "2026-09-22T00:00:00.000Z",
+              "articleSection": "教程"
+            },
+            {
+              "@id": "https://ankiforge.dev/#software",
+              "@type": "SoftwareApplication",
+              "name": "Anki Forge"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "filename": "dist/index.html",
+      "htmlSha256": "79f61d21643987ffd771f0c1e5d5efa4ce1baf64105d5e89731b0ada363984cb",
+      "h1": "Generate Anki flashcards\nfrom your data.",
+      "nav": [
+        {
+          "text": "Guide",
+          "href": "/docs/"
+        },
+        {
+          "text": "Examples",
+          "href": "/examples/"
+        },
+        {
+          "text": "Blog",
+          "href": "/blog/"
+        },
+        {
+          "text": "GitHub repository",
+          "href": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "languageMenu": [
+        {
+          "text": "简体中文",
+          "lang": "zh-CN",
+          "href": "/zh-cn/"
+        }
+      ],
+      "footer": [
+        {
+          "text": "Articles",
+          "href": "/blog/"
+        },
+        {
+          "text": "RSS",
+          "href": "/rss.xml"
+        },
+        {
+          "text": "MIT license",
+          "href": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "text": "GitHub repository",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "AI documentation index",
+          "href": "https://ankiforge.dev/llms.txt"
+        }
+      ],
+      "sidebar": [],
+      "next": "From your first deck to the next updateStart with a CSV spreadsheet, JSON data or cards drafted with an AI assistant. Follow a complete export recipe, then add media and review updates.Build from JSON Convert CSV to Anki Create cards with AI Compare with genanki",
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://ankiforge.dev/#website",
+              "@type": "WebSite",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": [
+                "en",
+                "zh-CN"
+              ]
+            },
+            {
+              "@id": "https://ankiforge.dev/#webpage",
+              "@type": "WebPage",
+              "name": "Anki flashcard generator for developers",
+              "description": "Generate Anki flashcards and APKG decks with open-source Python, Node.js and Rust APIs. Start with CSV, JSON or an AI-assisted workflow.",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": "en",
+              "isPartOf": {
+                "@id": "https://ankiforge.dev/#website"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              },
+              "mainEntity": {
+                "@id": "https://ankiforge.dev/#software"
+              }
+            },
+            {
+              "@id": "https://ankiforge.dev/#software",
+              "@type": "SoftwareApplication",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "applicationCategory": "DeveloperApplication",
+              "softwareVersion": "0.3.1",
+              "license": "https://github.com/morehardy/anki-forge/blob/main/LICENSE",
+              "softwareHelp": "https://ankiforge.dev/docs/",
+              "description": "Anki Forge is an open-source Anki APKG generation library with a Rust core and Rust, Python and Node.js interfaces. Package media, use custom templates and review updates before distribution."
+            },
+            {
+              "@id": "https://ankiforge.dev/#source",
+              "@type": "SoftwareSourceCode",
+              "name": "Anki Forge",
+              "codeRepository": "https://github.com/morehardy/anki-forge",
+              "license": "https://github.com/morehardy/anki-forge/blob/main/LICENSE",
+              "targetProduct": {
+                "@id": "https://ankiforge.dev/#software"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "filename": "dist/docs/index.html",
+      "htmlSha256": "bf1a04b54287d4fa096d22a0bc8e3429d4ce89c489e9922dad4e5915b1d8bdcd",
+      "h1": "Build Anki decks from code",
+      "nav": [
+        {
+          "text": "Guide",
+          "href": "/docs/"
+        },
+        {
+          "text": "Examples",
+          "href": "/examples/"
+        },
+        {
+          "text": "Blog",
+          "href": "/blog/"
+        },
+        {
+          "text": "GitHub repository",
+          "href": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "languageMenu": [
+        {
+          "text": "简体中文",
+          "lang": "zh-CN",
+          "href": "/zh-cn/docs/"
+        },
+        {
+          "text": "简体中文",
+          "lang": "zh-CN",
+          "href": "/zh-cn/docs/"
+        }
+      ],
+      "footer": [
+        {
+          "text": "Articles",
+          "href": "/blog/"
+        },
+        {
+          "text": "RSS",
+          "href": "/rss.xml"
+        },
+        {
+          "text": "MIT license",
+          "href": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "text": "GitHub repository",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "AI documentation index",
+          "href": "https://ankiforge.dev/llms.txt"
+        }
+      ],
+      "sidebar": [
+        {
+          "text": "Start here"
+        },
+        {
+          "text": "Build Anki decks from code",
+          "href": "/docs/"
+        },
+        {
+          "text": "Choose your language",
+          "href": "/docs/languages/"
+        },
+        {
+          "text": "Generate an Anki APKG with Rust",
+          "href": "/docs/quickstart/"
+        },
+        {
+          "text": "Add to your application",
+          "href": "/docs/installation/"
+        },
+        {
+          "text": "Core concepts",
+          "href": "/docs/concepts/"
+        },
+        {
+          "text": "Anki Forge vs genanki: choose for your workflow",
+          "href": "/docs/anki-forge-vs-genanki/"
+        },
+        {
+          "text": "Guides"
+        },
+        {
+          "text": "CSV to Anki: generate flashcards with Python",
+          "href": "/docs/csv-to-anki/"
+        },
+        {
+          "text": "Generate and update Anki decks from JSON",
+          "href": "/docs/json-to-anki/"
+        },
+        {
+          "text": "AI-assisted Anki flashcards: from notes to APKG",
+          "href": "/docs/ai-anki-cards/"
+        },
+        {
+          "text": "Generate Anki Basic and Cloze flashcards",
+          "href": "/docs/cards/"
+        },
+        {
+          "text": "Add images and audio to Anki cards",
+          "href": "/docs/media/"
+        },
+        {
+          "text": "Custom note types",
+          "href": "/docs/custom-notetypes/"
+        },
+        {
+          "text": "Reusable Anki card templates, CSS and media",
+          "href": "/docs/templates/"
+        },
+        {
+          "text": "Generate Anki Image Occlusion cards",
+          "href": "/docs/image-occlusion/"
+        },
+        {
+          "text": "Update Anki decks with stable note IDs",
+          "href": "/docs/updates/"
+        },
+        {
+          "text": "Language guides"
+        },
+        {
+          "text": "Rust authoring guide",
+          "href": "/docs/rust-guide/"
+        },
+        {
+          "text": "Generate an Anki APKG with Node.js",
+          "href": "/docs/node-quickstart/"
+        },
+        {
+          "text": "Generate an Anki APKG with Python",
+          "href": "/docs/python-quickstart/"
+        },
+        {
+          "text": "Python API transition",
+          "href": "/docs/python-migration/"
+        },
+        {
+          "text": "Move from genanki",
+          "href": "/docs/genanki-migration/"
+        },
+        {
+          "text": "Reference"
+        },
+        {
+          "text": "Public API overview",
+          "href": "/docs/api/"
+        },
+        {
+          "text": "Rust API guide",
+          "href": "/docs/rust-api/"
+        },
+        {
+          "text": "Node and TypeScript API",
+          "href": "/docs/node-api/"
+        },
+        {
+          "text": "Python API",
+          "href": "/docs/python-api/"
+        },
+        {
+          "text": "Build and output guarantees",
+          "href": "/docs/build-guarantees/"
+        },
+        {
+          "text": "Compatibility and releases",
+          "href": "/docs/compatibility/"
+        },
+        {
+          "text": "Help"
+        },
+        {
+          "text": "Troubleshooting",
+          "href": "/docs/troubleshooting/"
+        },
+        {
+          "text": "Python diagnostics",
+          "href": "/docs/python-diagnostics/"
+        },
+        {
+          "text": "Build SDKs from source",
+          "href": "/docs/development/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "简体中文",
+          "href": "/zh-cn/docs/"
+        }
+      ],
+      "next": "",
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://ankiforge.dev/#website",
+              "@type": "WebSite",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": [
+                "en",
+                "zh-CN"
+              ]
+            },
+            {
+              "@id": "https://ankiforge.dev/docs/#webpage",
+              "@type": "CollectionPage",
+              "name": "Build Anki decks from code",
+              "description": "Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.",
+              "url": "https://ankiforge.dev/docs/",
+              "inLanguage": "en",
+              "isPartOf": {
+                "@id": "https://ankiforge.dev/#website"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              }
+            },
+            {
+              "@id": "https://ankiforge.dev/#software",
+              "@type": "SoftwareApplication",
+              "name": "Anki Forge"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "filename": "dist/examples/index.html",
+      "htmlSha256": "f4d6fab8032cdeff429f01d88dc7f709e6fd6f121068963a172cff637e2c80b2",
+      "h1": "A little code.\nSomething to remember.",
+      "nav": [
+        {
+          "text": "Guide",
+          "href": "/docs/"
+        },
+        {
+          "text": "Examples",
+          "href": "/examples/"
+        },
+        {
+          "text": "Blog",
+          "href": "/blog/"
+        },
+        {
+          "text": "GitHub repository",
+          "href": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "languageMenu": [
+        {
+          "text": "简体中文",
+          "lang": "zh-CN",
+          "href": "/zh-cn/examples/"
+        }
+      ],
+      "footer": [
+        {
+          "text": "Articles",
+          "href": "/blog/"
+        },
+        {
+          "text": "RSS",
+          "href": "/rss.xml"
+        },
+        {
+          "text": "MIT license",
+          "href": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "text": "GitHub repository",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "AI documentation index",
+          "href": "https://ankiforge.dev/llms.txt"
+        }
+      ],
+      "sidebar": [],
+      "next": "",
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://ankiforge.dev/#website",
+              "@type": "WebSite",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": [
+                "en",
+                "zh-CN"
+              ]
+            },
+            {
+              "@id": "https://ankiforge.dev/examples/#webpage",
+              "@type": "CollectionPage",
+              "name": "Card examples",
+              "description": "Explore Basic, Cloze, media, and Image Occlusion cards built with Anki Forge. Read their Rust source and download the generated Anki decks.",
+              "url": "https://ankiforge.dev/examples/",
+              "inLanguage": "en",
+              "isPartOf": {
+                "@id": "https://ankiforge.dev/#website"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              }
+            },
+            {
+              "@id": "https://ankiforge.dev/#software",
+              "@type": "SoftwareApplication",
+              "name": "Anki Forge"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "filename": "dist/blog/index.html",
+      "htmlSha256": "9052801535197489602071a03ed75196f4f3b8a27b8d2738a0c12fd179a95585",
+      "h1": "Notes on making notes.",
+      "nav": [
+        {
+          "text": "Guide",
+          "href": "/docs/"
+        },
+        {
+          "text": "Examples",
+          "href": "/examples/"
+        },
+        {
+          "text": "Blog",
+          "href": "/blog/"
+        },
+        {
+          "text": "GitHub repository",
+          "href": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "languageMenu": [
+        {
+          "text": "简体中文",
+          "lang": "zh-CN",
+          "href": "/zh-cn/blog/"
+        }
+      ],
+      "footer": [
+        {
+          "text": "Articles",
+          "href": "/blog/"
+        },
+        {
+          "text": "RSS",
+          "href": "/rss.xml"
+        },
+        {
+          "text": "MIT license",
+          "href": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "text": "GitHub repository",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "AI documentation index",
+          "href": "https://ankiforge.dev/llms.txt"
+        }
+      ],
+      "sidebar": [],
+      "next": "",
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://ankiforge.dev/#website",
+              "@type": "WebSite",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": [
+                "en",
+                "zh-CN"
+              ]
+            },
+            {
+              "@id": "https://ankiforge.dev/blog/#webpage",
+              "@type": "CollectionPage",
+              "name": "Blog",
+              "description": "Practical guides and engineering decisions behind Anki Forge.",
+              "url": "https://ankiforge.dev/blog/",
+              "inLanguage": "en",
+              "isPartOf": {
+                "@id": "https://ankiforge.dev/#website"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              }
+            },
+            {
+              "@id": "https://ankiforge.dev/#software",
+              "@type": "SoftwareApplication",
+              "name": "Anki Forge"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "filename": "dist/blog/your-first-anki-deck/index.html",
+      "htmlSha256": "06251629acdded94aaf08a25f42ae90220951e5a4819d60e558aa4e7c16812e6",
+      "h1": "Build your first Anki deck with Rust",
+      "nav": [
+        {
+          "text": "Guide",
+          "href": "/docs/"
+        },
+        {
+          "text": "Examples",
+          "href": "/examples/"
+        },
+        {
+          "text": "Blog",
+          "href": "/blog/"
+        },
+        {
+          "text": "GitHub repository",
+          "href": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "languageMenu": [
+        {
+          "text": "简体中文",
+          "lang": "zh-CN",
+          "href": "/zh-cn/blog/your-first-anki-deck/"
+        }
+      ],
+      "footer": [
+        {
+          "text": "Articles",
+          "href": "/blog/"
+        },
+        {
+          "text": "RSS",
+          "href": "/rss.xml"
+        },
+        {
+          "text": "MIT license",
+          "href": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "text": "GitHub repository",
+          "href": "https://github.com/morehardy/anki-forge"
+        },
+        {
+          "text": "AI documentation index",
+          "href": "https://ankiforge.dev/llms.txt"
+        }
+      ],
+      "sidebar": [],
+      "next": "",
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://ankiforge.dev/#website",
+              "@type": "WebSite",
+              "name": "Anki Forge",
+              "url": "https://ankiforge.dev/",
+              "inLanguage": [
+                "en",
+                "zh-CN"
+              ]
+            },
+            {
+              "@id": "https://ankiforge.dev/blog/your-first-anki-deck/#webpage",
+              "@type": "WebPage",
+              "name": "Build your first Anki deck with Rust",
+              "description": "From a short Rust program to a Spanish flashcard you can open in Anki.",
+              "url": "https://ankiforge.dev/blog/your-first-anki-deck/",
+              "inLanguage": "en",
+              "isPartOf": {
+                "@id": "https://ankiforge.dev/#website"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              },
+              "mainEntity": {
+                "@id": "https://ankiforge.dev/blog/your-first-anki-deck/#article"
+              }
+            },
+            {
+              "@id": "https://ankiforge.dev/blog/your-first-anki-deck/#article",
+              "@type": "BlogPosting",
+              "headline": "Build your first Anki deck with Rust",
+              "description": "From a short Rust program to a Spanish flashcard you can open in Anki.",
+              "url": "https://ankiforge.dev/blog/your-first-anki-deck/",
+              "inLanguage": "en",
+              "mainEntityOfPage": {
+                "@id": "https://ankiforge.dev/blog/your-first-anki-deck/#webpage"
+              },
+              "about": {
+                "@id": "https://ankiforge.dev/#software"
+              },
+              "encoding": {
+                "@type": "MediaObject",
+                "contentUrl": "https://ankiforge.dev/blog/your-first-anki-deck/index.md",
+                "encodingFormat": "text/markdown",
+                "inLanguage": "en"
+              },
+              "datePublished": "2026-09-22T00:00:00.000Z",
+              "articleSection": "Tutorial"
+            },
+            {
+              "@id": "https://ankiforge.dev/#software",
+              "@type": "SoftwareApplication",
+              "name": "Anki Forge"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "zh-CN": {
+      "navigation": {
+        "values": [
+          {
+            "label": "指南",
+            "destination": "/zh-cn/docs/"
+          },
+          {
+            "label": "示例",
+            "destination": "/zh-cn/examples/"
+          },
+          {
+            "label": "博客",
+            "destination": "/zh-cn/blog/"
+          }
+        ],
+        "judgement": "“指南/示例/博客”是自然并列入口；移动与桌面导航复用相同词，点击对象分别为文档、卡片示例和文章列表，均不暗示另有托管制卡服务。"
+      },
+      "activeLocaleMenu": {
+        "values": [
+          {
+            "id": "en",
+            "label": "English",
+            "prefix": "",
+            "lang": "en",
+            "dir": "ltr"
+          },
+          {
+            "id": "zh-CN",
+            "label": "简体中文",
+            "prefix": "/zh-cn",
+            "lang": "zh-CN",
+            "dir": "ltr"
+          }
+        ],
+        "current": {
+          "prefix": "/zh-cn",
+          "lang": "zh-CN",
+          "og": "zh_CN",
+          "label": "简体中文",
+          "format": "zh-CN",
+          "starlightKey": "zh-cn",
+          "dir": "ltr"
+        },
+        "judgement": "实际仅发布English/简体中文。以目标语言自称为切换标签自然，lang/prefix/dir为技术标识，中文网站语言与“选择开发语言”的Rust/Node/Python选择不会混淆。"
+      },
+      "footer": {
+        "values": [
+          {
+            "id": "articles",
+            "label": "文章",
+            "destination": "/zh-cn/blog/"
+          },
+          {
+            "id": "feed",
+            "label": "RSS",
+            "destination": "feed"
+          },
+          {
+            "id": "license",
+            "label": "MIT 许可证",
+            "destination": "license"
+          },
+          {
+            "id": "repository",
+            "label": "GitHub 仓库",
+            "destination": "repository"
+          }
+        ],
+        "judgement": "“文章/RSS/MIT许可证/GitHub仓库/AI文档索引”分别指列表、订阅源、许可证、源码和机器索引；短标签符合页脚语境，所有权技术术语未误作版权或用户权限。"
+      },
+      "homeNext": {
+        "values": [
+          {
+            "label": "从 JSON 开始",
+            "destination": "/zh-cn/docs/json-to-anki/",
+            "primary": true
+          },
+          {
+            "label": "CSV 批量制卡",
+            "destination": "/zh-cn/docs/csv-to-anki/",
+            "primary": false
+          },
+          {
+            "label": "AI 辅助生成卡片",
+            "destination": "/zh-cn/docs/ai-anki-cards/",
+            "primary": false
+          },
+          {
+            "label": "与 genanki 比较",
+            "destination": "/zh-cn/docs/anki-forge-vs-genanki/",
+            "primary": false
+          }
+        ],
+        "judgement": "“从JSON开始/CSV批量制卡/AI辅助生成卡片/与genanki比较”四个动作指向各自已经全文审读的任务。JSON仍为主入口，CSV和AI为补充，比较入口保留；起草、审核、APKG构建边界由目标正文说明。"
+      },
+      "sidebar": {
+        "values": [
+          {
+            "label": "从这里开始",
+            "collapsed": false,
+            "items": [
+              {
+                "label": "用代码生成 Anki 牌组",
+                "destination": "/zh-cn/docs/"
+              },
+              {
+                "label": "选择开发语言",
+                "destination": "/zh-cn/docs/languages/"
+              },
+              {
+                "label": "用 Rust 生成 Anki APKG",
+                "destination": "/zh-cn/docs/quickstart/"
+              },
+              {
+                "label": "集成到应用",
+                "destination": "/zh-cn/docs/installation/"
+              },
+              {
+                "label": "核心概念",
+                "destination": "/zh-cn/docs/concepts/"
+              },
+              {
+                "label": "Anki Forge 与 genanki：如何选择",
+                "destination": "/zh-cn/docs/anki-forge-vs-genanki/"
+              }
+            ]
+          },
+          {
+            "label": "使用指南",
+            "collapsed": false,
+            "items": [
+              {
+                "label": "CSV 转 Anki：用 Python 批量生成卡片",
+                "destination": "/zh-cn/docs/csv-to-anki/"
+              },
+              {
+                "label": "用 JSON 数据生成并更新 Anki 牌组",
+                "destination": "/zh-cn/docs/json-to-anki/"
+              },
+              {
+                "label": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+                "destination": "/zh-cn/docs/ai-anki-cards/"
+              },
+              {
+                "label": "生成 Anki 问答卡片与 Cloze 填空卡片",
+                "destination": "/zh-cn/docs/cards/"
+              },
+              {
+                "label": "为 Anki 卡片添加图片与音频",
+                "destination": "/zh-cn/docs/media/"
+              },
+              {
+                "label": "自定义笔记类型",
+                "destination": "/zh-cn/docs/custom-notetypes/"
+              },
+              {
+                "label": "复用 Anki 卡片模板、CSS 与媒体",
+                "destination": "/zh-cn/docs/templates/"
+              },
+              {
+                "label": "生成 Anki 图片遮挡卡片",
+                "destination": "/zh-cn/docs/image-occlusion/"
+              },
+              {
+                "label": "用稳定笔记 ID 更新 Anki 牌组",
+                "destination": "/zh-cn/docs/updates/"
+              }
+            ]
+          },
+          {
+            "label": "开发语言指南",
+            "collapsed": false,
+            "items": [
+              {
+                "label": "Rust 编写指南",
+                "destination": "/zh-cn/docs/rust-guide/"
+              },
+              {
+                "label": "用 Node.js 生成 Anki APKG",
+                "destination": "/zh-cn/docs/node-quickstart/"
+              },
+              {
+                "label": "用 Python 生成 Anki APKG",
+                "destination": "/zh-cn/docs/python-quickstart/"
+              },
+              {
+                "label": "Python API 迁移",
+                "destination": "/zh-cn/docs/python-migration/"
+              },
+              {
+                "label": "从 genanki 迁移",
+                "destination": "/zh-cn/docs/genanki-migration/"
+              }
+            ]
+          },
+          {
+            "label": "参考",
+            "collapsed": true,
+            "items": [
+              {
+                "label": "公开 API 总览",
+                "destination": "/zh-cn/docs/api/"
+              },
+              {
+                "label": "Rust API 指南",
+                "destination": "/zh-cn/docs/rust-api/"
+              },
+              {
+                "label": "Node 与 TypeScript API",
+                "destination": "/zh-cn/docs/node-api/"
+              },
+              {
+                "label": "Python API",
+                "destination": "/zh-cn/docs/python-api/"
+              },
+              {
+                "label": "构建与输出保证",
+                "destination": "/zh-cn/docs/build-guarantees/"
+              },
+              {
+                "label": "兼容性与发布",
+                "destination": "/zh-cn/docs/compatibility/"
+              }
+            ]
+          },
+          {
+            "label": "帮助",
+            "collapsed": false,
+            "items": [
+              {
+                "label": "排查问题",
+                "destination": "/zh-cn/docs/troubleshooting/"
+              },
+              {
+                "label": "Python 诊断",
+                "destination": "/zh-cn/docs/python-diagnostics/"
+              },
+              {
+                "label": "从源码构建 SDK",
+                "destination": "/zh-cn/docs/development/"
+              }
+            ]
+          }
+        ],
+        "judgement": "“从这里开始/使用指南/开发语言指南/参考/帮助”分组自然，29个文档标题逐项读过；顺序先选SDK与概念，再任务，再语言指南/API/排错。API方法名、Basic/Cloze和APKG保留原语义。"
+      },
+      "structuredData": {
+        "judgement": "已读中英现有HTML的JSON-LD：name/headline/description/articleSection使用已审自然文案，软件名称Anki Forge保持品牌，中文“教程”符合文章类别。Schema类型、属性、locale和URL是协议，不翻译。"
+      }
+    },
+    "en": {
+      "navigation": {
+        "values": [
+          {
+            "label": "Guide",
+            "destination": "/docs/"
+          },
+          {
+            "label": "Examples",
+            "destination": "/examples/"
+          },
+          {
+            "label": "Blog",
+            "destination": "/blog/"
+          }
+        ],
+        "judgement": "Guide, Examples and Blog are idiomatic parallel navigation labels. Desktop/mobile actions have the same meanings and point to documentation, previews and the article collection."
+      },
+      "activeLocaleMenu": {
+        "values": [
+          {
+            "id": "en",
+            "label": "English",
+            "prefix": "",
+            "lang": "en",
+            "dir": "ltr"
+          },
+          {
+            "id": "zh-CN",
+            "label": "简体中文",
+            "prefix": "/zh-cn",
+            "lang": "zh-CN",
+            "dir": "ltr"
+          }
+        ],
+        "current": {
+          "prefix": "",
+          "lang": "en",
+          "og": "en_US",
+          "label": "English",
+          "format": "en-US",
+          "starlightKey": "root",
+          "dir": "ltr"
+        },
+        "judgement": "English and 简体中文 are natural target-language autonyms for the two active locales. The website-language menu is distinct from the Rust/Node/Python SDK choice; locale, prefix and direction values remain technical metadata."
+      },
+      "footer": {
+        "values": [
+          {
+            "id": "articles",
+            "label": "Articles",
+            "destination": "/blog/"
+          },
+          {
+            "id": "feed",
+            "label": "RSS",
+            "destination": "feed"
+          },
+          {
+            "id": "license",
+            "label": "MIT license",
+            "destination": "license"
+          },
+          {
+            "id": "repository",
+            "label": "GitHub repository",
+            "destination": "repository"
+          }
+        ],
+        "judgement": "Articles, RSS, MIT license, GitHub repository and AI documentation index accurately identify the collection, feed, license, source and machine index. Concise noun labels fit footer usage and preserve task scope."
+      },
+      "homeNext": {
+        "values": [
+          {
+            "label": "Build from JSON",
+            "destination": "/docs/json-to-anki/",
+            "primary": true
+          },
+          {
+            "label": "Convert CSV to Anki",
+            "destination": "/docs/csv-to-anki/",
+            "primary": false
+          },
+          {
+            "label": "Create cards with AI",
+            "destination": "/docs/ai-anki-cards/",
+            "primary": false
+          },
+          {
+            "label": "Compare with genanki",
+            "destination": "/docs/anki-forge-vs-genanki/",
+            "primary": false
+          }
+        ],
+        "judgement": "Build from JSON, Convert CSV to Anki, Create cards with AI and Compare with genanki are natural actions supported by their already reviewed destinations. The AI destination explicitly requires source checking and local APKG construction; the label does not promise unchecked automation."
+      },
+      "sidebar": {
+        "values": [
+          {
+            "label": "Start here",
+            "collapsed": false,
+            "items": [
+              {
+                "label": "Build Anki decks from code",
+                "destination": "/docs/"
+              },
+              {
+                "label": "Choose your language",
+                "destination": "/docs/languages/"
+              },
+              {
+                "label": "Generate an Anki APKG with Rust",
+                "destination": "/docs/quickstart/"
+              },
+              {
+                "label": "Add to your application",
+                "destination": "/docs/installation/"
+              },
+              {
+                "label": "Core concepts",
+                "destination": "/docs/concepts/"
+              },
+              {
+                "label": "Anki Forge vs genanki: choose for your workflow",
+                "destination": "/docs/anki-forge-vs-genanki/"
+              }
+            ]
+          },
+          {
+            "label": "Guides",
+            "collapsed": false,
+            "items": [
+              {
+                "label": "CSV to Anki: generate flashcards with Python",
+                "destination": "/docs/csv-to-anki/"
+              },
+              {
+                "label": "Generate and update Anki decks from JSON",
+                "destination": "/docs/json-to-anki/"
+              },
+              {
+                "label": "AI-assisted Anki flashcards: from notes to APKG",
+                "destination": "/docs/ai-anki-cards/"
+              },
+              {
+                "label": "Generate Anki Basic and Cloze flashcards",
+                "destination": "/docs/cards/"
+              },
+              {
+                "label": "Add images and audio to Anki cards",
+                "destination": "/docs/media/"
+              },
+              {
+                "label": "Custom note types",
+                "destination": "/docs/custom-notetypes/"
+              },
+              {
+                "label": "Reusable Anki card templates, CSS and media",
+                "destination": "/docs/templates/"
+              },
+              {
+                "label": "Generate Anki Image Occlusion cards",
+                "destination": "/docs/image-occlusion/"
+              },
+              {
+                "label": "Update Anki decks with stable note IDs",
+                "destination": "/docs/updates/"
+              }
+            ]
+          },
+          {
+            "label": "Language guides",
+            "collapsed": false,
+            "items": [
+              {
+                "label": "Rust authoring guide",
+                "destination": "/docs/rust-guide/"
+              },
+              {
+                "label": "Generate an Anki APKG with Node.js",
+                "destination": "/docs/node-quickstart/"
+              },
+              {
+                "label": "Generate an Anki APKG with Python",
+                "destination": "/docs/python-quickstart/"
+              },
+              {
+                "label": "Python API transition",
+                "destination": "/docs/python-migration/"
+              },
+              {
+                "label": "Move from genanki",
+                "destination": "/docs/genanki-migration/"
+              }
+            ]
+          },
+          {
+            "label": "Reference",
+            "collapsed": true,
+            "items": [
+              {
+                "label": "Public API overview",
+                "destination": "/docs/api/"
+              },
+              {
+                "label": "Rust API guide",
+                "destination": "/docs/rust-api/"
+              },
+              {
+                "label": "Node and TypeScript API",
+                "destination": "/docs/node-api/"
+              },
+              {
+                "label": "Python API",
+                "destination": "/docs/python-api/"
+              },
+              {
+                "label": "Build and output guarantees",
+                "destination": "/docs/build-guarantees/"
+              },
+              {
+                "label": "Compatibility and releases",
+                "destination": "/docs/compatibility/"
+              }
+            ]
+          },
+          {
+            "label": "Help",
+            "collapsed": false,
+            "items": [
+              {
+                "label": "Troubleshooting",
+                "destination": "/docs/troubleshooting/"
+              },
+              {
+                "label": "Python diagnostics",
+                "destination": "/docs/python-diagnostics/"
+              },
+              {
+                "label": "Build SDKs from source",
+                "destination": "/docs/development/"
+              }
+            ]
+          }
+        ],
+        "judgement": "Start here, Guides, Language guides, Reference and Help are idiomatic groups. All 29 actual labels and their order were read in the current model and rendered sidebar context. Language guides is understandable with Rust/Node/Python items; Programming language guides would only be a style preference."
+      },
+      "structuredData": {
+        "judgement": "Actual existing HTML/JSON-LD uses the reviewed page titles, descriptions and Tutorial category; the site/software name remains Anki Forge. Schema.org types/properties and locale/URL values are protocol fields, not untranslated UI prose."
+      }
+    }
+  },
+  "parserCrossReview": {
+    "mapTransformation": {
+      "originalFinding": {
+        "fixture": "/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-linguistic-parser-gap-SBmOGp",
+        "actualChangedNavigationLabel": "新指南标签",
+        "before": {
+          "sourceHash": "cd700f043501726bf4d70de2f8bbce27213e5f6d794b759dbb3fef5f68ed61ef",
+          "targetHash": "307ec031d82a3696a1944502841f2561a1ea44d57dde54d68c9a27614dfab081",
+          "technicalDependencyHash": "8116212e7f738d452b7e3b703eddd83c3e465c6dabcc488195d8460202dbcc6a"
+        },
+        "after": {
+          "sourceHash": "cd700f043501726bf4d70de2f8bbce27213e5f6d794b759dbb3fef5f68ed61ef",
+          "targetHash": "307ec031d82a3696a1944502841f2561a1ea44d57dde54d68c9a27614dfab081",
+          "technicalDependencyHash": "8116212e7f738d452b7e3b703eddd83c3e465c6dabcc488195d8460202dbcc6a"
+        },
+        "targetHashUnchanged": true,
+        "sourceHashUnchanged": true
+      },
+      "afterFix": {
+        "rejected": true,
+        "error": "Review model array must remain literal: navigation"
+      },
+      "status": "resolved",
+      "judgement": "Actual runtime label mutation through an untracked navigation.map was originally accepted without changed hashes. Re-running the same isolated fixture now rejects navigation as nonliteral.",
+      "exactProbe": "Replace navigation literal array terminator with .map(item => ({ ...item, label: { ...item.label, \"zh-CN\": item.id === \"docs\" ? \"新指南标签\" : item.label[\"zh-CN\"] } }))."
+    },
+    "initializerSideEffect": {
+      "originalFinding": {
+        "fixture": "/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-linguistic-parser-gap-SBmOGp",
+        "actualChangedLabel": "新指南标签",
+        "before": {
+          "sourceHash": "0d99984a2f0a7de07e64d71af26969306a959a9ade8c70821f63b39fc423a417",
+          "targetHash": "1040aa04a802aa20dbd22b2a8b051c746e117730afe52623b6f5be71fd43f300",
+          "technicalDependencyHash": "8116212e7f738d452b7e3b703eddd83c3e465c6dabcc488195d8460202dbcc6a"
+        },
+        "after": {
+          "sourceHash": "0d99984a2f0a7de07e64d71af26969306a959a9ade8c70821f63b39fc423a417",
+          "targetHash": "1040aa04a802aa20dbd22b2a8b051c746e117730afe52623b6f5be71fd43f300",
+          "technicalDependencyHash": "8116212e7f738d452b7e3b703eddd83c3e465c6dabcc488195d8460202dbcc6a"
+        },
+        "hashesUnchanged": true
+      },
+      "afterFix": {
+        "probe": "unmodeled initializer mutation",
+        "before": {
+          "sourceHash": "7450ccc09c99d38ec3c4c329149a9798bcfb8ef2205803e7d0125d70969f5246",
+          "targetHash": "1b1196ae6850c7ee8650a9a1f1ecdadde1128a4825f70aa9a656ffee74874b15",
+          "technicalDependencyHash": "8116212e7f738d452b7e3b703eddd83c3e465c6dabcc488195d8460202dbcc6a"
+        },
+        "after": {
+          "sourceHash": "6bf59f167c827219c329fa57c1323f801c53459ad4d08275150622ccf4b7eec4",
+          "targetHash": "be433a79ba41231a0fb88d7d212ca94232f234b25e80e0d274b035b63effeea4",
+          "technicalDependencyHash": "8116212e7f738d452b7e3b703eddd83c3e465c6dabcc488195d8460202dbcc6a"
+        },
+        "sourceInvalidated": true,
+        "targetInvalidated": true
+      },
+      "status": "resolved",
+      "judgement": "The new implementation projection includes unprojected initializer logic, and the exact previously accepted const-assignment mutation now changes sourceHash and targetHash. No product file was changed for these probes.",
+      "exactProbe": "Append const unintendedNavigationMutation = (navigation[0].label[\"zh-CN\"] = \"新指南标签\"); to a temporary copy of site-model.mjs."
+    },
+    "suppliedRootAndWordmark": {
+      "file": "website/scripts/content-review-inputs.mjs",
+      "span": "metadata: { ... destination: destination(page.id) ... }; wordmark: destination('home')",
+      "judgement": "Actually read the fix: own current-page title/description are taken from the supplied-root literal model/current catalog, articles retain exact frontmatter bytes and route mapping, and the logo home destination is included. Read the targeted root-metadata and home-route negative tests; no independent test-suite pass is asserted here."
+    },
+    "openFindings": []
+  },
+  "openIssues": []
+}

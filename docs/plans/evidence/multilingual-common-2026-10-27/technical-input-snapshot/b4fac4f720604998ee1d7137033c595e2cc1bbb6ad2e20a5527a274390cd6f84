@@ -1,0 +1,36 @@
+[project]
+name = "ankiforge"
+version = "0.3.1"
+description = "Generate Anki APKG decks with media, templates and reviewed updates, powered by Rust"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+
+[project.urls]
+Homepage = "https://ankiforge.dev/"
+Documentation = "https://ankiforge.dev/docs/python-quickstart/"
+Repository = "https://github.com/morehardy/anki-forge"
+Issues = "https://github.com/morehardy/anki-forge/issues"
+
+[build-system]
+requires = ["maturin==1.15.0"]
+build-backend = "ankiforge_build"
+backend-path = ["."]
+
+[tool.maturin]
+manifest-path = "native/Cargo.toml"
+python-source = "src"
+module-name = "ankiforge._native"
+python-packages = ["ankiforge"]
+exclude = ["src/ankiforge/_runtime/**", "src/anki_forge/**", "src/anki_forge_python/**"]
+include = [{ path = "ankiforge_build.py", format = "sdist" }]
+
+[tool.mypy]
+python_version = "3.11"
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+warn_return_any = true
+warn_unused_ignores = true
+strict_equality = true

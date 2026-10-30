@@ -5,7 +5,7 @@ import PostCard from './PostCard.astro';
 import { sitePath } from '../lib/site';
 import { locales } from '../../site-model.mjs';
 import { createTranslator } from '../i18n/messages.mjs';
-interface Props { locale: 'en' | 'zh-CN' }
+interface Props { locale: string }
 const { locale } = Astro.props;
 const t = createTranslator(locale);
 const posts = (await getCollection('blog', ({ data }) => !data.draft && data.locale === locale)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());

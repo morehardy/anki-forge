@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-engineering",
+  "status": "failed",
+  "engineeringStatus": "passed",
+  "engineeringOnly": false,
+  "startedAt": "2026-10-28T07:54:44.954Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "checks": [
+    {
+      "name": "check:content",
+      "command": [
+        "npm",
+        "run",
+        "check:content"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 1532,
+      "log": {
+        "file": "01-check-content.log",
+        "sha256": "77f9a6640b360e66cb67b330638d25104633300a8ec44e960e8378200f5caa1d",
+        "bytes": 471
+      }
+    },
+    {
+      "name": "check:site",
+      "command": [
+        "npm",
+        "run",
+        "check:site"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 1192,
+      "log": {
+        "file": "02-check-site.log",
+        "sha256": "26f8c3ea93c55683c171df4eb2dc4a4d1c40866571d3983583d72aea9c4dd6cd",
+        "bytes": 483
+      }
+    },
+    {
+      "name": "check:surface",
+      "command": [
+        "npm",
+        "run",
+        "check:surface"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 877,
+      "log": {
+        "file": "03-check-surface.log",
+        "sha256": "a52f73517ac41fc032cb0945b2825425a658782f505ce9b4fa66de671f9e5f50",
+        "bytes": 627
+      }
+    },
+    {
+      "name": "check:machine",
+      "command": [
+        "npm",
+        "run",
+        "check:machine"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 1013,
+      "log": {
+        "file": "04-check-machine.log",
+        "sha256": "9865124399d73ac547a17775dae2780f5c80377129b2ade16a00149c8366bcf8",
+        "bytes": 440
+      }
+    },
+    {
+      "name": "check:schema",
+      "command": [
+        "npm",
+        "run",
+        "check:schema"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 544,
+      "log": {
+        "file": "05-check-schema.log",
+        "sha256": "69dd430f8317abf6a5c0a7bbb4b9008410a99b17462f264092e1316114c0d6ee",
+        "bytes": 426
+      }
+    },
+    {
+      "name": "check:gates",
+      "command": [
+        "npm",
+        "run",
+        "check:gates"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 11847,
+      "log": {
+        "file": "06-check-gates.log",
+        "sha256": "f9e678138ef8024e8deeca6012745bfbc60a3f7049ca0631d4274401c069214a",
+        "bytes": 1643
+      }
+    },
+    {
+      "name": "test:browser",
+      "command": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 17292,
+      "log": {
+        "file": "07-test-browser.log",
+        "sha256": "ee2dcd789b2c6fa9b679cd13bab15f813fffefa6e9ac2e28b2335edd78669fa7",
+        "bytes": 1835
+      }
+    },
+    {
+      "name": "check:search",
+      "command": [
+        "npm",
+        "run",
+        "check:search"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 2945,
+      "log": {
+        "file": "08-check-search.log",
+        "sha256": "0463f8eadeff8aeef34ba2845c9fdc77992fc1f706d28782fd7fdaff8eb3e90e",
+        "bytes": 553
+      }
+    }
+  ],
+  "identity": {
+    "commit": "decde69ac379e69175f986801e56e9456e16acb0",
+    "inputSha256": "083ac8095ad2a6c7f641fc6ce0398f0a7164f946fbf7fc567243f71c39a3eec0",
+    "configuration": {
+      "site": "https://morehardy.github.io",
+      "base": "/anki-forge",
+      "customDomain": ""
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN"
+    ]
+  },
+  "manifestSha256": "20eca7c196990c7fae7e0c70ddecc93d1adb69f871c39438c91e69ffe8c1ce15",
+  "artifactSha256": "345bd633fbcc7000605945079507e52be9ebfb4fa3e3155667b9ab56092b33b7",
+  "fileCount": 274,
+  "attachments": [
+    {
+      "file": "search-results.json",
+      "sha256": "dbe8ccc38d0ec334cb7a70670460f86a68b5e5ba237c2ff3d951886149fbda21",
+      "bytes": 98916
+    }
+  ],
+  "artifactUnchanged": true,
+  "finishedAt": "2026-10-28T07:55:22.588Z",
+  "error": "docs/plans/evidence/multilingual-common-2026-10-27/usage-tasks-prefix.json: reviewed resource changed: /anki-forge/\n+ actual - expected\n\n+ 'cddd10493ca3adb4765986a37db0ed5d9f8d897e77cd45b533b27433a87eefea'\n- 'cf63f1a0281e0b597e641bfd86fe359adc83bb9d06cd4154a405b12e73786a88'\n"
+}

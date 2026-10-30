@@ -1,7 +1,12 @@
 # Basic and Cloze cards
 
-A Basic note has a front and back. A Cloze note generates one card for each
-supported deletion number. This example creates two notes and three cards.
+Generate Anki Basic (question-and-answer) and Cloze (fill-in-the-blank) cards
+from code instead of adding them one at a time in Anki. A Basic note has a front
+and back. A Cloze note generates one card for each supported deletion number.
+This Rust example creates two notes and three cards. Python and Node.js provide
+the same `Note.basic` and `Note.cloze` constructors; see the
+[Python API](python/api.md#project-and-note-values) and
+[Node API](node/api.md#project-and-notes).
 
 From the repository root:
 

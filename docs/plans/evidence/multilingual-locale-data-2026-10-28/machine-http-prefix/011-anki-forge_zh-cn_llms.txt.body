@@ -1,0 +1,54 @@
+# Anki Forge
+
+> Anki Forge 使用 Rust、Node / TypeScript 或 Python 从代码生成 Anki APKG 牌组。
+
+当前公开包版本：0.3.1。 正常导出无需安装 Anki。公开包 API 与源码构建不同。更新时保留上一份原始分发 APKG；Anki 导入设置和较新的本地修改可能影响结果。
+
+- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)
+- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)
+- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)
+
+## 从这里开始
+
+- [用代码生成 Anki 牌组](https://morehardy.github.io/anki-forge/zh-cn/docs/index.md): 选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。
+- [选择开发语言](https://morehardy.github.io/anki-forge/zh-cn/docs/languages/index.md): 安装公开 Rust、Node 或 Python 包，导出第一个 Anki 牌组。
+- [兼容性与发布](https://morehardy.github.io/anki-forge/zh-cn/docs/compatibility/index.md): 查看公开包、已验证运行环境和 Anki 客户端条件。
+
+## 快速开始
+
+- [用 Rust 生成 Anki APKG](https://morehardy.github.io/anki-forge/zh-cn/docs/quickstart/index.md): 安装公开 Rust 包，编写西班牙语卡片并导出持久保存的 APKG。
+- [用 Node.js 生成 Anki APKG](https://morehardy.github.io/anki-forge/zh-cn/docs/node-quickstart/index.md): 安装公开 Node 包并导出第一个牌组。
+- [用 Python 生成 Anki APKG](https://morehardy.github.io/anki-forge/zh-cn/docs/python-quickstart/index.md): 安装公开 Python wheel 并生成第一个 Anki APKG。
+
+## API 参考
+
+- [公开 API 总览](https://morehardy.github.io/anki-forge/zh-cn/docs/api/index.md): 查找 Rust、Node 和 Python 的内容编写、媒体、诊断与更新 API。
+- [Rust API 指南](https://morehardy.github.io/anki-forge/zh-cn/docs/rust-api/index.md): 查找内容编写方法、构建默认值、报告和诊断行为。
+- [Node 与 TypeScript API](https://morehardy.github.io/anki-forge/zh-cn/docs/node-api/index.md): 公开方法、异步行为、构建选项和报告。
+- [Python API](https://morehardy.github.io/anki-forge/zh-cn/docs/python-api/index.md): Project、媒体、构建选项、报告和临时产物的所有权。
+
+## 任务指南
+
+- [CSV 转 Anki：用 Python 批量生成卡片](https://morehardy.github.io/anki-forge/zh-cn/docs/csv-to-anki/index.md): 用完整 Python 脚本将 UTF-8 CSV 词汇表转换为 Anki APKG，包含示例数据、稳定笔记 ID 和导入检查步骤。
+- [用 JSON 数据生成并更新 Anki 牌组](https://morehardy.github.io/anki-forge/zh-cn/docs/json-to-anki/index.md): 用 Rust、Node 或 Python 读取 JSON，打包图片和音频，再检查仅修改答案的更新。
+- [AI 辅助生成 Anki 卡片：从笔记到 APKG](https://morehardy.github.io/anki-forge/zh-cn/docs/ai-anki-cards/index.md): 让 AI 助手根据笔记起草卡片，核对答案后用 Anki Forge 导出 APKG。提供 CSV 制卡流程和编程助手任务说明入口。
+- [生成 Anki 问答卡片与 Cloze 填空卡片](https://morehardy.github.io/anki-forge/zh-cn/docs/cards/index.md): 运行完整 Rust 示例，用两个笔记生成三张卡片。
+- [为 Anki 卡片添加图片与音频](https://morehardy.github.io/anki-forge/zh-cn/docs/media/index.md): 导入图片和音频，组合类型化内容，并管理导出名称、MIME 类型与媒体预算。
+- [复用 Anki 卡片模板、CSS 与媒体](https://morehardy.github.io/anki-forge/zh-cn/docs/templates/index.md): 导入完整的普通与 Cloze 模板、CSS 和媒体。
+- [生成 Anki 图片遮挡卡片](https://morehardy.github.io/anki-forge/zh-cn/docs/image-occlusion/index.md): 用矩形区域创建图像问题，了解两种遮挡模式。
+- [用稳定笔记 ID 更新 Anki 牌组](https://morehardy.github.io/anki-forge/zh-cn/docs/updates/index.md): 以原始 APKG 为基线比较并构建新版本。
+
+## 限制与保障
+
+- [构建与输出保证](https://morehardy.github.io/anki-forge/zh-cn/docs/build-guarantees/index.md): 理解临时产物、路径保护和候选版本发布。
+- [排查问题](https://morehardy.github.io/anki-forge/zh-cn/docs/troubleshooting/index.md): 解决安装、媒体、模板、身份与输出错误。
+
+## Optional
+
+- [Anki Forge 与 genanki：如何选择](https://morehardy.github.io/anki-forge/zh-cn/docs/anki-forge-vs-genanki/index.md): 比较 Anki APKG 编写流程、运行环境、更新检查和迁移成本。
+- [从 genanki 迁移](https://morehardy.github.io/anki-forge/zh-cn/docs/genanki-migration/index.md): 了解迁入 Anki Forge 时内容、模板与媒体行为的变化。
+- [从源码构建 SDK](https://morehardy.github.io/anki-forge/zh-cn/docs/development/index.md): 开发/源码环境。 从仓库源码构建 SDK，运行示例并区分公开包与源码功能。
+- [用 Rust 构建第一个 Anki 牌组](https://morehardy.github.io/anki-forge/zh-cn/blog/your-first-anki-deck/index.md): 历史文章，发布于 2026-09-22。 从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。
+- [笔记身份应当比措辞更持久](https://morehardy.github.io/anki-forge/zh-cn/blog/stable-ids-and-deck-updates/index.md): 历史文章，发布于 2026-09-22。 更新生成的 Anki 牌组时，稳定 ID 与构建基线如何共同发挥作用。
+- [GitHub](https://github.com/morehardy/anki-forge): 源码仓库与开发资源。
+- [English](https://morehardy.github.io/anki-forge/llms.txt): English AI 文档索引。

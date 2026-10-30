@@ -1,6 +1,6 @@
 # Basic 与 Cloze 卡片
 
-Basic 笔记有正面和背面。Cloze 笔记针对每个受支持的填空编号生成一张卡片。本例创建两条笔记和三张卡片。
+用代码批量生成 Anki 问答（Basic）卡片和 Cloze 填空（挖空）卡片，无需在 Anki 中逐张添加。Basic 笔记有正面和背面。Cloze 笔记针对每个受支持的填空编号生成一张卡片。本例用 Rust 创建两条笔记和三张卡片。Python 和 Node.js 提供相同的 `Note.basic` 与 `Note.cloze` 构造方法，参见 [Python API](../python/api.md#project-and-note-values) 和 [Node API](../node/api.md#project-and-notes)。
 
 在仓库根目录运行：
 

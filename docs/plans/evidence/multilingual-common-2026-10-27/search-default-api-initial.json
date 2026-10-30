@@ -1,0 +1,1419 @@
+{
+  "schemaVersion": 1,
+  "mode": "editorial-preview",
+  "status": "failed",
+  "manifestSha256": null,
+  "querySetSha256": "61ec6d751285dc389471a8bebde8e86b9c12eb905d459c6262890b249dacf128",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "summaries": {
+    "en": {
+      "core": 4,
+      "positive": 11,
+      "negative": 4
+    },
+    "zh-CN": {
+      "core": 2,
+      "positive": 9,
+      "negative": 4
+    }
+  },
+  "results": {
+    "en": [
+      {
+        "id": "en-core-01",
+        "query": "Rust apkg export",
+        "top3": [
+          {
+            "url": "/docs/quickstart/",
+            "title": "Generate an Anki APKG with Rust",
+            "excerpt": "Anki <mark>APKG</mark> with <mark>Rust.</mark> Use <mark>Rust</mark> 1.92 or later. For another language, choose Node / TypeScript or Python. Install. Terminal window cargo new anki-deck. cd anki-deck. cargo add ankiforge@0.3.1. <mark>Export</mark>",
+            "pageId": "quickstart"
+          },
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "ankiforge==0.3.1 The <mark>export,</mark> measured. <mark>Rust</mark> Project API / genanki 0.13.1 · 1,000 Basic notes per workload. 52.7 <mark>msExport</mark> 1,000 text-only notes. 45.7–53.9%Less <mark>export</mark> time across five measured workloads. <mark>Rust</mark> Project",
+            "pageId": "home"
+          },
+          {
+            "url": "/blog/your-first-anki-deck/",
+            "title": "Build your first Anki deck with Rust",
+            "excerpt": "your first Anki deck with <mark>Rust.</mark> From a short <mark>Rust</mark> program to a Spanish flashcard you can open in Anki. TutorialSeptember 22, 2026. When your notes already live in a",
+            "pageId": "blog:your-first-anki-deck"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-02",
+        "query": "TypeScript create Anki deck",
+        "top3": [
+          {
+            "url": "/docs/node-api/",
+            "title": "Node and TypeScript API",
+            "excerpt": "and <mark>TypeScript</mark> API. The <mark>ankiforge</mark> entry point exposes the sole Project authoring model. Types are defined in the public source, report classes, and JSON snapshot declarations. Start with the quick",
+            "pageId": "node-api"
+          },
+          {
+            "url": "/docs/languages/",
+            "title": "Choose your language",
+            "excerpt": "/ <mark>TypeScript</mark> or Python to connect <mark>Anki</mark> <mark>deck</mark> generation to your data. All three can export a persistent spanish.apkg without installing <mark>Anki.</mark> Language Public package Install Complete first <mark>deck</mark> Rust.",
+            "pageId": "languages"
+          },
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "data into <mark>Anki</mark> <mark>decks.</mark> <mark>Anki</mark> Forge is an open-source <mark>Anki</mark> APKG generation library with a Rust core and Rust, Python and Node.js interfaces. Package media, use custom templates and review",
+            "pageId": "home"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-core-03",
+        "query": "Python questions to apkg",
+        "top3": [
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "deck <mark>to</mark> the next update. Build three cards from shared JSON, image and audio inputs. Keep your business IDs, change an answer, and review the update against the original <mark>APKG.</mark>",
+            "pageId": "home"
+          },
+          {
+            "url": "/docs/",
+            "title": "Build Anki decks from code",
+            "excerpt": "example. Add <mark>to</mark> your application. Node / TypeScript. Install and build your first deck. API and async behavior. <mark>Python.</mark> Install and export a deck. API and output ownership. Prefer <mark>to</mark>",
+            "pageId": "docs"
+          },
+          {
+            "url": "/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge vs genanki: choose for your workflow",
+            "excerpt": "Rust core; Rust, <mark>Python</mark> and Node / TypeScript interfaces. <mark>Python.</mark> Shared basics. Basic, Cloze, custom templates, media and offline <mark>APKG</mark> generation. Basic, Cloze, custom templates, media and offline <mark>APKG</mark> generation.",
+            "pageId": "anki-forge-vs-genanki"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-core-04",
+        "query": "JSON deck images audio",
+        "top3": [
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "update Anki <mark>decks</mark> from <mark>JSON.</mark> Read three biology questions from <mark>JSON,</mark> add a shared <mark>image</mark> and <mark>audio</mark> clip, and export an original APKG plus a reviewed answer-only update. Each release",
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "across five measured workloads. Rust Project API · Apple M1 Pro · 10-run medians. Text, <mark>images,</mark> <mark>audio.</mark> Faster in all five tests. Each workload contains 1,000 Basic notes, covering text-only,",
+            "pageId": "home"
+          },
+          {
+            "url": "/docs/languages/",
+            "title": "Choose your language",
+            "excerpt": "tasks. Generate and update a <mark>deck</mark> from shared <mark>JSON,</mark> <mark>image</mark> and <mark>audio</mark> inputs, or compare Anki Forge and genanki for your workflow. Add <mark>images</mark> and <mark>audio,</mark> create custom note types,",
+            "pageId": "languages"
+          }
+        ],
+        "kind": "core",
+        "intentId": "json-with-media",
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-05",
+        "query": "update deck original apkg",
+        "top3": [
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "and <mark>update</mark> Anki <mark>decks</mark> from JSON. Read three biology questions from JSON, add a shared image and audio clip, and export an <mark>original</mark> <mark>APKG</mark> plus a reviewed answer-only <mark>update.</mark> Each",
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "first <mark>deck</mark> to the next <mark>update.</mark> Build three cards from shared JSON, image and audio inputs. Keep your business IDs, change an answer, and review the <mark>update</mark> against the <mark>original</mark>",
+            "pageId": "home"
+          },
+          {
+            "url": "/docs/rust-guide/",
+            "title": "Rust authoring guide",
+            "excerpt": "your chosen keys when source records are reordered or edited. <mark>Updating</mark> distributed <mark>decks.</mark> Use the previous <mark>original</mark> distribution <mark>APKG</mark> with <mark>update_from.</mark> Its complete embedded evidence preserves identity and revision mappings.",
+            "pageId": "rust-guide"
+          }
+        ],
+        "kind": "core",
+        "intentId": "update-original-baseline",
+        "expectedPageIds": [
+          "updates"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-core-06",
+        "query": "Anki Forge genanki comparison",
+        "top3": [
+          {
+            "url": "/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge vs genanki: choose for your workflow",
+            "excerpt": "<mark>Anki</mark> <mark>Forge</mark> vs <mark>genanki:</mark> choose for your workflow. Consider <mark>Anki</mark> <mark>Forge</mark> when you are designing a repeatable publishing workflow and need owned media, structured diagnostics, <mark>comparison</mark> and policy review before",
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "install command. npm install --include=optional <mark>ankiforge@0.3.1</mark> Build with Node / TypeScript Python. CPython 3.11+Copy install command. python -m pip install <mark>ankiforge==0.3.1</mark> Build with Python Use <mark>Anki</mark> <mark>Forge</mark> with AI. Choose",
+            "pageId": "home"
+          }
+        ],
+        "kind": "core",
+        "intentId": "compare-genanki",
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-07",
+        "query": "migrate genanki preserve note identity",
+        "top3": [
+          {
+            "url": "/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge vs genanki: choose for your workflow",
+            "excerpt": "Forge vs <mark>genanki:</mark> choose for your workflow. Consider Anki Forge when you are designing a repeatable publishing workflow and need owned media, structured diagnostics, comparison and policy review before releasing",
+            "pageId": "anki-forge-vs-genanki"
+          }
+        ],
+        "kind": "core",
+        "intentId": "migrate-genanki",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-core-08",
+        "query": "card image pronunciation audio",
+        "top3": [
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "export time across five measured workloads. Rust Project API · Apple M1 <mark>Pro</mark> · 10-run medians. Text, <mark>images,</mark> <mark>audio.</mark> Faster in all five tests. Each workload contains 1,000 Basic notes,",
+            "pageId": "home"
+          }
+        ],
+        "kind": "core",
+        "intentId": "attach-image-audio",
+        "expectedPageIds": [
+          "media"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-core-09",
+        "query": "sentence multiple cloze deletions",
+        "top3": [],
+        "kind": "core",
+        "intentId": "create-cloze",
+        "expectedPageIds": [
+          "cards"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-core-10",
+        "query": "custom card front back fields",
+        "top3": [
+          {
+            "url": "/docs/cards/",
+            "title": "Basic and Cloze cards",
+            "excerpt": "previous distribution. Text, <mark>fields</mark> and <mark>card</mark> identity. Both Basic and Cloze strings are Text. Use Content::html for intentional HTML; Cloze deletion syntax is still recognized inside Text. <mark>back_extra</mark> is the",
+            "pageId": "cards"
+          },
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "other hardware and workloads may differ. Method and original measurements. See the code. Try the <mark>card.</mark> Switch between runnable Rust examples, flip the previews, and download the decks they produce.",
+            "pageId": "home"
+          },
+          {
+            "url": "/docs/templates/",
+            "title": "Template bundles",
+            "excerpt": "separate kind declaration is needed. A <mark>field</mark> without required: true may be omitted. Unknown manifest properties are rejected. Every template uses <mark>field</mark> keys, including <mark>front,</mark> <mark>back</mark> and browser variants: {{cloze:text}},",
+            "pageId": "templates"
+          }
+        ],
+        "kind": "core",
+        "intentId": "custom-card-template",
+        "expectedPageIds": [
+          "templates",
+          "custom-notetypes"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-11",
+        "query": "hide anatomy diagram labels",
+        "top3": [],
+        "kind": "core",
+        "intentId": "create-image-occlusion",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-core-12",
+        "query": "deck generation error fix",
+        "top3": [
+          {
+            "url": "/docs/templates/",
+            "title": "Template bundles",
+            "excerpt": "names such as Sentence and Extra are <mark>generated</mark> for Anki after binding. The loader preserves original file paths and template byte ranges in <mark>errors.</mark> Load and reuse a model. fn",
+            "pageId": "templates"
+          },
+          {
+            "url": "/docs/rust-api/",
+            "title": "Rust API guide",
+            "excerpt": "cannot accept missing/corrupt identity evidence or other hard <mark>errors.</mark> Reports and <mark>errors.</mark> BuildReport::snapshot() returns build::json::ReportSnapshot, observations without success/failure or file ownership. BuildOutput::snapshot() and <mark>BuildError::snapshot()</mark> return build::json::BuildSnapshot, including the actual outcome",
+            "pageId": "rust-api"
+          }
+        ],
+        "kind": "core",
+        "intentId": "repair-generation-error",
+        "expectedPageIds": [
+          "troubleshooting"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-terminology-01",
+        "query": "deck grouping notes",
+        "top3": [
+          {
+            "url": "/docs/",
+            "title": "Build Anki decks from code",
+            "excerpt": "Anki <mark>decks</mark> from code. Anki Forge turns <mark>notes,</mark> templates and media into Anki .apkg files. Use it when your learning content lives in code or structured data and you want",
+            "pageId": "docs"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-deck",
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-terminology-02",
+        "query": "note fields versus cards",
+        "top3": [
+          {
+            "url": "/docs/cards/",
+            "title": "Basic and Cloze cards",
+            "excerpt": "answer under the same key remains the same logical <mark>note</mark> when building an update from its previous distribution. Text, <mark>fields</mark> and <mark>card</mark> identity. Both Basic and Cloze strings are Text.",
+            "pageId": "cards"
+          },
+          {
+            "url": "/examples/",
+            "title": "A little code. Something to remember.",
+            "excerpt": "? Cell anatomy Nucleus. Show answer Question shown. Download cell-anatomy.apkg 1 <mark>note</mark> · 1 <mark>card</mark> · 1 media file. One <mark>note,</mark> two versions. The second build changes the answer from",
+            "pageId": "examples"
+          },
+          {
+            "url": "/docs/",
+            "title": "Build Anki decks from code",
+            "excerpt": "the <mark>card</mark> examples and download their generated packages. Understand the pieces. A <mark>note</mark> holds <mark>fields;</mark> a <mark>note</mark> type and its templates turn those <mark>fields</mark> into <mark>cards.</mark> Decks group the resulting",
+            "pageId": "docs"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-note",
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-terminology-03",
+        "query": "one note multiple cards",
+        "top3": [
+          {
+            "url": "/docs/image-occlusion/",
+            "title": "Image Occlusion",
+            "excerpt": "Media::file(diagram)?; let <mark>note</mark> = <mark>Note::image_occlusion(image).</mark> .mask(Mask::rect(\"region-1\", 10, 10, 40, 25)). .build()?; let mut project = Project::new(\"docs-diagram\")?.default_deck(\"Diagram\"); project.add(\"diagram\", <mark>note)?;</mark> let built = project.build(BuildOptions::to(output.join(\"diagram.apkg\")))?; verify(&built, 1, 1, 1)?; Ok(()). } <mark>Multiple</mark> masks",
+            "pageId": "image-occlusion"
+          },
+          {
+            "url": "/docs/concepts/",
+            "title": "Core concepts",
+            "excerpt": "Project and <mark>note.</mark> A Project is <mark>one</mark> publication with a stable namespace. It can place <mark>notes</mark> in several Anki decks: default_deck supplies the fallback and <mark>Note::deck</mark> overrides it. A deck",
+            "pageId": "concepts"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-card",
+        "expectedPageIds": [
+          "concepts",
+          "cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-04",
+        "query": "APKG package contents",
+        "top3": [
+          {
+            "url": "/docs/genanki-migration/",
+            "title": "Move from genanki",
+            "excerpt": "note container. Project with a default deck; optional note-level .deck(name). <mark>Package</mark> media file paths. Owned Media.file(path) values, automatically collected through typed <mark>content.</mark> <mark>Package</mark> write. project.build(BuildOptions.to(path)). Default GUID derived from fields,",
+            "pageId": "genanki-migration"
+          },
+          {
+            "url": "/docs/updates/",
+            "title": "Update and distribute",
+            "excerpt": "baseline. Missing evidence is never silently reconstructed. Display-name and <mark>content</mark> edits preserve identity keys. Unchanged <mark>content</mark> keeps its baseline revision; changed <mark>content</mark> advances it. Reordering fields/templates preserves historical mappings. Retired",
+            "pageId": "updates"
+          },
+          {
+            "url": "/docs/media/",
+            "title": "Images and audio",
+            "excerpt": "Media::bytes(b\".card { color: navy; }\".to_vec(), \"text/css\")? .with_export_name(\"course.css\")?; project.add_asset(css)?; let built = <mark>project.build(BuildOptions::to(output.join(\"media.apkg\")))?;</mark> verify(&built, 1, 1, 3)?; Ok(()). } Compose <mark>content</mark> and explicit assets. This complete program uses fixtures/pixel.png, fixtures/silence.wav, and",
+            "pageId": "media"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-apkg",
+        "expectedPageIds": [
+          "concepts",
+          "compatibility"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-terminology-05",
+        "query": "genanki migration compatibility",
+        "top3": [
+          {
+            "url": "/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge vs genanki: choose for your workflow",
+            "excerpt": "Forge vs <mark>genanki:</mark> choose for your workflow. Consider Anki Forge when you are designing a repeatable publishing workflow and need owned media, structured diagnostics, comparison and policy review before releasing",
+            "pageId": "anki-forge-vs-genanki"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-genanki",
+        "expectedPageIds": [
+          "anki-forge-vs-genanki",
+          "genanki-migration"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-06",
+        "query": "Image Occlusion diagram masks",
+        "top3": [
+          {
+            "url": "/docs/image-occlusion/",
+            "title": "Image Occlusion",
+            "excerpt": "<mark>Image</mark> <mark>Occlusion.</mark> Create a structured <mark>image-occlusion</mark> note from an owned <mark>image</mark> and rectangles. Each <mark>mask</mark> needs a stable key that continues to identify the same region through later versions. The",
+            "pageId": "image-occlusion"
+          },
+          {
+            "url": "/docs/node-api/",
+            "title": "Node and TypeScript API",
+            "excerpt": "can be reused across projects; incompatible definitions under one model key fail atomically. Media and <mark>Image</mark> <mark>Occlusion.</mark> await Media.file(path, limits?) and await Media.bytes(Uint8Array, mime, limits?) return owned snapshots. Source files",
+            "pageId": "node-api"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-image-occlusion",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-07",
+        "query": "namespace stable note key",
+        "top3": [
+          {
+            "url": "/docs/rust-guide/",
+            "title": "Rust authoring guide",
+            "excerpt": "but do not own files. <mark>Stable</mark> <mark>note</mark> identity. Use a durable source-record <mark>key</mark> with <mark>project.add(key,</mark> <mark>note).</mark> The project <mark>namespace,</mark> model <mark>key,</mark> field <mark>keys</mark> and template <mark>keys</mark> are independent of display",
+            "pageId": "rust-guide"
+          },
+          {
+            "url": "/docs/genanki-migration/",
+            "title": "Move from genanki",
+            "excerpt": "numeric ID. <mark>NoteType.builder(stable_key)...build().</mark> Field names used as identifiers. <mark>Stable</mark> Field <mark>keys</mark> plus separate display names. <mark>Note</mark> carrying field strings. <mark>model.note().field(key,</mark> content) with an owned model. Deck as a <mark>note</mark> container.",
+            "pageId": "genanki-migration"
+          },
+          {
+            "url": "/docs/concepts/",
+            "title": "Core concepts",
+            "excerpt": "Project and <mark>note.</mark> A Project is one publication with a <mark>stable</mark> <mark>namespace.</mark> It can place <mark>notes</mark> in several Anki decks: default_deck supplies the fallback and <mark>Note::deck</mark> overrides it. A deck",
+            "pageId": "concepts"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-namespace-note-key",
+        "expectedPageIds": [
+          "updates",
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-08",
+        "query": "Cloze c1 c2",
+        "top3": [
+          {
+            "url": "/docs/cards/",
+            "title": "Basic and Cloze cards",
+            "excerpt": "and <mark>Cloze</mark> cards. A Basic note has a front and back. A <mark>Cloze</mark> note generates one card for each supported deletion number. This example creates two notes and three cards.",
+            "pageId": "cards"
+          },
+          {
+            "url": "/docs/templates/",
+            "title": "Template bundles",
+            "excerpt": "note_type: key: <mark>language-cloze.</mark> name: Language <mark>Cloze.</mark> <mark>cloze_field:</mark> text. fields: - key: text. name: Sentence. sort: true. required: true. - key: extra. name: Extra. templates: - key: <mark>cloze.</mark> name: <mark>Cloze.</mark> front_file:",
+            "pageId": "templates"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-cloze",
+        "expectedPageIds": [
+          "cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-variant-01",
+        "query": "json deck sound files",
+        "top3": [
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "update Anki <mark>decks</mark> from <mark>JSON.</mark> Read three biology questions from <mark>JSON,</mark> add a shared image and audio clip, and export an original APKG plus a reviewed answer-only update. Each release",
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "data into Anki <mark>decks.</mark> Anki Forge is an open-source Anki APKG generation library with a Rust core and Rust, Python and Node.js interfaces. Package media, use custom templates and review",
+            "pageId": "home"
+          },
+          {
+            "url": "/docs/concepts/",
+            "title": "Core concepts",
+            "excerpt": "a stable namespace. It can place notes in several Anki <mark>decks:</mark> <mark>default_deck</mark> supplies the fallback and <mark>Note::deck</mark> overrides it. A <mark>deck</mark> is a destination, not a second container for authoring,",
+            "pageId": "concepts"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-json-audio",
+        "expectedPageIds": [
+          "json-to-anki",
+          "media"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-variant-02",
+        "query": "change answer same note",
+        "top3": [
+          {
+            "url": "/docs/cards/",
+            "title": "Basic and Cloze cards",
+            "excerpt": "separately hide Madrid and Spain. Author the <mark>notes.</mark> This function is extracted from the complete executable. Its verify helper checks the successful output’s <mark>note/card/media</mark> counts. fn cards(output: &Path) -&gt; anyhow::Result&lt;()&gt;",
+            "pageId": "cards"
+          },
+          {
+            "url": "/examples/",
+            "title": "A little code. Something to remember.",
+            "excerpt": "Cell anatomy Nucleus. Show <mark>answer</mark> Question shown. Download cell-anatomy.apkg 1 <mark>note</mark> · 1 card · 1 media file. One <mark>note,</mark> two versions. The second build <mark>changes</mark> the <mark>answer</mark> from “hello”",
+            "pageId": "examples"
+          },
+          {
+            "url": "/docs/updates/",
+            "title": "Update and distribute",
+            "excerpt": "Field/template schema <mark>changes</mark> and sort-field <mark>changes</mark> are high-risk because Anki merge and import settings affect their behavior. Schema <mark>changes</mark> can copy models or update target <mark>note</mark> timestamps before <mark>note-content</mark> comparison.",
+            "pageId": "updates"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-answer-update",
+        "expectedPageIds": [
+          "updates"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-variant-03",
+        "query": "hide diagram labels",
+        "top3": [],
+        "kind": "variant",
+        "intentId": "variant-cover-diagram",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-variant-04",
+        "query": "switch genanki to ankiforge",
+        "top3": [
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "Keep HTML, CSS, and media in reusable template bundles. Explore templates From your first deck <mark>to</mark> the next update. Build three cards from shared JSON, image and audio inputs. Keep",
+            "pageId": "home"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-switch-genanki",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-variant-05",
+        "query": "imported deck missing picture",
+        "top3": [
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "data into Anki <mark>decks.</mark> Anki Forge is an open-source Anki APKG generation library with a Rust core and Rust, Python and Node.js interfaces. Package media, use custom templates and review",
+            "pageId": "home"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-missing-picture",
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "passed": false
+      },
+      {
+        "id": "en-negative-01",
+        "query": "zxqvnj 847261 qqqrzz",
+        "top3": [],
+        "kind": "negative",
+        "intentId": "negative-gibberish",
+        "expectedPageIds": [],
+        "passed": true,
+        "expectedBoundary": "Meaningless input has no supported task or expected page. An empty result is allowed; the interface must remain usable and offer a way to revise the query.",
+        "boundaryReviewRequired": false
+      },
+      {
+        "id": "en-negative-02",
+        "query": "ankiforge-project-v1 unchanged input",
+        "top3": [
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "Normal export needs no Anki installation. Maintained by Anki Forge maintainers · reviewed 2026-10-25. Shared <mark>inputs.</mark> Download v1.json, v2.json, cell.png and tone.wav. The image is a cell diagram; the audio",
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/docs/node-api/",
+            "title": "Node and TypeScript API",
+            "excerpt": "NativeLoadError reports missing, incompatible or stale native packages. Addition context. Failed additions leave the project <mark>unchanged.</mark> Structured context records the original note/model keys and the target, with optional conflict or",
+            "pageId": "node-api"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-old-schema",
+        "expectedPageIds": [
+          "json-to-anki",
+          "troubleshooting",
+          "rust-guide"
+        ],
+        "passed": true,
+        "expectedBoundary": "The public 0.3.1 tool requires ankiforge-project-v2 and rejects v1. A result may explain that the input must be converted; it must not present unchanged v1 as accepted input. Empty results are allowed.",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "en-negative-03",
+        "query": "Anki re-export update baseline",
+        "top3": [
+          {
+            "url": "/blog/stable-ids-and-deck-updates/",
+            "title": "A note’s identity should outlive its wording",
+            "excerpt": "its own is only one part of a repeatable <mark>update</mark> workflow. Give the next build a <mark>baseline.</mark> A previous package tells <mark>Anki</mark> Forge what was exported before. Use it when",
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/",
+            "title": "Turn your data into Anki decks.",
+            "excerpt": "into <mark>Anki</mark> decks. <mark>Anki</mark> Forge is an open-source <mark>Anki</mark> APKG generation library with a Rust core and Rust, Python and Node.js interfaces. Package media, use custom templates and review <mark>updates</mark>",
+            "pageId": "home"
+          },
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "and <mark>update</mark> <mark>Anki</mark> decks from JSON. Read three biology questions from JSON, add a shared image and audio clip, and export an original APKG plus a reviewed answer-only <mark>update.</mark> Each",
+            "pageId": "json-to-anki"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-reexport-baseline",
+        "expectedPageIds": [
+          "updates",
+          "compatibility",
+          "troubleshooting"
+        ],
+        "passed": false,
+        "expectedBoundary": "Updates require the previous original distribution APKG. An Anki re-export is not a valid replacement baseline; a result may explain this requirement. Empty results are allowed.",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "en-negative-04",
+        "query": "PNG renamed wrong.mp3 audio",
+        "top3": [
+          {
+            "url": "/docs/media/",
+            "title": "Images and audio",
+            "excerpt": "and <mark>audio.</mark> A Media value owns an immutable snapshot. Import files with Media::file or native bytes with an explicit MIME type via Media::bytes. After successful import, modifying or deleting the",
+            "pageId": "media"
+          },
+          {
+            "url": "/docs/rust-guide/",
+            "title": "Rust authoring guide",
+            "excerpt": "playback. Raw HTML and explicit assets retain their existing behavior. Export <mark>renaming</mark> does not change MIME: a <mark>PNG</mark> <mark>renamed</mark> <mark>wrong.mp3</mark> passes image addition but can still fail build’s independent sniffing/extension",
+            "pageId": "rust-guide"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-mime-rename",
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "passed": true,
+        "expectedBoundary": "Renaming a file does not convert its bytes or retained media MIME. A PNG renamed wrong.mp3 can fail the independent build sniff or extension check. Results must direct the reader to correct media input or actual conversion, not promise conversion by renaming. Empty results are allowed.",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "en-negative-05",
+        "query": "directly reset Anki review history",
+        "top3": [],
+        "kind": "negative",
+        "intentId": "negative-edit-study-progress",
+        "expectedPageIds": [
+          "compatibility",
+          "updates"
+        ],
+        "passed": true,
+        "expectedBoundary": "The library generates APKGs and does not directly modify an installed Anki collection or study progress. A result may explain the package and client import boundary; it must not promise direct review-history edits. Empty results are allowed.",
+        "boundaryReviewRequired": false
+      }
+    ],
+    "zh-CN": [
+      {
+        "id": "zh-CN-core-01",
+        "query": "Rust 导出 apkg",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/quickstart/",
+            "title": "用 Rust 生成 Anki APKG",
+            "excerpt": "用 <mark>Rust </mark>生成 Anki <mark>APKG</mark>. 使用 <mark>Rust </mark>1.92 或更高版本。其他语言可选择 Node / TypeScript 或 Python。 安装. 终端窗口",
+            "pageId": "quickstart"
+          },
+          {
+            "url": "/zh-cn/",
+            "title": "把你的数据 变成 Anki 牌组。",
+            "excerpt": ".1 <mark>导出</mark>耗时实测. <mark>Rust </mark>Project API / genanki 0.13.1 · 每组 1,000 条 Basic 笔记. 52.7 ms<mark>导出 </mark>",
+            "pageId": "home"
+          },
+          {
+            "url": "/zh-cn/blog/your-first-anki-deck/",
+            "title": "用 Rust 构建第一个 Anki 牌组",
+            "excerpt": "文章 用 <mark>Rust </mark>构建第一个 Anki 牌组. 从一段简短的 <mark>Rust </mark>程序，到可以在 Anki 中打开的西班牙语卡片。 教程2026",
+            "pageId": "blog:your-first-anki-deck"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-02",
+        "query": "TypeScript 创建 Anki 牌组",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/",
+            "title": "用代码生成 Anki 牌组",
+            "excerpt": "代码生成 <mark>Anki </mark><mark>牌</mark><mark>组</mark>. <mark>Anki </mark>Forge 将笔记、模板与媒体生成 <mark>Anki </mark>.apkg 文件。当学习内容保存在代码或结构化数据",
+            "pageId": "docs"
+          },
+          {
+            "url": "/zh-cn/docs/languages/",
+            "title": "选择开发语言",
+            "excerpt": "/ <mark>TypeScript </mark>或 Python，将 <mark>Anki </mark><mark>牌</mark><mark>组</mark>生成接入你的数据。三者都能导出持久保存的 spanish.apkg，不需要安装 <mark>Anki</mark>",
+            "pageId": "languages"
+          },
+          {
+            "url": "/zh-cn/docs/node-api/",
+            "title": "Node 与 TypeScript API",
+            "excerpt": "与 <mark>TypeScript </mark>API. <mark>ankiforge </mark>入口提供唯一的 Project 内容编写模型。类型定义位于公开源码、报告类及 JSON 快照声明。从入门开始",
+            "pageId": "node-api"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-core-03",
+        "query": "Python 问答 生成牌组",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/",
+            "title": "用代码生成 Anki 牌组",
+            "excerpt": "代码<mark>生成 </mark>Anki <mark>牌</mark><mark>组</mark>. Anki Forge 将笔记、模板与媒体<mark>生成 </mark>Anki .apkg 文件。当学习内容保存在代码或结构化数据",
+            "pageId": "docs"
+          },
+          {
+            "url": "/zh-cn/",
+            "title": "把你的数据 变成 Anki 牌组。",
+            "excerpt": "数据 变成 Anki <mark>牌</mark><mark>组</mark>。 Anki Forge 是开源 Anki APKG <mark>生成</mark>库，以 Rust 为核心，提供 Rust、<mark>Python </mark>和 Node.js 接口。",
+            "pageId": "home"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-core-04",
+        "query": "JSON 牌组 图片 音频",
+        "top3": [
+          {
+            "url": "/zh-cn/",
+            "title": "把你的数据 变成 Anki 牌组。",
+            "excerpt": "数据 变成 Anki <mark>牌</mark><mark>组</mark>。 Anki Forge 是开源 Anki APKG 生成库，以 Rust 为核心，提供 Rust、Python 和 Node.js 接口。",
+            "pageId": "home"
+          },
+          {
+            "url": "/zh-cn/docs/languages/",
+            "title": "选择开发语言",
+            "excerpt": "使用共享 <mark>JSON</mark>、<mark>图片</mark>和<mark>音频</mark>输入生成并更新<mark>牌</mark><mark>组</mark>，或按自己的工作流程比较 Anki Forge 与 genanki。 添加<mark>图片</mark>与<mark>音频</mark>",
+            "pageId": "languages"
+          },
+          {
+            "url": "/zh-cn/docs/python-quickstart/",
+            "title": "用 Python 生成 Anki APKG",
+            "excerpt": "CPython 3.11–3.14，参见已验证环境。 导出<mark>牌</mark><mark>组</mark>. 将以下程序保存为 main.py： from ankiforge import",
+            "pageId": "python-quickstart"
+          }
+        ],
+        "kind": "core",
+        "intentId": "json-with-media",
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-core-05",
+        "query": "更新牌组 原始 apkg",
+        "top3": [
+          {
+            "url": "/zh-cn/",
+            "title": "把你的数据 变成 Anki 牌组。",
+            "excerpt": "个<mark>牌</mark><mark>组</mark>到下一次<mark>更新</mark>. 用同一份 JSON、图片和音频生成三张卡片。保持业务 ID，修改答案，再基于<mark>原始 </mark>",
+            "pageId": "home"
+          },
+          {
+            "url": "/zh-cn/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge 与 genanki：如何选择",
+            "excerpt": "基于<mark>原始 </mark>v1 <mark>APKG </mark>比较和预备 v2，最后发布。完整 JSON 示例提供 Rust、Python 和 TypeScript 实现及运行命令。 已有 genanki <mark>牌</mark><mark>组</mark>",
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/zh-cn/docs/rust-guide/",
+            "title": "Rust 编写指南",
+            "excerpt": "保存并复用所选键。 <mark>更新</mark>已分发的<mark>牌</mark><mark>组</mark>. 向 update_from 提供上一次<mark>原始</mark>分发 <mark>APKG</mark>。完整的内嵌证据保留",
+            "pageId": "rust-guide"
+          }
+        ],
+        "kind": "core",
+        "intentId": "update-original-baseline",
+        "expectedPageIds": [
+          "updates"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-core-06",
+        "query": "Anki Forge genanki 选型",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge 与 genanki：如何选择",
+            "excerpt": "<mark>Anki </mark><mark>Forge </mark>与 <mark>genanki</mark>：如何<mark>选择</mark>. 如果正在设计可重复的发布流程，需要拥有所有权的媒体、结构化诊断，以及发布",
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/zh-cn/docs/genanki-migration/",
+            "title": "从 genanki 迁移",
+            "excerpt": "从 <mark>genanki </mark>迁移. 还在<mark>选</mark>库？阅读 <mark>Anki </mark><mark>Forge </mark>与 <mark>genanki</mark>。 <mark>AnkiForge </mark>使用稳定数据键、已校验的不可变模型、拥有所有",
+            "pageId": "genanki-migration"
+          },
+          {
+            "url": "/zh-cn/docs/languages/",
+            "title": "选择开发语言",
+            "excerpt": "<mark>选择</mark>开发语言. 使用 Rust、Node / TypeScript 或 Python，将 <mark>Anki </mark>牌组生成接入你的数据。三者都能导出持久保存的",
+            "pageId": "languages"
+          }
+        ],
+        "kind": "core",
+        "intentId": "compare-genanki",
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-07",
+        "query": "genanki 迁移 保持笔记身份",
+        "top3": [],
+        "kind": "core",
+        "intentId": "migrate-genanki",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-core-08",
+        "query": "卡片 图片 发音音频",
+        "top3": [
+          {
+            "url": "/zh-cn/examples/",
+            "title": "一点代码， 留住值得记忆的内容。",
+            "excerpt": "。 下载<mark>音频</mark>。显示答案 已显示问题。 下载 ear-training.apkg 1 条笔记 · 1 张<mark>卡片 </mark>· 2 个媒体文件. <mark>图片</mark>",
+            "pageId": "examples"
+          },
+          {
+            "url": "/zh-cn/",
+            "title": "把你的数据 变成 Anki 牌组。",
+            "excerpt": "阅读代码，试用<mark>卡片</mark>。 切换可运行的 Rust 示例、翻转<mark>卡片</mark>预览，并下载对应牌组。 基础问答 填空 媒体 <mark>图片</mark>遮挡.",
+            "pageId": "home"
+          },
+          {
+            "url": "/zh-cn/docs/",
+            "title": "用代码生成 Anki 牌组",
+            "excerpt": "Basic 与 Cloze：创建问答和填空<mark>卡片</mark>。 <mark>图片</mark>与<mark>音频</mark>：注册真实资源并附加到<mark>卡片</mark>。 自定义笔记类型与模板包：",
+            "pageId": "docs"
+          }
+        ],
+        "kind": "core",
+        "intentId": "attach-image-audio",
+        "expectedPageIds": [
+          "media"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-core-09",
+        "query": "句子 多处挖空",
+        "top3": [],
+        "kind": "core",
+        "intentId": "create-cloze",
+        "expectedPageIds": [
+          "cards"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-core-10",
+        "query": "自定义卡片 正反面 字段",
+        "top3": [],
+        "kind": "core",
+        "intentId": "custom-card-template",
+        "expectedPageIds": [
+          "templates",
+          "custom-notetypes"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-core-11",
+        "query": "解剖图 遮住标注",
+        "top3": [],
+        "kind": "core",
+        "intentId": "create-image-occlusion",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-core-12",
+        "query": "生成牌组 报错修复",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/rust-guide/",
+            "title": "Rust 编写指南",
+            "excerpt": "或编辑时，保存并复用所选键。 更新已分发的<mark>牌</mark><mark>组</mark>. 向 update_from 提供上一次原始分发 APKG。完整",
+            "pageId": "rust-guide"
+          },
+          {
+            "url": "/zh-cn/blog/stable-ids-and-deck-updates/",
+            "title": "笔记身份应当比措辞更持久",
+            "excerpt": "更新<mark>生成</mark>的 Anki <mark>牌</mark><mark>组</mark>时，稳定 ID 与构建基线如何共同发挥作用。 工程2026年9月22日. <mark>生成</mark>的<mark>牌</mark><mark>组</mark>",
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/zh-cn/docs/python-api/",
+            "title": "Python API",
+            "excerpt": "数量预算，包括 max_identity_bytes；不能禁用必需检查。 <mark>错误</mark>与并发. 失败抛出 SchemaError、AddError、MediaError、ImageOcclusionError、TemplateBundleError",
+            "pageId": "python-api"
+          }
+        ],
+        "kind": "core",
+        "intentId": "repair-generation-error",
+        "expectedPageIds": [
+          "troubleshooting"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-terminology-01",
+        "query": "牌组 笔记 分组",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/",
+            "title": "用代码生成 Anki 牌组",
+            "excerpt": "生成 Anki <mark>牌</mark><mark>组</mark>. Anki Forge 将<mark>笔记</mark>、模板与媒体生成 Anki .apkg 文件。当学习内容保存在代码或结构化数据中",
+            "pageId": "docs"
+          },
+          {
+            "url": "/zh-cn/blog/your-first-anki-deck/",
+            "title": "用 Rust 构建第一个 Anki 牌组",
+            "excerpt": "Rust 构建第一个 Anki <mark>牌</mark><mark>组</mark>. 从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。 教程2026年9",
+            "pageId": "blog:your-first-anki-deck"
+          },
+          {
+            "url": "/zh-cn/blog/stable-ids-and-deck-updates/",
+            "title": "笔记身份应当比措辞更持久",
+            "excerpt": "全部文章 <mark>笔记</mark>身份应当比措辞更持久. 更新生成的 Anki <mark>牌</mark><mark>组</mark>时，稳定 ID 与构建基线如何共同发挥作用。 工程2026",
+            "pageId": "blog:stable-ids-and-deck-updates"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-deck",
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-terminology-02",
+        "query": "笔记 字段 卡片 区别",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/cards/",
+            "title": "Basic 与 Cloze 卡片",
+            "excerpt": "下修改答案仍表示同一条逻辑<mark>笔记</mark>。 文本、<mark>字</mark><mark>段</mark>与<mark>卡片</mark>身份. Basic 和 Cloze 的<mark>字符</mark>串均为 Text。有意使用",
+            "pageId": "cards"
+          },
+          {
+            "url": "/zh-cn/docs/",
+            "title": "用代码生成 Anki 牌组",
+            "excerpt": "？探索<mark>卡片</mark>示例，并下载生成的包。 理解各个部分. <mark>笔记</mark>保存<mark>字</mark><mark>段</mark>；<mark>笔记</mark>类型及其模板把<mark>字</mark><mark>段</mark>转换成<mark>卡片</mark>",
+            "pageId": "docs"
+          },
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "排序后保持不变。显示名称和文本不是身份键。 模型、<mark>字</mark><mark>段</mark>与模板. NoteType::builder(key) 收集声明；",
+            "pageId": "concepts"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-note",
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-03",
+        "query": "一条笔记 多张卡片",
+        "top3": [],
+        "kind": "terminology",
+        "intentId": "term-card",
+        "expectedPageIds": [
+          "concepts",
+          "cards"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-terminology-04",
+        "query": "APKG 包含内容",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "也会被<mark>包含</mark>。库不会从任意 HTML 或脚本中自动发现文件<mark>内容</mark>。 构建与更新. 成功构建返回保证<mark>包含 </mark><mark>APKG </mark>的输出",
+            "pageId": "concepts"
+          },
+          {
+            "url": "/zh-cn/docs/media/",
+            "title": "图片与音频",
+            "excerpt": ".<mark>apkg</mark>\")))?; verify(&built, 1, 1, 3)?; Ok(()). } 组合<mark>内容</mark>",
+            "pageId": "media"
+          },
+          {
+            "url": "/zh-cn/docs/rust-api/",
+            "title": "Rust API 指南",
+            "excerpt": "独立且由 feature 控制的接口；消费者应用不需要它们。 <mark>内容</mark>编写. 入口 职责 Project::new(namespace). 校验稳定",
+            "pageId": "rust-api"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-apkg",
+        "expectedPageIds": [
+          "concepts",
+          "compatibility"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-05",
+        "query": "genanki 迁移 兼容性",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge 与 genanki：如何选择",
+            "excerpt": "Forge 与 <mark>genanki</mark>：如何选择. 如果正在设计可重复的发布流程，需要拥有所有权的媒体、结构化诊断，以及发布更新",
+            "pageId": "anki-forge-vs-genanki"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-genanki",
+        "expectedPageIds": [
+          "anki-forge-vs-genanki",
+          "genanki-migration"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-06",
+        "query": "图片遮挡 Image Occlusion 遮罩",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/image-occlusion/",
+            "title": "图片遮挡",
+            "excerpt": "?; Ok(()). } 多个<mark>遮罩</mark>与模式. 此独立示例需要 fixtures/<mark>occlusion</mark>.png，解码后的图像至少为",
+            "pageId": "image-occlusion"
+          },
+          {
+            "url": "/zh-cn/examples/",
+            "title": "一点代码， 留住值得记忆的内容。",
+            "excerpt": ". <mark>图片</mark><mark>遮挡</mark>. 带稳定键的矩形<mark>遮住</mark>细胞剖面图中的细胞核。下载牌组与此预览使用相同图像和<mark>遮罩</mark>。",
+            "pageId": "examples"
+          },
+          {
+            "url": "/zh-cn/docs/python-api/",
+            "title": "Python API",
+            "excerpt": ".cloze_field(key) 声明自定义填空生成。 媒体与<mark>遮挡</mark>. 入口 行为 Media.file(path, *, limits=MediaLimits()",
+            "pageId": "python-api"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-image-occlusion",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-07",
+        "query": "命名空间 稳定笔记键",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/rust-guide/",
+            "title": "Rust 编写指南",
+            "excerpt": "。 <mark>稳定</mark><mark>笔记</mark>身份. 为 project.add(key, note) 使用持久的源记录<mark>键</mark>。项目<mark>命名</mark><mark>空间</mark>、模型<mark>键</mark>、字段",
+            "pageId": "rust-guide"
+          },
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": ". Project 与<mark>笔记</mark>. 一个 Project 表示一次具有<mark>稳定</mark><mark>命名</mark><mark>空间</mark>的发布。它可以把<mark>笔记</mark>放入多个 Anki 牌组：default_deck 提供",
+            "pageId": "concepts"
+          },
+          {
+            "url": "/zh-cn/docs/genanki-migration/",
+            "title": "从 genanki 迁移",
+            "excerpt": "派生的默认 GUID，或自定义 GUID 规则. 显式<mark>稳定</mark><mark>命名</mark><mark>空间</mark>和<mark>笔记</mark><mark>键</mark>. from ankiforge import Project, NoteType, Field, Template",
+            "pageId": "genanki-migration"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-namespace-note-key",
+        "expectedPageIds": [
+          "updates",
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-08",
+        "query": "Cloze c1 c2 挖空",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/cards/",
+            "title": "Basic 与 Cloze 卡片",
+            "excerpt": "与 <mark>Cloze </mark>卡片. Basic 笔记有正面和背面。<mark>Cloze </mark>笔记针对每个受支持的填空编号生成一张卡片。本例创建两条笔记和三张",
+            "pageId": "cards"
+          },
+          {
+            "url": "/zh-cn/docs/templates/",
+            "title": "模板包",
+            "excerpt": "bundle-v2. note_type: key: language-<mark>cloze</mark>. name: Language <mark>Cloze</mark>. <mark>cloze</mark>_field: text. fields: - key:",
+            "pageId": "templates"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-cloze",
+        "expectedPageIds": [
+          "cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-variant-01",
+        "query": "JSON 做牌组 打包 mp3",
+        "top3": [],
+        "kind": "variant",
+        "intentId": "variant-json-audio",
+        "expectedPageIds": [
+          "json-to-anki",
+          "media"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-variant-02",
+        "query": "改答案 保持 note key",
+        "top3": [],
+        "kind": "variant",
+        "intentId": "variant-answer-update",
+        "expectedPageIds": [
+          "updates"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-variant-03",
+        "query": "示意图 遮名称 复习题",
+        "top3": [],
+        "kind": "variant",
+        "intentId": "variant-cover-diagram",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-variant-04",
+        "query": "genanki 脚本 换 ankiforge",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/genanki-migration/",
+            "title": "从 genanki 迁移",
+            "excerpt": "从 <mark>genanki </mark>迁移. 还在选库？阅读 Anki Forge 与 <mark>genanki</mark>。 <mark>AnkiForge </mark>使用稳定数据键、已校验的不可变模型、拥有所有",
+            "pageId": "genanki-migration"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-switch-genanki",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-variant-05",
+        "query": "导入 Anki 图片不显示",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "键与可选的<mark>显示</mark>名称。编写模板时使用字段键，例如 {{front}}，即使 <mark>Anki </mark><mark>显示</mark>名称为 正面。",
+            "pageId": "concepts"
+          },
+          {
+            "url": "/zh-cn/examples/",
+            "title": "一点代码， 留住值得记忆的内容。",
+            "excerpt": "下载音频。<mark>显示</mark>答案 已<mark>显示</mark>问题。 下载 ear-training.apkg 1 条笔记 · 1 张卡片 · 2 个媒体文件. <mark>图片</mark>遮挡",
+            "pageId": "examples"
+          },
+          {
+            "url": "/zh-cn/",
+            "title": "把你的数据 变成 Anki 牌组。",
+            "excerpt": "的数据 变成 <mark>Anki </mark>牌组。 <mark>Anki </mark>Forge 是开源 <mark>Anki </mark>APKG 生成库，以 Rust 为核心，提供 Rust、Python 和 Node.js 接口",
+            "pageId": "home"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-missing-picture",
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-negative-01",
+        "query": "zxqvnj 847261 qqqrzz",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/templates/",
+            "title": "模板包",
+            "excerpt": "包括扩展名在内的完整导出名称最多为 255 个 UTF-<mark>8 </mark>字节。JSON Schema 检查语法和字符数；NoteType::from",
+            "pageId": "templates"
+          },
+          {
+            "url": "/zh-cn/docs/json-to-anki/",
+            "title": "用 JSON 数据生成并更新 Anki 牌组",
+            "excerpt": "((source / version).read_text(encoding='utf-<mark>8</mark>')). image = Media.file(source / 'cell",
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/zh-cn/docs/rust-api/",
+            "title": "Rust API 指南",
+            "excerpt": "有效 Unicode 使用字符串，否则使用无损原生编码：非 UTF-<mark>8 </mark>Unix 名称为 {\"encoding\":\"unix_bytes\",",
+            "pageId": "rust-api"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-gibberish",
+        "expectedPageIds": [],
+        "passed": false,
+        "expectedBoundary": "无意义输入没有对应任务或预期页面。允许无结果；搜索界面应保持可用，并允许修改查询。",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "zh-CN-negative-02",
+        "query": "ankiforge-project-v1 原样输入",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/rust-guide/",
+            "title": "Rust 编写指南",
+            "excerpt": ".DECLARED_MIME_MISMATCH。 工具<mark>输入</mark>现在要求 <mark>ankiforge</mark>-<mark>project</mark>-v2，且没有顶层 name；<mark>v1 </mark>被拒绝。契约包为 2",
+            "pageId": "rust-guide"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-old-schema",
+        "expectedPageIds": [
+          "json-to-anki",
+          "troubleshooting",
+          "rust-guide"
+        ],
+        "passed": true,
+        "expectedBoundary": "公开 0.3.1 工具要求 ankiforge-project-v2，拒绝 v1。结果可以说明需要转换输入，不能声称原样接受 v1。允许无结果。",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "zh-CN-negative-03",
+        "query": "Anki 重导出 更新基线",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/compatibility/",
+            "title": "兼容性与发布",
+            "excerpt": "在公开 0.3.1 包中。 <mark>Anki </mark>导入与播放. 普通<mark>导出</mark>不需要安装 <mark>Anki</mark>。导入、渲染和播放媒体仍取决",
+            "pageId": "compatibility"
+          },
+          {
+            "url": "/zh-cn/docs/node-api/",
+            "title": "Node 与 TypeScript API",
+            "excerpt": "配置<mark>基于</mark>完整原始分发证据的<mark>更新</mark>. options.inspectLimits(limits). 覆盖独立检查计数器. options.updatePolicy(policy). 配置",
+            "pageId": "node-api"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-reexport-baseline",
+        "expectedPageIds": [
+          "updates",
+          "compatibility",
+          "troubleshooting"
+        ],
+        "passed": true,
+        "expectedBoundary": "更新要求保留上一份原始分发 APKG；Anki 重导出包不能替代有效基线。结果可以解释这一要求。允许无结果。",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "zh-CN-negative-04",
+        "query": "PNG 改名 wrong.mp3 音频",
+        "top3": [],
+        "kind": "negative",
+        "intentId": "negative-mime-rename",
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "passed": true,
+        "expectedBoundary": "改文件名不会转换实际字节或媒体保留的 MIME；PNG 改名 wrong.mp3 可能在独立构建的内容嗅探或扩展名检查中失败。结果应指向正确媒体输入或实际转换，不能承诺改名即可转换。允许无结果。",
+        "boundaryReviewRequired": false
+      },
+      {
+        "id": "zh-CN-negative-05",
+        "query": "直接重置 Anki 复习记录",
+        "top3": [],
+        "kind": "negative",
+        "intentId": "negative-edit-study-progress",
+        "expectedPageIds": [
+          "compatibility",
+          "updates"
+        ],
+        "passed": true,
+        "expectedBoundary": "该库生成 APKG，不直接修改已安装 Anki 的集合或学习进度。结果可以解释生成包与客户端导入的边界，不能承诺直接编辑复习记录。允许无结果。",
+        "boundaryReviewRequired": false
+      }
+    ]
+  }
+}

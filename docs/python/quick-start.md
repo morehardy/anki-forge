@@ -1,4 +1,4 @@
-# Generate an Anki APKG with Python
+# Generate Anki flashcards with Python
 
 Create and activate a virtual environment, then install the [public PyPI package](https://pypi.org/project/ankiforge/):
 
@@ -34,6 +34,9 @@ Open the persistent `spanish.apkg` in Anki. It contains **hola → hello** in **
 Keep namespace `spanish` and note key `es:hola` stable for later edits. Exporting does not require Anki to be installed.
 
 ## Continue
+
+For a vocabulary spreadsheet, follow [CSV to Anki](../csv-to-anki.md). To draft
+cards from source notes, start with [AI-assisted card generation](../ai-anki-cards.md).
 
 For a complete media and update task, follow [JSON to Anki](../json-to-anki.md#python).
 

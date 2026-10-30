@@ -1,0 +1,37 @@
+npm warn Unknown user config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> anki-forge-website@0.1.0 verify:release
+> node scripts/release-evidence.mjs run
+
+Release acceptance: running check:content
+Release acceptance: running check:site
+Release acceptance: running check:surface
+Release acceptance: running check:machine
+Release acceptance: running check:schema
+Release acceptance: running check:gates
+Release acceptance: running test:browser
+Release acceptance: running check:search
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: docs/plans/evidence/multilingual-common-2026-10-27/usage-tasks-prefix.json: reviewed resource changed: /anki-forge/
++ actual - expected
+
++ 'cddd10493ca3adb4765986a37db0ed5d9f8d897e77cd45b533b27433a87eefea'
+- 'cf63f1a0281e0b597e641bfd86fe359adc83bb9d06cd4154a405b12e73786a88'
+
+    at validateReport (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/post-build-reviews.mjs:114:12)
+    at async Promise.all (index 0)
+    at async verifyPostBuildReviews (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/post-build-reviews.mjs:191:19)
+    at async runReleaseEvidence (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/release-evidence.mjs:207:53)
+    at async file:///Users/hp/Desktop/2026/anki-forge/website/scripts/release-evidence.mjs:302:23 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'cddd10493ca3adb4765986a37db0ed5d9f8d897e77cd45b533b27433a87eefea',
+  expected: 'cf63f1a0281e0b597e641bfd86fe359adc83bb9d06cd4154a405b12e73786a88',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

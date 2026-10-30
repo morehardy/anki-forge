@@ -88,6 +88,11 @@ Runtime requirements and client/platform limitations are summarized in [compatib
 | Node / TypeScript | Node 22.13+ | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.1` | [Node](docs/node/quick-start.md) |
 | Python | CPython 3.11+ | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.1` | [Python](docs/python/quick-start.md) |
 
+Common tasks: [CSV to Anki with Python](https://ankiforge.dev/docs/csv-to-anki/) ·
+[JSON to Anki](https://ankiforge.dev/docs/json-to-anki/) ·
+[AI-assisted Anki flashcards](https://ankiforge.dev/docs/ai-anki-cards/) ·
+[Anki Forge vs genanki](https://ankiforge.dev/docs/anki-forge-vs-genanki/)
+
 <!-- ai-quickstart:start -->
 ## Use with an AI coding assistant
 

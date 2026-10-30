@@ -4,9 +4,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { siteConfig, withBase } from '../site.config.mjs';
 
-export async function serveBuiltSite() {
-  const dist = fileURLToPath(new URL('../dist/', import.meta.url));
-  const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.wasm': 'application/wasm', '.svg': 'image/svg+xml', '.png': 'image/png', '.wav': 'audio/wav', '.woff2': 'font/woff2', '.xml': 'application/xml' };
+export async function serveBuiltSite({ directory } = {}) {
+  const dist = path.resolve(directory || fileURLToPath(new URL('../dist/', import.meta.url)));
+  const types = { '.html': 'text/html', '.md': 'text/markdown; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.wasm': 'application/wasm', '.svg': 'image/svg+xml', '.png': 'image/png', '.wav': 'audio/wav', '.woff2': 'font/woff2', '.xml': 'application/xml' };
   const server = createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://localhost');
@@ -15,7 +15,7 @@ export async function serveBuiltSite() {
       let relative = decodeURIComponent(url.pathname.slice(prefix.length));
       if (relative.endsWith('/')) relative += 'index.html';
       const file = path.resolve(dist, '.' + relative);
-      if (!file.startsWith(dist)) throw new Error('Outside artifact');
+      if (!file.startsWith(dist + path.sep)) throw new Error('Outside artifact');
       const bytes = await readFile(file);
       response.writeHead(200, { 'Content-Type': types[path.extname(file)] ?? 'application/octet-stream' });
       response.end(bytes);

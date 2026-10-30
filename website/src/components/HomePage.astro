@@ -12,7 +12,7 @@ import { sitePath } from '../lib/site';
 import '../styles/home.css';
 import { pagePath, nextTasks } from '../../site-model.mjs';
 import { createTranslator } from '../i18n/messages.mjs';
-interface Props { locale?: 'en' | 'zh-CN' }
+interface Props { locale?: string }
 const { locale = 'en' } = Astro.props;
 const t = createTranslator(locale);
 const href = (id: string, section = '') => sitePath(pagePath(id, locale, section));

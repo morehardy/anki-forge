@@ -1,0 +1,37 @@
+---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import Icon from './Icon.astro';
+import BrandMark from './BrandMark.astro';
+import ThemeControl from './ThemeControl.astro';
+import { repository, sitePath } from '../lib/site';
+import { navigation, pagePath, pagePair } from '../../site-model.mjs';
+import { createTranslator } from '../i18n/messages.mjs';
+interface Props { locale?: string }
+const { locale = 'en' } = Astro.props;
+const t = createTranslator(locale);
+const links = navigation.map(link => {
+  const label = link.label[locale];
+  if (!label) throw new Error(`${locale}: missing navigation label ${link.id}`);
+  return { ...link, label };
+});
+const section = pagePair(Astro.url.pathname, import.meta.env.BASE_URL)?.section;
+---
+<header class="site-header container">
+  <a class="wordmark" href={sitePath(pagePath('home', locale))} aria-label={t('nav.home')}><BrandMark /><span>ankiforge</span></a>
+  <nav class="desktop-nav" aria-label={t('nav.main')}>
+    {links.map(link => <a data-section={link.id} href={sitePath(pagePath(link.id, locale))} aria-current={section === link.id ? 'page' : undefined}>{link.label}</a>)}
+    <a class="github-link" href={repository} aria-label={t('nav.repository')} title="GitHub"><Icon name="githubLogo" /></a>
+  </nav>
+  <div class="header-tools">
+    <LanguageSwitcher />
+    <ThemeControl locale={locale} scope="header" />
+    <details class="mobile-menu">
+      <summary>{t('nav.menu')}</summary>
+      <nav aria-label={t('nav.mobile')}>
+        {links.map(link => <a data-section={link.id} href={sitePath(pagePath(link.id, locale))} aria-current={section === link.id ? 'page' : undefined}>{link.label}</a>)}
+        <a class="github-link" href={repository} aria-label={t('nav.repository')} title="GitHub"><Icon name="githubLogo" /></a>
+      </nav>
+    </details>
+  </div>
+  <slot />
+</header>

@@ -1,0 +1,54 @@
+# Anki Forge
+
+> Anki Forge generates Anki APKG decks from code using Rust, Node / TypeScript or Python.
+
+Current public package version: 0.3.1. Normal export does not require Anki. Published package APIs differ from source builds. Keep the original previous distribution APKG for updates; Anki import settings and newer local edits can affect the result.
+
+- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)
+- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)
+- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)
+
+## Start here
+
+- [Build Anki decks from code](https://morehardy.github.io/anki-forge/docs/index.md): Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.
+- [Choose your language](https://morehardy.github.io/anki-forge/docs/languages/index.md): Install the public Rust, Node or Python package and export your first Anki deck.
+- [Compatibility and releases](https://morehardy.github.io/anki-forge/docs/compatibility/index.md): Published packages, verified environments and Anki client conditions.
+
+## Quickstarts
+
+- [Generate an Anki APKG with Rust](https://morehardy.github.io/anki-forge/docs/quickstart/index.md): Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.
+- [Generate an Anki APKG with Node.js](https://morehardy.github.io/anki-forge/docs/node-quickstart/index.md): Install the public Node package and export your first deck.
+- [Generate an Anki APKG with Python](https://morehardy.github.io/anki-forge/docs/python-quickstart/index.md): Install the public Python wheel and generate your first Anki APKG.
+
+## API references
+
+- [Public API overview](https://morehardy.github.io/anki-forge/docs/api/index.md): Find Rust, Python and Node APIs for authoring, media, diagnostics and updates.
+- [Rust API guide](https://morehardy.github.io/anki-forge/docs/rust-api/index.md): Find public authoring methods, build defaults, reports and diagnostic behavior.
+- [Node and TypeScript API](https://morehardy.github.io/anki-forge/docs/node-api/index.md): Public methods, async behavior, build options and reports.
+- [Python API](https://morehardy.github.io/anki-forge/docs/python-api/index.md): Project, media, build options, reports and temporary artifact ownership.
+
+## Task guides
+
+- [CSV to Anki: generate flashcards with Python](https://morehardy.github.io/anki-forge/docs/csv-to-anki/index.md): Convert a UTF-8 vocabulary spreadsheet to an Anki APKG with a complete Python script, sample CSV, stable note IDs and import checks.
+- [Generate and update Anki decks from JSON](https://morehardy.github.io/anki-forge/docs/json-to-anki/index.md): Read JSON with Rust, Python or TypeScript, package images and audio, then review an answer-only APKG update.
+- [AI-assisted Anki flashcards: from notes to APKG](https://morehardy.github.io/anki-forge/docs/ai-anki-cards/index.md): Draft Anki cards with an AI assistant, review the answers, then export an APKG using Anki Forge. Follow a CSV workflow or use a coding-assistant brief.
+- [Generate Anki Basic and Cloze flashcards](https://morehardy.github.io/anki-forge/docs/cards/index.md): Build two notes and three cards with a complete verified Rust example.
+- [Add images and audio to Anki cards](https://morehardy.github.io/anki-forge/docs/media/index.md): Import images and audio, compose typed content, and manage export names, MIME types and media budgets.
+- [Reusable Anki card templates, CSS and media](https://morehardy.github.io/anki-forge/docs/templates/index.md): Import complete reusable Cloze and normal templates, CSS and media.
+- [Generate Anki Image Occlusion cards](https://morehardy.github.io/anki-forge/docs/image-occlusion/index.md): Create rectangle-based image questions in both occlusion modes.
+- [Update Anki decks with stable note IDs](https://morehardy.github.io/anki-forge/docs/updates/index.md): Compare and build releases using verified original APKG baselines.
+
+## Constraints
+
+- [Build and output guarantees](https://morehardy.github.io/anki-forge/docs/build-guarantees/index.md): Understand temporary artifacts, path protection and candidate publication.
+- [Troubleshooting](https://morehardy.github.io/anki-forge/docs/troubleshooting/index.md): Resolve installation, media, template, identity and output errors.
+
+## Optional
+
+- [Anki Forge vs genanki: choose for your workflow](https://morehardy.github.io/anki-forge/docs/anki-forge-vs-genanki/index.md): Compare Anki APKG authoring workflows, runtime requirements, update review and migration costs.
+- [Move from genanki](https://morehardy.github.io/anki-forge/docs/genanki-migration/index.md): Understand content, template and media behavior when moving to Anki Forge.
+- [Build SDKs from source](https://morehardy.github.io/anki-forge/docs/development/index.md): Development/source environment. Build SDKs and examples from a source checkout.
+- [Build your first Anki deck with Rust](https://morehardy.github.io/anki-forge/blog/your-first-anki-deck/index.md): Historical article, published 2026-09-22. From a short Rust program to a Spanish flashcard you can open in Anki.
+- [A note’s identity should outlive its wording](https://morehardy.github.io/anki-forge/blog/stable-ids-and-deck-updates/index.md): Historical article, published 2026-09-22. How stable IDs and a build baseline work together when you update a generated Anki deck.
+- [GitHub](https://github.com/morehardy/anki-forge): Source repository and development resources.
+- [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): 简体中文 AI documentation index.

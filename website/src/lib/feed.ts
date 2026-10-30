@@ -5,7 +5,7 @@ import { locales, pagePath } from '../../site-model.mjs';
 import { createTranslator } from '../i18n/messages.mjs';
 import type { APIContext } from 'astro';
 
-export async function feed(context: APIContext, locale: 'en' | 'zh-CN') {
+export async function feed(context: APIContext, locale: string) {
   const t = createTranslator(locale);
   const posts = (await getCollection('blog', ({ data }) => !data.draft && data.locale === locale)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   return rss({

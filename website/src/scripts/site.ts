@@ -1,22 +1,23 @@
-import { createTranslator } from '../i18n/messages.mjs';
-const t = createTranslator(document.documentElement.lang === 'zh-CN' ? 'zh-CN' : 'en');
-import aiQuickstart from '../generated/ai-quickstart.json';
-import { renderPrompt } from '../lib/ai-quickstart.mjs';
+import { translatorFor } from '../i18n/format-message.mjs';
+const clientMessages = document.querySelector<HTMLScriptElement>('script[data-anki-forge-messages]');
+const t = translatorFor(JSON.parse(clientMessages?.textContent || '{}'), document.documentElement.lang);
 
 const root = document.documentElement;
 const darkPreference = window.matchMedia('(prefers-color-scheme: dark)');
-const themePickers = [...document.querySelectorAll<HTMLSelectElement>('[data-theme-picker]')];
+const themeControls = [...document.querySelectorAll<HTMLElement>('[data-theme-control]')];
+const themeOptions = [...document.querySelectorAll<HTMLInputElement>('[data-theme-option]')];
 let theme = 'auto';
 try { theme = localStorage.getItem('starlight-theme') || 'auto'; } catch { /* Storage is optional. */ }
 if (!['light', 'dark', 'auto'].includes(theme)) theme = 'auto';
 function applyTheme() {
   root.dataset.theme = theme === 'dark' || (theme === 'auto' && darkPreference.matches) ? 'dark' : 'light';
-  themePickers.forEach(picker => { picker.value = theme; picker.disabled = false; });
+  themeControls.forEach(control => { control.dataset.themeChoice = theme; });
+  themeOptions.forEach(option => { option.checked = option.value === theme; option.disabled = false; });
 }
 applyTheme();
 darkPreference.addEventListener('change', applyTheme);
-themePickers.forEach(themePicker => themePicker.addEventListener('change', () => {
-  theme = themePicker.value;
+themeOptions.forEach(option => option.addEventListener('change', () => {
+  theme = option.value;
   try { localStorage.setItem('starlight-theme', theme === 'auto' ? '' : theme); } catch { /* Respect storage restrictions. */ }
   applyTheme();
 }));
@@ -91,6 +92,7 @@ document.querySelectorAll<HTMLElement>('[data-update-demo]').forEach(demo => {
 const copyListeners = new AbortController();
 const copyTimers = new Set<ReturnType<typeof setTimeout>>();
 document.querySelectorAll<HTMLElement>('[data-ai-quickstart]').forEach(builder => {
+  const templates: Record<string, { before: string; after: string; empty: string }> = JSON.parse(builder.querySelector<HTMLScriptElement>('script[data-ai-templates]')?.textContent || '{}');
   const tabs = [...builder.querySelectorAll<HTMLButtonElement>('[data-ai-language]')];
   const panels = [...builder.querySelectorAll<HTMLElement>('[data-ai-panel]')];
   const request = builder.querySelector<HTMLTextAreaElement>('[data-ai-request]');
@@ -125,7 +127,8 @@ document.querySelectorAll<HTMLElement>('[data-ai-quickstart]').forEach(builder =
   request.addEventListener('input', () => {
     panels.forEach(panel => {
       const prompt = panel.querySelector<HTMLElement>('[data-ai-prompt]');
-      if (prompt) prompt.textContent = renderPrompt(aiQuickstart, panel.dataset.aiPanel!, request.value, builder.dataset.aiLocale || 'en');
+      const template = templates[panel.dataset.aiPanel!];
+      if (prompt && template) prompt.textContent = request.value.trim() ? `${template.before}${request.value}${template.after}` : template.empty;
       panel.querySelectorAll<HTMLElement>('[data-copy-status]').forEach(status => { status.textContent = ''; });
     });
   }, { signal: copyListeners.signal });

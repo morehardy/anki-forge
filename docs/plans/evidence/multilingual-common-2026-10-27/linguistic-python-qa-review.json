@@ -1,0 +1,377 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/independent_linguistic_source_review/2026-10-29/python-qa",
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-python-qa-34.json",
+    "sha256": "019c3aa6f68418075b48da8bde9e4bb94597dfe4b97738fd6951664ae024f243"
+  },
+  "priorCumulativeReview": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-source-review-before-python-qa.json",
+    "sha256": "2469017f808b5fbc8cfa35ece6f5f9fb7f01ec5d18536cb523194ba586970d34"
+  },
+  "priorInputSnapshot": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-input-snapshot/04d952f6f1201676addb125262a5f97304a5ea83c189bf8661a858571a44bfde",
+    "sha256": "04d952f6f1201676addb125262a5f97304a5ea83c189bf8661a858571a44bfde",
+    "note": "Content-addressed copy of the HEAD website/site-model.mjs; the other 126 candidate inputs are byte-identical to HEAD."
+  },
+  "commits": {
+    "lastReviewed": "86095ce83a590fa3c027810a5fe64b4e487d275e",
+    "head": "86095ce83a590fa3c027810a5fe64b4e487d275e",
+    "change": "uncommitted working-tree edit to website/site-model.mjs line 182",
+    "note": "The prior cumulative report was recorded at 86095ce and HEAD reproduces it. The working tree differs from HEAD in website/site-model.mjs (the reviewed edit) and website/post-build-reviews.config.json, which is not a candidate input and was not reviewed here."
+  },
+  "method": "Regenerated the candidate to stdout with website/scripts/content-review-candidates.mjs: byte-identical to the recorded candidate (sha256 019c3aa6f68418075b48da8bde9e4bb94597dfe4b97738fd6951664ae024f243). Extracted the 127 distinct candidate inputFiles from HEAD (86095ce) with git archive into a scratch directory and compared them with the working tree: only website/site-model.mjs differs; git diff -U0 shows one hunk (@@ -182 +182 @@). Ran the unchanged hashing module website/scripts/content-review-inputs.mjs from a scratch script (no repository writes) against both trees: the HEAD tree reproduces all 68 sourceHash/targetHash/technicalDependencyHash/inputFiles values of the prior cumulative report, and the working tree reproduces all 68 candidate values. The only differing value is python-quickstart/zh-CN targetHash. Character diff of the zh-CN description: one insertion of \"问答\" (U+95EE U+7B54) at offset 42, between \"Anki \" and \"卡片\"; the en description and the title are unchanged. Read in full the zh-CN page (docs/zh-cn/python-quickstart.md), its English source (docs/python/quick-start.md), the included example (bindings/python/examples/quickstart.py), the zh-CN cards page (docs/zh-cn/cards.md), the site-model entries of the cards page and all three quickstarts, website/language-briefs.json, the zh-CN search terms for python-quickstart and cards, and the search query zh-CN-core-03 in website/search-queries.json with its failing observation in docs/plans/evidence/multilingual-task-descriptions-2026-10-29/engineering/prefix/08-check-search.log. Searched every zh-CN source and catalog for 问答 to check how the site names Basic cards. Judged the new description as a meta description and search snippet, against the page title, the H1, the page body and the sibling quickstart descriptions, on the four rubric axes. Supplemental rendered context, not a build by this reviewer: read the existing website/dist (written 07:38:07, after site-model.mjs was modified at 07:37:59) and the gitignored generated website/src/content/docs/zh-cn/docs/python-quickstart.md. Both carry the new description verbatim; they are not claimed to be a release build or proof that the dist matches the working tree. Unchanged prose of this record (body, title, sidebar, catalogs) reuses the prior full reading only by exact-byte proof: 44 of the record's 45 inputFiles are byte-identical to HEAD, and in website/site-model.mjs every line except 182 is byte-identical.",
+  "changedInputFiles": [
+    "website/site-model.mjs"
+  ],
+  "unchangedInputFileCount": 126,
+  "recordInputFileCount": 45,
+  "files": {
+    "website/site-model.mjs": {
+      "priorSha256": "04d952f6f1201676addb125262a5f97304a5ea83c189bf8661a858571a44bfde",
+      "priorSnapshotPath": "docs/plans/evidence/multilingual-common-2026-10-27/technical-input-snapshot/04d952f6f1201676addb125262a5f97304a5ea83c189bf8661a858571a44bfde",
+      "headSha256": "04d952f6f1201676addb125262a5f97304a5ea83c189bf8661a858571a44bfde",
+      "currentSha256": "839dd854739b2155758f40392a04f7825f571e7cc3785ac55d26228d49e001e7",
+      "priorEqualsHead": true,
+      "headBlob": "1d724c84383b3dbf4f5825e887043e8f0cc7ce12",
+      "currentBlob": "2534e519e98da1bb0e976544f740a2c8d82eb7d2",
+      "hunks": [
+        "@@ -182 +182 @@"
+      ],
+      "diff": "diff --git a/website/site-model.mjs b/website/site-model.mjs\nindex 1d724c8..2534e51 100644\n--- a/website/site-model.mjs\n+++ b/website/site-model.mjs\n@@ -179,7 +179,7 @@ const documents = [\n     \"route\": \"/docs/python-quickstart/\",\n     \"name\": \"python-quickstart\",\n     \"title\": { \"en\": \"Generate Anki flashcards with Python\", \"zh-CN\": \"用 Python 生成 Anki 卡片\" },\n-    \"description\": { \"en\": \"Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki.\", \"zh-CN\": \"从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。\" }\n+    \"description\": { \"en\": \"Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki.\", \"zh-CN\": \"从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。\" }\n   },\n   {\n     \"source\": \"docs/python/api.md\",\n"
+    }
+  },
+  "hashProof": {
+    "regeneratedCandidateSha256": "019c3aa6f68418075b48da8bde9e4bb94597dfe4b97738fd6951664ae024f243",
+    "priorReproducedOnHeadTree": 68,
+    "candidateReproducedOnWorkingTree": 68,
+    "changedRecords": [
+      "python-quickstart/zh-CN"
+    ],
+    "changedFields": [
+      "targetHash"
+    ],
+    "priorTargetHash": "5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e",
+    "candidateTargetHash": "93f0d9c4e82e9861db7078d819f7851621c4286e03b93206e2ee38b6ba8c0a98",
+    "explanation": "Only the zh-CN description changed. It enters only the zh-CN rendered model metadata of python-quickstart, so only that record's targetHash changes. sourceHash hashes the en model (unchanged); the sidebar model of every docs page uses titles, not descriptions; technicalDependencyHash and inputFiles do not depend on descriptions.",
+    "metadataChange": {
+      "record": "python-quickstart/zh-CN",
+      "field": "description",
+      "before": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。",
+      "after": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。",
+      "insertion": {
+        "offset": 42,
+        "text": "问答",
+        "codePoints": [
+          "U+95EE",
+          "U+7B54"
+        ]
+      },
+      "beforeLength": 67,
+      "afterLength": 69
+    }
+  },
+  "passages": [
+    {
+      "id": "Q01",
+      "locale": "zh-CN",
+      "file": "website/site-model.mjs",
+      "line": 182,
+      "field": "description",
+      "spanBefore": "    \"description\": { \"en\": \"Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki.\", \"zh-CN\": \"从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。\" }",
+      "span": "    \"description\": { \"en\": \"Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki.\", \"zh-CN\": \"从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。\" }",
+      "changedSpan": {
+        "before": "用简短的 Python 脚本生成 Anki 卡片，",
+        "after": "用简短的 Python 脚本生成 Anki 问答卡片，"
+      },
+      "judgement": "“Anki 问答卡片”是自然的中文名词短语，语序与卡片页标题“生成 Anki 问答卡片与 Cloze 填空卡片”一致，也与站内对 Basic 卡片的既有叫法一致（卡片页“问答（Basic）卡片”、CSV 指南“Basic 问答卡片”“选择问答卡片或填空卡片”、文档首页“创建问答和填空卡片”）。“卡片”仍按简报对应 card，没有把笔记说成卡片：本页唯一的示例 Note.basic('hola', 'hello') 生成一条 Basic 笔记和一张“hola → hello”问答卡片，描述的说法在事实上准确。这里不需要再括注 Basic：本页只出现一种卡片，括注只会造成名词堆叠。整句“从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。”三个动宾分句并列，节奏不变，共 69 字。作为搜索摘要，中文用户能直接读出包从哪里装、用什么写、生成哪种卡片、导出成什么。与标题“用 Python 生成 Anki 卡片”不矛盾：标题说任务，描述具体说明本页示例生成的卡片类型，没有声称 Python 只能生成问答卡片；填空、媒体、模板与图片遮挡仍在“继续学习”中链接。",
+      "result": "approved"
+    }
+  ],
+  "pageContext": [
+    {
+      "file": "docs/zh-cn/python-quickstart.md",
+      "line": 1,
+      "span": "# 用 Python 生成 Anki 卡片",
+      "note": "H1, equal to the site title"
+    },
+    {
+      "file": "docs/zh-cn/python-quickstart.md",
+      "line": 22,
+      "span": "project.add('es:hola', Note.basic('hola', 'hello'))",
+      "note": "the only note in the page: one Basic note"
+    },
+    {
+      "file": "docs/zh-cn/python-quickstart.md",
+      "line": 32,
+      "span": "其中 **Spanish** 牌组包含 **hola → hello**",
+      "note": "result: one question → answer card"
+    },
+    {
+      "file": "docs/python/api.md",
+      "line": 13,
+      "span": "`Note.basic(front, back)` | Built-in Basic model",
+      "note": "Note.basic is the built-in Basic (front/back) note type"
+    },
+    {
+      "file": "docs/zh-cn/python-quickstart.md",
+      "line": 36,
+      "span": "需要根据原始笔记起草卡片时",
+      "note": "continue section; Cloze, media, templates, Image Occlusion are only linked, not shown"
+    }
+  ],
+  "terminologyConsistency": {
+    "brief": {
+      "file": "website/language-briefs.json",
+      "version": "anki-forge-technical-terms-v1",
+      "card": "卡片",
+      "note": "笔记",
+      "deck": "牌组",
+      "protectedTermsInSpan": [
+        "ankiforge",
+        "Python",
+        "APKG"
+      ]
+    },
+    "siteUsageOfBasic": [
+      {
+        "file": "website/site-model.mjs",
+        "line": 104,
+        "span": "\"zh-CN\": \"生成 Anki 问答卡片与 Cloze 填空卡片\"",
+        "role": "cards page title"
+      },
+      {
+        "file": "website/site-model.mjs",
+        "line": 105,
+        "span": "用代码批量生成 Anki 问答（Basic）卡片与 Cloze 填空卡片。",
+        "role": "cards page description"
+      },
+      {
+        "file": "docs/zh-cn/cards.md",
+        "line": 3,
+        "span": "用代码批量生成 Anki 问答（Basic）卡片和 Cloze 填空（挖空）卡片",
+        "role": "cards page lead"
+      },
+      {
+        "file": "docs/zh-cn/csv-to-anki.md",
+        "line": 4,
+        "span": "生成 Basic 问答卡片",
+        "role": "CSV guide lead"
+      },
+      {
+        "file": "docs/zh-cn/csv-to-anki.md",
+        "line": 125,
+        "span": "选择问答卡片或填空卡片",
+        "role": "CSV guide next steps"
+      },
+      {
+        "file": "docs/zh-cn/index.md",
+        "line": 24,
+        "span": "创建问答和填空卡片",
+        "role": "docs index"
+      },
+      {
+        "file": "website/src/i18n/zh-CN.json",
+        "line": 53,
+        "span": "\"card.basic\": \"基础问答\"",
+        "role": "home example card label"
+      },
+      {
+        "file": "website/search-terms.json",
+        "line": 594,
+        "span": "\"Basic 问答卡片\"",
+        "role": "cards search term"
+      }
+    ],
+    "ankiUiNote": "Anki 的简体中文界面把内置 Basic 笔记类型称为“问答题”，“问答卡片”与之相近。此条出自评审者对 Anki 界面的了解；本仓库中的 Anki 翻译子模块 docs/source/anki/ftl/core-repo/core 为空，无法在本地核对。",
+    "judgement": "用词一致。“问答卡片”是站内 Basic 卡片的固定叫法；card/note/deck 仍按简报译作卡片/笔记/牌组；受保护词 ankiforge、Python、APKG 原样保留，PyPI 与 Anki 也未改写；没有出现“闪卡”或“问答题卡片”这类混用。"
+  },
+  "records": [
+    {
+      "record": "python-quickstart/zh-CN",
+      "change": "description",
+      "bodyFilesChanged": [],
+      "priorReviewedInput": {
+        "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
+        "targetHash": "5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e",
+        "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2"
+      },
+      "candidate": {
+        "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
+        "targetHash": "93f0d9c4e82e9861db7078d819f7851621c4286e03b93206e2ee38b6ba8c0a98",
+        "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2"
+      },
+      "changedHashes": [
+        "targetHash"
+      ],
+      "inputFilesEqualPrior": true,
+      "technicalDependencyHashEqualPrior": true,
+      "passages": [
+        "Q01"
+      ],
+      "priorScore": {
+        "terminology": 5,
+        "syntax": 5,
+        "register": 5,
+        "usability": 5
+      },
+      "score": {
+        "terminology": 5,
+        "syntax": 5,
+        "register": 5,
+        "usability": 5
+      },
+      "scoreChanged": false,
+      "newIssues": [],
+      "retainedIssues": [],
+      "approved": true
+    }
+  ],
+  "unchangedRecordCount": 67,
+  "unchangedRecords": [
+    "home/en",
+    "home/zh-CN",
+    "examples/en",
+    "examples/zh-CN",
+    "blog/en",
+    "blog/zh-CN",
+    "docs/en",
+    "docs/zh-CN",
+    "languages/en",
+    "languages/zh-CN",
+    "quickstart/en",
+    "quickstart/zh-CN",
+    "json-to-anki/en",
+    "json-to-anki/zh-CN",
+    "csv-to-anki/en",
+    "csv-to-anki/zh-CN",
+    "ai-anki-cards/en",
+    "ai-anki-cards/zh-CN",
+    "anki-forge-vs-genanki/en",
+    "anki-forge-vs-genanki/zh-CN",
+    "development/en",
+    "development/zh-CN",
+    "rust-guide/en",
+    "rust-guide/zh-CN",
+    "templates/en",
+    "templates/zh-CN",
+    "api/en",
+    "api/zh-CN",
+    "installation/en",
+    "installation/zh-CN",
+    "concepts/en",
+    "concepts/zh-CN",
+    "cards/en",
+    "cards/zh-CN",
+    "custom-notetypes/en",
+    "custom-notetypes/zh-CN",
+    "media/en",
+    "media/zh-CN",
+    "image-occlusion/en",
+    "image-occlusion/zh-CN",
+    "updates/en",
+    "updates/zh-CN",
+    "build-guarantees/en",
+    "build-guarantees/zh-CN",
+    "troubleshooting/en",
+    "troubleshooting/zh-CN",
+    "compatibility/en",
+    "compatibility/zh-CN",
+    "rust-api/en",
+    "rust-api/zh-CN",
+    "node-quickstart/en",
+    "node-quickstart/zh-CN",
+    "node-api/en",
+    "node-api/zh-CN",
+    "python-quickstart/en",
+    "python-api/en",
+    "python-api/zh-CN",
+    "python-diagnostics/en",
+    "python-diagnostics/zh-CN",
+    "python-migration/en",
+    "python-migration/zh-CN",
+    "genanki-migration/en",
+    "genanki-migration/zh-CN",
+    "blog:your-first-anki-deck/en",
+    "blog:your-first-anki-deck/zh-CN",
+    "blog:stable-ids-and-deck-updates/en",
+    "blog:stable-ids-and-deck-updates/zh-CN"
+  ],
+  "unchangedRecordsNote": "Hashes and inputFiles of these 67 records are equal in the prior report and the candidate; they are not touched.",
+  "scores": {
+    "python-quickstart/zh-CN": {
+      "terminology": 5,
+      "syntax": 5,
+      "register": 5,
+      "usability": 5
+    }
+  },
+  "scoreRationale": {
+    "terminology": "5: 与站内 Basic 卡片的既有叫法和简报术语一致，受保护词不变。",
+    "syntax": "5: 插入的定语位置正确，整句并列结构完整，标点规范。",
+    "register": "5: 直接、自然，没有名词机械堆叠或翻译腔。",
+    "usability": "5: 作为搜索摘要更具体，说明本页示例生成的是问答卡片，与页面内容相符。"
+  },
+  "languageJudgement": {
+    "zh-CN": "新描述自然、准确，可以作为中文搜索摘要直接使用。“问答卡片”与卡片页标题、卡片页导语、CSV 指南和文档首页的叫法一致，也贴近中文 Anki 用户熟悉的“问答题”。它比旧描述多说明了卡片类型，而这正是本页唯一示例生成的内容（Note.basic → hola → hello），没有夸大功能，也没有把笔记和卡片混为一谈。与标题“用 Python 生成 Anki 卡片”是“任务 + 具体结果”的关系，不冲突。没有 critical、major 或 minor 问题，评分保持 5/5/5/5。"
+  },
+  "resolvedIssues": [],
+  "openIssues": [],
+  "preExistingOpenIssuesRetained": {
+    "onReviewedRecord": 0,
+    "note": "python-quickstart/zh-CN had no open linguistic issues before this change and has none after it."
+  },
+  "supplementalRenderedContext": {
+    "note": "Read from the pre-existing website/dist and generated Starlight content; not a build by this reviewer and not release evidence.",
+    "observed": [
+      {
+        "file": "website/dist/zh-cn/docs/python-quickstart/index.html",
+        "field": "title",
+        "value": "用 Python 生成 Anki 卡片 | Anki Forge"
+      },
+      {
+        "file": "website/dist/zh-cn/docs/python-quickstart/index.html",
+        "field": "meta description / og:description / JSON-LD description",
+        "value": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。"
+      },
+      {
+        "file": "website/dist/zh-cn/docs/python-quickstart/index.html",
+        "field": "h1",
+        "value": "用 Python 生成 Anki 卡片"
+      },
+      {
+        "file": "website/dist/zh-cn/docs/python-quickstart/index.md",
+        "field": "Description line",
+        "value": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。"
+      },
+      {
+        "file": "website/dist/zh-cn/llms.txt",
+        "line": 21,
+        "field": "quickstart list entry",
+        "value": "- [用 Python 生成 Anki 卡片](https://morehardy.github.io/anki-forge/zh-cn/docs/python-quickstart/index.md): 从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。"
+      },
+      {
+        "file": "website/src/content/docs/zh-cn/docs/python-quickstart.md",
+        "field": "frontmatter description (gitignored generated file)",
+        "value": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。"
+      }
+    ]
+  },
+  "outOfScopeObservations": [
+    "Sibling parallelism, not recorded as an issue: in the zh-CN quickstart list (e.g. website/dist/zh-cn/llms.txt lines 19-21) the Rust and Node.js descriptions say 卡片 while Python now says 问答卡片, although all three quickstarts build the same Basic note (hola → hello). Each description is accurate on its own and a reader is not misled. If the team later wants the three to read in parallel, the Node.js zh-CN description could say “用 Node.js 或 TypeScript 生成 Anki 问答卡片”. That would make node-quickstart/zh-CN stale, so it is only an optional follow-up and was not judged here.",
+    "The en description (“generate Anki flashcards with a short Python script”) is unchanged and does not name the card type. The zh-CN text is now slightly more specific than the English. The language brief rejects mechanical mirroring, so this is acceptable localization; the en record is not stale and was not re-judged.",
+    "The edit was made so the fixed query zh-CN-core-03 (“Python 问答 生成牌组”) would rank python-quickstart again. This review judges only the wording. The wording stands on its own: it describes what the page actually generates. Whether visible copy or website/search-terms.json is the better lever for ranking is a technical/search decision outside this review."
+  ],
+  "notVerified": [
+    "Search ranking: check-search was not run and no site was built by this reviewer, so whether zh-CN-core-03 now returns python-quickstart in its top three is not verified.",
+    "Anki's own Simplified Chinese name for the Basic note type (问答题) comes from reviewer knowledge; the local Anki translation submodule is empty.",
+    "Browser rendering, SERP truncation and the provenance of the existing website/dist were not verified; the dist strings were only read."
+  ],
+  "approval": {
+    "approvedRecords": 1,
+    "notApprovedRecords": [],
+    "untouchedCurrentRecordCount": 67,
+    "basis": "The only changed passage was read in its page context with the title, H1, body, example code and the site-wide usage of 问答. No critical, major or minor issue. All four scores are 5."
+  },
+  "hashScope": "For python-quickstart/zh-CN only, sets sourceHash, targetHash, technicalDependencyHash and inputFiles from the candidate; only targetHash differs from the prior report (5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e -> 93f0d9c4e82e9861db7078d819f7851621c4286e03b93206e2ee38b6ba8c0a98), because its zh-CN rendered-model metadata.description gained “问答”. The other 67 records are byte-identical to the prior report and are not touched. Every technical axis is unchanged. Scores are unchanged."
+}

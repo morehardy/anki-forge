@@ -1,0 +1,2948 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/seo_research:seo-content-review-2026-10-27/delta-search-closure",
+  "reviewedDate": "2026-10-27",
+  "timezone": "America/Los_Angeles",
+  "priorReport": {
+    "path": "docs/plans/evidence/anki-search-demand-2026-10-27/independent-content-review.json",
+    "sha256": "f2353b7d3c2bedb73fdbb22a61ad680afa1c678306756588b9cafe2a32be208f",
+    "reviewerRun": "/root/seo_research:seo-content-review-2026-10-27"
+  },
+  "priorBaseline": {
+    "path": "docs/plans/evidence/anki-search-demand-2026-10-27/baseline-inheritance-audit.json",
+    "sha256": "8fcf854ea6b6f28535f2f106706118b07a8b4702eb75e77fb8939951a4c97c89"
+  },
+  "algorithmDeltaReview": {
+    "file": "website/scripts/content-review-inputs.mjs",
+    "previousSha256": "62687dc45aebf3a50a9faa13dcafd0a40c7dba3659507f0125a86208349c9c13",
+    "currentSha256": "f43dff64d16b86238993906a7e39a30338bed13b6606e3f643ea1bc3251a9e1c",
+    "origin": "Separately authored concurrent source change; this reviewer did not edit the gate or product source.",
+    "technicalJudgement": "Read the complete current function and the exact old-to-current diff. The docs-only input closure now adds the client, engine, ranking configuration and bilingual search concepts. English concepts enter sourceHash; locale concepts and client/engine/config bytes enter targetHash. The existing framework catalogs remain in both algorithms. technicalDependencyHash code is unchanged. On identical live input bytes and independent deep-cloned page objects, changing only the algorithm reproduces every reported old/new mismatch, without mutating metadata.",
+    "linguisticJudgement": "This algorithm delta adds no displayed prose. The newly included English/Chinese concepts, reused locale labels, search count placeholders and source-rendered snippets were already read independently in the initial report at the same byte hashes. All previous terminology, syntax, register and usability judgments and minor issues are retained without increasing any score.",
+    "freshnessBoundary": "For docs pages the gate now automatically includes docs-search.ts, search.mjs, search.config.mjs and search-concepts.json. search-documents.mjs and the hash algorithm itself are supplemental source fingerprints rather than fully self-covered by reviewInputs. This is a source-snapshot review; future edits require fresh byte verification and review of actual deltas.",
+    "evidenceBoundary": "This re-review does not execute or certify browser interaction, result ordering, external search rankings, a deployment or Anki-client imports. Earlier native Pagefind preview observations are not treated as tests of the concurrent custom UI/engine."
+  },
+  "summary": {
+    "byteComparisons": 133,
+    "unchangedSourceFiles": 132,
+    "changedSourceFiles": [
+      "website/scripts/content-review-inputs.mjs"
+    ],
+    "pageLocales": 68,
+    "previousHashComparisons": 204,
+    "previousHashMismatches": 0,
+    "docsWithSourceAndTargetHashChanged": 58,
+    "nonDocsWithAllHashesUnchanged": 10,
+    "technicalDependencyHashesUnchanged": 68,
+    "pageMetadataMutations": 0,
+    "retainedMinorLinguisticIssues": 22
+  },
+  "causalReproduction": "A fresh Node 24.19.0 process imported both algorithm revisions. Each received the same current live repository root and separate structuredClone(page) metadata. The previous algorithm exactly reproduced the initial review for all 68 page/locales; the current algorithm produced the 58 docs-only differences. Both retained the same frameworkCatalog input paths, and serialized page metadata was equal before and after both calls. Therefore the failure was caused by a concurrent algorithm/closure update, not a stale metadata overlay, framework-catalog omission or page-object mutation.",
+  "byteComparisons": [
+    {
+      "path": "anki_forge/examples/docs_publication.rs",
+      "previousSha256": "65e6404ee7381d73709dca0ada96cdb7923650ddd1cc330447884864d552a85b",
+      "currentSha256": "65e6404ee7381d73709dca0ada96cdb7923650ddd1cc330447884864d552a85b",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/docs_workflow.rs",
+      "previousSha256": "2ab71f370ca174b256d1ba56e8b8cccc34fda5918a1fe25fe29626b061d25d86",
+      "currentSha256": "2ab71f370ca174b256d1ba56e8b8cccc34fda5918a1fe25fe29626b061d25d86",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "previousSha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287",
+      "currentSha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "previousSha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "currentSha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/target_api_custom_notetype.rs",
+      "previousSha256": "2951c058e9c3376fbe115b199a010830445c5765c923f9f66f6406a724d9cd13",
+      "currentSha256": "2951c058e9c3376fbe115b199a010830445c5765c923f9f66f6406a724d9cd13",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/website_showcase.rs",
+      "previousSha256": "458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3",
+      "currentSha256": "458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "previousSha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a",
+      "currentSha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "previousSha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+      "currentSha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/python/MIGRATION.md",
+      "previousSha256": "ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2",
+      "currentSha256": "ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "previousSha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962",
+      "currentSha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "previousSha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+      "currentSha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+      "unchanged": true
+    },
+    {
+      "path": "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+      "previousSha256": "842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34",
+      "currentSha256": "842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "previousSha256": "c5a14089ea49b3aaadd6a6966e34237c737afa853fe0fcebcae5854a954606c5",
+      "currentSha256": "c5a14089ea49b3aaadd6a6966e34237c737afa853fe0fcebcae5854a954606c5",
+      "unchanged": true
+    },
+    {
+      "path": "docs/anki-forge-vs-genanki.md",
+      "previousSha256": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+      "currentSha256": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+      "unchanged": true
+    },
+    {
+      "path": "docs/api-overview.md",
+      "previousSha256": "a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b",
+      "currentSha256": "a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b",
+      "unchanged": true
+    },
+    {
+      "path": "docs/benchmark-presentation.json",
+      "previousSha256": "487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074",
+      "currentSha256": "487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074",
+      "unchanged": true
+    },
+    {
+      "path": "docs/build-guarantees.md",
+      "previousSha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+      "currentSha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+      "unchanged": true
+    },
+    {
+      "path": "docs/cards.md",
+      "previousSha256": "ae6830f58bbb9560be689099ae5728a2f42573da0c201dc34621fc13435c6b0a",
+      "currentSha256": "ae6830f58bbb9560be689099ae5728a2f42573da0c201dc34621fc13435c6b0a",
+      "unchanged": true
+    },
+    {
+      "path": "docs/compatibility.md",
+      "previousSha256": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c",
+      "currentSha256": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/concepts.md",
+      "previousSha256": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279",
+      "currentSha256": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279",
+      "unchanged": true
+    },
+    {
+      "path": "docs/custom-notetypes.md",
+      "previousSha256": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1",
+      "currentSha256": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1",
+      "unchanged": true
+    },
+    {
+      "path": "docs/image-occlusion.md",
+      "previousSha256": "8584c7b31832078f1e03fd7287867cc5008c88a87e6340dca843d8ba33de9651",
+      "currentSha256": "8584c7b31832078f1e03fd7287867cc5008c88a87e6340dca843d8ba33de9651",
+      "unchanged": true
+    },
+    {
+      "path": "docs/installation.md",
+      "previousSha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "currentSha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "unchanged": true
+    },
+    {
+      "path": "docs/json-to-anki.md",
+      "previousSha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "currentSha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "unchanged": true
+    },
+    {
+      "path": "docs/media.md",
+      "previousSha256": "e1144d2a2c90cb2905df6c6e00e06a7a59a99a6bebf6e226ff573d420a03756b",
+      "currentSha256": "e1144d2a2c90cb2905df6c6e00e06a7a59a99a6bebf6e226ff573d420a03756b",
+      "unchanged": true
+    },
+    {
+      "path": "docs/node/api.md",
+      "previousSha256": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726",
+      "currentSha256": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726",
+      "unchanged": true
+    },
+    {
+      "path": "docs/node/quick-start.md",
+      "previousSha256": "1538750a51685097fd4dad38f8612b4bcb717ca44bbac76ccadaca30ce72a3e8",
+      "currentSha256": "1538750a51685097fd4dad38f8612b4bcb717ca44bbac76ccadaca30ce72a3e8",
+      "unchanged": true
+    },
+    {
+      "path": "docs/performance/20261008/comparison.csv",
+      "previousSha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999",
+      "currentSha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999",
+      "unchanged": true
+    },
+    {
+      "path": "docs/python/api.md",
+      "previousSha256": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+      "currentSha256": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+      "unchanged": true
+    },
+    {
+      "path": "docs/python/diagnostics.md",
+      "previousSha256": "b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28",
+      "currentSha256": "b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28",
+      "unchanged": true
+    },
+    {
+      "path": "docs/python/genanki-migration.md",
+      "previousSha256": "3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f",
+      "currentSha256": "3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/python/quick-start.md",
+      "previousSha256": "482dc6d2277c0ff5d8574dc0a88dd1cb301dcfff733ae6a97f1367a7d99c7f55",
+      "currentSha256": "482dc6d2277c0ff5d8574dc0a88dd1cb301dcfff733ae6a97f1367a7d99c7f55",
+      "unchanged": true
+    },
+    {
+      "path": "docs/rust-api.md",
+      "previousSha256": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a",
+      "currentSha256": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a",
+      "unchanged": true
+    },
+    {
+      "path": "docs/rust-guide.md",
+      "previousSha256": "5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf",
+      "currentSha256": "5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf",
+      "unchanged": true
+    },
+    {
+      "path": "docs/source-builds.md",
+      "previousSha256": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac",
+      "currentSha256": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac",
+      "unchanged": true
+    },
+    {
+      "path": "docs/template-bundles.md",
+      "previousSha256": "d049c66a6aedecea885c24bda2d5d0a6d0e65ec5558211217456a75b21032f53",
+      "currentSha256": "d049c66a6aedecea885c24bda2d5d0a6d0e65ec5558211217456a75b21032f53",
+      "unchanged": true
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "previousSha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699",
+      "currentSha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699",
+      "unchanged": true
+    },
+    {
+      "path": "docs/updates.md",
+      "previousSha256": "86de1d53b26e1780b31d622ad6700be1a36f7a52120cd053b4da32c4966696ef",
+      "currentSha256": "86de1d53b26e1780b31d622ad6700be1a36f7a52120cd053b4da32c4966696ef",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/anki-forge-vs-genanki.md",
+      "previousSha256": "fe79c48acc7247921f08a8403b3a24e3ae29ba0977b220c7eab06e779a6fbbea",
+      "currentSha256": "fe79c48acc7247921f08a8403b3a24e3ae29ba0977b220c7eab06e779a6fbbea",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/api.md",
+      "previousSha256": "e6cc07f90a030bd3a24ff7d53d8569010772600e9cdff582edd906a851bc925d",
+      "currentSha256": "e6cc07f90a030bd3a24ff7d53d8569010772600e9cdff582edd906a851bc925d",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/build-guarantees.md",
+      "previousSha256": "5d7f6e975cd181ec7fe980b9a2e3f223bf50f99b0fb65207e8dfbf183eaf17af",
+      "currentSha256": "5d7f6e975cd181ec7fe980b9a2e3f223bf50f99b0fb65207e8dfbf183eaf17af",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/cards.md",
+      "previousSha256": "e4a8ebb6f650310f9d2c953ba823f5dc7877ecf49f21a8499973d6a9ad56e8f3",
+      "currentSha256": "e4a8ebb6f650310f9d2c953ba823f5dc7877ecf49f21a8499973d6a9ad56e8f3",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/compatibility.md",
+      "previousSha256": "617bfe97d87e825467371377e8711d757469b6d007d4ca7fb9962f6ab10ed87c",
+      "currentSha256": "617bfe97d87e825467371377e8711d757469b6d007d4ca7fb9962f6ab10ed87c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/concepts.md",
+      "previousSha256": "d96916d3e573822c4bc9f918a0b00f86fefad8062a8d42330a5942b18f017823",
+      "currentSha256": "d96916d3e573822c4bc9f918a0b00f86fefad8062a8d42330a5942b18f017823",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/custom-notetypes.md",
+      "previousSha256": "ef1fa002f9f75f63ba5d7751e8acc7aa20dbff58c8f431c860d52f39fd130682",
+      "currentSha256": "ef1fa002f9f75f63ba5d7751e8acc7aa20dbff58c8f431c860d52f39fd130682",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/development.md",
+      "previousSha256": "fd8598bdbc120b1a955a56ef0971407eb63f9146f2fb49a8191abcdf62089968",
+      "currentSha256": "fd8598bdbc120b1a955a56ef0971407eb63f9146f2fb49a8191abcdf62089968",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/genanki-migration.md",
+      "previousSha256": "d484bf3260f897ad2f7f7e49e7397d2ddf81c65e56017316c0a527c08e7d2e83",
+      "currentSha256": "d484bf3260f897ad2f7f7e49e7397d2ddf81c65e56017316c0a527c08e7d2e83",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/image-occlusion.md",
+      "previousSha256": "3639491364d28125552bd216b28a2317fa51c3793d4044ffed1eab1997589173",
+      "currentSha256": "3639491364d28125552bd216b28a2317fa51c3793d4044ffed1eab1997589173",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/index.md",
+      "previousSha256": "fa3257852f1c090ccb804ebb6758b469e89a847573486dce4a297a4c85936079",
+      "currentSha256": "fa3257852f1c090ccb804ebb6758b469e89a847573486dce4a297a4c85936079",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/installation.md",
+      "previousSha256": "aad9da7f5ec2507e69ee4c6d060b9287d0ad193236f2010175e17227dcf6714f",
+      "currentSha256": "aad9da7f5ec2507e69ee4c6d060b9287d0ad193236f2010175e17227dcf6714f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/json-to-anki.md",
+      "previousSha256": "134964c1647cbdf5856e01914ff1c9b04f9dcc3339fcd90f323462a256ed7f64",
+      "currentSha256": "134964c1647cbdf5856e01914ff1c9b04f9dcc3339fcd90f323462a256ed7f64",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/languages.md",
+      "previousSha256": "90f4543ae0c33e8ba9ee9732b14ef3ce9d45231d851efa4d157f54789a3bebf9",
+      "currentSha256": "90f4543ae0c33e8ba9ee9732b14ef3ce9d45231d851efa4d157f54789a3bebf9",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/media.md",
+      "previousSha256": "98d0136e6ef67fdc71a0df8f2adebaad3558a3e03e1607597c078a408e4e2d05",
+      "currentSha256": "98d0136e6ef67fdc71a0df8f2adebaad3558a3e03e1607597c078a408e4e2d05",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/node-api.md",
+      "previousSha256": "4ac2fbc3679542af661a2ff5172ad2d9b20daa575d3b5cf2deefcc4b06a0f07f",
+      "currentSha256": "4ac2fbc3679542af661a2ff5172ad2d9b20daa575d3b5cf2deefcc4b06a0f07f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/node-quickstart.md",
+      "previousSha256": "8b0675746f54b7b0a6111201006ad668378a231a831c61c3b5eb9f955454f3ac",
+      "currentSha256": "8b0675746f54b7b0a6111201006ad668378a231a831c61c3b5eb9f955454f3ac",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/python-api.md",
+      "previousSha256": "29db80f1af39809197c38e33a6af315501da5586a4ecc6a01f77202773ddddfd",
+      "currentSha256": "29db80f1af39809197c38e33a6af315501da5586a4ecc6a01f77202773ddddfd",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/python-diagnostics.md",
+      "previousSha256": "18fa83415cf6e7e1b1e57d44f2c66ff5240d21663bb1520fbc8a0ae53e01704f",
+      "currentSha256": "18fa83415cf6e7e1b1e57d44f2c66ff5240d21663bb1520fbc8a0ae53e01704f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/python-migration.md",
+      "previousSha256": "d3ba868ff20b98f54538e366263bea6f2f86799e355748db84e5e021bb235979",
+      "currentSha256": "d3ba868ff20b98f54538e366263bea6f2f86799e355748db84e5e021bb235979",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/python-quickstart.md",
+      "previousSha256": "499fc2d46f54500b417320b0ff4862b0dcaa9faf5c08e0d28797d61aaeba7c2e",
+      "currentSha256": "499fc2d46f54500b417320b0ff4862b0dcaa9faf5c08e0d28797d61aaeba7c2e",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/quickstart.md",
+      "previousSha256": "e16b86d580ed7f336ebfcf3d46917cd171a3e44ed7536981f09fccd856b8dbbd",
+      "currentSha256": "e16b86d580ed7f336ebfcf3d46917cd171a3e44ed7536981f09fccd856b8dbbd",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/rust-api.md",
+      "previousSha256": "7d4432c78d62063d5205b9524765456674ad12aad23201a035e433fac7517de9",
+      "currentSha256": "7d4432c78d62063d5205b9524765456674ad12aad23201a035e433fac7517de9",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/rust-guide.md",
+      "previousSha256": "0766dabbb020a38c80f1edd9fca8f167c77f7a6d4f5abd1e5f5fa2ff078a13de",
+      "currentSha256": "0766dabbb020a38c80f1edd9fca8f167c77f7a6d4f5abd1e5f5fa2ff078a13de",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/templates.md",
+      "previousSha256": "c60e2b8d7a569537d652dddab89a8347afd7982119ed6f6aedec85461f37327d",
+      "currentSha256": "c60e2b8d7a569537d652dddab89a8347afd7982119ed6f6aedec85461f37327d",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/troubleshooting.md",
+      "previousSha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f",
+      "currentSha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/updates.md",
+      "previousSha256": "135912b5feea3a94d60a1e8f34b9efc155bedb3eec4e36c7229f3496baa38543",
+      "currentSha256": "135912b5feea3a94d60a1e8f34b9efc155bedb3eec4e36c7229f3496baa38543",
+      "unchanged": true
+    },
+    {
+      "path": "website/astro.config.mjs",
+      "previousSha256": "ddb68f8f3cf680bb1ff86444ea82bdb1fbb04ec2e95c61e7de02a5a1c3ab66d8",
+      "currentSha256": "ddb68f8f3cf680bb1ff86444ea82bdb1fbb04ec2e95c61e7de02a5a1c3ab66d8",
+      "unchanged": true
+    },
+    {
+      "path": "website/language-briefs.json",
+      "previousSha256": "a721f0d5ca2478ece225c6d8432a3d33c41f230f0fb50171b98295e652852b4e",
+      "currentSha256": "a721f0d5ca2478ece225c6d8432a3d33c41f230f0fb50171b98295e652852b4e",
+      "unchanged": true
+    },
+    {
+      "path": "website/legacy-sections.json",
+      "previousSha256": "7549ad8d40adb58bd69b400f62c7ab4fa718dfe50dbac37be6d981213d01ed30",
+      "currentSha256": "7549ad8d40adb58bd69b400f62c7ab4fa718dfe50dbac37be6d981213d01ed30",
+      "unchanged": true
+    },
+    {
+      "path": "website/scripts/benchmark-presentation.mjs",
+      "previousSha256": "0b0d7bdd3fbab28b50881b57a74859c508c21380459b37313cedd3c290fb05c1",
+      "currentSha256": "0b0d7bdd3fbab28b50881b57a74859c508c21380459b37313cedd3c290fb05c1",
+      "unchanged": true
+    },
+    {
+      "path": "website/scripts/content-review-inputs.mjs",
+      "previousSha256": "62687dc45aebf3a50a9faa13dcafd0a40c7dba3659507f0125a86208349c9c13",
+      "currentSha256": "f43dff64d16b86238993906a7e39a30338bed13b6606e3f643ea1bc3251a9e1c",
+      "unchanged": false
+    },
+    {
+      "path": "website/search-terms.json",
+      "previousSha256": "1e33ab534b9b13df687a841289064a12fa7faf531150f9aea17984076eabc4f9",
+      "currentSha256": "1e33ab534b9b13df687a841289064a12fa7faf531150f9aea17984076eabc4f9",
+      "unchanged": true
+    },
+    {
+      "path": "website/search.config.mjs",
+      "previousSha256": "4381563e2e59fed7aa4780a92f81ecf827714dc1cbd59e89e8673a2c1fe543df",
+      "currentSha256": "4381563e2e59fed7aa4780a92f81ecf827714dc1cbd59e89e8673a2c1fe543df",
+      "unchanged": true
+    },
+    {
+      "path": "website/section-contracts.json",
+      "previousSha256": "9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b",
+      "currentSha256": "9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b",
+      "unchanged": true
+    },
+    {
+      "path": "website/site-model.mjs",
+      "previousSha256": "7cfab12d586121fea3cc862d0efafe70a2bb8f7563715c90010b6909bd96a24d",
+      "currentSha256": "7cfab12d586121fea3cc862d0efafe70a2bb8f7563715c90010b6909bd96a24d",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/AiQuickstart.astro",
+      "previousSha256": "755e96c650604d7949125b9967f25992b3f5fd62e9d18debdfd27671ef3a7a84",
+      "currentSha256": "755e96c650604d7949125b9967f25992b3f5fd62e9d18debdfd27671ef3a7a84",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/ArticlePage.astro",
+      "previousSha256": "813acecf25d6f42d1d6c840c35cad3ee5b1634e7e289c27c422cb09fb94e5ebb",
+      "currentSha256": "813acecf25d6f42d1d6c840c35cad3ee5b1634e7e289c27c422cb09fb94e5ebb",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/BlogPage.astro",
+      "previousSha256": "a3b1b7f73d75c98b9b7aafb64c4a714b01cba099fd225b0f0316d7fb778269ac",
+      "currentSha256": "a3b1b7f73d75c98b9b7aafb64c4a714b01cba099fd225b0f0316d7fb778269ac",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/BrandMark.astro",
+      "previousSha256": "6cb4983d7143f2d240868ebffae9bae8bf179f074bf3abb13b092b8f667407c0",
+      "currentSha256": "6cb4983d7143f2d240868ebffae9bae8bf179f074bf3abb13b092b8f667407c0",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/CardPreview.astro",
+      "previousSha256": "dc851faa961636a75707ac08ba9ebc832a3542283d020ac96df3f2e99b9baaa1",
+      "currentSha256": "dc851faa961636a75707ac08ba9ebc832a3542283d020ac96df3f2e99b9baaa1",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/CodeBlock.astro",
+      "previousSha256": "9a26a31b6a637d60d56f97d1e8a6eef17446bded2212c4b0551ace29f6c9ddec",
+      "currentSha256": "9a26a31b6a637d60d56f97d1e8a6eef17446bded2212c4b0551ace29f6c9ddec",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/CopyBlock.astro",
+      "previousSha256": "dd2b299819d3095c0fdfe3af8755d0375ed3e1b3f8eafd0c855b530b3c357812",
+      "currentSha256": "dd2b299819d3095c0fdfe3af8755d0375ed3e1b3f8eafd0c855b530b3c357812",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/DocsFooter.astro",
+      "previousSha256": "de1fbd0f7d4d71dc9b391c79088f26652dd9201eb5ed7133020d4cc41235f8f2",
+      "currentSha256": "de1fbd0f7d4d71dc9b391c79088f26652dd9201eb5ed7133020d4cc41235f8f2",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/DocsHeader.astro",
+      "previousSha256": "f1066072fdf18f19cd1b78581469e1b802a395776452b39b52f937e8156a0848",
+      "currentSha256": "f1066072fdf18f19cd1b78581469e1b802a395776452b39b52f937e8156a0848",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/DocsSearch.astro",
+      "previousSha256": "587a877356eda345e0d66ea9cd4d33f25426230ea2aeb4f435556a954b24d16a",
+      "currentSha256": "587a877356eda345e0d66ea9cd4d33f25426230ea2aeb4f435556a954b24d16a",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/ExampleWorkbench.astro",
+      "previousSha256": "486b5faf302b0c1d161c947937c518748969e86fb9625651f8db054b82a8b9b8",
+      "currentSha256": "486b5faf302b0c1d161c947937c518748969e86fb9625651f8db054b82a8b9b8",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/ExamplesPage.astro",
+      "previousSha256": "8b10e1280635172c69029b94cbc8765fa95593f221772af1bd338c0373d95649",
+      "currentSha256": "8b10e1280635172c69029b94cbc8765fa95593f221772af1bd338c0373d95649",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/Footer.astro",
+      "previousSha256": "320057dbcae7f74003f143530ba4629c5ad0aed324605db3e1c68fb5e8b038b3",
+      "currentSha256": "320057dbcae7f74003f143530ba4629c5ad0aed324605db3e1c68fb5e8b038b3",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/Header.astro",
+      "previousSha256": "d960ef3f5e55f89625b45d4fcffb8770bb84154aeb053b6599f3dc541ca45ea3",
+      "currentSha256": "d960ef3f5e55f89625b45d4fcffb8770bb84154aeb053b6599f3dc541ca45ea3",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/HomePage.astro",
+      "previousSha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439",
+      "currentSha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/HomeShowcase.astro",
+      "previousSha256": "4515f6b70dff73e28bf312949577946bf8bb6435d39e7661da6ebe602610784e",
+      "currentSha256": "4515f6b70dff73e28bf312949577946bf8bb6435d39e7661da6ebe602610784e",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/Icon.astro",
+      "previousSha256": "37eb6e14469523e5d6aa4c588c3e230c8366972caee5b12c1e70d9f0179384ee",
+      "currentSha256": "37eb6e14469523e5d6aa4c588c3e230c8366972caee5b12c1e70d9f0179384ee",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/InstallCommand.astro",
+      "previousSha256": "28d216c4936193691ef41595109cdf2ce460bf8dcfd2786df232a2d3855d76c1",
+      "currentSha256": "28d216c4936193691ef41595109cdf2ce460bf8dcfd2786df232a2d3855d76c1",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/LanguageSwitcher.astro",
+      "previousSha256": "9d3c5658fc3c42fe5162f5f1883dde73f6aa23a11a4adcc2ca7955a1a1050c57",
+      "currentSha256": "9d3c5658fc3c42fe5162f5f1883dde73f6aa23a11a4adcc2ca7955a1a1050c57",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/PerformanceEvidence.astro",
+      "previousSha256": "ed9c4b797037499fe36c1553cfcfc94dd489086b883d8d77ff60dc94ac72e2ef",
+      "currentSha256": "ed9c4b797037499fe36c1553cfcfc94dd489086b883d8d77ff60dc94ac72e2ef",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/PostCard.astro",
+      "previousSha256": "cf73be0f12d07293ae02128cf62fb5ec49064011d7375a831453a9214eef5b47",
+      "currentSha256": "cf73be0f12d07293ae02128cf62fb5ec49064011d7375a831453a9214eef5b47",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/ThemeControl.astro",
+      "previousSha256": "6778d9bcf865afd557d59fd9f69e0298bfe0924b53b7746bfbdcc62ea7a2c875",
+      "currentSha256": "6778d9bcf865afd557d59fd9f69e0298bfe0924b53b7746bfbdcc62ea7a2c875",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/UpdateDemo.astro",
+      "previousSha256": "79956a12d3aea601c80736115918e4552d7f64cff32e8c6c6734bd8296936c99",
+      "currentSha256": "79956a12d3aea601c80736115918e4552d7f64cff32e8c6c6734bd8296936c99",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+      "previousSha256": "77e2a04feaec5959d73f2aa008412203cc598bcdbfbffb6823ced93c03cfb0c7",
+      "currentSha256": "77e2a04feaec5959d73f2aa008412203cc598bcdbfbffb6823ced93c03cfb0c7",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/your-first-anki-deck.mdx",
+      "previousSha256": "957379c92c61b6d5f3569da4b41be4d6f593aa0374f0fc97576d3630b4a2e7a0",
+      "currentSha256": "957379c92c61b6d5f3569da4b41be4d6f593aa0374f0fc97576d3630b4a2e7a0",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+      "previousSha256": "66922194e8fcbc6bb137a4fbc0b55f47c19fc38d4b4159f4b4a14d2b6a901589",
+      "currentSha256": "66922194e8fcbc6bb137a4fbc0b55f47c19fc38d4b4159f4b4a14d2b6a901589",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+      "previousSha256": "db5acd23e97e05d1303baa88af2fef9b1a94e9f11398eb11e2cedfced33d5841",
+      "currentSha256": "db5acd23e97e05d1303baa88af2fef9b1a94e9f11398eb11e2cedfced33d5841",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/docs/docs/index.mdx",
+      "previousSha256": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c",
+      "currentSha256": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/docs/docs/languages.mdx",
+      "previousSha256": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24",
+      "currentSha256": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/docs/docs/quickstart.mdx",
+      "previousSha256": "678a5696fb13166a8f5a3232d737efac8da5169bdbb55c148f9807d235a02cd6",
+      "currentSha256": "678a5696fb13166a8f5a3232d737efac8da5169bdbb55c148f9807d235a02cd6",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/i18n/en.json",
+      "previousSha256": "52ac3f26f729435f0682de9b384c1c740cf275c6dd9cd8539eb4fb8c56605187",
+      "currentSha256": "52ac3f26f729435f0682de9b384c1c740cf275c6dd9cd8539eb4fb8c56605187",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/i18n/zh-CN.json",
+      "previousSha256": "44e533587105bc7fafc6d8eb13d42c4153c67a6c6fa32c24193b7a3d75cec4e8",
+      "currentSha256": "44e533587105bc7fafc6d8eb13d42c4153c67a6c6fa32c24193b7a3d75cec4e8",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/client-messages.mjs",
+      "previousSha256": "69cbebbb402b9db84912c0514ac209650768079c5e7158c6e9e0da77222a5368",
+      "currentSha256": "69cbebbb402b9db84912c0514ac209650768079c5e7158c6e9e0da77222a5368",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/en.json",
+      "previousSha256": "aa9a4aff3941255413a7fe9be1e2a388142a21de74e863528e1ccd0336cad957",
+      "currentSha256": "aa9a4aff3941255413a7fe9be1e2a388142a21de74e863528e1ccd0336cad957",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/format-message.mjs",
+      "previousSha256": "8d0c482c34a744ccc4add7e6087c68a36e4cce433f97825e82be3bd03b0d3c76",
+      "currentSha256": "8d0c482c34a744ccc4add7e6087c68a36e4cce433f97825e82be3bd03b0d3c76",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/messages.mjs",
+      "previousSha256": "a8f52d1df8eac07604ee34e626d39bae81596eba66429baf875763a62d853104",
+      "currentSha256": "a8f52d1df8eac07604ee34e626d39bae81596eba66429baf875763a62d853104",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/zh-CN.json",
+      "previousSha256": "301d51a9c2baaefaedb0b8a21b29b1d444775daad3aca207fe03d7a445c0ad64",
+      "currentSha256": "301d51a9c2baaefaedb0b8a21b29b1d444775daad3aca207fe03d7a445c0ad64",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/layouts/SiteLayout.astro",
+      "previousSha256": "04c73e6602a4a5010efd8a4601072daf43f70508a21ebe1da5a73bdf0c0360c3",
+      "currentSha256": "04c73e6602a4a5010efd8a4601072daf43f70508a21ebe1da5a73bdf0c0360c3",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/lib/ai-quickstart.mjs",
+      "previousSha256": "f9567627f5edec69ab09ff3fb8a855231e82b4e893c3e0f0961c16bed018153c",
+      "currentSha256": "f9567627f5edec69ab09ff3fb8a855231e82b4e893c3e0f0961c16bed018153c",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/lib/examples.ts",
+      "previousSha256": "aa92e39a4ba31c22bc9e11dd5c6ec7a5ebfb93081f001da29e465c8ebd11d457",
+      "currentSha256": "aa92e39a4ba31c22bc9e11dd5c6ec7a5ebfb93081f001da29e465c8ebd11d457",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/lib/page-metadata.mjs",
+      "previousSha256": "7aecabc0e8235eea60effb0d26b79dec03091a48bb5c7423d9531174356e48c6",
+      "currentSha256": "7aecabc0e8235eea60effb0d26b79dec03091a48bb5c7423d9531174356e48c6",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/lib/search-terms.mjs",
+      "previousSha256": "c6f10080708189333263efcd40971231207fa5686a4bc45803db738633f7e93c",
+      "currentSha256": "c6f10080708189333263efcd40971231207fa5686a4bc45803db738633f7e93c",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/route-middleware.ts",
+      "previousSha256": "2f27fd73b1381f2ccba6822be4da01be19d38a7b753756f8c4d30e7a642f657d",
+      "currentSha256": "2f27fd73b1381f2ccba6822be4da01be19d38a7b753756f8c4d30e7a642f657d",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/scripts/site.ts",
+      "previousSha256": "76767efa229f1f6286226ae4226cc3902b303fb4c4b148066b02fc6aece57036",
+      "currentSha256": "76767efa229f1f6286226ae4226cc3902b303fb4c4b148066b02fc6aece57036",
+      "unchanged": true
+    },
+    {
+      "path": "website/machine-content.config.mjs",
+      "previousSha256": "26200ad1f6b5ccbf11db4b4202a3f02fc214ee6c838aa7a042b40d7b881f8653",
+      "currentSha256": "26200ad1f6b5ccbf11db4b4202a3f02fc214ee6c838aa7a042b40d7b881f8653",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/target_api_media.rs",
+      "previousSha256": "fbc860657897c163fc3ac4924527a7c2962823de99eae2e881e7b2cfebf9222d",
+      "currentSha256": "fbc860657897c163fc3ac4924527a7c2962823de99eae2e881e7b2cfebf9222d",
+      "unchanged": true
+    },
+    {
+      "path": "website/locale-model.mjs",
+      "previousSha256": "e357763d9ba16adc611f8f49ce6742fc37e783f2fbbbcada934f5990ab4fa8c7",
+      "currentSha256": "e357763d9ba16adc611f8f49ce6742fc37e783f2fbbbcada934f5990ab4fa8c7",
+      "unchanged": true
+    },
+    {
+      "path": "docs/csv-to-anki.md",
+      "previousSha256": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486",
+      "currentSha256": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/csv-to-anki.md",
+      "previousSha256": "a42ecf3bc3b7d2bf4dda6a248569f3fa7c35918a21e8436f36893b08cd5ef50f",
+      "currentSha256": "a42ecf3bc3b7d2bf4dda6a248569f3fa7c35918a21e8436f36893b08cd5ef50f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai-anki-cards.md",
+      "previousSha256": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5",
+      "currentSha256": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/ai-anki-cards.md",
+      "previousSha256": "49a557471ff9ab2a4ae8cc9c4b7d7fe12307a928bb3c66d2c0d2082119e4c1ae",
+      "currentSha256": "49a557471ff9ab2a4ae8cc9c4b7d7fe12307a928bb3c66d2c0d2082119e4c1ae",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/python/examples/csv_to_anki.py",
+      "previousSha256": "5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc",
+      "currentSha256": "5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc",
+      "unchanged": true
+    },
+    {
+      "path": "docs/recipes/csv-to-anki/cards.csv",
+      "previousSha256": "216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64",
+      "currentSha256": "216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/python/tests/test_csv_recipe.py",
+      "previousSha256": "a16859259928ac41f30e2d5845c579ef434b323bddf70fe4878add5d34623235",
+      "currentSha256": "a16859259928ac41f30e2d5845c579ef434b323bddf70fe4878add5d34623235",
+      "unchanged": true
+    },
+    {
+      "path": "website/scripts/prepare-site.mjs",
+      "previousSha256": "2d794904115363855c26e190a9e4a258a3f888af2108fd3d4c074661da478847",
+      "currentSha256": "2d794904115363855c26e190a9e4a258a3f888af2108fd3d4c074661da478847",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/scripts/docs-search.ts",
+      "previousSha256": "a95829f4526db5340ce7d0ec928b2f56bc4fed6c81c3647ec664646b6cddabe0",
+      "currentSha256": "a95829f4526db5340ce7d0ec928b2f56bc4fed6c81c3647ec664646b6cddabe0",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/lib/search.mjs",
+      "previousSha256": "905d81e6b53b97f45f7ce3fd28da53802813e390cca557039b580f601df7f6bf",
+      "currentSha256": "905d81e6b53b97f45f7ce3fd28da53802813e390cca557039b580f601df7f6bf",
+      "unchanged": true
+    },
+    {
+      "path": "website/search-concepts.json",
+      "previousSha256": "5c4d5a6a6f726d503aa91358842806d0fde5ba19657a5f903a1c957d9855d680",
+      "currentSha256": "5c4d5a6a6f726d503aa91358842806d0fde5ba19657a5f903a1c957d9855d680",
+      "unchanged": true
+    },
+    {
+      "path": "website/scripts/search-documents.mjs",
+      "previousSha256": "063979b385988790403114b97a603ff66f77480d72e336b7866134e4dbaf12ac",
+      "currentSha256": "063979b385988790403114b97a603ff66f77480d72e336b7866134e4dbaf12ac",
+      "unchanged": true
+    }
+  ],
+  "newlyAutomaticDependencies": [
+    {
+      "path": "website/search-concepts.json",
+      "sha256": "5c4d5a6a6f726d503aa91358842806d0fde5ba19657a5f903a1c957d9855d680",
+      "priorAssessment": "Initial independent SEO report concurrent search source review and identical supplemental fingerprint."
+    },
+    {
+      "path": "website/search.config.mjs",
+      "sha256": "4381563e2e59fed7aa4780a92f81ecf827714dc1cbd59e89e8673a2c1fe543df",
+      "priorAssessment": "Prior baseline technical source review and unchanged original audit fingerprint; ranking options were reread in this delta review."
+    },
+    {
+      "path": "website/src/lib/search.mjs",
+      "sha256": "905d81e6b53b97f45f7ce3fd28da53802813e390cca557039b580f601df7f6bf",
+      "priorAssessment": "Initial independent SEO report concurrent search source review and identical supplemental fingerprint."
+    },
+    {
+      "path": "website/src/scripts/docs-search.ts",
+      "sha256": "a95829f4526db5340ce7d0ec928b2f56bc4fed6c81c3647ec664646b6cddabe0",
+      "priorAssessment": "Initial independent SEO report concurrent search source review and identical supplemental fingerprint."
+    }
+  ],
+  "pageComparisons": [
+    {
+      "page": "home",
+      "type": "home",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "215b0f4c09c6f93c4d15db6ccd1e8b88e840eb48e7bfa30211ce0515ce6374e7",
+        "targetHash": "9a02f3b1623392fe8eb05f09c61b2d0263afe2cb55031b9f74c10fbe3390af0b",
+        "technicalDependencyHash": "1a92405a30d4e9171f0cac017d8bb3ce5746b1e2b1554cdf4603577e1e82a0b3"
+      },
+      "current": {
+        "sourceHash": "215b0f4c09c6f93c4d15db6ccd1e8b88e840eb48e7bfa30211ce0515ce6374e7",
+        "targetHash": "9a02f3b1623392fe8eb05f09c61b2d0263afe2cb55031b9f74c10fbe3390af0b",
+        "technicalDependencyHash": "1a92405a30d4e9171f0cac017d8bb3ce5746b1e2b1554cdf4603577e1e82a0b3"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [],
+      "removedInputFiles": []
+    },
+    {
+      "page": "home",
+      "type": "home",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "215b0f4c09c6f93c4d15db6ccd1e8b88e840eb48e7bfa30211ce0515ce6374e7",
+        "targetHash": "27151e71244d5c3defafa0fea316b3c904ec7889f6fde7f8be0a538faa984659",
+        "technicalDependencyHash": "8116212e7f738d452b7e3b703eddd83c3e465c6dabcc488195d8460202dbcc6a"
+      },
+      "current": {
+        "sourceHash": "215b0f4c09c6f93c4d15db6ccd1e8b88e840eb48e7bfa30211ce0515ce6374e7",
+        "targetHash": "27151e71244d5c3defafa0fea316b3c904ec7889f6fde7f8be0a538faa984659",
+        "technicalDependencyHash": "8116212e7f738d452b7e3b703eddd83c3e465c6dabcc488195d8460202dbcc6a"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [],
+      "removedInputFiles": []
+    },
+    {
+      "page": "examples",
+      "type": "examples",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "baf1f991a8a58b0eb2704957b23a51242719b72049437aa940ffac32638562e6",
+        "targetHash": "9a2fc09c6118a26e633152f9975cb67dc1fb86a5c98a00ab918e6f01dfe4f889",
+        "technicalDependencyHash": "2909f0891b0eefa5045cbbe52296c527ea57a0557025de8ab72ecdcab88c954a"
+      },
+      "current": {
+        "sourceHash": "baf1f991a8a58b0eb2704957b23a51242719b72049437aa940ffac32638562e6",
+        "targetHash": "9a2fc09c6118a26e633152f9975cb67dc1fb86a5c98a00ab918e6f01dfe4f889",
+        "technicalDependencyHash": "2909f0891b0eefa5045cbbe52296c527ea57a0557025de8ab72ecdcab88c954a"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [],
+      "removedInputFiles": []
+    },
+    {
+      "page": "examples",
+      "type": "examples",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "baf1f991a8a58b0eb2704957b23a51242719b72049437aa940ffac32638562e6",
+        "targetHash": "9094a895c538b768e2c94aadad868a83e0baa6a8bc6aeb8f0174c8fdabddce5b",
+        "technicalDependencyHash": "26ca13a693607535b33115aa54c7befc5d4b589f742b62d0fb1f5c7607dd972e"
+      },
+      "current": {
+        "sourceHash": "baf1f991a8a58b0eb2704957b23a51242719b72049437aa940ffac32638562e6",
+        "targetHash": "9094a895c538b768e2c94aadad868a83e0baa6a8bc6aeb8f0174c8fdabddce5b",
+        "technicalDependencyHash": "26ca13a693607535b33115aa54c7befc5d4b589f742b62d0fb1f5c7607dd972e"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [],
+      "removedInputFiles": []
+    },
+    {
+      "page": "blog",
+      "type": "blog-list",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "09477d8fac1e44094d841b65f158cdff4d554be1c7a940f594bfb6a7f77bf846",
+        "targetHash": "9448c64a8f9b61537387130932e4d458616ee74d01efeaba83ae09e3ad97335f",
+        "technicalDependencyHash": "2909f0891b0eefa5045cbbe52296c527ea57a0557025de8ab72ecdcab88c954a"
+      },
+      "current": {
+        "sourceHash": "09477d8fac1e44094d841b65f158cdff4d554be1c7a940f594bfb6a7f77bf846",
+        "targetHash": "9448c64a8f9b61537387130932e4d458616ee74d01efeaba83ae09e3ad97335f",
+        "technicalDependencyHash": "2909f0891b0eefa5045cbbe52296c527ea57a0557025de8ab72ecdcab88c954a"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [],
+      "removedInputFiles": []
+    },
+    {
+      "page": "blog",
+      "type": "blog-list",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "09477d8fac1e44094d841b65f158cdff4d554be1c7a940f594bfb6a7f77bf846",
+        "targetHash": "efb36bc1cd16cc323664fc084c33e4e90f7b1e32a75437b1a85daaf0a69f4ac6",
+        "technicalDependencyHash": "26ca13a693607535b33115aa54c7befc5d4b589f742b62d0fb1f5c7607dd972e"
+      },
+      "current": {
+        "sourceHash": "09477d8fac1e44094d841b65f158cdff4d554be1c7a940f594bfb6a7f77bf846",
+        "targetHash": "efb36bc1cd16cc323664fc084c33e4e90f7b1e32a75437b1a85daaf0a69f4ac6",
+        "technicalDependencyHash": "26ca13a693607535b33115aa54c7befc5d4b589f742b62d0fb1f5c7607dd972e"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [],
+      "removedInputFiles": []
+    },
+    {
+      "page": "docs",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "2c0c9a41bacccd48a61b781eb36a95ca111d4c31929cf098883dec419fc92bff",
+        "targetHash": "8afe4763025f7f3a26eeb645015a9045435f569a3317ded8fa54c5e00349e657",
+        "technicalDependencyHash": "354cafacc69ac62e19d77f7d13347b7d1f4f3280dc65890412a994371d5f8468"
+      },
+      "current": {
+        "sourceHash": "279d7b448f57a1aa3d74cf4ff81901ac17c8aefdc235d7edad64e8bf5a3a961c",
+        "targetHash": "04e8eadd402bcd571d3143d76bb1c9c855c638fa6207bc1410c81743707cb75c",
+        "technicalDependencyHash": "354cafacc69ac62e19d77f7d13347b7d1f4f3280dc65890412a994371d5f8468"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "docs",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "2c0c9a41bacccd48a61b781eb36a95ca111d4c31929cf098883dec419fc92bff",
+        "targetHash": "275278330e8ee09e93ee40c5d3e367685b998565a08e633695dc42912ef27291",
+        "technicalDependencyHash": "2660cd8256bb9142e92c324bc77c10fa1651a4a90f942f021ca8b6f655e8b3c3"
+      },
+      "current": {
+        "sourceHash": "279d7b448f57a1aa3d74cf4ff81901ac17c8aefdc235d7edad64e8bf5a3a961c",
+        "targetHash": "83e9ced8e6f6270a166a5b9436d065955246d1e614383e9e2a52cc5218230c17",
+        "technicalDependencyHash": "2660cd8256bb9142e92c324bc77c10fa1651a4a90f942f021ca8b6f655e8b3c3"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "languages",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "68876993dc297380168263a81f53540c0e93cab95c6e714a494afaa1fe9b8f8e",
+        "targetHash": "deddf135b685838e2e92bb9eb0f6c3411d1dcdefc0b96b1c79be672b047ee9c7",
+        "technicalDependencyHash": "4131ee6ebde54bd54cd3520e9a856ae2415bd1c2e0d230abd56a892380ebf13b"
+      },
+      "current": {
+        "sourceHash": "6314f09cbd515e137bb8feef200819e65e17c1d93451825ccd89a9fae496a5e3",
+        "targetHash": "1d351adc3151214b71ebff3fb00832234f7e54d7bfb2565b292ee4bc2e344aec",
+        "technicalDependencyHash": "4131ee6ebde54bd54cd3520e9a856ae2415bd1c2e0d230abd56a892380ebf13b"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "languages",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "68876993dc297380168263a81f53540c0e93cab95c6e714a494afaa1fe9b8f8e",
+        "targetHash": "4e90e6f6de58ddc24a21039472302e3eae4b78b89a690c40dbb051fdceb831eb",
+        "technicalDependencyHash": "590857a06b20813c78441bf7773e9e58183fa6b6509224a8b6201a78d3f8ffb2"
+      },
+      "current": {
+        "sourceHash": "6314f09cbd515e137bb8feef200819e65e17c1d93451825ccd89a9fae496a5e3",
+        "targetHash": "775c8d8129954b0e0b746efe9774bd74807dc66b85503701b35eca6a9588829c",
+        "technicalDependencyHash": "590857a06b20813c78441bf7773e9e58183fa6b6509224a8b6201a78d3f8ffb2"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "quickstart",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "9a98177764a518eadb048a746794d8d1f4c4a58cb4d2df91e929cd73433d5a03",
+        "targetHash": "8159ec42a23585c66ed461a5e69d438924a95c6c2f42262473383c7030ab4e0f",
+        "technicalDependencyHash": "1fc86f055aa464588c7740c7aeeddb68814b1945ba2aea322a31a6a606588b83"
+      },
+      "current": {
+        "sourceHash": "53c1f3f224be0e3813ae67edb045a5a3af4f3b6d5e2442f7f5a1b00368cf8ab7",
+        "targetHash": "eb5a62f37dfa6db1dd7a6d46f9a9e824325d4e0bf327095feecf6a732c1f27f3",
+        "technicalDependencyHash": "1fc86f055aa464588c7740c7aeeddb68814b1945ba2aea322a31a6a606588b83"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "quickstart",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "9a98177764a518eadb048a746794d8d1f4c4a58cb4d2df91e929cd73433d5a03",
+        "targetHash": "647c111417ee42c7429b62fed8e4ef7f264797202d740cce5ba32e5194076e95",
+        "technicalDependencyHash": "b1d67ce9335e7748528f82fc75e10164a670a9c2b8f08ab71195bc88236f801a"
+      },
+      "current": {
+        "sourceHash": "53c1f3f224be0e3813ae67edb045a5a3af4f3b6d5e2442f7f5a1b00368cf8ab7",
+        "targetHash": "264796c5099b08a01e2127257e6fe0e2399206e207bd963bcf8816db681c6116",
+        "technicalDependencyHash": "b1d67ce9335e7748528f82fc75e10164a670a9c2b8f08ab71195bc88236f801a"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "json-to-anki",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "c9f267350ef4102bd492d0319a93ac11b6220a06ad774bcb722f8415846ca3d4",
+        "targetHash": "ff05714a2cad795b75c71df8219c64d71f88818997793e60acba917aa0f9e47b",
+        "technicalDependencyHash": "0bbca62544385b97badf39ef4e839d90d08a4baa8ae6e44dd036852fc74f31da"
+      },
+      "current": {
+        "sourceHash": "3f034fe336eba334138f37931a30ca0b0f322724c0ad12ffaf84564f2117feee",
+        "targetHash": "dc04a05ab4f0f810f343dec1b75cc90705dc7b5d728fe13852ec1b7e55ab575e",
+        "technicalDependencyHash": "0bbca62544385b97badf39ef4e839d90d08a4baa8ae6e44dd036852fc74f31da"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "json-to-anki",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "c9f267350ef4102bd492d0319a93ac11b6220a06ad774bcb722f8415846ca3d4",
+        "targetHash": "ad13dd6fe227c70dba52e1617e14af8a5f1647ece6969c86997fb9d3144ff893",
+        "technicalDependencyHash": "058ec04dd23998172dc1b803a4dd5a9aadc03e2a6e43e19b99f6438f4fa95c38"
+      },
+      "current": {
+        "sourceHash": "3f034fe336eba334138f37931a30ca0b0f322724c0ad12ffaf84564f2117feee",
+        "targetHash": "1ec8d39347be36f5a24d0111e571606a01fd945b726b285e84bfa7888bc0b715",
+        "technicalDependencyHash": "058ec04dd23998172dc1b803a4dd5a9aadc03e2a6e43e19b99f6438f4fa95c38"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "csv-to-anki",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "d28fb378ca1f72f3e46f5e1810f8217bb681a938981bfcb96994c5b439827348",
+        "targetHash": "4bf2a0d673de0589d1342a3bf5ca1b6e031913cdf4218571645a9d1d48082719",
+        "technicalDependencyHash": "c54446180497da8341a60846cb5374719a6e2de090c718cb7d78a98c3d36f554"
+      },
+      "current": {
+        "sourceHash": "14adc1117cd67fbdbeedc8523ce80359d982e1ba21c586cad5c0737f419acb9e",
+        "targetHash": "0dd338994066703f22ce05b4a3c7dbb0941758fc460c62f32fa08e0b4c66e66b",
+        "technicalDependencyHash": "c54446180497da8341a60846cb5374719a6e2de090c718cb7d78a98c3d36f554"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "csv-to-anki",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "d28fb378ca1f72f3e46f5e1810f8217bb681a938981bfcb96994c5b439827348",
+        "targetHash": "ae514da1781e94b91a75653e77aed2dba55dd1f2d25e0360a2a931b3ff9c4ca7",
+        "technicalDependencyHash": "12387ff19213c7bf02cb5d5f85f22baf69b628e07a2b41b0b192a66749eb08d5"
+      },
+      "current": {
+        "sourceHash": "14adc1117cd67fbdbeedc8523ce80359d982e1ba21c586cad5c0737f419acb9e",
+        "targetHash": "c08571a6a1ca4ada557a72eb57dcfd18cd9486fcc323ac3b382922290b0d189d",
+        "technicalDependencyHash": "12387ff19213c7bf02cb5d5f85f22baf69b628e07a2b41b0b192a66749eb08d5"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "ai-anki-cards",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "7be1c84cf24e1e4a5c0f26e630e5669a20794cf97883ecf41ae10f20c9beb950",
+        "targetHash": "0195ff8056c85b6d5c87d39331efac0c1fd542e58b933db72dd9486f9939a954",
+        "technicalDependencyHash": "b06682f5840ed82311af003b387d967ca56ac914fa3ffcd10a7530d0d2381de1"
+      },
+      "current": {
+        "sourceHash": "503519874898d285c18545718b8647f2b3d2943e527a672425b5384a2300226b",
+        "targetHash": "f157ed9991873ed66c0ccc7847a5f771499cf416c00b24de2750f86cf7c564ed",
+        "technicalDependencyHash": "b06682f5840ed82311af003b387d967ca56ac914fa3ffcd10a7530d0d2381de1"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "ai-anki-cards",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "7be1c84cf24e1e4a5c0f26e630e5669a20794cf97883ecf41ae10f20c9beb950",
+        "targetHash": "e938c584cec1b3956777dcaa7ce6b1ad9d5509b18d5c8f9417b197709db3c7fc",
+        "technicalDependencyHash": "4bff6938d413c24f2a699b8ac61b1f8a7a0832bf815636aeefd1e50076eac0e4"
+      },
+      "current": {
+        "sourceHash": "503519874898d285c18545718b8647f2b3d2943e527a672425b5384a2300226b",
+        "targetHash": "b1d5fae7d644dc70609e7f487608f0c0b37ebaefbb6e55dd6413e381d968fea9",
+        "technicalDependencyHash": "4bff6938d413c24f2a699b8ac61b1f8a7a0832bf815636aeefd1e50076eac0e4"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "anki-forge-vs-genanki",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "1f498627e2f915a60018897356582adcd9a230816fdad6b1ae0db71dc1b4648e",
+        "targetHash": "733e2c02da746a8ddd249eaf186267794b850f40769b708d141020e54af1e033",
+        "technicalDependencyHash": "773700daaa175981ac0b2d29c48b8f9244495cc2e8636931b0d2b1ddf5292e7f"
+      },
+      "current": {
+        "sourceHash": "fdc25eedafb7003ad858fd85cdd4634e407f4197f50262afc6370a3d0acf2ace",
+        "targetHash": "6fb7662754802208f1ef5f38267729049fa89777cbc26edb3e00c16f31c3f7bd",
+        "technicalDependencyHash": "773700daaa175981ac0b2d29c48b8f9244495cc2e8636931b0d2b1ddf5292e7f"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "anki-forge-vs-genanki",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "1f498627e2f915a60018897356582adcd9a230816fdad6b1ae0db71dc1b4648e",
+        "targetHash": "c451c2de9f19934de25efcabf5c57f95b17d7a47fa003072b6cf8129a4174701",
+        "technicalDependencyHash": "d4547ff8da4b37646a01287db2fda0c1a787da0923a72513bb85117ba36ee9a8"
+      },
+      "current": {
+        "sourceHash": "fdc25eedafb7003ad858fd85cdd4634e407f4197f50262afc6370a3d0acf2ace",
+        "targetHash": "a2edc0a700bee0417bfa3e61db82d1ef3e369cf2143ece686e283288f92e65e6",
+        "technicalDependencyHash": "d4547ff8da4b37646a01287db2fda0c1a787da0923a72513bb85117ba36ee9a8"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "development",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "2460ae459a683a92926215bb356d8ac27b921eaaf9bc7f67e90935ea1ce3b43d",
+        "targetHash": "5c117c10bc62be2df3ce662dc84b9d81b7e5490b86027bda97f59ca37d46bdd9",
+        "technicalDependencyHash": "1f076fb993f4032a135625d42463ab176905f8a352b58f6459d9c25c45aa0ce5"
+      },
+      "current": {
+        "sourceHash": "526ba1b16f6d2cfac0e2105c510dea114e876f7f5ca3409fb5a059cbeeac6723",
+        "targetHash": "38432f6f7a65e234a5c19e176c3dc7e466bebf5bb8517fdb6d9a1b1932fb50f9",
+        "technicalDependencyHash": "1f076fb993f4032a135625d42463ab176905f8a352b58f6459d9c25c45aa0ce5"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "development",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "2460ae459a683a92926215bb356d8ac27b921eaaf9bc7f67e90935ea1ce3b43d",
+        "targetHash": "e38db182612671bae28d97db857120faf69a5a41eec6301ae746f2719ff2d39a",
+        "technicalDependencyHash": "2c3c4c7d2d0060e2d44c9d9c5361be7c6dfd4839210339500c076c22102e0fca"
+      },
+      "current": {
+        "sourceHash": "526ba1b16f6d2cfac0e2105c510dea114e876f7f5ca3409fb5a059cbeeac6723",
+        "targetHash": "a94e54f78ff6c96c5765162880654d0360415d84b81e3d3ed27d9e630160e15c",
+        "technicalDependencyHash": "2c3c4c7d2d0060e2d44c9d9c5361be7c6dfd4839210339500c076c22102e0fca"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "rust-guide",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "3ad37fb8a91b061395d23dee33a40775b70d91212f997c79540e888c336a8545",
+        "targetHash": "a5295b4b425c0d4bd2d7f54d930e5fa49ae872856162feb3f7bfe51651edcdd9",
+        "technicalDependencyHash": "03328afd686f4e5255540fec38ab7ce768ac15e4ae0f0912c8723a63b5245012"
+      },
+      "current": {
+        "sourceHash": "73055b6f3ea1addd4f5fdea166c554650e73ec24b88b0ebeb5c3cc0585035bc3",
+        "targetHash": "eaf749fc95f8be1422344446d32c25d32722df4f40c4ad51d59d6f3c66ba246d",
+        "technicalDependencyHash": "03328afd686f4e5255540fec38ab7ce768ac15e4ae0f0912c8723a63b5245012"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "rust-guide",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "3ad37fb8a91b061395d23dee33a40775b70d91212f997c79540e888c336a8545",
+        "targetHash": "e6f28a8028f34ed487e45a1db2bc68f598a7690d0ee83872eca3651c809d398f",
+        "technicalDependencyHash": "78b9bf3feb0bbc77dc2403b7b834f748be0c11457b0077067bcb7ce8a2ab1d17"
+      },
+      "current": {
+        "sourceHash": "73055b6f3ea1addd4f5fdea166c554650e73ec24b88b0ebeb5c3cc0585035bc3",
+        "targetHash": "22941bad198ee2b44e337ffc79e0afbbea65b95def27cb3c6d590f677361a85a",
+        "technicalDependencyHash": "78b9bf3feb0bbc77dc2403b7b834f748be0c11457b0077067bcb7ce8a2ab1d17"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "templates",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "5d16ba86642c957766e6f12f399896589ce80b8ddac5e14ecb10c2148fc616a6",
+        "targetHash": "56a6ad7a83551104cb961cc4bc0da082edc495a8b3a777c72ed60e9d5f4151fb",
+        "technicalDependencyHash": "e530b7ad90db489ffa75d11cff9a64a03089ffb8772d981c3cf7b2c165a032a1"
+      },
+      "current": {
+        "sourceHash": "ea0720b017e1439e6cecb306a8c4edee11301715c1c609a56f84efab6060d7f8",
+        "targetHash": "06a0d98f675b70f5c9fb2a3bbcf9435eb0c83cfbf369528dca5cd63fa1cd0d94",
+        "technicalDependencyHash": "e530b7ad90db489ffa75d11cff9a64a03089ffb8772d981c3cf7b2c165a032a1"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "templates",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "5d16ba86642c957766e6f12f399896589ce80b8ddac5e14ecb10c2148fc616a6",
+        "targetHash": "586ce404a372a2245fe7a53298340e5ec1838ab41a38c1f8e9f98a959c31e1f7",
+        "technicalDependencyHash": "ae9e3e97b929da87b4865ac2ab46b4142f67c63c98a60210530cc4bf3a6496a4"
+      },
+      "current": {
+        "sourceHash": "ea0720b017e1439e6cecb306a8c4edee11301715c1c609a56f84efab6060d7f8",
+        "targetHash": "ad91b899f61875d785abcd1e15c160dc236c5ad2a1b1b18e9be17d2a053b987b",
+        "technicalDependencyHash": "ae9e3e97b929da87b4865ac2ab46b4142f67c63c98a60210530cc4bf3a6496a4"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "api",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "5bbd329fddbe50e973df470ba2c5bcf026bea0ad0bf3feb17cc7e50893774e86",
+        "targetHash": "c99ded373e7c59a24c4e3cf2db853ec712a4483b5f48155670be4b1b478d4cbb",
+        "technicalDependencyHash": "ca3735a1ab15640530e9949b8d5a8897f329fa2412d5cc200c9b8fa7ddd44fcd"
+      },
+      "current": {
+        "sourceHash": "58649a4585911247971c12c6b1e2951ac47dafab6ba429e5ea9d0f3fc1db8c0b",
+        "targetHash": "25b01b7bf1c90ae13a875e744a7c826ac57f0caf46960936b5fc60abf7be7364",
+        "technicalDependencyHash": "ca3735a1ab15640530e9949b8d5a8897f329fa2412d5cc200c9b8fa7ddd44fcd"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "api",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "5bbd329fddbe50e973df470ba2c5bcf026bea0ad0bf3feb17cc7e50893774e86",
+        "targetHash": "32044a692eb5037a51a54ca4482abc8c8b7d9b7ab955a1a8c4f302793f9d8ce7",
+        "technicalDependencyHash": "f0b1230b6781e796cc1bb16995dd715b36a9ce5c559a90f8aba751ea42e40990"
+      },
+      "current": {
+        "sourceHash": "58649a4585911247971c12c6b1e2951ac47dafab6ba429e5ea9d0f3fc1db8c0b",
+        "targetHash": "4e4fd8431f877240f2754596f14d1b795b0f29381a6eb283fa73600cff36a6f7",
+        "technicalDependencyHash": "f0b1230b6781e796cc1bb16995dd715b36a9ce5c559a90f8aba751ea42e40990"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "installation",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "ed4e03b099c03279b9f66e1ba230085acabff4d2ff26f8f6b22dd00aed57da61",
+        "targetHash": "d6aa22f467b5d75183ef09087bdb2c0d9ba6859f79a91c82822f718cb1443b04",
+        "technicalDependencyHash": "19c57eb213f1c26ca37f96f28acde4b10914d657c1a26378269ae5436055fa97"
+      },
+      "current": {
+        "sourceHash": "de791592f57de34a6429fa9346294bc336b2f5557237151442b93bcf65b26d6c",
+        "targetHash": "7cd6c224f5149d28688ecd78182b9050692756e4cef254886ae6e007b5e62cd4",
+        "technicalDependencyHash": "19c57eb213f1c26ca37f96f28acde4b10914d657c1a26378269ae5436055fa97"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "installation",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "ed4e03b099c03279b9f66e1ba230085acabff4d2ff26f8f6b22dd00aed57da61",
+        "targetHash": "c65841f1b5f390bc6ab9987800bc089deb8d67e22d0e0f7632293175234d8fd1",
+        "technicalDependencyHash": "ca33f80c148a9b7c2d359d5cd0e3e98847901ed154e463d91cf15eeac66ea3be"
+      },
+      "current": {
+        "sourceHash": "de791592f57de34a6429fa9346294bc336b2f5557237151442b93bcf65b26d6c",
+        "targetHash": "f94d4553b4f9fe8f3a41f3b7d604f8dd0dafc7de89d28de044621bf8842ace55",
+        "technicalDependencyHash": "ca33f80c148a9b7c2d359d5cd0e3e98847901ed154e463d91cf15eeac66ea3be"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "concepts",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "7fc12a5e8eea83ebe06adcc5adc3ddc250d900055e4315732d53202f95da175e",
+        "targetHash": "5b85a2963cddf6485251e5de833073ef9e64b7697a2211cfc0e2307b0ff7185c",
+        "technicalDependencyHash": "76f2a6f9a54c03b6d88db45444f40d998d7b6469982d695bcc497813a76dc4ca"
+      },
+      "current": {
+        "sourceHash": "eac3b14e9820a7b64fb5c40f8ea4a2b2a7165d81571cf4b1b8ea49bad9f2cb7e",
+        "targetHash": "c7ad2ec8c4fc9fcd9a8640358b7a753e2839ac2d206b2e587f11fa9b428451f4",
+        "technicalDependencyHash": "76f2a6f9a54c03b6d88db45444f40d998d7b6469982d695bcc497813a76dc4ca"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "concepts",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "7fc12a5e8eea83ebe06adcc5adc3ddc250d900055e4315732d53202f95da175e",
+        "targetHash": "00eae4a3fa76bd4990ac50224550c10d506a4bd721e976044726c5e49222407f",
+        "technicalDependencyHash": "b08f1ae7d12d033cd7198410dff22791c3881712fb84353cf3934891f42e4373"
+      },
+      "current": {
+        "sourceHash": "eac3b14e9820a7b64fb5c40f8ea4a2b2a7165d81571cf4b1b8ea49bad9f2cb7e",
+        "targetHash": "8e4939403402b4bf857ff569f7f07361eff201decfdb67985c25646a58cc4215",
+        "technicalDependencyHash": "b08f1ae7d12d033cd7198410dff22791c3881712fb84353cf3934891f42e4373"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "cards",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "95ea58f4e45def5cfd44a0c049a83a131f9668f56275a01c07b0ba9ea5dd10e8",
+        "targetHash": "dcc888a8eeca019f0d1487fb375d7d5a0135a2b47da9a04ad1c237d6876d1fdb",
+        "technicalDependencyHash": "ae870f3a188244eb905fb4ba563cee96ed5d3e823af2a24bf6fde6937c43d8a5"
+      },
+      "current": {
+        "sourceHash": "f0563d28c302d18914244cd5572086d78ab18015e9029eb575fec67d609bf2c2",
+        "targetHash": "47ebcf1ea5d06831d8d2779cb8e00b2d426f6bedf05052f425d827263f8ac722",
+        "technicalDependencyHash": "ae870f3a188244eb905fb4ba563cee96ed5d3e823af2a24bf6fde6937c43d8a5"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "cards",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "95ea58f4e45def5cfd44a0c049a83a131f9668f56275a01c07b0ba9ea5dd10e8",
+        "targetHash": "c7c4259297b369b0ad6a5f3df1ea673b3e5e112d1d59e1f52a98cca0b0c86b47",
+        "technicalDependencyHash": "f7a327cc1a217e7c2ffb02da31d55d1d7b3ccf51a68304da3b9d55ae14e95eac"
+      },
+      "current": {
+        "sourceHash": "f0563d28c302d18914244cd5572086d78ab18015e9029eb575fec67d609bf2c2",
+        "targetHash": "96f3ad79ed9b56027e6db53a6c6e5727abcdea09e2f5ef96c9a1bcba88cb6afc",
+        "technicalDependencyHash": "f7a327cc1a217e7c2ffb02da31d55d1d7b3ccf51a68304da3b9d55ae14e95eac"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "custom-notetypes",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "1bcfdf1880b5c821cee9f8e695ae212b82e4e80e18a3485f9b67d6ef0df266d2",
+        "targetHash": "9a7692381d41492b82e8782e62c0d4e4012fc88dbf7c962b8d2a699a0dfaee36",
+        "technicalDependencyHash": "636954125a477835514e3922ab80b78dc73d378c1e2cbf926bc42784d4a7fd1a"
+      },
+      "current": {
+        "sourceHash": "dba7f2c74ccf54f983b55f8d13acde8258e922fbede2bd8fdf19f790512cbb3f",
+        "targetHash": "d51ba115c67aa997e92d63303a6901a3c211af10fddc17fd65d2168a168a2b2a",
+        "technicalDependencyHash": "636954125a477835514e3922ab80b78dc73d378c1e2cbf926bc42784d4a7fd1a"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "custom-notetypes",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "1bcfdf1880b5c821cee9f8e695ae212b82e4e80e18a3485f9b67d6ef0df266d2",
+        "targetHash": "ee187a544833b3cb87f23fd8d093e1abfdd6fa35b792d1644e2ffb69f59a304f",
+        "technicalDependencyHash": "b83fbf2a5e1232b72091acf467cf861d3e82a30acfaa9617d0f05267b7417f10"
+      },
+      "current": {
+        "sourceHash": "dba7f2c74ccf54f983b55f8d13acde8258e922fbede2bd8fdf19f790512cbb3f",
+        "targetHash": "1a4a7b4388a97cc62277c731358af34c62e95a3182415519dacfd6ab30291491",
+        "technicalDependencyHash": "b83fbf2a5e1232b72091acf467cf861d3e82a30acfaa9617d0f05267b7417f10"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "media",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "664d39500b197dc3af260cf2a5f7ada68dafe1438ce3a25a518acee915c900c9",
+        "targetHash": "4d0d8d0fc56f7c6a5cee60412fe1e12191b63a07023b2a89ca7d35fb6dd8f7c3",
+        "technicalDependencyHash": "5f24116437e3237ace7bcdcb572e07c822a48d117fa6e3836ad604972b6e8b26"
+      },
+      "current": {
+        "sourceHash": "221248cbf9d3f990cf0cde8ae7007838d50350f835f74e1aa9121cc0d8510277",
+        "targetHash": "b7fb2701c28e06b4717bc92b09fdc50f8ae683578343d28acaab2f7526d45003",
+        "technicalDependencyHash": "5f24116437e3237ace7bcdcb572e07c822a48d117fa6e3836ad604972b6e8b26"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "media",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "664d39500b197dc3af260cf2a5f7ada68dafe1438ce3a25a518acee915c900c9",
+        "targetHash": "7b44fee66a30b2e2ab2642a5f583cdea9275bf62f37a69ceaa4f19916ed3c8be",
+        "technicalDependencyHash": "72fb2d7a5c3f9c9d46983f29fd4779909e051fbf1c7b37d17c32454037ce655d"
+      },
+      "current": {
+        "sourceHash": "221248cbf9d3f990cf0cde8ae7007838d50350f835f74e1aa9121cc0d8510277",
+        "targetHash": "004c7e25a64afb281d2b5a3729c508f738e059904928705240d6e8d29b7c751e",
+        "technicalDependencyHash": "72fb2d7a5c3f9c9d46983f29fd4779909e051fbf1c7b37d17c32454037ce655d"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "image-occlusion",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "4862d5e4861de8f8961dddc8499c248a604742545fb132f7ef4aa565fcf3b096",
+        "targetHash": "9109ee1723e1b74c2db2604e4a18f17bd8d9fc8a0060f664bd63bee861508ccc",
+        "technicalDependencyHash": "31fffda216fe1f8e17239b24f28e776b47eb9d4935c9c9ea1cc2a075595b2628"
+      },
+      "current": {
+        "sourceHash": "7ace14df870ba23099caf28e8d1ef3924635c720b6cacbdb0b8589a86fbe7230",
+        "targetHash": "5357cc44ebfc0b73f26d1c8b357d4d070b11c8ab76ba1dc9851bb1b08077be34",
+        "technicalDependencyHash": "31fffda216fe1f8e17239b24f28e776b47eb9d4935c9c9ea1cc2a075595b2628"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "image-occlusion",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "4862d5e4861de8f8961dddc8499c248a604742545fb132f7ef4aa565fcf3b096",
+        "targetHash": "fe51615e4080eeb9ffaacb11f29a5ed82085617d7acd3fca3477cb63b1199fc8",
+        "technicalDependencyHash": "26807fe9e8fa66b17a2271fe44ad8408f3a32d4ec377f0aa571dd677ed799216"
+      },
+      "current": {
+        "sourceHash": "7ace14df870ba23099caf28e8d1ef3924635c720b6cacbdb0b8589a86fbe7230",
+        "targetHash": "16ea009845076f049bcc8127c7c66fc6177d03c275a74d27de6730a8297a3dbf",
+        "technicalDependencyHash": "26807fe9e8fa66b17a2271fe44ad8408f3a32d4ec377f0aa571dd677ed799216"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "updates",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "09029cdc8f83588994994875170cccb5608b0661dc3de17ef195253ebabe2486",
+        "targetHash": "b837b7b93f8d04ab1f25bf640c84e21b27a2e78e474e0028e2a23a9bfbd36690",
+        "technicalDependencyHash": "487b2a03867333696524e1d5107d85dd03e216cdeee9b90b2cb6a5b2c80aec08"
+      },
+      "current": {
+        "sourceHash": "bb33db9594f188013bddb419a13d87761fe6f0e7e22125594d82f67bcf58c6b1",
+        "targetHash": "cd31c0cc73963bd6de2777ff7163132c46dbf80a3578cb0efd5dc1bed4dcbbd0",
+        "technicalDependencyHash": "487b2a03867333696524e1d5107d85dd03e216cdeee9b90b2cb6a5b2c80aec08"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "updates",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "09029cdc8f83588994994875170cccb5608b0661dc3de17ef195253ebabe2486",
+        "targetHash": "d999aed84a0e374c4fe9831dcafdfaa2bf52426344b5b5985c2ac1f5844464f0",
+        "technicalDependencyHash": "e0265a12365afffcc7485c3de73dbd2e0539480e2adea567b9c4310d54edc1f5"
+      },
+      "current": {
+        "sourceHash": "bb33db9594f188013bddb419a13d87761fe6f0e7e22125594d82f67bcf58c6b1",
+        "targetHash": "550639c1da95df16b337a54f55e16705b3d368ec61580cc6823fb2f390ccc4a2",
+        "technicalDependencyHash": "e0265a12365afffcc7485c3de73dbd2e0539480e2adea567b9c4310d54edc1f5"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "build-guarantees",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "8d966043be767ba5eb67a58c6a3970578e87123a5725762c1a39e0739edf9e03",
+        "targetHash": "80553c0bb99d227a6c8a19169ccd74dc61db8993918e5ca2428de61f809f4d50",
+        "technicalDependencyHash": "784ebac278153cb8e17a9a372711893f8d161ebc3fa7a2a641c3c3663c3e7f0a"
+      },
+      "current": {
+        "sourceHash": "e984a73146791e2a706d5f0111d06ded2c2704fe7416cf056d40565a77a067c1",
+        "targetHash": "6750f1589be6c337fe885828d5e1e34e00726026ed95e08330c7cca52bab6e89",
+        "technicalDependencyHash": "784ebac278153cb8e17a9a372711893f8d161ebc3fa7a2a641c3c3663c3e7f0a"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "build-guarantees",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "8d966043be767ba5eb67a58c6a3970578e87123a5725762c1a39e0739edf9e03",
+        "targetHash": "ae5e64f734b65550410fa328043198260ac824cd127870bd9173874f1c9071c6",
+        "technicalDependencyHash": "2457304ac503edb4bd66085710b65cbb2d9be3fe7e92694ee95f08627094dca7"
+      },
+      "current": {
+        "sourceHash": "e984a73146791e2a706d5f0111d06ded2c2704fe7416cf056d40565a77a067c1",
+        "targetHash": "1af08827a21aeb4e1d3b6737cbec0d7b1835f110c0dc6db7e469c61d8b75438e",
+        "technicalDependencyHash": "2457304ac503edb4bd66085710b65cbb2d9be3fe7e92694ee95f08627094dca7"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "troubleshooting",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "b1a1d87bd11126e0241a8ad0365cc6d79cb8086e2a0716dfcc6bfc7edd2b8c31",
+        "targetHash": "c6b216839c3386fc770ce881cccd2e727ed90cac900cda8b23b9c5f7dd0fd31d",
+        "technicalDependencyHash": "071ada282b21e5303e9671ce7c32330d56416ee1827ac68a7f5f3e779cf7b987"
+      },
+      "current": {
+        "sourceHash": "8395fd33923b6e611e4b724a9d17ea60326a72274360c04e5502481b05e6e133",
+        "targetHash": "94118efaf5933e9c12848925209e95171ee09f6ac2ebc46502cdf96d4e772614",
+        "technicalDependencyHash": "071ada282b21e5303e9671ce7c32330d56416ee1827ac68a7f5f3e779cf7b987"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "troubleshooting",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "b1a1d87bd11126e0241a8ad0365cc6d79cb8086e2a0716dfcc6bfc7edd2b8c31",
+        "targetHash": "909fb3320bc8be8563d76ff416edd6e86dbe5c49428348c822e17a37a33e4388",
+        "technicalDependencyHash": "a3a754a8a285d9bbc3865ebcd7b7a6bedd5756343d3de6949cad38ffc777f8a8"
+      },
+      "current": {
+        "sourceHash": "8395fd33923b6e611e4b724a9d17ea60326a72274360c04e5502481b05e6e133",
+        "targetHash": "bd489d43bc667ff60646bfc45581783c1c47b1bd6cb047ebb00b3808568f2b3c",
+        "technicalDependencyHash": "a3a754a8a285d9bbc3865ebcd7b7a6bedd5756343d3de6949cad38ffc777f8a8"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "compatibility",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "2d2ac6c560ff52e266435a2869b4352c4a7088d40b4db5c7c9552520f870e373",
+        "targetHash": "c36bdbfdd9aca92e79926dabdf1112d31b020cdbdac597ad113e40cc99c4e637",
+        "technicalDependencyHash": "da20030b84972d65c2803c3ce648d5239fc2a074fcf451ac80e83e6fb2f1e34d"
+      },
+      "current": {
+        "sourceHash": "713c92d25b205dbf0b1f0cdb4932731851f439b467b11d47003d7cc5ac973b39",
+        "targetHash": "f36abaa7d89fed0383cf24c864dacb2c68dc5e2ad10eb923a2ec6898b41229b2",
+        "technicalDependencyHash": "da20030b84972d65c2803c3ce648d5239fc2a074fcf451ac80e83e6fb2f1e34d"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "compatibility",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "2d2ac6c560ff52e266435a2869b4352c4a7088d40b4db5c7c9552520f870e373",
+        "targetHash": "74437c2aab439b98471d814a301644b63ed80665fd6d3a051bb8cea522b50795",
+        "technicalDependencyHash": "dca63a58ac33ba9bca582b382bf8ad5b8c5d94bd6ba8af76953ca5562b60a35e"
+      },
+      "current": {
+        "sourceHash": "713c92d25b205dbf0b1f0cdb4932731851f439b467b11d47003d7cc5ac973b39",
+        "targetHash": "1f09f7d80e24c2b5877980defbf05977b45fea8f36e6436d37e6eacacbdc4f9b",
+        "technicalDependencyHash": "dca63a58ac33ba9bca582b382bf8ad5b8c5d94bd6ba8af76953ca5562b60a35e"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "rust-api",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "2cf0a3ea7818750b3e651f21d87d1eb879b035a1aced85a1e0387fabe405cf85",
+        "targetHash": "a677b2587e5c3b90cb84ee3647770ef3bd93b14d7a37e30a9d3fd1f6ee400997",
+        "technicalDependencyHash": "e764fcb3667f2089eaa188c651ebd7c144a803cb70f09766fcd9a08435a4123d"
+      },
+      "current": {
+        "sourceHash": "16a84acd5a6f2d6fd85287cd50546a87123d3a33696f4ca656560ccd6a206d92",
+        "targetHash": "5796c1ba87505fefa31b652ce77407196a43db441e5fd9a11acd50d370e896d9",
+        "technicalDependencyHash": "e764fcb3667f2089eaa188c651ebd7c144a803cb70f09766fcd9a08435a4123d"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "rust-api",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "2cf0a3ea7818750b3e651f21d87d1eb879b035a1aced85a1e0387fabe405cf85",
+        "targetHash": "70110cc790591a491ab7824fe752b46231693f11d5f2e4d66b8f0c7455c61853",
+        "technicalDependencyHash": "dc9ffd78abab02776d3059088ee0df97bd0b7233b03878186c22fae6c0671b81"
+      },
+      "current": {
+        "sourceHash": "16a84acd5a6f2d6fd85287cd50546a87123d3a33696f4ca656560ccd6a206d92",
+        "targetHash": "637409d7fb2903e1ad87015b3bb24cc2c3b6561dcb66c1a157183a0a4adc6bf7",
+        "technicalDependencyHash": "dc9ffd78abab02776d3059088ee0df97bd0b7233b03878186c22fae6c0671b81"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "node-quickstart",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "9ad5254fbb8b129348cc819ebad89031dec903ca884fcac93f8fdee2d80b4d23",
+        "targetHash": "24a81b54d6495351af6b0060f7c0ec57ef128a19c95ac22c0c5454e9bfdd7f6d",
+        "technicalDependencyHash": "4660a3ffa23ee53d105deb0ba6b09731d4ab3db8a2a3fdb8140892678ed84db7"
+      },
+      "current": {
+        "sourceHash": "1321528133e35309e1471d18e0f00a1a4ad96beb222632490fecf48dec637b16",
+        "targetHash": "725bbafc8659765635e59ac4b3f61ddfb76f6dadc46628ef850c6b11d0ff3273",
+        "technicalDependencyHash": "4660a3ffa23ee53d105deb0ba6b09731d4ab3db8a2a3fdb8140892678ed84db7"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "node-quickstart",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "9ad5254fbb8b129348cc819ebad89031dec903ca884fcac93f8fdee2d80b4d23",
+        "targetHash": "670f7f1d4a3ff84bbb6191d3386ea800f4a6d054d531736d9c3163583c94ac59",
+        "technicalDependencyHash": "763d485193bc1e5217a68695436f0e53b37acc7268bcc0145120c6892959b74f"
+      },
+      "current": {
+        "sourceHash": "1321528133e35309e1471d18e0f00a1a4ad96beb222632490fecf48dec637b16",
+        "targetHash": "1f9f256e1a3398eea8144af21da522d46428ae0c06a64b7fa9e78d122d658453",
+        "technicalDependencyHash": "763d485193bc1e5217a68695436f0e53b37acc7268bcc0145120c6892959b74f"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "node-api",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "9edee14ab827632fe421feca1d4b98587c4fbe448888ea03558b0703d5a6402d",
+        "targetHash": "d5b601590441cd05ae3fc71f1f7d29c74078d16f03c9ee8277ba99e8e1a3ac85",
+        "technicalDependencyHash": "4fe2b7984520ce75221317401d8e8cd93c17cf4bcc511fa97e763db81a0b8728"
+      },
+      "current": {
+        "sourceHash": "4109950b321e6b4f619ecc7379ea6b10a147534a15c877e1b6976891a9705f66",
+        "targetHash": "ed357b9fd751b32b2b428fb53b6bafdadd15f7c5fba1c4eabf362a44846842e4",
+        "technicalDependencyHash": "4fe2b7984520ce75221317401d8e8cd93c17cf4bcc511fa97e763db81a0b8728"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "node-api",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "9edee14ab827632fe421feca1d4b98587c4fbe448888ea03558b0703d5a6402d",
+        "targetHash": "caf6591ce6e321cd5e72268cfbf835826d30ad26daa6c5304e6c7b8854bf52a7",
+        "technicalDependencyHash": "07e37aaf758f42be2d897360451afac6aebc79a697c240f87ba6ae13afc7bdf5"
+      },
+      "current": {
+        "sourceHash": "4109950b321e6b4f619ecc7379ea6b10a147534a15c877e1b6976891a9705f66",
+        "targetHash": "81efff2fc085d89ddc2bd5bf72d9187322fb12b803efb0cf4f402249fe5a6dc9",
+        "technicalDependencyHash": "07e37aaf758f42be2d897360451afac6aebc79a697c240f87ba6ae13afc7bdf5"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "python-quickstart",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "98b667c43152454b02891f3d20310413997d9b26ea7582dac9aba14e1d95ed6c",
+        "targetHash": "1e42365ada77466109d77e3a6bff890c606cb6923c14bf3ad516878dc9a3c3f1",
+        "technicalDependencyHash": "a4f4782aef023681222ce8a65f87bd660582fd957e789158f20a5d89d6d9e5a3"
+      },
+      "current": {
+        "sourceHash": "f4e7dfa7c0636993ad00405894a4dbb5151c6cfb419e87a7134f4aaacb3b9410",
+        "targetHash": "b05e3a180cabc5a13f75c07a4a0919252e2ce947b74c0bf416ed2bbc59daf227",
+        "technicalDependencyHash": "a4f4782aef023681222ce8a65f87bd660582fd957e789158f20a5d89d6d9e5a3"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "python-quickstart",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "98b667c43152454b02891f3d20310413997d9b26ea7582dac9aba14e1d95ed6c",
+        "targetHash": "5d089202eb87766d111fcf18d16c6d3261d20d78690b38225af935efb7b000a9",
+        "technicalDependencyHash": "4cc8211864ae822c22c22d7e0c7f48fd0b2e601d5937f21a35ad56282180c198"
+      },
+      "current": {
+        "sourceHash": "f4e7dfa7c0636993ad00405894a4dbb5151c6cfb419e87a7134f4aaacb3b9410",
+        "targetHash": "02b089be5581025cf08f4434550e17fbb789f428ff0791bc5955087ad23e0ffc",
+        "technicalDependencyHash": "4cc8211864ae822c22c22d7e0c7f48fd0b2e601d5937f21a35ad56282180c198"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "python-api",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "7cc9b916161c517043c7ef4698d1c0abad67cc73977ea41787bb5e811e36e7cf",
+        "targetHash": "31740428317b5530cb479e97e4475db289303cb3c51cd0337fec2f9a17a78582",
+        "technicalDependencyHash": "8b9d6b35fc998b9f017dbb09002c8f5b5848fd9f01f51e6c98a1de5f52eafdc7"
+      },
+      "current": {
+        "sourceHash": "9dcb6a8b640785a17a4d8bf96631795dc9d639ba2406a17e80e5bf4aad060233",
+        "targetHash": "835135b55f359cfd80c775c6a429b4012c8e89fc82b93d6ac5b0f7462bb050c7",
+        "technicalDependencyHash": "8b9d6b35fc998b9f017dbb09002c8f5b5848fd9f01f51e6c98a1de5f52eafdc7"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "python-api",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "7cc9b916161c517043c7ef4698d1c0abad67cc73977ea41787bb5e811e36e7cf",
+        "targetHash": "517b6b1037b22b5e00a826bb705a6e5ea4cf765b150763745f1f752a61fc49b2",
+        "technicalDependencyHash": "21e7a2f13d916f34a5eceeedad8a5708482a81af8f00a0ce4da9010c624be881"
+      },
+      "current": {
+        "sourceHash": "9dcb6a8b640785a17a4d8bf96631795dc9d639ba2406a17e80e5bf4aad060233",
+        "targetHash": "4d3f24380a4c73ef1a64d1fc5bba4584c2dc3482e65977ab4283e73c24f25464",
+        "technicalDependencyHash": "21e7a2f13d916f34a5eceeedad8a5708482a81af8f00a0ce4da9010c624be881"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "python-diagnostics",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "e3a56641c80c70bc7110186d9bafa4e6550b40fff23c4f245ed7e9d9466252c3",
+        "targetHash": "b7f113e10f829afe84bb8922bee0ef4a0e4151fd7856d33366a3781eeec643bc",
+        "technicalDependencyHash": "7eb0dc332c45d3df78b3d4b680176b2c75b4cb7509d3598e818a5da4528e6027"
+      },
+      "current": {
+        "sourceHash": "2c65f0d44a9fc660f718612bf435c9dea2623e505eab9747edc8277ac0965bc9",
+        "targetHash": "8aa348c75996bfbb23302bc3e8233fb005a365d6756a10c1d62fb8c0a66d74d8",
+        "technicalDependencyHash": "7eb0dc332c45d3df78b3d4b680176b2c75b4cb7509d3598e818a5da4528e6027"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "python-diagnostics",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "e3a56641c80c70bc7110186d9bafa4e6550b40fff23c4f245ed7e9d9466252c3",
+        "targetHash": "05da18ce2133db10f8bcba7e37c8cc87c0454a8f68fe12bc600bfa4c394f6122",
+        "technicalDependencyHash": "8c10dec3d5a703ee513013825a201df5982c8b6a90703526feb63e24ef70d623"
+      },
+      "current": {
+        "sourceHash": "2c65f0d44a9fc660f718612bf435c9dea2623e505eab9747edc8277ac0965bc9",
+        "targetHash": "246344c7d7dbdd25e13931bf6f34f3b08d4824bf0c6db914e206e2ed25bf1813",
+        "technicalDependencyHash": "8c10dec3d5a703ee513013825a201df5982c8b6a90703526feb63e24ef70d623"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "python-migration",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "e981295c7c114cbde1a6ed01eedb5864cf84696bbdf69d214beaa104df5f3317",
+        "targetHash": "c4cdb5f8614b25c37dbb88d6b0e1d9b35d095e61bf093e6cc600e3bfc839be82",
+        "technicalDependencyHash": "865455ae7ec4445b411b29f51458b87cda3c19694170f01fc7e0dd6a9108da34"
+      },
+      "current": {
+        "sourceHash": "09c3e9157524fca43378a8e08deb8062dd33c61de999bcad910fc12a07ef5e43",
+        "targetHash": "e0dcf33ef30e93ca7e4e36ec99eb666e825e328bc0cc4a390d21502eec27052b",
+        "technicalDependencyHash": "865455ae7ec4445b411b29f51458b87cda3c19694170f01fc7e0dd6a9108da34"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "python-migration",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "e981295c7c114cbde1a6ed01eedb5864cf84696bbdf69d214beaa104df5f3317",
+        "targetHash": "5c31a9041247dd6d8a5ce9453c89a04be8a363a0dbe100d32b90a085e6e828e7",
+        "technicalDependencyHash": "8fcfbe25e9f19fefd37c9ec58b0f40a2845a41d61fb4c5b43d64bdd2bb27bb05"
+      },
+      "current": {
+        "sourceHash": "09c3e9157524fca43378a8e08deb8062dd33c61de999bcad910fc12a07ef5e43",
+        "targetHash": "5425404fe49b59995e4f355320717cb82ed744620de74daab8d5811b23809cab",
+        "technicalDependencyHash": "8fcfbe25e9f19fefd37c9ec58b0f40a2845a41d61fb4c5b43d64bdd2bb27bb05"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "genanki-migration",
+      "type": "docs",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "83c03891e9f1f920b0c11b07c94a2a1b61aa3bba3e3b9b764d1d5eca0a98a600",
+        "targetHash": "8330e0c62300fc52d313303cdd4b6c4df0b3fb6b93357f218498d0b5a5cb0822",
+        "technicalDependencyHash": "865455ae7ec4445b411b29f51458b87cda3c19694170f01fc7e0dd6a9108da34"
+      },
+      "current": {
+        "sourceHash": "0c1c2cd2a992debdb0fb74e0728cb7ed8eae88b19e93d6f661260c9f22fc41a6",
+        "targetHash": "97d1ce367c2bd46506839ab6cfc0f29a07251ef24f37905c50f9b8d11a5adf38",
+        "technicalDependencyHash": "865455ae7ec4445b411b29f51458b87cda3c19694170f01fc7e0dd6a9108da34"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "genanki-migration",
+      "type": "docs",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "83c03891e9f1f920b0c11b07c94a2a1b61aa3bba3e3b9b764d1d5eca0a98a600",
+        "targetHash": "e55e723d6c048eb7efc5f1ff8c4989e8ddd1e9da8bbad35d33a80cf636f5fe6b",
+        "technicalDependencyHash": "8fcfbe25e9f19fefd37c9ec58b0f40a2845a41d61fb4c5b43d64bdd2bb27bb05"
+      },
+      "current": {
+        "sourceHash": "0c1c2cd2a992debdb0fb74e0728cb7ed8eae88b19e93d6f661260c9f22fc41a6",
+        "targetHash": "b11f525d9082f4e844f2f5bf417567400d76ad95db03f8709b1cc5297f1f28ac",
+        "technicalDependencyHash": "8fcfbe25e9f19fefd37c9ec58b0f40a2845a41d61fb4c5b43d64bdd2bb27bb05"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [
+        "website/search-concepts.json",
+        "website/search.config.mjs",
+        "website/src/lib/search.mjs",
+        "website/src/scripts/docs-search.ts"
+      ],
+      "removedInputFiles": []
+    },
+    {
+      "page": "blog:your-first-anki-deck",
+      "type": "article",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "7be56068cd198ce5f75d8c29466e7155e98bc877ded2db0facc8081ab535840c",
+        "targetHash": "a447c7c3432755d8fb5a5617d6a01587465236cf6223363171df642b87c6296d",
+        "technicalDependencyHash": "096a5f96e0f36f385cb232693178422ab715da6eb7003dce7991e1205690fa98"
+      },
+      "current": {
+        "sourceHash": "7be56068cd198ce5f75d8c29466e7155e98bc877ded2db0facc8081ab535840c",
+        "targetHash": "a447c7c3432755d8fb5a5617d6a01587465236cf6223363171df642b87c6296d",
+        "technicalDependencyHash": "096a5f96e0f36f385cb232693178422ab715da6eb7003dce7991e1205690fa98"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [],
+      "removedInputFiles": []
+    },
+    {
+      "page": "blog:your-first-anki-deck",
+      "type": "article",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "7be56068cd198ce5f75d8c29466e7155e98bc877ded2db0facc8081ab535840c",
+        "targetHash": "69f0ccfb9ae1f57304f242d179c0ddf238aef67fa46cb7064a977bfc540e0794",
+        "technicalDependencyHash": "32e59ebb0fbcf2da3cd70de692a400485c7ee0e4169718c999e6058bfd8b40d4"
+      },
+      "current": {
+        "sourceHash": "7be56068cd198ce5f75d8c29466e7155e98bc877ded2db0facc8081ab535840c",
+        "targetHash": "69f0ccfb9ae1f57304f242d179c0ddf238aef67fa46cb7064a977bfc540e0794",
+        "technicalDependencyHash": "32e59ebb0fbcf2da3cd70de692a400485c7ee0e4169718c999e6058bfd8b40d4"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [],
+      "removedInputFiles": []
+    },
+    {
+      "page": "blog:stable-ids-and-deck-updates",
+      "type": "article",
+      "locale": "en",
+      "prior": {
+        "sourceHash": "26733ba6ded829da4b6e13a41cdc3547fa6f04204832f52ea9f219cdc030abd5",
+        "targetHash": "fe1a73f0ad24ff8d15414184f562fd3563f0063188c82a65a3f722db98615d60",
+        "technicalDependencyHash": "118366f959246f646ec74374dfd973b39fcef063d57ae495c9d02873614dddc2"
+      },
+      "current": {
+        "sourceHash": "26733ba6ded829da4b6e13a41cdc3547fa6f04204832f52ea9f219cdc030abd5",
+        "targetHash": "fe1a73f0ad24ff8d15414184f562fd3563f0063188c82a65a3f722db98615d60",
+        "technicalDependencyHash": "118366f959246f646ec74374dfd973b39fcef063d57ae495c9d02873614dddc2"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [],
+      "removedInputFiles": []
+    },
+    {
+      "page": "blog:stable-ids-and-deck-updates",
+      "type": "article",
+      "locale": "zh-CN",
+      "prior": {
+        "sourceHash": "26733ba6ded829da4b6e13a41cdc3547fa6f04204832f52ea9f219cdc030abd5",
+        "targetHash": "96f04e522baf0ac7b644172bcd5dbe60b4964c960aeb0286d4fbe12e5aa07d3d",
+        "technicalDependencyHash": "b4e693171d28bc132925cc5e84d7c26a5ae8b1b2ab2825ff37312ee75d8d7c35"
+      },
+      "current": {
+        "sourceHash": "26733ba6ded829da4b6e13a41cdc3547fa6f04204832f52ea9f219cdc030abd5",
+        "targetHash": "96f04e522baf0ac7b644172bcd5dbe60b4964c960aeb0286d4fbe12e5aa07d3d",
+        "technicalDependencyHash": "b4e693171d28bc132925cc5e84d7c26a5ae8b1b2ab2825ff37312ee75d8d7c35"
+      },
+      "previousReportReproduced": true,
+      "pageMetadataUnchangedAfterBothCalls": true,
+      "addedInputFiles": [],
+      "removedInputFiles": []
+    }
+  ],
+  "currentReviewInputFingerprints": [
+    {
+      "path": "anki_forge/examples/docs_publication.rs",
+      "sha256": "65e6404ee7381d73709dca0ada96cdb7923650ddd1cc330447884864d552a85b"
+    },
+    {
+      "path": "anki_forge/examples/docs_workflow.rs",
+      "sha256": "2ab71f370ca174b256d1ba56e8b8cccc34fda5918a1fe25fe29626b061d25d86"
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+    },
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+    },
+    {
+      "path": "anki_forge/examples/target_api_custom_notetype.rs",
+      "sha256": "2951c058e9c3376fbe115b199a010830445c5765c923f9f66f6406a724d9cd13"
+    },
+    {
+      "path": "anki_forge/examples/website_showcase.rs",
+      "sha256": "458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3"
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+    },
+    {
+      "path": "bindings/python/MIGRATION.md",
+      "sha256": "ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2"
+    },
+    {
+      "path": "bindings/python/examples/csv_to_anki.py",
+      "sha256": "5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc"
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+    },
+    {
+      "path": "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+      "sha256": "842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34"
+    },
+    {
+      "path": "docs/ai-anki-cards.md",
+      "sha256": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5"
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "sha256": "c5a14089ea49b3aaadd6a6966e34237c737afa853fe0fcebcae5854a954606c5"
+    },
+    {
+      "path": "docs/anki-forge-vs-genanki.md",
+      "sha256": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4"
+    },
+    {
+      "path": "docs/api-overview.md",
+      "sha256": "a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b"
+    },
+    {
+      "path": "docs/benchmark-presentation.json",
+      "sha256": "487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074"
+    },
+    {
+      "path": "docs/build-guarantees.md",
+      "sha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83"
+    },
+    {
+      "path": "docs/cards.md",
+      "sha256": "ae6830f58bbb9560be689099ae5728a2f42573da0c201dc34621fc13435c6b0a"
+    },
+    {
+      "path": "docs/compatibility.md",
+      "sha256": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c"
+    },
+    {
+      "path": "docs/concepts.md",
+      "sha256": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279"
+    },
+    {
+      "path": "docs/csv-to-anki.md",
+      "sha256": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486"
+    },
+    {
+      "path": "docs/custom-notetypes.md",
+      "sha256": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1"
+    },
+    {
+      "path": "docs/image-occlusion.md",
+      "sha256": "8584c7b31832078f1e03fd7287867cc5008c88a87e6340dca843d8ba33de9651"
+    },
+    {
+      "path": "docs/installation.md",
+      "sha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81"
+    },
+    {
+      "path": "docs/json-to-anki.md",
+      "sha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021"
+    },
+    {
+      "path": "docs/media.md",
+      "sha256": "e1144d2a2c90cb2905df6c6e00e06a7a59a99a6bebf6e226ff573d420a03756b"
+    },
+    {
+      "path": "docs/node/api.md",
+      "sha256": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726"
+    },
+    {
+      "path": "docs/node/quick-start.md",
+      "sha256": "1538750a51685097fd4dad38f8612b4bcb717ca44bbac76ccadaca30ce72a3e8"
+    },
+    {
+      "path": "docs/performance/20261008/comparison.csv",
+      "sha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999"
+    },
+    {
+      "path": "docs/python/api.md",
+      "sha256": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004"
+    },
+    {
+      "path": "docs/python/diagnostics.md",
+      "sha256": "b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28"
+    },
+    {
+      "path": "docs/python/genanki-migration.md",
+      "sha256": "3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f"
+    },
+    {
+      "path": "docs/python/quick-start.md",
+      "sha256": "482dc6d2277c0ff5d8574dc0a88dd1cb301dcfff733ae6a97f1367a7d99c7f55"
+    },
+    {
+      "path": "docs/recipes/csv-to-anki/cards.csv",
+      "sha256": "216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64"
+    },
+    {
+      "path": "docs/rust-api.md",
+      "sha256": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a"
+    },
+    {
+      "path": "docs/rust-guide.md",
+      "sha256": "5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf"
+    },
+    {
+      "path": "docs/source-builds.md",
+      "sha256": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac"
+    },
+    {
+      "path": "docs/template-bundles.md",
+      "sha256": "d049c66a6aedecea885c24bda2d5d0a6d0e65ec5558211217456a75b21032f53"
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+    },
+    {
+      "path": "docs/updates.md",
+      "sha256": "86de1d53b26e1780b31d622ad6700be1a36f7a52120cd053b4da32c4966696ef"
+    },
+    {
+      "path": "docs/zh-cn/ai-anki-cards.md",
+      "sha256": "49a557471ff9ab2a4ae8cc9c4b7d7fe12307a928bb3c66d2c0d2082119e4c1ae"
+    },
+    {
+      "path": "docs/zh-cn/anki-forge-vs-genanki.md",
+      "sha256": "fe79c48acc7247921f08a8403b3a24e3ae29ba0977b220c7eab06e779a6fbbea"
+    },
+    {
+      "path": "docs/zh-cn/api.md",
+      "sha256": "e6cc07f90a030bd3a24ff7d53d8569010772600e9cdff582edd906a851bc925d"
+    },
+    {
+      "path": "docs/zh-cn/build-guarantees.md",
+      "sha256": "5d7f6e975cd181ec7fe980b9a2e3f223bf50f99b0fb65207e8dfbf183eaf17af"
+    },
+    {
+      "path": "docs/zh-cn/cards.md",
+      "sha256": "e4a8ebb6f650310f9d2c953ba823f5dc7877ecf49f21a8499973d6a9ad56e8f3"
+    },
+    {
+      "path": "docs/zh-cn/compatibility.md",
+      "sha256": "617bfe97d87e825467371377e8711d757469b6d007d4ca7fb9962f6ab10ed87c"
+    },
+    {
+      "path": "docs/zh-cn/concepts.md",
+      "sha256": "d96916d3e573822c4bc9f918a0b00f86fefad8062a8d42330a5942b18f017823"
+    },
+    {
+      "path": "docs/zh-cn/csv-to-anki.md",
+      "sha256": "a42ecf3bc3b7d2bf4dda6a248569f3fa7c35918a21e8436f36893b08cd5ef50f"
+    },
+    {
+      "path": "docs/zh-cn/custom-notetypes.md",
+      "sha256": "ef1fa002f9f75f63ba5d7751e8acc7aa20dbff58c8f431c860d52f39fd130682"
+    },
+    {
+      "path": "docs/zh-cn/development.md",
+      "sha256": "fd8598bdbc120b1a955a56ef0971407eb63f9146f2fb49a8191abcdf62089968"
+    },
+    {
+      "path": "docs/zh-cn/genanki-migration.md",
+      "sha256": "d484bf3260f897ad2f7f7e49e7397d2ddf81c65e56017316c0a527c08e7d2e83"
+    },
+    {
+      "path": "docs/zh-cn/image-occlusion.md",
+      "sha256": "3639491364d28125552bd216b28a2317fa51c3793d4044ffed1eab1997589173"
+    },
+    {
+      "path": "docs/zh-cn/index.md",
+      "sha256": "fa3257852f1c090ccb804ebb6758b469e89a847573486dce4a297a4c85936079"
+    },
+    {
+      "path": "docs/zh-cn/installation.md",
+      "sha256": "aad9da7f5ec2507e69ee4c6d060b9287d0ad193236f2010175e17227dcf6714f"
+    },
+    {
+      "path": "docs/zh-cn/json-to-anki.md",
+      "sha256": "134964c1647cbdf5856e01914ff1c9b04f9dcc3339fcd90f323462a256ed7f64"
+    },
+    {
+      "path": "docs/zh-cn/languages.md",
+      "sha256": "90f4543ae0c33e8ba9ee9732b14ef3ce9d45231d851efa4d157f54789a3bebf9"
+    },
+    {
+      "path": "docs/zh-cn/media.md",
+      "sha256": "98d0136e6ef67fdc71a0df8f2adebaad3558a3e03e1607597c078a408e4e2d05"
+    },
+    {
+      "path": "docs/zh-cn/node-api.md",
+      "sha256": "4ac2fbc3679542af661a2ff5172ad2d9b20daa575d3b5cf2deefcc4b06a0f07f"
+    },
+    {
+      "path": "docs/zh-cn/node-quickstart.md",
+      "sha256": "8b0675746f54b7b0a6111201006ad668378a231a831c61c3b5eb9f955454f3ac"
+    },
+    {
+      "path": "docs/zh-cn/python-api.md",
+      "sha256": "29db80f1af39809197c38e33a6af315501da5586a4ecc6a01f77202773ddddfd"
+    },
+    {
+      "path": "docs/zh-cn/python-diagnostics.md",
+      "sha256": "18fa83415cf6e7e1b1e57d44f2c66ff5240d21663bb1520fbc8a0ae53e01704f"
+    },
+    {
+      "path": "docs/zh-cn/python-migration.md",
+      "sha256": "d3ba868ff20b98f54538e366263bea6f2f86799e355748db84e5e021bb235979"
+    },
+    {
+      "path": "docs/zh-cn/python-quickstart.md",
+      "sha256": "499fc2d46f54500b417320b0ff4862b0dcaa9faf5c08e0d28797d61aaeba7c2e"
+    },
+    {
+      "path": "docs/zh-cn/quickstart.md",
+      "sha256": "e16b86d580ed7f336ebfcf3d46917cd171a3e44ed7536981f09fccd856b8dbbd"
+    },
+    {
+      "path": "docs/zh-cn/rust-api.md",
+      "sha256": "7d4432c78d62063d5205b9524765456674ad12aad23201a035e433fac7517de9"
+    },
+    {
+      "path": "docs/zh-cn/rust-guide.md",
+      "sha256": "0766dabbb020a38c80f1edd9fca8f167c77f7a6d4f5abd1e5f5fa2ff078a13de"
+    },
+    {
+      "path": "docs/zh-cn/templates.md",
+      "sha256": "c60e2b8d7a569537d652dddab89a8347afd7982119ed6f6aedec85461f37327d"
+    },
+    {
+      "path": "docs/zh-cn/troubleshooting.md",
+      "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+    },
+    {
+      "path": "docs/zh-cn/updates.md",
+      "sha256": "135912b5feea3a94d60a1e8f34b9efc155bedb3eec4e36c7229f3496baa38543"
+    },
+    {
+      "path": "website/language-briefs.json",
+      "sha256": "a721f0d5ca2478ece225c6d8432a3d33c41f230f0fb50171b98295e652852b4e"
+    },
+    {
+      "path": "website/legacy-sections.json",
+      "sha256": "7549ad8d40adb58bd69b400f62c7ab4fa718dfe50dbac37be6d981213d01ed30"
+    },
+    {
+      "path": "website/scripts/benchmark-presentation.mjs",
+      "sha256": "0b0d7bdd3fbab28b50881b57a74859c508c21380459b37313cedd3c290fb05c1"
+    },
+    {
+      "path": "website/search-concepts.json",
+      "sha256": "5c4d5a6a6f726d503aa91358842806d0fde5ba19657a5f903a1c957d9855d680"
+    },
+    {
+      "path": "website/search-terms.json",
+      "sha256": "1e33ab534b9b13df687a841289064a12fa7faf531150f9aea17984076eabc4f9"
+    },
+    {
+      "path": "website/search.config.mjs",
+      "sha256": "4381563e2e59fed7aa4780a92f81ecf827714dc1cbd59e89e8673a2c1fe543df"
+    },
+    {
+      "path": "website/section-contracts.json",
+      "sha256": "9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b"
+    },
+    {
+      "path": "website/site-model.mjs",
+      "sha256": "7cfab12d586121fea3cc862d0efafe70a2bb8f7563715c90010b6909bd96a24d"
+    },
+    {
+      "path": "website/src/components/AiQuickstart.astro",
+      "sha256": "755e96c650604d7949125b9967f25992b3f5fd62e9d18debdfd27671ef3a7a84"
+    },
+    {
+      "path": "website/src/components/ArticlePage.astro",
+      "sha256": "813acecf25d6f42d1d6c840c35cad3ee5b1634e7e289c27c422cb09fb94e5ebb"
+    },
+    {
+      "path": "website/src/components/BlogPage.astro",
+      "sha256": "a3b1b7f73d75c98b9b7aafb64c4a714b01cba099fd225b0f0316d7fb778269ac"
+    },
+    {
+      "path": "website/src/components/BrandMark.astro",
+      "sha256": "6cb4983d7143f2d240868ebffae9bae8bf179f074bf3abb13b092b8f667407c0"
+    },
+    {
+      "path": "website/src/components/CardPreview.astro",
+      "sha256": "dc851faa961636a75707ac08ba9ebc832a3542283d020ac96df3f2e99b9baaa1"
+    },
+    {
+      "path": "website/src/components/CodeBlock.astro",
+      "sha256": "9a26a31b6a637d60d56f97d1e8a6eef17446bded2212c4b0551ace29f6c9ddec"
+    },
+    {
+      "path": "website/src/components/CopyBlock.astro",
+      "sha256": "dd2b299819d3095c0fdfe3af8755d0375ed3e1b3f8eafd0c855b530b3c357812"
+    },
+    {
+      "path": "website/src/components/DocsFooter.astro",
+      "sha256": "de1fbd0f7d4d71dc9b391c79088f26652dd9201eb5ed7133020d4cc41235f8f2"
+    },
+    {
+      "path": "website/src/components/DocsHeader.astro",
+      "sha256": "f1066072fdf18f19cd1b78581469e1b802a395776452b39b52f937e8156a0848"
+    },
+    {
+      "path": "website/src/components/DocsSearch.astro",
+      "sha256": "587a877356eda345e0d66ea9cd4d33f25426230ea2aeb4f435556a954b24d16a"
+    },
+    {
+      "path": "website/src/components/ExampleWorkbench.astro",
+      "sha256": "486b5faf302b0c1d161c947937c518748969e86fb9625651f8db054b82a8b9b8"
+    },
+    {
+      "path": "website/src/components/ExamplesPage.astro",
+      "sha256": "8b10e1280635172c69029b94cbc8765fa95593f221772af1bd338c0373d95649"
+    },
+    {
+      "path": "website/src/components/Footer.astro",
+      "sha256": "320057dbcae7f74003f143530ba4629c5ad0aed324605db3e1c68fb5e8b038b3"
+    },
+    {
+      "path": "website/src/components/Header.astro",
+      "sha256": "d960ef3f5e55f89625b45d4fcffb8770bb84154aeb053b6599f3dc541ca45ea3"
+    },
+    {
+      "path": "website/src/components/HomePage.astro",
+      "sha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439"
+    },
+    {
+      "path": "website/src/components/HomeShowcase.astro",
+      "sha256": "4515f6b70dff73e28bf312949577946bf8bb6435d39e7661da6ebe602610784e"
+    },
+    {
+      "path": "website/src/components/Icon.astro",
+      "sha256": "37eb6e14469523e5d6aa4c588c3e230c8366972caee5b12c1e70d9f0179384ee"
+    },
+    {
+      "path": "website/src/components/InstallCommand.astro",
+      "sha256": "28d216c4936193691ef41595109cdf2ce460bf8dcfd2786df232a2d3855d76c1"
+    },
+    {
+      "path": "website/src/components/LanguageSwitcher.astro",
+      "sha256": "9d3c5658fc3c42fe5162f5f1883dde73f6aa23a11a4adcc2ca7955a1a1050c57"
+    },
+    {
+      "path": "website/src/components/PerformanceEvidence.astro",
+      "sha256": "ed9c4b797037499fe36c1553cfcfc94dd489086b883d8d77ff60dc94ac72e2ef"
+    },
+    {
+      "path": "website/src/components/PostCard.astro",
+      "sha256": "cf73be0f12d07293ae02128cf62fb5ec49064011d7375a831453a9214eef5b47"
+    },
+    {
+      "path": "website/src/components/ThemeControl.astro",
+      "sha256": "6778d9bcf865afd557d59fd9f69e0298bfe0924b53b7746bfbdcc62ea7a2c875"
+    },
+    {
+      "path": "website/src/components/UpdateDemo.astro",
+      "sha256": "79956a12d3aea601c80736115918e4552d7f64cff32e8c6c6734bd8296936c99"
+    },
+    {
+      "path": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+      "sha256": "77e2a04feaec5959d73f2aa008412203cc598bcdbfbffb6823ced93c03cfb0c7"
+    },
+    {
+      "path": "website/src/content/blog/your-first-anki-deck.mdx",
+      "sha256": "957379c92c61b6d5f3569da4b41be4d6f593aa0374f0fc97576d3630b4a2e7a0"
+    },
+    {
+      "path": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+      "sha256": "66922194e8fcbc6bb137a4fbc0b55f47c19fc38d4b4159f4b4a14d2b6a901589"
+    },
+    {
+      "path": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+      "sha256": "db5acd23e97e05d1303baa88af2fef9b1a94e9f11398eb11e2cedfced33d5841"
+    },
+    {
+      "path": "website/src/content/docs/docs/index.mdx",
+      "sha256": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c"
+    },
+    {
+      "path": "website/src/content/docs/docs/languages.mdx",
+      "sha256": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24"
+    },
+    {
+      "path": "website/src/content/docs/docs/quickstart.mdx",
+      "sha256": "678a5696fb13166a8f5a3232d737efac8da5169bdbb55c148f9807d235a02cd6"
+    },
+    {
+      "path": "website/src/content/i18n/en.json",
+      "sha256": "52ac3f26f729435f0682de9b384c1c740cf275c6dd9cd8539eb4fb8c56605187"
+    },
+    {
+      "path": "website/src/content/i18n/zh-CN.json",
+      "sha256": "44e533587105bc7fafc6d8eb13d42c4153c67a6c6fa32c24193b7a3d75cec4e8"
+    },
+    {
+      "path": "website/src/i18n/client-messages.mjs",
+      "sha256": "69cbebbb402b9db84912c0514ac209650768079c5e7158c6e9e0da77222a5368"
+    },
+    {
+      "path": "website/src/i18n/en.json",
+      "sha256": "aa9a4aff3941255413a7fe9be1e2a388142a21de74e863528e1ccd0336cad957"
+    },
+    {
+      "path": "website/src/i18n/format-message.mjs",
+      "sha256": "8d0c482c34a744ccc4add7e6087c68a36e4cce433f97825e82be3bd03b0d3c76"
+    },
+    {
+      "path": "website/src/i18n/messages.mjs",
+      "sha256": "a8f52d1df8eac07604ee34e626d39bae81596eba66429baf875763a62d853104"
+    },
+    {
+      "path": "website/src/i18n/zh-CN.json",
+      "sha256": "301d51a9c2baaefaedb0b8a21b29b1d444775daad3aca207fe03d7a445c0ad64"
+    },
+    {
+      "path": "website/src/layouts/SiteLayout.astro",
+      "sha256": "04c73e6602a4a5010efd8a4601072daf43f70508a21ebe1da5a73bdf0c0360c3"
+    },
+    {
+      "path": "website/src/lib/ai-quickstart.mjs",
+      "sha256": "f9567627f5edec69ab09ff3fb8a855231e82b4e893c3e0f0961c16bed018153c"
+    },
+    {
+      "path": "website/src/lib/examples.ts",
+      "sha256": "aa92e39a4ba31c22bc9e11dd5c6ec7a5ebfb93081f001da29e465c8ebd11d457"
+    },
+    {
+      "path": "website/src/lib/search-terms.mjs",
+      "sha256": "c6f10080708189333263efcd40971231207fa5686a4bc45803db738633f7e93c"
+    },
+    {
+      "path": "website/src/lib/search.mjs",
+      "sha256": "905d81e6b53b97f45f7ce3fd28da53802813e390cca557039b580f601df7f6bf"
+    },
+    {
+      "path": "website/src/route-middleware.ts",
+      "sha256": "2f27fd73b1381f2ccba6822be4da01be19d38a7b753756f8c4d30e7a642f657d"
+    },
+    {
+      "path": "website/src/scripts/docs-search.ts",
+      "sha256": "a95829f4526db5340ce7d0ec928b2f56bc4fed6c81c3647ec664646b6cddabe0"
+    },
+    {
+      "path": "website/src/scripts/site.ts",
+      "sha256": "76767efa229f1f6286226ae4226cc3902b303fb4c4b148066b02fc6aece57036"
+    }
+  ],
+  "productFilesModifiedByThisReviewer": [],
+  "registration": "Read-only validation duplicates the report shape and hash requirements of record-content-review.mjs; this reviewer did not run that mutating tool or modify content-reviews.json."
+}

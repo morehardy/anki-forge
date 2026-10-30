@@ -1,0 +1,113 @@
+npm warn Unknown user config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> anki-forge-website@0.1.0 check:examples
+> node scripts/verify-doc-examples.mjs
+
+     Locking 192 packages to latest compatible versions
+      Adding rusqlite v0.32.1 (available: v0.36.0)
+      Adding unicase v2.6.0 (available: v2.9.0)
+      Adding zip v9.1.2 (available: v9.1.3)
+/private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/target_api_basic/spanish.apkg
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/target_api_basic/spanish.apkg: 1 notes, 1 cards, 0 media
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/target_api_custom_notetype/jp-core.apkg: 1 notes, 1 cards, 0 media
+{
+  "schema_version": "ankiforge-build-v1",
+  "tool_version": "0.3.1",
+  "result": {
+    "status": "success",
+    "artifact": "/private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/target_api_media/spanish-media.apkg",
+    "temporary": false
+  },
+  "report": {
+    "schema_version": "ankiforge-report-v1",
+    "counts": {
+      "notes": 1,
+      "cards": 1,
+      "media": 3
+    },
+    "baseline_counts": null,
+    "diagnostics": [
+      {
+        "code": "MEDIA.UNUSED_BINDING",
+        "severity": "warning",
+        "message": "unused media binding hint.wav for export filename hint.wav",
+        "source": {
+          "path": "project.assets[\"hint.wav\"]",
+          "byte_range": null
+        },
+        "help": "This explicit asset is retained in the package. Reference it from a note, template, or CSS, or remove it if unwanted."
+      }
+    ],
+    "duration_ms": 53,
+    "comparison": null
+  }
+}
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/target_api_media/spanish-media.apkg: 1 notes, 1 cards, 3 media
+Verified cards, bundle, media, occlusion, comparison and update in /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/docs_workflow
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/docs_workflow/cards.apkg: 2 notes, 3 cards, 0 media
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/docs_workflow/diagram.apkg: 1 notes, 1 cards, 1 media
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/docs_workflow/media.apkg: 1 notes, 1 cards, 3 media
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/docs_workflow/spanish-v1.apkg: 1 notes, 1 cards, 0 media
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/docs_workflow/spanish-v2.apkg: 1 notes, 1 cards, 0 media
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/docs_workflow/template.apkg: 1 notes, 2 cards, 0 media
+Some(ComparisonReport { findings: [RiskFinding { code: NoteChanged, level: Low, message: "Content, deck or tags changed. Acceptance still depends on the target Anki import settings and local modification times.", evidence: [ComparisonEvidence { selector: "notes[\"es:hola\"]", before: Some(String("08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe")), after: Some(String("8cf2bfeb2f90e43eb0499dcf4c7839dc25e4f2a54351f4c83c2d60c43fa7afd2")) }] }], policy: PolicyEvaluation { threshold: High, allowed_codes: [], unmatched_allowances: [], blocking_findings: [] }, diagnostics: [], baseline_counts: BuildCounts { notes: 1, cards: 1, media: 0 }, candidate_counts: BuildCounts { notes: 1, cards: 1, media: 0 } })
+/private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/docs_publication/spanish-reviewed.apkg
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/docs_publication/spanish-original.apkg: 1 notes, 1 cards, 0 media
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/docs_publication/spanish-reviewed.apkg: 1 notes, 1 cards, 0 media
+Verifying complete Rust main from README.md, README.zh-CN.md, docs/zh-cn/quickstart.md
+/private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-5/spanish.apkg
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-5/spanish.apkg: 1 notes, 1 cards, 0 media
+Executed complete Rust main from README.md, README.zh-CN.md, docs/zh-cn/quickstart.md
+Verifying complete Rust main from docs/json-to-anki.md, docs/zh-cn/json-to-anki.md
+/private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-6/output/rust/v2.apkg
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-6/output/rust/v1.apkg: 3 notes, 3 cards, 2 media
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-6/output/rust/v2.apkg: 3 notes, 3 cards, 2 media
+Executed complete Rust main from docs/json-to-anki.md, docs/zh-cn/json-to-anki.md
+Verifying complete Rust main from docs/rust-guide.md, docs/zh-cn/rust-guide.md
+1 notes
+{
+  "schema_version": "ankiforge-build-v1",
+  "tool_version": "0.3.1",
+  "result": {
+    "status": "success",
+    "artifact": "/private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-7/jp-core.apkg",
+    "temporary": false
+  },
+  "report": {
+    "schema_version": "ankiforge-report-v1",
+    "counts": {
+      "notes": 1,
+      "cards": 1,
+      "media": 0
+    },
+    "baseline_counts": null,
+    "diagnostics": [],
+    "duration_ms": 39,
+    "comparison": null
+  }
+}
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-7/jp-core.apkg: 1 notes, 1 cards, 0 media
+Executed complete Rust main from docs/rust-guide.md, docs/zh-cn/rust-guide.md
+Verifying complete Rust main from docs/template-bundles.md, docs/zh-cn/templates.md
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-8/bundle-example.apkg: 1 notes, 2 cards, 0 media
+Executed complete Rust main from docs/template-bundles.md, docs/zh-cn/templates.md
+Verifying complete Rust main from docs/custom-notetypes.md, docs/zh-cn/custom-notetypes.md
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-9/jp-core.apkg: 1 notes, 1 cards, 0 media
+Executed complete Rust main from docs/custom-notetypes.md, docs/zh-cn/custom-notetypes.md
+Verifying complete Rust main from docs/media.md, docs/zh-cn/media.md
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-10/media-guide.apkg: 1 notes, 1 cards, 3 media
+Executed complete Rust main from docs/media.md, docs/zh-cn/media.md
+Verifying complete Rust main from docs/image-occlusion.md, docs/zh-cn/image-occlusion.md
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-11/cell-diagram.apkg: 1 notes, 2 cards, 1 media
+Executed complete Rust main from docs/image-occlusion.md, docs/zh-cn/image-occlusion.md
+Verifying complete Rust main from docs/updates.md, docs/zh-cn/updates.md
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-12/policy-v1.apkg: 1 notes, 1 cards, 0 media
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-12/policy-v2.apkg: 1 notes, 1 cards, 0 media
+Executed complete Rust main from docs/updates.md, docs/zh-cn/updates.md
+Verifying complete Rust main from docs/updates.md, docs/zh-cn/updates.md
+Some(ComparisonReport { findings: [RiskFinding { code: NoteChanged, level: Low, message: "Content, deck or tags changed. Acceptance still depends on the target Anki import settings and local modification times.", evidence: [ComparisonEvidence { selector: "notes[\"es:hola\"]", before: Some(String("08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe")), after: Some(String("8cf2bfeb2f90e43eb0499dcf4c7839dc25e4f2a54351f4c83c2d60c43fa7afd2")) }] }], policy: PolicyEvaluation { threshold: High, allowed_codes: [], unmatched_allowances: [], blocking_findings: [] }, diagnostics: [], baseline_counts: BuildCounts { notes: 1, cards: 1, media: 0 }, candidate_counts: BuildCounts { notes: 1, cards: 1, media: 0 } })
+/private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-13/spanish-reviewed.apkg
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-13/spanish-original.apkg: 1 notes, 1 cards, 0 media
+Verified /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-docs-kV486w/program-13/spanish-reviewed.apkg: 1 notes, 1 cards, 0 media
+Executed complete Rust main from docs/updates.md, docs/zh-cn/updates.md
+Verified 14 complete executions and 23 APKG outputs with real fixtures and independent SQLite/media observations.

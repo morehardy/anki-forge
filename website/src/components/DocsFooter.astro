@@ -1,7 +1,16 @@
 ---
 import StarlightFooter from '@astrojs/starlight/components/Footer.astro';
 import Footer from './Footer.astro';
-const locale = Astro.locals.starlightRoute.lang === 'zh-CN' ? 'zh-CN' : 'en';
+import { resolvePage } from '../../site-model.mjs';
+import { siteConfig } from '../../site.config.mjs';
+import { canonicalUrl, markdownUrl } from '../lib/machine-urls.mjs';
+import { createTranslator } from '../i18n/messages.mjs';
+const resolved = resolvePage(Astro.url.pathname, siteConfig.base);
+if (!resolved) throw new Error(`Unregistered documentation: ${Astro.url.pathname}`);
+const { page, locale } = resolved;
+const markdown = markdownUrl({ id: page.id, type: page.type, locale, canonical: canonicalUrl(page.id, locale, siteConfig) });
+const t = createTranslator(locale);
 ---
+<p><a href={markdown}>{t('machine.viewMarkdown')}</a></p>
 <StarlightFooter />
 <Footer locale={locale} />

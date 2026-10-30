@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "note": "Actual program runs recorded in the attached original logs. Snapshot binds the currently unchanged program/fixture/dependency inputs; it does not assert fresh execution of historical logs. Basic Rust/Python/Node and controlled duplicate recovery executed during this continuation. Public JSON consumers and full Rust doc programs executed earlier in the same implementation session.",
+  "inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+    },
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+    },
+    {
+      "path": "bindings/node/package.json",
+      "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+    },
+    {
+      "path": "bindings/python/pyproject.toml",
+      "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "sha256": "c5a14089ea49b3aaadd6a6966e34237c737afa853fe0fcebcae5854a954606c5"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/cell.png",
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/tone.wav",
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v1.json",
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v2.json",
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+      "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+      "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/inspection.rs",
+      "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+    },
+    {
+      "path": "website/scripts/verify-doc-examples.mjs",
+      "sha256": "70af42b9fbf42480c36a54cf1993e9e9db1fbe1a822a0a670146f0095f7658c2"
+    },
+    {
+      "path": "website/scripts/verify-public-recipe.mjs",
+      "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+    }
+  ]
+}

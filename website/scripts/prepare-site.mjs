@@ -1,18 +1,19 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { cp, mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promises';
+import { cp, mkdir, readFile, writeFile, copyFile, rm, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { importedDocs, rewriteMarkdown, stripDocumentTitle } from './content-links.mjs';
-import { translatedDocs, docPages, pages } from '../site-model.mjs';
-import { sectionMap, addSectionAliases } from './content-sections.mjs';
+import { rewriteMarkdown, stripDocumentTitle } from './content-links.mjs';
+import { documentationEntries, pages, localeIds, configuredLocales } from '../site-model.mjs';
+import { legacyAliases, sectionMapping, addSectionAliases } from './content-sections.mjs';
 import legacySections from '../legacy-sections.json' with { type: 'json' };
-import { siteConfig } from '../site.config.mjs';
+import { siteConfig, repository } from '../site.config.mjs';
 import { prepareBrandAssets } from './social-image.mjs';
 import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
 import { checkContent } from './check-content.mjs';
 import { checkDocumentation } from './documentation.mjs';
 import { checkAiQuickstart, generateAiQuickstart } from './ai-quickstart.mjs';
+import { frontmatter } from './published-pages.mjs';
 
 const website = fileURLToPath(new URL('../', import.meta.url));
 const root = path.resolve(website, '..');
@@ -32,6 +33,10 @@ await cp(path.join(root, 'docs/recipes/json-to-anki'), recipe, { recursive: true
 for (const source of ['anki_forge/examples/json_to_anki.rs', 'bindings/python/examples/json_to_anki.py', 'bindings/node/examples/json_to_anki.mts']) {
   await copyFile(path.join(root, source), path.join(recipe, path.basename(source)));
 }
+const csvRecipe = path.join(output, 'recipes/csv-to-anki');
+await mkdir(csvRecipe, { recursive: true });
+await copyFile(path.join(root, 'docs/recipes/csv-to-anki/cards.csv'), path.join(csvRecipe, 'cards.csv'));
+await copyFile(path.join(root, 'bindings/python/examples/csv_to_anki.py'), path.join(csvRecipe, 'csv_to_anki.py'));
 
 const sourcePath = 'anki_forge/examples/website_showcase.rs';
 const source = await readFile(path.join(root, sourcePath), 'utf8');
@@ -61,25 +66,38 @@ await writeFile(path.join(output, 'showcase.json'), `${JSON.stringify(data, null
 await copyFile(path.join(root, sourcePath), path.join(output, 'website_showcase.rs'));
 await prepareBrandAssets(website, data.examples[0]);
 
-await mkdir(path.join(website, 'src/content/docs/docs'), { recursive: true });
-await mkdir(path.join(website, 'src/content/docs/zh-cn/docs'), { recursive: true });
+// Only generated .md files in registered documentation namespaces are owned here.
+// Authored English .mdx files are never removed; withdrawn candidates are cleaned too.
+for (const config of Object.values(configuredLocales)) {
+  const directory = path.join(website, `src/content/docs${config.prefix}/docs`);
+  const entries = await readdir(directory, { withFileTypes: true }).catch(error => {
+    if (error.code === 'ENOENT') return [];
+    throw error;
+  });
+  for (const entry of entries) if (entry.isFile() && entry.name.endsWith('.md')) await rm(path.join(directory, entry.name));
+}
 const sections = {};
 for (const page of pages.filter(page => page.type === 'docs' || page.type === 'article')) {
-  sections[page.id] = sectionMap(await readFile(path.join(root, page.sources.en), 'utf8'), await readFile(path.join(root, page.sources['zh-CN']), 'utf8'), legacySections[page.id]);
-}
-await writeFile(path.join(generated, 'sections.json'), JSON.stringify(sections, null, 2));
-for (const entry of [...importedDocs, ...translatedDocs]) {
-  const original = await readFile(path.join(root, entry.source), 'utf8');
-  let content = rewriteMarkdown(stripDocumentTitle(original).replace(/^```rust,[^\n]+$/gm, '```rust'), entry.source, siteConfig.base);
-  if (translatedDocs.includes(entry)) {
-    const page = docPages.find(page => page.sources['zh-CN'] === entry.source);
-    content = addSectionAliases(content, sections[page.id]);
-    for (const [alias, target] of Object.entries(legacySections[page.id] ?? {})) {
-      if (target === '_top') content = `<span id="${alias}" data-section-alias="_top"></span>\n\n` + content;
-    }
+  sections[page.id] = {};
+  for (const locale of localeIds) {
+    const source = await readFile(path.join(root, page.sources[locale]), 'utf8');
+    sections[page.id][locale] = sectionMapping(page.id, locale, source, legacyAliases(legacySections, page.id, locale));
   }
-  const frontmatter = `---\ntitle: ${JSON.stringify(entry.title)}\ndescription: ${JSON.stringify(entry.description)}\neditUrl: https://github.com/morehardy/anki-forge/edit/main/${entry.source}\n---\n\n`;
-  await writeFile(path.join(website, translatedDocs.includes(entry) ? `src/content/docs/zh-cn/docs/${entry.name}.md` : `src/content/docs/docs/${entry.name}.md`), frontmatter + content);
+}
+await writeFile(path.join(generated, 'sections.json'), JSON.stringify(sections, null, 2) + '\n');
+for (const entry of documentationEntries()) {
+  const original = await readFile(path.join(root, entry.source), 'utf8');
+  const draft = frontmatter(original).draft === true;
+  const withoutFrontmatter = original.replace(/^---\s*\n[\s\S]*?\n---(?:\n|$)/, '');
+  let content = rewriteMarkdown(stripDocumentTitle(withoutFrontmatter).replace(/^```rust,[^\n]+$/gm, '```rust'), entry.source, siteConfig.base, entry.locale);
+  content = addSectionAliases(content, sections[entry.id][entry.locale]);
+  for (const [alias, target] of Object.entries(sections[entry.id][entry.locale])) {
+    if (target === '_top') content = `<span id="${alias}" data-section-alias="_top"></span>\n\n` + content;
+  }
+  const header = `---\ntitle: ${JSON.stringify(entry.title)}\ndescription: ${JSON.stringify(entry.description)}\neditUrl: ${repository}/edit/main/${entry.source}\n${draft ? 'draft: true\n' : ''}---\n\n`;
+  const destination = path.join(website, entry.output);
+  await mkdir(path.dirname(destination), { recursive: true });
+  await writeFile(destination, header + content);
 }
 
 const cname = path.join(website, 'public/CNAME');

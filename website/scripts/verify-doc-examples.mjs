@@ -35,6 +35,14 @@ async function inspect(work) {
 function cargo(args, cwd = app) {
   execFileSync('cargo', args, { cwd, stdio: 'inherit', env: environment });
 }
+// Offline resolution sees only crates fetched for the workspace lock, so the
+// inspector pins the archive and database crates it shares with ankiforge.
+const lock = await readFile(path.join(root, 'Cargo.lock'), 'utf8');
+function locked(name) {
+  const versions = [...lock.matchAll(new RegExp(`\\[\\[package\\]\\]\\nname = "${name}"\\nversion = "([^"]+)"`, 'g'))].map(match => match[1]);
+  if (versions.length !== 1) throw new Error(`Expected one locked ${name} version, found ${versions.length}`);
+  return versions[0];
+}
 
 try {
   await mkdir(path.join(app, 'src', 'bin'), { recursive: true });
@@ -49,10 +57,10 @@ ankiforge = { path = ${JSON.stringify(path.join(root, 'anki_forge'))}, default-f
 serde = { version = "1", features = ["derive"] }
 anyhow = "1"
 serde_json = "1"
-prost = "0.13"
-rusqlite = { version = "0.32", features = ["bundled"] }
-zip = { version = "2", default-features = false, features = ["deflate"] }
-zstd = "0.13"
+prost = "=${locked('prost')}"
+rusqlite = { version = "=${locked('rusqlite')}", features = ["bundled"] }
+zip = { version = "=${locked('zip')}", default-features = false, features = ["deflate-flate2"] }
+zstd = "=${locked('zstd')}"
 tempfile = "3"
 `);
   await cp(path.join(root, 'scripts/packaged_consumer/src/inspection.rs'), path.join(app, 'src/inspection.rs'));

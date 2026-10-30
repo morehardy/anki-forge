@@ -6,16 +6,17 @@ import { test } from 'node:test';
 import { checkAiQuickstart, generateAiQuickstart, loadAiQuickstart, renderReadme, root } from './ai-quickstart.mjs';
 import { renderPrompt } from '../src/lib/ai-quickstart.mjs';
 import { importedDocs } from './content-links.mjs';
+import { locales, localeIds } from '../site-model.mjs';
 
 test('every language and locale renders the public setup and an empty task placeholder', async () => {
   const data = await loadAiQuickstart();
   for (const language of Object.keys(data.languages)) {
-    for (const locale of Object.keys(data.prompts)) {
+    for (const locale of localeIds) {
       const prompt = renderPrompt(data, language, ' \n ', locale);
       assert.ok(prompt.includes(data.languages[language].install));
       assert.ok(prompt.includes(data.languages[language].runtime));
-      assert.ok(prompt.includes(locale === 'en' ? data.languages[language].quickstart : data.languages[language].quickstart.replace('/docs/', '/zh-cn/docs/')));
-      assert.ok(prompt.includes(locale === 'en' ? '<describe your task>' : '<描述你的需求>'));
+      assert.ok(prompt.includes(data.languages[language].quickstart.replace('/docs/', `${locales[locale].prefix}/docs/`)));
+      assert.ok(prompt.includes(data.requestPlaceholders[locale]));
       assert.doesNotMatch(prompt, /\{(?:version|language|install|request)\}/);
     }
   }
@@ -87,6 +88,13 @@ test('invalid installs, URLs and missing prompt requirements fail before generat
     [data => { data.languages.rust.quickstart = 'https://other.example/docs/quickstart/'; }, /inconsistent public docs origin/],
     [data => { data.prompts.en = data.prompts.en.replace('persistent', 'temporary'); }, /incomplete prompt contract/],
     [data => { data.prompts.en += '\n<script>alert(1)</script>'; }, /Unsafe prompt template/],
+    [data => { delete data.prompts['zh-CN']; }, /must cover exactly the release locales/],
+    [data => { data.prompts.es = data.prompts.en; }, /must cover exactly the release locales/],
+    [data => { delete data.requestPlaceholders['zh-CN']; }, /must cover exactly the release locales/],
+    [data => { data.requestPlaceholders.en = '{request}'; }, /Unsafe request placeholder/],
+    [data => { data.promptContracts['zh-CN'].required.push('未写入模板的要求'); }, /incomplete prompt contract/],
+    [data => { data.promptContracts.en.maxWords = 20; }, /prompt too long/],
+    [data => { delete data.promptContracts.en.maxWords; }, /prompt length limit/],
   ];
   for (const [mutate, error] of invalid) {
     const data = structuredClone(original);

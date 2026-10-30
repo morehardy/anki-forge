@@ -18,13 +18,17 @@ Anki Forge 将笔记、模板与媒体生成 Anki `.apkg` 文件。当学习内�
 
 ## 构建下一项功能
 
+- [CSV 转 Anki](/docs/csv-to-anki/)：用 Python 将词汇表批量生成 APKG。
+- [JSON 转 Anki](/docs/json-to-anki/)：用三种开发语言生成带媒体的卡片，并检查更新。
+- [AI 辅助制卡](/docs/ai-anki-cards/)：根据笔记起草卡片，核对答案后导出 APKG。
 - [Basic 与 Cloze](/docs/cards/)：创建问答和填空卡片。
 - [图片与音频](/docs/media/)：注册真实资源并附加到卡片。
 - [自定义笔记类型](/docs/custom-notetypes/)与[模板包](/docs/templates/)：定义字段、布局与 CSS。
 - [图片遮挡](/docs/image-occlusion/)：根据图像区域创建问题。
 - [更新与分发](/docs/updates/)：在版本之间传递身份和修订证据。
 
-任务指南使用可运行的 Rust 示例。Node 和 Python API 页面说明相应接口及其差异。
+卡片类型指南使用可运行的 Rust 示例，CSV 教程使用 Python，JSON 教程覆盖三种开发语言。
+Node 和 Python API 页面说明相应接口及其差异。
 
 ## 查找答案与参与贡献
 

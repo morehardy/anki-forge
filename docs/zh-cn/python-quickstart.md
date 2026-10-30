@@ -1,4 +1,4 @@
-# 用 Python 生成 Anki APKG
+# 用 Python 生成 Anki 卡片
 
 创建并激活虚拟环境，然后安装[公开 PyPI 包](https://pypi.org/project/ankiforge/)：
 
@@ -32,6 +32,9 @@ python main.py
 在 Anki 中打开持久保存的 `spanish.apkg`，其中 **Spanish** 牌组包含 **hola → hello**。后续编辑时保持命名空间 `spanish` 和笔记键 `es:hola` 不变。导出不需要安装 Anki。
 
 ## 继续学习
+
+已有词汇表时，参考 [CSV 转 Anki](csv-to-anki.md)。需要根据原始笔记起草卡片时，
+可从 [AI 辅助制卡](ai-anki-cards.md)开始。
 
 完整媒体与更新任务见 [JSON 到 Anki](../json-to-anki.md#python)。
 

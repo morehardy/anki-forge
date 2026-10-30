@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load } from 'cheerio';
 import { siteConfig, withBase } from '../site.config.mjs';
+import { releaseLocales } from '../locale-model.mjs';
 
 const website = fileURLToPath(new URL('../', import.meta.url));
 const root = path.dirname(website.slice(0, -1));
@@ -16,16 +17,24 @@ async function walk(directory) {
 
 // This inventory observes the output, independently of the topic registry. It is
 // uploaded beside the Pages artifact so deployment checks know which build won.
-export async function writeSiteManifest() {
-  const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
-  const inputs = git(['ls-files', '--cached', '--others', '--exclude-standard', '--', 'website', 'docs', 'anki_forge', 'Cargo.toml', 'Cargo.lock', 'README.md', 'README.zh-CN.md', '.github/workflows/website.yml']).split('\n').filter(Boolean).sort();
+export async function buildInputIdentity(directory = root) {
+  const git = args => execFileSync('git', args, { cwd: directory, encoding: 'utf8' }).trim();
+  // Include the Cargo workspace, contract assets and copied SDK programs, along
+  // with the scripts and toolchain settings used to prepare or verify them.
+  const inputs = git(['ls-files', '--cached', '--others', '--exclude-standard', '--', 'website', 'docs', 'anki_forge', 'bindings', 'contracts', 'contract_tools', 'scripts', 'skills/anki-forge', '.cargo', 'rust-toolchain', 'rust-toolchain.toml', 'Cargo.toml', 'Cargo.lock', 'README.md', 'README.zh-CN.md', '.github/workflows/website.yml']).split('\n').filter(Boolean).sort();
   const fingerprints = [];
   for (const input of inputs) {
     // Implementation records and unrelated local audit drafts are not build inputs.
     if (input.startsWith('docs/plans/') || input.startsWith('docs/superpowers/')) continue;
-    try { fingerprints.push([input, sha256(await readFile(path.join(root, input)))]); }
+    try { fingerprints.push([input, sha256(await readFile(path.join(directory, input)))]); }
     catch (error) { if (error.code !== 'ENOENT') throw error; }
   }
+  return { commit: git(['rev-parse', 'HEAD']), inputSha256: sha256(JSON.stringify(fingerprints)), configuration: siteConfig, releaseLocales };
+}
+
+export async function writeSiteManifest() {
+  if (process.env.CONTENT_REVIEW_MODE === 'preview') throw new Error('An isolated editorial preview cannot produce a release manifest');
+  const identity = await buildInputIdentity();
   const pages = [], resources = [];
   for (const file of (await walk(dist)).sort()) {
     const relative = path.relative(dist, file).split(path.sep).join('/');
@@ -41,7 +50,7 @@ export async function writeSiteManifest() {
       } });
     } else if (relative !== 'CNAME' && !relative.startsWith('.')) resources.push(entry);
   }
-  const manifest = { schemaVersion: 1, commit: git(['rev-parse', 'HEAD']), inputSha256: sha256(JSON.stringify(fingerprints)), configuration: siteConfig, pages, resources };
+  const manifest = { schemaVersion: 1, ...identity, pages, resources };
   await writeFile(path.join(dist, 'generated/site-manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
   console.log(`Recorded ${pages.length} pages and ${resources.length} resources for commit ${manifest.commit}.`);
 }

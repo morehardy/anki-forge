@@ -1,0 +1,1283 @@
+{
+  "schemaVersion": 1,
+  "tool": "reviewer-apkg-inspection/inspect_apkgs.py (stdlib zipfile/compression.zstd/sqlite3; no Anki Forge code)",
+  "python": "3.14.5",
+  "fixtureSha256": {
+    "cell.png": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+    "tone.wav": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+  },
+  "status": "passed",
+  "checks": [
+    {
+      "check": "rust basic: sqlite ok, 1 note/1 card/0 media",
+      "passed": true,
+      "detail": {
+        "notes": 1,
+        "cards": 1,
+        "media": 0
+      }
+    },
+    {
+      "check": "rust basic: fields hola/hello, Basic notetype, Spanish deck",
+      "passed": true,
+      "detail": {
+        "fields": [
+          "hola",
+          "hello"
+        ],
+        "notetype": "Basic",
+        "deck": "Spanish"
+      }
+    },
+    {
+      "check": "rust basic: identity key es:hola maps to the note GUID",
+      "passed": true,
+      "detail": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "spanish",
+        "notes": {
+          "es:hola": {
+            "guid": "aaf05442c6721ba14cf48d7802f35de0",
+            "active": true
+          }
+        }
+      }
+    },
+    {
+      "check": "python basic: sqlite ok, 1 note/1 card/0 media",
+      "passed": true,
+      "detail": {
+        "notes": 1,
+        "cards": 1,
+        "media": 0
+      }
+    },
+    {
+      "check": "python basic: fields hola/hello, Basic notetype, Spanish deck",
+      "passed": true,
+      "detail": {
+        "fields": [
+          "hola",
+          "hello"
+        ],
+        "notetype": "Basic",
+        "deck": "Spanish"
+      }
+    },
+    {
+      "check": "python basic: identity key es:hola maps to the note GUID",
+      "passed": true,
+      "detail": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "spanish",
+        "notes": {
+          "es:hola": {
+            "guid": "aaf05442c6721ba14cf48d7802f35de0",
+            "active": true
+          }
+        }
+      }
+    },
+    {
+      "check": "node basic: sqlite ok, 1 note/1 card/0 media",
+      "passed": true,
+      "detail": {
+        "notes": 1,
+        "cards": 1,
+        "media": 0
+      }
+    },
+    {
+      "check": "node basic: fields hola/hello, Basic notetype, Spanish deck",
+      "passed": true,
+      "detail": {
+        "fields": [
+          "hola",
+          "hello"
+        ],
+        "notetype": "Basic",
+        "deck": "Spanish"
+      }
+    },
+    {
+      "check": "node basic: identity key es:hola maps to the note GUID",
+      "passed": true,
+      "detail": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "spanish",
+        "notes": {
+          "es:hola": {
+            "guid": "aaf05442c6721ba14cf48d7802f35de0",
+            "active": true
+          }
+        }
+      }
+    },
+    {
+      "check": "basic: same stable GUID across the three SDKs for spanish/es:hola",
+      "passed": true,
+      "detail": [
+        "aaf05442c6721ba14cf48d7802f35de0"
+      ]
+    },
+    {
+      "check": "troubleshooting recovered: 2 notes/2 cards/0 media, keys source:1 and source:2, Recovery deck",
+      "passed": true,
+      "detail": {
+        "counts": {
+          "notes": 2,
+          "cards": 2,
+          "media": 0
+        },
+        "fields": [
+          [
+            "one",
+            "first"
+          ],
+          [
+            "two",
+            "second"
+          ]
+        ],
+        "identity": {
+          "format_version": "ankiforge-identity-v1",
+          "namespace": "controlled-duplicate",
+          "notes": {
+            "source:1": {
+              "guid": "8e363c025de858cc34527c3f94565e5a",
+              "active": true
+            },
+            "source:2": {
+              "guid": "0f8f9139b04ecc21e3276eaa8e80c28b",
+              "active": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "check": "troubleshooting recovered: the rejected duplicate (\"two\",\"second\" under source:1) was not stored under source:1",
+      "passed": true
+    },
+    {
+      "check": "rust v1: sqlite ok, 3 notes/3 cards/2 media, Biology deck",
+      "passed": true,
+      "detail": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    {
+      "check": "rust v1: the two stored media are byte-exact cell.png/tone.wav fixtures (content-derived names, extension kept)",
+      "passed": true,
+      "detail": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+          "actualSize": 16044
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+          "actualSize": 178597
+        }
+      ]
+    },
+    {
+      "check": "rust v1: every note front references the stored image and sound",
+      "passed": true
+    },
+    {
+      "check": "rust v2: sqlite ok, 3 notes/3 cards/2 media, Biology deck",
+      "passed": true,
+      "detail": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    {
+      "check": "rust v2: the two stored media are byte-exact cell.png/tone.wav fixtures (content-derived names, extension kept)",
+      "passed": true,
+      "detail": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+          "actualSize": 16044
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+          "actualSize": 178597
+        }
+      ]
+    },
+    {
+      "check": "rust v2: every note front references the stored image and sound",
+      "passed": true
+    },
+    {
+      "check": "rust: identity keys bio:cell/bio:membrane/bio:nucleus with identical GUIDs in v1 and v2",
+      "passed": true,
+      "detail": {
+        "bio:cell": "ce55b46e801a1e8fdf4a5a632610cc4e",
+        "bio:membrane": "49dff2fadd29b11ef4c022e534bf5858",
+        "bio:nucleus": "a26bc1122d44b5d560ff4a16e5505b66"
+      }
+    },
+    {
+      "check": "rust: only bio:cell changed between v1 and v2",
+      "passed": true,
+      "detail": {
+        "bio:cell": [
+          [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "A unit of life"
+          ],
+          [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The basic structural and functional unit of life"
+          ]
+        ]
+      }
+    },
+    {
+      "check": "rust: bio:cell back text changed A unit of life -> The basic structural and functional unit of life; front and media references unchanged",
+      "passed": true,
+      "detail": {
+        "v1": [
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+          "A unit of life"
+        ],
+        "v2": [
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+          "The basic structural and functional unit of life"
+        ]
+      }
+    },
+    {
+      "check": "python v1: sqlite ok, 3 notes/3 cards/2 media, Biology deck",
+      "passed": true,
+      "detail": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    {
+      "check": "python v1: the two stored media are byte-exact cell.png/tone.wav fixtures (content-derived names, extension kept)",
+      "passed": true,
+      "detail": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+          "actualSize": 16044
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+          "actualSize": 178597
+        }
+      ]
+    },
+    {
+      "check": "python v1: every note front references the stored image and sound",
+      "passed": true
+    },
+    {
+      "check": "python v2: sqlite ok, 3 notes/3 cards/2 media, Biology deck",
+      "passed": true,
+      "detail": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    {
+      "check": "python v2: the two stored media are byte-exact cell.png/tone.wav fixtures (content-derived names, extension kept)",
+      "passed": true,
+      "detail": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+          "actualSize": 16044
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+          "actualSize": 178597
+        }
+      ]
+    },
+    {
+      "check": "python v2: every note front references the stored image and sound",
+      "passed": true
+    },
+    {
+      "check": "python: identity keys bio:cell/bio:membrane/bio:nucleus with identical GUIDs in v1 and v2",
+      "passed": true,
+      "detail": {
+        "bio:cell": "ce55b46e801a1e8fdf4a5a632610cc4e",
+        "bio:membrane": "49dff2fadd29b11ef4c022e534bf5858",
+        "bio:nucleus": "a26bc1122d44b5d560ff4a16e5505b66"
+      }
+    },
+    {
+      "check": "python: only bio:cell changed between v1 and v2",
+      "passed": true,
+      "detail": {
+        "bio:cell": [
+          [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "A unit of life"
+          ],
+          [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The basic structural and functional unit of life"
+          ]
+        ]
+      }
+    },
+    {
+      "check": "python: bio:cell back text changed A unit of life -> The basic structural and functional unit of life; front and media references unchanged",
+      "passed": true,
+      "detail": {
+        "v1": [
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+          "A unit of life"
+        ],
+        "v2": [
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+          "The basic structural and functional unit of life"
+        ]
+      }
+    },
+    {
+      "check": "node v1: sqlite ok, 3 notes/3 cards/2 media, Biology deck",
+      "passed": true,
+      "detail": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    {
+      "check": "node v1: the two stored media are byte-exact cell.png/tone.wav fixtures (content-derived names, extension kept)",
+      "passed": true,
+      "detail": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+          "actualSize": 16044
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+          "actualSize": 178597
+        }
+      ]
+    },
+    {
+      "check": "node v1: every note front references the stored image and sound",
+      "passed": true
+    },
+    {
+      "check": "node v2: sqlite ok, 3 notes/3 cards/2 media, Biology deck",
+      "passed": true,
+      "detail": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    {
+      "check": "node v2: the two stored media are byte-exact cell.png/tone.wav fixtures (content-derived names, extension kept)",
+      "passed": true,
+      "detail": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+          "actualSize": 16044
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+          "actualSize": 178597
+        }
+      ]
+    },
+    {
+      "check": "node v2: every note front references the stored image and sound",
+      "passed": true
+    },
+    {
+      "check": "node: identity keys bio:cell/bio:membrane/bio:nucleus with identical GUIDs in v1 and v2",
+      "passed": true,
+      "detail": {
+        "bio:cell": "ce55b46e801a1e8fdf4a5a632610cc4e",
+        "bio:membrane": "49dff2fadd29b11ef4c022e534bf5858",
+        "bio:nucleus": "a26bc1122d44b5d560ff4a16e5505b66"
+      }
+    },
+    {
+      "check": "node: only bio:cell changed between v1 and v2",
+      "passed": true,
+      "detail": {
+        "bio:cell": [
+          [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "A unit of life"
+          ],
+          [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The basic structural and functional unit of life"
+          ]
+        ]
+      }
+    },
+    {
+      "check": "node: bio:cell back text changed A unit of life -> The basic structural and functional unit of life; front and media references unchanged",
+      "passed": true,
+      "detail": {
+        "v1": [
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+          "A unit of life"
+        ],
+        "v2": [
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+          "The basic structural and functional unit of life"
+        ]
+      }
+    },
+    {
+      "check": "JSON recipe: the three SDKs assign the same GUID to each stable key",
+      "passed": true,
+      "detail": {
+        "rust": {
+          "bio:cell": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "bio:membrane": "49dff2fadd29b11ef4c022e534bf5858",
+          "bio:nucleus": "a26bc1122d44b5d560ff4a16e5505b66"
+        },
+        "python": {
+          "bio:cell": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "bio:membrane": "49dff2fadd29b11ef4c022e534bf5858",
+          "bio:nucleus": "a26bc1122d44b5d560ff4a16e5505b66"
+        },
+        "node": {
+          "bio:cell": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "bio:membrane": "49dff2fadd29b11ef4c022e534bf5858",
+          "bio:nucleus": "a26bc1122d44b5d560ff4a16e5505b66"
+        }
+      }
+    }
+  ],
+  "packages": {
+    "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/rust/spanish.apkg": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/rust/spanish.apkg",
+      "sha256": "f05a493b957672d3e43305eeb2a7d0ae4f54598a0f1716f905a92fcee91d0701",
+      "bytes": 57323,
+      "zipEntries": [
+        "ankiforge-identity.json",
+        "collection.anki2",
+        "collection.anki21b",
+        "media",
+        "meta"
+      ],
+      "sqliteIntegrity": "ok",
+      "notes": [
+        {
+          "guid": "aaf05442c6721ba14cf48d7802f35de0",
+          "notetype": "Basic",
+          "fields": [
+            "hola",
+            "hello"
+          ],
+          "tags": ""
+        }
+      ],
+      "cards": [
+        {
+          "noteGuid": "aaf05442c6721ba14cf48d7802f35de0",
+          "ord": 0,
+          "deck": "Spanish"
+        }
+      ],
+      "media": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "spanish",
+        "notes": {
+          "es:hola": {
+            "guid": "aaf05442c6721ba14cf48d7802f35de0",
+            "active": true
+          }
+        }
+      },
+      "counts": {
+        "notes": 1,
+        "cards": 1,
+        "media": 0
+      }
+    },
+    "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/python/spanish.apkg": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/python/spanish.apkg",
+      "sha256": "b6f990da257abf60b5ee43df0ecf0b8ee6ab79923e903e4199ab0b4a8ff5ecc9",
+      "bytes": 57323,
+      "zipEntries": [
+        "ankiforge-identity.json",
+        "collection.anki2",
+        "collection.anki21b",
+        "media",
+        "meta"
+      ],
+      "sqliteIntegrity": "ok",
+      "notes": [
+        {
+          "guid": "aaf05442c6721ba14cf48d7802f35de0",
+          "notetype": "Basic",
+          "fields": [
+            "hola",
+            "hello"
+          ],
+          "tags": ""
+        }
+      ],
+      "cards": [
+        {
+          "noteGuid": "aaf05442c6721ba14cf48d7802f35de0",
+          "ord": 0,
+          "deck": "Spanish"
+        }
+      ],
+      "media": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "spanish",
+        "notes": {
+          "es:hola": {
+            "guid": "aaf05442c6721ba14cf48d7802f35de0",
+            "active": true
+          }
+        }
+      },
+      "counts": {
+        "notes": 1,
+        "cards": 1,
+        "media": 0
+      }
+    },
+    "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/node/spanish.apkg": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/node/spanish.apkg",
+      "sha256": "6beec5c16e1d74aea8d6b989d3839c98b2d066681881db06be63189b58a3682a",
+      "bytes": 57323,
+      "zipEntries": [
+        "ankiforge-identity.json",
+        "collection.anki2",
+        "collection.anki21b",
+        "media",
+        "meta"
+      ],
+      "sqliteIntegrity": "ok",
+      "notes": [
+        {
+          "guid": "aaf05442c6721ba14cf48d7802f35de0",
+          "notetype": "Basic",
+          "fields": [
+            "hola",
+            "hello"
+          ],
+          "tags": ""
+        }
+      ],
+      "cards": [
+        {
+          "noteGuid": "aaf05442c6721ba14cf48d7802f35de0",
+          "ord": 0,
+          "deck": "Spanish"
+        }
+      ],
+      "media": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "spanish",
+        "notes": {
+          "es:hola": {
+            "guid": "aaf05442c6721ba14cf48d7802f35de0",
+            "active": true
+          }
+        }
+      },
+      "counts": {
+        "notes": 1,
+        "cards": 1,
+        "media": 0
+      }
+    },
+    "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/python/recovered.apkg": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/python/recovered.apkg",
+      "sha256": "d1a1403105d0fa49064538634013ec351e34392f0bbb716928a2a9fb3515a418",
+      "bytes": 57718,
+      "zipEntries": [
+        "ankiforge-identity.json",
+        "collection.anki2",
+        "collection.anki21b",
+        "media",
+        "meta"
+      ],
+      "sqliteIntegrity": "ok",
+      "notes": [
+        {
+          "guid": "0f8f9139b04ecc21e3276eaa8e80c28b",
+          "notetype": "Basic",
+          "fields": [
+            "two",
+            "second"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "8e363c025de858cc34527c3f94565e5a",
+          "notetype": "Basic",
+          "fields": [
+            "one",
+            "first"
+          ],
+          "tags": ""
+        }
+      ],
+      "cards": [
+        {
+          "noteGuid": "0f8f9139b04ecc21e3276eaa8e80c28b",
+          "ord": 0,
+          "deck": "Recovery"
+        },
+        {
+          "noteGuid": "8e363c025de858cc34527c3f94565e5a",
+          "ord": 0,
+          "deck": "Recovery"
+        }
+      ],
+      "media": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "controlled-duplicate",
+        "notes": {
+          "source:1": {
+            "guid": "8e363c025de858cc34527c3f94565e5a",
+            "active": true
+          },
+          "source:2": {
+            "guid": "0f8f9139b04ecc21e3276eaa8e80c28b",
+            "active": true
+          }
+        }
+      },
+      "counts": {
+        "notes": 2,
+        "cards": 2,
+        "media": 0
+      }
+    },
+    "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/rust/v1.apkg": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/rust/v1.apkg",
+      "sha256": "77c90a620f9b26d8245f4b255d42377579fd0a120b08a3a0b6bb4fdc338ac80e",
+      "bytes": 238658,
+      "zipEntries": [
+        "0",
+        "1",
+        "ankiforge-identity.json",
+        "collection.anki2",
+        "collection.anki21b",
+        "media",
+        "meta"
+      ],
+      "sqliteIntegrity": "ok",
+      "notes": [
+        {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "notetype": "Basic",
+          "fields": [
+            "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The cell membrane"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "notetype": "Basic",
+          "fields": [
+            "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The nucleus"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "notetype": "Basic",
+          "fields": [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "A unit of life"
+          ],
+          "tags": ""
+        }
+      ],
+      "cards": [
+        {
+          "noteGuid": "49dff2fadd29b11ef4c022e534bf5858",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "ord": 0,
+          "deck": "Biology"
+        }
+      ],
+      "media": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "declaredSize": 16044,
+          "actualSize": 16044,
+          "sha1Matches": true,
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "declaredSize": 178597,
+          "actualSize": 178597,
+          "sha1Matches": true,
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+        }
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "biology-json",
+        "notes": {
+          "bio:cell": {
+            "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+            "active": true
+          },
+          "bio:membrane": {
+            "guid": "49dff2fadd29b11ef4c022e534bf5858",
+            "active": true
+          },
+          "bio:nucleus": {
+            "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+            "active": true
+          }
+        }
+      },
+      "counts": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/rust/v2.apkg": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/rust/v2.apkg",
+      "sha256": "1b02046ba82c9f46bc7f1cc04836bc3bb38df2e0c53dbb21324f3f8dac8b5ded",
+      "bytes": 238677,
+      "zipEntries": [
+        "0",
+        "1",
+        "ankiforge-identity.json",
+        "collection.anki2",
+        "collection.anki21b",
+        "media",
+        "meta"
+      ],
+      "sqliteIntegrity": "ok",
+      "notes": [
+        {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "notetype": "Basic",
+          "fields": [
+            "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The cell membrane"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "notetype": "Basic",
+          "fields": [
+            "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The nucleus"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "notetype": "Basic",
+          "fields": [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The basic structural and functional unit of life"
+          ],
+          "tags": ""
+        }
+      ],
+      "cards": [
+        {
+          "noteGuid": "49dff2fadd29b11ef4c022e534bf5858",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "ord": 0,
+          "deck": "Biology"
+        }
+      ],
+      "media": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "declaredSize": 16044,
+          "actualSize": 16044,
+          "sha1Matches": true,
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "declaredSize": 178597,
+          "actualSize": 178597,
+          "sha1Matches": true,
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+        }
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "biology-json",
+        "notes": {
+          "bio:cell": {
+            "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+            "active": true
+          },
+          "bio:membrane": {
+            "guid": "49dff2fadd29b11ef4c022e534bf5858",
+            "active": true
+          },
+          "bio:nucleus": {
+            "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+            "active": true
+          }
+        }
+      },
+      "counts": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/python/v1.apkg": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/python/v1.apkg",
+      "sha256": "8df45b7fb5d2b82965fc58dc3b956ec938315069776976dba77e04e9c1c667cb",
+      "bytes": 238659,
+      "zipEntries": [
+        "0",
+        "1",
+        "ankiforge-identity.json",
+        "collection.anki2",
+        "collection.anki21b",
+        "media",
+        "meta"
+      ],
+      "sqliteIntegrity": "ok",
+      "notes": [
+        {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "notetype": "Basic",
+          "fields": [
+            "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The cell membrane"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "notetype": "Basic",
+          "fields": [
+            "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The nucleus"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "notetype": "Basic",
+          "fields": [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "A unit of life"
+          ],
+          "tags": ""
+        }
+      ],
+      "cards": [
+        {
+          "noteGuid": "49dff2fadd29b11ef4c022e534bf5858",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "ord": 0,
+          "deck": "Biology"
+        }
+      ],
+      "media": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "declaredSize": 16044,
+          "actualSize": 16044,
+          "sha1Matches": true,
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "declaredSize": 178597,
+          "actualSize": 178597,
+          "sha1Matches": true,
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+        }
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "biology-json",
+        "notes": {
+          "bio:cell": {
+            "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+            "active": true
+          },
+          "bio:membrane": {
+            "guid": "49dff2fadd29b11ef4c022e534bf5858",
+            "active": true
+          },
+          "bio:nucleus": {
+            "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+            "active": true
+          }
+        }
+      },
+      "counts": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/python/v2.apkg": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/python/v2.apkg",
+      "sha256": "cc0cda81aaf4fa3f5eaaa972dc60624612c56c5a38f977aa41e623d3b22b0fcc",
+      "bytes": 238677,
+      "zipEntries": [
+        "0",
+        "1",
+        "ankiforge-identity.json",
+        "collection.anki2",
+        "collection.anki21b",
+        "media",
+        "meta"
+      ],
+      "sqliteIntegrity": "ok",
+      "notes": [
+        {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "notetype": "Basic",
+          "fields": [
+            "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The cell membrane"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "notetype": "Basic",
+          "fields": [
+            "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The nucleus"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "notetype": "Basic",
+          "fields": [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The basic structural and functional unit of life"
+          ],
+          "tags": ""
+        }
+      ],
+      "cards": [
+        {
+          "noteGuid": "49dff2fadd29b11ef4c022e534bf5858",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "ord": 0,
+          "deck": "Biology"
+        }
+      ],
+      "media": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "declaredSize": 16044,
+          "actualSize": 16044,
+          "sha1Matches": true,
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "declaredSize": 178597,
+          "actualSize": 178597,
+          "sha1Matches": true,
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+        }
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "biology-json",
+        "notes": {
+          "bio:cell": {
+            "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+            "active": true
+          },
+          "bio:membrane": {
+            "guid": "49dff2fadd29b11ef4c022e534bf5858",
+            "active": true
+          },
+          "bio:nucleus": {
+            "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+            "active": true
+          }
+        }
+      },
+      "counts": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/node/v1.apkg": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/node/v1.apkg",
+      "sha256": "5f1aa500b334725ccf991198a878a0ce8a306300ef2f198557fb791fa82ba1ec",
+      "bytes": 238658,
+      "zipEntries": [
+        "0",
+        "1",
+        "ankiforge-identity.json",
+        "collection.anki2",
+        "collection.anki21b",
+        "media",
+        "meta"
+      ],
+      "sqliteIntegrity": "ok",
+      "notes": [
+        {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "notetype": "Basic",
+          "fields": [
+            "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The cell membrane"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "notetype": "Basic",
+          "fields": [
+            "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The nucleus"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "notetype": "Basic",
+          "fields": [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "A unit of life"
+          ],
+          "tags": ""
+        }
+      ],
+      "cards": [
+        {
+          "noteGuid": "49dff2fadd29b11ef4c022e534bf5858",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "ord": 0,
+          "deck": "Biology"
+        }
+      ],
+      "media": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "declaredSize": 16044,
+          "actualSize": 16044,
+          "sha1Matches": true,
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "declaredSize": 178597,
+          "actualSize": 178597,
+          "sha1Matches": true,
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+        }
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "biology-json",
+        "notes": {
+          "bio:cell": {
+            "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+            "active": true
+          },
+          "bio:membrane": {
+            "guid": "49dff2fadd29b11ef4c022e534bf5858",
+            "active": true
+          },
+          "bio:nucleus": {
+            "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+            "active": true
+          }
+        }
+      },
+      "counts": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    },
+    "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/node/v2.apkg": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-json/node/v2.apkg",
+      "sha256": "2a4c3ebefca54ffb70a1009b97cd2fdfaac9cb09d5d545248683bd9704b96aa7",
+      "bytes": 238677,
+      "zipEntries": [
+        "0",
+        "1",
+        "ankiforge-identity.json",
+        "collection.anki2",
+        "collection.anki21b",
+        "media",
+        "meta"
+      ],
+      "sqliteIntegrity": "ok",
+      "notes": [
+        {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "notetype": "Basic",
+          "fields": [
+            "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The cell membrane"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "notetype": "Basic",
+          "fields": [
+            "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The nucleus"
+          ],
+          "tags": ""
+        },
+        {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "notetype": "Basic",
+          "fields": [
+            "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]",
+            "The basic structural and functional unit of life"
+          ],
+          "tags": ""
+        }
+      ],
+      "cards": [
+        {
+          "noteGuid": "49dff2fadd29b11ef4c022e534bf5858",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "ord": 0,
+          "deck": "Biology"
+        },
+        {
+          "noteGuid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "ord": 0,
+          "deck": "Biology"
+        }
+      ],
+      "media": [
+        {
+          "name": "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav",
+          "declaredSize": 16044,
+          "actualSize": 16044,
+          "sha1Matches": true,
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+        },
+        {
+          "name": "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png",
+          "declaredSize": 178597,
+          "actualSize": 178597,
+          "sha1Matches": true,
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+        }
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "namespace": "biology-json",
+        "notes": {
+          "bio:cell": {
+            "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+            "active": true
+          },
+          "bio:membrane": {
+            "guid": "49dff2fadd29b11ef4c022e534bf5858",
+            "active": true
+          },
+          "bio:nucleus": {
+            "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+            "active": true
+          }
+        }
+      },
+      "counts": {
+        "notes": 3,
+        "cards": 3,
+        "media": 2
+      }
+    }
+  }
+}

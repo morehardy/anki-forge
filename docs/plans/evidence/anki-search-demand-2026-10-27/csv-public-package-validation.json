@@ -1,0 +1,52 @@
+{
+  "observedOn": "2026-10-27",
+  "timezone": "America/Los_Angeles",
+  "status": "passed",
+  "package": {
+    "name": "ankiforge",
+    "version": "0.3.1",
+    "download": {
+      "url": "https://files.pythonhosted.org/packages/27/4e/b507bd4f13c3e1ae2e7e843a8274fa3a143fd023b71e0c8b75188ff688c6/ankiforge-0.3.1-cp311-abi3-macosx_11_0_arm64.whl",
+      "archive_info": {
+        "hashes": {
+          "sha256": "632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1"
+        },
+        "hash": "sha256=632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1"
+      }
+    }
+  },
+  "python": "3.14.5 (main, May 10 2026, 10:21:34) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "platform": "darwin",
+  "program": "bindings/python/examples/csv_to_anki.py",
+  "programSha256": "5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc",
+  "input": "docs/recipes/csv-to-anki/cards.csv",
+  "inputSha256": "216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64",
+  "artifactSha256": "96f1597d004b006faa976414722f278e35914be158bf5a44ef29713d0ac6b3c6",
+  "packageInspection": {
+    "method": "ZIP + standard-library Zstandard decompression + SQLite fields/card counts and empty media protobuf, independent of SDK report",
+    "notes": 3,
+    "cards": 3,
+    "media": 0,
+    "fields": [
+      [
+        "adiós",
+        "goodbye"
+      ],
+      [
+        "gracias",
+        "thank you"
+      ],
+      [
+        "hola",
+        "hello"
+      ]
+    ]
+  },
+  "regressionTests": {
+    "command": "python bindings/python/tests/test_csv_recipe.py",
+    "tests": 5,
+    "passed": 5,
+    "invalidInputSubcases": 9
+  },
+  "limitation": "This is package-content validation on macOS arm64 with a public wheel; no Anki client import or ranking measurement was performed."
+}

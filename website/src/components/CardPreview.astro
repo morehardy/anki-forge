@@ -3,7 +3,7 @@ import { createTranslator } from '../i18n/messages.mjs';
 import type { CardExample } from '../lib/examples';
 import { sitePath } from '../lib/site';
 import Icon from './Icon.astro';
-interface Props { example: CardExample; prefix: string; locale?: 'en' | 'zh-CN' }
+interface Props { example: CardExample; prefix: string; locale?: string }
 const { example, prefix, locale = 'en' } = Astro.props;
 const { clozeParts: cloze } = example;
 const t = createTranslator(locale);

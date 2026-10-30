@@ -1,0 +1,553 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/independent_technical_source_review/2026-10-28/rendered-model-data-34",
+  "scope": "Current exported model data independently compared with the actual source templates; these are source-model destinations, not observed browser/HTML results. Shared deployment base handling stays in the unchanged sitePath adapter.",
+  "locales": {
+    "en": {
+      "currentLocale": {
+        "prefix": "",
+        "lang": "en",
+        "og": "en_US",
+        "label": "English",
+        "format": "en-US",
+        "starlightKey": "root",
+        "dir": "ltr"
+      },
+      "wordmark": {
+        "destination": "/",
+        "ariaLabel": "Anki Forge home"
+      },
+      "languageLinks": [
+        {
+          "locale": "zh-CN",
+          "label": "简体中文",
+          "prefix": "/zh-cn",
+          "lang": "zh-CN"
+        }
+      ],
+      "header": [
+        {
+          "id": "docs",
+          "label": "Guide",
+          "destination": "/docs/"
+        },
+        {
+          "id": "examples",
+          "label": "Examples",
+          "destination": "/examples/"
+        },
+        {
+          "id": "blog",
+          "label": "Blog",
+          "destination": "/blog/"
+        }
+      ],
+      "footer": [
+        {
+          "id": "articles",
+          "pageId": "blog",
+          "resource": "",
+          "label": "Articles",
+          "destination": "/blog/"
+        },
+        {
+          "id": "feed",
+          "pageId": "",
+          "resource": "feed",
+          "label": "RSS",
+          "destination": "/rss.xml"
+        },
+        {
+          "id": "license",
+          "pageId": "",
+          "resource": "license",
+          "label": "MIT license",
+          "destination": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "id": "repository",
+          "pageId": "",
+          "resource": "repository",
+          "label": "GitHub repository",
+          "destination": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "nextTasks": [
+        {
+          "pageId": "json-to-anki",
+          "label": "Build from JSON",
+          "primary": true,
+          "destination": "/docs/json-to-anki/"
+        },
+        {
+          "pageId": "csv-to-anki",
+          "label": "Convert CSV to Anki",
+          "primary": false,
+          "destination": "/docs/csv-to-anki/"
+        },
+        {
+          "pageId": "ai-anki-cards",
+          "label": "Create cards with AI",
+          "primary": false,
+          "destination": "/docs/ai-anki-cards/"
+        },
+        {
+          "pageId": "anki-forge-vs-genanki",
+          "label": "Compare with genanki",
+          "primary": false,
+          "destination": "/docs/anki-forge-vs-genanki/"
+        }
+      ],
+      "sidebar": [
+        {
+          "label": "Start here",
+          "collapsed": false,
+          "items": [
+            {
+              "id": "docs",
+              "label": "Build Anki decks from code",
+              "destination": "/docs/"
+            },
+            {
+              "id": "languages",
+              "label": "Choose your language",
+              "destination": "/docs/languages/"
+            },
+            {
+              "id": "quickstart",
+              "label": "Generate an Anki APKG with Rust",
+              "destination": "/docs/quickstart/"
+            },
+            {
+              "id": "installation",
+              "label": "Add to your application",
+              "destination": "/docs/installation/"
+            },
+            {
+              "id": "concepts",
+              "label": "Core concepts",
+              "destination": "/docs/concepts/"
+            },
+            {
+              "id": "anki-forge-vs-genanki",
+              "label": "Anki Forge vs genanki: choose for your workflow",
+              "destination": "/docs/anki-forge-vs-genanki/"
+            }
+          ]
+        },
+        {
+          "label": "Guides",
+          "collapsed": false,
+          "items": [
+            {
+              "id": "csv-to-anki",
+              "label": "CSV to Anki: generate flashcards with Python",
+              "destination": "/docs/csv-to-anki/"
+            },
+            {
+              "id": "json-to-anki",
+              "label": "Generate and update Anki decks from JSON",
+              "destination": "/docs/json-to-anki/"
+            },
+            {
+              "id": "ai-anki-cards",
+              "label": "AI-assisted Anki flashcards: from notes to APKG",
+              "destination": "/docs/ai-anki-cards/"
+            },
+            {
+              "id": "cards",
+              "label": "Generate Anki Basic and Cloze flashcards",
+              "destination": "/docs/cards/"
+            },
+            {
+              "id": "media",
+              "label": "Add images and audio to Anki cards",
+              "destination": "/docs/media/"
+            },
+            {
+              "id": "custom-notetypes",
+              "label": "Custom note types",
+              "destination": "/docs/custom-notetypes/"
+            },
+            {
+              "id": "templates",
+              "label": "Reusable Anki card templates, CSS and media",
+              "destination": "/docs/templates/"
+            },
+            {
+              "id": "image-occlusion",
+              "label": "Generate Anki Image Occlusion cards",
+              "destination": "/docs/image-occlusion/"
+            },
+            {
+              "id": "updates",
+              "label": "Update Anki decks with stable note IDs",
+              "destination": "/docs/updates/"
+            }
+          ]
+        },
+        {
+          "label": "Language guides",
+          "collapsed": false,
+          "items": [
+            {
+              "id": "rust-guide",
+              "label": "Rust authoring guide",
+              "destination": "/docs/rust-guide/"
+            },
+            {
+              "id": "node-quickstart",
+              "label": "Generate an Anki APKG with Node.js",
+              "destination": "/docs/node-quickstart/"
+            },
+            {
+              "id": "python-quickstart",
+              "label": "Generate an Anki APKG with Python",
+              "destination": "/docs/python-quickstart/"
+            },
+            {
+              "id": "python-migration",
+              "label": "Python API transition",
+              "destination": "/docs/python-migration/"
+            },
+            {
+              "id": "genanki-migration",
+              "label": "Move from genanki",
+              "destination": "/docs/genanki-migration/"
+            }
+          ]
+        },
+        {
+          "label": "Reference",
+          "collapsed": true,
+          "items": [
+            {
+              "id": "api",
+              "label": "Public API overview",
+              "destination": "/docs/api/"
+            },
+            {
+              "id": "rust-api",
+              "label": "Rust API guide",
+              "destination": "/docs/rust-api/"
+            },
+            {
+              "id": "node-api",
+              "label": "Node and TypeScript API",
+              "destination": "/docs/node-api/"
+            },
+            {
+              "id": "python-api",
+              "label": "Python API",
+              "destination": "/docs/python-api/"
+            },
+            {
+              "id": "build-guarantees",
+              "label": "Build and output guarantees",
+              "destination": "/docs/build-guarantees/"
+            },
+            {
+              "id": "compatibility",
+              "label": "Compatibility and releases",
+              "destination": "/docs/compatibility/"
+            }
+          ]
+        },
+        {
+          "label": "Help",
+          "collapsed": false,
+          "items": [
+            {
+              "id": "troubleshooting",
+              "label": "Troubleshooting",
+              "destination": "/docs/troubleshooting/"
+            },
+            {
+              "id": "python-diagnostics",
+              "label": "Python diagnostics",
+              "destination": "/docs/python-diagnostics/"
+            },
+            {
+              "id": "development",
+              "label": "Build SDKs from source",
+              "destination": "/docs/development/"
+            }
+          ]
+        }
+      ]
+    },
+    "zh-CN": {
+      "currentLocale": {
+        "prefix": "/zh-cn",
+        "lang": "zh-CN",
+        "og": "zh_CN",
+        "label": "简体中文",
+        "format": "zh-CN",
+        "starlightKey": "zh-cn",
+        "dir": "ltr"
+      },
+      "wordmark": {
+        "destination": "/zh-cn/",
+        "ariaLabel": "Anki Forge 首页"
+      },
+      "languageLinks": [
+        {
+          "locale": "en",
+          "label": "English",
+          "prefix": "",
+          "lang": "en"
+        }
+      ],
+      "header": [
+        {
+          "id": "docs",
+          "label": "指南",
+          "destination": "/zh-cn/docs/"
+        },
+        {
+          "id": "examples",
+          "label": "示例",
+          "destination": "/zh-cn/examples/"
+        },
+        {
+          "id": "blog",
+          "label": "博客",
+          "destination": "/zh-cn/blog/"
+        }
+      ],
+      "footer": [
+        {
+          "id": "articles",
+          "pageId": "blog",
+          "resource": "",
+          "label": "文章",
+          "destination": "/zh-cn/blog/"
+        },
+        {
+          "id": "feed",
+          "pageId": "",
+          "resource": "feed",
+          "label": "RSS",
+          "destination": "/zh-cn/rss.xml"
+        },
+        {
+          "id": "license",
+          "pageId": "",
+          "resource": "license",
+          "label": "MIT 许可证",
+          "destination": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "id": "repository",
+          "pageId": "",
+          "resource": "repository",
+          "label": "GitHub 仓库",
+          "destination": "https://github.com/morehardy/anki-forge"
+        }
+      ],
+      "nextTasks": [
+        {
+          "pageId": "json-to-anki",
+          "label": "从 JSON 开始",
+          "primary": true,
+          "destination": "/zh-cn/docs/json-to-anki/"
+        },
+        {
+          "pageId": "csv-to-anki",
+          "label": "CSV 批量制卡",
+          "primary": false,
+          "destination": "/zh-cn/docs/csv-to-anki/"
+        },
+        {
+          "pageId": "ai-anki-cards",
+          "label": "AI 辅助生成卡片",
+          "primary": false,
+          "destination": "/zh-cn/docs/ai-anki-cards/"
+        },
+        {
+          "pageId": "anki-forge-vs-genanki",
+          "label": "与 genanki 比较",
+          "primary": false,
+          "destination": "/zh-cn/docs/anki-forge-vs-genanki/"
+        }
+      ],
+      "sidebar": [
+        {
+          "label": "从这里开始",
+          "collapsed": false,
+          "items": [
+            {
+              "id": "docs",
+              "label": "用代码生成 Anki 牌组",
+              "destination": "/zh-cn/docs/"
+            },
+            {
+              "id": "languages",
+              "label": "选择开发语言",
+              "destination": "/zh-cn/docs/languages/"
+            },
+            {
+              "id": "quickstart",
+              "label": "用 Rust 生成 Anki APKG",
+              "destination": "/zh-cn/docs/quickstart/"
+            },
+            {
+              "id": "installation",
+              "label": "集成到应用",
+              "destination": "/zh-cn/docs/installation/"
+            },
+            {
+              "id": "concepts",
+              "label": "核心概念",
+              "destination": "/zh-cn/docs/concepts/"
+            },
+            {
+              "id": "anki-forge-vs-genanki",
+              "label": "Anki Forge 与 genanki：如何选择",
+              "destination": "/zh-cn/docs/anki-forge-vs-genanki/"
+            }
+          ]
+        },
+        {
+          "label": "使用指南",
+          "collapsed": false,
+          "items": [
+            {
+              "id": "csv-to-anki",
+              "label": "CSV 转 Anki：用 Python 批量生成卡片",
+              "destination": "/zh-cn/docs/csv-to-anki/"
+            },
+            {
+              "id": "json-to-anki",
+              "label": "用 JSON 数据生成并更新 Anki 牌组",
+              "destination": "/zh-cn/docs/json-to-anki/"
+            },
+            {
+              "id": "ai-anki-cards",
+              "label": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+              "destination": "/zh-cn/docs/ai-anki-cards/"
+            },
+            {
+              "id": "cards",
+              "label": "生成 Anki 问答卡片与 Cloze 填空卡片",
+              "destination": "/zh-cn/docs/cards/"
+            },
+            {
+              "id": "media",
+              "label": "为 Anki 卡片添加图片与音频",
+              "destination": "/zh-cn/docs/media/"
+            },
+            {
+              "id": "custom-notetypes",
+              "label": "自定义笔记类型",
+              "destination": "/zh-cn/docs/custom-notetypes/"
+            },
+            {
+              "id": "templates",
+              "label": "复用 Anki 卡片模板、CSS 与媒体",
+              "destination": "/zh-cn/docs/templates/"
+            },
+            {
+              "id": "image-occlusion",
+              "label": "生成 Anki 图片遮挡卡片",
+              "destination": "/zh-cn/docs/image-occlusion/"
+            },
+            {
+              "id": "updates",
+              "label": "用稳定笔记 ID 更新 Anki 牌组",
+              "destination": "/zh-cn/docs/updates/"
+            }
+          ]
+        },
+        {
+          "label": "开发语言指南",
+          "collapsed": false,
+          "items": [
+            {
+              "id": "rust-guide",
+              "label": "Rust 编写指南",
+              "destination": "/zh-cn/docs/rust-guide/"
+            },
+            {
+              "id": "node-quickstart",
+              "label": "用 Node.js 生成 Anki APKG",
+              "destination": "/zh-cn/docs/node-quickstart/"
+            },
+            {
+              "id": "python-quickstart",
+              "label": "用 Python 生成 Anki APKG",
+              "destination": "/zh-cn/docs/python-quickstart/"
+            },
+            {
+              "id": "python-migration",
+              "label": "Python API 迁移",
+              "destination": "/zh-cn/docs/python-migration/"
+            },
+            {
+              "id": "genanki-migration",
+              "label": "从 genanki 迁移",
+              "destination": "/zh-cn/docs/genanki-migration/"
+            }
+          ]
+        },
+        {
+          "label": "参考",
+          "collapsed": true,
+          "items": [
+            {
+              "id": "api",
+              "label": "公开 API 总览",
+              "destination": "/zh-cn/docs/api/"
+            },
+            {
+              "id": "rust-api",
+              "label": "Rust API 指南",
+              "destination": "/zh-cn/docs/rust-api/"
+            },
+            {
+              "id": "node-api",
+              "label": "Node 与 TypeScript API",
+              "destination": "/zh-cn/docs/node-api/"
+            },
+            {
+              "id": "python-api",
+              "label": "Python API",
+              "destination": "/zh-cn/docs/python-api/"
+            },
+            {
+              "id": "build-guarantees",
+              "label": "构建与输出保证",
+              "destination": "/zh-cn/docs/build-guarantees/"
+            },
+            {
+              "id": "compatibility",
+              "label": "兼容性与发布",
+              "destination": "/zh-cn/docs/compatibility/"
+            }
+          ]
+        },
+        {
+          "label": "帮助",
+          "collapsed": false,
+          "items": [
+            {
+              "id": "troubleshooting",
+              "label": "排查问题",
+              "destination": "/zh-cn/docs/troubleshooting/"
+            },
+            {
+              "id": "python-diagnostics",
+              "label": "Python 诊断",
+              "destination": "/zh-cn/docs/python-diagnostics/"
+            },
+            {
+              "id": "development",
+              "label": "从源码构建 SDK",
+              "destination": "/zh-cn/docs/development/"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

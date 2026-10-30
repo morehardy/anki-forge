@@ -1,8 +1,100 @@
 ---
 import { createTranslator } from '../i18n/messages.mjs';
 import { localeFromPath } from '../../site-model.mjs';
-interface Props { locale?: 'en' | 'zh-CN' }
-const { locale = localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL) } = Astro.props;
+import Icon from './Icon.astro';
+interface Props { locale?: string; scope?: 'header' | 'docs' }
+const { locale = localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL), scope = 'docs' } = Astro.props;
 const t = createTranslator(locale);
+const name = `theme-${scope}-${locale}`;
+const options = [
+  { value: 'light', icon: 'sun', label: t('nav.light') },
+  { value: 'dark', icon: 'moon', label: t('nav.dark') },
+  { value: 'auto', icon: 'desktop', label: t('nav.auto') },
+] as const;
 ---
-<label class="theme-label"><span class="sr-only">{t('nav.theme')}</span><select data-theme-picker aria-label={t('nav.theme')} disabled><option value="auto">{t('nav.auto')}</option><option value="light">{t('nav.light')}</option><option value="dark">{t('nav.dark')}</option></select></label>
+<div class="theme-control" role="radiogroup" aria-label={t('nav.theme')} data-theme-control data-theme-choice="auto">
+  {options.map(option => (
+    <label class="theme-option">
+      <input class="sr-only" type="radio" name={name} value={option.value} aria-label={option.label} data-theme-option checked={option.value === 'auto'} disabled />
+      <span class="theme-option-face"><Icon name={option.icon} /></span>
+      <span class="theme-tooltip" aria-hidden="true">{option.label}</span>
+    </label>
+  ))}
+</div>
+
+<style>
+  .theme-control {
+    --theme-option-size: 32px;
+    --theme-position: 2;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: repeat(3, var(--theme-option-size));
+    flex-shrink: 0;
+    padding: 4px;
+    border: 1px solid var(--af-line);
+    border-radius: 999px;
+    background: var(--af-soft);
+  }
+  .theme-control[data-theme-choice='light'] { --theme-position: 0; }
+  .theme-control[data-theme-choice='dark'] { --theme-position: 1; }
+  .theme-control::before {
+    content: '';
+    position: absolute;
+    inset: 4px auto auto 4px;
+    width: var(--theme-option-size);
+    height: var(--theme-option-size);
+    border-radius: 50%;
+    background: var(--af-paper);
+    box-shadow: 0 1px 4px #142d2914, inset 0 0 0 1px var(--af-line);
+    transform: translateX(calc(var(--theme-position) * 100%));
+    transition: transform 220ms cubic-bezier(.22, 1, .36, 1);
+    pointer-events: none;
+  }
+  .theme-option { position: relative; cursor: pointer; }
+  .theme-option-face {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--theme-option-size);
+    height: var(--theme-option-size);
+    border-radius: 50%;
+    color: var(--af-muted);
+    font-size: 17px;
+    transition: color 160ms ease;
+  }
+  .theme-option:hover .theme-option-face,
+  input:checked + .theme-option-face { color: var(--af-accent); }
+  input:focus-visible + .theme-option-face { outline: 2px solid var(--af-accent); outline-offset: 2px; }
+  input:disabled + .theme-option-face { opacity: .5; cursor: default; }
+  .theme-tooltip {
+    position: absolute;
+    z-index: 1;
+    top: calc(100% + 12px);
+    left: 50%;
+    transform: translate(-50%, -3px);
+    padding: 5px 9px;
+    border: 1px solid var(--af-line);
+    border-radius: 6px;
+    background: var(--af-paper);
+    color: var(--af-ink);
+    box-shadow: 0 3px 12px #142d2910;
+    font: 12px/1.5 var(--af-font);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 120ms ease, transform 120ms ease, visibility 120ms;
+  }
+  .theme-option:last-child .theme-tooltip { left: auto; right: -4px; transform: translateY(-3px); }
+  input:focus-visible ~ .theme-tooltip { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+  .theme-option:last-child input:focus-visible ~ .theme-tooltip { transform: translateY(0); }
+  @media (hover: hover) {
+    .theme-option:hover .theme-tooltip { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+    .theme-option:last-child:hover .theme-tooltip { transform: translateY(0); }
+  }
+  @media (pointer: coarse) { .theme-control { --theme-option-size: 40px; } }
+  @media (prefers-reduced-motion: reduce) {
+    .theme-control::before, .theme-option-face, .theme-tooltip { transition: none; }
+  }
+</style>

@@ -1,0 +1,10 @@
+[package]
+name = "multilingual_basic_task"
+version = "0.0.0"
+edition = "2021"
+[workspace]
+[[bin]]
+name = "multilingual_basic_task"
+path = "main.rs"
+[dependencies]
+ankiforge = "=0.3.1"

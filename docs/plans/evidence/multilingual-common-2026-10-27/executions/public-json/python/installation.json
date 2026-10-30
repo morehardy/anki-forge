@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-10-28T06:57:44.013Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "node": "v24.19.0",
+  "language": "python",
+  "source": {
+    "download_info": {
+      "url": "https://files.pythonhosted.org/packages/27/4e/b507bd4f13c3e1ae2e7e843a8274fa3a143fd023b71e0c8b75188ff688c6/ankiforge-0.3.1-cp311-abi3-macosx_11_0_arm64.whl",
+      "archive_info": {
+        "hashes": {
+          "sha256": "632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1"
+        },
+        "hash": "sha256=632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1"
+      }
+    },
+    "is_direct": false,
+    "is_yanked": false,
+    "requested": true,
+    "metadata": {
+      "metadata_version": "2.4",
+      "name": "ankiforge",
+      "version": "0.3.1",
+      "summary": "Python Product API for Anki Forge",
+      "description": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/morehardy/anki-forge/main/docs/assets/brand/ankiforge-dark.svg\">\n    <img src=\"https://raw.githubusercontent.com/morehardy/anki-forge/main/docs/assets/brand/ankiforge.svg\" alt=\"Anki Forge logo: stacked cards with a folded corner and card loop\" width=\"96\" height=\"96\">\n  </picture>\n</p>\n\n<h1 align=\"center\">anki-forge</h1>\n\n<p align=\"center\">\n  <a href=\"https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/morehardy/anki-forge/contract-ci.yml?branch=main&label=tests%20passing\" alt=\"Tests passing\"></a>\n  <a href=\"https://pypi.org/project/ankiforge/\"><img src=\"https://img.shields.io/pypi/v/ankiforge?logo=pypi\" alt=\"PyPI version\"></a>\n  <a href=\"https://ankiforge.dev/docs/\"><img src=\"https://img.shields.io/badge/docs-ankiforge.dev-blue\" alt=\"Documentation\"></a>\n  <a href=\"https://github.com/morehardy/anki-forge/blob/main/LICENSE\"><img src=\"https://img.shields.io/badge/License-MIT-blue.svg\" alt=\"License: MIT\"></a>\n</p>\n\n<p align=\"center\">Python SDK</p>\n\nBuild Basic, Cloze, Image Occlusion and custom cards, package media, and check updates before distributing a new deck.\n\n## Install\n\nUse an ordinary CPython interpreter with a matching platform wheel; CPython 3.11/3.12 are verified in the recorded package checks. See [verified environments](https://ankiforge.dev/docs/compatibility/).\nThe public package is [`ankiforge` 0.3.1](https://pypi.org/project/ankiforge/).\n\n```sh\npython -m venv .venv\n. .venv/bin/activate\npython -m pip install ankiforge==0.3.1\n```\n\nOn Windows, activate the environment with `.venv\\Scripts\\Activate.ps1`.\n\n## Your first deck\n\nSave this as `main.py`:\n\n<!-- source: bindings/python/examples/quickstart.py -->\n```python\nfrom ankiforge import Project, Note, BuildOptions\n\nproject = Project('spanish', default_deck='Spanish')\nproject.add('es:hola', Note.basic('hola', 'hello'))\noutput = project.build(BuildOptions.to('spanish.apkg'))\nprint(output.artifact.path)\n```\n<!-- /source -->\n\n```sh\npython main.py\n```\n\nOpen the persistent `spanish.apkg` in Anki. It contains one Basic card in **Spanish**, with **hola → hello**. Keep `spanish` and `es:hola` stable when editing this publication.\n\n## Continue\n\n- [Complete quickstart](https://ankiforge.dev/docs/python-quickstart/)\n- [Images and audio](https://ankiforge.dev/docs/media/)\n- [Custom note types](https://ankiforge.dev/docs/custom-notetypes/) and [template bundles](https://ankiforge.dev/docs/templates/)\n- [Image Occlusion](https://ankiforge.dev/docs/image-occlusion/)\n- [Compare and update](https://ankiforge.dev/docs/updates/)\n- [Python API](https://ankiforge.dev/docs/python-api/)\n- [Build SDKs from source](https://ankiforge.dev/docs/development/)\n\n",
+      "description_content_type": "text/markdown; charset=UTF-8; variant=GFM",
+      "license_expression": "MIT",
+      "license_file": [
+        "LICENSE",
+        "THIRD_PARTY_NOTICES.md"
+      ],
+      "requires_python": ">=3.11",
+      "project_url": [
+        "Documentation, https://ankiforge.dev/docs/python-quickstart/",
+        "Homepage, https://ankiforge.dev/",
+        "Issues, https://github.com/morehardy/anki-forge/issues",
+        "Repository, https://github.com/morehardy/anki-forge"
+      ]
+    }
+  },
+  "contract": "3 notes / 3 cards / 2 exact media; stable identity; one answer changed; compare + review policy allowed; v1 preserved"
+}

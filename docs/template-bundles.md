@@ -1,5 +1,11 @@
 # Template bundles
 
+Reuse the same Anki card design across decks: keep a note type's templates, CSS
+and media in one directory and load it for normal or Cloze cards. The examples
+use Rust; Python and Node.js load bundles with `NoteType.from_bundle` and
+`NoteType.fromBundle` (see the [Python API](python/api.md#models-and-templates)
+and [Node API](node/api.md#immutable-models)).
+
 A bundle is a reusable model declaration, template text, CSS and explicit media
 closure. `NoteType::from_bundle(directory)` validates the complete bundle and
 takes owned snapshots before returning the same immutable `NoteType` used by

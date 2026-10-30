@@ -36,7 +36,6 @@ code { font-size: 0.86em; }
 .github-link svg { overflow: visible; }
 .github-tail { transform-box: view-box; transform-origin: 40.625% 81.25%; }
 .header-tools { display: flex; align-items: center; gap: 16px; }
-.theme-label select { border: 1px solid var(--af-line); background: var(--af-bg); color: var(--af-muted); font-size: 12px; border-radius: 6px; padding: 6px 7px; min-height: 34px; }
 .mobile-menu { display: none; font-size: 14px; }
 .mobile-menu summary { list-style: none; padding: 8px 0 8px 6px; }
 .mobile-menu summary::-webkit-details-marker { display: none; }
@@ -130,7 +129,7 @@ code { font-size: 0.86em; }
 .post-card h3 a:hover { color: var(--af-accent); }
 .post-card p { color: var(--af-muted); font-size: 15px; margin: 13px 0 17px; }
 .site-footer { padding: 28px 0 32px; border-top: 1px solid var(--af-line); display: flex; justify-content: space-between; align-items: center; gap: 30px; color: var(--af-muted); font-size: 12px; }
-.site-footer nav { display: flex; align-items: center; gap: 24px; }
+.site-footer nav { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; max-width: 100%; }
 .site-footer a { color: var(--af-muted); text-decoration: none; }
 .page-intro { padding-block: 65px 48px; max-width: 750px; }
 .page-intro h1, .article-header h1 { font-size: clamp(39px, 4.7vw, 57px); line-height: 1.12; }
@@ -224,7 +223,6 @@ code { font-size: 0.86em; }
 @media (max-width: 374px) {
   .container { width: calc(100% - 32px); }
   .wordmark { font-size: 20px; gap: 6px; }
-  .theme-label select { max-width: 75px; }
   .identity-controls { flex-direction: column; align-items: flex-start; gap: 0; }
   .identity-controls p { max-width: none; }
   .card-preview { padding-inline: 18px; }
@@ -237,7 +235,6 @@ code { font-size: 0.86em; }
 @media (max-width: 767px) {
   .site-header { column-gap: 10px; row-gap: 8px; }
   .header-tools { gap: 8px; }
-  .theme-label select { max-width: 88px; }
 }
 @media (max-width: 420px) {
   .site-header .wordmark > span:last-child { display: none; }

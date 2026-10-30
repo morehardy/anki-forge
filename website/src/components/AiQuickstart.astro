@@ -1,5 +1,5 @@
 ---
-interface Props { locale?: 'en' | 'zh-CN' }
+interface Props { locale?: string }
 const { locale = 'en' } = Astro.props;
 import { createTranslator } from '../i18n/messages.mjs';
 const t = createTranslator(locale);
@@ -9,8 +9,17 @@ import Icon from './Icon.astro';
 import data from '../generated/ai-quickstart.json';
 import { renderPrompt } from '../lib/ai-quickstart.mjs';
 import { repository } from '../lib/site';
+import { serializeClientMessages } from '../i18n/client-messages.mjs';
+const requestMarker = '__ANKI_FORGE_TASK_INPUT__';
+const clientTemplates = Object.fromEntries(Object.keys(data.languages).map(sdk => {
+  const prompt = renderPrompt(data, sdk, requestMarker, locale);
+  const split = prompt.split(requestMarker);
+  if (split.length !== 2) throw new Error(`Expected one request placeholder: ${sdk}/${locale}`);
+  return [sdk, { before: split[0], after: split[1], empty: renderPrompt(data, sdk, '', locale) }];
+}));
 ---
 <section data-module="ai-quickstart" id="ai-quickstart" class="ai-quickstart" data-ai-quickstart data-ai-locale={locale} aria-labelledby="ai-heading">
+  <script is:inline type="application/json" data-ai-templates set:html={serializeClientMessages(clientTemplates)} />
   <div class="ai-intro">
     <h2 id="ai-heading">{t('ai.title')}</h2>
     <p>{t('ai.description')}</p>

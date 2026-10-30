@@ -3,6 +3,10 @@
 /.astro/
 /.cache/
 /src/generated/
+# Imported English Markdown and all translated Starlight copies are generated.
+# Authored English entry pages remain .mdx; translated sources live in ../docs/.
+/src/content/docs/docs/*.md
+/src/content/docs/*/docs/
 /src/content/docs/docs/rust-guide.md
 /src/content/docs/docs/templates.md
 /src/content/docs/docs/api.md

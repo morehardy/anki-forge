@@ -1,0 +1,117 @@
+{
+  "observedAt": "2026-10-28T07:19:38.849Z",
+  "sourceRoot": "/tmp/anki-seo-validated-20261028",
+  "manifestSha256": "d4ef074dcc04b958d00357012e6bb9700d5cfdc29c6cf622f8dd1c39908b0408",
+  "status": "passed",
+  "cases": [
+    {
+      "locale": "en",
+      "origin": "default",
+      "query": "",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "BUTTON",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "en",
+      "origin": "default",
+      "query": "zzzznonexistentterm62zzzz",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "BUTTON",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "en",
+      "origin": "trigger",
+      "query": "",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "BUTTON",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "en",
+      "origin": "trigger",
+      "query": "zzzznonexistentterm62zzzz",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "BUTTON",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "en",
+      "origin": "link",
+      "query": "",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "A",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "en",
+      "origin": "link",
+      "query": "zzzznonexistentterm62zzzz",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "A",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "zh-CN",
+      "origin": "default",
+      "query": "",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "BUTTON",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "zh-CN",
+      "origin": "default",
+      "query": "zzzznonexistentterm62zzzz",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "BUTTON",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "zh-CN",
+      "origin": "trigger",
+      "query": "",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "BUTTON",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "zh-CN",
+      "origin": "trigger",
+      "query": "zzzznonexistentterm62zzzz",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "BUTTON",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "zh-CN",
+      "origin": "link",
+      "query": "",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "A",
+      "expectedFocusRestored": true
+    },
+    {
+      "locale": "zh-CN",
+      "origin": "link",
+      "query": "zzzznonexistentterm62zzzz",
+      "dialogOpenAfterEscape": false,
+      "queryRetained": true,
+      "focusedTag": "A",
+      "expectedFocusRestored": true
+    }
+  ],
+  "method": "Real Chrome keypresses with empty and nonempty native search input, from body, trigger and a focused link. Assertions require dialog closure, query retention and original focus restoration."
+}

@@ -10,8 +10,11 @@ on:
       - 'Cargo.toml'
       - 'Cargo.lock'
       - 'docs/**'
-      - 'scripts/generate_readme_assets.py'
-      - 'scripts/packaged_consumer/**'
+      - 'scripts/**'
+      - 'contracts/**'
+      - '.cargo/**'
+      - 'rust-toolchain'
+      - 'rust-toolchain.toml'
       - 'bindings/**'
       - 'README.md'
       - 'README.zh-CN.md'
@@ -26,8 +29,11 @@ on:
       - 'Cargo.toml'
       - 'Cargo.lock'
       - 'docs/**'
-      - 'scripts/generate_readme_assets.py'
-      - 'scripts/packaged_consumer/**'
+      - 'scripts/**'
+      - 'contracts/**'
+      - '.cargo/**'
+      - 'rust-toolchain'
+      - 'rust-toolchain.toml'
       - 'bindings/**'
       - 'README.md'
       - 'README.zh-CN.md'
@@ -55,6 +61,8 @@ jobs:
         working-directory: website
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
@@ -67,6 +75,10 @@ jobs:
       - name: Fetch locked dependencies for offline documentation consumers
         run: cargo fetch --locked --manifest-path ../Cargo.toml
       - run: npm ci
+      - name: Select historic compatibility contracts from the immutable base
+        env:
+          SURFACE_BASE_REVISION: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
+        run: node scripts/trusted-surface.mjs "$SURFACE_BASE_REVISION" "$RUNNER_TEMP/anki-forge-historic-surface"
       - name: Install browser and Chinese social-image fonts
         timeout-minutes: 10
         run: bash scripts/setup-browser-ci.sh
@@ -83,15 +95,15 @@ jobs:
           SITE_DEPLOYMENT: preview
         run: |
           npm run build
-          npm run check:site
-          npm run check:gates
-          npm run test:browser
+          npm run check:rebuild
+          npm run verify:release
+          npm run check:release
       - name: Verify root deployment and prepare the release artifact
         run: |
           npm run build
-          npm run check:site
-          npm run check:gates
-          npm run test:browser
+          npm run check:rebuild
+          npm run verify:release
+          npm run check:release
       - uses: actions/upload-artifact@v4
         with:
           name: website-verified-manifest
@@ -101,6 +113,11 @@ jobs:
         with:
           name: website-browser-evidence
           path: target/website-i18n-62/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: website-localization-evidence
+          path: target/website-localization/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: website/dist
@@ -125,6 +142,7 @@ jobs:
           python bindings/python/examples/docs_basic.py target/docs-python/basic
           python bindings/python/examples/docs_media.py target/docs-python/media
           python bindings/python/examples/native_workflow.py target/docs-python/workflow
+          python bindings/python/tests/test_csv_recipe.py
 
   node-examples:
     runs-on: ubuntu-latest

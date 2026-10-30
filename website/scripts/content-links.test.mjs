@@ -34,3 +34,10 @@ test('translated core guides keep their topic and deployment base', () => {
   assert.equal(rewriteTarget('json-to-anki.md#python', 'docs/zh-cn/languages.md', '/anki-forge'), '/anki-forge/zh-cn/docs/json-to-anki/#python');
   assert.equal(rewriteTarget('../python/api.md', 'docs/zh-cn/python-quickstart.md', '/'), '/zh-cn/docs/python-api/');
 });
+
+test('explicit locale keeps links local without inferring locale from the source path', () => {
+  assert.equal(rewriteTarget('template-bundles.md#fields', 'docs/rust-guide.md', '/', 'zh-CN'), '/zh-cn/docs/templates/#fields');
+  assert.equal(rewriteTarget('/docs/cards/?view=all#card', 'docs/cards.md', '/project', 'zh-CN'), '/project/zh-cn/docs/cards/?view=all#card');
+  assert.equal(rewriteTarget('/zh-cn/docs/cards/', 'docs/cards.md', '/', 'en'), '/docs/cards/');
+  assert.throws(() => rewriteTarget('/docs/cards/', 'docs/cards.md', '/', 'es'), /Unreleased/);
+});

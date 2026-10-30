@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Independent AI-designed acceptance queries for local Pagefind discovery of the new CSV and AI workflows. These are task fixtures, not observed user queries, external ranking evidence or search-volume measurements.",
+  "reviewerRun": "/root/seo_research:seo-content-review-2026-10-27",
+  "createdDate": "2026-10-27",
+  "timezone": "America/Los_Angeles",
+  "selectionMethod": "Authored from the complete new English and Chinese page content and product boundaries before reading any search result output for these queries. No ranking or existing query fixture was changed.",
+  "locales": {
+    "en": [
+      {
+        "id": "seo-en-csv",
+        "locale": "en",
+        "kind": "core",
+        "intentId": "spreadsheet-to-apkg",
+        "query": "CSV to Anki with Python",
+        "expectedPageIds": ["csv-to-anki"],
+        "expectedTask": "Find the UTF-8 CSV sample, complete Python script and APKG verification steps.",
+        "provenance": "independent-ai-authored-task-fixture",
+        "observedAt": null
+      },
+      {
+        "id": "seo-en-ai",
+        "locale": "en",
+        "kind": "core",
+        "intentId": "ai-draft-review-export",
+        "query": "AI Anki flashcards from notes",
+        "expectedPageIds": ["ai-anki-cards"],
+        "expectedTask": "Find a source-grounded drafting prompt, human review step and working CSV/JSON export path.",
+        "provenance": "independent-ai-authored-task-fixture",
+        "observedAt": null
+      },
+      {
+        "id": "seo-en-pdf-ocr-boundary",
+        "locale": "en",
+        "kind": "negative",
+        "intentId": "unsupported-pdf-ocr-conversion",
+        "query": "PDF to Anki OCR",
+        "expectedPageIds": ["ai-anki-cards"],
+        "expectedBoundary": "Empty results are allowed. The AI workflow page is an acceptable boundary explanation because it explicitly requires a separate tool for PDF/text extraction and OCR. It must not present Anki Forge as an implemented PDF uploader or OCR converter; successful retrieval alone does not establish that feature support.",
+        "provenance": "independent-ai-authored-task-fixture",
+        "observedAt": null
+      }
+    ],
+    "zh-CN": [
+      {
+        "id": "seo-zh-csv",
+        "locale": "zh-CN",
+        "kind": "core",
+        "intentId": "spreadsheet-to-apkg",
+        "query": "Excel 表格批量制卡",
+        "expectedPageIds": ["csv-to-anki"],
+        "expectedTask": "找到 Excel 先导出 UTF-8 CSV、运行 Python 脚本和检查 APKG 的完整流程。",
+        "provenance": "independent-ai-authored-task-fixture",
+        "observedAt": null
+      },
+      {
+        "id": "seo-zh-ai",
+        "locale": "zh-CN",
+        "kind": "core",
+        "intentId": "ai-draft-review-export",
+        "query": "AI 根据笔记生成 Anki 卡片",
+        "expectedPageIds": ["ai-anki-cards"],
+        "expectedTask": "找到依据原文起草、人工核对、保持 ID 并导出 APKG 的流程。",
+        "provenance": "independent-ai-authored-task-fixture",
+        "observedAt": null
+      },
+      {
+        "id": "seo-zh-pdf-ocr-boundary",
+        "locale": "zh-CN",
+        "kind": "negative",
+        "intentId": "unsupported-pdf-ocr-conversion",
+        "query": "PDF OCR 自动制卡",
+        "expectedPageIds": ["ai-anki-cards"],
+        "expectedBoundary": "允许无结果。AI 工作流页明确要求先用其他工具提取并核对 PDF/扫描件文字，所以可以作为能力边界解释页；不能把检索命中解释成 Anki Forge 已支持 PDF 上传、OCR 或自动图片识别制卡。",
+        "provenance": "independent-ai-authored-task-fixture",
+        "observedAt": null
+      }
+    ]
+  }
+}

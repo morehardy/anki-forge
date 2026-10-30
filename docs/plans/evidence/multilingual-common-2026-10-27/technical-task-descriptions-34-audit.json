@@ -1,0 +1,2723 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/independent_technical_source_review/2026-10-29/task-descriptions-34",
+  "reviewedAt": "2026-10-29T13:32:13.360Z",
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-task-descriptions-34.json",
+    "sha256": "c90a215e990eb6e1d4b5b40ab95e725b9d02adad9531ff93dff4a2972fc2be4e"
+  },
+  "priorReview": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review-before-task-descriptions.json",
+    "sha256": "e7567230ef8d3111efc85f32dce12621811fa359ed646c9e7783c410f8acaa1a"
+  },
+  "priorSnapshot": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-locale-data-34.json",
+    "sha256": "4d3607950df598a2aa6eb3ff9e6f9fbf03ca11285e3250c1cf7b0b52b0b03105",
+    "scope": "Locale-data source set (127 candidate inputs, 14 implementation files); every candidate input equals its d9f5354 blob and content-addressed copy."
+  },
+  "scope": "Targeted technical delta review of commit 3cf5aed (d9f5354..HEAD 109c254; 109c254 only edits .gitattributes) for the 58 stale docs page/locale records (29 docs topics × en/zh-CN): every new or changed title, description, opening sentence and link checked against the published ankiforge 0.3.1 public API, the page task, prerequisites and program identity, and same-locale link/anchor resolution in built output. Supporting review of the README link additions in README.md, README.zh-CN.md, anki_forge/README.md, bindings/node/README.md and bindings/python/README.md. The 10 home/examples/blog/article records are unchanged and not re-reviewed. Unchanged prior full content evidence reused with exact-byte and rendered-byte proof.",
+  "authorshipDisclosure": "This reviewer (run /root/independent_technical_source_review/2026-10-29/task-descriptions-34) did not author any part of commit 3cf5aed (the site-model.mjs titles and descriptions, the quickstart retitles, the English and Chinese opening paragraphs and their API links, the README link additions and the implementation-record note were written by the coordinator) or of 109c254 (.gitattributes), nor any earlier evidence. This reviewer wrote only the evidence files of this run (the input snapshot and its new content-addressed copies, the probe, the audit) and this report update, and changed no product or source file; the preview builds wrote only ignored build output. This record is therefore an independent technical review of the 58 docs page/locale records and a supporting review of the five README link additions.",
+  "evidence": [
+    "Inputs: all 127 files of the prior immutable snapshot docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-locale-data-34.json (SHA-256 4d3607950df598a2aa6eb3ff9e6f9fbf03ca11285e3250c1cf7b0b52b0b03105) equal their d9f5354 blobs, the git-archive extraction and their content-addressed copies. Against HEAD exactly 16 candidate inputs differ: website/site-model.mjs, website/src/content/docs/docs/quickstart.mdx, docs/{cards,image-occlusion,media,template-bundles,updates}.md, docs/node/quick-start.md, docs/python/quick-start.md and docs/zh-cn/{cards,image-occlusion,media,templates,updates,node-quickstart,python-quickstart}.md; the other 111 are byte-identical, and none of the 14 implementation files changed d9f5354..HEAD. git diff --name-only d9f5354 HEAD lists only those 16, the five READMEs, .gitattributes and docs/plans/2026-10-27-anki-search-discovery-implementation.md. website/README.md moved between the locale-data snapshot and d9f5354 (166abec): it now lists the `language-briefs.json` entry, which resolves that audit's third minor observation. Regenerating the candidate with website/scripts/content-review-candidates.mjs to stdout produced SHA-256 c90a215e990eb6e1d4b5b40ab95e725b9d02adad9531ff93dff4a2972fc2be4e, identical to the file under review.",
+    "Fingerprints: d9f5354 code on d9f5354 bytes reproduces all 68 triples of the prior report copy (= the unchanged website/content-reviews.json); current code on current bytes reproduces all 68 candidate triples and inputFiles. Exactly the 58 docs records change sourceHash and targetHash (zh-CN source hashes include the en model titles); no technicalDependencyHash and no inputFiles list changed; the 10 home/examples/blog/article triples are identical.",
+    "Read git show 3cf5aed in full. website/site-model.mjs changes exactly lines 27 (quickstart title), 77 (templates description), 105 (cards description), 119 (media description), 126 (image-occlusion description), 133 (updates description), 167-168 (node-quickstart title and description) and 181-182 (python-quickstart title and description), each in both locales. The probe confirms the eight pages differ only in those title/description fields and their metadata mirrors; docGroups, navigation, footer, nextTasks, homepage modules, routes and source paths are identical, documentation entries differ only in title/description, and the Starlight options built by the actual astro.config.mjs differ only in the labels and zh-CN translations of docs/quickstart, docs/node-quickstart and docs/python-quickstart. quickstart.mdx:2 and the H1 lines of the four md quickstarts equal the model titles.",
+    "Page sources: 15 of the 29×2 docs sources changed. For every docs source the ## headings, section markers, stable section mapping (including legacy aliases) and <!-- source --> program references are identical, and each changed source is byte-identical from its first ## heading on. The changes are the title line of the six quickstart sources (opening text unchanged) and the opening paragraphs of cards (en 3-9, zh 3), image-occlusion (en 3-8 and 12-14, zh 3-5), media (en 3-8, zh 3-4), template-bundles/templates (en 3-8, zh 3-4) and updates (en 3-7, zh 3-4). Each opening still introduces the same task, keeps the existing prerequisites and points to the same Rust programs (docs_workflow cards/occlusion/media/bundle/updates).",
+    "API truth: anki-forge-v0.3.1, npm-v0.3.1 and python-v0.3.1 all name 480cfd0; note.py, notetype.py, media.py, index.ts, occlusion.rs and bundle.rs at the tag equal the working tree. Quoted: note.py `def basic(front: str | Content, back: str | Content) -> Note:`, `def cloze(text: str | Content) -> Note:`, `def image_occlusion(image: Media) -> ImageOcclusionBuilder:`, `HIDE_ALL_GUESS_ONE = \"hide_all_guess_one\"`, `HIDE_ONE_GUESS_ONE = \"hide_one_guess_one\"`; notetype.py `def from_bundle(path: PathInput, *, limits: MediaLimits = MediaLimits()) -> NoteType:`; media.py `def files(paths: Iterable[PathInput], *, limits: MediaLimits = MediaLimits()) -> list[Media]:`; index.ts `static basic(front: ContentLike, back: ContentLike): Note {`, `static cloze(text: ContentLike): Note {`, `static imageOcclusion(image: Media): ImageOcclusionBuilder {`, `export type OcclusionMode = \"hide_all_guess_one\" | \"hide_one_guess_one\";`, `static async fromBundle(`, `static async files(`; occlusion.rs renders one cloze ordinal per mask key (`let ordinal = ordinals[&mask.key];`) and has no detection. The linked reference sections (docs/python/api.md, docs/node/api.md and zh-cn counterparts) document these same entries.",
+    "Runtime with the published packages (not the repository build): the ankiforge 0.3.1 Python wheel from files.pythonhosted.org (SHA-256 632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1 per the locale-data pip report; 16 installed files match its RECORD hashes) and ankiforge 0.3.1 from registry.npmjs.org (lockfile integrity sha512-kOqS5BGp4rc0JOeWQjtWI5SQ+EodyGa0eR13HE8+s9CNIxzytlTBqToLBQODzJnw0gVyaXU2Bw3bX4b0n+mOWA==), both installed earlier by the locale-data acceptance under /private/tmp/anki-forge-locale-data-execution. In Python and in Node: Note.basic + Note.cloze (c1/c2, back_extra) → 2 notes, 3 cards; NoteType.from_bundle/fromBundle(custom-cloze) → 1 note, 2 cards; custom-normal → 1 note, 1 card, 1 media; Note.image_occlusion/imageOcclusion with three Mask.rect masks → 1 note, 3 cards, 1 media in the default and in hide-one-guess-one mode; Media.files([pixel.png, silence.wav]) with image()/sound() → 1 note, 1 card, 2 media. Python NoteType.from_bundle(path, MediaLimits()) raises “NoteType.from_bundle() takes 1 positional argument but 2 were given” (minor openIssue).",
+    "Links: the 12 new page links (cards, image-occlusion, templates × 2 targets × 2 locales) rewrite through content-links.mjs to the same-locale python-api/node-api routes and appear once in the built opening with the right text. In en the fragment is the h2 itself (“Project and note values”, “Project and notes”, “Media and occlusion”, “Media and Image Occlusion”, “Models and templates”, “Immutable models”); in zh-CN it is a data-section-alias span immediately before “Project 与笔记值”, “Project 与笔记”, “媒体与遮挡”, “媒体与图片遮挡”, “模型与模板” and “不可变模型”, whose section-contracts mapping equals the anchor. Each target section's text contains the named API. Markdown exports keep the absolute same-locale links. A site-wide check of same-site links in main content found 1026 links and 278 fragments at HEAD (d9f5354: 1014/266), all resolving. The media opening's “batch import below” is true in both locales: the built batch section after it shows await Media.files([...]) for Node and Media.files([...]) for Python.",
+    "Builds: d9f5354 extracted with git archive into a scratch repository with a cloned website/node_modules (a symlinked node_modules failed Astro's module resolution and was replaced; that failed attempt re-optimized the ignored website/node_modules/.vite cache, which a later HEAD rebuild shows has no effect on output). Its build-input identity recomputes to 44821de01215cb0c93f8ba15f5608c3395602fd8715651dc5518409ccd059c00, equal to docs/plans/evidence/multilingual-locale-data-2026-10-28/prefix-origin-manifest.json; its CONTENT_REVIEW_MODE=preview build equals that manifest for every file apart from the 9 known volatile ones (7 APKGs, showcase.json, pagefind-entry.json) and lacks only generated/cell-diagram.png (see openIssues). Two CONTENT_REVIEW_MODE=preview builds of HEAD in website/: all 69 HTML pages byte-identical between runs. HEAD vs d9f5354: 87 changed files = the 58 docs HTML pages, 16 Markdown exports, llms.txt and zh-cn/llms.txt, generated/search-en.json and search-zh-cn.json, plus the 9 volatile files; 24 content-addressed Pagefind files per side are renamed. 48 HTML pages are byte-identical after normalizing the sidebar-state hash, the three quickstart titles and the seven changed descriptions; the 10 pages with new openings differ only in leading paragraphs whose text equals the reviewed source (and equals d9f5354's for the replaced ones). The Markdown exports, both llms.txt files (exactly 8 entries each), both search directories (13 title/pageTitle/description fields each) and 16 Pagefind fragments change exactly those titles, descriptions and openings. showcase.json differs only in APKG identities and the source commit.",
+    "Tests executed: npm test in website/ passed 144/144; npm run check:docs, npm run check:ai (README AI blocks still in sync after the README edits) and CONTENT_REVIEW_MODE=preview npm run check:content passed; npm run check:surface passed against the trusted publication baselines (64 historic pages, retitled H1 anchors keep their role); node --test scripts/site-gates.test.mjs passed 9/15, the 6 built-site tests failing only with ENOENT for generated/site-manifest.json, which a preview build refuses to write. The non-preview check:content currently stops at “home/en: linguistic evidence digest changed” because docs/plans/evidence/multilingual-common-2026-10-27/linguistic-source-review.json is being modified by the separate linguistic review (uncommitted) and content-reviews.json has not been re-imported; this is expected before the coordinator imports both reports and is not a source defect.",
+    "README link additions (supporting review, not records): README.md adds “Common tasks:” links to https://ankiforge.dev/docs/csv-to-anki/ (“CSV to Anki with Python”), /docs/json-to-anki/, /docs/ai-anki-cards/ and /docs/anki-forge-vs-genanki/; README.zh-CN.md adds the four /zh-cn/docs/ equivalents; anki_forge/README.md adds /docs/json-to-anki/#rust and /docs/ai-anki-cards/; bindings/node/README.md adds /docs/json-to-anki/#node (“JSON to Anki with TypeScript”) and /docs/ai-anki-cards/; bindings/python/README.md adds /docs/csv-to-anki/, /docs/json-to-anki/#python and /docs/ai-anki-cards/. All 15 links are absolute production URLs on the canonical routes in the README's own locale; the fragments are the built h2 headings “Rust”, “Node” (the program that compiles TypeScript, main.mts) and “Python”; the CSV guide is the Python recipe (“CSV to Anki: generate flashcards with Python”). No defect found.",
+    "Not verified by this reviewer: browser or runtime interaction with the site, Pagefind/search ranking (check:search needs a browser and was not run), a non-preview release build or manifest, the root-origin (SITE_BASE=/) artifact, the 6 built-site gate tests that need a release manifest, deployment, the Rust snippets on these pages (unchanged and not re-executed), the content of docs/plans/2026-10-27-anki-search-discovery-implementation.md (not a review input), and linguistic quality, which stays with its independent reviewer.",
+    "This reviewer (run /root/independent_technical_source_review/2026-10-29/task-descriptions-34) did not author any part of commit 3cf5aed (the site-model.mjs titles and descriptions, the quickstart retitles, the English and Chinese opening paragraphs and their API links, the README link additions and the implementation-record note were written by the coordinator) or of 109c254 (.gitattributes), nor any earlier evidence. This reviewer wrote only the evidence files of this run (the input snapshot and its new content-addressed copies, the probe, the audit) and this report update, and changed no product or source file; the preview builds wrote only ignored build output. This record is therefore an independent technical review of the 58 docs page/locale records and a supporting review of the five README link additions."
+  ],
+  "verification": {
+    "executed": true,
+    "environment": "v24.19.0 on darwin; d9f5354 extracted with git archive into a scratch git repository (scratchpad) with a cloned website/node_modules and CARGO_TARGET_DIR pointing at the main checkout's target/ (both removed afterwards except the shared cargo cache); one CONTENT_REVIEW_MODE=preview npm run build of d9f5354 and two of HEAD in website/ with the default SITE_URL/SITE_BASE (prefix origin /anki-forge); published ankiforge 0.3.1 Python wheel and npm package from the locale-data acceptance installs; no browser execution, release manifest or deployment.",
+    "checks": 1945,
+    "passed": true,
+    "script": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-probe.mjs",
+      "sha256": "53c030adbf3b0a682d0542425c4b7b0301c7092894cce1bfb2b34cdce887a0a8"
+    },
+    "command": "node docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-probe.mjs <git-archive d9f5354 root> --before-dist <d9f5354 root>/website/dist --dist website/dist --rebuild-dist <first HEAD build copy> --python /private/tmp/anki-forge-locale-data-execution/python/venv/bin/python --node-package /private/tmp/anki-forge-locale-data-execution/node/node_modules/ankiforge",
+    "probeResults": {
+      "inputs": {
+        "priorSnapshotFiles": 127,
+        "candidateInputs": 127,
+        "changed": [
+          "docs/cards.md",
+          "docs/image-occlusion.md",
+          "docs/media.md",
+          "docs/node/quick-start.md",
+          "docs/python/quick-start.md",
+          "docs/template-bundles.md",
+          "docs/updates.md",
+          "docs/zh-cn/cards.md",
+          "docs/zh-cn/image-occlusion.md",
+          "docs/zh-cn/media.md",
+          "docs/zh-cn/node-quickstart.md",
+          "docs/zh-cn/python-quickstart.md",
+          "docs/zh-cn/templates.md",
+          "docs/zh-cn/updates.md",
+          "website/site-model.mjs",
+          "website/src/content/docs/docs/quickstart.mdx"
+        ],
+        "unchanged": 111,
+        "implementationFilesChanged": 0,
+        "implementationCommittedAfterPriorSnapshot": [
+          "website/README.md"
+        ],
+        "committedDiff": [
+          ".gitattributes",
+          "README.md",
+          "README.zh-CN.md",
+          "anki_forge/README.md",
+          "bindings/node/README.md",
+          "bindings/python/README.md",
+          "docs/cards.md",
+          "docs/image-occlusion.md",
+          "docs/media.md",
+          "docs/node/quick-start.md",
+          "docs/plans/2026-10-27-anki-search-discovery-implementation.md",
+          "docs/python/quick-start.md",
+          "docs/template-bundles.md",
+          "docs/updates.md",
+          "docs/zh-cn/cards.md",
+          "docs/zh-cn/image-occlusion.md",
+          "docs/zh-cn/media.md",
+          "docs/zh-cn/node-quickstart.md",
+          "docs/zh-cn/python-quickstart.md",
+          "docs/zh-cn/templates.md",
+          "docs/zh-cn/updates.md",
+          "website/site-model.mjs",
+          "website/src/content/docs/docs/quickstart.mdx"
+        ]
+      },
+      "fingerprints": {
+        "records": 68,
+        "stale": 58,
+        "current": [
+          "home/en",
+          "home/zh-CN",
+          "examples/en",
+          "examples/zh-CN",
+          "blog/en",
+          "blog/zh-CN",
+          "blog:your-first-anki-deck/en",
+          "blog:your-first-anki-deck/zh-CN",
+          "blog:stable-ids-and-deck-updates/en",
+          "blog:stable-ids-and-deck-updates/zh-CN"
+        ],
+        "changed": {
+          "sourceHash": 58,
+          "targetHash": 58,
+          "technicalDependencyHash": 0
+        }
+      },
+      "model": {
+        "changedPages": {
+          "quickstart": [
+            "metadata.en.title",
+            "metadata.zh-CN.title",
+            "title.en",
+            "title.zh-CN"
+          ],
+          "templates": [
+            "description.en",
+            "description.zh-CN",
+            "metadata.en.description",
+            "metadata.zh-CN.description"
+          ],
+          "cards": [
+            "description.en",
+            "description.zh-CN",
+            "metadata.en.description",
+            "metadata.zh-CN.description"
+          ],
+          "media": [
+            "description.en",
+            "description.zh-CN",
+            "metadata.en.description",
+            "metadata.zh-CN.description"
+          ],
+          "image-occlusion": [
+            "description.en",
+            "description.zh-CN",
+            "metadata.en.description",
+            "metadata.zh-CN.description"
+          ],
+          "updates": [
+            "description.en",
+            "description.zh-CN",
+            "metadata.en.description",
+            "metadata.zh-CN.description"
+          ],
+          "node-quickstart": [
+            "description.en",
+            "description.zh-CN",
+            "metadata.en.description",
+            "metadata.en.title",
+            "metadata.zh-CN.description",
+            "metadata.zh-CN.title",
+            "title.en",
+            "title.zh-CN"
+          ],
+          "python-quickstart": [
+            "description.en",
+            "description.zh-CN",
+            "metadata.en.description",
+            "metadata.en.title",
+            "metadata.zh-CN.description",
+            "metadata.zh-CN.title",
+            "title.en",
+            "title.zh-CN"
+          ]
+        },
+        "old": {
+          "quickstart": {
+            "title": {
+              "en": "Generate an Anki APKG with Rust",
+              "zh-CN": "用 Rust 生成 Anki APKG"
+            }
+          },
+          "templates": {
+            "description": {
+              "en": "Import complete reusable Cloze and normal templates, CSS and media.",
+              "zh-CN": "导入完整的普通与 Cloze 模板、CSS 和媒体。"
+            }
+          },
+          "cards": {
+            "description": {
+              "en": "Build two notes and three cards with a complete verified Rust example.",
+              "zh-CN": "运行完整 Rust 示例，用两个笔记生成三张卡片。"
+            }
+          },
+          "media": {
+            "description": {
+              "en": "Import images and audio, compose typed content, and manage export names, MIME types and media budgets.",
+              "zh-CN": "导入图片和音频，组合类型化内容，并管理导出名称、MIME 类型与媒体预算。"
+            }
+          },
+          "image-occlusion": {
+            "description": {
+              "en": "Create rectangle-based image questions in both occlusion modes.",
+              "zh-CN": "用矩形区域创建图像问题，了解两种遮挡模式。"
+            }
+          },
+          "updates": {
+            "description": {
+              "en": "Compare and build releases using verified original APKG baselines.",
+              "zh-CN": "以原始 APKG 为基线比较并构建新版本。"
+            }
+          },
+          "node-quickstart": {
+            "title": {
+              "en": "Generate an Anki APKG with Node.js",
+              "zh-CN": "用 Node.js 生成 Anki APKG"
+            },
+            "description": {
+              "en": "Install the public Node package and export your first deck.",
+              "zh-CN": "安装公开 Node 包并导出第一个牌组。"
+            }
+          },
+          "python-quickstart": {
+            "title": {
+              "en": "Generate an Anki APKG with Python",
+              "zh-CN": "用 Python 生成 Anki APKG"
+            },
+            "description": {
+              "en": "Install the public Python wheel and generate your first Anki APKG.",
+              "zh-CN": "安装公开 Python wheel 并生成第一个 Anki APKG。"
+            }
+          }
+        },
+        "sidebarItemsChanged": [
+          "docs/node-quickstart:label",
+          "docs/node-quickstart:translations.zh-CN",
+          "docs/python-quickstart:label",
+          "docs/python-quickstart:translations.zh-CN",
+          "docs/quickstart:label",
+          "docs/quickstart:translations.zh-CN"
+        ]
+      },
+      "sources": {
+        "quickstart/en": {
+          "source": "website/src/content/docs/docs/quickstart.mdx",
+          "firstLine": "changed",
+          "removed": [],
+          "added": [],
+          "links": []
+        },
+        "templates/en": {
+          "source": "docs/template-bundles.md",
+          "firstLine": "unchanged",
+          "removed": [],
+          "added": [
+            "Reuse the same Anki card design across decks: keep a note type's templates, CSS\nand media in one directory and load it for normal or Cloze cards. The examples\nuse Rust; Python and Node.js load bundles with `NoteType.from_bundle` and\n`NoteType.fromBundle` (see the [Python API](python/api.md#models-and-templates)\nand [Node API](node/api.md#immutable-models))."
+          ],
+          "links": [
+            {
+              "text": "Python API",
+              "target": "python/api.md#models-and-templates"
+            },
+            {
+              "text": "Node API",
+              "target": "node/api.md#immutable-models"
+            }
+          ]
+        },
+        "templates/zh-CN": {
+          "source": "docs/zh-cn/templates.md",
+          "firstLine": "unchanged",
+          "removed": [],
+          "added": [
+            "在多个牌组中复用同一套 Anki 卡片设计：把笔记类型的模板、CSS 和媒体放在同一目录中，用于普通卡片或 Cloze 卡片。示例使用 Rust；Python 和 Node.js 分别通过 `NoteType.from_bundle` 和 `NoteType.fromBundle` 加载模板包，参见 [Python API](../python/api.md#models-and-templates) 和 [Node API](../node/api.md#immutable-models)。"
+          ],
+          "links": [
+            {
+              "text": "Python API",
+              "target": "../python/api.md#models-and-templates"
+            },
+            {
+              "text": "Node API",
+              "target": "../node/api.md#immutable-models"
+            }
+          ]
+        },
+        "cards/en": {
+          "source": "docs/cards.md",
+          "firstLine": "unchanged",
+          "removed": [
+            "A Basic note has a front and back. A Cloze note generates one card for each\nsupported deletion number. This example creates two notes and three cards."
+          ],
+          "added": [
+            "Generate Anki Basic (question-and-answer) and Cloze (fill-in-the-blank) cards\nfrom code instead of adding them one at a time in Anki. A Basic note has a front\nand back. A Cloze note generates one card for each supported deletion number.\nThis Rust example creates two notes and three cards. Python and Node.js provide\nthe same `Note.basic` and `Note.cloze` constructors; see the\n[Python API](python/api.md#project-and-note-values) and\n[Node API](node/api.md#project-and-notes)."
+          ],
+          "links": [
+            {
+              "text": "Python API",
+              "target": "python/api.md#project-and-note-values"
+            },
+            {
+              "text": "Node API",
+              "target": "node/api.md#project-and-notes"
+            }
+          ]
+        },
+        "cards/zh-CN": {
+          "source": "docs/zh-cn/cards.md",
+          "firstLine": "unchanged",
+          "removed": [
+            "Basic 笔记有正面和背面。Cloze 笔记针对每个受支持的填空编号生成一张卡片。本例创建两条笔记和三张卡片。"
+          ],
+          "added": [
+            "用代码批量生成 Anki 问答（Basic）卡片和 Cloze 填空（挖空）卡片，无需在 Anki 中逐张添加。Basic 笔记有正面和背面。Cloze 笔记针对每个受支持的填空编号生成一张卡片。本例用 Rust 创建两条笔记和三张卡片。Python 和 Node.js 提供相同的 `Note.basic` 与 `Note.cloze` 构造方法，参见 [Python API](../python/api.md#project-and-note-values) 和 [Node API](../node/api.md#project-and-notes)。"
+          ],
+          "links": [
+            {
+              "text": "Python API",
+              "target": "../python/api.md#project-and-note-values"
+            },
+            {
+              "text": "Node API",
+              "target": "../node/api.md#project-and-notes"
+            }
+          ]
+        },
+        "media/en": {
+          "source": "docs/media.md",
+          "firstLine": "unchanged",
+          "removed": [],
+          "added": [
+            "Package images and audio into generated Anki cards, such as vocabulary cards\nwith pronunciation audio or diagram questions. Anki Forge copies the files you\nprovide into the APKG; creating the audio or images, for example with\ntext-to-speech, requires a separate tool. The examples use Rust; batch import\nbelow also shows the Python and Node.js calls."
+          ],
+          "links": []
+        },
+        "media/zh-CN": {
+          "source": "docs/zh-cn/media.md",
+          "firstLine": "unchanged",
+          "removed": [],
+          "added": [
+            "把图片和音频打包进生成的 Anki 卡片，例如带发音音频的单词卡或示意图题目。Anki Forge 将你提供的文件复制进 APKG；生成音频或图片（例如语音合成）需要使用其他工具。示例使用 Rust；下文的批量导入也给出了 Python 和 Node.js 调用。"
+          ],
+          "links": []
+        },
+        "image-occlusion/en": {
+          "source": "docs/image-occlusion.md",
+          "firstLine": "unchanged",
+          "removed": [
+            "Create a structured image-occlusion note from an owned image and rectangles.\nEach mask needs a stable key that continues to identify the same region through\nlater versions. The note joins a project through the ordinary `add(key, note)`\npath."
+          ],
+          "added": [
+            "Generate Anki Image Occlusion cards programmatically: supply an image and\nrectangle coordinates, and Anki Forge builds a note with one card per mask,\nready to import. Use it to produce diagram questions in batches without drawing\nmasks in Anki's editor. It does not detect labels in the image; you provide the\ncoordinates.",
+            "Create a structured image-occlusion note from an owned image and rectangles.\nEach mask needs a stable key that continues to identify the same region through\nlater versions. The note joins a project through the ordinary `add(key, note)`\npath. These examples use Rust; Python and Node.js provide the same builder in\nthe [Python API](python/api.md#media-and-occlusion) and\n[Node API](node/api.md#media-and-image-occlusion)."
+          ],
+          "links": [
+            {
+              "text": "Python API",
+              "target": "python/api.md#media-and-occlusion"
+            },
+            {
+              "text": "Node API",
+              "target": "node/api.md#media-and-image-occlusion"
+            }
+          ]
+        },
+        "image-occlusion/zh-CN": {
+          "source": "docs/zh-cn/image-occlusion.md",
+          "firstLine": "unchanged",
+          "removed": [
+            "使用拥有所有权的图像与矩形创建结构化图片遮挡笔记。每个遮罩需要稳定键，在后续版本中继续标识同一区域。笔记通过普通 `add(key, note)` 加入项目。"
+          ],
+          "added": [
+            "用代码批量生成 Anki 图片遮挡（图片挖空）卡片：提供图片和矩形坐标，Anki Forge 生成笔记，每个遮罩对应一张卡片，可直接导入。适合批量制作示意图题目，无需在 Anki 编辑器中逐个绘制遮罩。本库不会自动识别图中的标签，坐标由你提供。",
+            "使用拥有所有权的图像与矩形创建结构化图片遮挡笔记。每个遮罩需要稳定键，在后续版本中继续标识同一区域。笔记通过普通 `add(key, note)` 加入项目。示例使用 Rust；Python 和 Node.js 提供相同的构建器，参见 [Python API](../python/api.md#media-and-occlusion) 和 [Node API](../node/api.md#media-and-image-occlusion)。"
+          ],
+          "links": [
+            {
+              "text": "Python API",
+              "target": "../python/api.md#media-and-occlusion"
+            },
+            {
+              "text": "Node API",
+              "target": "../node/api.md#media-and-image-occlusion"
+            }
+          ]
+        },
+        "updates/en": {
+          "source": "docs/updates.md",
+          "firstLine": "unchanged",
+          "removed": [],
+          "added": [
+            "Publish corrections or new cards for an Anki deck you have already distributed.\nStable note IDs help Anki Forge and Anki recognize existing notes instead of\ntreating them as new ones; Anki's import settings and newer local edits still\naffect what changes."
+          ],
+          "links": []
+        },
+        "updates/zh-CN": {
+          "source": "docs/zh-cn/updates.md",
+          "firstLine": "unchanged",
+          "removed": [],
+          "added": [
+            "为已经分发的 Anki 牌组发布修正或新增卡片。稳定笔记 ID 帮助 Anki Forge 和 Anki 识别已有笔记，而不是把它们当成新笔记；Anki 导入设置与较新的本地编辑仍会影响最终变化。"
+          ],
+          "links": []
+        },
+        "node-quickstart/en": {
+          "source": "docs/node/quick-start.md",
+          "firstLine": "changed",
+          "removed": [],
+          "added": [],
+          "links": []
+        },
+        "node-quickstart/zh-CN": {
+          "source": "docs/zh-cn/node-quickstart.md",
+          "firstLine": "changed",
+          "removed": [],
+          "added": [],
+          "links": []
+        },
+        "python-quickstart/en": {
+          "source": "docs/python/quick-start.md",
+          "firstLine": "changed",
+          "removed": [],
+          "added": [],
+          "links": []
+        },
+        "python-quickstart/zh-CN": {
+          "source": "docs/zh-cn/python-quickstart.md",
+          "firstLine": "changed",
+          "removed": [],
+          "added": [],
+          "links": []
+        }
+      },
+      "links": {
+        "newLinks": [
+          {
+            "page": "cards/en",
+            "target": "python/api.md#project-and-note-values",
+            "href": "/anki-forge/docs/python-api/#project-and-note-values",
+            "heading": "Project and note values",
+            "identifiers": [
+              "Note.basic(front, back)",
+              "Note.cloze(text)"
+            ]
+          },
+          {
+            "page": "cards/en",
+            "target": "node/api.md#project-and-notes",
+            "href": "/anki-forge/docs/node-api/#project-and-notes",
+            "heading": "Project and notes",
+            "identifiers": [
+              "Note.basic(front, back)",
+              "Note.cloze(text)"
+            ]
+          },
+          {
+            "page": "cards/zh-CN",
+            "target": "../python/api.md#project-and-note-values",
+            "href": "/anki-forge/zh-cn/docs/python-api/#project-and-note-values",
+            "heading": "Project 与笔记值",
+            "identifiers": [
+              "Note.basic(front, back)",
+              "Note.cloze(text)"
+            ]
+          },
+          {
+            "page": "cards/zh-CN",
+            "target": "../node/api.md#project-and-notes",
+            "href": "/anki-forge/zh-cn/docs/node-api/#project-and-notes",
+            "heading": "Project 与笔记",
+            "identifiers": [
+              "Note.basic(front, back)",
+              "Note.cloze(text)"
+            ]
+          },
+          {
+            "page": "image-occlusion/en",
+            "target": "python/api.md#media-and-occlusion",
+            "href": "/anki-forge/docs/python-api/#media-and-occlusion",
+            "heading": "Media and occlusion",
+            "identifiers": [
+              "Note.image_occlusion(media)",
+              "Mask.rect(",
+              "OcclusionMode.HIDE_ONE_GUESS_ONE",
+              "HIDE_ALL_GUESS_ONE"
+            ]
+          },
+          {
+            "page": "image-occlusion/en",
+            "target": "node/api.md#media-and-image-occlusion",
+            "href": "/anki-forge/docs/node-api/#media-and-image-occlusion",
+            "heading": "Media and Image Occlusion",
+            "identifiers": [
+              "Note.imageOcclusion(image)",
+              "Mask.rect(",
+              "hide_one_guess_one",
+              "hide_all_guess_one"
+            ]
+          },
+          {
+            "page": "image-occlusion/zh-CN",
+            "target": "../python/api.md#media-and-occlusion",
+            "href": "/anki-forge/zh-cn/docs/python-api/#media-and-occlusion",
+            "heading": "媒体与遮挡",
+            "identifiers": [
+              "Note.image_occlusion(media)",
+              "Mask.rect(",
+              "OcclusionMode.HIDE_ONE_GUESS_ONE",
+              "HIDE_ALL_GUESS_ONE"
+            ]
+          },
+          {
+            "page": "image-occlusion/zh-CN",
+            "target": "../node/api.md#media-and-image-occlusion",
+            "href": "/anki-forge/zh-cn/docs/node-api/#media-and-image-occlusion",
+            "heading": "媒体与图片遮挡",
+            "identifiers": [
+              "Note.imageOcclusion(image)",
+              "Mask.rect(",
+              "hide_one_guess_one",
+              "hide_all_guess_one"
+            ]
+          },
+          {
+            "page": "templates/en",
+            "target": "python/api.md#models-and-templates",
+            "href": "/anki-forge/docs/python-api/#models-and-templates",
+            "heading": "Models and templates",
+            "identifiers": [
+              "NoteType.from_bundle("
+            ]
+          },
+          {
+            "page": "templates/en",
+            "target": "node/api.md#immutable-models",
+            "href": "/anki-forge/docs/node-api/#immutable-models",
+            "heading": "Immutable models",
+            "identifiers": [
+              "NoteType.fromBundle("
+            ]
+          },
+          {
+            "page": "templates/zh-CN",
+            "target": "../python/api.md#models-and-templates",
+            "href": "/anki-forge/zh-cn/docs/python-api/#models-and-templates",
+            "heading": "模型与模板",
+            "identifiers": [
+              "NoteType.from_bundle("
+            ]
+          },
+          {
+            "page": "templates/zh-CN",
+            "target": "../node/api.md#immutable-models",
+            "href": "/anki-forge/zh-cn/docs/node-api/#immutable-models",
+            "heading": "不可变模型",
+            "identifiers": [
+              "NoteType.fromBundle("
+            ]
+          }
+        ],
+        "sameSiteLinks": {
+          "head": {
+            "links": 1026,
+            "fragments": 278
+          },
+          "before": {
+            "links": 1014,
+            "fragments": 266
+          },
+          "failures": 0
+        }
+      },
+      "apiSources": {
+        "tag": "480cfd0e4947f88aef339740d0a27b3210e2b830",
+        "files": [
+          {
+            "file": "bindings/python/src/ankiforge/note.py",
+            "needles": 9
+          },
+          {
+            "file": "bindings/python/src/ankiforge/notetype.py",
+            "needles": 1
+          },
+          {
+            "file": "bindings/python/src/ankiforge/media.py",
+            "needles": 2
+          },
+          {
+            "file": "bindings/node/src/index.ts",
+            "needles": 6
+          },
+          {
+            "file": "anki_forge/src/note/occlusion.rs",
+            "needles": 4
+          },
+          {
+            "file": "anki_forge/src/schema/bundle.rs",
+            "needles": 1
+          }
+        ]
+      },
+      "runtime": {
+        "python": {
+          "basicAndCloze": {
+            "cards": 3,
+            "media": 0,
+            "notes": 2
+          },
+          "batchMedia": {
+            "cards": 1,
+            "media": 2,
+            "notes": 1
+          },
+          "bundleCloze": {
+            "cards": 2,
+            "media": 0,
+            "notes": 1
+          },
+          "bundleNormal": {
+            "cards": 1,
+            "media": 1,
+            "notes": 1
+          },
+          "fromBundleKeywordLimits": "language-card",
+          "fromBundlePositionalLimits": "TypeError: NoteType.from_bundle() takes 1 positional argument but 2 were given",
+          "occlusion_default": {
+            "cards": 3,
+            "media": 1,
+            "notes": 1
+          },
+          "occlusion_hide_one_guess_one": {
+            "cards": 3,
+            "media": 1,
+            "notes": 1
+          },
+          "signatures": {
+            "Media.files": "(paths: 'Iterable[PathInput]', *, limits: 'MediaLimits' = MediaLimits(max_bytes=268435456)) -> 'list[Media]'",
+            "Note.basic": "(front: 'str | Content', back: 'str | Content') -> 'Note'",
+            "Note.cloze": "(text: 'str | Content') -> 'Note'",
+            "Note.image_occlusion": "(image: 'Media') -> 'ImageOcclusionBuilder'",
+            "NoteType.from_bundle": "(path: 'PathInput', *, limits: 'MediaLimits' = MediaLimits(max_bytes=268435456)) -> 'NoteType'"
+          },
+          "version": "0.3.1"
+        },
+        "node": {
+          "basicAndCloze": {
+            "notes": 2,
+            "cards": 3,
+            "media": 0
+          },
+          "bundleCloze": {
+            "notes": 1,
+            "cards": 2,
+            "media": 0
+          },
+          "bundleNormal": {
+            "notes": 1,
+            "cards": 1,
+            "media": 1
+          },
+          "occlusion_default": {
+            "notes": 1,
+            "cards": 3,
+            "media": 1
+          },
+          "occlusion_hide_one_guess_one": {
+            "notes": 1,
+            "cards": 3,
+            "media": 1
+          },
+          "batchMedia": {
+            "notes": 1,
+            "cards": 1,
+            "media": 2
+          },
+          "version": "0.3.1"
+        },
+        "pythonRecordFiles": 16,
+        "nodeIntegrity": "sha512-kOqS5BGp4rc0JOeWQjtWI5SQ+EodyGa0eR13HE8+s9CNIxzytlTBqToLBQODzJnw0gVyaXU2Bw3bX4b0n+mOWA=="
+      },
+      "artifacts": {
+        "baselineManifest": {
+          "commit": "6780f26e23e88c702dcbfd88e74bc29de60d95df",
+          "inputSha256": "44821de01215cb0c93f8ba15f5608c3395602fd8715651dc5518409ccd059c00",
+          "recomputedFromD9f5354": "44821de01215cb0c93f8ba15f5608c3395602fd8715651dc5518409ccd059c00"
+        },
+        "before": {
+          "files": 272,
+          "differFromManifest": [
+            "generated/cell-anatomy.apkg",
+            "generated/ear-training.apkg",
+            "generated/showcase.apkg",
+            "generated/showcase.json",
+            "generated/sound.apkg",
+            "generated/spanish-v1.apkg",
+            "generated/spanish-v2.apkg",
+            "generated/spanish.apkg",
+            "pagefind/pagefind-entry.json"
+          ],
+          "missingFromManifest": [
+            "generated/cell-diagram.png"
+          ]
+        },
+        "head": {
+          "files": 273
+        },
+        "renamedPagefind": {
+          "before": 24,
+          "head": 24
+        },
+        "differ": [
+          "docs/ai-anki-cards/index.html",
+          "docs/anki-forge-vs-genanki/index.html",
+          "docs/api/index.html",
+          "docs/build-guarantees/index.html",
+          "docs/cards/index.html",
+          "docs/cards/index.md",
+          "docs/compatibility/index.html",
+          "docs/concepts/index.html",
+          "docs/csv-to-anki/index.html",
+          "docs/custom-notetypes/index.html",
+          "docs/development/index.html",
+          "docs/genanki-migration/index.html",
+          "docs/image-occlusion/index.html",
+          "docs/image-occlusion/index.md",
+          "docs/index.html",
+          "docs/installation/index.html",
+          "docs/json-to-anki/index.html",
+          "docs/languages/index.html",
+          "docs/media/index.html",
+          "docs/media/index.md",
+          "docs/node-api/index.html",
+          "docs/node-quickstart/index.html",
+          "docs/node-quickstart/index.md",
+          "docs/python-api/index.html",
+          "docs/python-diagnostics/index.html",
+          "docs/python-migration/index.html",
+          "docs/python-quickstart/index.html",
+          "docs/python-quickstart/index.md",
+          "docs/quickstart/index.html",
+          "docs/quickstart/index.md",
+          "docs/rust-api/index.html",
+          "docs/rust-guide/index.html",
+          "docs/templates/index.html",
+          "docs/templates/index.md",
+          "docs/troubleshooting/index.html",
+          "docs/updates/index.html",
+          "docs/updates/index.md",
+          "generated/cell-anatomy.apkg",
+          "generated/ear-training.apkg",
+          "generated/search-en.json",
+          "generated/search-zh-cn.json",
+          "generated/showcase.apkg",
+          "generated/showcase.json",
+          "generated/sound.apkg",
+          "generated/spanish-v1.apkg",
+          "generated/spanish-v2.apkg",
+          "generated/spanish.apkg",
+          "llms.txt",
+          "pagefind/pagefind-entry.json",
+          "zh-cn/docs/ai-anki-cards/index.html",
+          "zh-cn/docs/anki-forge-vs-genanki/index.html",
+          "zh-cn/docs/api/index.html",
+          "zh-cn/docs/build-guarantees/index.html",
+          "zh-cn/docs/cards/index.html",
+          "zh-cn/docs/cards/index.md",
+          "zh-cn/docs/compatibility/index.html",
+          "zh-cn/docs/concepts/index.html",
+          "zh-cn/docs/csv-to-anki/index.html",
+          "zh-cn/docs/custom-notetypes/index.html",
+          "zh-cn/docs/development/index.html",
+          "zh-cn/docs/genanki-migration/index.html",
+          "zh-cn/docs/image-occlusion/index.html",
+          "zh-cn/docs/image-occlusion/index.md",
+          "zh-cn/docs/index.html",
+          "zh-cn/docs/installation/index.html",
+          "zh-cn/docs/json-to-anki/index.html",
+          "zh-cn/docs/languages/index.html",
+          "zh-cn/docs/media/index.html",
+          "zh-cn/docs/media/index.md",
+          "zh-cn/docs/node-api/index.html",
+          "zh-cn/docs/node-quickstart/index.html",
+          "zh-cn/docs/node-quickstart/index.md",
+          "zh-cn/docs/python-api/index.html",
+          "zh-cn/docs/python-diagnostics/index.html",
+          "zh-cn/docs/python-migration/index.html",
+          "zh-cn/docs/python-quickstart/index.html",
+          "zh-cn/docs/python-quickstart/index.md",
+          "zh-cn/docs/quickstart/index.html",
+          "zh-cn/docs/quickstart/index.md",
+          "zh-cn/docs/rust-api/index.html",
+          "zh-cn/docs/rust-guide/index.html",
+          "zh-cn/docs/templates/index.html",
+          "zh-cn/docs/templates/index.md",
+          "zh-cn/docs/troubleshooting/index.html",
+          "zh-cn/docs/updates/index.html",
+          "zh-cn/docs/updates/index.md",
+          "zh-cn/llms.txt"
+        ],
+        "html": {
+          "identicalAfterNormalization": 48,
+          "openingChanged": [
+            "docs/cards/index.html",
+            "docs/image-occlusion/index.html",
+            "docs/media/index.html",
+            "docs/templates/index.html",
+            "docs/updates/index.html",
+            "zh-cn/docs/cards/index.html",
+            "zh-cn/docs/image-occlusion/index.html",
+            "zh-cn/docs/media/index.html",
+            "zh-cn/docs/templates/index.html",
+            "zh-cn/docs/updates/index.html"
+          ]
+        },
+        "markdown": {
+          "docs/cards/index.md": {
+            "added": 2,
+            "removed": 2
+          },
+          "docs/image-occlusion/index.md": {
+            "added": 3,
+            "removed": 2
+          },
+          "docs/media/index.md": {
+            "added": 2,
+            "removed": 1
+          },
+          "docs/node-quickstart/index.md": {
+            "added": 2,
+            "removed": 2
+          },
+          "docs/python-quickstart/index.md": {
+            "added": 2,
+            "removed": 2
+          },
+          "docs/quickstart/index.md": {
+            "added": 1,
+            "removed": 1
+          },
+          "docs/templates/index.md": {
+            "added": 2,
+            "removed": 1
+          },
+          "docs/updates/index.md": {
+            "added": 2,
+            "removed": 1
+          },
+          "zh-cn/docs/cards/index.md": {
+            "added": 2,
+            "removed": 2
+          },
+          "zh-cn/docs/image-occlusion/index.md": {
+            "added": 3,
+            "removed": 2
+          },
+          "zh-cn/docs/media/index.md": {
+            "added": 2,
+            "removed": 1
+          },
+          "zh-cn/docs/node-quickstart/index.md": {
+            "added": 2,
+            "removed": 2
+          },
+          "zh-cn/docs/python-quickstart/index.md": {
+            "added": 2,
+            "removed": 2
+          },
+          "zh-cn/docs/quickstart/index.md": {
+            "added": 1,
+            "removed": 1
+          },
+          "zh-cn/docs/templates/index.md": {
+            "added": 2,
+            "removed": 1
+          },
+          "zh-cn/docs/updates/index.md": {
+            "added": 2,
+            "removed": 1
+          }
+        },
+        "pagefindFragmentsChanged": 16,
+        "rebuild": {
+          "files": 273,
+          "differ": [
+            "generated/cell-anatomy.apkg",
+            "generated/ear-training.apkg",
+            "generated/showcase.apkg",
+            "generated/showcase.json",
+            "generated/sound.apkg",
+            "generated/spanish-v1.apkg",
+            "generated/spanish-v2.apkg",
+            "generated/spanish.apkg",
+            "pagefind/pagefind-entry.json"
+          ]
+        }
+      },
+      "readmes": [
+        {
+          "file": "README.md",
+          "text": "CSV to Anki with Python",
+          "url": "https://ankiforge.dev/docs/csv-to-anki/",
+          "page": "csv-to-anki",
+          "title": "CSV to Anki: generate flashcards with Python",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "README.md",
+          "text": "JSON to Anki",
+          "url": "https://ankiforge.dev/docs/json-to-anki/",
+          "page": "json-to-anki",
+          "title": "Generate and update Anki decks from JSON",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "README.md",
+          "text": "AI-assisted Anki flashcards",
+          "url": "https://ankiforge.dev/docs/ai-anki-cards/",
+          "page": "ai-anki-cards",
+          "title": "AI-assisted Anki flashcards: from notes to APKG",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "README.md",
+          "text": "Anki Forge vs genanki",
+          "url": "https://ankiforge.dev/docs/anki-forge-vs-genanki/",
+          "page": "anki-forge-vs-genanki",
+          "title": "Anki Forge vs genanki: choose for your workflow",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "README.zh-CN.md",
+          "text": "CSV 转 Anki（Python）",
+          "url": "https://ankiforge.dev/zh-cn/docs/csv-to-anki/",
+          "page": "csv-to-anki",
+          "title": "CSV 转 Anki：用 Python 批量生成卡片",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "README.zh-CN.md",
+          "text": "JSON 转 Anki",
+          "url": "https://ankiforge.dev/zh-cn/docs/json-to-anki/",
+          "page": "json-to-anki",
+          "title": "用 JSON 数据生成并更新 Anki 牌组",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "README.zh-CN.md",
+          "text": "AI 辅助生成 Anki 卡片",
+          "url": "https://ankiforge.dev/zh-cn/docs/ai-anki-cards/",
+          "page": "ai-anki-cards",
+          "title": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "README.zh-CN.md",
+          "text": "Anki Forge 与 genanki 比较",
+          "url": "https://ankiforge.dev/zh-cn/docs/anki-forge-vs-genanki/",
+          "page": "anki-forge-vs-genanki",
+          "title": "Anki Forge 与 genanki：如何选择",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "anki_forge/README.md",
+          "text": "JSON to Anki with Rust",
+          "url": "https://ankiforge.dev/docs/json-to-anki/#rust",
+          "page": "json-to-anki",
+          "title": "Generate and update Anki decks from JSON",
+          "section": "Rust",
+          "sectionText": "Rust 1.92+. JSON parsing uses serde and serde_json. Use public Anki Forge 0.3.1. Terminal windowcargo new json-deckcd json-deckcargo add ankiforge@0.3.1cargo ad"
+        },
+        {
+          "file": "anki_forge/README.md",
+          "text": "AI-assisted Anki flashcards",
+          "url": "https://ankiforge.dev/docs/ai-anki-cards/",
+          "page": "ai-anki-cards",
+          "title": "AI-assisted Anki flashcards: from notes to APKG",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "bindings/node/README.md",
+          "text": "JSON to Anki with TypeScript",
+          "url": "https://ankiforge.dev/docs/json-to-anki/#node",
+          "page": "json-to-anki",
+          "title": "Generate and update Anki decks from JSON",
+          "section": "Node",
+          "sectionText": "Node.js 22.13+ and a matching native optional dependency. This program compiles TypeScript to JavaScript and runs on Node.js. Use public Anki Forge 0.3.1. Termi"
+        },
+        {
+          "file": "bindings/node/README.md",
+          "text": "AI-assisted Anki flashcards",
+          "url": "https://ankiforge.dev/docs/ai-anki-cards/",
+          "page": "ai-anki-cards",
+          "title": "AI-assisted Anki flashcards: from notes to APKG",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "bindings/python/README.md",
+          "text": "CSV to Anki with Python",
+          "url": "https://ankiforge.dev/docs/csv-to-anki/",
+          "page": "csv-to-anki",
+          "title": "CSV to Anki: generate flashcards with Python",
+          "section": null,
+          "sectionText": null
+        },
+        {
+          "file": "bindings/python/README.md",
+          "text": "JSON to Anki",
+          "url": "https://ankiforge.dev/docs/json-to-anki/#python",
+          "page": "json-to-anki",
+          "title": "Generate and update Anki decks from JSON",
+          "section": "Python",
+          "sectionText": "Ordinary CPython 3.11+ with a platform wheel; 3.11–3.14 is covered by release checks. On Windows, activate with .venv\\Scripts\\Activate.ps1. Use public Anki Forg"
+        },
+        {
+          "file": "bindings/python/README.md",
+          "text": "AI-assisted Anki flashcards",
+          "url": "https://ankiforge.dev/docs/ai-anki-cards/",
+          "page": "ai-anki-cards",
+          "title": "AI-assisted Anki flashcards: from notes to APKG",
+          "section": null,
+          "sectionText": null
+        }
+      ]
+    },
+    "builds": {
+      "d9f5354": {
+        "runs": 1,
+        "command": "CONTENT_REVIEW_MODE=preview npm run build",
+        "inputSha256": "44821de01215cb0c93f8ba15f5608c3395602fd8715651dc5518409ccd059c00",
+        "manifest": {
+          "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/prefix-origin-manifest.json",
+          "sha256": "5ac69b729169f6b30f6a9ddebb4fbfb7a04b279f5f54092ff89fa93ab3993db0",
+          "commit": "6780f26e23e88c702dcbfd88e74bc29de60d95df",
+          "inputSha256": "44821de01215cb0c93f8ba15f5608c3395602fd8715651dc5518409ccd059c00"
+        },
+        "volatileDiffering": [
+          "generated/cell-anatomy.apkg",
+          "generated/ear-training.apkg",
+          "generated/showcase.apkg",
+          "generated/showcase.json",
+          "generated/sound.apkg",
+          "generated/spanish-v1.apkg",
+          "generated/spanish-v2.apkg",
+          "generated/spanish.apkg",
+          "pagefind/pagefind-entry.json"
+        ],
+        "missing": [
+          "generated/cell-diagram.png"
+        ]
+      },
+      "head": {
+        "runs": 2,
+        "command": "CONTENT_REVIEW_MODE=preview npm run build",
+        "routes": 273,
+        "htmlByteIdenticalAcrossRuns": 69,
+        "volatileDifferingAcrossRuns": [
+          "generated/cell-anatomy.apkg",
+          "generated/ear-training.apkg",
+          "generated/showcase.apkg",
+          "generated/showcase.json",
+          "generated/sound.apkg",
+          "generated/spanish-v1.apkg",
+          "generated/spanish-v2.apkg",
+          "generated/spanish.apkg",
+          "pagefind/pagefind-entry.json"
+        ],
+        "stoppedAt": "site-manifest (preview mode refuses to write a release manifest, by design)"
+      }
+    },
+    "tests": [
+      {
+        "command": "npm test (website/)",
+        "tests": 144,
+        "passed": 144
+      },
+      {
+        "command": "npm run check:docs",
+        "passed": true
+      },
+      {
+        "command": "npm run check:ai",
+        "passed": true
+      },
+      {
+        "command": "CONTENT_REVIEW_MODE=preview npm run check:content",
+        "passed": true
+      },
+      {
+        "command": "npm run check:surface",
+        "passed": true,
+        "detail": "Historic public surface preserved: 64 pages; inherited machine integration preserved: 60 resources"
+      },
+      {
+        "command": "node --test scripts/site-gates.test.mjs (website/)",
+        "tests": 15,
+        "passed": 9,
+        "failedReason": "six built-site gate tests require dist/generated/site-manifest.json, which the authorized preview build refuses to write"
+      },
+      {
+        "command": "npm run check:content (non-preview)",
+        "passed": false,
+        "failedReason": "home/en: linguistic evidence digest changed — the separate linguistic review is modifying linguistic-source-review.json and content-reviews.json is not yet re-imported; expected before the coordinator import"
+      }
+    ]
+  },
+  "changedPriorFiles": [
+    {
+      "path": "docs/cards.md",
+      "role": "candidate-input",
+      "previousSha256": "ae6830f58bbb9560be689099ae5728a2f42573da0c201dc34621fc13435c6b0a",
+      "currentSha256": "8de0e93bf4a3b94d18d8214687d78b70a32b53e16b2369692da7c624f028d5f8"
+    },
+    {
+      "path": "docs/image-occlusion.md",
+      "role": "candidate-input",
+      "previousSha256": "8584c7b31832078f1e03fd7287867cc5008c88a87e6340dca843d8ba33de9651",
+      "currentSha256": "3e54b44010c3420fff223ce8a4bf0a1bb095dd27a6fd3d4b1517d6a05a7f85a5"
+    },
+    {
+      "path": "docs/media.md",
+      "role": "candidate-input",
+      "previousSha256": "e1144d2a2c90cb2905df6c6e00e06a7a59a99a6bebf6e226ff573d420a03756b",
+      "currentSha256": "c2d0a5d292d6b320d47892926767ef782355935e8f9cefade9b930e2f6b62c02"
+    },
+    {
+      "path": "docs/node/quick-start.md",
+      "role": "candidate-input",
+      "previousSha256": "1538750a51685097fd4dad38f8612b4bcb717ca44bbac76ccadaca30ce72a3e8",
+      "currentSha256": "084c9c550e430907e7c77de653458fdc11a393136b8c4a24f1e64e8c03e2113e"
+    },
+    {
+      "path": "docs/python/quick-start.md",
+      "role": "candidate-input",
+      "previousSha256": "482dc6d2277c0ff5d8574dc0a88dd1cb301dcfff733ae6a97f1367a7d99c7f55",
+      "currentSha256": "394405423e6036cf8a11725eae7fb25adf1ba927df4fe68f690baee409258b42"
+    },
+    {
+      "path": "docs/template-bundles.md",
+      "role": "candidate-input",
+      "previousSha256": "d049c66a6aedecea885c24bda2d5d0a6d0e65ec5558211217456a75b21032f53",
+      "currentSha256": "8695e7f6f40d19911dd072a16bd5d07f43e2a250618eb6c0aefc06a39451f53f"
+    },
+    {
+      "path": "docs/updates.md",
+      "role": "candidate-input",
+      "previousSha256": "86de1d53b26e1780b31d622ad6700be1a36f7a52120cd053b4da32c4966696ef",
+      "currentSha256": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f"
+    },
+    {
+      "path": "docs/zh-cn/cards.md",
+      "role": "candidate-input",
+      "previousSha256": "e4a8ebb6f650310f9d2c953ba823f5dc7877ecf49f21a8499973d6a9ad56e8f3",
+      "currentSha256": "cbf569294454cda932ec7b3976a992d81ba4b020fb14105e8360539535c94e14"
+    },
+    {
+      "path": "docs/zh-cn/image-occlusion.md",
+      "role": "candidate-input",
+      "previousSha256": "3639491364d28125552bd216b28a2317fa51c3793d4044ffed1eab1997589173",
+      "currentSha256": "050e752c61b9735d2f97648491d0ee95cb8a30ca2d5d429845c81f1ff4d18957"
+    },
+    {
+      "path": "docs/zh-cn/media.md",
+      "role": "candidate-input",
+      "previousSha256": "98d0136e6ef67fdc71a0df8f2adebaad3558a3e03e1607597c078a408e4e2d05",
+      "currentSha256": "a2a3ebf687d9a30e1624340839f3c8262eeff6b5defecf958a034db5f55a8b65"
+    },
+    {
+      "path": "docs/zh-cn/node-quickstart.md",
+      "role": "candidate-input",
+      "previousSha256": "8b0675746f54b7b0a6111201006ad668378a231a831c61c3b5eb9f955454f3ac",
+      "currentSha256": "1c4fff521f3492cc60bfd6f262fa752ab5d2c27057300b3d19cbbe74df3f3207"
+    },
+    {
+      "path": "docs/zh-cn/python-quickstart.md",
+      "role": "candidate-input",
+      "previousSha256": "499fc2d46f54500b417320b0ff4862b0dcaa9faf5c08e0d28797d61aaeba7c2e",
+      "currentSha256": "929ffb6991e445fd4a97347abda9bc17d380ca64d25511e0869d9a64a9f2bbd6"
+    },
+    {
+      "path": "docs/zh-cn/templates.md",
+      "role": "candidate-input",
+      "previousSha256": "c60e2b8d7a569537d652dddab89a8347afd7982119ed6f6aedec85461f37327d",
+      "currentSha256": "14e4a855f6dc2486b6e180523477e7919f946f0c44263dee6495f126c615cb76"
+    },
+    {
+      "path": "docs/zh-cn/updates.md",
+      "role": "candidate-input",
+      "previousSha256": "135912b5feea3a94d60a1e8f34b9efc155bedb3eec4e36c7229f3496baa38543",
+      "currentSha256": "83b373f4166efb68518dc8d4f9954b2015748e71e8bdb2bd55abcc377854207c"
+    },
+    {
+      "path": "website/site-model.mjs",
+      "role": "candidate-input",
+      "previousSha256": "dda49136cbde4790dbc4fb08215a0846d48941138d2585e1f9d437a49a00411e",
+      "currentSha256": "04d952f6f1201676addb125262a5f97304a5ea83c189bf8661a858571a44bfde"
+    },
+    {
+      "path": "website/src/content/docs/docs/quickstart.mdx",
+      "role": "candidate-input",
+      "previousSha256": "678a5696fb13166a8f5a3232d737efac8da5169bdbb55c148f9807d235a02cd6",
+      "currentSha256": "274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9"
+    }
+  ],
+  "inputSnapshot": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-task-descriptions-34.json",
+    "sha256": "293e82dc61967d571e53884f5a0778c6c6c039a18a3ea47865092f8736a97cae"
+  },
+  "readmeReview": {
+    "files": [
+      "README.md",
+      "README.zh-CN.md",
+      "anki_forge/README.md",
+      "bindings/node/README.md",
+      "bindings/python/README.md"
+    ],
+    "links": [
+      {
+        "file": "README.md",
+        "text": "CSV to Anki with Python",
+        "url": "https://ankiforge.dev/docs/csv-to-anki/",
+        "page": "csv-to-anki",
+        "title": "CSV to Anki: generate flashcards with Python",
+        "section": null
+      },
+      {
+        "file": "README.md",
+        "text": "JSON to Anki",
+        "url": "https://ankiforge.dev/docs/json-to-anki/",
+        "page": "json-to-anki",
+        "title": "Generate and update Anki decks from JSON",
+        "section": null
+      },
+      {
+        "file": "README.md",
+        "text": "AI-assisted Anki flashcards",
+        "url": "https://ankiforge.dev/docs/ai-anki-cards/",
+        "page": "ai-anki-cards",
+        "title": "AI-assisted Anki flashcards: from notes to APKG",
+        "section": null
+      },
+      {
+        "file": "README.md",
+        "text": "Anki Forge vs genanki",
+        "url": "https://ankiforge.dev/docs/anki-forge-vs-genanki/",
+        "page": "anki-forge-vs-genanki",
+        "title": "Anki Forge vs genanki: choose for your workflow",
+        "section": null
+      },
+      {
+        "file": "README.zh-CN.md",
+        "text": "CSV 转 Anki（Python）",
+        "url": "https://ankiforge.dev/zh-cn/docs/csv-to-anki/",
+        "page": "csv-to-anki",
+        "title": "CSV 转 Anki：用 Python 批量生成卡片",
+        "section": null
+      },
+      {
+        "file": "README.zh-CN.md",
+        "text": "JSON 转 Anki",
+        "url": "https://ankiforge.dev/zh-cn/docs/json-to-anki/",
+        "page": "json-to-anki",
+        "title": "用 JSON 数据生成并更新 Anki 牌组",
+        "section": null
+      },
+      {
+        "file": "README.zh-CN.md",
+        "text": "AI 辅助生成 Anki 卡片",
+        "url": "https://ankiforge.dev/zh-cn/docs/ai-anki-cards/",
+        "page": "ai-anki-cards",
+        "title": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+        "section": null
+      },
+      {
+        "file": "README.zh-CN.md",
+        "text": "Anki Forge 与 genanki 比较",
+        "url": "https://ankiforge.dev/zh-cn/docs/anki-forge-vs-genanki/",
+        "page": "anki-forge-vs-genanki",
+        "title": "Anki Forge 与 genanki：如何选择",
+        "section": null
+      },
+      {
+        "file": "anki_forge/README.md",
+        "text": "JSON to Anki with Rust",
+        "url": "https://ankiforge.dev/docs/json-to-anki/#rust",
+        "page": "json-to-anki",
+        "title": "Generate and update Anki decks from JSON",
+        "section": "Rust"
+      },
+      {
+        "file": "anki_forge/README.md",
+        "text": "AI-assisted Anki flashcards",
+        "url": "https://ankiforge.dev/docs/ai-anki-cards/",
+        "page": "ai-anki-cards",
+        "title": "AI-assisted Anki flashcards: from notes to APKG",
+        "section": null
+      },
+      {
+        "file": "bindings/node/README.md",
+        "text": "JSON to Anki with TypeScript",
+        "url": "https://ankiforge.dev/docs/json-to-anki/#node",
+        "page": "json-to-anki",
+        "title": "Generate and update Anki decks from JSON",
+        "section": "Node"
+      },
+      {
+        "file": "bindings/node/README.md",
+        "text": "AI-assisted Anki flashcards",
+        "url": "https://ankiforge.dev/docs/ai-anki-cards/",
+        "page": "ai-anki-cards",
+        "title": "AI-assisted Anki flashcards: from notes to APKG",
+        "section": null
+      },
+      {
+        "file": "bindings/python/README.md",
+        "text": "CSV to Anki with Python",
+        "url": "https://ankiforge.dev/docs/csv-to-anki/",
+        "page": "csv-to-anki",
+        "title": "CSV to Anki: generate flashcards with Python",
+        "section": null
+      },
+      {
+        "file": "bindings/python/README.md",
+        "text": "JSON to Anki",
+        "url": "https://ankiforge.dev/docs/json-to-anki/#python",
+        "page": "json-to-anki",
+        "title": "Generate and update Anki decks from JSON",
+        "section": "Python"
+      },
+      {
+        "file": "bindings/python/README.md",
+        "text": "AI-assisted Anki flashcards",
+        "url": "https://ankiforge.dev/docs/ai-anki-cards/",
+        "page": "ai-anki-cards",
+        "title": "AI-assisted Anki flashcards: from notes to APKG",
+        "section": null
+      }
+    ],
+    "verdict": "all 15 added links correct; no defect",
+    "openIssues": []
+  },
+  "priorIssues": [
+    {
+      "from": "docs/plans/evidence/multilingual-common-2026-10-27/technical-locale-data-34-audit.json",
+      "scope": "website/scripts/content-review-inputs.mjs:210 (technicalDependencyHash legacy field)",
+      "severity": "minor",
+      "status": "still applicable (file unchanged d9f5354..HEAD); no record affected by this delta"
+    },
+    {
+      "from": "docs/plans/evidence/multilingual-common-2026-10-27/technical-locale-data-34-audit.json",
+      "scope": "website/scripts/content-sections.mjs:65-69 used by content-review-inputs.mjs",
+      "severity": "minor",
+      "status": "still applicable (file unchanged d9f5354..HEAD); no record affected by this delta"
+    },
+    {
+      "from": "docs/plans/evidence/multilingual-common-2026-10-27/technical-locale-data-34-audit.json",
+      "scope": "website/README.md lines 101-108",
+      "severity": "minor",
+      "status": "resolved in 166abec: website/README.md now lists the `language-briefs.json` entry among locale data"
+    }
+  ],
+  "openIssues": [
+    {
+      "severity": "minor",
+      "scope": "docs/python/api.md:23 and docs/zh-cn/python-api.md:23 (unchanged text; pre-existing, not introduced by 3cf5aed)",
+      "description": "The Models and templates section documents `NoteType.from_bundle(path, limits=MediaLimits())`, but the published ankiforge 0.3.1 signature is keyword-only: `def from_bundle(path: PathInput, *, limits: MediaLimits = MediaLimits()) -> NoteType:` (bindings/python/src/ankiforge/notetype.py at the 0.3.1 tag and in the installed wheel). Executed with the published package: `NoteType.from_bundle(path, MediaLimits())` raises “TypeError: NoteType.from_bundle() takes 1 positional argument but 2 were given”; `limits=MediaLimits()` works. The same table already writes `Media.file(path, *, limits=MediaLimits())` with the `*`. The new template-bundles opening (both locales) now links readers to this section, so the spelling deserves `*, limits=`. Documentation precision only; the default call shown elsewhere is correct, and no new sentence is wrong."
+    },
+    {
+      "severity": "minor",
+      "scope": "local build environment: website/public/generated/cell-diagram.png in the main checkout (not a reviewed source; no record affected)",
+      "description": "An untracked, ignored file dated 2026-09-28 sits in website/public/generated and is copied into every build from the main checkout, so it appears as /generated/cell-diagram.png in both locale-data release manifests (multilingual-locale-data-2026-10-28/{prefix,root}-origin-manifest.json) and in this reviewer's HEAD builds. No built page references it, and a clean checkout (the d9f5354 extraction) does not produce it, so a CI build's manifest will lack it. Release hygiene only; deleting it locally or building from a clean checkout makes local and CI artifacts agree."
+    }
+  ],
+  "unchangedRecords": [
+    "home/en",
+    "home/zh-CN",
+    "examples/en",
+    "examples/zh-CN",
+    "blog/en",
+    "blog/zh-CN",
+    "blog:your-first-anki-deck/en",
+    "blog:your-first-anki-deck/zh-CN",
+    "blog:stable-ids-and-deck-updates/en",
+    "blog:stable-ids-and-deck-updates/zh-CN"
+  ],
+  "entries": [
+    {
+      "pageId": "docs",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "2851b78aff65806de1d6f194dc94eb837ddf683f437d1b5a8c6cc68843c22fb1",
+        "targetHash": "f2afc8ba84adfbd294384ae05be2d5d25f476905e1a8be3f72d323701ee0b7d2",
+        "technicalDependencyHash": "3e0c195daa93826e669323f95055883195c2f858ee385fc8731ef2bc7381e004"
+      },
+      "sourceHash": "4c1c1af9b79681ec8836c513131f11b2fafacc8036d427e432ff4d1e09859703",
+      "targetHash": "b62792ca658fd09dcc09951e40abdbacfaea7b2c277b231bd37fa6e7c3ef6a54",
+      "technicalDependencyHash": "3e0c195daa93826e669323f95055883195c2f858ee385fc8731ef2bc7381e004",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/",
+        "sha256": "0ec122832ffe32da96a5e91765a3438c07edb5a7b02cc40304145e83d7ac2315",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "1cbed37a971e6df8d4d9eec54896abc846f689f236f7f9783b5db173d0bf3d8f",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "docs",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "2851b78aff65806de1d6f194dc94eb837ddf683f437d1b5a8c6cc68843c22fb1",
+        "targetHash": "881fc37d3221c8a18c3fd0ad64169ea3f4baa4bf0fa513ac69ff9a3fc35d5f07",
+        "technicalDependencyHash": "614c08089604ae2231bcf20b33977fd2ae072d9637589d81b95b9ca66cd16b89"
+      },
+      "sourceHash": "4c1c1af9b79681ec8836c513131f11b2fafacc8036d427e432ff4d1e09859703",
+      "targetHash": "41a623c7f45c1aea32f5b113dd5778b266b95d9c424fb905b40b4d4dceb52416",
+      "technicalDependencyHash": "614c08089604ae2231bcf20b33977fd2ae072d9637589d81b95b9ca66cd16b89",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/",
+        "sha256": "a06cdb4e3cebc2c5512b91708d6f0ddc4e32f15d2b9cdda2ab4a1217951166f3",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "2ad40dfa346b9b1a79719f6f2af179c1c159b2178acb1e17ca8d867db84f0602",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "languages",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "c1651337944970f13f39385abff0980067b4975f9b17023fd8f5d9b7767d7cb4",
+        "targetHash": "2f1fa00f1d261f4005b1e67ff59c7453d510182a3d3cadc3c96a1e7413b2b819",
+        "technicalDependencyHash": "1b381b0bbb438dea49869b93bbe78b7b9a4f3536751d516b79d117532df8bdd8"
+      },
+      "sourceHash": "0521bb3f28ac71aab26fbcdc8caaf61b0451a2a5314d4b48d3b4587e43e8575d",
+      "targetHash": "8b7837c7d6b4aa01bb2b8737034119084568061c06545e9b7d4cfed3f6c56763",
+      "technicalDependencyHash": "1b381b0bbb438dea49869b93bbe78b7b9a4f3536751d516b79d117532df8bdd8",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/languages/",
+        "sha256": "20b0ea795412cbcac8510e5853123311e535543f237d53f1431bdabd859fa075",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "d44075de587cce98ed6c2a78371b6e2adaef9ae65e96e64050bceb510c9eb85b",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "Generate Anki flashcards with Rust"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "languages",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "c1651337944970f13f39385abff0980067b4975f9b17023fd8f5d9b7767d7cb4",
+        "targetHash": "1df75131a53dd095039b71e74ebaa815ea0b57fa5f88ca5f707adc5589a52c2a",
+        "technicalDependencyHash": "0f8b824b3ec65b4735b01dbef902a0d8661ac65ee881edc88ec7b63da78aa260"
+      },
+      "sourceHash": "0521bb3f28ac71aab26fbcdc8caaf61b0451a2a5314d4b48d3b4587e43e8575d",
+      "targetHash": "61c619f0975df5e73e26434e8845533881e9450c02cf7927ef432234a3a0c121",
+      "technicalDependencyHash": "0f8b824b3ec65b4735b01dbef902a0d8661ac65ee881edc88ec7b63da78aa260",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/languages/",
+        "sha256": "ece5c9bfeb248708cc4e1eda40a9b92ca0fdfb8354007df3b6c8843a1a00e805",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "93df8e0c097f247083eb1f2b46bfcf7b8b5ae5679e628e1bc7f8d734a50bf6d9",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "用 Rust 生成 Anki 卡片"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "quickstart",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "030fec158dd94c129d78cb21d9ea5169c6753992ff67f887bf88909714dc8ed1",
+        "targetHash": "e902ab9fb46eb0e64fc56f8eca94000d0a40cf6abc8af06e4778b2120032a586",
+        "technicalDependencyHash": "52519b6ecaac9caa0576a1cb9c24a668c7a1b8f606ce5d648a341d3b22183890"
+      },
+      "sourceHash": "be6dce9fdf19b55629aa790f185a75d840f4012942cb04f81ae7159c32b4f616",
+      "targetHash": "021982d8eac7710ea8bb9f6eb386e7d321a8165347a792d88b0efa7a49c6a3ce",
+      "technicalDependencyHash": "52519b6ecaac9caa0576a1cb9c24a668c7a1b8f606ce5d648a341d3b22183890",
+      "delta": "sidebar labels + page title",
+      "builtPage": {
+        "route": "/anki-forge/docs/quickstart/",
+        "sha256": "ea06e3336d3d1350c53f8e2dbec31fbf7518ae3ad3b9603a7c255beaa3ccf903",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "9d5fee3069f107f40fe2448545d5bd7f10860283e8a387b9d51316a1187e07ac",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "quickstart",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "030fec158dd94c129d78cb21d9ea5169c6753992ff67f887bf88909714dc8ed1",
+        "targetHash": "b8d6cb000ef7d2bd125105bbf607b1a83ce63a4255692e937b6e381d66f14ae9",
+        "technicalDependencyHash": "213d4abb089c018705714e6c7e8d45766981300744dfd8e1ac6d039d6f8b4977"
+      },
+      "sourceHash": "be6dce9fdf19b55629aa790f185a75d840f4012942cb04f81ae7159c32b4f616",
+      "targetHash": "883810d7472b18cf7d88f8b966bc980a94b060cd2e841c597b3e30eeef501f70",
+      "technicalDependencyHash": "213d4abb089c018705714e6c7e8d45766981300744dfd8e1ac6d039d6f8b4977",
+      "delta": "sidebar labels + page title",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/quickstart/",
+        "sha256": "4740bfd8745ae23e160ae243ae22bbcfafdc4d0bb91425eeb0c2f95192966c9f",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "1d47627986acf3722ef618fd1624d538c8a3032f03f862efb82515e03be0936f",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "json-to-anki",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "1ca3320736ceef70b7e5ab7f84220dc2b45fad6359d3b31babed90f851281c4d",
+        "targetHash": "7c4320d51d80bdfac737b4d5f185bd08d75e8f70a305c1d8c118512fb6be2724",
+        "technicalDependencyHash": "3ebe419560c32c39f84dbeb3a2e06c33d4f0b05e4b30742c8727a74ee8b8e0be"
+      },
+      "sourceHash": "7b33366a2dc37316dae75361a5d485096e8c0f69ee81bc19dd0760aa22cd226c",
+      "targetHash": "52da0e7a455c9f392600c40c07c64f1104fc92111746a7f93966b1ef20bf027a",
+      "technicalDependencyHash": "3ebe419560c32c39f84dbeb3a2e06c33d4f0b05e4b30742c8727a74ee8b8e0be",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/json-to-anki/",
+        "sha256": "b38c34a09e8bb9fa47958554f88783302937b89c542484c6ac3d59452e32a1e4",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "27de035f3da1ca7cc74cb69a81198d50f00d9fa0a90b986439bf82d6a42e22e5",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "json-to-anki",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "1ca3320736ceef70b7e5ab7f84220dc2b45fad6359d3b31babed90f851281c4d",
+        "targetHash": "37a5e0a2a05c965b066e596348026e6b695041857e186414287392e25a6fa4e9",
+        "technicalDependencyHash": "931abd996ad6f61ebbebf59cfa6e9c7f58d1eb7062156d84e541d2a4ea5bfc34"
+      },
+      "sourceHash": "7b33366a2dc37316dae75361a5d485096e8c0f69ee81bc19dd0760aa22cd226c",
+      "targetHash": "2832eaf39d78a751b837f037bf4bacb75318308535c74d8edbf493f1167977a7",
+      "technicalDependencyHash": "931abd996ad6f61ebbebf59cfa6e9c7f58d1eb7062156d84e541d2a4ea5bfc34",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/json-to-anki/",
+        "sha256": "d4b8cd9e0c76fd503bdc5df33059eafa3fa90b181642bccfa75398e11d353e73",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "71c179ee4b107574c5e6b0e8b4f500993894902da15acde880b383b3d6578f8c",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "csv-to-anki",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "ef1e69da636a853ff66043c3caefe67e4e4a8c6c35801c609a66d53e2dd137a8",
+        "targetHash": "bea94c6f2720b84f57c61c0aadf4b6d2cfd03612fce0dc8b7c46409369d424d6",
+        "technicalDependencyHash": "8912e487379cd5daef14e1de822b1773f9abf84c02043d2f07a864e9e53bbe50"
+      },
+      "sourceHash": "4b8c1e13b25f8d72166922d0c58edf5d3f39df039b308e4210c8178c61e5996a",
+      "targetHash": "03f9d31ede870d6a194e1feaff5f72c2c618c003d0d890e58a2b47892f26d266",
+      "technicalDependencyHash": "8912e487379cd5daef14e1de822b1773f9abf84c02043d2f07a864e9e53bbe50",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/csv-to-anki/",
+        "sha256": "845bdf32e1f0dc45d47ad1583573a600d1297f77522fd53c2556cb297159c720",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "73fd0006496f4bf1934ccf1b801bfd18e109454d0d6ed876e19a633c3fbd800a",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "csv-to-anki",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "ef1e69da636a853ff66043c3caefe67e4e4a8c6c35801c609a66d53e2dd137a8",
+        "targetHash": "b400a4e9493ad47b334c25234da94e32de76c1e3554bcac536f1bffbe6efe176",
+        "technicalDependencyHash": "89fc978e901c57dbe976c5b3a607523cbdb5ae7e621a20f733f646941f9c5611"
+      },
+      "sourceHash": "4b8c1e13b25f8d72166922d0c58edf5d3f39df039b308e4210c8178c61e5996a",
+      "targetHash": "91b6836c1f0479308288ee494495fa037e3f0cbd3fa3f6cb13d911eaa73b9dbd",
+      "technicalDependencyHash": "89fc978e901c57dbe976c5b3a607523cbdb5ae7e621a20f733f646941f9c5611",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/csv-to-anki/",
+        "sha256": "7292e0d0b3f734233f1fb36c4a1466dca7a582b39199789ce9188010c65756af",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "9df547e2502cf824d11f026ee78eb74f954bb70d799231d85cc760e4a684cde8",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "ai-anki-cards",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "dce001e0a2c7261d7015a38562cec4a21f6a673fd09e4a5649efead43d620c31",
+        "targetHash": "bdc1f1f76cff9d98ba1f743ee63cefd79c41ef0d6da173a9ede6cb50951b9059",
+        "technicalDependencyHash": "67e3ce976f420a30fec3f6bf59b09a6c2e87365423a9055e9aeb2a8208ac5f24"
+      },
+      "sourceHash": "9a8bfab3586f02ea03dc24d12efc4a5c07117c359b8968a1cf7e2354eaf4e47d",
+      "targetHash": "d1988288ed2ae5a249dec9ce8fade101096d7421fcb84ea713597e72639bcb97",
+      "technicalDependencyHash": "67e3ce976f420a30fec3f6bf59b09a6c2e87365423a9055e9aeb2a8208ac5f24",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/ai-anki-cards/",
+        "sha256": "1b94d718dea8e288751ab918b317562ec6bea5905b405fa22fa67764309fb2d9",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "5dbff5ac992a292a0fd38ddc7bb2a7ae9a8ee7fb477e7b5015542fd9e9127ebc",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "ai-anki-cards",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "dce001e0a2c7261d7015a38562cec4a21f6a673fd09e4a5649efead43d620c31",
+        "targetHash": "7a43d17ceacbbed58cd86b7ff9098864b9b1de8cfb00b11d19f20f66a2ef72e5",
+        "technicalDependencyHash": "3a1043057dce597a144c31a81b487fbdf4e56716650fe2864f3f6427fc761371"
+      },
+      "sourceHash": "9a8bfab3586f02ea03dc24d12efc4a5c07117c359b8968a1cf7e2354eaf4e47d",
+      "targetHash": "43d9cd5ca300c140900ce1b38edf727128824071e66da3fbe67b95121ff9a94f",
+      "technicalDependencyHash": "3a1043057dce597a144c31a81b487fbdf4e56716650fe2864f3f6427fc761371",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/ai-anki-cards/",
+        "sha256": "6f9d5cf06615efd891595757275240f843971e0f272332d2bbb5e5fced6039d9",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "670f18d4a71dff3d87150f0c3c710bbcd57778328e813b6978629187744b2d97",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "36e7dca432985ff16c43ed3b2915eaddcffe35f7b7e51c00967d4f0a359c3611",
+        "targetHash": "6e74ed008ee61047723162deac78c999d2a73e3f619b3c6a05d83d0a46a937f7",
+        "technicalDependencyHash": "57f7f4885107b7b2669abdbd6ccf5c03743002f17ac40d9f5986328127a5076b"
+      },
+      "sourceHash": "0c97cd1f6167388c418b18e985fa91939e7425af3ed08233ee245a10862b1208",
+      "targetHash": "b3a1d422f418013c71816a2719b1068404e22c28cefdd94a090743af9682b8aa",
+      "technicalDependencyHash": "57f7f4885107b7b2669abdbd6ccf5c03743002f17ac40d9f5986328127a5076b",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/anki-forge-vs-genanki/",
+        "sha256": "863433f1d56978af324a9b63bac1807d5b046ae904406fbcff78fa7c051b7488",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "a3c74f31d1b77fc29660c315d027bfa59eb9495c356d5e4a63b38e8b97135b38",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "36e7dca432985ff16c43ed3b2915eaddcffe35f7b7e51c00967d4f0a359c3611",
+        "targetHash": "8dfc3cef3953adae15921c2269e5c79ff11635e9c7885ce87ee51bdb44702429",
+        "technicalDependencyHash": "e4365d87113ea8a8a6b9f0f818d2cf7f42d3b8507c39017f1cbf7df707c9849b"
+      },
+      "sourceHash": "0c97cd1f6167388c418b18e985fa91939e7425af3ed08233ee245a10862b1208",
+      "targetHash": "065d5f7daee331dca902fa0d9646aa3d4b39d14afc2ef409706ccc196c8ad24b",
+      "technicalDependencyHash": "e4365d87113ea8a8a6b9f0f818d2cf7f42d3b8507c39017f1cbf7df707c9849b",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/anki-forge-vs-genanki/",
+        "sha256": "44ab1731612238f1d3487658b239ab6d1df7356490b0001ed4111188feecd63c",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "27c6ef17f5d9f932b505557606fc66124dd2738b63c765860010e2047c615c16",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "development",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "6bb458042fbd63ced7a61a9df6d371dd65ca5e0c87a17a4438064797228bf8e1",
+        "targetHash": "7d4de3b7426eed15f3f5d63352e7e55613181d7a742bc90762c03d1b46af2f09",
+        "technicalDependencyHash": "a59f355101e1cbe920786e31b87e334e01cad69868a8792795d0fcde4db95893"
+      },
+      "sourceHash": "6c298f34120600bbee4e7710c913fa367f4d76844d810331ddb68948f7337be1",
+      "targetHash": "a7533742b26cb063fdfe160f38ed4d80262b33df2ced3eeef1a043c00f2486dc",
+      "technicalDependencyHash": "a59f355101e1cbe920786e31b87e334e01cad69868a8792795d0fcde4db95893",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/development/",
+        "sha256": "37ccf392d639244824e00879037b409c0f228bf775a018dd22b455824772cc05",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "ca03b6728de4e053cb4edc1a1e9f9fa484201c9e7bf679c1c2e4e1e8e383b2f6",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "development",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "6bb458042fbd63ced7a61a9df6d371dd65ca5e0c87a17a4438064797228bf8e1",
+        "targetHash": "6fc8e38a7c12930b8acf3f7e2a0acc8b91ca59013d2dd494a09f25d4277b8ab1",
+        "technicalDependencyHash": "d940a6b000938cce5770453a8e9467e24a58270f5c3c7dc4fdecbbbdf540f62d"
+      },
+      "sourceHash": "6c298f34120600bbee4e7710c913fa367f4d76844d810331ddb68948f7337be1",
+      "targetHash": "daf94e434f856b4d55a50dad8502a6241e36e6589dcdef749aebbe06ba7520b2",
+      "technicalDependencyHash": "d940a6b000938cce5770453a8e9467e24a58270f5c3c7dc4fdecbbbdf540f62d",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/development/",
+        "sha256": "1b4f3a2f8001a8efc2df84d2c74540270756c02831a432217d01611ffe4943d3",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "563112b6eaf309ef955e999426b64a88810173548f40182d05c917fbde48cbe8",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "rust-guide",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "dc9301cb66c07a19c680b762d25e60234c2e51bb6730960047bc0c2741cb1654",
+        "targetHash": "21d7831abbac23670270abefab0c9ef2065d8338606d65d149a00e3d49f6a789",
+        "technicalDependencyHash": "fbdb5393772689d954bb9301d9073c11dcb30b10d596930e4c91a62c22133171"
+      },
+      "sourceHash": "1a715588cd295c1c835268a6280705ee4c1696955f9adf487a386dc65cef2ce7",
+      "targetHash": "86fd539c1c13c1f1e57f6b4baca1a3fbb084803fb19dc93fc84c127b99ae2151",
+      "technicalDependencyHash": "fbdb5393772689d954bb9301d9073c11dcb30b10d596930e4c91a62c22133171",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/rust-guide/",
+        "sha256": "10fb44e65ab1497c8574ebc3f243f9e2282032b30d4cf214906c78bb910c6880",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "bd288ed321ac3cf05003a573d6e87c1d1699ebd0a6eca43992ab5862dd71fb25",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "Generate Anki flashcards with Node.js"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "rust-guide",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "dc9301cb66c07a19c680b762d25e60234c2e51bb6730960047bc0c2741cb1654",
+        "targetHash": "154122ebc2ca341c968f48d15dbc9b4a7e45284b3ea362a5e3f76a5322f5c0fc",
+        "technicalDependencyHash": "676e34aebd29536ce29037b03c6eb4ec0f5f85afc7319005d9a4453aa72b5dc7"
+      },
+      "sourceHash": "1a715588cd295c1c835268a6280705ee4c1696955f9adf487a386dc65cef2ce7",
+      "targetHash": "c018b31096252411c1e8908411b3bb56126bf4d0b20c43e1fda829b0597e2dc3",
+      "technicalDependencyHash": "676e34aebd29536ce29037b03c6eb4ec0f5f85afc7319005d9a4453aa72b5dc7",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/rust-guide/",
+        "sha256": "94b7389dfb57d44e4118829f5a4b5fadfdc01dab86248d60fe3d7d66003fd2a4",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "b0e1ba532409f6745dba0e1eda41fe1d2d4f7f93319a3abf80ec7ecb342fc0ce",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "用 Node.js 生成 Anki 卡片"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "templates",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "02f8d338f1ba5d1695c7ffc0b67a4a08ece388f915a4e1b66a36fd3acbeb98e7",
+        "targetHash": "eaee6344f6bd8da92233a12f5b140a7df57619247f29cad3d216fe7f767b1850",
+        "technicalDependencyHash": "063491af4c81afd2185a566d3e2a56efb7049d79e3c8f0697b63266b6518dc88"
+      },
+      "sourceHash": "f076cd72fe2ca58ff9d1421f251de68c1752d150d9984605ccf8b9638fa8f2c6",
+      "targetHash": "4ab22fdaddc3cbcc484744be070ecb6d3ea530b75a3fc19732e02899899a9e5b",
+      "technicalDependencyHash": "063491af4c81afd2185a566d3e2a56efb7049d79e3c8f0697b63266b6518dc88",
+      "delta": "sidebar labels + description + opening paragraphs",
+      "builtPage": {
+        "route": "/anki-forge/docs/templates/",
+        "sha256": "75a33cf361fc5df8cd4e75596b87f587f66b42d2323f2d00c8a5c85ad86cf8f2",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "4b8d550dcf23ba5d15bf9b9de069592735e71327d3cd325eaf20e17fdc9fd816",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "templates",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "02f8d338f1ba5d1695c7ffc0b67a4a08ece388f915a4e1b66a36fd3acbeb98e7",
+        "targetHash": "ece618fc36675b6db08f47da830909c94fd733c6bddb7cca0991fd41828b92c4",
+        "technicalDependencyHash": "e44a3d4bfd112755d16db5ccfc8faf0adcf06887e6da63449084bdc0198a47d3"
+      },
+      "sourceHash": "f076cd72fe2ca58ff9d1421f251de68c1752d150d9984605ccf8b9638fa8f2c6",
+      "targetHash": "92f6f0f2dcf0e15ae9fb803f891f0e6147a7416222d7c9a281c06bf5fdbe67d7",
+      "technicalDependencyHash": "e44a3d4bfd112755d16db5ccfc8faf0adcf06887e6da63449084bdc0198a47d3",
+      "delta": "sidebar labels + description + opening paragraphs",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/templates/",
+        "sha256": "a39c95c4827a725fe810bf5bec755e10f9e03f9f7d081b42995c0740f71da843",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "c61d7ba925bfcabbf9d11c87c5a50b58424a27d95bbc61500ab62d4fc663f732",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "api",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "408abf60807f000cec44d77a42364d486eb892fbb49348c961bd3bce3d624a68",
+        "targetHash": "75b97fef30f07ae89dfd476690f61bac50533d18963b334fe81edabbda32dd15",
+        "technicalDependencyHash": "134c08e953461d89271b6bb52a9e2f05c3c55ea3ab16c8af34c0e83abf215a98"
+      },
+      "sourceHash": "a728bce1b7ba6a94ce8bc3f4114fdeb6ac55c6eff3c6a4eb7dbe0368ae5ae66a",
+      "targetHash": "65510cb95d2a67495c0e0cbbcc875c128ec32bb3834751c545f62e630098c9b9",
+      "technicalDependencyHash": "134c08e953461d89271b6bb52a9e2f05c3c55ea3ab16c8af34c0e83abf215a98",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/api/",
+        "sha256": "079753f5e970d15fd1653917c971c6c3796383106d99cbf84d486c5bab32e39c",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "3179a7a4794a3dc2e9d3ac04b43c321414d99fa06e3b479edad8d2f58736ae31",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "api",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "408abf60807f000cec44d77a42364d486eb892fbb49348c961bd3bce3d624a68",
+        "targetHash": "c3e88d3f04ab6a1a791e7df8641e5e75adf3afb81e032585c8c9f8fd63c0c519",
+        "technicalDependencyHash": "d18d8e01dcbb2595582bd56af3aee1de25eb0c6bafae07dd1299731ffc298cf2"
+      },
+      "sourceHash": "a728bce1b7ba6a94ce8bc3f4114fdeb6ac55c6eff3c6a4eb7dbe0368ae5ae66a",
+      "targetHash": "cd172cda03d9bbf1b48040f339e48d522cb2ee111acdc8a08b8aa4990c7f11ad",
+      "technicalDependencyHash": "d18d8e01dcbb2595582bd56af3aee1de25eb0c6bafae07dd1299731ffc298cf2",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/api/",
+        "sha256": "d15881fcc203c7cd40c7ca57c80bdb70ee4eecabea8c995c6d16f17ce5f198cb",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "6461a2b75da82e2adb8b17f19eddcd4128df167ad210a3c9ae96447060d07f19",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "installation",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "1d8e6a84a955de2ab22f129a6a8891d9ba381751c698583e7d4f0868d5751d11",
+        "targetHash": "aba52c2aa0bf1d035d209b85b87ac857abdaff5e05c7d26a2098dc56679aa3d7",
+        "technicalDependencyHash": "c2ebd615598db01020f8030c45a25ac261a81587598a9fb7481a5970d4f35224"
+      },
+      "sourceHash": "6e27fd8f8f41b074eb3e8f8593c55b5c4c721c83b5f2b4dd117eb25a34125467",
+      "targetHash": "19b9b272757caee5db61f325807bbebf19abfc880b5e149eda282d026962bbb7",
+      "technicalDependencyHash": "c2ebd615598db01020f8030c45a25ac261a81587598a9fb7481a5970d4f35224",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/installation/",
+        "sha256": "d8d74d1cebfb1dbbe52b3b7fb56b3e21fd0e584c81a8f99023a24848a9772319",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "3279dfeb47a383957ebc231ab6ff7cb9f9144ff55d1445d42e4b9edf474e30c3",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "Generate Anki flashcards with Rust"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "installation",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "1d8e6a84a955de2ab22f129a6a8891d9ba381751c698583e7d4f0868d5751d11",
+        "targetHash": "bc7111de595a0873f7e68da5714069518e1b97a8c792ce3a3354a420e97375f6",
+        "technicalDependencyHash": "22be19499a019c066704d2062c470b6207450959cab974ce34a61219aa1b0e5c"
+      },
+      "sourceHash": "6e27fd8f8f41b074eb3e8f8593c55b5c4c721c83b5f2b4dd117eb25a34125467",
+      "targetHash": "2c4170115f3b5d6235943f39a95371ddc71610cb4f02ca9820b0634a121cd1e1",
+      "technicalDependencyHash": "22be19499a019c066704d2062c470b6207450959cab974ce34a61219aa1b0e5c",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/installation/",
+        "sha256": "680b6940c80e8176e9baae44d0a03a87d92129b06ef34b4747cb96d01a85e0f8",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "f558648d0ea17ee187c373b4ed643a6ced9c813fbfcbc25aa1b5ae0539667698",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "用 Rust 生成 Anki 卡片"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "concepts",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "0de535d7febeace2a235118c98562f1548fd2399b5bad57a71a5c5d9e2427561",
+        "targetHash": "6f755c477f704649ef95c3f7f8bac47709e1dd290dbe58a23a18941297b9a4ea",
+        "technicalDependencyHash": "3f9d0f7c7e92de618d7ecc9db5483e5eb2ba66e04f238b5cba0e901b99d30a6b"
+      },
+      "sourceHash": "9dd70956708a14948c28bd143de695a8f480068b0c2760ef07affe30fad18dc3",
+      "targetHash": "a5027517eebe140087dcfa11f9b03ca99d85221e50d1fd088a2232ecb58c7a02",
+      "technicalDependencyHash": "3f9d0f7c7e92de618d7ecc9db5483e5eb2ba66e04f238b5cba0e901b99d30a6b",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/concepts/",
+        "sha256": "9918c5deac1d428db1fcc15946e40b6be6910fee2b6e87c3edc5802ffdaf0196",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "ce87189ab81fe6545f88cf80c18f54f3b051802416ee0de1fa07258d457781a6",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "concepts",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "0de535d7febeace2a235118c98562f1548fd2399b5bad57a71a5c5d9e2427561",
+        "targetHash": "7ac450731089af6f442d10358d4e2128958558f855c8f81f443924451cd33775",
+        "technicalDependencyHash": "5e436ab19ed0f0d3907b95fe6565e685466d050f38a3da61e9a2ac22bbd7291b"
+      },
+      "sourceHash": "9dd70956708a14948c28bd143de695a8f480068b0c2760ef07affe30fad18dc3",
+      "targetHash": "e6bb12095f4d9101e251a652c9cc9c6c49031eb9db1f839edea03845689f09b7",
+      "technicalDependencyHash": "5e436ab19ed0f0d3907b95fe6565e685466d050f38a3da61e9a2ac22bbd7291b",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/concepts/",
+        "sha256": "1495b7008232d0686f18007cc1f196121b8b25b26a78626f1fff0bd05602763e",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "9153a96a5a66f07c162fb6fa5f9df7ae2a61d1b1b5599fad738cb2dc9f1adea8",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "cards",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "2149bffb04319c86de7ea14103dabe7f217364de34ce470df11312d4a54df561",
+        "targetHash": "be7a20be3a97fa966b8967a3099decca7da0332f4fe81a4ac27e3441c73d88f4",
+        "technicalDependencyHash": "79c50ef1d623760bb87edd1101af26f6dc033a33a202bb40e47ca7f182bccbae"
+      },
+      "sourceHash": "1bb9f6ea32ad66035ca62678fd736095dce1898c46143345f1d68b47124c6eeb",
+      "targetHash": "a91aede6ee2d614995642fe658501c040ecd9be3cbab6b721aeffa97899b65ed",
+      "technicalDependencyHash": "79c50ef1d623760bb87edd1101af26f6dc033a33a202bb40e47ca7f182bccbae",
+      "delta": "sidebar labels + description + opening paragraphs",
+      "builtPage": {
+        "route": "/anki-forge/docs/cards/",
+        "sha256": "e941fbdf67d8f48578e460ed8ce6245e1eff2f9ea85c8e419210477098561f42",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "6e7f2700c4c9af015474c98264c652c083d8274db976fe82468711a92fa70d80",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "cards",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "2149bffb04319c86de7ea14103dabe7f217364de34ce470df11312d4a54df561",
+        "targetHash": "a417adc3e7a269b98b6914b6ff48254ce2c43cd4fe1c4670f6de61623e10d43f",
+        "technicalDependencyHash": "cd4fe6acc88d98738de47e8d92adc67ca42b8fd0befe2d3167ba638478802f9f"
+      },
+      "sourceHash": "1bb9f6ea32ad66035ca62678fd736095dce1898c46143345f1d68b47124c6eeb",
+      "targetHash": "ad23f26a874cece170ebf9a6a4fc302ff091e007fb4fd60fed13676eaefd313d",
+      "technicalDependencyHash": "cd4fe6acc88d98738de47e8d92adc67ca42b8fd0befe2d3167ba638478802f9f",
+      "delta": "sidebar labels + description + opening paragraphs",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/cards/",
+        "sha256": "299695e042331dab4bb1a6ad80ba13ce28a650456f084105260582e8c1cc32d6",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "3f6789b30308a49bc3dc6913048eaf25cbcfe74d70391caa92511b79167428de",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "custom-notetypes",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "85da49a4be27194dd49bc0dea4c90baa14d3e844652eda994f6f736bda35c1d0",
+        "targetHash": "955ae6d9a211da160d9d067240015e1a128541f770d6501966424b44e075b80f",
+        "technicalDependencyHash": "9162de4dc911c9d2625b33609c2dcb9c64be025e828b3be636b86df97b4da24a"
+      },
+      "sourceHash": "96c5503ae5a587b660a65187e1455ee2dd5584d8c1894727f0563d04e7f59cb9",
+      "targetHash": "c214b5cdbb81cae98a09f9a2094f04331fbe5417d3c7537f2feb36d698d81720",
+      "technicalDependencyHash": "9162de4dc911c9d2625b33609c2dcb9c64be025e828b3be636b86df97b4da24a",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/custom-notetypes/",
+        "sha256": "6bf3804fe2bb977c2335940f67cfb772a70cad73f04e67c9b90929463bab13d8",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "ef6fca3662403d5421abfcc93b53f5904e44d9aa341f18b34cc95482b4615807",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "custom-notetypes",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "85da49a4be27194dd49bc0dea4c90baa14d3e844652eda994f6f736bda35c1d0",
+        "targetHash": "a96b659649ae128e2ceb94bd547e0d5aab539c8e962fbdf2d3de67cb04506503",
+        "technicalDependencyHash": "57445086d748d90054c576c2e6e0d7fe4895d53d1c5805374b0f0187d9258e01"
+      },
+      "sourceHash": "96c5503ae5a587b660a65187e1455ee2dd5584d8c1894727f0563d04e7f59cb9",
+      "targetHash": "79a46131f77f7dc12479a0f5d42d7d3f9d490513759e0e9f91c8acc85a8f1ef3",
+      "technicalDependencyHash": "57445086d748d90054c576c2e6e0d7fe4895d53d1c5805374b0f0187d9258e01",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/custom-notetypes/",
+        "sha256": "6c6e7f0f8a0639ce8f54514be4e7d7bcfc4f6597ea058806c984f63b5ddb78cd",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "afda9f5ba31ae82464f9ae01d5f2efdeef4175547125b2027689136a468789bf",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "media",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "d4e477151f3eae0eef8105fec381b1a2598a545c724e977d31d660a7fb1a2a12",
+        "targetHash": "7d48addb04b5c5b83ca0ded8f7a0c2f881c16bf5dce0183457a8aa0b09e2bbc0",
+        "technicalDependencyHash": "03561aeeef7aa11b99a3b5326e4edf0b13a4030157dfe5223edca764b9a66932"
+      },
+      "sourceHash": "b2f44a86d02aff6f26d271139687fbec0bc3e0205b0993f9cb5309298eeba481",
+      "targetHash": "edcbef309ba458c5fc0ef833a69f09a5e359d24cbbe103d3ebe75eec8a2927fd",
+      "technicalDependencyHash": "03561aeeef7aa11b99a3b5326e4edf0b13a4030157dfe5223edca764b9a66932",
+      "delta": "sidebar labels + description + opening paragraphs",
+      "builtPage": {
+        "route": "/anki-forge/docs/media/",
+        "sha256": "51fd0b8e517862aaaaec7e750e3156f1da2fd47760261a4733b75076884f975f",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "20eb6c6f8e4973fe2884aa6dc9aebb9d4ef14a4171913dbe3addcf7780958bb1",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "media",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "d4e477151f3eae0eef8105fec381b1a2598a545c724e977d31d660a7fb1a2a12",
+        "targetHash": "230e96c6c2d85cd352d3725aef89d2ee58dbc52ffd24f2c3b41265fc81b6e7dd",
+        "technicalDependencyHash": "cdb1b7375bce9f8296a2a201bcc77da68bdf5ae1797f983df022d646ec00ce2c"
+      },
+      "sourceHash": "b2f44a86d02aff6f26d271139687fbec0bc3e0205b0993f9cb5309298eeba481",
+      "targetHash": "8ea37e86cc320d91c2120733fbc9bdc5727bc7378bfcbefa640272f8ff0e4062",
+      "technicalDependencyHash": "cdb1b7375bce9f8296a2a201bcc77da68bdf5ae1797f983df022d646ec00ce2c",
+      "delta": "sidebar labels + description + opening paragraphs",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/media/",
+        "sha256": "80855380265030dba3770d1d4445674e81bffc7e9ef603222d0c286d1ea1942f",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "8bea38fedb2b3f0fb938c17d461dc75ade12f64f5e3dd74d35a58ec6ea2962f0",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "b901db204f401ab2479cc9c1a1ecc482bf781d5160025bbd9962f72380a2b4a5",
+        "targetHash": "181102353cfea5f6371e92f4beb2bf040cc0647c9db89305d17d58b1bd44fb40",
+        "technicalDependencyHash": "a0295cbbc9df1209d2192c145c8be924696869fe46df1bde7d6fd8bd0d00657b"
+      },
+      "sourceHash": "52b1d98d14db72ed71548f115464ee1e977bbf44c14addf8b4d6d0eed52a48ce",
+      "targetHash": "9eff5d1bbd4bd52d22cc70329dd076da177f66ef363f7c0dc492da710a718b4d",
+      "technicalDependencyHash": "a0295cbbc9df1209d2192c145c8be924696869fe46df1bde7d6fd8bd0d00657b",
+      "delta": "sidebar labels + description + opening paragraphs",
+      "builtPage": {
+        "route": "/anki-forge/docs/image-occlusion/",
+        "sha256": "8c70929a63efc1cc6be95ccca3cb83e33c08fdf87b60e4b313e7ae7b44d7969a",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "b3779eb18cee5d72b340d1c7409f0c5c64b02e47c0a995bca39d86c9b4b286f7",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "b901db204f401ab2479cc9c1a1ecc482bf781d5160025bbd9962f72380a2b4a5",
+        "targetHash": "33c3785b30e1b3e4af595a94c09c095516e18428dbb6f1bcad3ad136a4117f02",
+        "technicalDependencyHash": "9efddcde7919254f3ef2de33769422aff3df4033e70ca47feb541337ba197683"
+      },
+      "sourceHash": "52b1d98d14db72ed71548f115464ee1e977bbf44c14addf8b4d6d0eed52a48ce",
+      "targetHash": "28583d2c872b81ff371e249ac2924a2a8fe63e2d6cdcb9dac7dee53defefa6da",
+      "technicalDependencyHash": "9efddcde7919254f3ef2de33769422aff3df4033e70ca47feb541337ba197683",
+      "delta": "sidebar labels + description + opening paragraphs",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/image-occlusion/",
+        "sha256": "5dbe7f6beb2b50546ad6096d992d23e0890dcf65db93d83684e0dc0687205a49",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "73017ef968b1ce0bf4bf857ad105688c12355aefcab5c509ad2e7067c8f886a6",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "updates",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "85d49339bca6096606beecf52cfced972dc89b31c2ac18ebcb08d49a078405f2",
+        "targetHash": "45b28a6082cbf96a80873b2e554159de7d1885e9624fdbb1f78921f6a6e4da6e",
+        "technicalDependencyHash": "98987e0cac3d34b2aa5abc4b366c676e7835532942e607f90f7c2b6e8ac927b7"
+      },
+      "sourceHash": "0021e3be3aa412d1e567a323ed20da30949cdf137f97aaa4fabc89cfcaa3307f",
+      "targetHash": "9bc9062f72efd28cceadd1dabbea56d8425d10373367202948483d251bdea605",
+      "technicalDependencyHash": "98987e0cac3d34b2aa5abc4b366c676e7835532942e607f90f7c2b6e8ac927b7",
+      "delta": "sidebar labels + description + opening paragraphs",
+      "builtPage": {
+        "route": "/anki-forge/docs/updates/",
+        "sha256": "0cdaf0628efaea67f702804f64205a07b2f99231fee357c7e000111fd3c968f0",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "2eac84dee9e5cc0d61949741eb3a56ebe26fe10907da6cc7ed68294111678829",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "updates",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "85d49339bca6096606beecf52cfced972dc89b31c2ac18ebcb08d49a078405f2",
+        "targetHash": "fd6502cb30a7e1f9711f01dbe32c4a7c8372faf868281f711b0a86b4512e644b",
+        "technicalDependencyHash": "5963a39c6194c0cf38d48f83de988696342751876f40e2472259c0a8ccad3c38"
+      },
+      "sourceHash": "0021e3be3aa412d1e567a323ed20da30949cdf137f97aaa4fabc89cfcaa3307f",
+      "targetHash": "12c11bb590bd429319a906ee29d305892287a4ce2ab4206de6bd91836cef952b",
+      "technicalDependencyHash": "5963a39c6194c0cf38d48f83de988696342751876f40e2472259c0a8ccad3c38",
+      "delta": "sidebar labels + description + opening paragraphs",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/updates/",
+        "sha256": "eeadb6384a61a2387df7054e7dc9e8a26df6be32fc6e24802abb6ffd4d7f59b6",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "4c926553fdf3ac5215b0da95976c0fb7467a7757c7a952666629f0661ca941fe",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "b0aa9a684ce3222ebba57a63158811a6e118e19c8ff02be960ca41f40dbf07a2",
+        "targetHash": "f5f5c8a16fc288c80a50c207e345a3aaa0cf6fa289ded9c65ade4124926b00d1",
+        "technicalDependencyHash": "3dcf54b2e9a4466d1d0dc78ed2b4518ebdd15eb65540484bb7992df1e169754a"
+      },
+      "sourceHash": "b9e8a9ddefc56cea3590099e00ea281bae30b8f8ac4544654782fac6e28c2e15",
+      "targetHash": "2ea93aaa3ee6b825b200b9d4b8b7fd21668c4a19293346b4614784beab33093f",
+      "technicalDependencyHash": "3dcf54b2e9a4466d1d0dc78ed2b4518ebdd15eb65540484bb7992df1e169754a",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/build-guarantees/",
+        "sha256": "6fab9b407e0187f67c465be60b38101cfc2629574856ac9c06de7491c1363931",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "d1e24574f2cda6bae752daba8b25cb6262a725b15e6ca3eadbc967e15159fb9f",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "b0aa9a684ce3222ebba57a63158811a6e118e19c8ff02be960ca41f40dbf07a2",
+        "targetHash": "b8b854292abc07456e784a17128b443f5c2a47770e2bb1713c02f6f0dc4f9571",
+        "technicalDependencyHash": "44b1bf0ce011651f9db0309dd1d0fb4094cfc1976d6e4523423d0604667a4ab8"
+      },
+      "sourceHash": "b9e8a9ddefc56cea3590099e00ea281bae30b8f8ac4544654782fac6e28c2e15",
+      "targetHash": "c3f910ac28688319c8d62c21babcc1f73743cdb1a20a38df8d29c68ce2ca4e0a",
+      "technicalDependencyHash": "44b1bf0ce011651f9db0309dd1d0fb4094cfc1976d6e4523423d0604667a4ab8",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/build-guarantees/",
+        "sha256": "734b244e74f81925b7b68e4b93e98105e45143bf1b61754f28f308708a8b798e",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "221b91e8b35fd95f321dab5529c46390227acb42d93d06937330aa505582425d",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "d0e909d2544fe1aa3ddecf1001d04c39d71f1fdd18486236238e2f2e00a3612b",
+        "targetHash": "ef1ee1820e99e903eba8d05af4485d0ed80d1f99917b77456f14c31886d7bf7f",
+        "technicalDependencyHash": "d85b607e26d89b8262d6d88e6f2f3cdf0f26f932d67260348a5f0a8b58d3591a"
+      },
+      "sourceHash": "a3ab7389914cc72065c7696c17c87a9676e4e46149c35407c862f797669a10b3",
+      "targetHash": "a82e7553a2ee584f5152a7bbc66cd33f4496c964f06025ed5681264dd363dd04",
+      "technicalDependencyHash": "d85b607e26d89b8262d6d88e6f2f3cdf0f26f932d67260348a5f0a8b58d3591a",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/troubleshooting/",
+        "sha256": "7f0293f8c0341a5bf5e5825d8e30672f8191f617a2eec37b80aebe2cfa557465",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "73808a33456af255759f592f9986025b139a07ccb5a9110f52c3a548fc29140b",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "d0e909d2544fe1aa3ddecf1001d04c39d71f1fdd18486236238e2f2e00a3612b",
+        "targetHash": "ddd79162159148c3bb5201f0f275b85f90da46aa065d219a19190b082aeb55d5",
+        "technicalDependencyHash": "c7a3849287f97e50fe2fd501fa9417a88912906c3cc0309ecb483ff74e10e602"
+      },
+      "sourceHash": "a3ab7389914cc72065c7696c17c87a9676e4e46149c35407c862f797669a10b3",
+      "targetHash": "4cf96e81e19363f9c05b66cd7e7b9a1afde33b4df11dadd54f81791462066b04",
+      "technicalDependencyHash": "c7a3849287f97e50fe2fd501fa9417a88912906c3cc0309ecb483ff74e10e602",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/troubleshooting/",
+        "sha256": "21520f2c01774ce32f57ac742acdcaf671cc837bf7f16e89ba6a975936e72749",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "5f8b21ad64d43155117ad5817083f894a0610e97b750fb69e08d85b21e2a4b89",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "compatibility",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "43c55aeb30f26ef66a81894f61fbffa9b220183fea06e689a99f482d1538c283",
+        "targetHash": "a6340b3959f319e59c77802b41667673352bb47203649d3fc1f02cc3a70d0f29",
+        "technicalDependencyHash": "6d7e2542ffe774d08746ec00592606032619921e383bd295c0e2d9bf2ab97f84"
+      },
+      "sourceHash": "356149227c44e5c73f86aec2092f9fc7901ffa561500c7b0d3b1516505ae06e8",
+      "targetHash": "d56d89ace50637b7de6e979ec967cc6b096035369b8333e0377143bcf2f15ba6",
+      "technicalDependencyHash": "6d7e2542ffe774d08746ec00592606032619921e383bd295c0e2d9bf2ab97f84",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/compatibility/",
+        "sha256": "f80ee431cf74161394498213cd4ea736a4d9ce1363a1dc2ccae874d911efa8fe",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "5785fbc0d9e378645143aee138eefd040ceb579278cd899b91ce67f5df4b1745",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "compatibility",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "43c55aeb30f26ef66a81894f61fbffa9b220183fea06e689a99f482d1538c283",
+        "targetHash": "b848db4dfb0a8a0dff332a1d5cfb2114107c570416d6e4ca9f67ba12e51f1809",
+        "technicalDependencyHash": "e502d915b1c15eba443bf1af7f62fa97799d34bfdf40c78bfad557d544aa571a"
+      },
+      "sourceHash": "356149227c44e5c73f86aec2092f9fc7901ffa561500c7b0d3b1516505ae06e8",
+      "targetHash": "a7c4d77a8ceacf8f7997e9b139cba02c6d143a3ae567dd9be77ab49013f0646e",
+      "technicalDependencyHash": "e502d915b1c15eba443bf1af7f62fa97799d34bfdf40c78bfad557d544aa571a",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/compatibility/",
+        "sha256": "8cbbad9b5fd76b96c72f2789a444db7bde1b7a92e1a9b54a3d406ad0ab9cd2c1",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "a79a34537c21d6596a346f645298196aa34aca8ec860a885e4e9e098fcf351b1",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "3558e24e9157cd8ae903b03cd7fd6ededcb6f5046dee1b8cca1d169551c63a2c",
+        "targetHash": "a7ca40071faa8484f424ae32a95641e5e3c6b60066e979bcccc0bfe19217dde9",
+        "technicalDependencyHash": "9eb7b715995636e5d35ee01a37f9ea01e6fa6bb82e35d72586b63560ae771035"
+      },
+      "sourceHash": "8e13eff4f3668d4a83e378523ed139205c6feabc68c2832df2c87fa9b36c5931",
+      "targetHash": "99eefbc8a9965153fd7e12f1643e41b9aaf50f736159acc782a2c2f7fdd8386f",
+      "technicalDependencyHash": "9eb7b715995636e5d35ee01a37f9ea01e6fa6bb82e35d72586b63560ae771035",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/rust-api/",
+        "sha256": "354a9aab800f6f453bd23d0584688702a01c1a79263b985979e01c6ccbfdc939",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "23f655901ba7a2f6b271674611e87071a02b073a52f7bd640e0ba030a5e5a56c",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "3558e24e9157cd8ae903b03cd7fd6ededcb6f5046dee1b8cca1d169551c63a2c",
+        "targetHash": "29a791a566f06ec2cf409f9d8f8c53ea08a6ca51e73f7c679a48b70861a4bef7",
+        "technicalDependencyHash": "7e4dff4a1670bccafc84019f3dff8918912771e7a0d9058f4b333aeca75612b8"
+      },
+      "sourceHash": "8e13eff4f3668d4a83e378523ed139205c6feabc68c2832df2c87fa9b36c5931",
+      "targetHash": "2d7ae4647634bd1752d5951eb371eeee677c2bd91d7cd9ecf4022bff95ed2481",
+      "technicalDependencyHash": "7e4dff4a1670bccafc84019f3dff8918912771e7a0d9058f4b333aeca75612b8",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/rust-api/",
+        "sha256": "c50c574696f7350fe4c97d0d305c2d317faf6caee04ec638a9f149221930e361",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "10f0e34e1ef7b53f0236ea2253cff168aa613436831325e48d37aadc27e6bfbc",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "node-quickstart",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "268372d33c57e1e2cb0114cb036ea5bb727912c8aed3f9951ee8e28f342275ce",
+        "targetHash": "8c08d904713b21a3328e0388b0971c1da65aac7a1887d71cb93dfac39ee67b75",
+        "technicalDependencyHash": "c5a7a6cb630539ef0149c04dc5c10685da9e34d85d0c985926d4a95d1ed50ec6"
+      },
+      "sourceHash": "c2d30b9f352d81bf7489f1f09e19c6900a4b950b15696efc8ce7374055747e7f",
+      "targetHash": "8f44e705fe3fa2823b7ae566819183adb097ecf261bd210d4d3b5d85bf3b6973",
+      "technicalDependencyHash": "c5a7a6cb630539ef0149c04dc5c10685da9e34d85d0c985926d4a95d1ed50ec6",
+      "delta": "sidebar labels + page title + description",
+      "builtPage": {
+        "route": "/anki-forge/docs/node-quickstart/",
+        "sha256": "cf7c698c5e854cca1786dc3edfd184589e3708f9f5636f64ecf03ff43f526e52",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "5f4e3850cb36a817b18db6b0b1d28e87b1d6b80bd5e563c1e50367c306718715",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "Generate Anki flashcards with Python"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "node-quickstart",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "268372d33c57e1e2cb0114cb036ea5bb727912c8aed3f9951ee8e28f342275ce",
+        "targetHash": "accf1d2a980e0931baf7a5f5d48e81fcc322ca37dcc925638d8836e79c754702",
+        "technicalDependencyHash": "95a9d5f2081e31a026815f35c5f110df655502b609b2150af1dca14a80af26a5"
+      },
+      "sourceHash": "c2d30b9f352d81bf7489f1f09e19c6900a4b950b15696efc8ce7374055747e7f",
+      "targetHash": "a6f2aff22b2940c3530229d568bd369d5b46db3bfd17ef8795ab5d465f087405",
+      "technicalDependencyHash": "95a9d5f2081e31a026815f35c5f110df655502b609b2150af1dca14a80af26a5",
+      "delta": "sidebar labels + page title + description",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/node-quickstart/",
+        "sha256": "9e2b89dcb859bb247bad74b0d6f1955a4c6a1e853e82d53bb394aad86854dad5",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "7a6a7b7ae21b4f29ed1ef2f81c3a84182c11c79779097cd0ce4b1d654f25c9d7",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "用 Python 生成 Anki 卡片"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "node-api",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "b41863c443caeb63c6765071f1a14e78b6206fdb540c7c318138e939b8e7e20c",
+        "targetHash": "99dcd60b945e87449bb27bff157063d27ecb602916d3087fd6d181f7b8e4e916",
+        "technicalDependencyHash": "98de49d5789e01ecc73958ea5cbaeec174c5b103f1b88ff5c1a0ca68a4e2e47a"
+      },
+      "sourceHash": "994dcbfb989bb53bca7a4129633599af3026e190f3a2385718771d1fca55a491",
+      "targetHash": "416a0e7283bbb893ed6018f862958a5b5672b1a322e1a168b49a4540aabecec4",
+      "technicalDependencyHash": "98de49d5789e01ecc73958ea5cbaeec174c5b103f1b88ff5c1a0ca68a4e2e47a",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/node-api/",
+        "sha256": "476263627952453ccd5158e4d04bf4736690f70566f4a9b6f692f7d23ad86724",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "74a078bdd6ceacf8ca40ac8535cd10cd22caf3d93457126b59ee4865baeb183d",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "node-api",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "b41863c443caeb63c6765071f1a14e78b6206fdb540c7c318138e939b8e7e20c",
+        "targetHash": "ad7d92b41c28ca6d9b14601bd573b0f040a6ad0b0ddd1816e253fd9bc7e491c3",
+        "technicalDependencyHash": "7f3a7eceff2127a5d88b2e9e3e2b2fe8cbce225c3c7aeed12e3d2df16d5d93d1"
+      },
+      "sourceHash": "994dcbfb989bb53bca7a4129633599af3026e190f3a2385718771d1fca55a491",
+      "targetHash": "5acdd689a13daabbd891be28c29327c998736281459c385d75fc36465092b7c6",
+      "technicalDependencyHash": "7f3a7eceff2127a5d88b2e9e3e2b2fe8cbce225c3c7aeed12e3d2df16d5d93d1",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/node-api/",
+        "sha256": "4bd7831297d0d8be58c16636978f8bee4928cef6030aa3d92232f1198666d636",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "5842b560cfc60d5253ff7c388c78394b00fd2a7e950cd303f5b5b0f86e352b13",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "python-quickstart",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "7f524b17352f880094d9da679d23a30872334c5aacb784658e3840b02230caad",
+        "targetHash": "134d4bffe04704e9818854585325b3111f5bf95289ad43e1da4ecbbe1f9663ec",
+        "technicalDependencyHash": "579f397c6780a19bf532c7d4571948827cdf059144ec8d1c81a0eb0cfd424350"
+      },
+      "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
+      "targetHash": "d4edca58d0a3498ae6f0fe3923cc7382b3f6af7db109478800cb66f11c6c3f79",
+      "technicalDependencyHash": "579f397c6780a19bf532c7d4571948827cdf059144ec8d1c81a0eb0cfd424350",
+      "delta": "sidebar labels + page title + description",
+      "builtPage": {
+        "route": "/anki-forge/docs/python-quickstart/",
+        "sha256": "3257dce8691abe8537d949925253a6c10cd1a170771cfb12216dc3075f7909b0",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "26906009db1fcfa24015b7e75ba08bcb5d17819fbe23b9c05efc1738492068d2",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "Generate Anki flashcards with Node.js"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "python-quickstart",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "7f524b17352f880094d9da679d23a30872334c5aacb784658e3840b02230caad",
+        "targetHash": "9ae6bd74d93fea1dde34082ca03dd0a36368a74fd11ae9c1028bcf613bfbaabb",
+        "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2"
+      },
+      "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
+      "targetHash": "5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e",
+      "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2",
+      "delta": "sidebar labels + page title + description",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/python-quickstart/",
+        "sha256": "d29b83cf3f5398ccefb30669074a1706bf08a331ab71cc907374423384c9ac8b",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "e5a21bb35402290b8bd61f9bac70a365194c582b6391ab5b31b4b0586dc35a69",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "用 Node.js 生成 Anki 卡片"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "python-api",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "c9c38818c5c74bfe0bce226c421f1ad87a329eb8a152ca4eb6dc70bdec4a5c4c",
+        "targetHash": "4939a2e6f0aafb5a19e34d3e7d228ec960253b190d4dde2610e17858132b2afa",
+        "technicalDependencyHash": "77a4f9b94891561b77f36e8a859509f22c75b4f30ffb8e4c5ab8ad8f994a625a"
+      },
+      "sourceHash": "5ac59ead0eeed59fcfffe4a2137160c12000f4a3c6a3068b5b64630f924d1b82",
+      "targetHash": "4cb67d28e970748f908ccdc612c5fd2ec3fd4b1b5b7a2182975e0274676fcd26",
+      "technicalDependencyHash": "77a4f9b94891561b77f36e8a859509f22c75b4f30ffb8e4c5ab8ad8f994a625a",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/python-api/",
+        "sha256": "0bc9d416a598db9f9164d0042fb0754f142c79aeee2e6e640918c0cbdca21186",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "fb18b3d2fce776c64257b7bab7548ad59c38f9860cf0427ac9a5b9eec8ce64e6",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": [
+        {
+          "severity": "minor",
+          "scope": "docs/python/api.md:23 and docs/zh-cn/python-api.md:23 (unchanged text; pre-existing, not introduced by 3cf5aed)",
+          "description": "The Models and templates section documents `NoteType.from_bundle(path, limits=MediaLimits())`, but the published ankiforge 0.3.1 signature is keyword-only: `def from_bundle(path: PathInput, *, limits: MediaLimits = MediaLimits()) -> NoteType:` (bindings/python/src/ankiforge/notetype.py at the 0.3.1 tag and in the installed wheel). Executed with the published package: `NoteType.from_bundle(path, MediaLimits())` raises “TypeError: NoteType.from_bundle() takes 1 positional argument but 2 were given”; `limits=MediaLimits()` works. The same table already writes `Media.file(path, *, limits=MediaLimits())` with the `*`. The new template-bundles opening (both locales) now links readers to this section, so the spelling deserves `*, limits=`. Documentation precision only; the default call shown elsewhere is correct, and no new sentence is wrong."
+        }
+      ]
+    },
+    {
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "c9c38818c5c74bfe0bce226c421f1ad87a329eb8a152ca4eb6dc70bdec4a5c4c",
+        "targetHash": "01c200463c92e6faa6df94e2e942cdb59c66ab619e4e022c40fa6d9a128f0ab1",
+        "technicalDependencyHash": "1814224a8e64028c845af430d986603ab5c9632463d737612e7c07db979bee6b"
+      },
+      "sourceHash": "5ac59ead0eeed59fcfffe4a2137160c12000f4a3c6a3068b5b64630f924d1b82",
+      "targetHash": "9566f4305e52422bf33d3f569079c74c69aa42899e46fe59c44ea6eca863cc34",
+      "technicalDependencyHash": "1814224a8e64028c845af430d986603ab5c9632463d737612e7c07db979bee6b",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/python-api/",
+        "sha256": "178cc6fd8438be7726cadbd1bdb4d4ef2629507b62db53bdd1d253e08fa114c2",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "42d5b567fc117b5c7f1d7be70ccd3d863ca041003db08e8b0fefd991f7606a78",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": [
+        {
+          "severity": "minor",
+          "scope": "docs/python/api.md:23 and docs/zh-cn/python-api.md:23 (unchanged text; pre-existing, not introduced by 3cf5aed)",
+          "description": "The Models and templates section documents `NoteType.from_bundle(path, limits=MediaLimits())`, but the published ankiforge 0.3.1 signature is keyword-only: `def from_bundle(path: PathInput, *, limits: MediaLimits = MediaLimits()) -> NoteType:` (bindings/python/src/ankiforge/notetype.py at the 0.3.1 tag and in the installed wheel). Executed with the published package: `NoteType.from_bundle(path, MediaLimits())` raises “TypeError: NoteType.from_bundle() takes 1 positional argument but 2 were given”; `limits=MediaLimits()` works. The same table already writes `Media.file(path, *, limits=MediaLimits())` with the `*`. The new template-bundles opening (both locales) now links readers to this section, so the spelling deserves `*, limits=`. Documentation precision only; the default call shown elsewhere is correct, and no new sentence is wrong."
+        }
+      ]
+    },
+    {
+      "pageId": "python-diagnostics",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "9b7544b80114ddc00925972f410b330b843cdfe75c839f1ab1f85d6f53b12c88",
+        "targetHash": "958c1b9d958dd9d515641e5bcf697e3e474b7e242625a7abbd99689af6267ae0",
+        "technicalDependencyHash": "53b709d30cba3a822af8c928e611ce6bb322344214daad29aa08f18416de02c8"
+      },
+      "sourceHash": "cfd4bc496a46a0ea1d44106d3c57ad7ee0514345f20aa39c71e200e10caa1c62",
+      "targetHash": "76babcfebd3f929a0e07787f0b606db11948f80055994ae51f775fe63e1e802b",
+      "technicalDependencyHash": "53b709d30cba3a822af8c928e611ce6bb322344214daad29aa08f18416de02c8",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/python-diagnostics/",
+        "sha256": "6a3d82b8376227c19dc487df960db9c015fafcd49e0dd76b80c4143136774bfe",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "bbb6759f4df8e2c68a0f02be555f391105a43e7b73e964b57a4d7c0347c68fd9",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "python-diagnostics",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "9b7544b80114ddc00925972f410b330b843cdfe75c839f1ab1f85d6f53b12c88",
+        "targetHash": "fb15a02cfb28ce72bf06959d446dd89ddb7913f3c9293e29fa4c83dc791a7c4e",
+        "technicalDependencyHash": "c31990ebcfabec1426a860a5e247fed2f2883f54fdc1b44c98f63555cac2081a"
+      },
+      "sourceHash": "cfd4bc496a46a0ea1d44106d3c57ad7ee0514345f20aa39c71e200e10caa1c62",
+      "targetHash": "d9d28f87f34b1e0a8aada94b0572b304fde04598cb7b2c424d87a91adba3d151",
+      "technicalDependencyHash": "c31990ebcfabec1426a860a5e247fed2f2883f54fdc1b44c98f63555cac2081a",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/python-diagnostics/",
+        "sha256": "b98050f4656dc6188d7b23f9265ec95c5c3db80eba00912cacd4a37eb563025c",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "d964a3e58e32c39e563f0dbeea0a15c33a32932f84de8a5fd760f0cbf0fa5933",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "python-migration",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "b0d3c5131790763f07d06c7b9c1123f845f6e4489c0421922f876aaec150e686",
+        "targetHash": "af320c608f67b111c5381490ef1b981e1e817a7aac99732823c17bb1deee3fbb",
+        "technicalDependencyHash": "858e8e7252bb817e254de3b245a2946cf77cd674eb812b55467632a860019a7f"
+      },
+      "sourceHash": "61e872f18cfd92fb9966a1ac1d3b90d9870428cf09cf82feaabfb0a8a2606886",
+      "targetHash": "09380ec1414cab24ba286f1a11352a9ad2bb3c0a5cf766a6d5c4c8e3f71f1e6c",
+      "technicalDependencyHash": "858e8e7252bb817e254de3b245a2946cf77cd674eb812b55467632a860019a7f",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/python-migration/",
+        "sha256": "3fb1df42b759ba27edf950429e14d837ccafbf8ba12683d74dbbed0c6360fb98",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "be72debb0d181935bc77c89e34f438109007960e9fc2a9923da46542a25cc19a",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "Generate Anki flashcards with Python"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "python-migration",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "b0d3c5131790763f07d06c7b9c1123f845f6e4489c0421922f876aaec150e686",
+        "targetHash": "c2ac618f00a13811d782999958ccc283e3047ef117a27056a93f41b370a875ab",
+        "technicalDependencyHash": "096531076b6c739d11e2c8be498fb55c78f606c0ec257d4aad36620dbd7027ad"
+      },
+      "sourceHash": "61e872f18cfd92fb9966a1ac1d3b90d9870428cf09cf82feaabfb0a8a2606886",
+      "targetHash": "7df11335064b57deb05cb1ae38de9803276519a5a561805de9377005f12b1b15",
+      "technicalDependencyHash": "096531076b6c739d11e2c8be498fb55c78f606c0ec257d4aad36620dbd7027ad",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/python-migration/",
+        "sha256": "f9698d440a030da46f6b2c1684573ca414ffc0308451d10c9c2417bd4b82a6fe",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "49e5e1f4ef990dd161b09d09e166a85b81f8a3938c28b88d4409788bbee2da21",
+        "d9f5354EqualsLocaleDataManifest": true,
+        "paginationTitles": [
+          "用 Python 生成 Anki 卡片"
+        ]
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "4ea872d9bdc8cf3efbb36cd23aa5718a34a9fc1e945b19237bc443787b85d1e3",
+        "targetHash": "14168752407445f56dfcb992ca55193bfbb6e79d8231b01af18df14095dd31d7",
+        "technicalDependencyHash": "858e8e7252bb817e254de3b245a2946cf77cd674eb812b55467632a860019a7f"
+      },
+      "sourceHash": "739d69e483a04434407e919adf83acfa3ca5bf67da7708a182a0e60f54f3031d",
+      "targetHash": "79f8cc75f8df42bac1a8a48391fa347337f2ec695c4662df82b1141e8249b0e5",
+      "technicalDependencyHash": "858e8e7252bb817e254de3b245a2946cf77cd674eb812b55467632a860019a7f",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/docs/genanki-migration/",
+        "sha256": "9139934670d20f4a664a621f6bd2ad25af96297937e23324683a574ecdd1fbec",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "53f0bb176279b8364336d91d3bd1d427fdb68977e0ee62b6bfee2b314cb048df",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "4ea872d9bdc8cf3efbb36cd23aa5718a34a9fc1e945b19237bc443787b85d1e3",
+        "targetHash": "7887b5e07dd4e42184410a25dd41db7532ed532103be80a590a688807520cc7a",
+        "technicalDependencyHash": "096531076b6c739d11e2c8be498fb55c78f606c0ec257d4aad36620dbd7027ad"
+      },
+      "sourceHash": "739d69e483a04434407e919adf83acfa3ca5bf67da7708a182a0e60f54f3031d",
+      "targetHash": "e1fdea2bee31ab8566c7f4a0d4f579686f4400edda4c1726876fcdc82bdeba59",
+      "technicalDependencyHash": "096531076b6c739d11e2c8be498fb55c78f606c0ec257d4aad36620dbd7027ad",
+      "delta": "sidebar labels only",
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/genanki-migration/",
+        "sha256": "ecb735d9238f2bd5187ca233a9445c66221d5f27288a7bf835619886eeed2b0f",
+        "rebuildByteIdentical": true,
+        "d9f5354Sha256": "b171e33538738e1155e367e16f6ef9e12eddea11fc5ce6e394ffcaf29579e3a0",
+        "d9f5354EqualsLocaleDataManifest": true
+      },
+      "openIssues": []
+    }
+  ]
+}

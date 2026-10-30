@@ -1,7 +1,7 @@
 ---
-interface Props { locale?: 'en' | 'zh-CN' }
+interface Props { locale?: string }
 const { locale = 'en' } = Astro.props;
-import { createTranslator } from '../i18n/messages.mjs';
+import { createTranslator, formatCounts } from '../i18n/messages.mjs';
 const t = createTranslator(locale);
 import { examples, showcase } from '../lib/examples';
 import { sitePath } from '../lib/site';
@@ -41,7 +41,7 @@ const typeIcons: Record<string, 'textAa' | 'bracketsCurly' | 'waveform' | 'scan'
           <div class="forge-box-label">
             <div class="forge-box-heading"><span>showcase</span><Icon name="check" /></div>
             <strong>.apkg</strong>
-            <span class="forge-box-counts">{showcase.combined.counts.cards} {t('hero.cards')} <span>/</span> {showcase.combined.counts.media} {t('hero.files')}</span>
+            <span class="forge-box-counts">{t('hero.counts', formatCounts(locale, showcase.combined.counts))}</span>
           </div>
           <span class="forge-box-seal forge-box-seal-front"></span>
         </div>

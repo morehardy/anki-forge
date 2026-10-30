@@ -1,0 +1,25 @@
+✔ built-site gate rejects missing action (1224.59525ms)
+✔ built-site gate rejects broken anchor (1283.555375ms)
+✔ built-site gate rejects wrong-language link (1264.619417ms)
+✔ built-site gate rejects an incomplete search artifact manifest (284.528458ms)
+✔ built-site gate checks the mobile language switch as well as the header (1081.354ms)
+✔ built-site gate rejects an external footer destination on a different host (1122.635084ms)
+✔ machine gate rejects missing Markdown (278.459583ms)
+✔ machine gate rejects broken AI index (1034.088209ms)
+✔ machine gate rejects wrong software version (287.969125ms)
+✔ machine gate rejects wrong article headline (314.394625ms)
+✔ machine gate rejects wrong article language (312.380625ms)
+✔ machine gate rejects wrong canonical (322.326792ms)
+✔ valid links to the site root pass the machine gate (1030.859ms)
+✔ generation leaves existing exports intact when an HTML link is broken (732.167458ms)
+Generated 62 Markdown pages and 2 AI indexes.
+Generated 62 Markdown pages and 2 AI indexes.
+✔ repeated machine generation is byte-for-byte deterministic and removes stale exports (1744.841709ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12476.598042

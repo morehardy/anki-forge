@@ -1,0 +1,463 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+  "issues": [
+    {
+      "id": "L001-en",
+      "pageId": "media",
+      "locale": "en",
+      "sectionId": "metadata.description",
+      "file": "website/site-model.mjs",
+      "line": 130,
+      "span": "Generate and package a real waveform image and a one-second audio tone.",
+      "category": "context/promise",
+      "severity": "major",
+      "explanation": "该描述把网站听音示例的波形图和一秒音调任务放到媒体API指南；此页正文/所调用示例没有提供该任务。",
+      "proposedFix": "Import images and audio, compose typed content, and manage export names, MIME types and media budgets.",
+      "evidence": [
+        "website/site-model.mjs:130"
+      ],
+      "resolution": "resolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/delta-1",
+      "fixSpan": "Import images and audio, compose typed content, and manage export names, MIME types and media budgets.",
+      "verification": "Actual replacement description re-read against the full page; see linguistic-source-review.json delta history."
+    },
+    {
+      "id": "L002-en",
+      "pageId": "build-guarantees",
+      "locale": "en",
+      "sectionId": "prepared-publication-from-source",
+      "file": "docs/build-guarantees.md",
+      "line": 82,
+      "span": "Prepared publication from source",
+      "category": "context/scope",
+      "severity": "minor",
+      "explanation": "标题的源码限定与下句公开包已包含的适用范围冲突；正文已澄清，故不判为无法完成任务。",
+      "proposedFix": "Prepared publication",
+      "evidence": [
+        "docs/build-guarantees.md:82"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L003-en",
+      "pageId": "python-api",
+      "locale": "en",
+      "sectionId": "source-api-details",
+      "file": "docs/python/api.md",
+      "line": 82,
+      "span": "Source API details",
+      "category": "context/scope",
+      "severity": "minor",
+      "explanation": "该段正文说公开0.3.1包含预备发布；标题却暗示源码API。保留旧锚点即可改显示标题。",
+      "proposedFix": "Batch media and prepared publication",
+      "evidence": [
+        "docs/python/api.md:82"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L004-en",
+      "pageId": "genanki-migration",
+      "locale": "en",
+      "sectionId": "_top",
+      "file": "docs/python/genanki-migration.md",
+      "line": 5,
+      "span": "AnkiForge",
+      "category": "terminology/brand",
+      "severity": "minor",
+      "explanation": "非代码品牌拼写与全站Anki Forge不一致。",
+      "proposedFix": "将正文及表头的AnkiForge统一为Anki Forge，代码/API标识符保持不变。",
+      "evidence": [
+        "docs/python/genanki-migration.md:5"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L005-en",
+      "pageId": "troubleshooting",
+      "locale": "en",
+      "sectionId": "media-and-templates",
+      "file": "docs/troubleshooting.md",
+      "line": 49,
+      "span": "IO rectangle fails",
+      "category": "terminology/abbreviation",
+      "severity": "minor",
+      "explanation": "未展开的IO易被识别为I/O；此行实际为图片遮挡矩形错误。",
+      "proposedFix": "Image Occlusion rectangle fails",
+      "evidence": [
+        "docs/troubleshooting.md:49"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L006-en",
+      "pageId": "rust-api",
+      "locale": "en",
+      "sectionId": "build-compare-and-output",
+      "file": "docs/rust-api.md",
+      "line": 81,
+      "span": "returns an owned `build::ApkgArtifact` reference",
+      "category": "terminology/ownership",
+      "severity": "minor",
+      "explanation": "owned直接修饰reference有歧义；应明确返回引用，产物对象持有文件。",
+      "proposedFix": "returns a reference to the owned `build::ApkgArtifact`",
+      "evidence": [
+        "docs/rust-api.md:81"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L001-zh-CN",
+      "pageId": "media",
+      "locale": "zh-CN",
+      "sectionId": "metadata.description",
+      "file": "website/site-model.mjs",
+      "line": 132,
+      "span": "生成并打包真实波形图和一秒钟的音频。",
+      "category": "context/promise",
+      "severity": "major",
+      "explanation": "该描述把网站听音示例的波形图和一秒音调任务放到媒体API指南；此页正文/所调用示例没有提供该任务。",
+      "proposedFix": "导入图片和音频，组合类型化内容，并管理导出名称、MIME 类型与媒体预算。",
+      "evidence": [
+        "website/site-model.mjs:132"
+      ],
+      "resolution": "resolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/delta-1",
+      "fixSpan": "导入图片和音频，组合类型化内容，并管理导出名称、MIME 类型与媒体预算。",
+      "verification": "Actual replacement description re-read against the full page; see linguistic-source-review.json delta history."
+    },
+    {
+      "id": "L002-zh-CN",
+      "pageId": "build-guarantees",
+      "locale": "zh-CN",
+      "sectionId": "prepared-publication-from-source",
+      "file": "docs/zh-cn/build-guarantees.md",
+      "line": 41,
+      "span": "源码中的预备发布",
+      "category": "context/scope",
+      "severity": "minor",
+      "explanation": "标题的源码限定与下句公开包已包含的适用范围冲突；正文已澄清，故不判为无法完成任务。",
+      "proposedFix": "预备发布",
+      "evidence": [
+        "docs/zh-cn/build-guarantees.md:41"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L003-zh-CN",
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "sectionId": "source-api-details",
+      "file": "docs/zh-cn/python-api.md",
+      "line": 70,
+      "span": "源码 API 详情",
+      "category": "context/scope",
+      "severity": "minor",
+      "explanation": "该段正文说公开0.3.1包含预备发布；标题却暗示源码API。保留旧锚点即可改显示标题。",
+      "proposedFix": "批量媒体与预备发布",
+      "evidence": [
+        "docs/zh-cn/python-api.md:70"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L004-zh-CN",
+      "pageId": "genanki-migration",
+      "locale": "zh-CN",
+      "sectionId": "_top",
+      "file": "docs/zh-cn/genanki-migration.md",
+      "line": 5,
+      "span": "AnkiForge",
+      "category": "terminology/brand",
+      "severity": "minor",
+      "explanation": "非代码品牌拼写与全站Anki Forge不一致。",
+      "proposedFix": "将正文及表头的AnkiForge统一为Anki Forge，代码/API标识符保持不变。",
+      "evidence": [
+        "docs/zh-cn/genanki-migration.md:5"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L005-zh-CN",
+      "pageId": "troubleshooting",
+      "locale": "zh-CN",
+      "sectionId": "media-and-templates",
+      "file": "docs/zh-cn/troubleshooting.md",
+      "line": 43,
+      "span": "IO 矩形失败",
+      "category": "terminology/abbreviation",
+      "severity": "minor",
+      "explanation": "未展开的IO易被识别为I/O；此行实际为图片遮挡矩形错误。",
+      "proposedFix": "图片遮挡矩形无效",
+      "evidence": [
+        "docs/zh-cn/troubleshooting.md:43"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L006-zh-CN",
+      "pageId": "rust-api",
+      "locale": "zh-CN",
+      "sectionId": "build-compare-and-output",
+      "file": "docs/zh-cn/rust-api.md",
+      "line": 52,
+      "span": "返回拥有所有权的 `build::ApkgArtifact` 引用",
+      "category": "terminology/ownership",
+      "severity": "minor",
+      "explanation": "owned直接修饰reference有歧义；应明确返回引用，产物对象持有文件。",
+      "proposedFix": "返回对 `build::ApkgArtifact` 产物所有者的引用",
+      "evidence": [
+        "docs/zh-cn/rust-api.md:52"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L007-media",
+      "pageId": "media",
+      "locale": "zh-CN",
+      "sectionId": "typed-image-and-sound-usage",
+      "file": "docs/zh-cn/media.md",
+      "line": 84,
+      "span": "构造函数保持不会失败",
+      "category": "fluency/syntax",
+      "severity": "minor",
+      "explanation": "“保持不会失败”机械对应stay infallible，中文宜直接陈述构造函数本身不会失败。",
+      "proposedFix": "这些构造函数本身不会失败；媒体类别在添加笔记时检查。",
+      "evidence": [
+        "docs/zh-cn/media.md:84"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L007-rust-api",
+      "pageId": "rust-api",
+      "locale": "zh-CN",
+      "sectionId": "addition-context",
+      "file": "docs/zh-cn/rust-api.md",
+      "line": 68,
+      "span": "构造函数保持不会失败",
+      "category": "fluency/syntax",
+      "severity": "minor",
+      "explanation": "“保持不会失败”机械对应stay infallible，中文宜直接陈述构造函数本身不会失败。",
+      "proposedFix": "这些构造函数本身不会失败；媒体类别在添加笔记时检查。",
+      "evidence": [
+        "docs/zh-cn/rust-api.md:68"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L007-node-api",
+      "pageId": "node-api",
+      "locale": "zh-CN",
+      "sectionId": "addition-context",
+      "file": "docs/zh-cn/node-api.md",
+      "line": 99,
+      "span": "构造函数保持不会失败",
+      "category": "fluency/syntax",
+      "severity": "minor",
+      "explanation": "“保持不会失败”机械对应stay infallible，中文宜直接陈述构造函数本身不会失败。",
+      "proposedFix": "这些构造函数本身不会失败；媒体类别在添加笔记时检查。",
+      "evidence": [
+        "docs/zh-cn/node-api.md:99"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L007-python-api",
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "sectionId": "addition-context",
+      "file": "docs/zh-cn/python-api.md",
+      "line": 68,
+      "span": "构造函数保持不会失败",
+      "category": "fluency/syntax",
+      "severity": "minor",
+      "explanation": "“保持不会失败”机械对应stay infallible，中文宜直接陈述构造函数本身不会失败。",
+      "proposedFix": "这些构造函数本身不会失败；媒体类别在添加笔记时检查。",
+      "evidence": [
+        "docs/zh-cn/python-api.md:68"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L007-rust-guide",
+      "pageId": "rust-guide",
+      "locale": "zh-CN",
+      "sectionId": "addition-errors-and-media-categories",
+      "file": "docs/zh-cn/rust-guide.md",
+      "line": 58,
+      "span": "`Media::image()` 和 `sound()` 保持不会失败。",
+      "category": "fluency/syntax",
+      "severity": "minor",
+      "explanation": "“保持不会失败”不自然，方法名本身已经明确对象。",
+      "proposedFix": "`Media::image()` 和 `sound()` 本身不会失败。",
+      "evidence": [
+        "docs/zh-cn/rust-guide.md:58"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L008-en",
+      "pageId": "home",
+      "locale": "en",
+      "sectionId": "ai-quickstart",
+      "file": "website/src/i18n/en.json",
+      "line": 141,
+      "span": "Your coding assistant supports Skills?",
+      "category": "fluency/syntax",
+      "severity": "minor",
+      "explanation": "Declarative-question order sounds conversationally surprised; a neutral product prompt uses a direct question.",
+      "proposedFix": "Does your coding assistant support Skills?",
+      "evidence": [
+        "website/src/i18n/en.json:141"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L009-zh",
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "zh-CN",
+      "sectionId": "separate-identity-from-content",
+      "file": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+      "line": 32,
+      "span": "仅笔记 ID 本身只是可重复更新流程的一部分。",
+      "category": "fluency/redundancy",
+      "severity": "minor",
+      "explanation": "“仅…本身只是”重复限定，读起来不顺。",
+      "proposedFix": "笔记 ID 只是可重复更新流程的一部分。",
+      "evidence": [
+        "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx:32"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L010-en",
+      "pageId": "rust-api",
+      "locale": "en",
+      "sectionId": "build-compare-and-output",
+      "file": "docs/rust-api.md",
+      "line": 87,
+      "span": "even if high-risk findings block its policy",
+      "category": "fluency/semantic-subject",
+      "severity": "minor",
+      "explanation": "The policy blocks publication, rather than findings blocking the policy. Nearby sentences explain it, so the local ambiguity is minor.",
+      "proposedFix": "even if its policy blocks publication because of high-risk findings",
+      "evidence": [
+        "docs/rust-api.md:87"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1"
+    },
+    {
+      "id": "L011-zh-templates",
+      "pageId": "templates",
+      "locale": "zh-CN",
+      "sectionId": "search-terms",
+      "file": "website/search-terms.json",
+      "line": 534,
+      "span": "按字段键引用模板",
+      "category": "terminology/reference-direction",
+      "severity": "minor",
+      "explanation": "“模板引用字段键”的方向应更清楚；当前短语可能被读作通过字段键引用整个模板。",
+      "proposedFix": "模板中的字段键引用",
+      "evidence": [
+        "website/search-terms.json"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+    },
+    {
+      "id": "L012-zh-first-git",
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "sectionId": "search-terms",
+      "file": "website/search-terms.json",
+      "line": 849,
+      "span": "在 Git 中重复编写",
+      "category": "fluency/register",
+      "severity": "minor",
+      "explanation": "“重复编写”是重复劳动，不能自然表达可重复的编写/构建流程。",
+      "proposedFix": "用 Git 管理可重复构建流程",
+      "evidence": [
+        "website/search-terms.json"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+    },
+    {
+      "id": "L013-zh-first-errors",
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "sectionId": "search-terms",
+      "file": "website/search-terms.json",
+      "line": 853,
+      "span": "传播类型化失败",
+      "category": "fluency/register",
+      "severity": "minor",
+      "explanation": "传播失败可以理解，但中文Rust文体通常直接说传播带类型的错误；typed不是键入答案。",
+      "proposedFix": "传播带类型的错误",
+      "evidence": [
+        "website/search-terms.json"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+    },
+    {
+      "id": "L014-en-reexport",
+      "pageId": "updates",
+      "locale": "en",
+      "sectionId": "search-terms",
+      "file": "website/search-terms.json",
+      "line": 224,
+      "span": "Anki re-export baseline",
+      "category": "context/qualifier",
+      "severity": "minor",
+      "explanation": "As a retrieval topic it names the rejected baseline case, but it is clearer with the documented restriction explicit. The page and other terms already require an original distribution APKG.",
+      "proposedFix": "invalid Anki re-export baseline",
+      "evidence": [
+        "website/search-terms.json"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+    },
+    {
+      "id": "L015-zh-csv-bom",
+      "pageId": "csv-to-anki",
+      "locale": "zh-CN",
+      "sectionId": "prepare-csv",
+      "file": "docs/zh-cn/csv-to-anki.md",
+      "line": 28,
+      "span": "脚本支持部分表格软件导出的 UTF-8 BOM",
+      "category": "fluency/technical-object",
+      "severity": "minor",
+      "explanation": "脚本读取的是带BOM的CSV，直接说支持BOM略省略对象；不会妨碍按示例操作。",
+      "proposedFix": "脚本支持带 BOM 的 UTF-8 CSV；部分表格软件会以这种格式导出。",
+      "evidence": [
+        "docs/zh-cn/csv-to-anki.md"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/final-34-topic-delta"
+    }
+  ],
+  "deltaReviewerRun": "/root/independent_linguistic_source_review/2026-10-28/delta-1",
+  "searchVocabularyReviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3",
+  "final34TopicReviewerRun": "/root/independent_linguistic_source_review/2026-10-28/final-34-topic-delta"
+}

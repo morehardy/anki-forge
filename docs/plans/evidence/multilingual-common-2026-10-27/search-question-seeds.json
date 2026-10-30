@@ -1,0 +1,883 @@
+{
+  "schemaVersion": 1,
+  "provenanceNote": "AI-authored acceptance fixtures derived from reader tasks and language briefs before viewing tested page titles or bodies or running search. They are not observed user queries, search-volume data or evidence of market demand.",
+  "locales": {
+    "en": [
+      {
+        "id": "en-core-01",
+        "kind": "core",
+        "query": "How do I write a small Rust program that saves my first Anki deck as an apkg file?",
+        "locale": "en",
+        "intentId": "first-apkg-rust",
+        "sdk": "rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-02",
+        "kind": "core",
+        "query": "I use TypeScript on Node.js. How can I create an apkg I can import into Anki?",
+        "locale": "en",
+        "intentId": "first-apkg-node",
+        "sdk": "node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-03",
+        "kind": "core",
+        "query": "How can a Python script turn a few question and answer pairs into an Anki package?",
+        "locale": "en",
+        "intentId": "first-apkg-python",
+        "sdk": "python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-04",
+        "kind": "core",
+        "query": "I have questions in JSON plus local image and audio files. How do I package them together for Anki?",
+        "locale": "en",
+        "intentId": "json-with-media",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-05",
+        "kind": "core",
+        "query": "I need to correct answers in a released deck. Which original apkg should I keep for the next update?",
+        "locale": "en",
+        "intentId": "update-original-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-06",
+        "kind": "core",
+        "query": "I am choosing a library to generate Anki decks. When should I use Anki Forge instead of genanki?",
+        "locale": "en",
+        "intentId": "compare-genanki",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-07",
+        "kind": "core",
+        "query": "How do I move an existing genanki script to Anki Forge while keeping note identities stable?",
+        "locale": "en",
+        "intentId": "migrate-genanki",
+        "sdk": "python",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-08",
+        "kind": "core",
+        "query": "How do I put a picture on a flashcard and make its pronunciation audio play in Anki?",
+        "locale": "en",
+        "intentId": "attach-image-audio",
+        "sdk": null,
+        "expectedPageIds": [
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-09",
+        "kind": "core",
+        "query": "How do I make fill in the blank cards from sentences with more than one hidden word?",
+        "locale": "en",
+        "intentId": "create-cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-10",
+        "kind": "core",
+        "query": "My notes have several fields. How do I choose what appears on the front and back of each card?",
+        "locale": "en",
+        "intentId": "custom-card-template",
+        "sdk": null,
+        "expectedPageIds": [
+          "templates",
+          "custom-notetypes"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-11",
+        "kind": "core",
+        "query": "How can I cover labels on an anatomy image and turn the covered areas into Anki questions?",
+        "locale": "en",
+        "intentId": "create-image-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-12",
+        "kind": "core",
+        "query": "Deck generation fails with an error. How do I find the cause, fix the input and check the package again?",
+        "locale": "en",
+        "intentId": "repair-generation-error",
+        "sdk": null,
+        "expectedPageIds": [
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-01",
+        "kind": "terminology",
+        "query": "What is an Anki deck and how are generated notes grouped into it?",
+        "locale": "en",
+        "intentId": "term-deck",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-02",
+        "kind": "terminology",
+        "query": "What is an Anki note, and which fields belong to it?",
+        "locale": "en",
+        "intentId": "term-note",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-03",
+        "kind": "terminology",
+        "query": "Can one note create several cards, and how are they different?",
+        "locale": "en",
+        "intentId": "term-card",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts",
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-04",
+        "kind": "terminology",
+        "query": "What does an APKG contain when I distribute a deck?",
+        "locale": "en",
+        "intentId": "term-apkg",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts",
+          "compatibility"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-05",
+        "kind": "terminology",
+        "query": "genanki compatibility when moving generated decks to ankiforge",
+        "locale": "en",
+        "intentId": "term-genanki",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki",
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-06",
+        "kind": "terminology",
+        "query": "Image Occlusion masks for diagram labels",
+        "locale": "en",
+        "intentId": "term-image-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-07",
+        "kind": "terminology",
+        "query": "namespace and stable note key for repeatable deck builds",
+        "locale": "en",
+        "intentId": "term-namespace-note-key",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates",
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-08",
+        "kind": "terminology",
+        "query": "Cloze c1 and c2 deletions in the same note",
+        "locale": "en",
+        "intentId": "term-cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-variant-01",
+        "kind": "variant",
+        "query": "make an anki deck from json with sound files",
+        "locale": "en",
+        "intentId": "variant-json-audio",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki",
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-variant-02",
+        "kind": "variant",
+        "query": "change an answer without changing which note it is",
+        "locale": "en",
+        "intentId": "variant-answer-update",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-variant-03",
+        "kind": "variant",
+        "query": "hide labels on a diagram for revision",
+        "locale": "en",
+        "intentId": "variant-cover-diagram",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-variant-04",
+        "kind": "variant",
+        "query": "switch my genanki script over to ankiforge",
+        "locale": "en",
+        "intentId": "variant-switch-genanki",
+        "sdk": "python",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-variant-05",
+        "kind": "variant",
+        "query": "why is the picture missing after I import the deck",
+        "locale": "en",
+        "intentId": "variant-missing-picture",
+        "sdk": null,
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-negative-01",
+        "kind": "negative",
+        "query": "zxqvnj 847261 qqqrzz",
+        "locale": "en",
+        "intentId": "negative-gibberish",
+        "sdk": null,
+        "expectedPageIds": [],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Meaningless input has no supported task or expected page. An empty result is allowed; the interface must remain usable and offer a way to revise the query."
+      },
+      {
+        "id": "en-negative-02",
+        "kind": "negative",
+        "query": "How do I pass ankiforge-project-v1 JSON to the current tool without converting it?",
+        "locale": "en",
+        "intentId": "negative-old-schema",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki",
+          "troubleshooting",
+          "rust-guide"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "The public 0.3.1 tool requires ankiforge-project-v2 and rejects v1. A result may explain that the input must be converted; it must not present unchanged v1 as accepted input. Empty results are allowed."
+      },
+      {
+        "id": "en-negative-03",
+        "kind": "negative",
+        "query": "Can I use an apkg re-exported from Anki as the baseline for updating my distributed deck?",
+        "locale": "en",
+        "intentId": "negative-reexport-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates",
+          "compatibility",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Updates require the previous original distribution APKG. An Anki re-export is not a valid replacement baseline; a result may explain this requirement. Empty results are allowed."
+      },
+      {
+        "id": "en-negative-04",
+        "kind": "negative",
+        "query": "Can I turn a PNG into audio just by renaming it wrong.mp3 before packaging it?",
+        "locale": "en",
+        "intentId": "negative-mime-rename",
+        "sdk": null,
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Renaming a file does not convert its bytes or retained media MIME. A PNG renamed wrong.mp3 can fail the independent build sniff or extension check. Results must direct the reader to correct media input or actual conversion, not promise conversion by renaming. Empty results are allowed."
+      },
+      {
+        "id": "en-negative-05",
+        "kind": "negative",
+        "query": "How do I use Anki Forge to directly reset review history in my installed Anki collection?",
+        "locale": "en",
+        "intentId": "negative-edit-study-progress",
+        "sdk": null,
+        "expectedPageIds": [
+          "compatibility",
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "The library generates APKGs and does not directly modify an installed Anki collection or study progress. A result may explain the package and client import boundary; it must not promise direct review-history edits. Empty results are allowed."
+      }
+    ],
+    "zh-CN": [
+      {
+        "id": "zh-CN-core-01",
+        "kind": "core",
+        "query": "怎么写一个最小的 Rust 程序，把第一副 Anki 牌组保存成 apkg 文件？",
+        "locale": "zh-CN",
+        "intentId": "first-apkg-rust",
+        "sdk": "rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-02",
+        "kind": "core",
+        "query": "我用 Node.js 和 TypeScript，怎么生成能导入 Anki 的 apkg？",
+        "locale": "zh-CN",
+        "intentId": "first-apkg-node",
+        "sdk": "node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-03",
+        "kind": "core",
+        "query": "怎么用 Python 脚本把几组问答做成能导入 Anki 的牌组文件？",
+        "locale": "zh-CN",
+        "intentId": "first-apkg-python",
+        "sdk": "python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-04",
+        "kind": "core",
+        "query": "题目在 JSON 里，图片和音频在本地，怎么一起打包成 Anki 牌组？",
+        "locale": "zh-CN",
+        "intentId": "json-with-media",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-05",
+        "kind": "core",
+        "query": "已经发布的牌组要改答案，下次更新应该保留哪一份原始 apkg？",
+        "locale": "zh-CN",
+        "intentId": "update-original-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-06",
+        "kind": "core",
+        "query": "准备选一个生成 Anki 牌组的库，Anki Forge 和 genanki 各适合什么情况？",
+        "locale": "zh-CN",
+        "intentId": "compare-genanki",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-07",
+        "kind": "core",
+        "query": "现有的 genanki 脚本怎么迁到 Anki Forge，还能保持笔记身份不变？",
+        "locale": "zh-CN",
+        "intentId": "migrate-genanki",
+        "sdk": "python",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-08",
+        "kind": "core",
+        "query": "怎么在卡片上放图片，并让 Anki 播放对应的发音音频？",
+        "locale": "zh-CN",
+        "intentId": "attach-image-audio",
+        "sdk": null,
+        "expectedPageIds": [
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-09",
+        "kind": "core",
+        "query": "一句话里有几个词要挖空，怎么生成对应的填空卡片？",
+        "locale": "zh-CN",
+        "intentId": "create-cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-10",
+        "kind": "core",
+        "query": "笔记里有好几个字段，怎么自定义每张卡片正面和背面显示的内容？",
+        "locale": "zh-CN",
+        "intentId": "custom-card-template",
+        "sdk": null,
+        "expectedPageIds": [
+          "templates",
+          "custom-notetypes"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-11",
+        "kind": "core",
+        "query": "怎么把解剖图上的标注遮住，再把这些遮挡区域做成 Anki 题目？",
+        "locale": "zh-CN",
+        "intentId": "create-image-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-12",
+        "kind": "core",
+        "query": "生成牌组时报错了，怎么定位原因、修正输入，再检查生成的包？",
+        "locale": "zh-CN",
+        "intentId": "repair-generation-error",
+        "sdk": null,
+        "expectedPageIds": [
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-01",
+        "kind": "terminology",
+        "query": "Anki 里的牌组是什么，生成的笔记怎么放进牌组？",
+        "locale": "zh-CN",
+        "intentId": "term-deck",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-02",
+        "kind": "terminology",
+        "query": "Anki 里的笔记是什么，字段属于笔记还是卡片？",
+        "locale": "zh-CN",
+        "intentId": "term-note",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-03",
+        "kind": "terminology",
+        "query": "一条笔记能生成多张卡片吗，它们有什么区别？",
+        "locale": "zh-CN",
+        "intentId": "term-card",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts",
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-04",
+        "kind": "terminology",
+        "query": "分发牌组时，APKG 文件里包含哪些内容？",
+        "locale": "zh-CN",
+        "intentId": "term-apkg",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts",
+          "compatibility"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-05",
+        "kind": "terminology",
+        "query": "genanki 生成的牌组迁到 ankiforge 时有什么兼容性要求",
+        "locale": "zh-CN",
+        "intentId": "term-genanki",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki",
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-06",
+        "kind": "terminology",
+        "query": "图片遮挡 Image Occlusion 的遮罩怎么用于图中标注",
+        "locale": "zh-CN",
+        "intentId": "term-image-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-07",
+        "kind": "terminology",
+        "query": "重复生成牌组时的命名空间和稳定笔记键",
+        "locale": "zh-CN",
+        "intentId": "term-namespace-note-key",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates",
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-08",
+        "kind": "terminology",
+        "query": "同一条笔记里的 Cloze c1 和 c2 挖空",
+        "locale": "zh-CN",
+        "intentId": "term-cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-variant-01",
+        "kind": "variant",
+        "query": "用 JSON 做牌组，顺便打包发音 mp3",
+        "locale": "zh-CN",
+        "intentId": "variant-json-audio",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki",
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-variant-02",
+        "kind": "variant",
+        "query": "第二版只改答案，怎么保持 note key 不变",
+        "locale": "zh-CN",
+        "intentId": "variant-answer-update",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-variant-03",
+        "kind": "variant",
+        "query": "想把示意图上的名称遮起来做复习题",
+        "locale": "zh-CN",
+        "intentId": "variant-cover-diagram",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-variant-04",
+        "kind": "variant",
+        "query": "原来用 genanki 的脚本怎么换成 ankiforge",
+        "locale": "zh-CN",
+        "intentId": "variant-switch-genanki",
+        "sdk": "python",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-variant-05",
+        "kind": "variant",
+        "query": "导进 Anki 后图片不显示，怎么排查",
+        "locale": "zh-CN",
+        "intentId": "variant-missing-picture",
+        "sdk": null,
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-negative-01",
+        "kind": "negative",
+        "query": "zxqvnj 847261 qqqrzz",
+        "locale": "zh-CN",
+        "intentId": "negative-gibberish",
+        "sdk": null,
+        "expectedPageIds": [],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "无意义输入没有对应任务或预期页面。允许无结果；搜索界面应保持可用，并允许修改查询。"
+      },
+      {
+        "id": "zh-CN-negative-02",
+        "kind": "negative",
+        "query": "怎么把 ankiforge-project-v1 的 JSON 原样交给当前工具，不做转换？",
+        "locale": "zh-CN",
+        "intentId": "negative-old-schema",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki",
+          "troubleshooting",
+          "rust-guide"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "公开 0.3.1 工具要求 ankiforge-project-v2，拒绝 v1。结果可以说明需要转换输入，不能声称原样接受 v1。允许无结果。"
+      },
+      {
+        "id": "zh-CN-negative-03",
+        "kind": "negative",
+        "query": "能把从 Anki 重新导出的 apkg 当作已发布牌组的更新基线吗？",
+        "locale": "zh-CN",
+        "intentId": "negative-reexport-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates",
+          "compatibility",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "更新要求保留上一份原始分发 APKG；Anki 重导出包不能替代有效基线。结果可以解释这一要求。允许无结果。"
+      },
+      {
+        "id": "zh-CN-negative-04",
+        "kind": "negative",
+        "query": "把 PNG 改名成 wrong.mp3，就能作为音频打进牌组吗？",
+        "locale": "zh-CN",
+        "intentId": "negative-mime-rename",
+        "sdk": null,
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "改文件名不会转换实际字节或媒体保留的 MIME；PNG 改名 wrong.mp3 可能在独立构建的内容嗅探或扩展名检查中失败。结果应指向正确媒体输入或实际转换，不能承诺改名即可转换。允许无结果。"
+      },
+      {
+        "id": "zh-CN-negative-05",
+        "kind": "negative",
+        "query": "怎么用 Anki Forge 直接重置已安装 Anki 里的复习记录？",
+        "locale": "zh-CN",
+        "intentId": "negative-edit-study-progress",
+        "sdk": null,
+        "expectedPageIds": [
+          "compatibility",
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "该库生成 APKG，不直接修改已安装 Anki 的集合或学习进度。结果可以解释生成包与客户端导入的边界，不能承诺直接编辑复习记录。允许无结果。"
+      }
+    ]
+  },
+  "intendedUse": "Original question-form AI seeds retained for GEO evaluation and later agent task scenarios. These are synthetic prompts, not observed user queries. The Pagefind acceptance fixture uses the separately frozen concise phrase version in website/search-queries.json."
+}

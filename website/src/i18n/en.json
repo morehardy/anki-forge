@@ -1,8 +1,8 @@
 {
-  "home.title": "Build Anki decks from code",
-  "home.description": "Build Basic, Cloze, Image Occlusion and custom Anki cards with Rust, TypeScript or Python. Package media, keep note identities stable and review deck updates.",
-  "home.hero1": "Turn your data",
-  "home.hero2": "into Anki decks.",
+  "home.title": "Anki flashcard generator for developers",
+  "home.description": "Generate Anki flashcards and APKG decks with open-source Python, Node.js and Rust APIs. Start with CSV, JSON or an AI-assisted workflow.",
+  "home.hero1": "Generate Anki flashcards",
+  "home.hero2": "from your data.",
   "home.intro": "Anki Forge is an open-source Anki APKG generation library with a Rust core and Rust, Python and Node.js interfaces. Package media, use custom templates and review updates before distribution.",
   "home.first": "Build your first deck",
   "home.json": "Build from JSON",
@@ -27,7 +27,7 @@
   "home.templateDescription": "Start with Basic and Cloze, or define your own note types. Keep HTML, CSS, and media in reusable template bundles.",
   "home.templateLink": "Explore templates",
   "home.nextTitle": "From your first deck to the next update",
-  "home.nextDescription": "Build three cards from shared JSON, image and audio inputs. Keep your business IDs, change an answer, and review the update against the original APKG.",
+  "home.nextDescription": "Start with a CSV spreadsheet, JSON data or cards drafted with an AI assistant. Follow a complete export recipe, then add media and review updates.",
   "home.compare": "Compare with genanki",
   "nav.home": "Anki Forge home",
   "nav.main": "Main navigation",
@@ -124,7 +124,7 @@
   "examples.fullSource": "Read the complete source",
   "examples.excerpt": "Rust excerpt",
   "examples.download": "Download {file}",
-  "examples.counts": "{notes} note · {cards} card · {media} media files",
+  "examples.counts": "{notes} · {cards} · {media}",
   "examples.updateTitle": "One note, two versions.",
   "examples.updateDescription": "The second build changes the answer from “hello” to “hello; hi”. It compares against the first package and checks that the note identity is preserved.",
   "examples.workflow": "Read the update workflow",
@@ -187,5 +187,47 @@
   "social.footer": "Open source · Rust · Anki",
   "performance.method": "Method and original measurements",
   "performance.limitations": "These results measure deck generation, not Anki import or review speed; other hardware and workloads may differ.",
-  "footer.rss": "RSS"
+  "footer.rss": "RSS",
+  "machine.viewMarkdown": "View Markdown",
+  "machine.aiIndex": "AI documentation index",
+  "machine.intro": "Anki Forge generates Anki APKG decks from code using Rust, Node / TypeScript or Python.",
+  "machine.version": "Current public package version: {version}.",
+  "machine.constraints": "Normal export does not require Anki. Published package APIs differ from source builds. Keep the original previous distribution APKG for updates; Anki import settings and newer local edits can affect the result.",
+  "machine.start": "Start here",
+  "machine.quickstarts": "Quickstarts",
+  "machine.api": "API references",
+  "machine.tasks": "Task guides",
+  "machine.constraintsGroup": "Constraints",
+  "machine.optional": "Optional",
+  "machine.sourceBuild": "Development/source environment.",
+  "machine.history": "Historical article, published {date}.",
+  "machine.repository": "Source repository and development resources.",
+  "machine.otherLanguage": "{language} AI documentation index.",
+  "hero.counts": "{cards} / {media}",
+  "count.notes": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} note",
+      "other": "{count} notes"
+    }
+  },
+  "count.cards": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} card",
+      "other": "{count} cards"
+    }
+  },
+  "count.media": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} media file",
+      "other": "{count} media files"
+    }
+  },
+  "home.csv": "Convert CSV to Anki",
+  "home.aiCards": "Create cards with AI"
 }

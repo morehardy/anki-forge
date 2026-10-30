@@ -1,0 +1,64 @@
+{
+  "dataset": "benchmarks/results/20261008-latest-commit-genanki",
+  "measurementCommit": "11991964b06896b2e07ba09cbb3e6465f7585099",
+  "evidenceCommit": "bef4aeb653fc875f216614e73d8a617be039b9cf",
+  "notes": 1000,
+  "dataFile": "docs/performance/20261008/comparison.csv",
+  "sha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999",
+  "measuredAt": "2026-10-08",
+  "results": [
+    {
+      "profile": "basic-mixed-text-v1",
+      "label": "Text only",
+      "rust": 52.692,
+      "genanki": 105.02799999999999,
+      "saved": 49.83052138477358,
+      "speedup": 1.993243756167919,
+      "rustRSS": 21.90625,
+      "genankiRSS": 32.25
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "label": "Unique images",
+      "rust": 150.73450000000003,
+      "genanki": 320.173,
+      "saved": 52.92092087715079,
+      "speedup": 2.1240857268906583,
+      "rustRSS": 92.453125,
+      "genankiRSS": 35.59375
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "label": "Unique audio",
+      "rust": 128.65949999999998,
+      "genanki": 275.447,
+      "saved": 53.29065119605587,
+      "speedup": 2.1408990397133523,
+      "rustRSS": 62.65625,
+      "genankiRSS": 35.96875
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "label": "Mixed, unique media",
+      "rust": 110.476,
+      "genanki": 239.494,
+      "saved": 53.871078189850266,
+      "speedup": 2.167837358340273,
+      "rustRSS": 65.1875,
+      "genankiRSS": 35.03125
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "label": "Mixed, shared media",
+      "rust": 61.3505,
+      "genanki": 112.9115,
+      "saved": 45.66496769593886,
+      "speedup": 1.840433248302785,
+      "rustRSS": 29.359375,
+      "genankiRSS": 32.65625
+    }
+  ],
+  "maxTime": 320.173,
+  "minimumSaved": 45.66496769593886,
+  "maximumSaved": 53.871078189850266
+}

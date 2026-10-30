@@ -3,13 +3,15 @@ import Icon from './Icon.astro';
 import { repository, sitePath } from '../lib/site';
 import { footerNavigation, pagePath, locales } from '../../site-model.mjs';
 import { createTranslator } from '../i18n/messages.mjs';
-interface Props { locale?: 'en' | 'zh-CN' }
-const { locale = 'en' } = Astro.props;
+import { llmsUrl } from '../lib/machine-urls.mjs';
+import { siteConfig } from '../../site.config.mjs';
+interface Props { locale?: string; showAiIndex?: boolean }
+const { locale = 'en', showAiIndex = true } = Astro.props;
 const t = createTranslator(locale);
 const resources: Record<string, string> = { feed: sitePath(`${locales[locale].prefix}/rss.xml`), license: `${repository}/blob/main/LICENSE`, repository };
 ---
 <noscript><p class="container">{t('copy.noScript')}</p></noscript>
 <footer class="site-footer container">
   <p>{t('footer.description')}</p>
-  <nav aria-label={t('footer.label')}>{footerNavigation.map(link => <a href={link.pageId ? sitePath(pagePath(link.pageId, locale)) : resources[link.resource]} class:list={{ 'github-link': link.id === 'repository' }} aria-label={link.id === 'repository' ? t(link.label) : undefined} title={link.id === 'repository' ? 'GitHub' : undefined}>{link.id === 'repository' ? <Icon name="githubLogo" /> : t(link.label)}</a>)}</nav>
+  <nav aria-label={t('footer.label')}>{footerNavigation.map(link => <a href={link.pageId ? sitePath(pagePath(link.pageId, locale)) : resources[link.resource]} class:list={{ 'github-link': link.id === 'repository' }} aria-label={link.id === 'repository' ? t(link.label) : undefined} title={link.id === 'repository' ? 'GitHub' : undefined}>{link.id === 'repository' ? <Icon name="githubLogo" /> : t(link.label)}</a>)}{showAiIndex && <a href={llmsUrl(locale, siteConfig)}>{t('machine.aiIndex')}</a>}</nav>
 </footer>

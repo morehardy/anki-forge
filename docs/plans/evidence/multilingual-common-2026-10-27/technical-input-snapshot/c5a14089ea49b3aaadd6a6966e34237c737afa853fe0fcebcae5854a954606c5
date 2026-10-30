@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "publicVersion": "0.3.1",
+  "sitePromptUrl": "https://ankiforge.dev/#ai-quickstart",
+  "languages": {
+    "rust": {
+      "label": "Rust",
+      "runtime": "Rust 1.92+",
+      "install": "cargo add ankiforge@0.3.1",
+      "quickstart": "https://ankiforge.dev/docs/quickstart/"
+    },
+    "node": {
+      "label": "Node / TypeScript",
+      "runtime": "Node.js 22.13+",
+      "install": "npm install --include=optional ankiforge@0.3.1",
+      "quickstart": "https://ankiforge.dev/docs/node-quickstart/"
+    },
+    "python": {
+      "label": "Python",
+      "runtime": "CPython 3.11+",
+      "install": "python -m pip install ankiforge==0.3.1",
+      "quickstart": "https://ankiforge.dev/docs/python-quickstart/"
+    }
+  },
+  "prompts": {
+    "en": "You are helping me use Anki Forge {version} in a {language} application.\nRuntime requirement: {runtime}\n\nUse the published `ankiforge` package and only the public API documented for\nthis version. Do not use git/path dependencies, internal tools, source-only\nAPIs, unreleased methods, or invented methods.\n\nMy goal:\n{request}\n\nPlease:\n1. Inspect the existing project before changing files.\n2. Give the exact setup and installation command: {install}\n3. Create the smallest complete runnable program and name every file to add or edit.\n4. Produce a persistent `.apkg` file and use stable namespace and note keys.\n5. Include the run command, expected output, and a verification step.\n6. If media, custom templates, Image Occlusion, or updates are needed, use the\n   documented workflow instead of approximating the API. For updates, keep the\n   previous original distribution APKG as the baseline; do not use an Anki re-export.\n7. Ask only the questions required to resolve an unknown language, input shape,\n   output path, or identity rule.\n\nQuickstart reference: {quickstart}",
+    "zh-CN": "请帮助我在 {language} 项目中使用 Anki Forge {version}。\n运行时要求：{runtime}\n\n只使用该版本公开文档中的 `ankiforge` 包和公开 API。不要使用 git/path\n依赖、internal tools、仅源码可用的 API、未发布方法或猜测出来的方法。\n\n我的目标：\n{request}\n\n请按以下要求完成：\n1. 先检查现有项目，再决定需要新增或修改哪些文件。\n2. 给出准确的安装命令：{install}\n3. 生成最小但完整、可以直接运行的程序，列出新增或修改的文件。\n4. 输出持久化的 `.apkg`，并使用稳定的 namespace 和 note key。\n5. 给出运行命令、预期输出和验证步骤。\n6. 如果涉及媒体、自定义模板、图片遮挡或牌组更新，请遵循文档中的流程，\n   不要自行猜测 API。更新时保留上一份原始分发 APKG 作为基线，不使用 Anki 重新导出的包。\n7. 只有在语言、输入格式、输出路径或身份规则无法判断时才提问。\n\n快速开始文档：{quickstart}"
+  }
+}

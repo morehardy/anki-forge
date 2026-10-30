@@ -2,11 +2,11 @@
 import { Code } from 'astro:components';
 import { createTranslator } from '../i18n/messages.mjs';
 import { localeFromPath } from '../../site-model.mjs';
-interface Props { code: string; lang?: 'rust' | 'bash' | 'json' | 'text'; locale?: 'en' | 'zh-CN' }
+interface Props { code: string; lang?: 'rust' | 'bash' | 'json' | 'text'; locale?: string }
 const { code, lang = 'rust', locale = localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL) } = Astro.props;
 const t = createTranslator(locale);
 ---
-<div class="code-block" data-copy-block data-copy-success={t('copy.codeSuccess')} data-copy-fallback={t('copy.codeFallback')}>
+<div class="code-block" data-language={lang} data-copy-block data-copy-success={t('copy.codeSuccess')} data-copy-fallback={t('copy.codeFallback')}>
   <button class="text-button" type="button" data-copy disabled><span data-copy-label>{t('copy.code')}</span></button>
   <div data-copy-content><Code code={code} lang={lang} themes={{ light: 'github-light', dark: 'github-dark' }} wrap={true} tabindex="0" aria-label={t('copy.codeLabel', { language: lang })} /></div>
   <p data-copy-status role="status" aria-live="polite"></p>

@@ -1,9 +1,9 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { sitePath } from '../lib/site';
-import { pagePath } from '../../site-model.mjs';
+import { pagePath, localeIds } from '../../site-model.mjs';
 import { createTranslator } from '../i18n/messages.mjs';
-const languages = ['en', 'zh-CN'] as const;
+const languages = localeIds;
 ---
 <SiteLayout title="Page not found / 未找到页面" description="This page could not be found. 未找到此页面。" noindex>
   <div class="container">
@@ -11,18 +11,17 @@ const languages = ['en', 'zh-CN'] as const;
       <h1>{languages.map(locale => <span lang={locale} data-error-language={locale}>{createTranslator(locale)('error.heading')} </span>)}</h1>
       {languages.map(locale => {
         const t = createTranslator(locale);
-        return <div lang={locale} data-error-language={locale}><p>{t('error.explanation')}</p><div class="hero-actions"><a class="button" href={sitePath(pagePath('home', locale))}>{t('error.home')}</a><a class="text-link" href={sitePath(pagePath('docs', locale))}>{t('error.guide')}</a></div></div>;
+        return <div lang={locale} data-error-language={locale} data-error-title={`${t('error.title')} | Anki Forge`} data-error-description={t('error.description')}><p>{t('error.explanation')}</p><div class="hero-actions"><a class="button" href={sitePath(pagePath('home', locale))}>{t('error.home')}</a><a class="text-link" href={sitePath(pagePath('docs', locale))}>{t('error.guide')}</a></div></div>;
       })}
     </section>
   </div>
 </SiteLayout>
 <script>
-  import { localeFromPath } from '../../site-model.mjs';
-  import { createTranslator } from '../i18n/messages.mjs';
-  const locale = localeFromPath(location.pathname, import.meta.env.BASE_URL);
-  const t = createTranslator(locale);
+  import { resolveLocalePath } from '../../locale-model.mjs';
+  const locale = resolveLocalePath(location.pathname, import.meta.env.BASE_URL)?.locale ?? 'en';
+  const text = document.querySelector<HTMLElement>(`[data-error-language="${locale}"][data-error-title]`);
   document.documentElement.lang = locale;
-  document.title = `${t('error.title')} | Anki Forge`;
-  document.querySelector('meta[name="description"]')?.setAttribute('content', t('error.description'));
+  if (text?.dataset.errorTitle) document.title = text.dataset.errorTitle;
+  if (text?.dataset.errorDescription) document.querySelector('meta[name="description"]')?.setAttribute('content', text.dataset.errorDescription);
   document.querySelectorAll<HTMLElement>('[data-error-language]').forEach(element => { element.hidden = element.dataset.errorLanguage !== locale; });
 </script>

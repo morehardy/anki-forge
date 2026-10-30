@@ -5,7 +5,7 @@ import { examples } from '../lib/examples';
 import { sitePath } from '../lib/site';
 import CodeBlock from './CodeBlock.astro';
 import CardPreview from './CardPreview.astro';
-interface Props { id?: string; locale?: 'en' | 'zh-CN' }
+interface Props { id?: string; locale?: string }
 const { id = 'examples', locale = 'en' } = Astro.props;
 const t = createTranslator(locale);
 ---

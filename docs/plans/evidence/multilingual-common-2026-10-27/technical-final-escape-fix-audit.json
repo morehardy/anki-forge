@@ -1,0 +1,710 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/independent_technical_source_review/2026-10-28/final-escape-keyboard-fix",
+  "reviewedAt": "2026-10-28T07:03:45.532Z",
+  "priorReview": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review-final-34-before-escape.json",
+    "sha256": "87e7a8a7ba2a610eba6ccf7f39de69aa9d3e098903f5a09095ec89102001efdc"
+  },
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-final-escape-fix.json",
+    "sha256": "ccb6cc17f572d5c2f051fc09119e1ccbd1d1c76778c503954d18bc824c5b2e4b"
+  },
+  "source": {
+    "path": "website/src/scripts/docs-search.ts",
+    "previousSha256": "a95829f4526db5340ce7d0ec928b2f56bc4fed6c81c3647ec664646b6cddabe0",
+    "currentSha256": "801800476a39fc989a6f9741d0934e1aec2e84410c1bd7cb7094c71317cc3922",
+    "exactAddedBlock": "    if (event.key === 'Escape' && dialog.open) {\n      // Search inputs otherwise consume Escape to clear their value.\n      event.preventDefault();\n      closeModal();\n      return;\n    }\n"
+  },
+  "technicalEvidence": [
+    "Actually read the added Escape branch and its complete surrounding close/open/query event flow. With this search dialog open, Escape prevents the input type=search default clear behavior, calls the existing closeModal and returns. With dialog closed, the new condition is false and the previous Ctrl/Meta+K and other key behavior is unchanged.",
+    "closeModal calls dialog.close; the existing close listener invalidates request tokens, clears pending debounce timer, removes data-search-modal-open and restores the connected opener/fallback button. Pending search callbacks already check dialog.open/request token, so the new branch reuses the reviewed cancellation/focus lifecycle. It does not modify query parsing, rankings, URLs, locale selection, content, metadata or SDK behavior.",
+    "Exact text comparison removes only the six added lines and recovers the prior immutable source bytes. Every other final-34 input snapshot file is checked unchanged. This is targeted independent source reasoning; no Chrome, browser, search, build or SDK execution was performed by this reviewer. Other agents own the reported browser regression/verification."
+  ],
+  "entries": [
+    {
+      "pageId": "home",
+      "locale": "en",
+      "affected": false,
+      "priorTargetHash": "b5fb54f4a2b3ce6fc726bf63b87629e5c55605d84dc348d58fed08af51b21d3b",
+      "currentTargetHash": "b5fb54f4a2b3ce6fc726bf63b87629e5c55605d84dc348d58fed08af51b21d3b",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "home",
+      "locale": "zh-CN",
+      "affected": false,
+      "priorTargetHash": "6008f65408e8d4d0a720a958d09369063a02804ecadb1c24801d849c73e2ad7c",
+      "currentTargetHash": "6008f65408e8d4d0a720a958d09369063a02804ecadb1c24801d849c73e2ad7c",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "examples",
+      "locale": "en",
+      "affected": false,
+      "priorTargetHash": "83257604d9b343942465f5e96db57d3ce6337a2cda24e24c9b998ad3294ed8dd",
+      "currentTargetHash": "83257604d9b343942465f5e96db57d3ce6337a2cda24e24c9b998ad3294ed8dd",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "examples",
+      "locale": "zh-CN",
+      "affected": false,
+      "priorTargetHash": "7f1f9a00a6d8fd7c03408ece594d6de30225e50523ab7e97019638a8f32a97e7",
+      "currentTargetHash": "7f1f9a00a6d8fd7c03408ece594d6de30225e50523ab7e97019638a8f32a97e7",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "blog",
+      "locale": "en",
+      "affected": false,
+      "priorTargetHash": "7f01fdf4c11ffc24fce868ae88119f9837029f0621a2c6dd18f879bdfcd9a0e4",
+      "currentTargetHash": "7f01fdf4c11ffc24fce868ae88119f9837029f0621a2c6dd18f879bdfcd9a0e4",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "blog",
+      "locale": "zh-CN",
+      "affected": false,
+      "priorTargetHash": "66911b316a53aea0a79cd21dc58b9cd25a7651acd3c93cee0969a79dc3a1007c",
+      "currentTargetHash": "66911b316a53aea0a79cd21dc58b9cd25a7651acd3c93cee0969a79dc3a1007c",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "docs",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "e6a4069e5ed6eba6d94a928273f58a79aac08574eabf458d58fc0880ad2b378b",
+      "currentTargetHash": "fa6fee15624a7f51faa7430adb77084c33b5faa8e50a605f75d9232cce8af202",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "docs",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "c2bb8bb484735b3baeb9ce2c5fcb21ce2a4529e49e4c2e40ec42b1becd4a2b83",
+      "currentTargetHash": "19770970912cb0d26f30380a7662114b9118447f26461243c57688fa190f400c",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "languages",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "b306c1abd2434cc4aa345a01b99aab77d2e63f91ccb51a93c98dae056bd12254",
+      "currentTargetHash": "3acd604416ed73fa360e331238f96309f620f41ea0c4331b69be3d6b808ebf0a",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "languages",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "749272e660d1a7805f0a0b13d1f1b7d15c3749c287836898f27ee07d717018b4",
+      "currentTargetHash": "568ba39977591418191c35458a94ca47be85c89a92b48179ab20383687932cca",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "quickstart",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "e7233f4782c9a9e1e507c28b3991d857812e0023b77772fb2646a73f77da7fee",
+      "currentTargetHash": "08341770b4a44cff7deba7ce2b069e0c103f91baf0a6cbb2744c27e35f59dca1",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "quickstart",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "5b085e024dc2dde17a8b96edf44618dbf4fc5d8c15f948fa9b6a2ca1dfa61f87",
+      "currentTargetHash": "1bd397de3b2cce00712080e5376a1949cf1eb7c8d75901afd77eccb7f05d629c",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "json-to-anki",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "00ca465ecaf8b0c62fd002c553105ca7e830e29a70c181b2d37c12b93921bde6",
+      "currentTargetHash": "3db1dee0e5df59cffe26d09031a55bd3606367da68c159fb1675e45198928a55",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "json-to-anki",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "39d1cad6a7671a3eb648aaf2121bbca43a2e6ef18b77960cd6a14db6eba35d57",
+      "currentTargetHash": "2ea33bc6681eee0523e6b825d8f92dc6a59a1bdc1dd74d28574456243ba45e8a",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "csv-to-anki",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "920a80a4c3f103bfe42bd28dd5d308495225dee0786912cc662ae88713d9f0c0",
+      "currentTargetHash": "3398dbdffdf06ab81d342f223c13bc5df9681aedd4e458fa4d7241f932557a68",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "csv-to-anki",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "2830cdefb249671c2ae7b9c8fe02efd180a3a8cf73c90a34bdc911ac196a06d7",
+      "currentTargetHash": "45c4c7cdbb6832e4a067def4ab5100859bfc1f26a06a72845e550359e6171334",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "ai-anki-cards",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "0f10f37dce21b42d7eaaa93ab808a32ead3857acd0f2dd76001f87bd4bf48d66",
+      "currentTargetHash": "7695cea422dc189e011133a344b7f0b929008ef2c607beff323c1b3302a6d7ac",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "ai-anki-cards",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "2ab91b439c91273d6f0e8006242d58c0cabf1d2534e975d67b1d426a86f48ad1",
+      "currentTargetHash": "e942ff92326ce60402989d0b3eb52fc1e01d079835f51002668d995b86b07bc2",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "d68ae8ec004cd94c3ed6d7167f15cc83c38f19a31c5247b3ef8ab095f8f22222",
+      "currentTargetHash": "47a988d4edc35a363713654d7e30036d1c702b84f20ab078eb02994d06ea7d8c",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "7c38c6d2978de384fd731804f157a17688bcbc665688456c24be1f0a00e56c7f",
+      "currentTargetHash": "d959d2d3ad841ee22bfffdb2f30feb8edfcf4c99737ea5803a2b36f6f2e669f0",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "development",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "90fc38e55eaf70b1f5fac642a2864b0ba81945da5c8d430f6e43589b51fdec8e",
+      "currentTargetHash": "8c7385009093a560b9b507ea5eb3504dc597b0c2177b2dcb266d00469376ee64",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "development",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "45b944e2dcd3d7f97563c87f64916bb7f5bb75e0fdee3177ce0346bebdadeb15",
+      "currentTargetHash": "a67d4b058ec87a4dbef85d06c298dc631844adc8333c89ca4261bdcda0981ddf",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "rust-guide",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "ed98147dee8b922742183f49af620e66b40deee46852d94691a846df3be7ce65",
+      "currentTargetHash": "849c3d36e72521242f365ee7bd222a53a1f5c053c72e4f41619f30124f98b4d6",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "rust-guide",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "de93912fbc080d98b1f808e328adc5a0817ec6e8ff1850e226bf0e67308765fa",
+      "currentTargetHash": "c08e2424964e9d122f73e22750906248f67a034361cbed0c22b082fd322a91a2",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "templates",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "c72fb975954abf17c14b6da1b44e50edf2ebba288d4929ae320d13afdf735b6e",
+      "currentTargetHash": "2e314d614d5a66cec0325d37631a6630d0c16d5d3ebb03a67bbb0fbbe4f3d8df",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "templates",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "7b12515a04240dc1ad912d09650b5d69bc0212cb43537ca9067c65298cf8daad",
+      "currentTargetHash": "36eaaa1fdfa00fa14e143c96f054bd5c9efa6c3ab794e733a54ea2a7b33bb52b",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "api",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "0279e5c1c996fc683f1c37d163699ef95a84ed0a2b7dfa1ac071f9bf95bf1ffe",
+      "currentTargetHash": "cd10d1c6df2265cf85d5e07e1daaa40ac6a42dbf005dbd865981a74dcc3a94a1",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "api",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "17a021bc41ef64504a7ed2164dc25ca67fe72b9a50333600aeeef6b76e4d22e7",
+      "currentTargetHash": "8849055c56ffcfd8880c814252cac27ac7f33dffdb0e437bbee39ed95fe81454",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "installation",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "c8d3fee5445c252ca76db912ba2264bd3cd0239245b42a829e580dce38990a14",
+      "currentTargetHash": "f4b86b0200bf447e08bdb1657b15a72fbabb36e3903af4f487c4ae0bd13a9d8e",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "installation",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "a73cd3bef1f24ad3bf3fd48ede77477cf943d0e461e68c76f0b909657d083d2e",
+      "currentTargetHash": "e29747ba20fd10b78e608e7c96634adc3f70dbb037885fcaaa3b697bf23c2ed3",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "concepts",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "d4d8841c22dcd752b24a543e78c9ce5737a64a3d271fa110021a205d156e1d43",
+      "currentTargetHash": "5e6a674552438fac45237875fe8c31c4811be9876deb4214b9f11c7d636a6e03",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "concepts",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "1256fa78259efba98fc4155acb5fe14d1abb470da350a8a6796e12ddb8ecb1b3",
+      "currentTargetHash": "47c589e76d61aac14200f798c3e968ee512d45644bde8a72d8aefd27543468b9",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "cards",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "77b67b754709509e914edcb772a365f4d9b86e0b32b8f9c1a017f32a99cb9b3f",
+      "currentTargetHash": "c74d3b2bfae5b97e2a1ccaf640623759d703b57eb58b6d8c592e569e4f1a2cc5",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "cards",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "40422091243e99a52f01b53af302afc316894336cf433affef4c5461cee00822",
+      "currentTargetHash": "3eac2ad91f6768483f2fb6d855bba8131338aed57d777939fd280ed7cb640a2f",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "custom-notetypes",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "4e77ac2a5acdf7dc7ac386e3d7a3f7c01616a32a4ca8c34a9a7519d953cb7144",
+      "currentTargetHash": "1e89f516fd6d8848b97b028fd16fdb2beff118b47033d0b95732bd3a037f69c9",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "custom-notetypes",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "de1c8119fe3faac579a327285693f11a38a7ef5ac895a9730218df7d886ef09a",
+      "currentTargetHash": "d8fa6174c28bac2ce1fac4a1b328558d3ce51cbe5b59ed821d5be3fc52303fee",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "media",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "d72e11655443e246d4c12d8aa38f37af20deb6427b5c83a045a3be1c3b504ced",
+      "currentTargetHash": "fbcbf3b1691cb6f9479e1d25786cdaa5333108569f365abbc9aab6779dd9fe06",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "media",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "4d376041aa9e23fe42f9fdfd6f4a04be3d0cb88c50c01529ae4b520192b7de4b",
+      "currentTargetHash": "e3f895f154f9326f0dd0d59bdded6ae41ad16632bbd07673518464acec4c2dc8",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "99e5d08fdd266eb6ded627fabed915312a27aba6930929a2a29e1ca3a1c31a0a",
+      "currentTargetHash": "595910dffbeecf9c3bde1fbb84c5b170f6943bb31f5c8b8ad04a52e9e1a7015c",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "3a3d1100389c659a7342303a9c9cb2e96322dba97fd8e3369866238e1400bd07",
+      "currentTargetHash": "e38314449a3531dc668207e9e3854fa9680a33a6e4c32a4e28b9bed162738149",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "updates",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "41643fc29c75aa1c0a0e0885e3adc63c4c3588787e4e2b65791eab1bbe762b8c",
+      "currentTargetHash": "c6f07700d223bcd9f5a1e33ba2b61e94669d3aaabe60df4d46c99e715839ff33",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "updates",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "f0ab84ae955df3ceee5aa9c61dfe52bd8a1366d20dbd6ba98cfd241ecaefa7c5",
+      "currentTargetHash": "0ad86f43311f3c833a517e953a4509e3cec950377910289b7feb1f74a9fc3b99",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "ff8a905f2f17019686eff2775f73ea181df885f32177d33db760aa01c93549de",
+      "currentTargetHash": "357c6861f7214aec719125ead05afcb9c14042af8572aff2085ba395ac780578",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "5b4f908325dce34d28bf44343abe1973b043e01ac0fb6a8c422d5f49d2f89093",
+      "currentTargetHash": "0ecd561fdbabfda4dd870b0b1615305d77fbd6b217f5b1c0f46a79b8d39f1cc9",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "67a4db07ce8e9f4f9aa45dd98a6ee3d7bf26ecd246ccc13e728cb1e3d1b19488",
+      "currentTargetHash": "50fc8b5060eaf6ddb8df7b096891681c20f1ee3318253d10f85736b29e38f435",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "2d2325d36c2c98b18c240a15063eb5714e5afd07aaac26d9bd72aa848e968cc3",
+      "currentTargetHash": "9980f09e7971c65a5ebe15a52a82c14d1285c651c3e816922ef002bd1d924fdb",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "compatibility",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "28deee35495874715a55ea923e578b6cc9c7fcb4dcfef127cd0ca881e4d0953c",
+      "currentTargetHash": "77b1bb2685f774853e33ae52e0b8468edc8a81815c72857b653f37f481e50888",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "compatibility",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "64ef096c3d2a014355f673f06fc1b4a6644cfe192e727c5944c2a976594e4128",
+      "currentTargetHash": "7384d720fc2ab2274c81280070c58162761b8913ac0433dd8fb43f2596e39196",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "a24b6acdd23628268f815cf317c9d25a707067d0af4d8ca9c574decac0248160",
+      "currentTargetHash": "a14bc043a24b29ed4881471f8bce2aaa8b6bffac9893ee9362ce1edb37e42710",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "915af2194320fc3480814d7463bd2779b9bce50d024eca162594bc74203fb812",
+      "currentTargetHash": "8a4e5b2a2ac6d420b1ecaf8cdd70e9de096662a0bc85a210166d8ab83729f227",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "node-quickstart",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "1628aa28d9f54c916a528ed15e111cf6784e9aa67e695c09ebd6da4c51098808",
+      "currentTargetHash": "d2a29e8b8ba27cf2a5b0c63c5aaa64d2e7bae87636ac75540f03a8f3ad76ecae",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "node-quickstart",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "33bbd2b16e7a8773b3507677eaa6ad8c27df6841e63877d32adfd4ef91efc83a",
+      "currentTargetHash": "81cf1c10fc89b42196ddb10cef0c7fb42916ce30a553a39addf7e25e26503838",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "node-api",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "11e0e3ed8743cbc12232b005246322b961609362246e8cba6c9bcdea4dbe4b27",
+      "currentTargetHash": "7f2cb725927482d8ad11c949dfded1b0ac765ed5d456e42047d40a4e3cd2c1d2",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "node-api",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "de583746ea6d930978f56e7b9d8e1bbb12f5e026a97e0a4ce141e4be82f84051",
+      "currentTargetHash": "afaac01225d780d2a1ef3a86d157c5004b2e87264ed04f969617b19ebb101dda",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "python-quickstart",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "7b7aa6a2f72eb812a6755b4b1c422f801bdcc5c83b07e8a1e54283bea4c01461",
+      "currentTargetHash": "9923d142c94bf55b70cd6d2feef8d536ec5d5e63fbfcf537f78f5d9bd693637b",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "python-quickstart",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "f9dc459b82c73192a885cee5d698a5bec0bc1065bb2461c091dcbe7bee7bb18c",
+      "currentTargetHash": "64960236a90253be8112b819c4319120a665ff9004088949bfdde717b779f500",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "python-api",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "ea0835ae631d75f47d9979803c2a120e59d380dffdf63754b632fb441d1050c5",
+      "currentTargetHash": "00f219cb161251c809b2efa855983dba294bd07feb9ae9fc8a3fa27604137791",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "8aa31901433678af22d63e59149c6cd2a3260af39efae62bb54a1becee1a2c3b",
+      "currentTargetHash": "76d12f1b3965325666a25a178b3c3b07e51cbdf1223f9cb0a6312991760330bc",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "python-diagnostics",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "3bb136de8424f60c8ddc94be1b81ea06a7ddc53987ba8726b425c5237a3d37f9",
+      "currentTargetHash": "01f2d874e39cdc68c0ecff783ecb0e623aaeb0fc7b3321b78786aeec719bf701",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "python-diagnostics",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "0f9c88f4b16ea6d96270e64241a663f2355ebb51b774733a38d6f53f4203effb",
+      "currentTargetHash": "cefcba2d66a578580a7da9bf21ef543eb61ba1a719442b0c6c1eeef10f1cf4bc",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "python-migration",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "4ef6b313960fbe4241deb7d7e68a19db03500628d894c245acda0ce8ead2bbdd",
+      "currentTargetHash": "c00bd5b01ab32168ebefaec9db40c6f2222f419c0877f23c7b7a520b53c8296d",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "python-migration",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "93a78af16dd2b0467247f65a0b027362b1747ae840506a7d33dbdbd166e100ec",
+      "currentTargetHash": "fb0756f679b2cf6d9fbd4bc929ea47c99f9b880c7bee840a273e227200c6558e",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "en",
+      "affected": true,
+      "priorTargetHash": "428efe5ff465ca139f2126bb96a70d406e7cb1065a2526d4b30b5e796ec2592d",
+      "currentTargetHash": "589f5ba2c95eada23281aed1af7746da9ade2a095d1c9ff6125e9e3b0788a1e5",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "zh-CN",
+      "affected": true,
+      "priorTargetHash": "9c15896e3d0bbf3ade741188d34a8b5efb0480f31319ecb86970df9dc22b9f58",
+      "currentTargetHash": "96df55b115c6a1d49ea75c189682f254841b74b6c4b7bb65b8d703d214dce705",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "en",
+      "affected": false,
+      "priorTargetHash": "d1ebae9d72e6844abaf4928c6ec413fff614b3dd131ac742af43948fde9cc489",
+      "currentTargetHash": "d1ebae9d72e6844abaf4928c6ec413fff614b3dd131ac742af43948fde9cc489",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "affected": false,
+      "priorTargetHash": "17c1dd3b8b6a676537563b853a0eafa679eec1a57c686ddfe44f5b34b5a939fc",
+      "currentTargetHash": "17c1dd3b8b6a676537563b853a0eafa679eec1a57c686ddfe44f5b34b5a939fc",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "en",
+      "affected": false,
+      "priorTargetHash": "2c617d376cba289d5045ac7f507f835784112f26b161dc395648b746129ccc05",
+      "currentTargetHash": "2c617d376cba289d5045ac7f507f835784112f26b161dc395648b746129ccc05",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "zh-CN",
+      "affected": false,
+      "priorTargetHash": "a0564936fd404dc5f0252195ab87d8d26181499c0985509fae9a8939278e7489",
+      "currentTargetHash": "a0564936fd404dc5f0252195ab87d8d26181499c0985509fae9a8939278e7489",
+      "sourceHashUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "status": "reviewed"
+    }
+  ],
+  "changedSnapshotInputs": [
+    "website/src/scripts/docs-search.ts"
+  ]
+}
