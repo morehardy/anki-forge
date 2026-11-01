@@ -1,0 +1,4001 @@
+{
+  "schemaVersion": 1,
+  "scope": "Read-only infrastructure diagnostics on unchanged historical ja/de samples. Body inputs are synthetic Pagefind-shaped fixture inputs, not an actual index. No production vocabulary or independent release query file was changed. The proposed engine exists only in excluded scratch storage; these results do not authorize locale release.",
+  "head": "231bcd56b71765f71b6700141e7237d8561f20bc",
+  "node": "v24.19.0",
+  "icu": "78.3",
+  "inputs": [
+    {
+      "path": "website/src/lib/search.mjs",
+      "sha256": "22f649c4b5d6dda48541cf91c7d201206dd2210a9bd37101d30e16d36461c1c2"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/probes/queries.json",
+      "sha256": "1b286293526f842991e3186af7ee726a1002d7686f9100d0619e5b15ffa9f94e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/language-brief.json",
+      "sha256": "9019163f8af12c4e31643cdb99de023ca8cc4c18096c2cd1a4dbd7d69351b87b"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/home-ui.json",
+      "sha256": "8664e416718dc141a80f73f29c869cc719baa54a7c4bc3d720a7866232297220"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/quickstart.md",
+      "sha256": "fe0500fd8dcd4e351a5c69f07924fdf8e8581a0a4cce6398d5038fe471b6df99"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/json-to-anki.md",
+      "sha256": "3854b6f797272977f5926022df6651e48f9dea5538fe5ca1c1caee20661b2f20"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/updates.md",
+      "sha256": "3c7c8e628b08c69d253ca6453bdf9ea922068d6d0eae3c71f10a753babfa1bc2"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/python-api.md",
+      "sha256": "efdc6cd76a4286f44047418499ed264a5b15e4eac54eb838d6c690309b56d4c7"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/language-brief.json",
+      "sha256": "c310fc54514e1a28ce9b39ec28c2ab530808745e4478c6df6035d8cf5853eda3"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/home-ui.json",
+      "sha256": "871d34e1c2d7c58d51381e332801577a806da4ede3ccb10ccd3f21fcf5946a67"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/quickstart.md",
+      "sha256": "aedcddd82f1da4432f75f46aafc29926b5b3a3035c1fbd73965abe4f41c80e9d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/json-to-anki.md",
+      "sha256": "c9d69a877371fc780181db29480f59c1681b201970ecbe737ddb2cc1d319de44"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/updates.md",
+      "sha256": "78ba118cee9fd765ab0c1b7b6d519be3ec34aa0afdc976621cae996c5d196d01"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/python-api.md",
+      "sha256": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771"
+    }
+  ],
+  "observations": [
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "Rustで最初のデッキを生成したい",
+      "expected": "quickstart",
+      "intent": "no-space Rust first deck",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 13.04411156077297,
+          "matchedTerms": [
+            "rust",
+            "て",
+            "の",
+            "テッキ",
+            "を",
+            "生成"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 11.946688236470981,
+          "matchedTerms": [
+            "て",
+            "の",
+            "テッキ",
+            "を",
+            "した"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 10.283377848679438,
+          "matchedTerms": [
+            "て",
+            "の",
+            "テッキ",
+            "を",
+            "生成"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "JSONから画像と音声付きデッキを生成したい",
+      "expected": "json-to-anki",
+      "intent": "kanji/kana mixed with JSON",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 29.74114870981141,
+          "matchedTerms": [
+            "json",
+            "から",
+            "画像",
+            "と",
+            "音声",
+            "テッキ",
+            "を",
+            "生成"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 8.97221437439735,
+          "matchedTerms": [
+            "json",
+            "から",
+            "と",
+            "テッキ",
+            "を",
+            "生成"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 5.124972579873604,
+          "matchedTerms": [
+            "と",
+            "テッキ",
+            "を",
+            "した"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "配布済みデッキを元のAPKGから更新したい",
+      "expected": "updates",
+      "intent": "original package update",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 25.52746248332529,
+          "matchedTerms": [
+            "配布",
+            "済み",
+            "テッキ",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 22.571540847618245,
+          "matchedTerms": [
+            "配布",
+            "済み",
+            "テッキ",
+            "を",
+            "の",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 6.408800317134907,
+          "matchedTerms": [
+            "テッキ",
+            "を",
+            "の",
+            "apkg",
+            "から"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "PythonでBuildOptions.temporaryとcloseの寿命を知りたい",
+      "expected": "python-api",
+      "intent": "API identifier mixed with kana",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 13.980165197702835,
+          "matchedTerms": [
+            "python",
+            "て",
+            "と",
+            "の",
+            "を"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 9.295733074729263,
+          "matchedTerms": [
+            "python",
+            "て",
+            "の",
+            "を"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 8.465644713313711,
+          "matchedTerms": [
+            "python",
+            "と",
+            "の",
+            "を"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "でっきをこうしんしたい",
+      "expected": "updates",
+      "intent": "hiragana variation",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 8.516308452956196,
+          "matchedTerms": [
+            "を",
+            "した"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 1.0289932281187701,
+          "matchedTerms": [
+            "を"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 1.0289932281187701,
+          "matchedTerms": [
+            "を"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "デッキを更新したい",
+      "expected": "updates",
+      "intent": "katakana/kanji control",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 19.627829761622408,
+          "matchedTerms": [
+            "テッキ",
+            "を",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 7.927946322235837,
+          "matchedTerms": [
+            "テッキ",
+            "を",
+            "更新"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 1.6431953649142357,
+          "matchedTerms": [
+            "テッキ",
+            "を"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "カード",
+      "origin": "actual sample term: cards",
+      "expected": "card evidence",
+      "top3": [
+        {
+          "id": "home",
+          "score": 4.236489301936017,
+          "matchedTerms": [
+            "カート"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 4.236489301936017,
+          "matchedTerms": [
+            "カート"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 2.5418935811616103,
+          "matchedTerms": [
+            "カート"
+          ]
+        }
+      ],
+      "resultCount": 4
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "カート",
+      "origin": "dakuten counterexample: cart differs from card",
+      "expected": null,
+      "top3": [
+        {
+          "id": "home",
+          "score": 4.236489301936017,
+          "matchedTerms": [
+            "カート"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 4.236489301936017,
+          "matchedTerms": [
+            "カート"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 2.5418935811616103,
+          "matchedTerms": [
+            "カート"
+          ]
+        }
+      ],
+      "resultCount": 4
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "パス",
+      "origin": "actual sample term: file path",
+      "expected": "path evidence",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "バス",
+      "origin": "handakuten counterexample: bus differs from path",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "ノートルダム",
+      "origin": "alias boundary counterexample: proper noun differs from note",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "Rustで最初のデッキを生成したい",
+      "expected": "quickstart",
+      "intent": "no-space Rust first deck",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "quickstart",
+          "score": 16.143824807438854,
+          "matchedTerms": [
+            "rust",
+            "て",
+            "最初",
+            "の",
+            "テッキ",
+            "を",
+            "生成",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 15.834044522489144,
+          "matchedTerms": [
+            "rust",
+            "て",
+            "最初",
+            "の",
+            "テッキ",
+            "を",
+            "生成",
+            "した"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 14.84047938981764,
+          "matchedTerms": [
+            "rust",
+            "て",
+            "の",
+            "テッキ",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "JSONから画像と音声付きデッキを生成したい",
+      "expected": "json-to-anki",
+      "intent": "kanji/kana mixed with JSON",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 18.83007112787,
+          "matchedTerms": [
+            "json",
+            "から",
+            "画像",
+            "と",
+            "音声",
+            "テッキ",
+            "を",
+            "生成",
+            "した"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 9.808555041111322,
+          "matchedTerms": [
+            "から",
+            "と",
+            "付き",
+            "テッキ",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 9.457203190614972,
+          "matchedTerms": [
+            "json",
+            "から",
+            "画像",
+            "と",
+            "音声",
+            "付き",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "配布済みデッキを元のAPKGから更新したい",
+      "expected": "updates",
+      "intent": "original package update",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 27.99320509238464,
+          "matchedTerms": [
+            "配布",
+            "済み",
+            "テッキ",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 20.497885330149106,
+          "matchedTerms": [
+            "配布",
+            "済み",
+            "テッキ",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 12.765717458216516,
+          "matchedTerms": [
+            "配布",
+            "済み",
+            "テッキ",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "PythonでBuildOptions.temporaryとcloseの寿命を知りたい",
+      "expected": "python-api",
+      "intent": "API identifier mixed with kana",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 10.084877044955208,
+          "matchedTerms": [
+            "python",
+            "て",
+            "buildoptions.temporary",
+            "と",
+            "close",
+            "の",
+            "を"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 7.127293741276801,
+          "matchedTerms": [
+            "python",
+            "て",
+            "と",
+            "の",
+            "を",
+            "り"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 4.363227324224584,
+          "matchedTerms": [
+            "python",
+            "て",
+            "と",
+            "の",
+            "を"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "でっきをこうしんしたい",
+      "expected": "updates",
+      "intent": "hiragana variation",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 7.128564243915521,
+          "matchedTerms": [
+            "を",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 3.874040850840835,
+          "matchedTerms": [
+            "を",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 2.5744733100936212,
+          "matchedTerms": [
+            "を",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "デッキを更新したい",
+      "expected": "updates",
+      "intent": "katakana/kanji control",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 15.053048261505433,
+          "matchedTerms": [
+            "テッキ",
+            "を",
+            "更新",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 8.200018647732835,
+          "matchedTerms": [
+            "テッキ",
+            "を",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 4.256189042333114,
+          "matchedTerms": [
+            "テッキ",
+            "を",
+            "更新",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "カード",
+      "origin": "actual sample term: cards",
+      "expected": "card evidence",
+      "top3": [
+        {
+          "id": "home",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カート"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カート"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 2.2127968293923375,
+          "matchedTerms": [
+            "カート"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "カート",
+      "origin": "dakuten counterexample: cart differs from card",
+      "expected": null,
+      "top3": [
+        {
+          "id": "home",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カート"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カート"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 2.2127968293923375,
+          "matchedTerms": [
+            "カート"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "パス",
+      "origin": "actual sample term: file path",
+      "expected": "path evidence",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        }
+      ],
+      "resultCount": 3
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "バス",
+      "origin": "handakuten counterexample: bus differs from path",
+      "expected": null,
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        }
+      ],
+      "resultCount": 3
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "ノートルダム",
+      "origin": "alias boundary counterexample: proper noun differs from note",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "Rustで最初のデッキを生成したい",
+      "expected": "quickstart",
+      "intent": "no-space Rust first deck",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "quickstart",
+          "score": 16.014572311290355,
+          "matchedTerms": [
+            "デッキ",
+            "rust",
+            "て",
+            "最初",
+            "の",
+            "を",
+            "生成",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 15.34183749756317,
+          "matchedTerms": [
+            "デッキ",
+            "rust",
+            "て",
+            "最初",
+            "の",
+            "を",
+            "生成",
+            "した"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 14.351784524003294,
+          "matchedTerms": [
+            "デッキ",
+            "rust",
+            "て",
+            "の",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "JSONから画像と音声付きデッキを生成したい",
+      "expected": "json-to-anki",
+      "intent": "kanji/kana mixed with JSON",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 18.37089573145433,
+          "matchedTerms": [
+            "デッキ",
+            "json",
+            "から",
+            "画像",
+            "と",
+            "音声",
+            "を",
+            "生成",
+            "した"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 11.603564810943162,
+          "matchedTerms": [
+            "デッキ",
+            "json",
+            "から",
+            "画像",
+            "と",
+            "音声",
+            "付き",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 9.414495257702805,
+          "matchedTerms": [
+            "デッキ",
+            "から",
+            "と",
+            "付き",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "配布済みデッキを元のAPKGから更新したい",
+      "expected": "updates",
+      "intent": "original package update",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 27.444710506102517,
+          "matchedTerms": [
+            "デッキ",
+            "配布",
+            "済み",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 19.992074374739104,
+          "matchedTerms": [
+            "デッキ",
+            "配布",
+            "済み",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 12.460823656499075,
+          "matchedTerms": [
+            "デッキ",
+            "配布",
+            "済み",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "PythonでBuildOptions.temporaryとcloseの寿命を知りたい",
+      "expected": "python-api",
+      "intent": "API identifier mixed with kana",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 10.084877044955208,
+          "matchedTerms": [
+            "python",
+            "て",
+            "buildoptions.temporary",
+            "と",
+            "close",
+            "の",
+            "を"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 7.127293741276801,
+          "matchedTerms": [
+            "python",
+            "て",
+            "と",
+            "の",
+            "を",
+            "り"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 4.363227324224584,
+          "matchedTerms": [
+            "python",
+            "て",
+            "と",
+            "の",
+            "を"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "でっきをこうしんしたい",
+      "expected": "updates",
+      "intent": "hiragana variation",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 7.128564243915521,
+          "matchedTerms": [
+            "を",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 3.874040850840835,
+          "matchedTerms": [
+            "を",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 2.5744733100936212,
+          "matchedTerms": [
+            "を",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "デッキを更新したい",
+      "expected": "updates",
+      "intent": "katakana/kanji control",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 14.504553675223312,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 7.7438000751172185,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 5.201718948476238,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "カード",
+      "origin": "actual sample term: cards",
+      "expected": "card evidence",
+      "top3": [
+        {
+          "id": "home",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カード"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カード"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 2.2127968293923375,
+          "matchedTerms": [
+            "カード"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "カート",
+      "origin": "dakuten counterexample: cart differs from card",
+      "expected": null,
+      "top3": [
+        {
+          "id": "home",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カード"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カード"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 2.2127968293923375,
+          "matchedTerms": [
+            "カード"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "パス",
+      "origin": "actual sample term: file path",
+      "expected": "path evidence",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        }
+      ],
+      "resultCount": 3
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "バス",
+      "origin": "handakuten counterexample: bus differs from path",
+      "expected": null,
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "ハス"
+          ]
+        }
+      ],
+      "resultCount": 3
+    },
+    {
+      "locale": "ja",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "ノートルダム",
+      "origin": "alias boundary counterexample: proper noun differs from note",
+      "expected": null,
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 2.2127968293923375,
+          "matchedTerms": [
+            "ノート"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 2.2127968293923375,
+          "matchedTerms": [
+            "ノート"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 0.6638390488177012,
+          "matchedTerms": [
+            "ノート"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "Rustで最初のデッキを生成したい",
+      "expected": "quickstart",
+      "intent": "no-space Rust first deck",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 13.47033865218647,
+          "matchedTerms": [
+            "rust",
+            "で",
+            "の",
+            "デッキ",
+            "を",
+            "生成"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 12.36351067972808,
+          "matchedTerms": [
+            "で",
+            "の",
+            "デッキ",
+            "を",
+            "した"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 10.838411723328623,
+          "matchedTerms": [
+            "rust",
+            "で",
+            "の",
+            "を",
+            "生成"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "JSONから画像と音声付きデッキを生成したい",
+      "expected": "json-to-anki",
+      "intent": "kanji/kana mixed with JSON",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 29.74114870981141,
+          "matchedTerms": [
+            "json",
+            "から",
+            "画像",
+            "と",
+            "音声",
+            "デッキ",
+            "を",
+            "生成"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 8.97221437439735,
+          "matchedTerms": [
+            "json",
+            "から",
+            "と",
+            "デッキ",
+            "を",
+            "生成"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 5.124972579873604,
+          "matchedTerms": [
+            "と",
+            "デッキ",
+            "を",
+            "した"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "配布済みデッキを元のAPKGから更新したい",
+      "expected": "updates",
+      "intent": "original package update",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 25.52746248332529,
+          "matchedTerms": [
+            "配布",
+            "済み",
+            "デッキ",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 22.571540847618245,
+          "matchedTerms": [
+            "配布",
+            "済み",
+            "デッキ",
+            "を",
+            "の",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 6.408800317134907,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "の",
+            "apkg",
+            "から"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "PythonでBuildOptions.temporaryとcloseの寿命を知りたい",
+      "expected": "python-api",
+      "intent": "API identifier mixed with kana",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 14.433858106874606,
+          "matchedTerms": [
+            "python",
+            "で",
+            "と",
+            "の",
+            "を"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 9.957521389660902,
+          "matchedTerms": [
+            "python",
+            "で",
+            "の",
+            "を"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 8.689293028137037,
+          "matchedTerms": [
+            "で",
+            "と",
+            "の",
+            "を"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "でっきをこうしんしたい",
+      "expected": "updates",
+      "intent": "hiragana variation",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 6.500819252988953,
+          "matchedTerms": [
+            "で",
+            "を",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 5.6677683201737725,
+          "matchedTerms": [
+            "で",
+            "っ",
+            "を"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 2.5886723515886554,
+          "matchedTerms": [
+            "で",
+            "を"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "デッキを更新したい",
+      "expected": "updates",
+      "intent": "katakana/kanji control",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 19.627829761622408,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 7.927946322235837,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 1.6431953649142357,
+          "matchedTerms": [
+            "デッキ",
+            "を"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "カード",
+      "origin": "actual sample term: cards",
+      "expected": "card evidence",
+      "top3": [
+        {
+          "id": "home",
+          "score": 4.236489301936017,
+          "matchedTerms": [
+            "カード"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 4.236489301936017,
+          "matchedTerms": [
+            "カード"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 2.5418935811616103,
+          "matchedTerms": [
+            "カード"
+          ]
+        }
+      ],
+      "resultCount": 4
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "カート",
+      "origin": "dakuten counterexample: cart differs from card",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "パス",
+      "origin": "actual sample term: file path",
+      "expected": "path evidence",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "バス",
+      "origin": "handakuten counterexample: bus differs from path",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "ノートルダム",
+      "origin": "alias boundary counterexample: proper noun differs from note",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "Rustで最初のデッキを生成したい",
+      "expected": "quickstart",
+      "intent": "no-space Rust first deck",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 18.65098884467412,
+          "matchedTerms": [
+            "rust",
+            "で",
+            "最初",
+            "の",
+            "デッキ",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 15.834949772083673,
+          "matchedTerms": [
+            "rust",
+            "で",
+            "最初",
+            "の",
+            "デッキ",
+            "を",
+            "生成",
+            "い"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 14.171529548608223,
+          "matchedTerms": [
+            "rust",
+            "で",
+            "の",
+            "デッキ",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "JSONから画像と音声付きデッキを生成したい",
+      "expected": "json-to-anki",
+      "intent": "kanji/kana mixed with JSON",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 18.79291134840536,
+          "matchedTerms": [
+            "json",
+            "から",
+            "画像",
+            "と",
+            "音声",
+            "デッキ",
+            "を",
+            "生成",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 11.521279091686258,
+          "matchedTerms": [
+            "json",
+            "から",
+            "画像",
+            "と",
+            "デッキ",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 11.46745693819163,
+          "matchedTerms": [
+            "json",
+            "から",
+            "画像",
+            "と",
+            "音声",
+            "付き",
+            "デッキ",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "配布済みデッキを元のAPKGから更新したい",
+      "expected": "updates",
+      "intent": "original package update",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 27.308602633350986,
+          "matchedTerms": [
+            "配布",
+            "済み",
+            "デッキ",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 20.588780749166247,
+          "matchedTerms": [
+            "配布",
+            "済み",
+            "デッキ",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 16.154564353904096,
+          "matchedTerms": [
+            "配布",
+            "済み",
+            "デッキ",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "PythonでBuildOptions.temporaryとcloseの寿命を知りたい",
+      "expected": "python-api",
+      "intent": "API identifier mixed with kana",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 10.084877044955208,
+          "matchedTerms": [
+            "python",
+            "で",
+            "buildoptions.temporary",
+            "と",
+            "close",
+            "の",
+            "を"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 7.127293741276801,
+          "matchedTerms": [
+            "python",
+            "で",
+            "と",
+            "の",
+            "を",
+            "り"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 4.363227324224584,
+          "matchedTerms": [
+            "python",
+            "で",
+            "と",
+            "の",
+            "を"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "でっきをこうしんしたい",
+      "expected": "updates",
+      "intent": "hiragana variation",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 6.227895593227741,
+          "matchedTerms": [
+            "で",
+            "っ",
+            "を",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 5.514362089495399,
+          "matchedTerms": [
+            "で",
+            "っ",
+            "を",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 3.7441046529017976,
+          "matchedTerms": [
+            "で",
+            "き",
+            "を",
+            "した"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "デッキを更新したい",
+      "expected": "updates",
+      "intent": "katakana/kanji control",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 14.36844580247178,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 8.168193026817503,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 6.614568856299342,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "カード",
+      "origin": "actual sample term: cards",
+      "expected": "card evidence",
+      "top3": [
+        {
+          "id": "home",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カード"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カード"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 2.2127968293923375,
+          "matchedTerms": [
+            "カード"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "カート",
+      "origin": "dakuten counterexample: cart differs from card",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "パス",
+      "origin": "actual sample term: file path",
+      "expected": "path evidence",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "パス"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "パス"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "パス"
+          ]
+        }
+      ],
+      "resultCount": 3
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "バス",
+      "origin": "handakuten counterexample: bus differs from path",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "ノートルダム",
+      "origin": "alias boundary counterexample: proper noun differs from note",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "Rustで最初のデッキを生成したい",
+      "expected": "quickstart",
+      "intent": "no-space Rust first deck",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 18.65098884467412,
+          "matchedTerms": [
+            "デッキ",
+            "rust",
+            "で",
+            "最初",
+            "の",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 15.834949772083673,
+          "matchedTerms": [
+            "デッキ",
+            "rust",
+            "で",
+            "最初",
+            "の",
+            "を",
+            "生成",
+            "い"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 14.171529548608222,
+          "matchedTerms": [
+            "デッキ",
+            "rust",
+            "で",
+            "の",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "JSONから画像と音声付きデッキを生成したい",
+      "expected": "json-to-anki",
+      "intent": "kanji/kana mixed with JSON",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 18.792911348405358,
+          "matchedTerms": [
+            "デッキ",
+            "json",
+            "から",
+            "画像",
+            "と",
+            "音声",
+            "を",
+            "生成",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 11.521279091686258,
+          "matchedTerms": [
+            "デッキ",
+            "json",
+            "から",
+            "画像",
+            "と",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 11.46745693819163,
+          "matchedTerms": [
+            "デッキ",
+            "json",
+            "から",
+            "画像",
+            "と",
+            "音声",
+            "付き",
+            "を",
+            "生成",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "配布済みデッキを元のAPKGから更新したい",
+      "expected": "updates",
+      "intent": "original package update",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 27.308602633350986,
+          "matchedTerms": [
+            "デッキ",
+            "配布",
+            "済み",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 20.588780749166247,
+          "matchedTerms": [
+            "デッキ",
+            "配布",
+            "済み",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 16.154564353904096,
+          "matchedTerms": [
+            "デッキ",
+            "配布",
+            "済み",
+            "を",
+            "の",
+            "apkg",
+            "から",
+            "更新",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "PythonでBuildOptions.temporaryとcloseの寿命を知りたい",
+      "expected": "python-api",
+      "intent": "API identifier mixed with kana",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 10.084877044955208,
+          "matchedTerms": [
+            "python",
+            "で",
+            "buildoptions.temporary",
+            "と",
+            "close",
+            "の",
+            "を"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 7.127293741276801,
+          "matchedTerms": [
+            "python",
+            "で",
+            "と",
+            "の",
+            "を",
+            "り"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 4.363227324224584,
+          "matchedTerms": [
+            "python",
+            "で",
+            "と",
+            "の",
+            "を"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "でっきをこうしんしたい",
+      "expected": "updates",
+      "intent": "hiragana variation",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 6.227895593227741,
+          "matchedTerms": [
+            "で",
+            "っ",
+            "を",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 5.514362089495399,
+          "matchedTerms": [
+            "で",
+            "っ",
+            "を",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 3.7441046529017976,
+          "matchedTerms": [
+            "で",
+            "き",
+            "を",
+            "した"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "デッキを更新したい",
+      "expected": "updates",
+      "intent": "katakana/kanji control",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 14.36844580247178,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新",
+            "した",
+            "い"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 8.168193026817503,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新",
+            "した"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 6.614568856299342,
+          "matchedTerms": [
+            "デッキ",
+            "を",
+            "更新",
+            "した",
+            "い"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "カード",
+      "origin": "actual sample term: cards",
+      "expected": "card evidence",
+      "top3": [
+        {
+          "id": "home",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カード"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 3.6879947156538955,
+          "matchedTerms": [
+            "カード"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 2.2127968293923375,
+          "matchedTerms": [
+            "カード"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "カート",
+      "origin": "dakuten counterexample: cart differs from card",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "パス",
+      "origin": "actual sample term: file path",
+      "expected": "path evidence",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "パス"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "パス"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 0.8986759471000145,
+          "matchedTerms": [
+            "パス"
+          ]
+        }
+      ],
+      "resultCount": 3
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "バス",
+      "origin": "handakuten counterexample: bus differs from path",
+      "expected": null,
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "ja",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "ノートルダム",
+      "origin": "alias boundary counterexample: proper noun differs from note",
+      "expected": null,
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 2.2127968293923375,
+          "matchedTerms": [
+            "ノート"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 2.2127968293923375,
+          "matchedTerms": [
+            "ノート"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 0.6638390488177012,
+          "matchedTerms": [
+            "ノート"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "Wie erzeuge ich mit Rust meinen ersten Stapel?",
+      "expected": "quickstart",
+      "intent": "natural first-deck task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 13.815073208302447,
+          "matchedTerms": [
+            "erzeuge",
+            "mit",
+            "rust",
+            "stapel"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 3.4993966282602607,
+          "matchedTerms": [
+            "mit",
+            "rust"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 2.0996379769561564,
+          "matchedTerms": [
+            "mit",
+            "rust"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "Stapelaktualisierung mit dem ursprünglichen APKG",
+      "expected": "updates",
+      "intent": "compound update intent",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 4.464291509114138,
+          "matchedTerms": [
+            "mit",
+            "dem"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 3.1274106559767088,
+          "matchedTerms": [
+            "mit",
+            "apkg"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 1.2697660341460737,
+          "matchedTerms": [
+            "mit"
+          ]
+        }
+      ],
+      "resultCount": 4
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "Wie behalte ich stabile Notizschlüssel bei einer Aktualisierung?",
+      "expected": "updates",
+      "intent": "compound stable note key",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 1.9313254949209204,
+          "matchedTerms": [
+            "aktualisierung"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 1.9313254949209204,
+          "matchedTerms": [
+            "stabile"
+          ]
+        }
+      ],
+      "resultCount": 2
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "Wie verwalte ich die Lebensdauer von BuildOptions.temporary in Python?",
+      "expected": "python-api",
+      "intent": "natural API task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 4.634896071039661,
+          "matchedTerms": [
+            "von",
+            "in"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 2.8889803050642984,
+          "matchedTerms": [
+            "die",
+            "python"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 0.8828349540655537,
+          "matchedTerms": [
+            "die"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "Große",
+      "origin": "actual sample spelling: Große Medien",
+      "expected": "python-api",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "Grosse",
+      "origin": "ss spelling comparison; no production synonym assertion",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "ursprünglichen",
+      "origin": "actual sample spelling",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "ursprunglichen",
+      "origin": "Latin accent folding control",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "metadata-only",
+      "query": "Stapelaktualisierung",
+      "origin": "isolate compound from the previously frozen sample query",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "Wie erzeuge ich mit Rust meinen ersten Stapel?",
+      "expected": "quickstart",
+      "intent": "natural first-deck task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 6.784525639504543,
+          "matchedTerms": [
+            "erzeuge",
+            "mit",
+            "rust",
+            "ersten",
+            "stapel"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 4.598192545194846,
+          "matchedTerms": [
+            "erzeuge",
+            "mit",
+            "rust",
+            "ersten",
+            "stapel"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 4.0757861010981475,
+          "matchedTerms": [
+            "mit",
+            "rust",
+            "ersten",
+            "stapel"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "Stapelaktualisierung mit dem ursprünglichen APKG",
+      "expected": "updates",
+      "intent": "compound update intent",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 6.519927347831554,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "ursprunglichen",
+            "apkg"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 3.1916440604437897,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "ursprunglichen",
+            "apkg"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 2.817835077398378,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "apkg"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "Wie behalte ich stabile Notizschlüssel bei einer Aktualisierung?",
+      "expected": "updates",
+      "intent": "compound stable note key",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 5.850861240385603,
+          "matchedTerms": [
+            "wie",
+            "behalte",
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 5.053938940525868,
+          "matchedTerms": [
+            "behalte",
+            "stabile",
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 1.2467886271048325,
+          "matchedTerms": [
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "Wie verwalte ich die Lebensdauer von BuildOptions.temporary in Python?",
+      "expected": "python-api",
+      "intent": "natural API task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 5.637905604322534,
+          "matchedTerms": [
+            "die",
+            "von",
+            "buildoptions.temporary",
+            "in",
+            "python"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 3.695049969837726,
+          "matchedTerms": [
+            "wie",
+            "die",
+            "von",
+            "in",
+            "python"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 2.3722014991966476,
+          "matchedTerms": [
+            "die",
+            "von",
+            "in",
+            "python"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "Große",
+      "origin": "actual sample spelling: Große Medien",
+      "expected": "python-api",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "Grosse",
+      "origin": "ss spelling comparison; no production synonym assertion",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "ursprünglichen",
+      "origin": "actual sample spelling",
+      "expected": "diagnostic only",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        }
+      ],
+      "resultCount": 2
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "ursprunglichen",
+      "origin": "Latin accent folding control",
+      "expected": "diagnostic only",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        }
+      ],
+      "resultCount": 2
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-lexical",
+      "query": "Stapelaktualisierung",
+      "origin": "isolate compound from the previously frozen sample query",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "Wie erzeuge ich mit Rust meinen ersten Stapel?",
+      "expected": "quickstart",
+      "intent": "natural first-deck task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 6.784525639504542,
+          "matchedTerms": [
+            "Stapel",
+            "erzeuge",
+            "mit",
+            "rust",
+            "ersten"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 4.598192545194845,
+          "matchedTerms": [
+            "Stapel",
+            "erzeuge",
+            "mit",
+            "rust",
+            "ersten"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 4.0757861010981475,
+          "matchedTerms": [
+            "Stapel",
+            "mit",
+            "rust",
+            "ersten"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "Stapelaktualisierung mit dem ursprünglichen APKG",
+      "expected": "updates",
+      "intent": "compound update intent",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 6.519927347831554,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "ursprunglichen",
+            "apkg"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 3.1916440604437897,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "ursprunglichen",
+            "apkg"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 2.817835077398378,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "apkg"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "Wie behalte ich stabile Notizschlüssel bei einer Aktualisierung?",
+      "expected": "updates",
+      "intent": "compound stable note key",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 5.850861240385603,
+          "matchedTerms": [
+            "wie",
+            "behalte",
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 5.053938940525868,
+          "matchedTerms": [
+            "behalte",
+            "stabile",
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 1.2467886271048325,
+          "matchedTerms": [
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "Wie verwalte ich die Lebensdauer von BuildOptions.temporary in Python?",
+      "expected": "python-api",
+      "intent": "natural API task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 5.637905604322534,
+          "matchedTerms": [
+            "die",
+            "von",
+            "buildoptions.temporary",
+            "in",
+            "python"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 3.695049969837726,
+          "matchedTerms": [
+            "wie",
+            "die",
+            "von",
+            "in",
+            "python"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 2.3722014991966476,
+          "matchedTerms": [
+            "die",
+            "von",
+            "in",
+            "python"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "Große",
+      "origin": "actual sample spelling: Große Medien",
+      "expected": "python-api",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "Grosse",
+      "origin": "ss spelling comparison; no production synonym assertion",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "ursprünglichen",
+      "origin": "actual sample spelling",
+      "expected": "diagnostic only",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        }
+      ],
+      "resultCount": 2
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "ursprunglichen",
+      "origin": "Latin accent folding control",
+      "expected": "diagnostic only",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        }
+      ],
+      "resultCount": 2
+    },
+    {
+      "locale": "de",
+      "engine": "original",
+      "mode": "sample-body-brief-aliases",
+      "query": "Stapelaktualisierung",
+      "origin": "isolate compound from the previously frozen sample query",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "Wie erzeuge ich mit Rust meinen ersten Stapel?",
+      "expected": "quickstart",
+      "intent": "natural first-deck task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 13.815073208302447,
+          "matchedTerms": [
+            "erzeuge",
+            "mit",
+            "rust",
+            "stapel"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 3.4993966282602607,
+          "matchedTerms": [
+            "mit",
+            "rust"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 2.0996379769561564,
+          "matchedTerms": [
+            "mit",
+            "rust"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "Stapelaktualisierung mit dem ursprünglichen APKG",
+      "expected": "updates",
+      "intent": "compound update intent",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 4.464291509114138,
+          "matchedTerms": [
+            "mit",
+            "dem"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 3.1274106559767088,
+          "matchedTerms": [
+            "mit",
+            "apkg"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 1.2697660341460737,
+          "matchedTerms": [
+            "mit"
+          ]
+        }
+      ],
+      "resultCount": 4
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "Wie behalte ich stabile Notizschlüssel bei einer Aktualisierung?",
+      "expected": "updates",
+      "intent": "compound stable note key",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 1.9313254949209204,
+          "matchedTerms": [
+            "aktualisierung"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 1.9313254949209204,
+          "matchedTerms": [
+            "stabile"
+          ]
+        }
+      ],
+      "resultCount": 2
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "Wie verwalte ich die Lebensdauer von BuildOptions.temporary in Python?",
+      "expected": "python-api",
+      "intent": "natural API task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "updates",
+          "score": 4.634896071039661,
+          "matchedTerms": [
+            "von",
+            "in"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 2.8889803050642984,
+          "matchedTerms": [
+            "die",
+            "python"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 0.8828349540655537,
+          "matchedTerms": [
+            "die"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "Große",
+      "origin": "actual sample spelling: Große Medien",
+      "expected": "python-api",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "Grosse",
+      "origin": "ss spelling comparison; no production synonym assertion",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "ursprünglichen",
+      "origin": "actual sample spelling",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "ursprunglichen",
+      "origin": "Latin accent folding control",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "metadata-only",
+      "query": "Stapelaktualisierung",
+      "origin": "isolate compound from the previously frozen sample query",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "Wie erzeuge ich mit Rust meinen ersten Stapel?",
+      "expected": "quickstart",
+      "intent": "natural first-deck task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 6.784525639504543,
+          "matchedTerms": [
+            "erzeuge",
+            "mit",
+            "rust",
+            "ersten",
+            "stapel"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 4.598192545194846,
+          "matchedTerms": [
+            "erzeuge",
+            "mit",
+            "rust",
+            "ersten",
+            "stapel"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 4.0757861010981475,
+          "matchedTerms": [
+            "mit",
+            "rust",
+            "ersten",
+            "stapel"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "Stapelaktualisierung mit dem ursprünglichen APKG",
+      "expected": "updates",
+      "intent": "compound update intent",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 6.519927347831554,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "ursprunglichen",
+            "apkg"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 3.1916440604437897,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "ursprunglichen",
+            "apkg"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 2.817835077398378,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "apkg"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "Wie behalte ich stabile Notizschlüssel bei einer Aktualisierung?",
+      "expected": "updates",
+      "intent": "compound stable note key",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 5.850861240385603,
+          "matchedTerms": [
+            "wie",
+            "behalte",
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 5.053938940525868,
+          "matchedTerms": [
+            "behalte",
+            "stabile",
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 1.2467886271048325,
+          "matchedTerms": [
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "Wie verwalte ich die Lebensdauer von BuildOptions.temporary in Python?",
+      "expected": "python-api",
+      "intent": "natural API task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 5.637905604322534,
+          "matchedTerms": [
+            "die",
+            "von",
+            "buildoptions.temporary",
+            "in",
+            "python"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 3.695049969837726,
+          "matchedTerms": [
+            "wie",
+            "die",
+            "von",
+            "in",
+            "python"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 2.3722014991966476,
+          "matchedTerms": [
+            "die",
+            "von",
+            "in",
+            "python"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "Große",
+      "origin": "actual sample spelling: Große Medien",
+      "expected": "python-api",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "Grosse",
+      "origin": "ss spelling comparison; no production synonym assertion",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "ursprünglichen",
+      "origin": "actual sample spelling",
+      "expected": "diagnostic only",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        }
+      ],
+      "resultCount": 2
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "ursprunglichen",
+      "origin": "Latin accent folding control",
+      "expected": "diagnostic only",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        }
+      ],
+      "resultCount": 2
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-lexical",
+      "query": "Stapelaktualisierung",
+      "origin": "isolate compound from the previously frozen sample query",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "Wie erzeuge ich mit Rust meinen ersten Stapel?",
+      "expected": "quickstart",
+      "intent": "natural first-deck task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "home",
+          "score": 6.784525639504542,
+          "matchedTerms": [
+            "Stapel",
+            "erzeuge",
+            "mit",
+            "rust",
+            "ersten"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 4.598192545194845,
+          "matchedTerms": [
+            "Stapel",
+            "erzeuge",
+            "mit",
+            "rust",
+            "ersten"
+          ]
+        },
+        {
+          "id": "quickstart",
+          "score": 4.0757861010981475,
+          "matchedTerms": [
+            "Stapel",
+            "mit",
+            "rust",
+            "ersten"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "Stapelaktualisierung mit dem ursprünglichen APKG",
+      "expected": "updates",
+      "intent": "compound update intent",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 6.519927347831554,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "ursprunglichen",
+            "apkg"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 3.1916440604437897,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "ursprunglichen",
+            "apkg"
+          ]
+        },
+        {
+          "id": "home",
+          "score": 2.817835077398378,
+          "matchedTerms": [
+            "mit",
+            "dem",
+            "apkg"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "Wie behalte ich stabile Notizschlüssel bei einer Aktualisierung?",
+      "expected": "updates",
+      "intent": "compound stable note key",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "json-to-anki",
+          "score": 5.850861240385603,
+          "matchedTerms": [
+            "wie",
+            "behalte",
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 5.053938940525868,
+          "matchedTerms": [
+            "behalte",
+            "stabile",
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        },
+        {
+          "id": "python-api",
+          "score": 1.2467886271048325,
+          "matchedTerms": [
+            "notizschlussel",
+            "bei",
+            "einer",
+            "aktualisierung"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "Wie verwalte ich die Lebensdauer von BuildOptions.temporary in Python?",
+      "expected": "python-api",
+      "intent": "natural API task",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 5.637905604322534,
+          "matchedTerms": [
+            "die",
+            "von",
+            "buildoptions.temporary",
+            "in",
+            "python"
+          ]
+        },
+        {
+          "id": "json-to-anki",
+          "score": 3.695049969837726,
+          "matchedTerms": [
+            "wie",
+            "die",
+            "von",
+            "in",
+            "python"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 2.3722014991966476,
+          "matchedTerms": [
+            "die",
+            "von",
+            "in",
+            "python"
+          ]
+        }
+      ],
+      "resultCount": 5
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "zzzxqv 987654321",
+      "expected": null,
+      "intent": "unrelated negative",
+      "origin": "previously frozen sample diagnostic",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "Große",
+      "origin": "actual sample spelling: Große Medien",
+      "expected": "python-api",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "Grosse",
+      "origin": "ss spelling comparison; no production synonym assertion",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "ursprünglichen",
+      "origin": "actual sample spelling",
+      "expected": "diagnostic only",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        }
+      ],
+      "resultCount": 2
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "ursprunglichen",
+      "origin": "Latin accent folding control",
+      "expected": "diagnostic only",
+      "top3": [
+        {
+          "id": "python-api",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        },
+        {
+          "id": "updates",
+          "score": 1.101397888459904,
+          "matchedTerms": [
+            "ursprunglichen"
+          ]
+        }
+      ],
+      "resultCount": 2
+    },
+    {
+      "locale": "de",
+      "engine": "latin-marks-only-proposal",
+      "mode": "sample-body-brief-aliases",
+      "query": "Stapelaktualisierung",
+      "origin": "isolate compound from the previously frozen sample query",
+      "expected": "diagnostic only",
+      "top3": [],
+      "resultCount": 0
+    }
+  ]
+}

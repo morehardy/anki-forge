@@ -1,0 +1,58 @@
+# AI アシスタントで Anki カードを作成する
+
+AI アシスタントに学習メモから質問と解答の組を下書きしてもらい、原文と照合してから、Anki Forge で Anki の `.apkg` デッキをエクスポートします。Anki Forge は、この作業でカード生成を担うオープンソースライブラリです。アシスタントが内容の下書きやスクリプトを書き、ローカルの Python、Node.js、Rust のプログラムがカードを生成します。
+
+プログラミング言語を使って始めるには[コーディングアシスタント向けの依頼文をコピー](/#ai-quickstart)します。または、以下の CSV の手順に沿って進められます。サイトの依頼文作成機能はローカルで文章を組み立てるだけで、AI モデルを呼び出したり、学習メモをアップロードしたりしません。
+
+<!-- section: choose-input -->
+## 確認できる資料から始める
+
+自分の講義ノートや語彙リストなど、主題が明確な短い文章を使います。PDF、スキャン画像、講義スライドは、先に別のツールでテキストを抽出・確認してください。Anki Forge は API を通じて渡された内容を受け取ります。PDF の抽出や OCR はこのライブラリの範囲外です。
+
+各質問は1つの事実に絞ります。元の文書を離れてカードだけが表示されたときにも解答が理解できるよう、必要な文脈を含めてください。
+
+<!-- section: draft-cards -->
+## CSV のカードを依頼する
+
+次の例をアシスタントに貼り付けます。自分のデッキを作る際は元の文章を差し替え、新規ノートの件数と ID を調整してください。
+
+```text
+Turn the source below into exactly three Basic Anki notes.
+Use only facts stated in the source. Do not add facts from memory.
+Each question must test one fact and be understandable on its own.
+Return only UTF-8 CSV with the header id,front,back, with no Markdown fence.
+Use the IDs es:hola, es:gracias and es:adios for these three vocabulary items.
+Quote any CSV field containing a comma, quote or newline correctly.
+
+Source:
+In Spanish, hola means hello, gracias means thank you, and adiós means goodbye.
+```
+
+想定される内容は、次と同等です。
+
+```csv
+id,front,back
+es:hola,hola,hello
+es:gracias,gracias,thank you
+es:adios,adiós,goodbye
+```
+
+アシスタントは表面の質問を別の言い方にするかもしれません。各行を原文と照合し、曖昧な解答や根拠のない解答を除いて、確認済みの結果を `cards.csv` に保存します。新規ノートごとに一意の ID を割り当て、後の編集でも維持します。既存デッキの ID を作り直すようアシスタントに依頼しないでください。
+
+<!-- section: export-apkg -->
+## 確認済みのカードを APKG にする
+
+完全なプログラム、インストールコマンド、サンプル入力は [Python で CSV を Anki に変換する](/docs/csv-to-anki/)を参照してください。そのスクリプトは CSV の構造を検査し、ID の一意性を確認して、永続パッケージを書き出します。サンプルはメディアなしの Basic カード3枚を作成します。
+
+データがすでに JSON の場合や、画像・音声が必要な場合は、Python、Node / TypeScript、Rust の完全なプログラムがある [JSON から Anki を生成するレシピ](/docs/json-to-anki/)を使ってください。CSV と JSON は、アプリケーションでパースしてからノートとして Anki Forge に渡します。
+
+独自のプログラムを書く支援が必要な場合は、[コーディングアシスタント向けの依頼文](/#ai-quickstart)で、入力フィールド、必要なカードタイプ、出力ファイル名を指定します。任意で使える [Anki Forge Skill](https://github.com/morehardy/anki-forge/blob/main/docs/ai-assistants.md) は、Skill を読み込むアシスタント向けに公開 API リファレンスと作業手順を提供します。
+
+<!-- section: check-result -->
+## 学習前にカードを確認する
+
+生成した APKG を Anki で開き、カード数、質問、解答、書式を確認します。CSV の例では、Spanish デッキにノート3件、カード3枚があるはずです。エクスポートの成功が示すのはパッケージが生成されたことです。AI の解答が正しいことや、学習に役立つことを証明するものではありません。
+
+穴埋め問題には [Cloze カード](/docs/cards/)を使います。図のラベルには、指定した画像とマスク座標を使う[画像穴埋め](/docs/image-occlusion/)を利用できます。画像中のラベルを自動検出する機能ではありません。
+
+次回リリースのために配布時のオリジナル APKG を保持し、[更新の手順](/docs/updates/)に従います。名前空間とノート ID を維持し、比較を確認して、Anki のインポート設定と新しいローカル編集を考慮してください。

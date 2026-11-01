@@ -135,5 +135,52 @@
       "Traduzir o trocadilho Notes on making notes de forma literal"
     ],
     "ownership": "Explique quem mantém os bytes e controla a vida útil dos valores e arquivos. Propriedade em Rust não significa direitos autorais nem permissões do usuário do Anki."
+  },
+  "ja": {
+    "audience": "公開されている Rust、Python、Node.js パッケージをアプリケーションに組み込み、Anki 用 APKG を生成・更新する開発者。",
+    "register": "です・ます調の簡潔な技術説明。主語を過剰に補わず、操作は「〜します」、必要条件や禁止事項は理由とともに明示します。前提は該当する手順の近く、制約は影響を受ける結論の近くに置きます。見出しは作業内容を端的に示します。",
+    "terms": {
+      "note": "ノート",
+      "card": "カード",
+      "deck": "デッキ",
+      "noteType": "ノートタイプ",
+      "namespace": "名前空間",
+      "stableKey": "ノートの安定キー",
+      "originalApkg": "配布時のオリジナル APKG",
+      "imageOcclusion": "画像穴埋め",
+      "baseline": "基準パッケージ",
+      "template": "テンプレート",
+      "preparedPublication": "準備済み公開",
+      "snapshot": "スナップショット"
+    },
+    "protected": [
+      "Anki Forge",
+      "ankiforge",
+      "genanki",
+      "APKG",
+      "API",
+      "JSON",
+      "Rust",
+      "Node.js",
+      "Python",
+      "Basic",
+      "Cloze"
+    ],
+    "avoid": [
+      "ノートとカードを同義語として扱わない。",
+      "Anki から再エクスポートした APKG を更新の基準として案内しない。",
+      "一時成果物の保持や Rust の所有権を、著作権またはユーザー権限と混同しない。",
+      "コードの文字列、API 名、パッケージ名、安定キーを翻訳しない。",
+      "ソースだけで使える機能を公開パッケージの機能として紹介しない。",
+      "既存の復習状態やインポート結果を無条件に保証しない。"
+    ],
+    "ownership": "値がデータや一時ファイルの生存期間を管理する意味で「所有する」を使います。単に画面で表示するという意味の「持つ」と区別し、最後の所有者の解放で一時ファイルが削除されることを説明します。",
+    "languageChecks": [
+      "数字＋件／枚／個を対象に応じて使い分ける。",
+      "Cloze は API／モデル名として保持し、説明では穴埋めカードと補足する。",
+      "無空白の日本語検索、漢字・かな表記、英字 API と日本語の混在を検証する。",
+      "句読点や括弧の行頭禁則、狭い画面の折り返し、SNS共有用画像の日本語フォントを確認する。"
+    ],
+    "status": "draft/full-candidate"
   }
 }

@@ -4,7 +4,7 @@ const LATIN = /^[a-z]+$/;
 
 function normalize(value) {
   return String(value ?? '').normalize('NFKC').toLowerCase().replace(/node\.js/g, 'nodejs')
-    .normalize('NFD').replace(/\p{M}/gu, '').replace(/[’']/g, '');
+    .normalize('NFD').replace(/(\p{Script=Latin})\p{M}+/gu, '$1').normalize('NFC').replace(/[’']/g, '');
 }
 
 function stem(value, locale) {
@@ -98,9 +98,11 @@ export function documentSdk(document) {
 
 function aliasPattern(value) {
   const escaped = normalize(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  // Han boundaries do not follow whitespace; Latin words require lexical boundaries.
-  const start = /^[\p{Script=Latin}\p{N}_]/u.test(escaped) ? '(?<![\\p{Script=Latin}\\p{N}_])' : '';
-  const end = /[\p{Script=Latin}\p{N}_]$/u.test(escaped) ? '(?![\\p{Script=Latin}\\p{N}_])' : '';
+  // Han can join without spaces; Latin identifiers and Katakana words need boundaries.
+  const start = /^[\p{Script=Latin}\p{N}_]/u.test(escaped) ? '(?<![\\p{Script=Latin}\\p{N}_])'
+    : /^[\p{Script=Katakana}ー]/u.test(escaped) ? '(?<![\\p{Script=Katakana}ー])' : '';
+  const end = /[\p{Script=Latin}\p{N}_]$/u.test(escaped) ? '(?![\\p{Script=Latin}\\p{N}_])'
+    : /[\p{Script=Katakana}ー]$/u.test(escaped) ? '(?![\\p{Script=Katakana}ー])' : '';
   return new RegExp(`${start}${escaped}${end}`, 'gu');
 }
 

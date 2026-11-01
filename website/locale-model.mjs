@@ -6,7 +6,7 @@ export const configuredLocales = {
   'zh-CN': { prefix: '/zh-cn', lang: 'zh-CN', og: 'zh_CN', label: '简体中文', format: 'zh-CN', starlightKey: 'zh-cn', dir: 'ltr' },
   es: { prefix: '/es', lang: 'es', og: 'es_ES', label: 'Español', format: 'es', starlightKey: 'es', dir: 'ltr' },
   'pt-BR': { prefix: '/pt-br', lang: 'pt-BR', og: 'pt_BR', label: 'Português do Brasil', format: 'pt-BR', starlightKey: 'pt-br', dir: 'ltr' },
-  ja: { prefix: '/ja', lang: 'ja', og: 'ja_JP', label: '日本語', format: 'ja-JP', starlightKey: 'ja', dir: 'ltr' },
+  ja: { prefix: '/ja', lang: 'ja', og: 'ja_JP', label: '日本語', format: 'ja-JP', starlightKey: 'ja', dir: 'ltr', socialFontFamily: 'Arial, Noto Sans CJK JP, Hiragino Kaku Gothic ProN, sans-serif' },
   de: { prefix: '/de', lang: 'de', og: 'de_DE', label: 'Deutsch', format: 'de-DE', starlightKey: 'de', dir: 'ltr' },
   fr: { prefix: '/fr', lang: 'fr', og: 'fr_FR', label: 'Français', format: 'fr', starlightKey: 'fr', dir: 'ltr' },
   ru: { prefix: '/ru', lang: 'ru', og: 'ru_RU', label: 'Русский', format: 'ru-RU', starlightKey: 'ru', dir: 'ltr' },

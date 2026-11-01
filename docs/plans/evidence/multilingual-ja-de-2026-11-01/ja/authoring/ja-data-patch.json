@@ -1,0 +1,1183 @@
+{
+  "schemaVersion": 1,
+  "locale": "ja",
+  "documents": {
+    "docs": {
+      "title": "コードから Anki デッキを生成する",
+      "description": "言語を選んで最初のデッキを作り、メディア、テンプレート、繰り返し実行できる更新を追加します。"
+    },
+    "languages": {
+      "title": "プログラミング言語を選ぶ",
+      "description": "Rust、Node、Python の公開パッケージをインストールして、最初の Anki デッキをエクスポートします。"
+    },
+    "quickstart": {
+      "title": "Rust で Anki カードを生成する",
+      "description": "Rust の公開パッケージをインストールし、スペイン語のカードを作成して、永続 APKG ファイルを書き出します。"
+    },
+    "json-to-anki": {
+      "title": "JSON から Anki デッキを生成・更新する",
+      "description": "Rust、Python、TypeScript で JSON を読み取り、画像と音声を同梱し、解答だけを変更する APKG 更新を確認します。"
+    },
+    "csv-to-anki": {
+      "title": "Python で CSV を Anki カードに変換する",
+      "description": "UTF-8 の語彙表を Anki APKG に変換する完全な Python スクリプト。CSV サンプル、安定したノート ID、インポート確認の手順を含みます。"
+    },
+    "ai-anki-cards": {
+      "title": "AI を使った Anki カード作成：学習メモから APKG へ",
+      "description": "AI アシスタントでカードの下書きを作り、解答を確認して Anki Forge で APKG を生成。CSV の手順とコーディングアシスタント向け依頼文を用意しています。"
+    },
+    "anki-forge-vs-genanki": {
+      "title": "Anki Forge と genanki：作業に合う選択",
+      "description": "Anki APKG の作成手順、実行環境の要件、更新の確認、移行コストを比較します。"
+    },
+    "development": {
+      "title": "ソースから SDK をビルドする",
+      "description": "チェックアウトしたソースから SDK とサンプルをビルドし、公開パッケージとソース専用の機能を区別します。"
+    },
+    "rust-guide": {
+      "title": "Rust での作成ガイド",
+      "description": "サポートされる Rust API でプロジェクトを作成し、検証、メディア処理、更新を行います。"
+    },
+    "templates": {
+      "title": "Anki のカードテンプレート、CSS、メディアを再使用する",
+      "description": "Rust、Python、Node.js でテンプレート、CSS、メディアのバンドルから、通常・Cloze カード用の再使用可能なノートタイプを読み込みます。"
+    },
+    "api": {
+      "title": "公開 API の概要",
+      "description": "作成、メディア、診断、更新に使う Rust、Python、Node の API を探せます。"
+    },
+    "installation": {
+      "title": "アプリケーションに組み込む",
+      "description": "公開 Rust crate を組み込み、Cargo の依存関係を設定して、次のガイドを選びます。"
+    },
+    "concepts": {
+      "title": "基本概念",
+      "description": "Project、データを所有するノートとメディア、安定キー、テキスト、更新時の識別情報を理解します。"
+    },
+    "cards": {
+      "title": "Anki の Basic と Cloze カードを生成する",
+      "description": "コードで質問・解答の Basic カードと穴埋めの Cloze カードを生成。検証済みの Rust サンプルは2件のノートから3枚のカードを作ります。"
+    },
+    "custom-notetypes": {
+      "title": "独自のノートタイプ",
+      "description": "独自コンテンツのフィールド、カードテンプレート、生成ルールを定義します。"
+    },
+    "media": {
+      "title": "Anki カードに画像と音声を追加する",
+      "description": "Rust、Python、Node.js で画像・音声をインポートしてカードを組み立て、エクスポート名、MIME タイプ、メディア上限を管理します。"
+    },
+    "image-occlusion": {
+      "title": "Anki の画像穴埋めカードを生成する",
+      "description": "Rust、Python、Node.js で画像と指定した矩形マスクから画像穴埋めカードを作ります。2つの遮蔽モードに対応しています。"
+    },
+    "updates": {
+      "title": "安定したノート ID で Anki デッキを更新する",
+      "description": "ノート ID を維持し、前回配布時のオリジナル APKG を基準にビルドして、比較を確認してから新バージョンを配布します。"
+    },
+    "build-guarantees": {
+      "title": "ビルドと出力の保証",
+      "description": "一時成果物、パスの保護、検査の上限、確認済み候補の公開を理解します。"
+    },
+    "troubleshooting": {
+      "title": "トラブルシューティング",
+      "description": "インストール、メディア、テンプレート、識別情報、出力のエラーを解決します。"
+    },
+    "compatibility": {
+      "title": "互換性と検証済みの環境",
+      "description": "公開パッケージ、検証した実行環境、Anki クライアントでのインポートと再生の条件を確認します。"
+    },
+    "rust-api": {
+      "title": "Rust API ガイド",
+      "description": "公開される作成メソッド、ビルドの既定値、レポート、診断の動作を確認できます。"
+    },
+    "node-quickstart": {
+      "title": "Node.js で Anki カードを生成する",
+      "description": "公開 Node パッケージをインストールし、完全な JavaScript プログラムで最初の永続 APKG をエクスポートします。"
+    },
+    "node-api": {
+      "title": "Node と TypeScript API",
+      "description": "Node SDK の作成メソッド、非同期処理、メディア、所有権、型付きレポート、TypeScript の設定を確認できます。"
+    },
+    "python-quickstart": {
+      "title": "Python で Anki カードを生成する",
+      "description": "仮想環境に公開 Python パッケージをインストールし、短い完全なプログラムで永続 APKG を作成します。"
+    },
+    "python-api": {
+      "title": "Python API リファレンス",
+      "description": "Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、準備済み公開の API を確認できます。"
+    },
+    "python-diagnostics": {
+      "title": "Python の診断と更新ポリシー",
+      "description": "構造化されたエラー、比較結果、更新ポリシー、検査上限、成果物の所有権を扱います。"
+    },
+    "python-migration": {
+      "title": "Python API の移行",
+      "description": "旧 Deck・レジストリ・ランタイムの API を、安定キーとデータを所有する新しい Python API に置き換えます。"
+    },
+    "genanki-migration": {
+      "title": "genanki からの移行",
+      "description": "genanki のモデル、フィールド、デッキ、メディアを Anki Forge の概念に対応付け、識別情報を引き継ぐ条件を確認します。"
+    }
+  },
+  "docGroups": [
+    "はじめに",
+    "作業別ガイド",
+    "言語別ガイド",
+    "リファレンス",
+    "ヘルプ"
+  ],
+  "navigation": {
+    "docs": "ガイド",
+    "examples": "サンプル",
+    "blog": "ブログ"
+  },
+  "languageBrief": {
+    "audience": "公開されている Rust、Python、Node.js パッケージをアプリケーションに組み込み、Anki 用 APKG を生成・更新する開発者。",
+    "register": "です・ます調の簡潔な技術説明。主語を過剰に補わず、操作は「〜します」、必要条件や禁止事項は理由とともに明示します。前提は該当する手順の近く、制約は影響を受ける結論の近くに置きます。見出しは作業内容を端的に示します。",
+    "terms": {
+      "note": "ノート",
+      "card": "カード",
+      "deck": "デッキ",
+      "noteType": "ノートタイプ",
+      "namespace": "名前空間",
+      "stableKey": "ノートの安定キー",
+      "originalApkg": "配布時のオリジナル APKG",
+      "imageOcclusion": "画像穴埋め",
+      "baseline": "基準パッケージ",
+      "template": "テンプレート",
+      "preparedPublication": "準備済み公開",
+      "snapshot": "スナップショット"
+    },
+    "protected": [
+      "Anki Forge",
+      "ankiforge",
+      "genanki",
+      "APKG",
+      "API",
+      "JSON",
+      "Rust",
+      "Node.js",
+      "Python",
+      "Basic",
+      "Cloze"
+    ],
+    "avoid": [
+      "ノートとカードを同義語として扱わない。",
+      "Anki から再エクスポートした APKG を更新の基準として案内しない。",
+      "一時成果物の保持や Rust の所有権を、著作権またはユーザー権限と混同しない。",
+      "コードの文字列、API 名、パッケージ名、安定キーを翻訳しない。",
+      "ソースだけで使える機能を公開パッケージの機能として紹介しない。",
+      "既存の復習状態やインポート結果を無条件に保証しない。"
+    ],
+    "ownership": "値がデータや一時ファイルの生存期間を管理する意味で「所有する」を使います。単に画面で表示するという意味の「持つ」と区別し、最後の所有者の解放で一時ファイルが削除されることを説明します。",
+    "languageChecks": [
+      "数字＋件／枚／個を対象に応じて使い分ける。",
+      "Cloze は API／モデル名として保持し、説明では穴埋めカードと補足する。",
+      "無空白の日本語検索、漢字・かな表記、英字 API と日本語の混在を検証する。",
+      "句読点や括弧の行頭禁則、狭い画面の折り返し、SNS共有用画像の日本語フォントを確認する。"
+    ],
+    "status": "draft/full-candidate"
+  },
+  "prompts": {
+    "ja": "{language} アプリケーションで Anki Forge {version} を使う作業を手伝ってください。\n実行環境の要件: {runtime}\n\n公開パッケージ `ankiforge` と、このバージョンの文書に記載された公開 API だけを使ってください。\ngit/path 依存関係、内部ツール、ソース専用 API、未公開のメソッド、推測したメソッドは使わないでください。\n\n作りたいもの:\n{request}\n\n次の要件に従ってください。\n1. ファイルを変更する前に、既存プロジェクトを確認します。\n2. 必要な設定と正確なインストールコマンドを示します: {install}\n3. 最小限かつ完全に実行できるプログラムを作り、追加・編集するすべてのファイル名を示します。\n4. 永続的な `.apkg` ファイルを生成し、安定した名前空間とノートキーを使います。\n5. 実行コマンド、想定される出力、検証手順を含めます。\n6. メディア、独自テンプレート、画像穴埋め、更新が必要な場合は API を推測せず、文書化された手順に従います。\n   更新では、前回配布時のオリジナル APKG を基準として保持します。Anki から再エクスポートしたファイルは使いません。\n7. 言語、入力形式、出力パス、識別情報のルールが不明な場合に、その解消に必要な質問だけをします。\n\nクイックスタート: {quickstart}"
+  },
+  "requestPlaceholders": {
+    "ja": "<作りたいものを記入してください>"
+  },
+  "promptContracts": {
+    "ja": {
+      "required": [
+        "公開パッケージ",
+        "公開 API",
+        "永続的",
+        "安定した名前空間とノートキー",
+        "実行コマンド",
+        "検証手順",
+        "配布時のオリジナル APKG"
+      ],
+      "maxCharacters": 1000
+    }
+  },
+  "searchTerms": {
+    "docs": [
+      "Anki デッキをコードから生成",
+      "カード作成ガイド",
+      "ノートとテンプレートとメディア",
+      "最初のデッキ",
+      "学習データからAPKG",
+      "作成手順の全体像",
+      "ドキュメント入口"
+    ],
+    "languages": [
+      "プログラミング言語を選ぶ",
+      "Rust Python Node.js",
+      "公開パッケージの比較",
+      "インストール方法の選択",
+      "JavaScript TypeScript",
+      "CPython wheel",
+      "最初のエクスポート",
+      "ソースビルドとの違い"
+    ],
+    "quickstart": [
+      "Rust クイックスタート",
+      "Rustで初めてカードを作る",
+      "cargo new anki-deck",
+      "cargo add ankiforge",
+      "src/main.rs",
+      "cargo run",
+      "Rust 最初のデッキ",
+      "spanish.apkg",
+      "Rust 入門"
+    ],
+    "json-to-anki": [
+      "JSONからAnki",
+      "JSON データをカード化",
+      "構造化データを読み取る",
+      "3言語の完全なレシピ",
+      "画像と音声を同梱",
+      "JSON 解答だけの更新",
+      "answer-only 更新",
+      "TypeScript コンパイルと実行",
+      "共通のJSON入力",
+      "基準パッケージと候補",
+      "準備済み公開"
+    ],
+    "csv-to-anki": [
+      "CSVからAnki",
+      "CSVをAPKGに変換",
+      "語彙表からカード",
+      "単語帳",
+      "表計算",
+      "Excel UTF-8 CSV保存",
+      "cards.csv",
+      "csv_to_anki.py",
+      "重複IDの拒否",
+      "カンマの引用符",
+      "BOM",
+      "3件のノート",
+      "スプレッドシート"
+    ],
+    "ai-anki-cards": [
+      "AIでカードの下書き",
+      "学習メモからAnki",
+      "人工知能アシスタント",
+      "AI コーディング依頼文",
+      "質問と解答を原文と照合",
+      "生成した解答の確認",
+      "AIカード作成",
+      "CSVプロンプト",
+      "PDF抽出とOCRは別ツール",
+      "AIにIDを作り直させない"
+    ],
+    "anki-forge-vs-genanki": [
+      "Anki Forgeとgenanki比較",
+      "ライブラリの選び方",
+      "genankiの代替",
+      "既存Pythonスクリプトを維持",
+      "移行コスト",
+      "GUIDと数値ID",
+      "実行環境の要件",
+      "過去の性能測定",
+      "Rustエクスポート時間",
+      "genanki 更新対応"
+    ],
+    "development": [
+      "ソースからビルド",
+      "ソースビルド",
+      "SDK開発",
+      "チェックアウト",
+      "ネイティブ拡張を再ビルド",
+      "Maturin",
+      "ローカルtarball",
+      "pack:local",
+      "リポジトリ開発",
+      "Rustツールチェーン1.92.0",
+      "ネイティブバイナリーのバージョンを揃える"
+    ],
+    "rust-guide": [
+      "Rust作成ガイド",
+      "Rustプロジェクト設計",
+      "Projectの名前空間",
+      "ノートの安定キー",
+      "モデルとアセット",
+      "Rustエラー原因チェーン",
+      "Project::add アトミック",
+      "成果物所有者",
+      "NOTE.MEDIA_USAGE_INVALID",
+      "ツールレシピv2",
+      "ankiforge-project-v2",
+      "v1拒否"
+    ],
+    "templates": [
+      "テンプレートバンドル",
+      "テンプレートを再利用",
+      "テンプレートを再使用",
+      "anki-template.yaml",
+      "template-bundle-v2",
+      "NoteType::from_bundle",
+      "YAMLマニフェスト",
+      "ブラウザーテンプレート",
+      "CSSとフォント",
+      "export_as",
+      "バンドル外のパス拒否",
+      "Clozeバンドル",
+      "テキストの上限"
+    ],
+    "api": [
+      "公開API一覧",
+      "API概要",
+      "Rust Python Node API",
+      "ノート作成のメソッド",
+      "メディアのAPI",
+      "診断と更新API",
+      "オリジナルAPKGの必要性",
+      "SDKのリファレンス入口"
+    ],
+    "installation": [
+      "Rustアプリに組み込む",
+      "既存Cargoプロジェクト",
+      "Rust crateインストール",
+      "cargo add ankiforge@0.3.1",
+      "Cargo依存関係",
+      "デフォルトfeatureは空",
+      "Rustリンカーとビルドツール",
+      "serde_json パース",
+      "JSON CSV変換は呼び出し側"
+    ],
+    "concepts": [
+      "ノートとカードの違い",
+      "カードとデッキの関係",
+      "ノートタイプとフィールド",
+      "プロジェクトと名前空間",
+      "識別キーと表示名",
+      "基本概念",
+      "TextとHTML",
+      "所有するスナップショット",
+      "メディアの所有権",
+      "安定キー",
+      "複数カード",
+      "デッキは配置先",
+      "APKGの識別情報"
+    ],
+    "cards": [
+      "Basicカード",
+      "質問と解答",
+      "表面と裏面",
+      "Clozeカード",
+      "穴埋めカード",
+      "あなうめ",
+      "穴埋め番号1から500",
+      "2件のノートと3枚のカード",
+      "back_extra",
+      "Content::html",
+      "c1 answer hint",
+      "カード識別情報"
+    ],
+    "custom-notetypes": [
+      "独自のノートタイプ",
+      "カスタムノートタイプ",
+      "ノートタイプを定義",
+      "フィールドキーと表示名",
+      "テンプレートの条件生成",
+      "required 必須フィールド",
+      "sort 並べ替えフィールド",
+      "GenerationRule all any",
+      "不変モデルの共有",
+      "モデル競合",
+      "NoteType::builder",
+      "日本語の表示名"
+    ],
+    "media": [
+      "画像と音声を追加",
+      "メディアを同梱",
+      "発音音声",
+      "Media::file",
+      "Media::bytes",
+      "MIMEと拡張子",
+      "改名はMIMEを変えない",
+      "with_export_name",
+      "メディア一括インポート",
+      "Media.files",
+      "Unicodeファイル名の衝突",
+      "上限256MiB",
+      "明示的アセット",
+      "CSSフォント",
+      "音声合成は別ツール",
+      "写真と音"
+    ],
+    "image-occlusion": [
+      "画像穴埋め",
+      "画像あなうめ",
+      "イメージオクルージョン",
+      "画像遮蔽",
+      "矩形マスク",
+      "長方形の座標",
+      "図のラベルを隠す",
+      "Mask.rect",
+      "HideAllGuessOne",
+      "HideOneGuessOne",
+      "EXIFの向き",
+      "マスクの安定キー",
+      "画像認識はしない",
+      "マスク番号の保持"
+    ],
+    "updates": [
+      "配布済みデッキを更新",
+      "解答の訂正",
+      "原本APKG",
+      "配布時のオリジナルAPKG",
+      "前回のパッケージ",
+      "基準パッケージ",
+      "安定ノートID",
+      "比較と公開ポリシー",
+      "高リスク変更",
+      "準備済み公開",
+      "一度ビルドして確認して公開",
+      "復習履歴とインポート設定",
+      "ローカル編集",
+      "再エクスポートは使えない",
+      "削除同期しない"
+    ],
+    "build-guarantees": [
+      "ビルドと出力の保証",
+      "一時ファイルが消える",
+      "成果物の生存期間",
+      "永続成果物",
+      "最後の所有者",
+      "アトミックな置き換え",
+      "公開後のエラー",
+      "耐久性の確認",
+      "PublicationSnapshot",
+      "パスのシリアライズ",
+      "検査上限",
+      "準備済み候補の寿命",
+      "消費済み所有者",
+      "persist_to"
+    ],
+    "troubleshooting": [
+      "トラブルシューティング",
+      "エラーを解決",
+      "不具合の診断",
+      "インストールできない",
+      "ネイティブパッケージが読めない",
+      "バージョン不一致",
+      "NOTE.KEY_DUPLICATE",
+      "NOTE.FIELD_REQUIRED",
+      "NOTE.MODEL_CONFLICT",
+      "HTMLが文字で表示",
+      "Clozeが生成されない",
+      "メディア競合",
+      "MIME不一致",
+      "バンドル読み込み失敗",
+      "一時APKGが消えた",
+      "基準パッケージが無効"
+    ],
+    "compatibility": [
+      "対応プラットフォーム",
+      "検証済み環境",
+      "互換性",
+      "Rust最小バージョン",
+      "Node対応バージョン",
+      "CPython wheel対応",
+      "macOS arm64 x64",
+      "Windows x64",
+      "Linux GNU glibc",
+      "Alpine musl検証範囲外",
+      "Bun Electron",
+      "Ankiの再生条件",
+      "コーデック",
+      "復習履歴の条件"
+    ],
+    "rust-api": [
+      "Rust APIリファレンス",
+      "Rustメソッド一覧",
+      "公開ドメインモジュール",
+      "FieldKey TemplateKey",
+      "BuildOptions::temporary",
+      "InspectLimits既定値",
+      "BuildReport::snapshot",
+      "PathSnapshot::into_path_buf",
+      "AddError::context",
+      "AddTarget AddDetail",
+      "UpdatePolicy::fail_on",
+      "Project::prepare_publication"
+    ],
+    "node-quickstart": [
+      "Node.jsクイックスタート",
+      "JavaScriptでデッキを作る",
+      "Node入門",
+      "TypeScript最初のカード",
+      "npm install ankiforge",
+      "ネイティブのオプション依存関係",
+      "main.mjs",
+      "node main.mjs",
+      "ESM CommonJS require",
+      "Node最初のAPKG"
+    ],
+    "node-api": [
+      "Node APIリファレンス",
+      "JavaScript SDK",
+      "TypeScript型宣言",
+      "tsconfig.json",
+      "npx tsc",
+      "Promise非同期ビルド",
+      "ワーカーで処理",
+      "Projectスナップショット",
+      "Uint8Array",
+      "NoteType.fromBundle",
+      "preparePublication",
+      "ArtifactClosedError",
+      "NativeLoadError",
+      "camelCaseレポート",
+      "snake_caseスナップショット",
+      "persistTo相対パス"
+    ],
+    "python-quickstart": [
+      "Pythonクイックスタート",
+      "Pythonで最初のカード",
+      "Python入門",
+      "pip install ankiforge",
+      "python -m venv",
+      "仮想環境を有効にする",
+      "Windows Activate.ps1",
+      "main.py",
+      "python main.py",
+      "from ankiforge import",
+      "Python最初のAPKG"
+    ],
+    "python-api": [
+      "Python APIリファレンス",
+      "Python SDK型注釈",
+      "不変ノート",
+      "NoteType.builder",
+      "Content.sequence",
+      "Media.bytes",
+      "MediaLimits",
+      "max_identity_bytes",
+      "ApkgArtifactコンテキストマネージャー",
+      "copy.copy所有者",
+      "GIL解放",
+      "BINDING.PROJECT_BUSY",
+      "BINDING.FORKED_OBJECT",
+      "prepare_publication",
+      "例外のチェーン"
+    ],
+    "python-diagnostics": [
+      "Python診断",
+      "Pythonエラーの詳細",
+      "BuildError.snapshot",
+      "CompareError.report",
+      "source_details",
+      "causes __cause__",
+      "details limit_exceeded",
+      "allows_publication",
+      "RISK.NOTE_REMOVED",
+      "Python更新ポリシー",
+      "PersistError公開段階",
+      "surrogateescape",
+      "BINDING.EXTENSION_UNAVAILABLE",
+      "BINDING.VERSION_MISMATCH"
+    ],
+    "python-migration": [
+      "旧Python APIから移行",
+      "Python API刷新",
+      "anki-forge配布名の変更",
+      "anki_forgeインポート名の変更",
+      "Deck API削除",
+      "add_noteからaddへ",
+      "モデルレジストリ廃止",
+      "暗黙HTMLの移行",
+      "lockfile方式廃止",
+      "サブプロセスからPyO3",
+      "旧API互換レイヤーなし"
+    ],
+    "genanki-migration": [
+      "genankiから移行",
+      "genanki ModelからNoteType",
+      "DeckからProject",
+      "Package writeの置き換え",
+      "モデル数値IDの対応",
+      "GUIDの移行境界",
+      "業務識別子",
+      "フィールドキーと名前",
+      "genankiメディアファイル",
+      "Content.html",
+      "旧デッキの識別情報",
+      "最初の新モデル配布"
+    ],
+    "blog:your-first-anki-deck": [
+      "Rustで最初のAnkiデッキ",
+      "1語からカードを作る",
+      "hola hello",
+      "スペイン語の挨拶",
+      "Gitで学習内容を管理",
+      "Basicの表面と裏面",
+      "Project::new spanish",
+      "ノートのIDを付ける",
+      "型付きエラーの伝播",
+      "1件から増やす"
+    ],
+    "blog:stable-ids-and-deck-updates": [
+      "本文を変えても識別情報を保つ",
+      "安定IDの理由",
+      "解答を変えて同じノート",
+      "リリース間の名前空間",
+      "次のビルドの基準",
+      "配布した原本を保存",
+      "基準と出力は別パス",
+      "識別情報とリビジョン",
+      "Ankiインポートの条件",
+      "ローカル復習状態"
+    ]
+  },
+  "searchConcepts": {
+    "__language": {
+      "stopWords": [
+        "は",
+        "が",
+        "を",
+        "に",
+        "へ",
+        "で",
+        "と",
+        "の",
+        "も",
+        "や",
+        "から",
+        "まで",
+        "より",
+        "ので",
+        "ため",
+        "する",
+        "します",
+        "したい",
+        "した",
+        "して",
+        "できる",
+        "できます",
+        "です",
+        "ます",
+        "ください",
+        "たい",
+        "こと",
+        "もの",
+        "これ",
+        "それ",
+        "この",
+        "その",
+        "どの",
+        "どれ",
+        "どう",
+        "どのように",
+        "私",
+        "自分",
+        "使う",
+        "使って",
+        "使い",
+        "利用",
+        "方法",
+        "ついて",
+        "について",
+        "場合",
+        "時",
+        "とき",
+        "ある",
+        "いる",
+        "なる",
+        "なり",
+        "および",
+        "または",
+        "そして",
+        "例えば",
+        "SDK",
+        "教えて"
+      ]
+    },
+    "python": {
+      "terms": [
+        "Python",
+        "CPython",
+        "pip",
+        "パイソン"
+      ],
+      "sdk": "python"
+    },
+    "node": {
+      "terms": [
+        "Node.js",
+        "Node",
+        "JavaScript",
+        "TypeScript",
+        "npm",
+        "ノード"
+      ],
+      "sdk": "node"
+    },
+    "rust": {
+      "terms": [
+        "Rust",
+        "Cargo",
+        "crate",
+        "ラスト"
+      ],
+      "sdk": "rust"
+    },
+    "quickstart": {
+      "terms": [
+        "クイックスタート",
+        "入門",
+        "初心者",
+        "最初",
+        "初めて",
+        "はじめて",
+        "始める",
+        "はじめる",
+        "チュートリアル",
+        "初回"
+      ],
+      "roles": [
+        "quickstart"
+      ],
+      "intent": true
+    },
+    "reference": {
+      "terms": [
+        "API",
+        "リファレンス",
+        "参照",
+        "型宣言",
+        "型注釈",
+        "メソッド",
+        "関数",
+        "一覧"
+      ],
+      "roles": [
+        "api"
+      ],
+      "intent": true
+    },
+    "installation": {
+      "terms": [
+        "インストール",
+        "導入",
+        "セットアップ",
+        "依存関係",
+        "組み込む",
+        "組み込み"
+      ],
+      "roles": [
+        "installation",
+        "quickstart"
+      ],
+      "intent": true
+    },
+    "development": {
+      "terms": [
+        "ソースビルド",
+        "ソースからビルド",
+        "ソースからコンパイル",
+        "チェックアウト",
+        "ローカルアドオン",
+        "再ビルド",
+        "リポジトリ開発"
+      ],
+      "roles": [
+        "development"
+      ],
+      "intent": true
+    },
+    "comparison": {
+      "terms": [
+        "vs",
+        "versus",
+        "比較するライブラリ",
+        "ライブラリ比較",
+        "どちらを選ぶ",
+        "選び方",
+        "代替",
+        "長所",
+        "短所",
+        "移行コスト"
+      ],
+      "roles": [
+        "comparison"
+      ],
+      "intent": true
+    },
+    "migration": {
+      "terms": [
+        "移行",
+        "移す",
+        "乗り換え",
+        "乗り換える",
+        "置き換え",
+        "旧API",
+        "旧版",
+        "移植"
+      ],
+      "roles": [
+        "migration"
+      ],
+      "intent": true
+    },
+    "updates": {
+      "terms": [
+        "更新",
+        "アップデート",
+        "修正版",
+        "配布済み",
+        "既存ノート",
+        "解答の訂正",
+        "復習履歴",
+        "再公開",
+        "リリース"
+      ],
+      "roles": [
+        "updates"
+      ],
+      "intent": true,
+      "requiresAny": [
+        "更新",
+        "アップデート",
+        "修正",
+        "訂正",
+        "配布",
+        "公開",
+        "リリース",
+        "基準パッケージ",
+        "既存",
+        "バージョン"
+      ]
+    },
+    "baseline": {
+      "terms": [
+        "基準パッケージ",
+        "基準APKG",
+        "オリジナルAPKG",
+        "原本APKG",
+        "前回のパッケージ",
+        "前回配布",
+        "再エクスポート",
+        "再出力",
+        "識別情報の証拠"
+      ],
+      "roles": [
+        "updates"
+      ],
+      "intent": true
+    },
+    "identity": {
+      "terms": [
+        "安定ID",
+        "安定キー",
+        "GUID",
+        "名前空間",
+        "namespace",
+        "業務キー",
+        "識別情報",
+        "識別子",
+        "ノートID"
+      ]
+    },
+    "diagnostics": {
+      "terms": [
+        "トラブルシューティング",
+        "診断",
+        "エラー",
+        "不具合",
+        "失敗",
+        "動かない",
+        "動かなく",
+        "読めない",
+        "読み込めない",
+        "消えた",
+        "見つからない",
+        "欠落"
+      ],
+      "roles": [
+        "diagnostics"
+      ],
+      "intent": true
+    },
+    "media": {
+      "terms": [
+        "メディア",
+        "アセット",
+        "リソース",
+        "添付ファイル"
+      ],
+      "roles": [
+        "media"
+      ]
+    },
+    "images": {
+      "terms": [
+        "画像",
+        "がぞう",
+        "写真",
+        "イラスト",
+        "図",
+        "イメージ"
+      ],
+      "roles": [
+        "media"
+      ]
+    },
+    "audio": {
+      "terms": [
+        "音声",
+        "おんせい",
+        "音",
+        "サウンド",
+        "発音",
+        "オーディオ",
+        "mp3",
+        "wav"
+      ],
+      "roles": [
+        "media"
+      ]
+    },
+    "occlusion": {
+      "terms": [
+        "画像穴埋め",
+        "画像あなうめ",
+        "画像遮蔽",
+        "イメージオクルージョン",
+        "Image Occlusion",
+        "矩形マスク",
+        "長方形マスク",
+        "遮蔽",
+        "マスキング"
+      ],
+      "roles": [
+        "occlusion"
+      ]
+    },
+    "cloze": {
+      "terms": [
+        "Cloze",
+        "クローズ",
+        "穴埋め",
+        "あなうめ",
+        "空欄補充",
+        "削除番号",
+        "穴埋め番号"
+      ],
+      "roles": [
+        "cards"
+      ]
+    },
+    "templates": {
+      "terms": [
+        "カードテンプレート",
+        "テンプレート",
+        "テンプレートバンドル",
+        "バンドル",
+        "CSS",
+        "フォント",
+        "レイアウト"
+      ],
+      "roles": [
+        "templates"
+      ]
+    },
+    "note-types": {
+      "terms": [
+        "ノートタイプ",
+        "ノート型",
+        "独自モデル",
+        "カスタムモデル",
+        "独自フィールド",
+        "条件付き生成"
+      ],
+      "roles": [
+        "note-types"
+      ]
+    },
+    "compatibility": {
+      "terms": [
+        "互換性",
+        "対応環境",
+        "対応プラットフォーム",
+        "検証済み",
+        "最小バージョン",
+        "OS",
+        "Alpine",
+        "musl",
+        "Electron",
+        "Bun"
+      ],
+      "roles": [
+        "compatibility"
+      ]
+    },
+    "csv": {
+      "terms": [
+        "CSV",
+        "表計算",
+        "スプレッドシート",
+        "Excel",
+        "語彙表",
+        "単語帳",
+        "表データ"
+      ]
+    },
+    "json": {
+      "terms": [
+        "JSON",
+        "構造化データ",
+        "一括データ",
+        "JSON入力"
+      ]
+    },
+    "ai": {
+      "terms": [
+        "AI",
+        "人工知能",
+        "アシスタント",
+        "コーディングアシスタント",
+        "学習メモ",
+        "下書き",
+        "プロンプト"
+      ]
+    },
+    "text": {
+      "terms": [
+        "プレーンテキスト",
+        "Text",
+        "HTML",
+        "エスケープ",
+        "文字列"
+      ]
+    },
+    "fundamentals": {
+      "terms": [
+        "概念",
+        "基本",
+        "とは",
+        "意味",
+        "関係",
+        "違い",
+        "区別",
+        "定義",
+        "構成"
+      ],
+      "requiresAny": [
+        "ノート",
+        "カード",
+        "デッキ",
+        "プロジェクト",
+        "APKG",
+        "名前空間",
+        "フィールド",
+        "テンプレート",
+        "モデル"
+      ],
+      "roles": [
+        "concepts"
+      ],
+      "intent": true,
+      "consumeContext": true
+    },
+    "package-structure": {
+      "terms": [
+        "中身",
+        "含まれる",
+        "入っている",
+        "構造",
+        "構成要素"
+      ],
+      "requiresAny": [
+        "APKG",
+        "パッケージ",
+        "エクスポート",
+        "出力"
+      ],
+      "roles": [
+        "concepts"
+      ],
+      "intent": true,
+      "consumeContext": true
+    },
+    "learning": {
+      "terms": [
+        "学習",
+        "勉強",
+        "復習",
+        "練習",
+        "覚える",
+        "問題",
+        "クイズ"
+      ],
+      "weight": 0.25
+    },
+    "customization": {
+      "terms": [
+        "独自",
+        "カスタム",
+        "カスタマイズ",
+        "デザイン",
+        "自作",
+        "定義"
+      ],
+      "requiresAny": [
+        "フィールド",
+        "表面",
+        "裏面",
+        "テンプレート",
+        "モデル",
+        "ノートタイプ"
+      ],
+      "roles": [
+        "note-types"
+      ],
+      "intent": true
+    },
+    "cardinality": {
+      "terms": [
+        "複数",
+        "いくつ",
+        "何枚",
+        "何件",
+        "数",
+        "1対多",
+        "一対多"
+      ],
+      "requiresAll": [
+        [
+          "ノート"
+        ],
+        [
+          "カード"
+        ]
+      ],
+      "roles": [
+        "concepts"
+      ],
+      "intent": true,
+      "consumeContext": true
+    },
+    "occlusion-action": {
+      "terms": [
+        "隠す",
+        "かくす",
+        "隠したい",
+        "覆う",
+        "マスク",
+        "遮蔽"
+      ],
+      "requiresAny": [
+        "画像",
+        "図",
+        "イラスト",
+        "写真",
+        "イメージ"
+      ],
+      "roles": [
+        "occlusion"
+      ],
+      "consumeContext": true
+    }
+  }
+}

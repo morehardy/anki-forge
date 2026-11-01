@@ -1,0 +1,20 @@
+{
+  "author": "/root",
+  "method": "Independently authored natural Japanese/German task queries from the already established English task intents and previously reviewed sample terminology. Written before reading newly authored production vocabulary or any new-language search output. The content authors were explicitly instructed not to read this query set.",
+  "scope": "12 core +8 terminology +5 variants +5 negative per language; not measured demand or search volume. No expected page, intent or threshold changed. Old-schema boundary correctly refers to tool recipes, not all public SDK APIs.",
+  "baselineCommit": "231bcd56b71765f71b6700141e7237d8561f20bc",
+  "records": [
+    {
+      "locale": "ja",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/queries/ja-queries-frozen.json",
+      "sha256": "7a05da252f41cf7f47a7418d6e44e2cc64e20895599bae19e2570ad97adc4ae1",
+      "queryCount": 30
+    },
+    {
+      "locale": "de",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/queries/de-queries-frozen.json",
+      "sha256": "e13a02d75d7f045f8230a0b424208f6fd3563b4fa119ae39d60698a8e494e5c2",
+      "queryCount": 30
+    }
+  ]
+}

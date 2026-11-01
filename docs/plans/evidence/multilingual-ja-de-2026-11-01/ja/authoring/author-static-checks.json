@@ -1,0 +1,552 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-01",
+  "actor": "ja-full-author",
+  "status": "author-static-checks-complete",
+  "independentReview": false,
+  "releaseReady": false,
+  "scope": "Author-only static verification; no content-review approval or build acceptance.",
+  "documents": [
+    {
+      "topic": "docs",
+      "file": "docs/ja/index.md",
+      "source": "website/src/content/docs/docs/index.mdx",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "使用するプログラミング言語から始める": "start-with-your-language",
+        "構成要素を理解する": "understand-the-pieces",
+        "機能を追加する": "build-your-next-feature",
+        "問題を解決し開発に参加する": "find-answers-and-contribute"
+      },
+      "headingCount": 4
+    },
+    {
+      "topic": "languages",
+      "file": "docs/ja/languages.md",
+      "source": "website/src/content/docs/docs/languages.mdx",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "次の作業": "next-tasks"
+      },
+      "headingCount": 1
+    },
+    {
+      "topic": "quickstart",
+      "file": "docs/ja/quickstart.md",
+      "source": "website/src/content/docs/docs/quickstart.mdx",
+      "codeBlocks": 3,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "インストール": "install",
+        "最初のデッキをエクスポートする": "export-your-first-deck",
+        "次のステップ": "continue"
+      },
+      "headingCount": 3
+    },
+    {
+      "topic": "json-to-anki",
+      "file": "docs/ja/json-to-anki.md",
+      "source": "docs/json-to-anki.md",
+      "codeBlocks": 10,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "共通の入力ファイル": "shared-inputs",
+        "rust": "rust",
+        "python": "python",
+        "node": "node",
+        "出力を確認してインポートする": "check-and-import-the-result"
+      },
+      "headingCount": 5
+    },
+    {
+      "topic": "csv-to-anki",
+      "file": "docs/ja/csv-to-anki.md",
+      "source": "docs/csv-to-anki.md",
+      "codeBlocks": 5,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "csv-を用意する": "prepare-csv",
+        "anki-forge-をインストールする": "install",
+        "apkg-を生成する": "convert",
+        "インポート確認拡張": "verify-and-extend"
+      },
+      "headingCount": 4
+    },
+    {
+      "topic": "ai-anki-cards",
+      "file": "docs/ja/ai-anki-cards.md",
+      "source": "docs/ai-anki-cards.md",
+      "codeBlocks": 2,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "確認できる資料から始める": "choose-input",
+        "csv-のカードを依頼する": "draft-cards",
+        "確認済みのカードを-apkg-にする": "export-apkg",
+        "学習前にカードを確認する": "check-result"
+      },
+      "headingCount": 4
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "file": "docs/ja/anki-forge-vs-genanki.md",
+      "source": "docs/anki-forge-vs-genanki.md",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "同じ小さな作業で比べる": "the-same-small-task",
+        "既存の-genanki-デッキ": "existing-genanki-decks",
+        "過去の性能測定": "historical-performance-evidence"
+      },
+      "headingCount": 3
+    },
+    {
+      "topic": "development",
+      "file": "docs/ja/development.md",
+      "source": "docs/source-builds.md",
+      "codeBlocks": 3,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "ソースからのビルド": "source-builds"
+      },
+      "headingCount": 1
+    },
+    {
+      "topic": "rust-guide",
+      "file": "docs/ja/rust-guide.md",
+      "source": "docs/rust-guide.md",
+      "codeBlocks": 2,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "プロジェクトと診断": "projects-and-diagnostics",
+        "モデルとアセット": "models-and-assets",
+        "出力の所有権": "output-ownership",
+        "ノートの安定した識別情報": "stable-note-identity",
+        "配布済みデッキを更新する": "updating-distributed-decks",
+        "追加時のエラーとメディアの種類": "addition-errors-and-media-categories"
+      },
+      "headingCount": 6
+    },
+    {
+      "topic": "templates",
+      "file": "docs/ja/templates.md",
+      "source": "docs/template-bundles.md",
+      "codeBlocks": 5,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "同梱サンプルを実行する": "run-the-bundled-example",
+        "マニフェストとテンプレートの参照": "manifest-and-template-references",
+        "モデルを読み込んで再使用する": "load-and-reuse-a-model",
+        "アセットと上限": "assets-and-budgets"
+      },
+      "headingCount": 4
+    },
+    {
+      "topic": "api",
+      "file": "docs/ja/api.md",
+      "source": "docs/api-overview.md",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "ノートの安定した識別情報": "stable-note-identity",
+        "作業から始める": "start-with-a-task"
+      },
+      "headingCount": 2
+    },
+    {
+      "topic": "installation",
+      "file": "docs/ja/installation.md",
+      "source": "docs/installation.md",
+      "codeBlocks": 2,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "cargo-の依存関係": "cargo-dependencies",
+        "次のガイドを選ぶ": "choose-the-next-guide"
+      },
+      "headingCount": 2
+    },
+    {
+      "topic": "concepts",
+      "file": "docs/ja/concepts.md",
+      "source": "docs/concepts.md",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "project-とノート": "project-and-note",
+        "モデルフィールドテンプレート": "models-fields-and-templates",
+        "テキストと-html": "text-and-html",
+        "メディアの所有権": "media-ownership",
+        "ビルドと更新": "build-and-update"
+      },
+      "headingCount": 5
+    },
+    {
+      "topic": "cards",
+      "file": "docs/ja/cards.md",
+      "source": "docs/cards.md",
+      "codeBlocks": 2,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "ノートを作成する": "author-the-notes",
+        "テキストフィールドカードの識別情報": "text-fields-and-card-identity"
+      },
+      "headingCount": 2
+    },
+    {
+      "topic": "custom-notetypes",
+      "file": "docs/ja/custom-notetypes.md",
+      "source": "docs/custom-notetypes.md",
+      "codeBlocks": 1,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "実行可能な例": "executable-example",
+        "キーと名前": "keys-and-names",
+        "検証と生成": "validation-and-generation"
+      },
+      "headingCount": 3
+    },
+    {
+      "topic": "media",
+      "file": "docs/ja/media.md",
+      "source": "docs/media.md",
+      "codeBlocks": 4,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "メディアの作成手順を実行する": "execute-the-media-workflow",
+        "コンテンツと明示的なアセットを組み合わせる": "compose-content-and-explicit-assets",
+        "名前mime上限": "names-mime-and-budgets",
+        "型付きの画像音声としての使用": "typed-image-and-sound-usage",
+        "メディアの一括インポート": "batch-media-import",
+        "一括処理の動作と上限": "batch-behavior-and-budgets"
+      },
+      "headingCount": 6
+    },
+    {
+      "topic": "image-occlusion",
+      "file": "docs/ja/image-occlusion.md",
+      "source": "docs/image-occlusion.md",
+      "codeBlocks": 3,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "サンプルを実行する": "run-the-example",
+        "複数のマスクとモード": "multiple-masks-and-modes"
+      },
+      "headingCount": 2
+    },
+    {
+      "topic": "updates",
+      "file": "docs/ja/updates.md",
+      "source": "docs/updates.md",
+      "codeBlocks": 5,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "2つの版を生成して比較する": "run-two-versions-and-compare",
+        "ポリシーと検査の上限": "policy-and-inspection-limits",
+        "識別情報とその根拠": "evidence-and-identity",
+        "クライアントのインポート動作と公開前の確認": "client-import-behavior-and-release-review",
+        "一度だけビルドし確認してから公開する": "build-once-review-then-publish"
+      },
+      "headingCount": 5
+    },
+    {
+      "topic": "build-guarantees",
+      "file": "docs/ja/build-guarantees.md",
+      "source": "docs/build-guarantees.md",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "一時成果物と永続成果物": "temporary-and-persistent-artifacts",
+        "基準パッケージと公開": "baselines-and-publication",
+        "検査の上限": "inspection-limits",
+        "並行処理": "concurrent-work",
+        "準備済み公開": "prepared-publication-from-source"
+      },
+      "headingCount": 5
+    },
+    {
+      "topic": "troubleshooting",
+      "file": "docs/ja/troubleshooting.md",
+      "source": "docs/troubleshooting.md",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "インストール": "installation",
+        "モデルとノート": "models-and-notes",
+        "メディアとテンプレート": "media-and-templates",
+        "更新と出力": "updates-and-outputs"
+      },
+      "headingCount": 4
+    },
+    {
+      "topic": "compatibility",
+      "file": "docs/ja/compatibility.md",
+      "source": "docs/compatibility.md",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "パッケージと検証済みの環境": "packages-and-verified-environments",
+        "anki-でのインポートと再生": "anki-import-and-playback"
+      },
+      "headingCount": 2
+    },
+    {
+      "topic": "rust-api",
+      "file": "docs/ja/rust-api.md",
+      "source": "docs/rust-api.md",
+      "codeBlocks": 1,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "コンテンツの作成": "authoring",
+        "コンテンツとメディア": "content-and-media",
+        "ビルドのオプション": "build-options",
+        "ビルド比較出力": "build-compare-and-output",
+        "レポートとエラー": "reports-and-errors",
+        "追加時のコンテキスト": "addition-context",
+        "一度確認した候補をそのまま公開する": "review-once-publish-once"
+      },
+      "headingCount": 7
+    },
+    {
+      "topic": "node-quickstart",
+      "file": "docs/ja/node-quickstart.md",
+      "source": "docs/node/quick-start.md",
+      "codeBlocks": 3,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "デッキをエクスポートする": "export-a-deck",
+        "typescript-と次の作業": "typescript-and-next-tasks"
+      },
+      "headingCount": 2
+    },
+    {
+      "topic": "node-api",
+      "file": "docs/ja/node-api.md",
+      "source": "docs/node/api.md",
+      "codeBlocks": 4,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "プロジェクトとノート": "project-and-notes",
+        "不変のモデル": "immutable-models",
+        "メディアと画像穴埋め": "media-and-image-occlusion",
+        "ビルド比較出力": "build-compare-and-output",
+        "成果物の生存期間と並行処理": "artifact-lifetime-and-concurrency",
+        "エラー": "errors",
+        "追加時のコンテキスト": "addition-context",
+        "メディアの一括処理と準備済み公開": "batch-media-and-prepared-publication",
+        "準備確認公開": "prepare-review-and-publish",
+        "typescript": "typescript"
+      },
+      "headingCount": 10
+    },
+    {
+      "topic": "python-quickstart",
+      "file": "docs/ja/python-quickstart.md",
+      "source": "docs/python/quick-start.md",
+      "codeBlocks": 3,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "デッキをエクスポートする": "export-a-deck",
+        "次のステップ": "continue"
+      },
+      "headingCount": 2
+    },
+    {
+      "topic": "python-api",
+      "file": "docs/ja/python-api.md",
+      "source": "docs/python/api.md",
+      "codeBlocks": 1,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "プロジェクトとノートの値": "project-and-note-values",
+        "モデルとテンプレート": "models-and-templates",
+        "メディアと画像穴埋め": "media-and-occlusion",
+        "操作と結果": "operations-and-results",
+        "エラーと並行処理": "errors-and-concurrency",
+        "ノート追加時のコンテキスト": "addition-context",
+        "メディアの一括処理と準備済み公開": "source-api-details",
+        "準備確認公開": "prepare-review-and-publish"
+      },
+      "headingCount": 8
+    },
+    {
+      "topic": "python-diagnostics",
+      "file": "docs/ja/python-diagnostics.md",
+      "source": "docs/python/diagnostics.md",
+      "codeBlocks": 4,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "公開前に比較する": "compare-before-publication",
+        "上限と成果物の所有権": "budgets-and-artifact-ownership"
+      },
+      "headingCount": 2
+    },
+    {
+      "topic": "python-migration",
+      "file": "docs/ja/python-migration.md",
+      "source": "bindings/python/MIGRATION.md",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {},
+      "headingCount": 0
+    },
+    {
+      "topic": "genanki-migration",
+      "file": "docs/ja/genanki-migration.md",
+      "source": "docs/python/genanki-migration.md",
+      "codeBlocks": 1,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {},
+      "headingCount": 0
+    }
+  ],
+  "blogs": [
+    {
+      "file": "website/src/content/blog/ja/your-first-anki-deck.mdx",
+      "codeSource": "anki_forge/examples/target_api_basic.rs",
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "完全なプログラム": "a-complete-program",
+        "インストールして実行する": "install-and-run",
+        "ノートに識別情報を与える": "give-the-note-an-identity",
+        "1件のノートから広げる": "grow-from-one-note"
+      }
+    },
+    {
+      "file": "website/src/content/blog/ja/stable-ids-and-deck-updates.mdx",
+      "codeSource": "website/src/generated/updates.rs",
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "識別情報を内容から分離する": "separate-identity-from-content",
+        "次のビルドに基準パッケージを渡す": "give-the-next-build-a-baseline",
+        "配布時のオリジナルパッケージを保持する": "keep-the-original-distributed-package",
+        "ビルドとインポートを確認する": "inspect-the-build-and-the-import"
+      }
+    }
+  ],
+  "dictionaries": [
+    {
+      "file": "website/src/i18n/ja.json",
+      "keys": 210,
+      "keyParity": true,
+      "parametersChecked": true,
+      "pluralCategories": [
+        "other"
+      ]
+    },
+    {
+      "file": "website/src/content/i18n/ja.json",
+      "keys": 11,
+      "keyParity": true,
+      "parametersChecked": true,
+      "pluralCategories": [
+        "other"
+      ]
+    }
+  ],
+  "reusedSamples": [
+    {
+      "topic": "quickstart",
+      "targetByteIdentical": true,
+      "englishSourceHashUnchanged": true
+    },
+    {
+      "topic": "json-to-anki",
+      "targetByteIdentical": true,
+      "englishSourceHashUnchanged": true
+    },
+    {
+      "topic": "updates",
+      "targetByteIdentical": true,
+      "englishSourceHashUnchanged": true
+    },
+    {
+      "topic": "python-api",
+      "targetByteIdentical": true,
+      "englishSourceHashUnchanged": true
+    }
+  ],
+  "patch": {
+    "documents": 29,
+    "searchTerms": 31,
+    "docGroups": 5,
+    "navigation": 3,
+    "promptCharacters": 617,
+    "briefStatus": "draft/full-candidate"
+  },
+  "sourceHashes": {
+    "website/src/content/docs/docs/index.mdx": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c",
+    "website/src/content/docs/docs/languages.mdx": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24",
+    "website/src/content/docs/docs/quickstart.mdx": "274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9",
+    "docs/json-to-anki.md": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+    "docs/csv-to-anki.md": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486",
+    "docs/ai-anki-cards.md": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5",
+    "docs/anki-forge-vs-genanki.md": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+    "docs/source-builds.md": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac",
+    "docs/rust-guide.md": "5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf",
+    "docs/template-bundles.md": "8695e7f6f40d19911dd072a16bd5d07f43e2a250618eb6c0aefc06a39451f53f",
+    "docs/api-overview.md": "a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b",
+    "docs/installation.md": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+    "docs/concepts.md": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279",
+    "docs/cards.md": "8de0e93bf4a3b94d18d8214687d78b70a32b53e16b2369692da7c624f028d5f8",
+    "docs/custom-notetypes.md": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1",
+    "docs/media.md": "c2d0a5d292d6b320d47892926767ef782355935e8f9cefade9b930e2f6b62c02",
+    "docs/image-occlusion.md": "3e54b44010c3420fff223ce8a4bf0a1bb095dd27a6fd3d4b1517d6a05a7f85a5",
+    "docs/updates.md": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+    "docs/build-guarantees.md": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+    "docs/troubleshooting.md": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699",
+    "docs/compatibility.md": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c",
+    "docs/rust-api.md": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a",
+    "docs/node/quick-start.md": "084c9c550e430907e7c77de653458fdc11a393136b8c4a24f1e64e8c03e2113e",
+    "docs/node/api.md": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726",
+    "docs/python/quick-start.md": "394405423e6036cf8a11725eae7fb25adf1ba927df4fe68f690baee409258b42",
+    "docs/python/api.md": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+    "docs/python/diagnostics.md": "b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28",
+    "bindings/python/MIGRATION.md": "ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2",
+    "docs/python/genanki-migration.md": "3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f",
+    "anki_forge/examples/target_api_basic.rs": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+    "website/src/generated/updates.rs": "afaf2732fbec88a37aa78daa1aeb45f73321b54781ae559948190de42f18a745"
+  },
+  "outputs": {
+    "docs/ja/index.md": "3308d55caacf1041ee4496513bc6f9050deef341580bbf92bceef3c2a98f0090",
+    "docs/ja/languages.md": "a2fa963048f9fa985c66da2a9d7761ceaf863c81ab945cb45c61ecb6c2cd33f9",
+    "docs/ja/quickstart.md": "fe0500fd8dcd4e351a5c69f07924fdf8e8581a0a4cce6398d5038fe471b6df99",
+    "docs/ja/json-to-anki.md": "3854b6f797272977f5926022df6651e48f9dea5538fe5ca1c1caee20661b2f20",
+    "docs/ja/csv-to-anki.md": "34957010bbc729378a0919be713a544655aad690c21b6717499d74fd8257f16e",
+    "docs/ja/ai-anki-cards.md": "aa5ba2510bdf313c9e033617fc135f7000a745ca8a7fccd4bfb8a39f95df37f8",
+    "docs/ja/anki-forge-vs-genanki.md": "36b0579995c71016163cfdc2a1f2f09fc27d030d7272d5766cd06b86d58f4863",
+    "docs/ja/development.md": "283e4b1abf8f7a107c25f8d98eab4a8e0e9a5e2a41b7b92d0a9abb98af1564d2",
+    "docs/ja/rust-guide.md": "712ebe52246794612f274a158b902d05ebab0e196a6b74694117756b6ad14d00",
+    "docs/ja/templates.md": "4b5203ebb443b0170ea95e83028f9aec4c3a55b6756d842db3fc06a8656513b3",
+    "docs/ja/api.md": "110853c5ab56a32c577c1364e1d98eab998472dad1f664791e94f5f560a729a8",
+    "docs/ja/installation.md": "a5cc1a82631b4cd68a3f007b274ee193e5cbe8ad85d545adeba7ee9e5e10c77b",
+    "docs/ja/concepts.md": "5f28246535cc794e551e5de54926ef0b03737e0e8ec5eb15c57930d46704696a",
+    "docs/ja/cards.md": "5e20838f31c580ca80cfd2407692d4db85dc187633089c0eff0ae11df6859f4c",
+    "docs/ja/custom-notetypes.md": "e2a6f6afba493ac160bef24c6a25e19260ed4466e7e746df52a12ed1501fb940",
+    "docs/ja/media.md": "72a21d7e148e6a405485acf594578dc1ac1fc955b566376c2219007f317342bb",
+    "docs/ja/image-occlusion.md": "84fc0d6c6450ad7c372f30fb75ca6c8c305646a48f80d7e0bb8d686fdca46e05",
+    "docs/ja/updates.md": "3c7c8e628b08c69d253ca6453bdf9ea922068d6d0eae3c71f10a753babfa1bc2",
+    "docs/ja/build-guarantees.md": "c84cd190217a9413cd2bf5dc822035416de75694392d854de6535601c572010a",
+    "docs/ja/troubleshooting.md": "b793e99c00de54c1b73111a2c9a4b7b2f0e1809fad5be389be2b476bf9f9262b",
+    "docs/ja/compatibility.md": "1dbf64698229e3678678cd0d10a5c2accd87e54b3adcf1dd5154f503acbd4619",
+    "docs/ja/rust-api.md": "053f96f7c15c82a981b097e1b88419b46c6841455fcde24d81b3d161b4205338",
+    "docs/ja/node-quickstart.md": "b91ae050d54de2806334eb74fab42f4033178e6379e4a07c7f60c18c5740ef69",
+    "docs/ja/node-api.md": "a7e3b2466f6b1860929ca28d1283b689495cf47a71c5f4d976701e6d244968f7",
+    "docs/ja/python-quickstart.md": "f27a1f11499a4e8819a88a3524d26f6f806b0507a36487a573efb89f5331ca80",
+    "docs/ja/python-api.md": "efdc6cd76a4286f44047418499ed264a5b15e4eac54eb838d6c690309b56d4c7",
+    "docs/ja/python-diagnostics.md": "3500e8c8a888ce484c2806ddabb51c2efd53967fb92f53e43758c3c2644d2d1c",
+    "docs/ja/python-migration.md": "7de219491d7eeeb77f74c4d0e4742b44ece5726936815e93024c1002cb75d1f3",
+    "docs/ja/genanki-migration.md": "da87755746c6aa8aa68c998604d9efed2b228bbacafc67a454353816356e1d39",
+    "website/src/content/blog/ja/your-first-anki-deck.mdx": "91598ce216548cfc65dbc293808e9a3a17535fc5b09df40f120863a996f74d55",
+    "website/src/content/blog/ja/stable-ids-and-deck-updates.mdx": "35dadb2e388433d289b909bb4ad06ce6e36771b67dd1d5b85e51fddafc5a339c",
+    "website/src/i18n/ja.json": "be841fd45e8f4ef79e2fd15db779dc9182256834541c800b41ebd1318f291f26",
+    "website/src/content/i18n/ja.json": "388c28a848c8a4b1d794a237685bf54911076f29d616f347b1d5d141e8bb2e72",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/authoring/ja-data-patch.json": "f1a2a0e27c1bd621253ac0d184d1e1b7dae54b8189a894de6f73effe8900bd40"
+  },
+  "issues": [],
+  "limitations": [
+    "No independent technical or linguistic approval.",
+    "No SDK execution, browser, font, Pagefind ranking, complete site build or deployment checks performed by this author.",
+    "The new independent query set was not read or used to author vocabulary."
+  ]
+}

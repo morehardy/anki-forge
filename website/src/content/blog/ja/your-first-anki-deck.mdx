@@ -1,0 +1,68 @@
+---
+locale: ja
+translationKey: your-first-anki-deck
+title: Rust で最初の Anki デッキを作る
+description: 短い Rust プログラムから、Anki で開けるスペイン語のカードを作成します。
+date: 2026-09-22
+category: Tutorial
+---
+
+import { sitePath, repository } from '../../../lib/site';
+
+学習内容がスクリプト、データセット、複数のファイルにすでにまとまっているなら、Anki デッキの生成を自動化すると、同じ作業を繰り返しやすくなります。ソースは Git で確認できる形に保ち、エクスポートを再実行可能な1つの手順にできます。
+
+まずは **hola** の1語から始めます。表面にスペイン語の挨拶、裏面に英語の意味を表示するカードを作りましょう。
+
+<span id="a-complete-program" data-section-alias="a-complete-program"></span>
+
+{/* section: a-complete-program */}
+## 完全なプログラム
+
+リポジトリにある最小の Rust サンプルです。
+
+```rust
+use ankiforge::{BuildOptions, Note, Project};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
+    project.add("es:hola", Note::basic("hola", "hello"))?;
+    let output = project.build(BuildOptions::to("spanish.apkg"))?;
+    println!("{}", output.artifact().path().display());
+    Ok(())
+}
+```
+
+`Project::new("spanish")` が名前空間を作成します。`Note::basic("hola", "hello")` が Basic ノートを作り、`project.add("es:hola", note)` が安定キーを割り当て、`build(BuildOptions::to(...))` がパッケージを書き出します。
+
+`build` は成功した場合にのみ `BuildOutput` を返します。`?` 演算子が型付きの失敗を伝播するため、スクリプトはエラーとして終了できます。
+
+<span id="install-and-run" data-section-alias="install-and-run"></span>
+
+{/* section: install-and-run */}
+## インストールして実行する
+
+公開パッケージのインストールと実行コマンドは、<a href={sitePath('/ja/docs/quickstart/')}>現行のクイックスタート</a>に従ってください。自分のプロジェクトで同じプログラムを使うには、<a href={sitePath('/ja/docs/installation/')}>アプリケーションに組み込む</a>を参照します。
+
+エクスポート後、`spanish.apkg` を Anki にインポートし、最初のカードの解答を表示してみてください。
+
+先に完成形を確認したい場合は、<a href={sitePath('/ja/examples/#basic')}>このサイトの Basic サンプル</a>からパッケージをダウンロードできます。
+
+<span id="give-the-note-an-identity" data-section-alias="give-the-note-an-identity"></span>
+
+{/* section: give-the-note-an-identity */}
+## ノートに識別情報を与える
+
+文字列 `es:hola` は、名前空間 `spanish` 内の明示的な安定ノートキーです。解答の言い方とは独立して、どのノートかを示します。後で “hello” を “hello; hi” に広げても、同じ ID を使えます。
+
+論理的なノートごとに別の ID を使ってください。ソースに語彙項目の ID など永続的なキーがあるなら、そのキーを出発点にできます。編集予定の本文だけから識別情報を作ることは避けてください。
+
+配布済みデッキの更新には、リリース履歴も必要です。前回配布時のオリジナルパッケージを保持し、<a href={sitePath('/ja/docs/updates/')}>文書化された更新手順</a>に従ってください。
+
+<span id="grow-from-one-note" data-section-alias="grow-from-one-note"></span>
+
+{/* section: grow-from-one-note */}
+## 1件のノートから広げる
+
+別の挨拶には、新しい Basic ノートを作り、新しいキーで追加します。文中の単語を穴埋めにするなら、<a href={sitePath('/ja/examples/#cloze')}>Cloze ノート</a>を使います。さらに表現豊かなカードには、プロジェクト API でフィールドとテンプレートを定義し、画像や音声をノートと一緒に同梱できます。
+
+<a href={sitePath('/ja/docs/rust-guide/')}>Rust での作成ガイド</a>では、診断、メディア、繰り返し実行できるビルドへ進みます。<a href={`${repository}/tree/main/anki_forge/examples`}>リポジトリのサンプル</a>には、次の開発の土台になる実行可能なプログラムがあります。

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent check of the integrator's narrow normalization/Katakana-boundary fix against existing Japanese source text. No frozen release questions were read.",
+  "sourceSha256": "8a563577b68a548799a5b0988d78bff41adc63a7eee4644c7ad8986f34bc0fdf",
+  "observations": [
+    {
+      "query": "ノートルダム",
+      "result": []
+    },
+    {
+      "query": "ノートのフィールド",
+      "result": [
+        {
+          "id": "updates",
+          "matchedTerms": [
+            "ノート",
+            "の"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "Ankiノートを更新",
+      "result": [
+        {
+          "id": "updates",
+          "matchedTerms": [
+            "ノート",
+            "anki",
+            "を",
+            "更新"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "ノート生成",
+      "result": [
+        {
+          "id": "updates",
+          "matchedTerms": [
+            "ノート"
+          ]
+        }
+      ]
+    }
+  ]
+}

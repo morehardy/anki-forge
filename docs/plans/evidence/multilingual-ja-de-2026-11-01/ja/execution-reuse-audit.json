@@ -1,0 +1,1738 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/ja_de_infra_audit/ja-execution-reuse-2026-11-01",
+  "status": "passed",
+  "scope": "Actual earlier SDK executions are explicitly reused, not rerun. This reviewer freshly checked inputs, logs, package resolutions, ten retained ZIP/Zstandard/SQLite outputs and six comparison/review reports. Only AI prompt editorial locale data changed and its execution-relevant values are exactly equal.",
+  "priorAudit": {
+    "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/execution-reuse-audit.json",
+    "sha256": "b0282d29e2de33f624f8b484ffb18d03dfecf2471f7dfa7577933439fcbfb2f8"
+  },
+  "immutableBaseline": "231bcd56b71765f71b6700141e7237d8561f20bc",
+  "originalInspectionLineage": {
+    "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/execution-reuse-audit.json",
+    "sha256": "7c91d164b90039b6a0a5144528fd12b904b1424a425d517ea188c3d8ada4376a"
+  },
+  "currentBindings": [
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/inspection.rs",
+      "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+      "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8"
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+    },
+    {
+      "path": "docs/zh-cn/troubleshooting.md",
+      "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+    },
+    {
+      "path": "bindings/python/pyproject.toml",
+      "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+    },
+    {
+      "path": "bindings/node/package.json",
+      "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v1.json",
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v2.json",
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/cell.png",
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/tone.wav",
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+      "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+    },
+    {
+      "path": "website/scripts/verify-public-recipe.mjs",
+      "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+    },
+    {
+      "path": "website/package.json",
+      "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+    },
+    {
+      "path": "website/package-lock.json",
+      "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+    }
+  ],
+  "explainedNonExecutableChanges": [
+    {
+      "path": "docs/ai-quickstart.json",
+      "previousSha256": "29018d10275be4c94f7e9b8b6cb7eb910ce5cf743d7bfab04e82fac7f679edfd",
+      "currentSha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8",
+      "reason": "Only Japanese editorial prompt/placeholder/contract entries were added. Compared directly to immutable baseline 231bcd56b71765f71b6700141e7237d8561f20bc: publicVersion and all runtime/install commands plus twelve earlier locale/SDK combinations are exactly unchanged. The Japanese prompt is separately semantically reviewed; these additions do not alter any executed consumer program or package dependency."
+    }
+  ],
+  "outputs": [
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/spanish.apkg",
+        "sha256": "1db741938adb9c1681ff7f77662e34ccd14007829e0ea0f3ef67b29773eb038d"
+      },
+      "notes": [
+        [
+          "aaf05442c6721ba14cf48d7802f35de0",
+          "hola\u001fhello"
+        ]
+      ],
+      "cards": 1,
+      "cardOrdinals": [
+        0
+      ],
+      "mediaSha256": [],
+      "namespace": "spanish",
+      "noteIdentity": {
+        "es:hola": {
+          "guid": "aaf05442c6721ba14cf48d7802f35de0",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505184,
+          "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/spanish.apkg",
+        "sha256": "144ccaf1c0885cc0d22bec401de1bf8eb4f5994901a54624a121c076e3f4962f"
+      },
+      "notes": [
+        [
+          "aaf05442c6721ba14cf48d7802f35de0",
+          "hola\u001fhello"
+        ]
+      ],
+      "cards": 1,
+      "cardOrdinals": [
+        0
+      ],
+      "mediaSha256": [],
+      "namespace": "spanish",
+      "noteIdentity": {
+        "es:hola": {
+          "guid": "aaf05442c6721ba14cf48d7802f35de0",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505191,
+          "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/spanish.apkg",
+        "sha256": "8e3266decbe71ef5a1ed69fdc0c4297f9fcb85d3c7b6fd8f94eebb06345ae9d2"
+      },
+      "notes": [
+        [
+          "aaf05442c6721ba14cf48d7802f35de0",
+          "hola\u001fhello"
+        ]
+      ],
+      "cards": 1,
+      "cardOrdinals": [
+        0
+      ],
+      "mediaSha256": [],
+      "namespace": "spanish",
+      "noteIdentity": {
+        "es:hola": {
+          "guid": "aaf05442c6721ba14cf48d7802f35de0",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505195,
+          "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/v1.apkg",
+        "sha256": "a80084bf0ea3413b7cb7e5bef811580e6e20c694767dda079df26d1f948e3297"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fA unit of life"
+        ]
+      ],
+      "cards": 3,
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "namespace": "biology-json",
+      "noteIdentity": {
+        "bio:cell": {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505186,
+          "content_hash": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:membrane": {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505186,
+          "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:nucleus": {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505186,
+          "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/v2.apkg",
+        "sha256": "575e56dd32abea1fed021b74314716c5abb5f0c75fe48a9818977020fc6eb337"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe basic structural and functional unit of life"
+        ]
+      ],
+      "cards": 3,
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "namespace": "biology-json",
+      "noteIdentity": {
+        "bio:cell": {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505187,
+          "content_hash": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:membrane": {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505186,
+          "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:nucleus": {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505186,
+          "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/v1.apkg",
+        "sha256": "0872e011ce6646d0ae18883487616939a8efd67587f12741de37fd603e6ba4dd"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fA unit of life"
+        ]
+      ],
+      "cards": 3,
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "namespace": "biology-json",
+      "noteIdentity": {
+        "bio:cell": {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505191,
+          "content_hash": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:membrane": {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505191,
+          "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:nucleus": {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505191,
+          "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/v2.apkg",
+        "sha256": "c7a1cf1409a9962d709804e8c1dd3aee9071b539bd5323e4e860970c770de424"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe basic structural and functional unit of life"
+        ]
+      ],
+      "cards": 3,
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "namespace": "biology-json",
+      "noteIdentity": {
+        "bio:cell": {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505192,
+          "content_hash": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:membrane": {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505191,
+          "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:nucleus": {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505191,
+          "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/v1.apkg",
+        "sha256": "4b59e26cd2aa4f8ab3e83fd4ee763f0e68ac288fb8650d6ca1293308e9a5d630"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fA unit of life"
+        ]
+      ],
+      "cards": 3,
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "namespace": "biology-json",
+      "noteIdentity": {
+        "bio:cell": {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505197,
+          "content_hash": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:membrane": {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505197,
+          "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:nucleus": {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505197,
+          "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/v2.apkg",
+        "sha256": "5db7aa990fbfaccaa2a76630e7439c596356ee28aa9c4f8751459c5cb53f4a2d"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe basic structural and functional unit of life"
+        ]
+      ],
+      "cards": 3,
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "namespace": "biology-json",
+      "noteIdentity": {
+        "bio:cell": {
+          "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505198,
+          "content_hash": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:membrane": {
+          "guid": "49dff2fadd29b11ef4c022e534bf5858",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505197,
+          "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "bio:nucleus": {
+          "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505197,
+          "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/recovered.apkg",
+        "sha256": "38408fdc693813a2285434ddf967fdb98fea6b5b1ff359ace2ac315964c74d23"
+      },
+      "notes": [
+        [
+          "0f8f9139b04ecc21e3276eaa8e80c28b",
+          "two\u001fsecond"
+        ],
+        [
+          "8e363c025de858cc34527c3f94565e5a",
+          "one\u001ffirst"
+        ]
+      ],
+      "cards": 2,
+      "cardOrdinals": [
+        0,
+        0
+      ],
+      "mediaSha256": [],
+      "namespace": "controlled-duplicate",
+      "noteIdentity": {
+        "source:1": {
+          "guid": "8e363c025de858cc34527c3f94565e5a",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505191,
+          "content_hash": "f19564ba73bb897ccd3a88aaa87abc5affe2e247d0a33833b14f21383e41fb95",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        },
+        "source:2": {
+          "guid": "0f8f9139b04ecc21e3276eaa8e80c28b",
+          "model": "basic",
+          "active": true,
+          "mtime_secs": 1793505191,
+          "content_hash": "de11172b57fd8946b877a12405e61afe7b749725d9fc3cec73e8e7af8304f5ab",
+          "masks": {},
+          "mask_high_water": 0,
+          "cards": {
+            "template:card": 0
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    }
+  ],
+  "comparisonReports": [
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/comparison.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/review.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/comparison.json",
+        "sha256": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/review.json",
+        "sha256": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/comparison.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/review.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    }
+  ],
+  "executionLogAndInstallationBindings": [
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/basic.log",
+      "sha256": "e12ab3e700a030b6b22e3f1ecab4f4ea43d87b129c3825b08510d7841c0658ce"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/install.log",
+      "sha256": "681953e6055258730ea065b1ee2125dcca218e822a01064d55eb109515f036e5"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/inspection.log",
+      "sha256": "ab46e18534a2485efe9c48bf42ab1d09d85578b6c120f223c4a1122a612b9347"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/basic.log",
+      "sha256": "c8882091d0b2fd23a972ee85b3e0f8db118d80caedb0e35543bb891bdea5a0f4"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/install.log",
+      "sha256": "b4a5422bb1a90e2b21bcbc5a1f90c0d661ce2ae186ff616b39fa5b8402cfb5cc"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/inspection.log",
+      "sha256": "12473d599991795e21aa58fd0290aa0b718effda3e7f79212a33354b9ba1ebfa"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/basic.log",
+      "sha256": "717d6b53c0d25620e24928c8399ec08efa0e953f484f1f3169309643b8657501"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/install.log",
+      "sha256": "417e021f48191bc2d4f52d83f22f4da1821b36f0b63f1f24d13c6aec02bc1f45"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/inspection.log",
+      "sha256": "ecabd9492d3852f26ab9a8dab838c61fc2c64f4adbe71e7b24f1e70675acd40a"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/troubleshooting.log",
+      "sha256": "c5d91e7ee47316da9330ff7491e9ab52c6b8447c243c188720541874ba7e68db"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-recipe.log",
+      "sha256": "799970013c9258908f0c2ffd381b273a3c9b08481244e4f6843a9fe36e3d428c"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/installation.json",
+      "sha256": "a090c1aa7d91383a4f38da91288f227bfa88b5773125e287f4393c4655e3a33c"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/installation.json",
+      "sha256": "dd61c83e53df689a79da792b39435c3571465704ea7b7d86abd94ebc4ce5b005"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/installation.json",
+      "sha256": "9c54a378d71978b60d59ce36cb07fc11cada841c5a32ef2fdf6d6f5010621cd0"
+    }
+  ],
+  "executionEvidenceByTask": {
+    "rust-basic": [
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/basic.log",
+        "sha256": "e12ab3e700a030b6b22e3f1ecab4f4ea43d87b129c3825b08510d7841c0658ce",
+        "description": "Explicit reuse of actual successful public 0.3.1 execution; source and runtime/package inputs re-audited.",
+        "sourceBindings": [
+          {
+            "path": "anki_forge/examples/target_api_basic.rs",
+            "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+          },
+          {
+            "path": "bindings/python/examples/quickstart.py",
+            "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+          },
+          {
+            "path": "bindings/node/examples/quickstart.mjs",
+            "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/inspection.rs",
+            "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+            "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+          },
+          {
+            "path": "docs/troubleshooting.md",
+            "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+          },
+          {
+            "path": "docs/zh-cn/troubleshooting.md",
+            "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+          },
+          {
+            "path": "anki_forge/examples/json_to_anki.rs",
+            "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+          },
+          {
+            "path": "bindings/python/examples/json_to_anki.py",
+            "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+          },
+          {
+            "path": "bindings/node/examples/json_to_anki.mts",
+            "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v1.json",
+            "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v2.json",
+            "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/cell.png",
+            "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/tone.wav",
+            "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+            "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+          },
+          {
+            "path": "website/scripts/verify-public-recipe.mjs",
+            "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+          }
+        ],
+        "dependencyBindings": [
+          {
+            "path": "docs/ai-quickstart.json",
+            "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8"
+          },
+          {
+            "path": "bindings/python/pyproject.toml",
+            "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+          },
+          {
+            "path": "bindings/node/package.json",
+            "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+          },
+          {
+            "path": "Cargo.toml",
+            "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+          },
+          {
+            "path": "Cargo.lock",
+            "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+          },
+          {
+            "path": "website/package.json",
+            "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+          },
+          {
+            "path": "website/package-lock.json",
+            "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+          }
+        ]
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/spanish.apkg",
+        "sha256": "1db741938adb9c1681ff7f77662e34ccd14007829e0ea0f3ef67b29773eb038d",
+        "description": "Retained actual APKG, freshly decoded with Python ZIP/Zstandard/SQLite and checked against current inputs.",
+        "sourceBindings": [
+          {
+            "path": "anki_forge/examples/target_api_basic.rs",
+            "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+          },
+          {
+            "path": "bindings/python/examples/quickstart.py",
+            "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+          },
+          {
+            "path": "bindings/node/examples/quickstart.mjs",
+            "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/inspection.rs",
+            "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+            "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+          },
+          {
+            "path": "docs/troubleshooting.md",
+            "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+          },
+          {
+            "path": "docs/zh-cn/troubleshooting.md",
+            "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+          },
+          {
+            "path": "anki_forge/examples/json_to_anki.rs",
+            "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+          },
+          {
+            "path": "bindings/python/examples/json_to_anki.py",
+            "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+          },
+          {
+            "path": "bindings/node/examples/json_to_anki.mts",
+            "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v1.json",
+            "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v2.json",
+            "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/cell.png",
+            "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/tone.wav",
+            "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+            "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+          },
+          {
+            "path": "website/scripts/verify-public-recipe.mjs",
+            "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+          }
+        ],
+        "dependencyBindings": [
+          {
+            "path": "docs/ai-quickstart.json",
+            "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8"
+          },
+          {
+            "path": "bindings/python/pyproject.toml",
+            "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+          },
+          {
+            "path": "bindings/node/package.json",
+            "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+          },
+          {
+            "path": "Cargo.toml",
+            "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+          },
+          {
+            "path": "Cargo.lock",
+            "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+          },
+          {
+            "path": "website/package.json",
+            "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+          },
+          {
+            "path": "website/package-lock.json",
+            "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+          }
+        ]
+      }
+    ],
+    "python-basic": [
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/basic.log",
+        "sha256": "c8882091d0b2fd23a972ee85b3e0f8db118d80caedb0e35543bb891bdea5a0f4",
+        "description": "Explicit reuse of actual successful public 0.3.1 execution; source and runtime/package inputs re-audited.",
+        "sourceBindings": [
+          {
+            "path": "anki_forge/examples/target_api_basic.rs",
+            "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+          },
+          {
+            "path": "bindings/python/examples/quickstart.py",
+            "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+          },
+          {
+            "path": "bindings/node/examples/quickstart.mjs",
+            "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/inspection.rs",
+            "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+            "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+          },
+          {
+            "path": "docs/troubleshooting.md",
+            "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+          },
+          {
+            "path": "docs/zh-cn/troubleshooting.md",
+            "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+          },
+          {
+            "path": "anki_forge/examples/json_to_anki.rs",
+            "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+          },
+          {
+            "path": "bindings/python/examples/json_to_anki.py",
+            "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+          },
+          {
+            "path": "bindings/node/examples/json_to_anki.mts",
+            "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v1.json",
+            "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v2.json",
+            "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/cell.png",
+            "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/tone.wav",
+            "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+            "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+          },
+          {
+            "path": "website/scripts/verify-public-recipe.mjs",
+            "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+          }
+        ],
+        "dependencyBindings": [
+          {
+            "path": "docs/ai-quickstart.json",
+            "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8"
+          },
+          {
+            "path": "bindings/python/pyproject.toml",
+            "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+          },
+          {
+            "path": "bindings/node/package.json",
+            "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+          },
+          {
+            "path": "Cargo.toml",
+            "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+          },
+          {
+            "path": "Cargo.lock",
+            "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+          },
+          {
+            "path": "website/package.json",
+            "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+          },
+          {
+            "path": "website/package-lock.json",
+            "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+          }
+        ]
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/spanish.apkg",
+        "sha256": "144ccaf1c0885cc0d22bec401de1bf8eb4f5994901a54624a121c076e3f4962f",
+        "description": "Retained actual APKG, freshly decoded with Python ZIP/Zstandard/SQLite and checked against current inputs.",
+        "sourceBindings": [
+          {
+            "path": "anki_forge/examples/target_api_basic.rs",
+            "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+          },
+          {
+            "path": "bindings/python/examples/quickstart.py",
+            "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+          },
+          {
+            "path": "bindings/node/examples/quickstart.mjs",
+            "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/inspection.rs",
+            "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+            "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+          },
+          {
+            "path": "docs/troubleshooting.md",
+            "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+          },
+          {
+            "path": "docs/zh-cn/troubleshooting.md",
+            "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+          },
+          {
+            "path": "anki_forge/examples/json_to_anki.rs",
+            "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+          },
+          {
+            "path": "bindings/python/examples/json_to_anki.py",
+            "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+          },
+          {
+            "path": "bindings/node/examples/json_to_anki.mts",
+            "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v1.json",
+            "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v2.json",
+            "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/cell.png",
+            "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/tone.wav",
+            "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+            "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+          },
+          {
+            "path": "website/scripts/verify-public-recipe.mjs",
+            "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+          }
+        ],
+        "dependencyBindings": [
+          {
+            "path": "docs/ai-quickstart.json",
+            "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8"
+          },
+          {
+            "path": "bindings/python/pyproject.toml",
+            "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+          },
+          {
+            "path": "bindings/node/package.json",
+            "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+          },
+          {
+            "path": "Cargo.toml",
+            "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+          },
+          {
+            "path": "Cargo.lock",
+            "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+          },
+          {
+            "path": "website/package.json",
+            "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+          },
+          {
+            "path": "website/package-lock.json",
+            "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+          }
+        ]
+      }
+    ],
+    "node-basic": [
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/basic.log",
+        "sha256": "717d6b53c0d25620e24928c8399ec08efa0e953f484f1f3169309643b8657501",
+        "description": "Explicit reuse of actual successful public 0.3.1 execution; source and runtime/package inputs re-audited.",
+        "sourceBindings": [
+          {
+            "path": "anki_forge/examples/target_api_basic.rs",
+            "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+          },
+          {
+            "path": "bindings/python/examples/quickstart.py",
+            "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+          },
+          {
+            "path": "bindings/node/examples/quickstart.mjs",
+            "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/inspection.rs",
+            "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+            "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+          },
+          {
+            "path": "docs/troubleshooting.md",
+            "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+          },
+          {
+            "path": "docs/zh-cn/troubleshooting.md",
+            "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+          },
+          {
+            "path": "anki_forge/examples/json_to_anki.rs",
+            "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+          },
+          {
+            "path": "bindings/python/examples/json_to_anki.py",
+            "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+          },
+          {
+            "path": "bindings/node/examples/json_to_anki.mts",
+            "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v1.json",
+            "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v2.json",
+            "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/cell.png",
+            "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/tone.wav",
+            "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+            "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+          },
+          {
+            "path": "website/scripts/verify-public-recipe.mjs",
+            "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+          }
+        ],
+        "dependencyBindings": [
+          {
+            "path": "docs/ai-quickstart.json",
+            "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8"
+          },
+          {
+            "path": "bindings/python/pyproject.toml",
+            "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+          },
+          {
+            "path": "bindings/node/package.json",
+            "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+          },
+          {
+            "path": "Cargo.toml",
+            "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+          },
+          {
+            "path": "Cargo.lock",
+            "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+          },
+          {
+            "path": "website/package.json",
+            "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+          },
+          {
+            "path": "website/package-lock.json",
+            "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+          }
+        ]
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/spanish.apkg",
+        "sha256": "8e3266decbe71ef5a1ed69fdc0c4297f9fcb85d3c7b6fd8f94eebb06345ae9d2",
+        "description": "Retained actual APKG, freshly decoded with Python ZIP/Zstandard/SQLite and checked against current inputs.",
+        "sourceBindings": [
+          {
+            "path": "anki_forge/examples/target_api_basic.rs",
+            "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+          },
+          {
+            "path": "bindings/python/examples/quickstart.py",
+            "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+          },
+          {
+            "path": "bindings/node/examples/quickstart.mjs",
+            "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/inspection.rs",
+            "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+            "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+          },
+          {
+            "path": "docs/troubleshooting.md",
+            "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+          },
+          {
+            "path": "docs/zh-cn/troubleshooting.md",
+            "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+          },
+          {
+            "path": "anki_forge/examples/json_to_anki.rs",
+            "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+          },
+          {
+            "path": "bindings/python/examples/json_to_anki.py",
+            "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+          },
+          {
+            "path": "bindings/node/examples/json_to_anki.mts",
+            "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v1.json",
+            "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v2.json",
+            "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/cell.png",
+            "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/tone.wav",
+            "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+            "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+          },
+          {
+            "path": "website/scripts/verify-public-recipe.mjs",
+            "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+          }
+        ],
+        "dependencyBindings": [
+          {
+            "path": "docs/ai-quickstart.json",
+            "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8"
+          },
+          {
+            "path": "bindings/python/pyproject.toml",
+            "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+          },
+          {
+            "path": "bindings/node/package.json",
+            "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+          },
+          {
+            "path": "Cargo.toml",
+            "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+          },
+          {
+            "path": "Cargo.lock",
+            "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+          },
+          {
+            "path": "website/package.json",
+            "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+          },
+          {
+            "path": "website/package-lock.json",
+            "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+          }
+        ]
+      }
+    ],
+    "json-media": [
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-recipe.log",
+        "sha256": "799970013c9258908f0c2ffd381b273a3c9b08481244e4f6843a9fe36e3d428c",
+        "description": "Explicit reuse of three real public SDK recipe executions. All six APKGs were freshly inspected for exact media, stable GUIDs, one-answer change and publication policy.",
+        "sourceBindings": [
+          {
+            "path": "anki_forge/examples/target_api_basic.rs",
+            "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+          },
+          {
+            "path": "bindings/python/examples/quickstart.py",
+            "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+          },
+          {
+            "path": "bindings/node/examples/quickstart.mjs",
+            "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/inspection.rs",
+            "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+            "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+          },
+          {
+            "path": "docs/troubleshooting.md",
+            "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+          },
+          {
+            "path": "docs/zh-cn/troubleshooting.md",
+            "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+          },
+          {
+            "path": "anki_forge/examples/json_to_anki.rs",
+            "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+          },
+          {
+            "path": "bindings/python/examples/json_to_anki.py",
+            "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+          },
+          {
+            "path": "bindings/node/examples/json_to_anki.mts",
+            "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v1.json",
+            "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v2.json",
+            "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/cell.png",
+            "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/tone.wav",
+            "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+            "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+          },
+          {
+            "path": "website/scripts/verify-public-recipe.mjs",
+            "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+          }
+        ],
+        "dependencyBindings": [
+          {
+            "path": "docs/ai-quickstart.json",
+            "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8"
+          },
+          {
+            "path": "bindings/python/pyproject.toml",
+            "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+          },
+          {
+            "path": "bindings/node/package.json",
+            "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+          },
+          {
+            "path": "Cargo.toml",
+            "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+          },
+          {
+            "path": "Cargo.lock",
+            "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+          },
+          {
+            "path": "website/package.json",
+            "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+          },
+          {
+            "path": "website/package-lock.json",
+            "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+          }
+        ]
+      }
+    ],
+    "original-baseline-update": [
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-recipe.log",
+        "sha256": "799970013c9258908f0c2ffd381b273a3c9b08481244e4f6843a9fe36e3d428c",
+        "description": "Explicit reuse of three real public SDK recipe executions. All six APKGs were freshly inspected for exact media, stable GUIDs, one-answer change and publication policy.",
+        "sourceBindings": [
+          {
+            "path": "anki_forge/examples/target_api_basic.rs",
+            "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+          },
+          {
+            "path": "bindings/python/examples/quickstart.py",
+            "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+          },
+          {
+            "path": "bindings/node/examples/quickstart.mjs",
+            "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/inspection.rs",
+            "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+            "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+          },
+          {
+            "path": "docs/troubleshooting.md",
+            "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+          },
+          {
+            "path": "docs/zh-cn/troubleshooting.md",
+            "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+          },
+          {
+            "path": "anki_forge/examples/json_to_anki.rs",
+            "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+          },
+          {
+            "path": "bindings/python/examples/json_to_anki.py",
+            "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+          },
+          {
+            "path": "bindings/node/examples/json_to_anki.mts",
+            "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v1.json",
+            "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v2.json",
+            "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/cell.png",
+            "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/tone.wav",
+            "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+            "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+          },
+          {
+            "path": "website/scripts/verify-public-recipe.mjs",
+            "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+          }
+        ],
+        "dependencyBindings": [
+          {
+            "path": "docs/ai-quickstart.json",
+            "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8"
+          },
+          {
+            "path": "bindings/python/pyproject.toml",
+            "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+          },
+          {
+            "path": "bindings/node/package.json",
+            "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+          },
+          {
+            "path": "Cargo.toml",
+            "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+          },
+          {
+            "path": "Cargo.lock",
+            "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+          },
+          {
+            "path": "website/package.json",
+            "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+          },
+          {
+            "path": "website/package-lock.json",
+            "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+          }
+        ]
+      }
+    ],
+    "troubleshooting": [
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/troubleshooting.log",
+        "sha256": "c5d91e7ee47316da9330ff7491e9ab52c6b8447c243c188720541874ba7e68db",
+        "description": "Explicit reuse of real duplicate-key error and corrected two-note output; code and recovered APKG rechecked.",
+        "sourceBindings": [
+          {
+            "path": "anki_forge/examples/target_api_basic.rs",
+            "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+          },
+          {
+            "path": "bindings/python/examples/quickstart.py",
+            "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+          },
+          {
+            "path": "bindings/node/examples/quickstart.mjs",
+            "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/inspection.rs",
+            "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+            "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+          },
+          {
+            "path": "docs/troubleshooting.md",
+            "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+          },
+          {
+            "path": "docs/zh-cn/troubleshooting.md",
+            "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+          },
+          {
+            "path": "anki_forge/examples/json_to_anki.rs",
+            "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+          },
+          {
+            "path": "bindings/python/examples/json_to_anki.py",
+            "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+          },
+          {
+            "path": "bindings/node/examples/json_to_anki.mts",
+            "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v1.json",
+            "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/v2.json",
+            "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/cell.png",
+            "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+          },
+          {
+            "path": "docs/recipes/json-to-anki/tone.wav",
+            "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+          },
+          {
+            "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+            "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+          },
+          {
+            "path": "website/scripts/verify-public-recipe.mjs",
+            "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+          }
+        ],
+        "dependencyBindings": [
+          {
+            "path": "docs/ai-quickstart.json",
+            "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8"
+          },
+          {
+            "path": "bindings/python/pyproject.toml",
+            "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+          },
+          {
+            "path": "bindings/node/package.json",
+            "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+          },
+          {
+            "path": "Cargo.toml",
+            "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+          },
+          {
+            "path": "Cargo.lock",
+            "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+          },
+          {
+            "path": "website/package.json",
+            "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+          },
+          {
+            "path": "website/package-lock.json",
+            "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+          }
+        ]
+      }
+    ]
+  },
+  "openIssues": []
+}

@@ -80,6 +80,26 @@ test('a new locale supplies vocabulary as data without changing the engine', () 
   assert.equal(rankSearchDocuments('comment ajouter la prononciation', docs, 'fr', { concepts })[0].id, 'media');
 });
 
+test('Japanese voiced kana stay distinct across equivalent width and Unicode spellings', () => {
+  const docs = [doc('quickstart', 'Rust で Anki カードを生成する'), doc('media', 'メディアのパス')];
+  const search = query => rankSearchDocuments(query, docs, 'ja').map(result => result.id);
+  for (const query of ['カード', 'カード', 'ｶｰﾄﾞ']) assert.deepEqual(search(query), ['quickstart']);
+  assert.deepEqual(search('カート'), [], 'a shopping cart must not match a card');
+  assert.deepEqual(search('パス'), ['media']);
+  for (const query of ['バス', 'ハス']) assert.deepEqual(search(query), [], 'voicing changes the word, not its spelling');
+  for (const [locale, title, query] of [['es', 'Creación rápida', 'creacion rapida'], ['pt-BR', 'Áudio e mídia', 'audio midia'], ['de', 'Größe ändern', 'große andern']]) {
+    assert.deepEqual(rankSearchDocuments(query, [doc('guide', title)], locale).map(result => result.id), ['guide'], 'Latin accent variants remain searchable');
+  }
+});
+
+test('Japanese concept aliases do not match inside a longer Katakana word', () => {
+  const docs = [doc('concepts', 'ノート')];
+  const concepts = { note: { terms: ['ノート'] } };
+  const search = query => rankSearchDocuments(query, docs, 'ja', { concepts }).map(result => result.id);
+  assert.deepEqual(search('ノートのフィールド'), ['concepts']);
+  assert.deepEqual(search('ノートルダム'), [], 'Notre-Dame is not a note authoring task');
+});
+
 test('English plural forms share lexical evidence without fuzzy substring matches', () => {
   assert.equal(rank('snapshots', [doc('a', 'Immutable snapshot')])[0].id, 'a');
   assert.equal(rank('creating', [doc('a', 'Create content')])[0].id, 'a');
