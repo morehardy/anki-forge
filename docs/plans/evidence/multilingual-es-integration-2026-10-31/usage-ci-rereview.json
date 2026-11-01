@@ -1,0 +1,1022 @@
+{
+  "reviewerRun": "/root/spanish_standards/independent-usage-ci-rebuild-a9f3face-2026-11-01",
+  "observedAt": "2026-11-01T04:24:37.499571+00:00",
+  "scope": "Genuine new independent browser acceptance of the CI-compatible artifacts. This reviewer did not change product source. Rebuild changed Astro CSS-scope HTML/resource hashes after dependencies were placed in an ordinary local node_modules directory; source input identity remains unchanged. Prior report verdicts are not reused as artifact acceptance.",
+  "nodeModulesIsSymlink": false,
+  "environments": [
+    {
+      "environment": "prefix",
+      "preservedHistoricalReport": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-prefix-symlink.json",
+        "sha256": "72d48d79214fd6c085864b6e1fed977397dd764eef5d99a8527daab6bf6a68c4"
+      },
+      "oldManifest": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/prefix-origin-manifest.json",
+        "sha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463"
+      },
+      "newManifest": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/prefix-ci-origin-manifest.json",
+        "sha256": "3acb0fc02295a3822a6318e35f238b82d44bfb81234b42a65750faca23c25ad3"
+      },
+      "inputSha256Unchanged": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
+      "unchangedMachineResources": 96,
+      "changedHtmlRoutes": [
+        "/anki-forge/docs/ai-anki-cards/",
+        "/anki-forge/docs/anki-forge-vs-genanki/",
+        "/anki-forge/docs/api/",
+        "/anki-forge/docs/build-guarantees/",
+        "/anki-forge/docs/cards/",
+        "/anki-forge/docs/compatibility/",
+        "/anki-forge/docs/concepts/",
+        "/anki-forge/docs/csv-to-anki/",
+        "/anki-forge/docs/custom-notetypes/",
+        "/anki-forge/docs/development/",
+        "/anki-forge/docs/genanki-migration/",
+        "/anki-forge/docs/image-occlusion/",
+        "/anki-forge/docs/",
+        "/anki-forge/docs/installation/",
+        "/anki-forge/docs/json-to-anki/",
+        "/anki-forge/docs/languages/",
+        "/anki-forge/docs/media/",
+        "/anki-forge/docs/node-api/",
+        "/anki-forge/docs/node-quickstart/",
+        "/anki-forge/docs/python-api/",
+        "/anki-forge/docs/python-diagnostics/",
+        "/anki-forge/docs/python-migration/",
+        "/anki-forge/docs/python-quickstart/",
+        "/anki-forge/docs/quickstart/",
+        "/anki-forge/docs/rust-api/",
+        "/anki-forge/docs/rust-guide/",
+        "/anki-forge/docs/templates/",
+        "/anki-forge/docs/troubleshooting/",
+        "/anki-forge/docs/updates/",
+        "/anki-forge/es/docs/ai-anki-cards/",
+        "/anki-forge/es/docs/anki-forge-vs-genanki/",
+        "/anki-forge/es/docs/api/",
+        "/anki-forge/es/docs/build-guarantees/",
+        "/anki-forge/es/docs/cards/",
+        "/anki-forge/es/docs/compatibility/",
+        "/anki-forge/es/docs/concepts/",
+        "/anki-forge/es/docs/csv-to-anki/",
+        "/anki-forge/es/docs/custom-notetypes/",
+        "/anki-forge/es/docs/development/",
+        "/anki-forge/es/docs/genanki-migration/",
+        "/anki-forge/es/docs/image-occlusion/",
+        "/anki-forge/es/docs/",
+        "/anki-forge/es/docs/installation/",
+        "/anki-forge/es/docs/json-to-anki/",
+        "/anki-forge/es/docs/languages/",
+        "/anki-forge/es/docs/media/",
+        "/anki-forge/es/docs/node-api/",
+        "/anki-forge/es/docs/node-quickstart/",
+        "/anki-forge/es/docs/python-api/",
+        "/anki-forge/es/docs/python-diagnostics/",
+        "/anki-forge/es/docs/python-migration/",
+        "/anki-forge/es/docs/python-quickstart/",
+        "/anki-forge/es/docs/quickstart/",
+        "/anki-forge/es/docs/rust-api/",
+        "/anki-forge/es/docs/rust-guide/",
+        "/anki-forge/es/docs/templates/",
+        "/anki-forge/es/docs/troubleshooting/",
+        "/anki-forge/es/docs/updates/",
+        "/anki-forge/zh-cn/docs/ai-anki-cards/",
+        "/anki-forge/zh-cn/docs/anki-forge-vs-genanki/",
+        "/anki-forge/zh-cn/docs/api/",
+        "/anki-forge/zh-cn/docs/build-guarantees/",
+        "/anki-forge/zh-cn/docs/cards/",
+        "/anki-forge/zh-cn/docs/compatibility/",
+        "/anki-forge/zh-cn/docs/concepts/",
+        "/anki-forge/zh-cn/docs/csv-to-anki/",
+        "/anki-forge/zh-cn/docs/custom-notetypes/",
+        "/anki-forge/zh-cn/docs/development/",
+        "/anki-forge/zh-cn/docs/genanki-migration/",
+        "/anki-forge/zh-cn/docs/image-occlusion/",
+        "/anki-forge/zh-cn/docs/",
+        "/anki-forge/zh-cn/docs/installation/",
+        "/anki-forge/zh-cn/docs/json-to-anki/",
+        "/anki-forge/zh-cn/docs/languages/",
+        "/anki-forge/zh-cn/docs/media/",
+        "/anki-forge/zh-cn/docs/node-api/",
+        "/anki-forge/zh-cn/docs/node-quickstart/",
+        "/anki-forge/zh-cn/docs/python-api/",
+        "/anki-forge/zh-cn/docs/python-diagnostics/",
+        "/anki-forge/zh-cn/docs/python-migration/",
+        "/anki-forge/zh-cn/docs/python-quickstart/",
+        "/anki-forge/zh-cn/docs/quickstart/",
+        "/anki-forge/zh-cn/docs/rust-api/",
+        "/anki-forge/zh-cn/docs/rust-guide/",
+        "/anki-forge/zh-cn/docs/templates/",
+        "/anki-forge/zh-cn/docs/troubleshooting/",
+        "/anki-forge/zh-cn/docs/updates/"
+      ],
+      "changedOrNewResourceRoutes": [
+        "/anki-forge/_astro/index.C1tKili0.css",
+        "/anki-forge/generated/cell-anatomy.apkg",
+        "/anki-forge/generated/ear-training.apkg",
+        "/anki-forge/generated/showcase.apkg",
+        "/anki-forge/generated/showcase.json",
+        "/anki-forge/generated/sound.apkg",
+        "/anki-forge/generated/spanish-v1.apkg",
+        "/anki-forge/generated/spanish-v2.apkg",
+        "/anki-forge/generated/spanish.apkg",
+        "/anki-forge/pagefind/pagefind-entry.json"
+      ],
+      "removedResourceRoutes": [
+        "/anki-forge/_astro/index.Dimz6Ksf.css"
+      ],
+      "newTour": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/browser-tour.json",
+        "sha256": "2dda754fa4d65d0a6c5832406710225573fb21b052f9fb5249a64c6d6c09d297"
+      },
+      "newReadOrigin": "http://127.0.0.1:57120",
+      "oldReadOrigin": "http://127.0.0.1:65366",
+      "fullArtifactIntegrity": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/artifact-integrity.json",
+        "sha256": "8eaff5385c5ad788c7191b754ff87df57876f6edb6a54caa6285e8b921af2647"
+      },
+      "actualTaskObservations": [
+        {
+          "locale": "en",
+          "id": "rust-basic",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/",
+            "http://127.0.0.1:57120/anki-forge/docs/quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/en-rust-basic.png",
+            "sha256": "22203eae398522e3ffa7b56fd450856cac56a007d4a4797207a804da7d5b8221"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "en",
+          "id": "python-basic",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/docs/",
+            "http://127.0.0.1:57120/anki-forge/docs/python-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/en-python-basic.png",
+            "sha256": "3edf0504498aebe88566765379fa5f39dd55e07347e75740ff390a1576ee17c2"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "en",
+          "id": "node-basic",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/docs/python-quickstart/",
+            "http://127.0.0.1:57120/anki-forge/docs/node-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/en-node-basic.png",
+            "sha256": "f102e843641fa152a37cc628ae045fea3747bef4e02b26021753ec8e3a2caa52"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "en",
+          "id": "json-media",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/docs/node-quickstart/",
+            "http://127.0.0.1:57120/anki-forge/docs/json-to-anki/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/en-json-media.png",
+            "sha256": "43218aae8150bf6ebfb6d856f6bde74ecfe4407efdc24c4d24e722b0b0de01ad"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 3,
+          "httpInputDownloads": 4,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "en",
+          "id": "original-baseline-update",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/docs/json-to-anki/",
+            "http://127.0.0.1:57120/anki-forge/docs/updates/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/en-original-baseline-update.png",
+            "sha256": "a6a498b8239c0d072c22ec7abfcf4e0cdd7ed937d1c2b02c1f27c64ea8a4159d"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "en",
+          "id": "troubleshooting",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/docs/updates/",
+            "http://127.0.0.1:57120/anki-forge/docs/troubleshooting/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/en-troubleshooting.png",
+            "sha256": "4c9bc2b4fb31081fe52a8b61988311086d5c7d95b3fdfca59258b202e1a70a7d"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "rust-basic",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/zh-cn/",
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/zh-CN-rust-basic.png",
+            "sha256": "9ff313ad03b82c6b034c20979024f79dd05ec5b5fb7cb4dc0cbac6312ec30651"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "python-basic",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/",
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/python-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/zh-CN-python-basic.png",
+            "sha256": "f478ff9dfce39abe46bfc11af599a2211e00b750f8b1747951a0b0e0b0089a68"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "node-basic",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/python-quickstart/",
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/node-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/zh-CN-node-basic.png",
+            "sha256": "07dc6206bcbd2e05536e7428905f6564c4030247ccdd907eda7db177e200b6c9"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "json-media",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/node-quickstart/",
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/json-to-anki/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/zh-CN-json-media.png",
+            "sha256": "de084e58f5885b86440c2eaf8bd3addc9c90070460987605e16c364931491686"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 3,
+          "httpInputDownloads": 4,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "original-baseline-update",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/json-to-anki/",
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/updates/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/zh-CN-original-baseline-update.png",
+            "sha256": "999c38218197294c6acaa06c14be79ff06c030b30613ef3fe59e1f363ea980d4"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "troubleshooting",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/updates/",
+            "http://127.0.0.1:57120/anki-forge/zh-cn/docs/troubleshooting/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/zh-CN-troubleshooting.png",
+            "sha256": "4f9d01e074ce9ee1e6f1dddabedcd04f6f0c0e5b2d247e8a65b19d5b52ca0929"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "rust-basic",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/es/",
+            "http://127.0.0.1:57120/anki-forge/es/docs/quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/es-rust-basic.png",
+            "sha256": "62079a62bb2453a0f1ad52f320ebee44acf9cb2dc1b3c54a2162c9fb7f18600b"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "python-basic",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/es/docs/",
+            "http://127.0.0.1:57120/anki-forge/es/docs/python-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/es-python-basic.png",
+            "sha256": "bd7c4052b3db11faacb8dbbef493b933262f0f078b6b77e4edc06d9bb33e2a48"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "node-basic",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/es/docs/python-quickstart/",
+            "http://127.0.0.1:57120/anki-forge/es/docs/node-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/es-node-basic.png",
+            "sha256": "797cbe9eb175fbeb8b0c2aa067ab53abf68165132a662a9a3d0cea4fd7a5d62b"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "json-media",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/es/docs/node-quickstart/",
+            "http://127.0.0.1:57120/anki-forge/es/docs/json-to-anki/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/es-json-media.png",
+            "sha256": "01bcbfa6cac34b45acbefbec58e00b4658a450bf4a106d37f94c9e318b5b68ed"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 3,
+          "httpInputDownloads": 4,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "original-baseline-update",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/es/docs/json-to-anki/",
+            "http://127.0.0.1:57120/anki-forge/es/docs/updates/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/es-original-baseline-update.png",
+            "sha256": "09581d00cb31437a83855bc86e93e0c2ed49a33639845b094d4c9e913b0e21c1"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "troubleshooting",
+          "readUrls": [
+            "http://127.0.0.1:57120/anki-forge/es/docs/updates/",
+            "http://127.0.0.1:57120/anki-forge/es/docs/troubleshooting/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-prefix-ci/es-troubleshooting.png",
+            "sha256": "6c960fe10901376ac7e759a3c1b44e6e2e0d2c831e8bdba4ab15926791174f21"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        }
+      ]
+    },
+    {
+      "environment": "root",
+      "preservedHistoricalReport": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-root-symlink.json",
+        "sha256": "24ea4c7f630afe30f25e8e74db08344b33df127ccc552777a69d940599f8d155"
+      },
+      "oldManifest": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/root-origin-manifest.json",
+        "sha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27"
+      },
+      "newManifest": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/root-ci-origin-manifest.json",
+        "sha256": "23a68acba10e58db19a800fbae548e8005c7d05d03aae37f4ca7cc4209599552"
+      },
+      "inputSha256Unchanged": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
+      "unchangedMachineResources": 96,
+      "changedHtmlRoutes": [
+        "/docs/ai-anki-cards/",
+        "/docs/anki-forge-vs-genanki/",
+        "/docs/api/",
+        "/docs/build-guarantees/",
+        "/docs/cards/",
+        "/docs/compatibility/",
+        "/docs/concepts/",
+        "/docs/csv-to-anki/",
+        "/docs/custom-notetypes/",
+        "/docs/development/",
+        "/docs/genanki-migration/",
+        "/docs/image-occlusion/",
+        "/docs/",
+        "/docs/installation/",
+        "/docs/json-to-anki/",
+        "/docs/languages/",
+        "/docs/media/",
+        "/docs/node-api/",
+        "/docs/node-quickstart/",
+        "/docs/python-api/",
+        "/docs/python-diagnostics/",
+        "/docs/python-migration/",
+        "/docs/python-quickstart/",
+        "/docs/quickstart/",
+        "/docs/rust-api/",
+        "/docs/rust-guide/",
+        "/docs/templates/",
+        "/docs/troubleshooting/",
+        "/docs/updates/",
+        "/es/docs/ai-anki-cards/",
+        "/es/docs/anki-forge-vs-genanki/",
+        "/es/docs/api/",
+        "/es/docs/build-guarantees/",
+        "/es/docs/cards/",
+        "/es/docs/compatibility/",
+        "/es/docs/concepts/",
+        "/es/docs/csv-to-anki/",
+        "/es/docs/custom-notetypes/",
+        "/es/docs/development/",
+        "/es/docs/genanki-migration/",
+        "/es/docs/image-occlusion/",
+        "/es/docs/",
+        "/es/docs/installation/",
+        "/es/docs/json-to-anki/",
+        "/es/docs/languages/",
+        "/es/docs/media/",
+        "/es/docs/node-api/",
+        "/es/docs/node-quickstart/",
+        "/es/docs/python-api/",
+        "/es/docs/python-diagnostics/",
+        "/es/docs/python-migration/",
+        "/es/docs/python-quickstart/",
+        "/es/docs/quickstart/",
+        "/es/docs/rust-api/",
+        "/es/docs/rust-guide/",
+        "/es/docs/templates/",
+        "/es/docs/troubleshooting/",
+        "/es/docs/updates/",
+        "/zh-cn/docs/ai-anki-cards/",
+        "/zh-cn/docs/anki-forge-vs-genanki/",
+        "/zh-cn/docs/api/",
+        "/zh-cn/docs/build-guarantees/",
+        "/zh-cn/docs/cards/",
+        "/zh-cn/docs/compatibility/",
+        "/zh-cn/docs/concepts/",
+        "/zh-cn/docs/csv-to-anki/",
+        "/zh-cn/docs/custom-notetypes/",
+        "/zh-cn/docs/development/",
+        "/zh-cn/docs/genanki-migration/",
+        "/zh-cn/docs/image-occlusion/",
+        "/zh-cn/docs/",
+        "/zh-cn/docs/installation/",
+        "/zh-cn/docs/json-to-anki/",
+        "/zh-cn/docs/languages/",
+        "/zh-cn/docs/media/",
+        "/zh-cn/docs/node-api/",
+        "/zh-cn/docs/node-quickstart/",
+        "/zh-cn/docs/python-api/",
+        "/zh-cn/docs/python-diagnostics/",
+        "/zh-cn/docs/python-migration/",
+        "/zh-cn/docs/python-quickstart/",
+        "/zh-cn/docs/quickstart/",
+        "/zh-cn/docs/rust-api/",
+        "/zh-cn/docs/rust-guide/",
+        "/zh-cn/docs/templates/",
+        "/zh-cn/docs/troubleshooting/",
+        "/zh-cn/docs/updates/"
+      ],
+      "changedOrNewResourceRoutes": [
+        "/_astro/index.C1tKili0.css",
+        "/generated/cell-anatomy.apkg",
+        "/generated/ear-training.apkg",
+        "/generated/showcase.apkg",
+        "/generated/showcase.json",
+        "/generated/sound.apkg",
+        "/generated/spanish-v1.apkg",
+        "/generated/spanish-v2.apkg",
+        "/generated/spanish.apkg",
+        "/pagefind/pagefind-entry.json"
+      ],
+      "removedResourceRoutes": [
+        "/_astro/index.Dimz6Ksf.css"
+      ],
+      "newTour": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/browser-tour.json",
+        "sha256": "84aa39e788f618c5e80839e6ff853e4efa3f1946ea7d30cc14a47d0c61ac909f"
+      },
+      "newReadOrigin": "http://127.0.0.1:58920",
+      "oldReadOrigin": "http://127.0.0.1:49559",
+      "fullArtifactIntegrity": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/artifact-integrity.json",
+        "sha256": "23a5d8be46a398beaff1af5af75e322dec9fb0b4c9395ced0b31cdfb24bc436c"
+      },
+      "actualTaskObservations": [
+        {
+          "locale": "en",
+          "id": "rust-basic",
+          "readUrls": [
+            "http://127.0.0.1:58920/",
+            "http://127.0.0.1:58920/docs/quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/en-rust-basic.png",
+            "sha256": "22203eae398522e3ffa7b56fd450856cac56a007d4a4797207a804da7d5b8221"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "en",
+          "id": "python-basic",
+          "readUrls": [
+            "http://127.0.0.1:58920/docs/",
+            "http://127.0.0.1:58920/docs/python-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/en-python-basic.png",
+            "sha256": "3edf0504498aebe88566765379fa5f39dd55e07347e75740ff390a1576ee17c2"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "en",
+          "id": "node-basic",
+          "readUrls": [
+            "http://127.0.0.1:58920/docs/python-quickstart/",
+            "http://127.0.0.1:58920/docs/node-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/en-node-basic.png",
+            "sha256": "f102e843641fa152a37cc628ae045fea3747bef4e02b26021753ec8e3a2caa52"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "en",
+          "id": "json-media",
+          "readUrls": [
+            "http://127.0.0.1:58920/docs/node-quickstart/",
+            "http://127.0.0.1:58920/docs/json-to-anki/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/en-json-media.png",
+            "sha256": "43218aae8150bf6ebfb6d856f6bde74ecfe4407efdc24c4d24e722b0b0de01ad"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 3,
+          "httpInputDownloads": 4,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "en",
+          "id": "original-baseline-update",
+          "readUrls": [
+            "http://127.0.0.1:58920/docs/json-to-anki/",
+            "http://127.0.0.1:58920/docs/updates/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/en-original-baseline-update.png",
+            "sha256": "a6a498b8239c0d072c22ec7abfcf4e0cdd7ed937d1c2b02c1f27c64ea8a4159d"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "en",
+          "id": "troubleshooting",
+          "readUrls": [
+            "http://127.0.0.1:58920/docs/updates/",
+            "http://127.0.0.1:58920/docs/troubleshooting/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/en-troubleshooting.png",
+            "sha256": "4c9bc2b4fb31081fe52a8b61988311086d5c7d95b3fdfca59258b202e1a70a7d"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "rust-basic",
+          "readUrls": [
+            "http://127.0.0.1:58920/zh-cn/",
+            "http://127.0.0.1:58920/zh-cn/docs/quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/zh-CN-rust-basic.png",
+            "sha256": "9ff313ad03b82c6b034c20979024f79dd05ec5b5fb7cb4dc0cbac6312ec30651"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "python-basic",
+          "readUrls": [
+            "http://127.0.0.1:58920/zh-cn/docs/",
+            "http://127.0.0.1:58920/zh-cn/docs/python-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/zh-CN-python-basic.png",
+            "sha256": "f478ff9dfce39abe46bfc11af599a2211e00b750f8b1747951a0b0e0b0089a68"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "node-basic",
+          "readUrls": [
+            "http://127.0.0.1:58920/zh-cn/docs/python-quickstart/",
+            "http://127.0.0.1:58920/zh-cn/docs/node-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/zh-CN-node-basic.png",
+            "sha256": "07dc6206bcbd2e05536e7428905f6564c4030247ccdd907eda7db177e200b6c9"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "json-media",
+          "readUrls": [
+            "http://127.0.0.1:58920/zh-cn/docs/node-quickstart/",
+            "http://127.0.0.1:58920/zh-cn/docs/json-to-anki/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/zh-CN-json-media.png",
+            "sha256": "de084e58f5885b86440c2eaf8bd3addc9c90070460987605e16c364931491686"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 3,
+          "httpInputDownloads": 4,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "original-baseline-update",
+          "readUrls": [
+            "http://127.0.0.1:58920/zh-cn/docs/json-to-anki/",
+            "http://127.0.0.1:58920/zh-cn/docs/updates/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/zh-CN-original-baseline-update.png",
+            "sha256": "999c38218197294c6acaa06c14be79ff06c030b30613ef3fe59e1f363ea980d4"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "zh-CN",
+          "id": "troubleshooting",
+          "readUrls": [
+            "http://127.0.0.1:58920/zh-cn/docs/updates/",
+            "http://127.0.0.1:58920/zh-cn/docs/troubleshooting/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/zh-CN-troubleshooting.png",
+            "sha256": "4f9d01e074ce9ee1e6f1dddabedcd04f6f0c0e5b2d247e8a65b19d5b52ca0929"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "rust-basic",
+          "readUrls": [
+            "http://127.0.0.1:58920/es/",
+            "http://127.0.0.1:58920/es/docs/quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/es-rust-basic.png",
+            "sha256": "62079a62bb2453a0f1ad52f320ebee44acf9cb2dc1b3c54a2162c9fb7f18600b"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "python-basic",
+          "readUrls": [
+            "http://127.0.0.1:58920/es/docs/",
+            "http://127.0.0.1:58920/es/docs/python-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/es-python-basic.png",
+            "sha256": "bd7c4052b3db11faacb8dbbef493b933262f0f078b6b77e4edc06d9bb33e2a48"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "node-basic",
+          "readUrls": [
+            "http://127.0.0.1:58920/es/docs/python-quickstart/",
+            "http://127.0.0.1:58920/es/docs/node-quickstart/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/es-node-basic.png",
+            "sha256": "797cbe9eb175fbeb8b0c2aa067ab53abf68165132a662a9a3d0cea4fd7a5d62b"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 1,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "json-media",
+          "readUrls": [
+            "http://127.0.0.1:58920/es/docs/node-quickstart/",
+            "http://127.0.0.1:58920/es/docs/json-to-anki/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/es-json-media.png",
+            "sha256": "01bcbfa6cac34b45acbefbec58e00b4658a450bf4a106d37f94c9e318b5b68ed"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 3,
+          "httpInputDownloads": 4,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "original-baseline-update",
+          "readUrls": [
+            "http://127.0.0.1:58920/es/docs/json-to-anki/",
+            "http://127.0.0.1:58920/es/docs/updates/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/es-original-baseline-update.png",
+            "sha256": "09581d00cb31437a83855bc86e93e0c2ed49a33639845b094d4c9e913b0e21c1"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        },
+        {
+          "locale": "es",
+          "id": "troubleshooting",
+          "readUrls": [
+            "http://127.0.0.1:58920/es/docs/updates/",
+            "http://127.0.0.1:58920/es/docs/troubleshooting/"
+          ],
+          "actualNewScreenshot": {
+            "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-browser-root-ci/es-troubleshooting.png",
+            "sha256": "6c960fe10901376ac7e759a3c1b44e6e2e0d2c831e8bdba4ab15926791174f21"
+          },
+          "renderedTextAndCodeEqualToPriorRead": true,
+          "clipboardPrograms": 0,
+          "httpInputDownloads": 0,
+          "reviewerObservation": "New screenshot inspected: current locale heading, main content, sidebar and TOC remain readable; no obscured task control or broken layout. Navigation, search/clipboard/download operations were actually repeated against the new artifact. Critical rendered install/run, original-baseline/policy and error-recovery instructions were reread; full current body/code equality confirms no text was lost through the CSS-scope rebuild."
+        }
+      ]
+    }
+  ],
+  "executionReuse": {
+    "priorIndependentAudit": {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-execution-audit.json",
+      "sha256": "40dca792cd12a545979d9bb5cb8e11e35edb534753043bfa7ac6c05002b7086a"
+    },
+    "currentIndependentReinspection": {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-ci-execution-audit.json",
+      "sha256": "67fbeacd8d76a32bccb56eb95b261dd57f8cb789f9c28a7492af6f498580d9b7"
+    },
+    "exactUnchangedSourceDependencyCount": 23,
+    "exactUnchangedExecutionReceiptCount": 39,
+    "receipts": [
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/basic.log",
+        "sha256": "e12ab3e700a030b6b22e3f1ecab4f4ea43d87b129c3825b08510d7841c0658ce"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/install.log",
+        "sha256": "681953e6055258730ea065b1ee2125dcca218e822a01064d55eb109515f036e5"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/inspection.log",
+        "sha256": "ab46e18534a2485efe9c48bf42ab1d09d85578b6c120f223c4a1122a612b9347"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/src/main.rs",
+        "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/spanish.apkg",
+        "sha256": "1db741938adb9c1681ff7f77662e34ccd14007829e0ea0f3ef67b29773eb038d"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/execution-inputs.json",
+        "sha256": "c41ea1830d29645248b639aed12006453a87c030a01e22d6a395e25f4b44cd16"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/Cargo.lock",
+        "sha256": "a96882ee6cd24d0bd24296aba9de0d377dc1fc878c2071839dfdf4c8283026fc"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/basic.log",
+        "sha256": "c8882091d0b2fd23a972ee85b3e0f8db118d80caedb0e35543bb891bdea5a0f4"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/install.log",
+        "sha256": "b4a5422bb1a90e2b21bcbc5a1f90c0d661ce2ae186ff616b39fa5b8402cfb5cc"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/inspection.log",
+        "sha256": "12473d599991795e21aa58fd0290aa0b718effda3e7f79212a33354b9ba1ebfa"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/main.py",
+        "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/spanish.apkg",
+        "sha256": "144ccaf1c0885cc0d22bec401de1bf8eb4f5994901a54624a121c076e3f4962f"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/pip-report.json",
+        "sha256": "288bd16bd60ad6806c558b71d7c9d492e0fe2f28f460d33db8d8d8abc0b2c50a"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/basic.log",
+        "sha256": "717d6b53c0d25620e24928c8399ec08efa0e953f484f1f3169309643b8657501"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/install.log",
+        "sha256": "417e021f48191bc2d4f52d83f22f4da1821b36f0b63f1f24d13c6aec02bc1f45"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/inspection.log",
+        "sha256": "ecabd9492d3852f26ab9a8dab838c61fc2c64f4adbe71e7b24f1e70675acd40a"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/main.mjs",
+        "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/spanish.apkg",
+        "sha256": "8e3266decbe71ef5a1ed69fdc0c4297f9fcb85d3c7b6fd8f94eebb06345ae9d2"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/package-lock.json",
+        "sha256": "eeae72f76f5128348b47857a892268152608517087613c91c791b6e0865e01fb"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-recipe.log",
+        "sha256": "799970013c9258908f0c2ffd381b273a3c9b08481244e4f6843a9fe36e3d428c"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-recipe-inputs.json",
+        "sha256": "681443446f4e40f40c3fc7be8290fa2bf5c9beeccaf59894cf269bee8d8f14e5"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/installation.json",
+        "sha256": "a090c1aa7d91383a4f38da91288f227bfa88b5773125e287f4393c4655e3a33c"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/comparison.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/review.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/v1.apkg",
+        "sha256": "a80084bf0ea3413b7cb7e5bef811580e6e20c694767dda079df26d1f948e3297"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/v2.apkg",
+        "sha256": "575e56dd32abea1fed021b74314716c5abb5f0c75fe48a9818977020fc6eb337"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/installation.json",
+        "sha256": "dd61c83e53df689a79da792b39435c3571465704ea7b7d86abd94ebc4ce5b005"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/comparison.json",
+        "sha256": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/review.json",
+        "sha256": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/v1.apkg",
+        "sha256": "0872e011ce6646d0ae18883487616939a8efd67587f12741de37fd603e6ba4dd"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/v2.apkg",
+        "sha256": "c7a1cf1409a9962d709804e8c1dd3aee9071b539bd5323e4e860970c770de424"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/installation.json",
+        "sha256": "9c54a378d71978b60d59ce36cb07fc11cada841c5a32ef2fdf6d6f5010621cd0"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/comparison.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/review.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/v1.apkg",
+        "sha256": "4b59e26cd2aa4f8ab3e83fd4ee763f0e68ac288fb8650d6ca1293308e9a5d630"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/v2.apkg",
+        "sha256": "5db7aa990fbfaccaa2a76630e7439c596356ee28aa9c4f8751459c5cb53f4a2d"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/troubleshooting.log",
+        "sha256": "c5d91e7ee47316da9330ff7491e9ab52c6b8447c243c188720541874ba7e68db"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/duplicate-key.py",
+        "sha256": "fa5c946e65f320e94409e36691a501980d0860a1143402740642278f04f23849"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/recovered.apkg",
+        "sha256": "38408fdc693813a2285434ddf967fdb98fea6b5b1ff359ace2ac315964c74d23"
+      }
+    ],
+    "conclusion": "All 23 source/dependency bindings and all 39 execution receipt files remain byte-identical. All 10 output APKGs were independently decoded again; no new SDK execution or Anki GUI import is claimed."
+  },
+  "openIssues": []
+}

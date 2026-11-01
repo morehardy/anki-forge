@@ -4,7 +4,7 @@
   "status": "passed",
   "engineeringStatus": "passed",
   "engineeringOnly": false,
-  "startedAt": "2026-11-01T03:57:21.503Z",
+  "startedAt": "2026-11-01T04:20:54.949Z",
   "runtime": {
     "node": "v24.19.0",
     "platform": "darwin",
@@ -21,7 +21,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 2096,
+      "durationMs": 2340,
       "log": {
         "file": "01-check-content.log",
         "sha256": "a1389801725ed2ad44fc0ec79d1d44e234e28bcf301c29f2188742fc483de3a3",
@@ -38,7 +38,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 1960,
+      "durationMs": 2163,
       "log": {
         "file": "02-check-site.log",
         "sha256": "eddb3c8c646a7d2d1a310d1bf443fc8a577a537c5f3ea2358e4b52f0bcb42ebe",
@@ -55,7 +55,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 1002,
+      "durationMs": 1261,
       "log": {
         "file": "03-check-surface.log",
         "sha256": "b3db5872f218e05cf35a87cd0b58b7242cb3a117fc7d3ba2e9502132055844c4",
@@ -72,7 +72,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 1739,
+      "durationMs": 1856,
       "log": {
         "file": "04-check-machine.log",
         "sha256": "a66dcc4b7e69f3232f7118d9bc0382ca254f5bb73e3fd28a226d238f45b6110d",
@@ -89,7 +89,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 774,
+      "durationMs": 839,
       "log": {
         "file": "05-check-schema.log",
         "sha256": "d7cd528dbae04b3ca3a4f5746ee0536cf74ec0499e848de227e8101979025b23",
@@ -106,10 +106,10 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 19929,
+      "durationMs": 22029,
       "log": {
         "file": "06-check-gates.log",
-        "sha256": "23e1ea3b1648ff785488bee3d61b7e96c858a73def37f91ba044812b5088371b",
+        "sha256": "5848c56b56580ea0c9989f46e3f36c7a8e029e51afcb5a0e70465a06c0f3aedb",
         "bytes": 1508
       }
     },
@@ -123,11 +123,11 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 27681,
+      "durationMs": 30086,
       "log": {
         "file": "07-test-browser.log",
-        "sha256": "9b5a2f388f26bcd5e89985f8c2b25637d8afdf74ab04a83a83dd9841e3b7c73c",
-        "bytes": 2285
+        "sha256": "b1852b85e6dccd42147d3cf6bee91662d0b66753b212951022b6bcb047561ed9",
+        "bytes": 2287
       }
     },
     {
@@ -140,7 +140,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 4513,
+      "durationMs": 4943,
       "log": {
         "file": "08-check-search.log",
         "sha256": "7e2f3458af858528e53c2790cc1a00995de148699cd062c3e915777282a41e4c",
@@ -149,7 +149,7 @@
     }
   ],
   "identity": {
-    "commit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
+    "commit": "a9f3facef528369976712b81ead4c99c162b2907",
     "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
     "configuration": {
       "site": "https://morehardy.github.io",
@@ -162,18 +162,18 @@
       "es"
     ]
   },
-  "manifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
-  "artifactSha256": "a5f51cbb0e002af99c586932ed93aabd79756abbf36727b21b7fce87491b1be5",
+  "manifestSha256": "3acb0fc02295a3822a6318e35f238b82d44bfb81234b42a65750faca23c25ad3",
+  "artifactSha256": "ec338b119ced62cf5d5406125f3ecfdb5020c17c0183e881eab51a453491d3fe",
   "fileCount": 381,
   "attachments": [
     {
       "file": "search-results.json",
-      "sha256": "fa13122c6904df5d7d9299e016add1f079a796cb14b0590d0e9c5bad9ebf13f1",
+      "sha256": "09ac280dbf701357bdf25067c73b18862ac3d7c5d944a87697e1afaab6ed0650",
       "bytes": 151773
     }
   ],
   "artifactUnchanged": true,
-  "finishedAt": "2026-11-01T04:05:02.191Z",
+  "finishedAt": "2026-11-01T04:25:13.210Z",
   "postBuildReviews": {
     "schemaVersion": 1,
     "status": "passed",
@@ -189,20 +189,20 @@
       "zh-CN",
       "es"
     ],
-    "currentManifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
+    "currentManifestSha256": "3acb0fc02295a3822a6318e35f238b82d44bfb81234b42a65750faca23c25ad3",
     "configSha256": "9bd308b2e1c0a16690f526cfeb6a0591937b5e6109a875be08cc53d033ca77eb",
     "reports": [
       {
         "kind": "usage-tasks",
         "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-prefix.json",
-        "sha256": "72d48d79214fd6c085864b6e1fed977397dd764eef5d99a8527daab6bf6a68c4",
-        "bytes": 219395,
-        "reviewerRun": "/root/spanish_standards/independent-usage-2026-10-31/prefix",
-        "originManifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
-        "originCommit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
-        "currentManifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
+        "sha256": "ebba88c8d03e50804f4ef5028bba39552bdf4dd7917e473c6f73626567755c75",
+        "bytes": 221268,
+        "reviewerRun": "/root/spanish_standards/independent-usage-ci-rebuild-a9f3face-2026-11-01/prefix",
+        "originManifestSha256": "3acb0fc02295a3822a6318e35f238b82d44bfb81234b42a65750faca23c25ad3",
+        "originCommit": "a9f3facef528369976712b81ead4c99c162b2907",
+        "currentManifestSha256": "3acb0fc02295a3822a6318e35f238b82d44bfb81234b42a65750faca23c25ad3",
         "reused": false,
-        "resourceScopeSha256": "6140bf5c9bc98ede97c94bc29bd6aa360d7372592bc6c2757d437db21705be90"
+        "resourceScopeSha256": "03ff159e404d49b9c263423ea428a332563fc9e23b5f6b01d736a4613e240004"
       },
       {
         "kind": "machine-read",
@@ -212,11 +212,11 @@
         "reviewerRun": "/root/spanish_spec/independent-machine-prefix-2026-10-31",
         "originManifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
         "originCommit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
-        "currentManifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
-        "reused": false,
+        "currentManifestSha256": "3acb0fc02295a3822a6318e35f238b82d44bfb81234b42a65750faca23c25ad3",
+        "reused": true,
         "resourceScopeSha256": "6fe458c311635405fe4e5754010be0bb4db60032765add7a975d7bb0f97d7abc"
       }
     ]
   },
-  "reviewAttachedAt": "2026-11-01T04:05:02.191Z"
+  "reviewAttachedAt": "2026-11-01T04:25:13.210Z"
 }

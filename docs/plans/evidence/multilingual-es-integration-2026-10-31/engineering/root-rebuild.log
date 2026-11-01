@@ -25,16 +25,16 @@ Prepared verified examples, downloads, and source-backed documentation.
 > anki-forge-website@0.1.0 build
 > astro build && npm run generate:search && npm run generate:machine && npm run check:machine && npm run check:schema && node scripts/site-manifest.mjs
 
-20:58:46 [content] Syncing content
-20:58:46 [content] Synced content
-20:58:46 [types] Generated 474ms
-20:58:46 [build] output: "static"
-20:58:46 [build] mode: "static"
-20:58:46 [build] directory: /Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/website/dist/
-20:58:46 [build] Collecting build info...
-20:58:46 [build] ✓ Completed in 599ms.
-20:58:46 [build] Building static entrypoints...
-20:58:47 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/stable-ids-and-deck-updates.mdx?astroPropagatedAssets" may not be preserved when bundling.
+21:22:28 [content] Syncing content
+21:22:28 [content] Synced content
+21:22:28 [types] Generated 511ms
+21:22:28 [build] output: "static"
+21:22:28 [build] mode: "static"
+21:22:28 [build] directory: /Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/website/dist/
+21:22:28 [build] Collecting build info...
+21:22:28 [build] ✓ Completed in 653ms.
+21:22:28 [build] Building static entrypoints...
+21:22:29 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/stable-ids-and-deck-updates.mdx?astroPropagatedAssets" may not be preserved when bundling.
    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/blog/stable-ids-and-deck-updates.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
    [38;5;246m│[0m
  [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
@@ -44,27 +44,7 @@ Prepared verified examples, downloads, and source-backed documentation.
  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
 [38;5;246m───╯[0m
 
-20:58:47 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/docs/docs/quickstart.mdx?astroPropagatedAssets" may not be preserved when bundling.
-   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/docs/docs/quickstart.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
-   [38;5;246m│[0m
- [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
- [38;5;240m  │[0m               ────────────┬───────────  
- [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
- [38;5;240m  │[0m 
- [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[38;5;246m───╯[0m
-
-20:58:47 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/zh-cn/your-first-anki-deck.mdx?astroPropagatedAssets" may not be preserved when bundling.
-   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/blog/zh-cn/your-first-anki-deck.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
-   [38;5;246m│[0m
- [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
- [38;5;240m  │[0m               ────────────┬───────────  
- [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
- [38;5;240m  │[0m 
- [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[38;5;246m───╯[0m
-
-20:58:47 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/es/stable-ids-and-deck-updates.mdx?astroPropagatedAssets" may not be preserved when bundling.
+21:22:29 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/es/stable-ids-and-deck-updates.mdx?astroPropagatedAssets" may not be preserved when bundling.
    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/blog/es/stable-ids-and-deck-updates.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
    [38;5;246m│[0m
  [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
@@ -74,47 +54,7 @@ Prepared verified examples, downloads, and source-backed documentation.
  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
 [38;5;246m───╯[0m
 
-20:58:47 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/es/your-first-anki-deck.mdx?astroPropagatedAssets" may not be preserved when bundling.
-   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/blog/es/your-first-anki-deck.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
-   [38;5;246m│[0m
- [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
- [38;5;240m  │[0m               ────────────┬───────────  
- [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
- [38;5;240m  │[0m 
- [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[38;5;246m───╯[0m
-
-20:58:47 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/your-first-anki-deck.mdx?astroPropagatedAssets" may not be preserved when bundling.
-   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/blog/your-first-anki-deck.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
-   [38;5;246m│[0m
- [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
- [38;5;240m  │[0m               ────────────┬───────────  
- [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
- [38;5;240m  │[0m 
- [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[38;5;246m───╯[0m
-
-20:58:47 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/docs/docs/languages.mdx?astroPropagatedAssets" may not be preserved when bundling.
-   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/docs/docs/languages.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
-   [38;5;246m│[0m
- [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
- [38;5;240m  │[0m               ────────────┬───────────  
- [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
- [38;5;240m  │[0m 
- [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[38;5;246m───╯[0m
-
-20:58:47 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/docs/docs/index.mdx?astroPropagatedAssets" may not be preserved when bundling.
-   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/docs/docs/index.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
-   [38;5;246m│[0m
- [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
- [38;5;240m  │[0m               ────────────┬───────────  
- [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
- [38;5;240m  │[0m 
- [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[38;5;246m───╯[0m
-
-20:58:47 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx?astroPropagatedAssets" may not be preserved when bundling.
+21:22:29 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx?astroPropagatedAssets" may not be preserved when bundling.
    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
    [38;5;246m│[0m
  [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
@@ -124,127 +64,187 @@ Prepared verified examples, downloads, and source-backed documentation.
  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
 [38;5;246m───╯[0m
 
-20:58:47 [vite] ✓ built in 422ms
-20:58:47 [vite] ✓ built in 32ms
-20:58:47 [build] Rearranging server assets...
+21:22:29 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/es/your-first-anki-deck.mdx?astroPropagatedAssets" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/blog/es/your-first-anki-deck.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
+ [38;5;240m  │[0m               ────────────┬───────────  
+ [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+21:22:29 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/zh-cn/your-first-anki-deck.mdx?astroPropagatedAssets" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/blog/zh-cn/your-first-anki-deck.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
+ [38;5;240m  │[0m               ────────────┬───────────  
+ [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+21:22:29 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/docs/docs/languages.mdx?astroPropagatedAssets" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/docs/docs/languages.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
+ [38;5;240m  │[0m               ────────────┬───────────  
+ [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+21:22:29 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/docs/docs/index.mdx?astroPropagatedAssets" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/docs/docs/index.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
+ [38;5;240m  │[0m               ────────────┬───────────  
+ [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+21:22:29 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/docs/docs/quickstart.mdx?astroPropagatedAssets" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/docs/docs/quickstart.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
+ [38;5;240m  │[0m               ────────────┬───────────  
+ [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+21:22:29 [WARN] [vite] [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use astro:head-inject" in "src/content/blog/your-first-anki-deck.mdx?astroPropagatedAssets" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/content/blog/your-first-anki-deck.mdx?astroPropagatedAssets:2:6 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m2 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m"use astro:head-inject";
+ [38;5;240m  │[0m               ────────────┬───────────  
+ [38;5;240m  │[0m                           ╰───────────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+21:22:29 [vite] ✓ built in 584ms
+21:22:29 [vite] ✓ built in 33ms
+21:22:29 [build] Rearranging server assets...
 
  generating static routes 
-20:58:47   ├─ /404.html (+14ms) 
-20:58:47   ├─ /blog/index.html (+4ms) 
-20:58:47   ├─ /blog/stable-ids-and-deck-updates/index.html (+38ms) 
-20:58:47   ├─ /blog/your-first-anki-deck/index.html (+9ms) 
-20:58:47   ├─ /examples/index.html (+17ms) 
-20:58:47   ├─ /robots.txt (+1ms) 
-20:58:47   ├─ /rss.xml (+5ms) 
-20:58:47   ├─ /zh-cn/blog/index.html (+2ms) 
-20:58:47   ├─ /es/blog/index.html (+2ms) 
-20:58:47   ├─ /es/blog/stable-ids-and-deck-updates/index.html (+5ms) 
-20:58:47   ├─ /es/blog/your-first-anki-deck/index.html (+6ms) 
-20:58:47   ├─ /zh-cn/blog/stable-ids-and-deck-updates/index.html (+4ms) 
-20:58:47   ├─ /zh-cn/blog/your-first-anki-deck/index.html (+4ms) 
-20:58:47   ├─ /zh-cn/examples/index.html (+10ms) 
-20:58:47   ├─ /es/examples/index.html (+10ms) 
-20:58:47   ├─ /zh-cn/rss.xml (+1ms) 
-20:58:47   ├─ /es/rss.xml (+1ms) 
-20:58:47   ├─ /zh-cn/index.html (+11ms) 
-20:58:47   ├─ /es/index.html (+9ms) 
-20:58:47   ├─ /index.html (+10ms) 
-20:58:47   ├─ /docs/index.html (+9ms) 
-20:58:47   ├─ /docs/ai-anki-cards/index.html (+3ms) 
-20:58:47   ├─ /docs/anki-forge-vs-genanki/index.html (+2ms) 
-20:58:47   ├─ /docs/api/index.html (+2ms) 
-20:58:47   ├─ /docs/build-guarantees/index.html (+2ms) 
-20:58:47   ├─ /docs/cards/index.html (+2ms) 
-20:58:47   ├─ /docs/compatibility/index.html (+2ms) 
-20:58:47   ├─ /docs/concepts/index.html (+2ms) 
-20:58:47   ├─ /docs/csv-to-anki/index.html (+2ms) 
-20:58:47   ├─ /docs/custom-notetypes/index.html (+2ms) 
-20:58:47   ├─ /docs/development/index.html (+2ms) 
-20:58:47   ├─ /docs/genanki-migration/index.html (+2ms) 
-20:58:47   ├─ /docs/image-occlusion/index.html (+2ms) 
-20:58:47   ├─ /docs/installation/index.html (+2ms) 
-20:58:47   ├─ /docs/json-to-anki/index.html (+2ms) 
-20:58:47   ├─ /docs/languages/index.html (+3ms) 
-20:58:47   ├─ /docs/media/index.html (+2ms) 
-20:58:47   ├─ /docs/node-api/index.html (+2ms) 
-20:58:47   ├─ /docs/node-quickstart/index.html (+2ms) 
-20:58:47   ├─ /docs/python-api/index.html (+4ms) 
-20:58:47   ├─ /docs/python-diagnostics/index.html (+2ms) 
-20:58:47   ├─ /docs/python-migration/index.html (+2ms) 
-20:58:47   ├─ /docs/python-quickstart/index.html (+2ms) 
-20:58:47   ├─ /docs/quickstart/index.html (+5ms) 
-20:58:47   ├─ /docs/rust-api/index.html (+2ms) 
-20:58:47   ├─ /docs/rust-guide/index.html (+2ms) 
-20:58:47   ├─ /docs/templates/index.html (+2ms) 
-20:58:47   ├─ /docs/troubleshooting/index.html (+2ms) 
-20:58:47   ├─ /docs/updates/index.html (+2ms) 
-20:58:47   ├─ /es/docs/index.html (+2ms) 
-20:58:47   ├─ /es/docs/ai-anki-cards/index.html (+2ms) 
-20:58:47   ├─ /es/docs/anki-forge-vs-genanki/index.html (+2ms) 
-20:58:47   ├─ /es/docs/api/index.html (+2ms) 
-20:58:47   ├─ /es/docs/build-guarantees/index.html (+2ms) 
-20:58:47   ├─ /es/docs/cards/index.html (+2ms) 
-20:58:47   ├─ /es/docs/compatibility/index.html (+2ms) 
-20:58:47   ├─ /es/docs/concepts/index.html (+2ms) 
-20:58:47   ├─ /es/docs/csv-to-anki/index.html (+2ms) 
-20:58:47   ├─ /es/docs/custom-notetypes/index.html (+2ms) 
-20:58:47   ├─ /es/docs/development/index.html (+2ms) 
-20:58:47   ├─ /es/docs/genanki-migration/index.html (+2ms) 
-20:58:47   ├─ /es/docs/image-occlusion/index.html (+2ms) 
-20:58:47   ├─ /es/docs/installation/index.html (+2ms) 
-20:58:47   ├─ /es/docs/json-to-anki/index.html (+2ms) 
-20:58:47   ├─ /es/docs/languages/index.html (+2ms) 
-20:58:47   ├─ /es/docs/media/index.html (+2ms) 
-20:58:47   ├─ /es/docs/node-api/index.html (+2ms) 
-20:58:47   ├─ /es/docs/node-quickstart/index.html (+2ms) 
-20:58:47   ├─ /es/docs/python-api/index.html (+2ms) 
-20:58:47   ├─ /es/docs/python-diagnostics/index.html (+2ms) 
-20:58:47   ├─ /es/docs/python-migration/index.html (+2ms) 
-20:58:47   ├─ /es/docs/python-quickstart/index.html (+2ms) 
-20:58:47   ├─ /es/docs/quickstart/index.html (+2ms) 
-20:58:47   ├─ /es/docs/rust-api/index.html (+2ms) 
-20:58:47   ├─ /es/docs/rust-guide/index.html (+2ms) 
-20:58:47   ├─ /es/docs/templates/index.html (+2ms) 
-20:58:47   ├─ /es/docs/troubleshooting/index.html (+2ms) 
-20:58:47   ├─ /es/docs/updates/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/ai-anki-cards/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/anki-forge-vs-genanki/index.html (+6ms) 
-20:58:47   ├─ /zh-cn/docs/api/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/build-guarantees/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/cards/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/compatibility/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/concepts/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/csv-to-anki/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/custom-notetypes/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/development/index.html (+1ms) 
-20:58:47   ├─ /zh-cn/docs/genanki-migration/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/image-occlusion/index.html (+1ms) 
-20:58:47   ├─ /zh-cn/docs/installation/index.html (+1ms) 
-20:58:47   ├─ /zh-cn/docs/json-to-anki/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/languages/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/media/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/node-api/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/node-quickstart/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/python-api/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/python-diagnostics/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/python-migration/index.html (+1ms) 
-20:58:47   ├─ /zh-cn/docs/python-quickstart/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/quickstart/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/rust-api/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/rust-guide/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/templates/index.html (+2ms) 
-20:58:47   ├─ /zh-cn/docs/troubleshooting/index.html (+1ms) 
-20:58:47   ├─ /zh-cn/docs/updates/index.html (+2ms) 
-20:58:47 ✓ Completed in 417ms.
+21:22:29   ├─ /404.html (+12ms) 
+21:22:29   ├─ /blog/index.html (+5ms) 
+21:22:29   ├─ /blog/stable-ids-and-deck-updates/index.html (+44ms) 
+21:22:29   ├─ /blog/your-first-anki-deck/index.html (+9ms) 
+21:22:29   ├─ /examples/index.html (+18ms) 
+21:22:29   ├─ /robots.txt (+2ms) 
+21:22:29   ├─ /rss.xml (+5ms) 
+21:22:29   ├─ /zh-cn/blog/index.html (+3ms) 
+21:22:29   ├─ /es/blog/index.html (+2ms) 
+21:22:29   ├─ /es/blog/stable-ids-and-deck-updates/index.html (+5ms) 
+21:22:29   ├─ /es/blog/your-first-anki-deck/index.html (+5ms) 
+21:22:29   ├─ /zh-cn/blog/stable-ids-and-deck-updates/index.html (+4ms) 
+21:22:29   ├─ /zh-cn/blog/your-first-anki-deck/index.html (+5ms) 
+21:22:29   ├─ /zh-cn/examples/index.html (+11ms) 
+21:22:29   ├─ /es/examples/index.html (+11ms) 
+21:22:29   ├─ /zh-cn/rss.xml (+1ms) 
+21:22:29   ├─ /es/rss.xml (+1ms) 
+21:22:29   ├─ /zh-cn/index.html (+12ms) 
+21:22:29   ├─ /es/index.html (+10ms) 
+21:22:29   ├─ /index.html (+11ms) 
+21:22:29   ├─ /docs/index.html (+13ms) 
+21:22:29   ├─ /docs/ai-anki-cards/index.html (+3ms) 
+21:22:29   ├─ /docs/anki-forge-vs-genanki/index.html (+3ms) 
+21:22:29   ├─ /docs/api/index.html (+3ms) 
+21:22:29   ├─ /docs/build-guarantees/index.html (+3ms) 
+21:22:29   ├─ /docs/cards/index.html (+3ms) 
+21:22:29   ├─ /docs/compatibility/index.html (+3ms) 
+21:22:29   ├─ /docs/concepts/index.html (+2ms) 
+21:22:29   ├─ /docs/csv-to-anki/index.html (+3ms) 
+21:22:29   ├─ /docs/custom-notetypes/index.html (+3ms) 
+21:22:29   ├─ /docs/development/index.html (+3ms) 
+21:22:29   ├─ /docs/genanki-migration/index.html (+3ms) 
+21:22:29   ├─ /docs/image-occlusion/index.html (+3ms) 
+21:22:29   ├─ /docs/installation/index.html (+2ms) 
+21:22:29   ├─ /docs/json-to-anki/index.html (+3ms) 
+21:22:29   ├─ /docs/languages/index.html (+5ms) 
+21:22:29   ├─ /docs/media/index.html (+3ms) 
+21:22:29   ├─ /docs/node-api/index.html (+3ms) 
+21:22:29   ├─ /docs/node-quickstart/index.html (+2ms) 
+21:22:29   ├─ /docs/python-api/index.html (+5ms) 
+21:22:29   ├─ /docs/python-diagnostics/index.html (+3ms) 
+21:22:29   ├─ /docs/python-migration/index.html (+3ms) 
+21:22:29   ├─ /docs/python-quickstart/index.html (+2ms) 
+21:22:29   ├─ /docs/quickstart/index.html (+7ms) 
+21:22:29   ├─ /docs/rust-api/index.html (+3ms) 
+21:22:29   ├─ /docs/rust-guide/index.html (+3ms) 
+21:22:29   ├─ /docs/templates/index.html (+3ms) 
+21:22:29   ├─ /docs/troubleshooting/index.html (+3ms) 
+21:22:29   ├─ /docs/updates/index.html (+3ms) 
+21:22:29   ├─ /es/docs/index.html (+3ms) 
+21:22:29   ├─ /es/docs/ai-anki-cards/index.html (+2ms) 
+21:22:29   ├─ /es/docs/anki-forge-vs-genanki/index.html (+3ms) 
+21:22:29   ├─ /es/docs/api/index.html (+3ms) 
+21:22:29   ├─ /es/docs/build-guarantees/index.html (+2ms) 
+21:22:29   ├─ /es/docs/cards/index.html (+2ms) 
+21:22:29   ├─ /es/docs/compatibility/index.html (+3ms) 
+21:22:29   ├─ /es/docs/concepts/index.html (+4ms) 
+21:22:29   ├─ /es/docs/csv-to-anki/index.html (+3ms) 
+21:22:29   ├─ /es/docs/custom-notetypes/index.html (+3ms) 
+21:22:29   ├─ /es/docs/development/index.html (+2ms) 
+21:22:29   ├─ /es/docs/genanki-migration/index.html (+2ms) 
+21:22:29   ├─ /es/docs/image-occlusion/index.html (+2ms) 
+21:22:29   ├─ /es/docs/installation/index.html (+3ms) 
+21:22:29   ├─ /es/docs/json-to-anki/index.html (+3ms) 
+21:22:29   ├─ /es/docs/languages/index.html (+2ms) 
+21:22:29   ├─ /es/docs/media/index.html (+2ms) 
+21:22:29   ├─ /es/docs/node-api/index.html (+2ms) 
+21:22:29   ├─ /es/docs/node-quickstart/index.html (+2ms) 
+21:22:29   ├─ /es/docs/python-api/index.html (+2ms) 
+21:22:29   ├─ /es/docs/python-diagnostics/index.html (+2ms) 
+21:22:29   ├─ /es/docs/python-migration/index.html (+2ms) 
+21:22:29   ├─ /es/docs/python-quickstart/index.html (+2ms) 
+21:22:29   ├─ /es/docs/quickstart/index.html (+2ms) 
+21:22:29   ├─ /es/docs/rust-api/index.html (+2ms) 
+21:22:29   ├─ /es/docs/rust-guide/index.html (+2ms) 
+21:22:29   ├─ /es/docs/templates/index.html (+2ms) 
+21:22:29   ├─ /es/docs/troubleshooting/index.html (+2ms) 
+21:22:29   ├─ /es/docs/updates/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/index.html (+3ms) 
+21:22:29   ├─ /zh-cn/docs/ai-anki-cards/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/anki-forge-vs-genanki/index.html (+7ms) 
+21:22:29   ├─ /zh-cn/docs/api/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/build-guarantees/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/cards/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/compatibility/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/concepts/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/csv-to-anki/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/custom-notetypes/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/development/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/genanki-migration/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/image-occlusion/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/installation/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/json-to-anki/index.html (+3ms) 
+21:22:29   ├─ /zh-cn/docs/languages/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/media/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/node-api/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/node-quickstart/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/python-api/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/python-diagnostics/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/python-migration/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/python-quickstart/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/quickstart/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/rust-api/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/rust-guide/index.html (+2ms) 
+21:22:29   ├─ /zh-cn/docs/templates/index.html (+2ms) 
+21:22:30   ├─ /zh-cn/docs/troubleshooting/index.html (+2ms) 
+21:22:30   ├─ /zh-cn/docs/updates/index.html (+2ms) 
+21:22:30 ✓ Completed in 574ms.
 
-20:58:47 [build] ✓ Completed in 905ms.
-20:58:47 [starlight:pagefind] Building search index with Pagefind...
-20:58:48 [starlight:pagefind] Found 103 HTML files.
-20:58:48 [starlight:pagefind] Finished building search index in 0.77s.
-20:58:48 [@astrojs/sitemap] `sitemap-index.xml` created at `dist`
-20:58:48 [build] 103 page(s) built in 2.33s
-20:58:48 [build] Complete!
+21:22:30 [build] ✓ Completed in 1.23s.
+21:22:30 [starlight:pagefind] Building search index with Pagefind...
+21:22:30 [starlight:pagefind] Found 103 HTML files.
+21:22:30 [starlight:pagefind] Finished building search index in 0.97s.
+21:22:30 [@astrojs/sitemap] `sitemap-index.xml` created at `dist`
+21:22:30 [build] 103 page(s) built in 2.92s
+21:22:30 [build] Complete!
 npm warn Unknown env config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
 npm warn Unknown user config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
 
@@ -273,5 +273,5 @@ npm warn Unknown user config "home". This will stop working in the next major ve
 > node scripts/check-structured-data.mjs
 
 Verified structured data for 102 published HTML pages.
-Recorded 103 pages and 277 resources for commit c828b2d895c8d6cda143862bcd2daaff3a8a279a.
+Recorded 103 pages and 277 resources for commit a9f3facef528369976712b81ead4c99c162b2907.
 Same-input rebuild preserved all 199 HTML and machine files byte for byte; the second artifact is ready for release checks.

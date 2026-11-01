@@ -4,7 +4,7 @@
   "status": "passed",
   "engineeringStatus": "passed",
   "engineeringOnly": false,
-  "startedAt": "2026-11-01T03:58:54.786Z",
+  "startedAt": "2026-11-01T04:22:38.388Z",
   "runtime": {
     "node": "v24.19.0",
     "platform": "darwin",
@@ -21,7 +21,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 2094,
+      "durationMs": 2741,
       "log": {
         "file": "01-check-content.log",
         "sha256": "a1389801725ed2ad44fc0ec79d1d44e234e28bcf301c29f2188742fc483de3a3",
@@ -38,7 +38,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 1979,
+      "durationMs": 2252,
       "log": {
         "file": "02-check-site.log",
         "sha256": "13fab88ad16c813c1f01d958145e122e60e4af63602f610f8ebf0f08b17a6ead",
@@ -55,7 +55,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 994,
+      "durationMs": 1102,
       "log": {
         "file": "03-check-surface.log",
         "sha256": "b3db5872f218e05cf35a87cd0b58b7242cb3a117fc7d3ba2e9502132055844c4",
@@ -72,7 +72,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 1657,
+      "durationMs": 1787,
       "log": {
         "file": "04-check-machine.log",
         "sha256": "a66dcc4b7e69f3232f7118d9bc0382ca254f5bb73e3fd28a226d238f45b6110d",
@@ -89,7 +89,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 753,
+      "durationMs": 842,
       "log": {
         "file": "05-check-schema.log",
         "sha256": "d7cd528dbae04b3ca3a4f5746ee0536cf74ec0499e848de227e8101979025b23",
@@ -106,11 +106,11 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 19997,
+      "durationMs": 22379,
       "log": {
         "file": "06-check-gates.log",
-        "sha256": "a66b4bf1d292073875f02d2f097e749728fccf432db576406d73ddf7c3c1b8b7",
-        "bytes": 1509
+        "sha256": "cc05c0dae74c0659094cea19706b1608cc6d4299ee6779424da128aa4c825d8a",
+        "bytes": 1506
       }
     },
     {
@@ -123,11 +123,11 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 27524,
+      "durationMs": 31075,
       "log": {
         "file": "07-test-browser.log",
-        "sha256": "8bfd6eda2a634ae8fcc6b125ec088873c1b65b1ccdd7ff8739ad66b77e28df0a",
-        "bytes": 2292
+        "sha256": "97711f02b251b17b7ca07c7393a0e2a815e1b53da7c4e3755db5c7d677cf486d",
+        "bytes": 2289
       }
     },
     {
@@ -140,7 +140,7 @@
       "status": "passed",
       "exitCode": 0,
       "signal": null,
-      "durationMs": 4518,
+      "durationMs": 5060,
       "log": {
         "file": "08-check-search.log",
         "sha256": "7e2f3458af858528e53c2790cc1a00995de148699cd062c3e915777282a41e4c",
@@ -149,7 +149,7 @@
     }
   ],
   "identity": {
-    "commit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
+    "commit": "a9f3facef528369976712b81ead4c99c162b2907",
     "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
     "configuration": {
       "site": "https://ankiforge.dev",
@@ -162,18 +162,18 @@
       "es"
     ]
   },
-  "manifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
-  "artifactSha256": "026aea00ce01ed5c00855daf176920df4ad98602a90b3479eacd409343278fb6",
+  "manifestSha256": "23a68acba10e58db19a800fbae548e8005c7d05d03aae37f4ca7cc4209599552",
+  "artifactSha256": "36d25e60332d7b496f5f99ea7ffc0856229f759a63b44cebd08e423166efd692",
   "fileCount": 382,
   "attachments": [
     {
       "file": "search-results.json",
-      "sha256": "a87193770cca243e4028244b520a2e29d27875bd8183e4697a9bf8b7760d8067",
+      "sha256": "6dd9bc6409f141f4804fc19d07100ea148c0b4b70fcb9c04ab764051e781eea9",
       "bytes": 149042
     }
   ],
   "artifactUnchanged": true,
-  "finishedAt": "2026-11-01T04:05:03.677Z",
+  "finishedAt": "2026-11-01T04:25:14.938Z",
   "postBuildReviews": {
     "schemaVersion": 1,
     "status": "passed",
@@ -189,20 +189,20 @@
       "zh-CN",
       "es"
     ],
-    "currentManifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+    "currentManifestSha256": "23a68acba10e58db19a800fbae548e8005c7d05d03aae37f4ca7cc4209599552",
     "configSha256": "9bd308b2e1c0a16690f526cfeb6a0591937b5e6109a875be08cc53d033ca77eb",
     "reports": [
       {
         "kind": "usage-tasks",
         "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-root.json",
-        "sha256": "24ea4c7f630afe30f25e8e74db08344b33df127ccc552777a69d940599f8d155",
-        "bytes": 216500,
-        "reviewerRun": "/root/spanish_standards/independent-usage-2026-10-31/root",
-        "originManifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
-        "originCommit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
-        "currentManifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+        "sha256": "b407146d7829e41087122c85872ffd94e2ca9756e9e5592741373099157dd1fa",
+        "bytes": 218373,
+        "reviewerRun": "/root/spanish_standards/independent-usage-ci-rebuild-a9f3face-2026-11-01/root",
+        "originManifestSha256": "23a68acba10e58db19a800fbae548e8005c7d05d03aae37f4ca7cc4209599552",
+        "originCommit": "a9f3facef528369976712b81ead4c99c162b2907",
+        "currentManifestSha256": "23a68acba10e58db19a800fbae548e8005c7d05d03aae37f4ca7cc4209599552",
         "reused": false,
-        "resourceScopeSha256": "4c58aa359bf429bd6b0400e1ab5d9030197dafecb0f0403c596d46d03aefad81"
+        "resourceScopeSha256": "f50ff835523ba46f2b8b0361ff3adf1e486d9de5650b3c4028fc28f3a9afcb0c"
       },
       {
         "kind": "machine-read",
@@ -212,11 +212,11 @@
         "reviewerRun": "/root/spanish_spec/independent-machine-root-2026-10-31",
         "originManifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
         "originCommit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
-        "currentManifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
-        "reused": false,
+        "currentManifestSha256": "23a68acba10e58db19a800fbae548e8005c7d05d03aae37f4ca7cc4209599552",
+        "reused": true,
         "resourceScopeSha256": "f3a3a62d30dd405f47800f7e7cd6c50e854fe61807eceda880a0452a329ef8e7"
       }
     ]
   },
-  "reviewAttachedAt": "2026-11-01T04:05:03.677Z"
+  "reviewAttachedAt": "2026-11-01T04:25:14.938Z"
 }

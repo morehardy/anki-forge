@@ -3,23 +3,23 @@ npm warn Unknown user config "home". This will stop working in the next major ve
 > anki-forge-website@0.1.0 check:gates
 > node --test scripts/site-gates.test.mjs
 
-✔ built-site gate rejects missing action (2075.513917ms)
-✔ built-site gate rejects broken anchor (2098.993458ms)
-✔ built-site gate rejects wrong-language link (2128.779167ms)
-✔ built-site gate rejects an incomplete search artifact manifest (353.021583ms)
-✔ built-site gate checks the mobile language switch as well as the header (1481.466167ms)
-✔ built-site gate rejects an external footer destination on a different host (1767.962083ms)
-✔ machine gate rejects missing Markdown (358.568792ms)
-✔ machine gate rejects broken AI index (1693.947ms)
-✔ machine gate rejects wrong software version (353.312291ms)
-✔ machine gate rejects wrong article headline (417.208375ms)
-✔ machine gate rejects wrong article language (427.42375ms)
-✔ machine gate rejects wrong canonical (416.542166ms)
-✔ valid links to the site root pass the machine gate (1722.861041ms)
-✔ generation leaves existing exports intact when an HTML link is broken (1173.101584ms)
+✔ built-site gate rejects missing action (2673.118625ms)
+✔ built-site gate rejects broken anchor (2356.547083ms)
+✔ built-site gate rejects wrong-language link (2562.992ms)
+✔ built-site gate rejects an incomplete search artifact manifest (364.36675ms)
+✔ built-site gate checks the mobile language switch as well as the header (1601.99ms)
+✔ built-site gate rejects an external footer destination on a different host (2011.807833ms)
+✔ machine gate rejects missing Markdown (412.004416ms)
+✔ machine gate rejects broken AI index (1979.826958ms)
+✔ machine gate rejects wrong software version (391.676917ms)
+✔ machine gate rejects wrong article headline (452.336625ms)
+✔ machine gate rejects wrong article language (457.041459ms)
+✔ machine gate rejects wrong canonical (461.961709ms)
+✔ valid links to the site root pass the machine gate (1844.146375ms)
+✔ generation leaves existing exports intact when an HTML link is broken (1222.773625ms)
 Generated 93 Markdown pages and 3 AI indexes.
 Generated 93 Markdown pages and 3 AI indexes.
-✔ repeated machine generation is byte-for-byte deterministic and removes stale exports (3167.501709ms)
+✔ repeated machine generation is byte-for-byte deterministic and removes stale exports (3196.752208ms)
 ℹ tests 15
 ℹ suites 0
 ℹ pass 15
@@ -27,4 +27,4 @@ Generated 93 Markdown pages and 3 AI indexes.
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 19821.81775
+ℹ duration_ms 22196.778834

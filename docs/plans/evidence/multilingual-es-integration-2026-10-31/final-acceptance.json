@@ -35,7 +35,7 @@
   "deployments": {
     "prefix": {
       "status": "passed",
-      "manifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
+      "manifestSha256": "3acb0fc02295a3822a6318e35f238b82d44bfb81234b42a65750faca23c25ad3",
       "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
       "checks": 8,
       "browserTests": 23,
@@ -62,7 +62,7 @@
     },
     "root": {
       "status": "passed",
-      "manifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+      "manifestSha256": "23a68acba10e58db19a800fbae548e8005c7d05d03aae37f4ca7cc4209599552",
       "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
       "checks": 8,
       "browserTests": 23,
@@ -89,7 +89,10 @@
     }
   },
   "externalStatusAtLocalAcceptance": {
-    "ci": "not-yet-run",
+    "ci": "first-run rejected shared-dependency-symlink HTML; revised artifact evidence pending CI",
     "deployed": false
-  }
+  },
+  "artifactBuildCommit": "a9f3facef528369976712b81ead4c99c162b2907",
+  "buildEnvironmentDiagnosis": "build-environment-diagnosis.json",
+  "machineResourceReuseAudit": "machine-artifact-reuse-audit.json"
 }

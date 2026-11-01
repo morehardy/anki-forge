@@ -10,14 +10,14 @@ from urllib.parse import urlparse
 
 BASE = Path('docs/plans/evidence/multilingual-es-integration-2026-10-31')
 EX = BASE / 'executions'
-RUN = '/root/spanish_standards/independent-usage-2026-10-31'
+RUN = '/root/spanish_standards/independent-usage-ci-rebuild-a9f3face-2026-11-01'
 sha = lambda data: hashlib.sha256(data).hexdigest()
 load = lambda path: json.loads(Path(path).read_text())
 binding = lambda path: {'path': str(path), 'sha256': sha(Path(path).read_bytes())}
 def evidence(path, description):
     return {**binding(path), 'description': description}
 
-audit_path = BASE / 'usage-execution-audit.json'
+audit_path = BASE / 'usage-ci-execution-audit.json'
 audit = load(audit_path)
 sources = {row['path']: row for row in audit['currentSourceDependencyBindings']}
 basic = {
@@ -33,10 +33,10 @@ observed_limits = {
     'es': '“APKG original de distribución”; “La reexportación desde Anki no conserva estas pruebas”; “Asigna una clave única a cada registro lógico de origen”.',
 }
 for environment in ['prefix', 'root']:
-    directory = BASE / f'usage-browser-{environment}'
+    directory = BASE / f'usage-browser-{environment}-ci'
     tour_path = directory / 'browser-tour.json'
     tour = load(tour_path)
-    manifest_path = BASE / f'{environment}-origin-manifest.json'
+    manifest_path = BASE / f'{environment}-ci-origin-manifest.json'
     manifest = load(manifest_path)
     assert sha(manifest_path.read_bytes()) == tour['manifestSha256']
     frozen = Path('target/spanish-integration') / f'{environment}-artifact'
@@ -59,13 +59,15 @@ for environment in ['prefix', 'root']:
         'originManifest': {**binding(manifest_path), 'commit': manifest['commit']},
         'resourceBindings': [{'route': route, 'sha256': records[route]['sha256']} for route in sorted(bound_routes)],
         'scopeNotes': [
+            'New independent usage re-review of the CI-compatible rebuild at a9f3facef528369976712b81ead4c99c162b2907. The prior build used a shared node_modules symlink; the rebuilt artifact uses ordinary local dependencies, changing generated Astro CSS scopes/HTML hashes without changing source inputSha256. This report is based on new real browser tours and newly inspected screenshots, not replacement of old HTML hashes. No product source was changed by this reviewer.',
             'Independent actual Chrome tours ran against this exact frozen artifact after all delivered files were independently hashed and matched to the manifest/current source identity. Each release locale completed all six tasks. No old usage verdict or hash refresh was used.',
             'The reviewer read complete actual rendered task prose, checked the real clipboard code matches, inspected all 18 screenshots for this environment, and retrieved four linked recipe inputs per locale through actual HTTP requests. The captured root and prefix task texts/code blocks are exactly equal, while routes were exercised separately under the correct base.',
-            'SDK installation and execution were freshly performed by the coordinator in this integration batch. This reviewer independently read the new logs, checked all 23 current execution-source/dependency bindings and three exact retained basic program copies, reviewed the execution/inspection code, and freshly decoded 10 APKG outputs with independent Python ZIP/Zstandard/SQLite inspection. The reviewer did not itself rerun the SDKs or import into an Anki GUI.',
+            'SDK installation and execution were performed by the coordinator earlier in this integration batch and are explicitly reused for this CI rebuild only after verifying that all bound source/dependency bytes and output receipts remain unchanged. This reviewer rechecked the retained logs, verified all 23 current execution-source/dependency bindings and three exact retained basic program copies, reviewed the execution/inspection code, and freshly decoded 10 APKG outputs with independent Python ZIP/Zstandard/SQLite inspection. The reviewer did not itself rerun the SDKs or import into an Anki GUI.',
             'Actual public consumer Cargo locks, PyPI wheel hashes and npm package integrity records are retained. Repository dependency bindings document current project inputs and do not replace the separate public consumer resolution evidence. JSON temporary consumer copies were removed by the reviewed runner; its current source snapshot and actual run logs supply provenance.',
             'All Markdown/llms resources are integrity-bound as required by the release scope. readUrls name actual browser task reading; binding a machine resource does not claim it was independently read in this usage review. Unrelated generated showcase/APKG files are covered by full artifact integrity and are not unstable report resource bindings.',
             'Acceptance covers local frozen-artifact task completion at 1440×1000 in real Chrome. It does not establish live deployment/CDN headers, every OS/runtime, mobile task performance or Anki-client import guarantees. Those limitations remain explicit in the documentation.',
         ],
+        'ciRereviewEvidence': evidence(BASE / 'usage-ci-rereview.json', 'New Chrome tour provenance, old/new artifact delta, unchanged-source and execution-reuse audit; preserved historical reports remain intact.'),
         'observationHelper': evidence(BASE / 'usage-tour-helper.mjs', 'Exact helper used for actual browser navigation, locale assertions, real clipboard copying, recipe HTTP downloads and screenshots. It records observations only and does not issue review verdicts.'),
         'entries': {}, 'openIssues': [],
     }
@@ -88,7 +90,7 @@ for environment in ['prefix', 'root']:
                 sdk, source, copy = basic[task_id]
                 steps += [
                     f'Read the actual localized heading {task["h1"]!r}, public 0.3.1 installation instructions, complete program, run command, persistent spanish.apkg output and stable spanish/es:hola note identity.',
-                    'Independently read the new coordinator execution/install/inspection logs and directly inspected the retained APKG: valid SQLite, one note, one Basic card, no media, hola → hello in Spanish; the identity payload contains namespace spanish and key es:hola.',
+                    'Rechecked the unchanged coordinator execution/install/inspection logs from this integration batch and directly inspected the retained APKG: valid SQLite, one note, one Basic card, no media, hola → hello in Spanish; the identity payload contains namespace spanish and key es:hola.',
                 ]
                 if task_id == 'python-basic':
                     steps.append(f'The actual localized search query {queries[locale]!r} reached the Python quickstart; CPython/wheel and Windows activation guidance were readable and did not require an Anki installation for export.')
@@ -100,24 +102,24 @@ for environment in ['prefix', 'root']:
                 if sdk == 'python': deps.append('bindings/python/pyproject.toml')
                 if sdk == 'node': deps.append('bindings/node/package.json')
                 execution.append({
-                    **evidence(EX / 'basic' / sdk / 'basic.log', f'Fresh coordinator public ankiforge 0.3.1 {sdk} execution exited zero and produced persistent spanish.apkg. Independently reviewed here, bound to the exact current/copied program and dependencies.'),
+                    **evidence(EX / 'basic' / sdk / 'basic.log', f'Retained coordinator public ankiforge 0.3.1 {sdk} execution exited zero and produced persistent spanish.apkg. Independently reviewed here, bound to the exact current/copied program and dependencies.'),
                     'sourceBindings': [sources[source]], 'dependencyBindings': [sources[name] for name in deps],
                 })
                 proof.extend([
-                    evidence(EX / 'basic' / sdk / 'install.log', 'Actual new public-package install commands and successful exit; version fixed to 0.3.1.'),
-                    evidence(EX / 'basic' / sdk / 'inspection.log', 'New independent Rust ZIP/protobuf/SQLite inspector output; additionally checked by this reviewer using Python ZIP/Zstandard/SQLite.'),
+                    evidence(EX / 'basic' / sdk / 'install.log', 'Retained actual public-package install commands and successful exit; version fixed to 0.3.1.'),
+                    evidence(EX / 'basic' / sdk / 'inspection.log', 'Retained independent Rust ZIP/protobuf/SQLite inspector output; additionally checked by this reviewer using Python ZIP/Zstandard/SQLite.'),
                     evidence(EX / 'basic' / copy, 'Exact executable program retained from this batch; raw bytes equal current source and trimmed bytes equal the real browser clipboard.'),
                     evidence(EX / 'basic' / sdk / 'spanish.apkg', 'Actual persistent basic output directly inspected by this reviewer.'),
-                    evidence(EX / 'basic/execution-inputs.json', 'Current source/dependency snapshot accompanying this fresh basic execution, independently checked without changing any hash.'),
+                    evidence(EX / 'basic/execution-inputs.json', 'Current source/dependency snapshot accompanying the retained basic execution, independently checked without changing any hash.'),
                 ])
                 resolution = {'rust': 'rust/Cargo.lock', 'python': 'python/pip-report.json', 'node': 'node/package-lock.json'}[sdk]
                 proof.append(evidence(EX / 'basic' / resolution, 'Actual public consumer resolution: crates.io checksum, PyPI wheel hash, or npm integrity as appropriate; independently read and confirmed ankiforge 0.3.1.'))
             elif task_id in ['json-media', 'original-baseline-update']:
                 execution.append({
-                    **evidence(EX / 'public-recipe.log', 'Fresh public 0.3.1 Rust, Python and TypeScript JSON programs ran successfully in isolated consumers. Actual logs and reviewer-decoded v1/v2 APKGs establish three notes/cards, two exact media assets, one answer change, stable note identities and allowed comparison/prepared publication.'),
+                    **evidence(EX / 'public-recipe.log', 'Retained public 0.3.1 Rust, Python and TypeScript JSON programs from this integration batch ran successfully in isolated consumers. Actual logs and reviewer-decoded v1/v2 APKGs establish three notes/cards, two exact media assets, one answer change, stable note identities and allowed comparison/prepared publication.'),
                     'sourceBindings': recipe['sourceBindings'], 'dependencyBindings': recipe['dependencyBindings'],
                 })
-                proof.append(evidence(EX / 'public-recipe-inputs.json', 'Current source, fixture, verifier, version and dependency bindings for the fresh JSON execution; every stored hash equals current bytes.'))
+                proof.append(evidence(EX / 'public-recipe-inputs.json', 'Current source, fixture, verifier, version and dependency bindings for the retained JSON execution; every stored hash equals current bytes.'))
                 for sdk in ['rust', 'python', 'node']:
                     for name in ['installation.json', 'comparison.json', 'review.json', 'v1.apkg', 'v2.apkg']:
                         proof.append(evidence(EX / 'public-json' / sdk / name, f'Actual {sdk} JSON {name} from this integration batch; registry version/integrity, comparison policy and output identity/content independently reviewed.'))
@@ -131,7 +133,7 @@ for environment in ['prefix', 'root']:
                         route = urlparse(download['url']).path
                         proof += [
                             evidence(download['path'], f'Actual {download["httpStatus"]} HTTP download from the rendered {download["anchorText"]!r} anchor; {download["bytes"]} bytes and MIME {download["contentType"]}, exact fixture hash.'),
-                            {'route': route, 'sha256': records[route]['sha256'], 'observation': 'Actual linked resource fetched from this frozen artifact and saved; bytes match the source fixture consumed by the fresh SDK runs.'},
+                            {'route': route, 'sha256': records[route]['sha256'], 'observation': 'Actual linked resource fetched from this frozen artifact and saved; bytes match the source fixture consumed by the retained SDK runs.'},
                         ]
                 else:
                     steps += [
@@ -148,13 +150,13 @@ for environment in ['prefix', 'root']:
                     'Actual localized wording read: '+observed_limits[locale],
                 ]
                 execution.append({
-                    **evidence(EX / 'basic/python/troubleshooting.log', 'Fresh public Python 0.3.1 duplicate-key failure and corrected-key recovery, independently matched to the rendered localized remedy and directly inspected recovered APKG.'),
+                    **evidence(EX / 'basic/python/troubleshooting.log', 'Retained public Python 0.3.1 duplicate-key failure and corrected-key recovery, independently matched to the rendered localized remedy and directly inspected recovered APKG.'),
                     'sourceBindings': [sources['docs/troubleshooting.md'], sources['docs/zh-cn/troubleshooting.md'], binding('docs/es/troubleshooting.md')],
                     'dependencyBindings': [sources[name] for name in ['docs/ai-quickstart.json', 'bindings/python/pyproject.toml', 'scripts/packaged_consumer/src/inspection.rs', 'scripts/packaged_consumer/src/bin/verify_apkg.rs']],
                 })
                 proof += [
                     evidence(EX / 'basic/python/duplicate-key.py', 'Actual retained diagnostic/recovery script used by the coordinator; duplicate source:1 is followed by correction to a unique key.'),
-                    evidence(EX / 'basic/python/inspection.log', 'Fresh independent inspector verifies the recovered package has two notes/cards and the ordinary basic package has one.'),
+                    evidence(EX / 'basic/python/inspection.log', 'Retained independent inspector verifies the recovered package has two notes/cards and the ordinary basic package has one.'),
                     evidence(EX / 'basic/python/recovered.apkg', 'Actual recovered output; separately decoded by this reviewer through ZIP/Zstandard/SQLite.'),
                 ]
             results.append({'id': task_id, 'status': 'passed', 'readUrls': task['readUrls'], 'steps': steps, 'executionEvidence': execution, 'evidence': proof, 'openIssues': []})
