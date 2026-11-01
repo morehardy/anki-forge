@@ -1,0 +1,30 @@
+npm warn Unknown user config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> anki-forge-website@0.1.0 check:gates
+> node --test scripts/site-gates.test.mjs
+
+✔ built-site gate rejects missing action (2220.2615ms)
+✔ built-site gate rejects broken anchor (2209.092375ms)
+✔ built-site gate rejects wrong-language link (2179.474ms)
+✔ built-site gate rejects an incomplete search artifact manifest (376.352583ms)
+✔ built-site gate checks the mobile language switch as well as the header (1596.772625ms)
+✔ built-site gate rejects an external footer destination on a different host (1895.656125ms)
+✔ machine gate rejects missing Markdown (392.052916ms)
+✔ machine gate rejects broken AI index (1967.918166ms)
+✔ machine gate rejects wrong software version (378.194916ms)
+✔ machine gate rejects wrong article headline (520.309459ms)
+✔ machine gate rejects wrong article language (451.096833ms)
+✔ machine gate rejects wrong canonical (439.278209ms)
+✔ valid links to the site root pass the machine gate (1836.387625ms)
+✔ generation leaves existing exports intact when an HTML link is broken (1227.836333ms)
+Generated 93 Markdown pages and 3 AI indexes.
+Generated 93 Markdown pages and 3 AI indexes.
+✔ repeated machine generation is byte-for-byte deterministic and removes stale exports (3235.358292ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21129.036833
