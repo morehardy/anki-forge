@@ -1,0 +1,382 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-01",
+  "reviewerType": "ai",
+  "reviewerRun": "remaining-locales-ja-de-independent-review-2026-11-01",
+  "reviewerTask": "/root/pt_br_reference",
+  "independence": {
+    "authoredReviewedSamples": false,
+    "otherWork": "Reviewer authored unrelated pt-BR reference docs; no pt-BR material is approved by this report."
+  },
+  "scope": "Independent editorial and technical source review of ja/de language briefs, 50 selected UI keys and four complete document samples per locale.",
+  "mode": "sample-only",
+  "releaseReady": false,
+  "status": "sample-review-passed",
+  "method": [
+    "Blind-read each locale without English source comparison.",
+    "Compare facts and constraints against current authoritative English sources.",
+    "Independently verify exact protected code and semantic sections plus UI key/interpolation coverage.",
+    "Request corrections from the integrator; re-review changed inputs before closing findings."
+  ],
+  "locales": {
+    "ja": {
+      "status": "sample-review-passed",
+      "sourceInputHashes": {
+        "website/src/content/docs/docs/quickstart.mdx": "274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9",
+        "docs/json-to-anki.md": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+        "docs/updates.md": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+        "docs/python/api.md": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+        "anki_forge/examples/target_api_basic.rs": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+        "website/src/i18n/en.json": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848",
+        "website/section-contracts.json": "9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b",
+        "website/language-briefs.json": "c6b522d697a52715c296064559b2d2590e93469aed5e5b1d7e7c07b6987cd7bc"
+      },
+      "reviewedTargetHashes": {
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/language-brief.json": "9019163f8af12c4e31643cdb99de023ca8cc4c18096c2cd1a4dbd7d69351b87b",
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/home-ui.json": "8664e416718dc141a80f73f29c869cc719baa54a7c4bc3d720a7866232297220",
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/quickstart.md": "fe0500fd8dcd4e351a5c69f07924fdf8e8581a0a4cce6398d5038fe471b6df99",
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/json-to-anki.md": "3854b6f797272977f5926022df6651e48f9dea5538fe5ca1c1caee20661b2f20",
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/updates.md": "3c7c8e628b08c69d253ca6453bdf9ea922068d6d0eae3c71f10a753babfa1bc2",
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/python-api.md": "efdc6cd76a4286f44047418499ed264a5b15e4eac54eb838d6c690309b56d4c7"
+      },
+      "technical": {
+        "status": "sample-reviewed",
+        "findings": [],
+        "evidence": [
+          "Read all four translated document bodies against their authoritative English sources after a separate monolingual read.",
+          "Confirmed stable namespace/note keys, original distribution APKG baseline, no deletion sync, high-risk policy and hard-error distinctions, temporary ownership, prepared publication consumption and fork/GIL boundaries are preserved.",
+          "Re-extracted and compared code blocks independently; quickstart component expansion uses the current Rust source, without executing the program."
+        ]
+      },
+      "linguistic": {
+        "status": "sample-reviewed",
+        "score": {
+          "terminology": 4,
+          "syntax": 4,
+          "register": 4,
+          "usability": 4
+        },
+        "evidence": [
+          "Monolingual reading found coherent です・ます technical instructions and stable note/card/deck distinctions.",
+          "Count classifiers and explanatory boundaries are readable; the image term and both API-action clarifications were independently reread after revision."
+        ]
+      },
+      "checks": {
+        "documents": [
+          {
+            "topic": "quickstart",
+            "source": "website/src/content/docs/docs/quickstart.mdx",
+            "codeBlocks": 3,
+            "codeBytesUnchanged": true,
+            "sectionContract": "passed",
+            "stableSections": [
+              "install",
+              "export-your-first-deck",
+              "continue"
+            ]
+          },
+          {
+            "topic": "json-to-anki",
+            "source": "docs/json-to-anki.md",
+            "codeBlocks": 10,
+            "codeBytesUnchanged": true,
+            "sectionContract": "passed",
+            "stableSections": [
+              "shared-inputs",
+              "rust",
+              "python",
+              "node",
+              "check-and-import-the-result"
+            ]
+          },
+          {
+            "topic": "updates",
+            "source": "docs/updates.md",
+            "codeBlocks": 5,
+            "codeBytesUnchanged": true,
+            "sectionContract": "passed",
+            "stableSections": [
+              "run-two-versions-and-compare",
+              "policy-and-inspection-limits",
+              "evidence-and-identity",
+              "client-import-behavior-and-release-review",
+              "build-once-review-then-publish"
+            ]
+          },
+          {
+            "topic": "python-api",
+            "source": "docs/python/api.md",
+            "codeBlocks": 1,
+            "codeBytesUnchanged": true,
+            "sectionContract": "passed",
+            "stableSections": [
+              "project-and-note-values",
+              "models-and-templates",
+              "media-and-occlusion",
+              "operations-and-results",
+              "errors-and-concurrency",
+              "addition-context",
+              "source-api-details",
+              "prepare-review-and-publish"
+            ]
+          }
+        ],
+        "ui": {
+          "keys": 50,
+          "keysExistInSource": true,
+          "interpolationParametersUnchanged": true
+        }
+      },
+      "findings": [
+        {
+          "id": "JA-01",
+          "severity": "minor",
+          "axis": "linguistic",
+          "file": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/language-brief.json",
+          "location": "languageChecks[3]",
+          "quote": "社交画像の日本語フォント",
+          "recommendation": "Use SNS共有用画像の日本語フォント; 社交画像 is not natural Japanese technical terminology.",
+          "status": "resolved",
+          "resolution": {
+            "needle": "SNS共有用画像の日本語フォント",
+            "explanation": "Natural Japanese term for social-sharing images replaces the calque.",
+            "reviewedFileSha256": "9019163f8af12c4e31643cdb99de023ca8cc4c18096c2cd1a4dbd7d69351b87b",
+            "independentlyReread": true
+          }
+        },
+        {
+          "id": "JA-02",
+          "severity": "minor",
+          "axis": "technical-clarity",
+          "file": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/python-api.md",
+          "location": "media-and-occlusion",
+          "quote": "ビルド完了時に画像をデコードし",
+          "recommendation": "Identify ImageOcclusionBuilder explicitly: このビルダーの .build() は画像をデコードし. This prevents confusion with later Project.build().",
+          "status": "resolved",
+          "resolution": {
+            "needle": "このビルダーの `.build()` は画像をデコードし",
+            "explanation": "The image decoding step is explicitly tied to ImageOcclusionBuilder.build().",
+            "reviewedFileSha256": "efdc6cd76a4286f44047418499ed264a5b15e4eac54eb838d6c690309b56d4c7",
+            "independentlyReread": true
+          }
+        },
+        {
+          "id": "JA-03",
+          "severity": "minor",
+          "axis": "technical-clarity",
+          "file": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/python-api.md",
+          "location": "operations-and-results / options.update_policy",
+          "quote": "Create では無効です",
+          "recommendation": "State Create に指定すると設定エラーになります so invalid configuration cannot be mistaken for a silently ignored option.",
+          "status": "resolved",
+          "resolution": {
+            "needle": "Create に指定すると設定エラーになります",
+            "explanation": "The invalid Create option is explicitly described as a configuration error.",
+            "reviewedFileSha256": "efdc6cd76a4286f44047418499ed264a5b15e4eac54eb838d6c690309b56d4c7",
+            "independentlyReread": true
+          }
+        }
+      ],
+      "openIssues": [],
+      "rereview": {
+        "status": "passed",
+        "scope": "Reread all five corrected phrases in context, then independently reran protected-code, section-contract and 50-key UI checks for each locale after the final brief status update.",
+        "closedFindings": [
+          "JA-01",
+          "JA-02",
+          "JA-03"
+        ],
+        "authoringChecksPreserved": true,
+        "indexSha256": "9a08430221e31fa0ae8c798f6001138dd4aaf4173f35549f0fa11f9e0b3d1e4d"
+      }
+    },
+    "de": {
+      "status": "sample-review-passed",
+      "sourceInputHashes": {
+        "website/src/content/docs/docs/quickstart.mdx": "274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9",
+        "docs/json-to-anki.md": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+        "docs/updates.md": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+        "docs/python/api.md": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+        "anki_forge/examples/target_api_basic.rs": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+        "website/src/i18n/en.json": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848",
+        "website/section-contracts.json": "9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b",
+        "website/language-briefs.json": "c6b522d697a52715c296064559b2d2590e93469aed5e5b1d7e7c07b6987cd7bc"
+      },
+      "reviewedTargetHashes": {
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/language-brief.json": "c310fc54514e1a28ce9b39ec28c2ab530808745e4478c6df6035d8cf5853eda3",
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/home-ui.json": "871d34e1c2d7c58d51381e332801577a806da4ede3ccb10ccd3f21fcf5946a67",
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/quickstart.md": "aedcddd82f1da4432f75f46aafc29926b5b3a3035c1fbd73965abe4f41c80e9d",
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/json-to-anki.md": "c9d69a877371fc780181db29480f59c1681b201970ecbe737ddb2cc1d319de44",
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/updates.md": "78ba118cee9fd765ab0c1b7b6d519be3ec34aa0afdc976621cae996c5d196d01",
+        "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/python-api.md": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771"
+      },
+      "technical": {
+        "status": "sample-reviewed",
+        "findings": [],
+        "evidence": [
+          "Read all four translated document bodies against their authoritative English sources after a separate monolingual read.",
+          "Confirmed stable namespace/note keys, original distribution APKG baseline, no deletion sync, high-risk policy and hard-error distinctions, temporary ownership, prepared publication consumption and fork/GIL boundaries are preserved.",
+          "Re-extracted and compared code blocks independently; quickstart component expansion uses the current Rust source, without executing the program."
+        ]
+      },
+      "linguistic": {
+        "status": "sample-reviewed",
+        "score": {
+          "terminology": 4,
+          "syntax": 4,
+          "register": 4,
+          "usability": 4
+        },
+        "evidence": [
+          "Monolingual reading found consistent direct Du instructions, idiomatic task headings and stable Notiz/Karte/Stapel terminology.",
+          "Both API-paragraph wording revisions were independently reread; grammar and localization are resolved without changing source meaning."
+        ]
+      },
+      "checks": {
+        "documents": [
+          {
+            "topic": "quickstart",
+            "source": "website/src/content/docs/docs/quickstart.mdx",
+            "codeBlocks": 3,
+            "codeBytesUnchanged": true,
+            "sectionContract": "passed",
+            "stableSections": [
+              "install",
+              "export-your-first-deck",
+              "continue"
+            ]
+          },
+          {
+            "topic": "json-to-anki",
+            "source": "docs/json-to-anki.md",
+            "codeBlocks": 10,
+            "codeBytesUnchanged": true,
+            "sectionContract": "passed",
+            "stableSections": [
+              "shared-inputs",
+              "rust",
+              "python",
+              "node",
+              "check-and-import-the-result"
+            ]
+          },
+          {
+            "topic": "updates",
+            "source": "docs/updates.md",
+            "codeBlocks": 5,
+            "codeBytesUnchanged": true,
+            "sectionContract": "passed",
+            "stableSections": [
+              "run-two-versions-and-compare",
+              "policy-and-inspection-limits",
+              "evidence-and-identity",
+              "client-import-behavior-and-release-review",
+              "build-once-review-then-publish"
+            ]
+          },
+          {
+            "topic": "python-api",
+            "source": "docs/python/api.md",
+            "codeBlocks": 1,
+            "codeBytesUnchanged": true,
+            "sectionContract": "passed",
+            "stableSections": [
+              "project-and-note-values",
+              "models-and-templates",
+              "media-and-occlusion",
+              "operations-and-results",
+              "errors-and-concurrency",
+              "addition-context",
+              "source-api-details",
+              "prepare-review-and-publish"
+            ]
+          }
+        ],
+        "ui": {
+          "keys": 50,
+          "keysExistInSource": true,
+          "interpolationParametersUnchanged": true
+        }
+      },
+      "findings": [
+        {
+          "id": "DE-01",
+          "severity": "minor",
+          "axis": "linguistic",
+          "file": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/python-api.md",
+          "location": "media-and-occlusion",
+          "quote": "Am zurückgegebenen Note",
+          "recommendation": "Use Am zurückgegebenen Note-Objekt to make the grammatical gender and the API-object reference explicit.",
+          "status": "resolved",
+          "resolution": {
+            "needle": "Am zurückgegebenen Note-Objekt",
+            "explanation": "The compound noun states the API object and fixes the grammatical construction.",
+            "reviewedFileSha256": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771",
+            "independentlyReread": true
+          }
+        },
+        {
+          "id": "DE-02",
+          "severity": "minor",
+          "axis": "linguistic",
+          "file": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/python-api.md",
+          "location": "operations-and-results",
+          "quote": "weder ein outcome noch einen Dateibesitzer",
+          "recommendation": "Translate the ordinary noun: weder ein Erfolgs- oder Fehlerergebnis noch einen Dateibesitzer.",
+          "status": "resolved",
+          "resolution": {
+            "needle": "weder ein Erfolgs- oder Fehlerergebnis noch einen Dateibesitzer",
+            "explanation": "The ordinary English noun is replaced with a clear German success-or-failure result phrase.",
+            "reviewedFileSha256": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771",
+            "independentlyReread": true
+          }
+        }
+      ],
+      "openIssues": [],
+      "rereview": {
+        "status": "passed",
+        "scope": "Reread all five corrected phrases in context, then independently reran protected-code, section-contract and 50-key UI checks for each locale after the final brief status update.",
+        "closedFindings": [
+          "DE-01",
+          "DE-02"
+        ],
+        "authoringChecksPreserved": true,
+        "indexSha256": "886766a72ed2dc16bc8cb7f77abe928b8d3085f2db563356563ff97813c660d8"
+      }
+    }
+  },
+  "limitations": [
+    "No complete-locale or production acceptance.",
+    "No browser, font, layout, Pagefind ranking or external search verification.",
+    "No sample program execution during this review.",
+    "Structural checks do not establish translation completeness by themselves; prose was read independently.",
+    "Existing authored metadata such as the English 2026-10-25 review date is preserved as source history, not claimed as this review date."
+  ],
+  "sourceBriefBaseline": {
+    "commit": "ad98a6f5b9293e7657429e3ed423d11e55259a74",
+    "path": "website/language-briefs.json",
+    "baselineSha256": "29a40b5553535668741756670ae786ef57a1b496b8b7daa55e7db865f85de335",
+    "currentSha256": "c6b522d697a52715c296064559b2d2590e93469aed5e5b1d7e7c07b6987cd7bc",
+    "unchangedEntries": [
+      "en",
+      "zh-CN",
+      "es"
+    ],
+    "additionalCurrentEntries": [
+      "pt-BR"
+    ],
+    "interpretation": "The archived authoring checks used the three-language structure at ad98a6f. The current shared brief adds pt-BR; the existing English, Simplified Chinese and Spanish entries remain identical. Current reviewer inputs are hashed separately."
+  },
+  "reviewHistory": [
+    {
+      "stage": "initial-blind-read-and-source-comparison",
+      "outcome": "Three Japanese and two German minor findings; no major or critical findings.",
+      "oldTargetHashSource": "Unmodified authoring-checks.json outputs preserve the earlier authoring snapshot; the reviewer did not recompute those hashes before the integrator began revisions."
+    },
+    {
+      "stage": "integrator-revision-and-independent-rereview",
+      "outcome": "All five findings resolved. Current input and target hashes and static checks independently recomputed after the final sample status changes."
+    }
+  ],
+  "openIssues": []
+}

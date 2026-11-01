@@ -1,0 +1,18 @@
+{
+  "ja": [
+    {"query":"Rustで最初のデッキを生成したい","expected":"quickstart","intent":"no-space Rust first deck"},
+    {"query":"JSONから画像と音声付きデッキを生成したい","expected":"json-to-anki","intent":"kanji/kana mixed with JSON"},
+    {"query":"配布済みデッキを元のAPKGから更新したい","expected":"updates","intent":"original package update"},
+    {"query":"PythonでBuildOptions.temporaryとcloseの寿命を知りたい","expected":"python-api","intent":"API identifier mixed with kana"},
+    {"query":"でっきをこうしんしたい","expected":"updates","intent":"hiragana variation"},
+    {"query":"デッキを更新したい","expected":"updates","intent":"katakana/kanji control"},
+    {"query":"zzzxqv 987654321","expected":null,"intent":"unrelated negative"}
+  ],
+  "de": [
+    {"query":"Wie erzeuge ich mit Rust meinen ersten Stapel?","expected":"quickstart","intent":"natural first-deck task"},
+    {"query":"Stapelaktualisierung mit dem ursprünglichen APKG","expected":"updates","intent":"compound update intent"},
+    {"query":"Wie behalte ich stabile Notizschlüssel bei einer Aktualisierung?","expected":"updates","intent":"compound stable note key"},
+    {"query":"Wie verwalte ich die Lebensdauer von BuildOptions.temporary in Python?","expected":"python-api","intent":"natural API task"},
+    {"query":"zzzxqv 987654321","expected":null,"intent":"unrelated negative"}
+  ]
+}

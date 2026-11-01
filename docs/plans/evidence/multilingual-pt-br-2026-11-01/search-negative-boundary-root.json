@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-negative-search-boundary-review",
+  "status": "passed",
+  "mode": "release-candidate",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/pt_br_technical/search-boundary-root-2026-11-01",
+  "scope": "Five frozen Portuguese negative queries; all eleven nonempty top-three result rows (ten distinct pages) fetched over real HTTP and their technical claims reviewed independently of ranking. The empty query has no body to read. No positive-query acceptance or broad browser-usability conclusion is asserted.",
+  "inputSha256": "035f635c8d91691475f8e8be98bd915bc3b02652046dbc3e154876f06317d99d",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es",
+    "pt-BR"
+  ],
+  "readOrigin": "http://127.0.0.1:50610",
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/origin-manifest.json",
+    "sha256": "e402cf153a6f60548799a7dfcd486fd32fd2b0b2b31d604d2fa18d6de7dcbf46",
+    "commit": "24da571c26da12fcbcbccb5007e090900c9bff71"
+  },
+  "searchResults": {
+    "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/engineering/final-root/search-results.json",
+    "sha256": "294b784fd18d62db8c60e1b07f309a94cae9559b9f9804b225aeaa05fccd9e23"
+  },
+  "querySetSha256": "99dce779f45b0823f619d2252647946fd5466bafd091a8582041fd7d19b1e3c5",
+  "rawHttpObservations": {
+    "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/http-observations.json",
+    "sha256": "e70ff8bbcb88431e181c3d89d9863b02e1b4198bf1936bc2df38a96c0919f358"
+  },
+  "resourceBindings": [
+    {
+      "route": "/pt-br/docs/rust-guide/",
+      "sha256": "cd629b838f1f2aa74c3c3a82d7b96d4b5d4ce5c2c74283d6c1a2ea5298e07565"
+    },
+    {
+      "route": "/pt-br/docs/updates/",
+      "sha256": "13e575d885d7187b0996d8338e9100b71bfe36fa2a2ec7c6a3aa0fad15693512"
+    },
+    {
+      "route": "/pt-br/",
+      "sha256": "a9623a219ae06ca5ef0f4b298183d7b9e9f2526da0764031295c09db76cf019f"
+    },
+    {
+      "route": "/pt-br/blog/stable-ids-and-deck-updates/",
+      "sha256": "6a5e97baa44aeb20470b3126adfbbbd2e394df8f3998bf144fc75b49ac6c0078"
+    },
+    {
+      "route": "/pt-br/docs/troubleshooting/",
+      "sha256": "c72fa0e3b40b1d5326bcaedcc0dd1f3eb54bed99812c0909f4cda1c6a2391568"
+    },
+    {
+      "route": "/pt-br/docs/media/",
+      "sha256": "32549f709a1c1f8ef8ba852e9f473831fb9a3c934b924daf54e2b1c1278a765e"
+    },
+    {
+      "route": "/pt-br/docs/json-to-anki/",
+      "sha256": "59621a43c7c149a44578ddcc87286ba0036528f043040d37d608db83c479504c"
+    },
+    {
+      "route": "/pt-br/docs/anki-forge-vs-genanki/",
+      "sha256": "68de9e7ef41b04681a2fb071fa5dd32c11f813df9b8c784892e6b83873090d3d"
+    },
+    {
+      "route": "/pt-br/docs/compatibility/",
+      "sha256": "06dc72dec59a0bfd50fd88e789f3d1c0e8b32346ed0f02b95f06e00801706308"
+    },
+    {
+      "route": "/pt-br/blog/your-first-anki-deck/",
+      "sha256": "a6913e2e3582bcc0492215ff3a158b6097e11f3059123d6ad0b3f8f3f1dbf915"
+    }
+  ],
+  "cases": [
+    {
+      "id": "pt-BR-negative-01",
+      "query": "zxqvnj 847261 qqqrzz",
+      "intentId": "negative-gibberish",
+      "expectedBoundary": "Entrada sem significado não representa uma tarefa suportada. Resultado vazio é aceitável; a busca deve continuar utilizável e permitir reformular a consulta.",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "The exact nonsense query returned no results. This is allowed by the frozen boundary; there is no body from which a false supported capability could be inferred. This semantic check does not independently assert keyboard or search-form usability.",
+      "actualResultBodies": [],
+      "openIssues": []
+    },
+    {
+      "id": "pt-BR-negative-02",
+      "query": "Usar ankiforge-project-v1 sem alterar os dados",
+      "intentId": "negative-old-schema",
+      "expectedBoundary": "As receitas das ferramentas exigem ankiforge-project-v2 e rejeitam v1. Um resultado pode explicar a conversão necessária, mas não deve afirmar que v1 é aceito sem alterações. Resultado vazio é aceitável.",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "The first result explicitly rejects v1 for tool recipes and requires v2 without top-level name. The other two results describe APKG updates and data-to-APKG authoring without asserting that a tool v1 schema is accepted. Grouping v1/v2 as a retrieval concept therefore does not advertise schema compatibility or confuse caller-parsed recipe JSON with the tool schema.",
+      "actualResultBodies": [
+        {
+          "pageId": "rust-guide",
+          "url": "http://127.0.0.1:50610/pt-br/docs/rust-guide/",
+          "route": "/pt-br/docs/rust-guide/",
+          "sha256": "cd629b838f1f2aa74c3c3a82d7b96d4b5d4ce5c2c74283d6c1a2ea5298e07565",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/01-rust-guide.html",
+            "sha256": "cd629b838f1f2aa74c3c3a82d7b96d4b5d4ce5c2c74283d6c1a2ea5298e07565"
+          },
+          "quote": "As receitas das ferramentas agora exigem ankiforge-project-v2, sem name no nível superior; v1 é rejeitado.",
+          "observation": "Directly states the unsupported-v1 boundary and the required tool format."
+        },
+        {
+          "pageId": "updates",
+          "url": "http://127.0.0.1:50610/pt-br/docs/updates/",
+          "route": "/pt-br/docs/updates/",
+          "sha256": "13e575d885d7187b0996d8338e9100b71bfe36fa2a2ec7c6a3aa0fad15693512",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/02-updates.html",
+            "sha256": "13e575d885d7187b0996d8338e9100b71bfe36fa2a2ec7c6a3aa0fad15693512"
+          },
+          "quote": "O pacote inclui ankiforge-identity.json no formato ankiforge-identity-v1.",
+          "observation": "The v1 identifier here describes embedded package identity evidence, not the rejected ankiforge-project-v1 tool input. The body requires an original distribution APKG and contains no promise to accept an old project schema unchanged."
+        },
+        {
+          "pageId": "home",
+          "url": "http://127.0.0.1:50610/pt-br/",
+          "route": "/pt-br/",
+          "sha256": "a9623a219ae06ca5ef0f4b298183d7b9e9f2526da0764031295c09db76cf019f",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/03-home.html",
+            "sha256": "a9623a219ae06ca5ef0f4b298183d7b9e9f2526da0764031295c09db76cf019f"
+          },
+          "quote": "Comece com uma planilha CSV, dados JSON ou rascunhos criados com um assistente de IA.",
+          "observation": "Generic data inputs are described without claiming a specific legacy tool schema works unchanged. The explicit correction is supplied by the first result."
+        }
+      ],
+      "openIssues": []
+    },
+    {
+      "id": "pt-BR-negative-03",
+      "query": "Usar um APKG reexportado pelo Anki como base da atualização",
+      "intentId": "negative-reexport-baseline",
+      "expectedBoundary": "A atualização exige o APKG original distribuído anteriormente. Um APKG reexportado pelo Anki não o substitui. Um resultado pode explicar essa exigência; resultado vazio é aceitável.",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "All three returned pages require the original distributed package and explain why an Anki re-export is not a usable baseline. No result proposes weakening policy to recover missing identity evidence.",
+      "actualResultBodies": [
+        {
+          "pageId": "updates",
+          "url": "http://127.0.0.1:50610/pt-br/docs/updates/",
+          "route": "/pt-br/docs/updates/",
+          "sha256": "13e575d885d7187b0996d8338e9100b71bfe36fa2a2ec7c6a3aa0fad15693512",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/04-updates.html",
+            "sha256": "13e575d885d7187b0996d8338e9100b71bfe36fa2a2ec7c6a3aa0fad15693512"
+          },
+          "quote": "Uma reexportação pelo Anki não preserva essas evidências e não serve como base de atualização.",
+          "observation": "Direct rejection; missing identity evidence is not silently reconstructed."
+        },
+        {
+          "pageId": "blog:stable-ids-and-deck-updates",
+          "url": "http://127.0.0.1:50610/pt-br/blog/stable-ids-and-deck-updates/",
+          "route": "/pt-br/blog/stable-ids-and-deck-updates/",
+          "sha256": "6a5e97baa44aeb20470b3126adfbbbd2e394df8f3998bf144fc75b49ac6c0078",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/05-blog_stable-ids-and-deck-updates.html",
+            "sha256": "6a5e97baa44aeb20470b3126adfbbbd2e394df8f3998bf144fc75b49ac6c0078"
+          },
+          "quote": "Preserve o pacote original que você distribuiu; uma reexportação do Anki não é uma base aceita.",
+          "observation": "The blog distinguishes version history and stable note identity from a client re-export."
+        },
+        {
+          "pageId": "troubleshooting",
+          "url": "http://127.0.0.1:50610/pt-br/docs/troubleshooting/",
+          "route": "/pt-br/docs/troubleshooting/",
+          "sha256": "c72fa0e3b40b1d5326bcaedcc0dd1f3eb54bed99812c0909f4cda1c6a2391568",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/06-troubleshooting.html",
+            "sha256": "c72fa0e3b40b1d5326bcaedcc0dd1f3eb54bed99812c0909f4cda1c6a2391568"
+          },
+          "quote": "Use como base um APKG original distribuído com evidências completas de identidade. Pacotes reexportados pelo Anki não preservam essas evidências.",
+          "observation": "The recovery advice preserves the original-package requirement; corrupted evidence and namespace mismatches cannot be allowed by an update policy."
+        }
+      ],
+      "openIssues": []
+    },
+    {
+      "id": "pt-BR-negative-04",
+      "query": "Renomear PNG para errado.mp3 para virar áudio",
+      "intentId": "negative-mime-rename",
+      "expectedBoundary": "Renomear o arquivo não converte seus bytes nem o MIME retido. Um PNG renomeado para errado.mp3 pode falhar na detecção independente do build ou na validação da extensão. O resultado deve orientar a usar mídia correta ou convertê-la de fato; resultado vazio é aceitável.",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "The first result explicitly says renaming never changes retained MIME and explains that a PNG named wrong.mp3 can fail the separate build extension/content inspection. It distinguishes copying supplied media from creating media with another tool. The second result supplies actual image/audio assets and never teaches renaming as conversion.",
+      "actualResultBodies": [
+        {
+          "pageId": "media",
+          "url": "http://127.0.0.1:50610/pt-br/docs/media/",
+          "route": "/pt-br/docs/media/",
+          "sha256": "32549f709a1c1f8ef8ba852e9f473831fb9a3c934b924daf54e2b1c1278a765e",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/07-media.html",
+            "sha256": "32549f709a1c1f8ef8ba852e9f473831fb9a3c934b924daf54e2b1c1278a765e"
+          },
+          "quote": "Renomear um arquivo nunca altera o MIME preservado.",
+          "observation": "The same paragraph names MEDIA.DECLARED_MIME_MISMATCH for a PNG exported as wrong.mp3 and distinguishes typed category acceptance from independent build inspection."
+        },
+        {
+          "pageId": "json-to-anki",
+          "url": "http://127.0.0.1:50610/pt-br/docs/json-to-anki/",
+          "route": "/pt-br/docs/json-to-anki/",
+          "sha256": "59621a43c7c149a44578ddcc87286ba0036528f043040d37d608db83c479504c",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/08-json-to-anki.html",
+            "sha256": "59621a43c7c149a44578ddcc87286ba0036528f043040d37d608db83c479504c"
+          },
+          "quote": "A imagem é um diagrama de célula; o áudio é um tom curto gerado, não uma gravação de vocabulário falado.",
+          "observation": "The complete recipe uses separate genuine PNG and WAV resources; this is an example of valid media input rather than a claim that renaming changes its type."
+        }
+      ],
+      "openIssues": []
+    },
+    {
+      "id": "pt-BR-negative-05",
+      "query": "Redefinir diretamente o histórico de revisões do Anki",
+      "intentId": "negative-edit-study-progress",
+      "expectedBoundary": "A biblioteca gera APKGs e não altera diretamente uma coleção instalada do Anki nem o histórico de estudo. Um resultado pode explicar a separação entre geração do pacote e importação no cliente; resultado vazio é aceitável.",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "The returned bodies consistently describe producing an APKG and importing it in Anki. The comparison refuses guarantees about preserved review history; compatibility assigns history/import outcomes to client-specific checks; the first-deck tutorial explicitly requires an import after export. None offers an API or procedure for directly resetting an installed collection or review history. This is a non-endorsement finding, not a claim that every result directly states an unsupported-operation error.",
+      "actualResultBodies": [
+        {
+          "pageId": "anki-forge-vs-genanki",
+          "url": "http://127.0.0.1:50610/pt-br/docs/anki-forge-vs-genanki/",
+          "route": "/pt-br/docs/anki-forge-vs-genanki/",
+          "sha256": "68de9e7ef41b04681a2fb071fa5dd32c11f813df9b8c784892e6b83873090d3d",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/09-anki-forge-vs-genanki.html",
+            "sha256": "68de9e7ef41b04681a2fb071fa5dd32c11f813df9b8c784892e6b83873090d3d"
+          },
+          "quote": "Nem esta comparação nem a geração bem-sucedida de um APKG prometem uma migração sem perdas ou a preservação de todo o histórico de revisão.",
+          "observation": "Package creation and migration are distinguished; no direct history-edit capability is advertised."
+        },
+        {
+          "pageId": "compatibility",
+          "url": "http://127.0.0.1:50610/pt-br/docs/compatibility/",
+          "route": "/pt-br/docs/compatibility/",
+          "sha256": "06dc72dec59a0bfd50fd88e789f3d1c0e8b32346ed0f02b95f06e00801706308",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/10-compatibility.html",
+            "sha256": "06dc72dec59a0bfd50fd88e789f3d1c0e8b32346ed0f02b95f06e00801706308"
+          },
+          "quote": "Alterações de campos, modelos e campos de ordenação, edições locais e histórico de revisão exigem testes específicos para cada cliente.",
+          "observation": "The preceding paragraph separates ordinary export from Anki installation, import, rendering and codecs. Client behavior remains outside an APKG-generation success claim."
+        },
+        {
+          "pageId": "blog:your-first-anki-deck",
+          "url": "http://127.0.0.1:50610/pt-br/blog/your-first-anki-deck/",
+          "route": "/pt-br/blog/your-first-anki-deck/",
+          "sha256": "a6913e2e3582bcc0492215ff3a158b6097e11f3059123d6ad0b3f8f3f1dbf915",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/11-blog_your-first-anki-deck.html",
+            "sha256": "a6913e2e3582bcc0492215ff3a158b6097e11f3059123d6ad0b3f8f3f1dbf915"
+          },
+          "quote": "Após a exportação, importe spanish.apkg no Anki e revele a resposta do seu primeiro cartão.",
+          "observation": "The example writes a package and then instructs the user to import it; it never calls into an installed collection or resets study progress."
+        }
+      ],
+      "openIssues": []
+    }
+  ],
+  "openIssues": [],
+  "semanticComparison": {
+    "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-final-root/body-comparison.json",
+    "sha256": "61e51ef10a25673a1f274d0259220d67fb26d4e47bd25f1da60932b0bb4b5550"
+  },
+  "semanticReviewMethod": "Fresh root HTTP reads and exact text/paragraph comparison to the final prefix bodies independently read by this reviewer. The sole delta is one homepage noscript examples href losing the deployment prefix; that actual delta was inspected. The recorded per-page findings apply to the unchanged technical text."
+}

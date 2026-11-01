@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "locale": "ja",
+  "date": "2026-11-01",
+  "scope": "sample-authoring-static-checks",
+  "reviewStatus": "not-independently-reviewed",
+  "releaseReady": false,
+  "inputHashes": {
+    "website/src/content/docs/docs/quickstart.mdx": "274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9",
+    "docs/json-to-anki.md": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+    "docs/updates.md": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+    "docs/python/api.md": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+    "anki_forge/examples/target_api_basic.rs": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+    "website/section-contracts.json": "9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b",
+    "website/src/i18n/en.json": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848",
+    "website/language-briefs.json": "29a40b5553535668741756670ae786ef57a1b496b8b7daa55e7db865f85de335"
+  },
+  "outputs": {
+    "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/quickstart.md": "fe0500fd8dcd4e351a5c69f07924fdf8e8581a0a4cce6398d5038fe471b6df99",
+    "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/json-to-anki.md": "3854b6f797272977f5926022df6651e48f9dea5538fe5ca1c1caee20661b2f20",
+    "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/updates.md": "3c7c8e628b08c69d253ca6453bdf9ea922068d6d0eae3c71f10a753babfa1bc2",
+    "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/python-api.md": "d5c33fbeb9abbb44a5c5daa2dd189db941306798a58bc8a896ecb1be4a1e3214",
+    "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/home-ui.json": "8664e416718dc141a80f73f29c869cc719baa54a7c4bc3d720a7866232297220",
+    "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/language-brief.json": "96db0ae073f5ccf8b02f26450e3512022037b65ccef7195b3b8fa2c010a5c069"
+  },
+  "checks": {
+    "documents": [
+      {
+        "topic": "quickstart",
+        "source": "website/src/content/docs/docs/quickstart.mdx",
+        "output": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/quickstart.md",
+        "codeBlocks": 3,
+        "codeBytesUnchanged": true,
+        "semanticSections": [
+          "install",
+          "export-your-first-deck",
+          "continue"
+        ],
+        "sectionContract": "passed"
+      },
+      {
+        "topic": "json-to-anki",
+        "source": "docs/json-to-anki.md",
+        "output": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/json-to-anki.md",
+        "codeBlocks": 10,
+        "codeBytesUnchanged": true,
+        "semanticSections": [
+          "shared-inputs",
+          "rust",
+          "python",
+          "node",
+          "check-and-import-the-result"
+        ],
+        "sectionContract": "passed"
+      },
+      {
+        "topic": "updates",
+        "source": "docs/updates.md",
+        "output": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/updates.md",
+        "codeBlocks": 5,
+        "codeBytesUnchanged": true,
+        "semanticSections": [
+          "run-two-versions-and-compare",
+          "policy-and-inspection-limits",
+          "evidence-and-identity",
+          "client-import-behavior-and-release-review",
+          "build-once-review-then-publish"
+        ],
+        "sectionContract": "passed"
+      },
+      {
+        "topic": "python-api",
+        "source": "docs/python/api.md",
+        "output": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/python-api.md",
+        "codeBlocks": 1,
+        "codeBytesUnchanged": true,
+        "semanticSections": [
+          "project-and-note-values",
+          "models-and-templates",
+          "media-and-occlusion",
+          "operations-and-results",
+          "errors-and-concurrency",
+          "addition-context",
+          "source-api-details",
+          "prepare-review-and-publish"
+        ],
+        "sectionContract": "passed"
+      }
+    ],
+    "ui": {
+      "keys": 50,
+      "keysExistInSource": true,
+      "interpolationParametersUnchanged": true
+    }
+  },
+  "limitations": [
+    "No full-locale build or rendered browser verification.",
+    "No Pagefind ranking or external search validation.",
+    "No independent linguistic or technical review.",
+    "Published code examples were copied and compared; they were not executed during sample authoring."
+  ]
+}

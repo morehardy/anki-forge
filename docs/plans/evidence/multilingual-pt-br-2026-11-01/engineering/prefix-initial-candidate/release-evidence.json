@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-engineering",
+  "status": "failed",
+  "engineeringStatus": "failed",
+  "engineeringOnly": true,
+  "startedAt": "2026-11-01T15:44:42.849Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "checks": [
+    {
+      "name": "check:content",
+      "command": [
+        "npm",
+        "run",
+        "check:content"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 2473,
+      "log": {
+        "file": "01-check-content.log",
+        "sha256": "a1389801725ed2ad44fc0ec79d1d44e234e28bcf301c29f2188742fc483de3a3",
+        "bytes": 327
+      }
+    },
+    {
+      "name": "check:site",
+      "command": [
+        "npm",
+        "run",
+        "check:site"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 2788,
+      "log": {
+        "file": "02-check-site.log",
+        "sha256": "ad43d2aca917755d6c64022bea5cedb9239bf1dba3222101c2b76d0c4aa52a8b",
+        "bytes": 340
+      }
+    },
+    {
+      "name": "check:surface",
+      "command": [
+        "npm",
+        "run",
+        "check:surface"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 1334,
+      "log": {
+        "file": "03-check-surface.log",
+        "sha256": "5b45d3a4ccef89709de75a73194030bcbd0fd2655176de2b34cc69e611ea779c",
+        "bytes": 485
+      }
+    },
+    {
+      "name": "check:machine",
+      "command": [
+        "npm",
+        "run",
+        "check:machine"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 2210,
+      "log": {
+        "file": "04-check-machine.log",
+        "sha256": "6b35de6566db93f579db8f3aea8e87f73e71b6d87decd6f06bd2eabf5ab77ba0",
+        "bytes": 297
+      }
+    },
+    {
+      "name": "check:schema",
+      "command": [
+        "npm",
+        "run",
+        "check:schema"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 975,
+      "log": {
+        "file": "05-check-schema.log",
+        "sha256": "30924cd245b0a618845751f8876fc8c53b0f7b31960390e2f4a235acc66ee7f6",
+        "bytes": 283
+      }
+    },
+    {
+      "name": "check:gates",
+      "command": [
+        "npm",
+        "run",
+        "check:gates"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 29076,
+      "log": {
+        "file": "06-check-gates.log",
+        "sha256": "129dfa26caa71210ff1eb93677e45baa20f9d68df55ae06e4de0a3aada89e127",
+        "bytes": 1510
+      }
+    },
+    {
+      "name": "test:browser",
+      "command": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 38037,
+      "log": {
+        "file": "07-test-browser.log",
+        "sha256": "810903078eea2741f09f4dcf54f01e3074a8de8e9d6ce74c1baa43ec8a957b70",
+        "bytes": 2901
+      }
+    },
+    {
+      "name": "check:search",
+      "command": [
+        "npm",
+        "run",
+        "check:search"
+      ],
+      "status": "failed",
+      "exitCode": 1,
+      "signal": null,
+      "durationMs": 5662,
+      "log": {
+        "file": "08-check-search.log",
+        "sha256": "ae7a9ebff9844a10020019420c7a0c70f9024c867d3fad6ba2544c1be4faae93",
+        "bytes": 1282
+      }
+    }
+  ],
+  "identity": {
+    "commit": "6d0f6193e3f01b1f32cd25efe50bb7e57984126a",
+    "inputSha256": "7c587ece1d281594c497d37f67a30afdec01439a9095ef9aaa89e152bdc5b474",
+    "configuration": {
+      "site": "https://morehardy.github.io",
+      "base": "/anki-forge",
+      "customDomain": ""
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es",
+      "pt-BR"
+    ]
+  },
+  "manifestSha256": "e24261d6fd90146c71a8ed51fb5667268b7849d06ba9cca8f1680784acb21729",
+  "artifactSha256": "f3dc32153ffec76b8832c3bf576de6ae68b9e54f887e49ec4bc7e2735f5d1b8c",
+  "fileCount": 490,
+  "artifactUnchanged": true,
+  "finishedAt": "2026-11-01T15:46:05.827Z",
+  "error": "check:search failed; inspect 08-check-search.log\n\n'failed' !== 'passed'\n"
+}

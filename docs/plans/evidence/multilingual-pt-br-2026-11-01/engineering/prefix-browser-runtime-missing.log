@@ -1,0 +1,26 @@
+Release acceptance: running check:content
+Release acceptance: running check:site
+Release acceptance: running check:surface
+Release acceptance: running check:machine
+Release acceptance: running check:schema
+Release acceptance: running check:gates
+Release acceptance: running test:browser
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: test:browser failed; inspect 07-test-browser.log
+
+'failed' !== 'passed'
+
+    at runReleaseEvidence (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/release-evidence.mjs:196:14)
+    at async file:///Users/hp/Desktop/2026/anki-forge/website/scripts/release-evidence.mjs:302:23 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'failed',
+  expected: 'passed',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
