@@ -1,6 +1,6 @@
 # 巴葡首批实现与验收
 
-2026-11-01。范围遵循用户确认：巴葡先完成，日德仅准备术语与五类样稿。源码冻结提交为 `24da571c26da12fcbcbccb5007e090900c9bff71`，工作分支为 `codex/multilingual-common`。当前状态：**双配置工程验收及80个独立产物任务已通过，正在进行最终代码审查。未推送或部署新语言。**
+2026-11-01。范围遵循用户确认：巴葡先完成，日德仅准备术语与五类样稿。源码冻结提交为 `24da571c26da12fcbcbccb5007e090900c9bff71`，工作分支为 `codex/multilingual-common`。当前状态：**首批本地实现与验收完成；双配置工程及80个独立产物任务通过，规范与规格审查均无发现。未推送或部署新语言。**
 
 ## 实现范围
 
@@ -43,3 +43,12 @@ SDK消费程序执行证据是**显式复用**：独立代理重新核对23项�
 P0应先进入主线，确保巴葡PR的immutable base包含已发布西语的历史保护。巴葡当前是本地验收候选，尚无新CI部署或线上四语核验声明。巴葡实际发布后，再从独立verified artifact推进四语公开面；该维护仍须遵守原有验收合同。日德全文及法俄批次按既定顺序继续。
 
 日德样稿与最初八语失败探针见[样稿目录](../remaining-locales-2026-11-01/samples/ja/sample-index.md)、[德语样稿](../remaining-locales-2026-11-01/samples/de/sample-index.md)及[P2探针](../remaining-locales-2026-11-01/samples/probes/README.md)。八语回归是在隔离浏览器DOM中展示全部已配置选项，不是八种语言已经上线。
+
+## 最终代码审查
+
+固定比较为 `ad98a6f...17177d6`，两位独立代理分轴审查。
+
+- Standards：[规范报告](standards-review.md)，0项发现，最高严重度无。
+- Spec：[规格报告](spec-review.md)，0项发现，最高严重度无。
+
+审查后只更新排除构建输入的验收／进度记录。`evidence-only-commit-validation.json` 独立确认最终证据提交与受审源码具有相同inputSha，两套原始manifest对应的报告仍通过校验。后续CI仍应对其真实HEAD重建并执行门禁；本记录没有把本地结果写成线上发布。
