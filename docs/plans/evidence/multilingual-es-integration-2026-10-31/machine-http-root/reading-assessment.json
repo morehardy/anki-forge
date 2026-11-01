@@ -1,0 +1,468 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/spanish_spec/independent-machine-root-2026-10-31",
+  "completedAt": "2026-11-01T04:04:03.501Z",
+  "readOrigin": "http://127.0.0.1:49754",
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/root-origin-manifest.json",
+    "sha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+    "commit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
+    "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es"
+    ]
+  },
+  "method": "Fresh HTTP GET of each locale llms at the beginning of every task, parsing its actual links and following same-locale Markdown. Read captured text, including task instructions, API tables, example operations and limitations; author the answers below independently. The other deployment was separately fetched/read; its task bodies were also compared after exact origin/base substitution. No previous acceptance answers were imported.",
+  "limitations": "These are readings of frozen local build artifacts, not requests to the live public deployment or SDK/client execution. The HTTP metadata records actual loopback headers, not assumed production-host headers.",
+  "tasks": [
+    {
+      "locale": "en",
+      "id": "python-install",
+      "entryUrl": "http://127.0.0.1:49754/llms.txt",
+      "entryBody": "001-llms.txt.body",
+      "followed": [
+        {
+          "topic": "python-quickstart",
+          "label": "Generate Anki flashcards with Python",
+          "canonicalUrl": "https://ankiforge.dev/docs/python-quickstart/index.md",
+          "route": "/docs/python-quickstart/index.md"
+        },
+        {
+          "topic": "compatibility",
+          "label": "Compatibility and releases",
+          "canonicalUrl": "https://ankiforge.dev/docs/compatibility/index.md",
+          "route": "/docs/compatibility/index.md"
+        },
+        {
+          "topic": "python-api",
+          "label": "Python API",
+          "canonicalUrl": "https://ankiforge.dev/docs/python-api/index.md",
+          "route": "/docs/python-api/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "002-docs_python-quickstart_index.md.body",
+        "003-docs_compatibility_index.md.body",
+        "004-docs_python-api_index.md.body"
+      ],
+      "answer": "The root-domain llms index links directly to the English Python quickstart. Its runnable path is: create/activate a virtual environment, install `ankiforge==0.3.1` with pip, save the supplied Project/Note/BuildOptions example as `main.py`, and run `python main.py`. The result is persistent `spanish.apkg` containing hola → hello in the Spanish deck. Use ordinary CPython 3.11+ and a matching native wheel; the documented test range is 3.11–3.14, not every Python implementation. Windows has its own activation command, `.venv\\Scripts\\Activate.ps1`. Namespace `spanish` and note key `es:hola` must remain stable across edits. Anki is needed to import/view the result, not for generation; the API explains that closing a persistent artifact does not delete its file. Sources: [quickstart](https://ankiforge.dev/docs/python-quickstart/index.md), [runtime coverage](https://ankiforge.dev/docs/compatibility/index.md), [artifact API](https://ankiforge.dev/docs/python-api/index.md).",
+      "observations": [
+        "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example.",
+        "Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose."
+      ],
+      "status": "passed",
+      "openIssues": [
+        {
+          "id": "machine-root-en-python-api-heading",
+          "severity": "minor",
+          "route": "/docs/python-api/index.md",
+          "observation": "The subsection heading “Source API details” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "id": "node-api",
+      "entryUrl": "http://127.0.0.1:49754/llms.txt",
+      "entryBody": "005-llms.txt.body",
+      "followed": [
+        {
+          "topic": "node-api",
+          "label": "Node and TypeScript API",
+          "canonicalUrl": "https://ankiforge.dev/docs/node-api/index.md",
+          "route": "/docs/node-api/index.md"
+        },
+        {
+          "topic": "node-quickstart",
+          "label": "Generate Anki flashcards with Node.js",
+          "canonicalUrl": "https://ankiforge.dev/docs/node-quickstart/index.md",
+          "route": "/docs/node-quickstart/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "006-docs_node-api_index.md.body",
+        "007-docs_node-quickstart_index.md.body"
+      ],
+      "answer": "The root artifact provides the actual Node/TypeScript reference, not a fallback page. Start on Node 22.13+ with `npm install --include=optional ankiforge@0.3.1`; use `.mjs` for ESM or require for CommonJS. `Project.add` collects an explicitly keyed note, while `await project.build(BuildOptions.to(path))` returns output with artifact, report and snapshot. Retain an owner while reading temporary paths; persistent paths survive close. Media loading, bundle loading, build and comparison are asynchronous. Compare's success must be separated from `policy.allows_publication`; default policy blocks High/Critical findings. For update calls, preserve the original APKG and use `updateFrom`. Read native properties in camelCase and Rust-compatible snapshot properties in snake_case. TypeScript's documented path uses NodeNext, ES2022 and emitted `.mjs`. Sources: [API](https://ankiforge.dev/docs/node-api/index.md), [installation and runnable example](https://ankiforge.dev/docs/node-quickstart/index.md).",
+      "observations": [
+        "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names.",
+        "The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "en",
+      "id": "json-update",
+      "entryUrl": "http://127.0.0.1:49754/llms.txt",
+      "entryBody": "008-llms.txt.body",
+      "followed": [
+        {
+          "topic": "json-to-anki",
+          "label": "Generate and update Anki decks from JSON",
+          "canonicalUrl": "https://ankiforge.dev/docs/json-to-anki/index.md",
+          "route": "/docs/json-to-anki/index.md"
+        },
+        {
+          "topic": "updates",
+          "label": "Update Anki decks with stable note IDs",
+          "canonicalUrl": "https://ankiforge.dev/docs/updates/index.md",
+          "route": "/docs/updates/index.md"
+        },
+        {
+          "topic": "media",
+          "label": "Add images and audio to Anki cards",
+          "canonicalUrl": "https://ankiforge.dev/docs/media/index.md",
+          "route": "/docs/media/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "009-docs_json-to-anki_index.md.body",
+        "010-docs_updates_index.md.body",
+        "011-docs_media_index.md.body"
+      ],
+      "answer": "The three linked English guides provide a complete update path. Download the four recipe inputs into recipe/, choose the documented Rust/Python/TypeScript program, and use a fresh output directory. In Python, `python main.py recipe output/python` generates v1, records a comparison against it, prepares v2 with `update_from(baseline)`, checks the prepared comparison and publishes that candidate. The stable namespace is biology-json and each row's durable id is its note key. Both packages should contain 3 notes, 3 cards and 2 media assets; the new version changes the first answer and records RISK.NOTE_CHANGED without additions/removals. Keep the original v1 distribution and the reports. Never replace that baseline with an Anki re-export. Test first import and subsequent update in the target client, including local edits/scheduling; omission is not deletion synchronization. Sources: [JSON workflow](https://ankiforge.dev/docs/json-to-anki/index.md), [identity and policy](https://ankiforge.dev/docs/updates/index.md), [media behavior](https://ankiforge.dev/docs/media/index.md).",
+      "observations": [
+        "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result.",
+        "Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "en",
+      "id": "compatibility-constraints",
+      "entryUrl": "http://127.0.0.1:49754/llms.txt",
+      "entryBody": "012-llms.txt.body",
+      "followed": [
+        {
+          "topic": "compatibility",
+          "label": "Compatibility and releases",
+          "canonicalUrl": "https://ankiforge.dev/docs/compatibility/index.md",
+          "route": "/docs/compatibility/index.md"
+        },
+        {
+          "topic": "build-guarantees",
+          "label": "Build and output guarantees",
+          "canonicalUrl": "https://ankiforge.dev/docs/build-guarantees/index.md",
+          "route": "/docs/build-guarantees/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "013-docs_compatibility_index.md.body",
+        "014-docs_build-guarantees_index.md.body"
+      ],
+      "answer": "The root-domain compatibility text reports a dated 0.3.1 verification matrix: Rust 1.92, Node 22.13 plus current 22/24/26, and CPython 3.11–3.14. Its native targets are macOS arm64/x64, Linux x64 glibc and Windows x64; it explicitly excludes a universal host/runtime guarantee. Node's recorded scope excludes browser, Electron, Bun, musl and ARM64 Linux/Windows. Other Python implementations and free-threaded/subinterpreter use require separate validation. Build success certifies an APKG artifact, not every Anki import, renderer, codec, local edit or schedule. Updates need the original distribution evidence. The output guide distinguishes persistent and last-owner temporary files, hard inspection failures, per-file atomic replacement, and late failure after publication with unconfirmed durability. Prepared publication is included in public 0.3.1 despite the older English subsection heading. Sources: [compatibility](https://ankiforge.dev/docs/compatibility/index.md), [output guarantees](https://ankiforge.dev/docs/build-guarantees/index.md).",
+      "observations": [
+        "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability.",
+        "The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests."
+      ],
+      "status": "passed",
+      "openIssues": [
+        {
+          "id": "machine-root-en-build-guarantees-heading",
+          "severity": "minor",
+          "route": "/docs/build-guarantees/index.md",
+          "observation": "The subsection heading “Prepared publication from source” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        }
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "id": "python-install",
+      "entryUrl": "http://127.0.0.1:49754/zh-cn/llms.txt",
+      "entryBody": "015-zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "python-quickstart",
+          "label": "用 Python 生成 Anki 卡片",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/python-quickstart/index.md",
+          "route": "/zh-cn/docs/python-quickstart/index.md"
+        },
+        {
+          "topic": "compatibility",
+          "label": "兼容性与发布",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/compatibility/index.md",
+          "route": "/zh-cn/docs/compatibility/index.md"
+        },
+        {
+          "topic": "python-api",
+          "label": "Python API",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/python-api/index.md",
+          "route": "/zh-cn/docs/python-api/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "016-zh-cn_docs_python-quickstart_index.md.body",
+        "017-zh-cn_docs_compatibility_index.md.body",
+        "018-zh-cn_docs_python-api_index.md.body"
+      ],
+      "answer": "从根域名的中文 llms 入口可以直接到达中文 Python 入门页。操作顺序是创建并激活 .venv，用 `python -m pip install ankiforge==0.3.1` 安装，再将 Project/Note/BuildOptions 完整示例存为 main.py，执行 `python main.py`。会生成持久文件 spanish.apkg，其中 Spanish 牌组含 hola → hello。运行环境要求普通 CPython 3.11+ 和匹配 wheel；已记录验证的是 3.11–3.14。Windows 激活命令为 `.venv\\Scripts\\Activate.ps1`。命名空间 spanish 和键 es:hola 是后续编辑应保留的身份。生成不依赖安装 Anki，导入查看才使用 Anki；API 还区分了临时文件所有权和持久文件清理后的保留行为。来源：[Python 入门](https://ankiforge.dev/zh-cn/docs/python-quickstart/index.md)、[平台覆盖](https://ankiforge.dev/zh-cn/docs/compatibility/index.md)、[Python API](https://ankiforge.dev/zh-cn/docs/python-api/index.md)。",
+      "observations": [
+        "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example.",
+        "Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose."
+      ],
+      "status": "passed",
+      "openIssues": [
+        {
+          "id": "machine-root-zh-CN-python-api-heading",
+          "severity": "minor",
+          "route": "/zh-cn/docs/python-api/index.md",
+          "observation": "The subsection heading “源码 API 详情” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        }
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "id": "node-api",
+      "entryUrl": "http://127.0.0.1:49754/zh-cn/llms.txt",
+      "entryBody": "019-zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "node-api",
+          "label": "Node 与 TypeScript API",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/node-api/index.md",
+          "route": "/zh-cn/docs/node-api/index.md"
+        },
+        {
+          "topic": "node-quickstart",
+          "label": "用 Node.js 生成 Anki 卡片",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/node-quickstart/index.md",
+          "route": "/zh-cn/docs/node-quickstart/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "020-zh-cn_docs_node-api_index.md.body",
+        "021-zh-cn_docs_node-quickstart_index.md.body"
+      ],
+      "answer": "根域名中文 API 给出了实际公开 Node 接口。Node.js 22.13+ 下运行 `npm install --include=optional ankiforge@0.3.1`，使用 .mjs 或 CommonJS 的 require。Project 添加显式稳定键的笔记后，异步 build 返回 artifact、report 和 snapshot；临时路径需要存活的所有者，持久文件在 close 后仍存在。媒体和模板包读取、build、compare 都采用异步操作，其中项目状态在调用时捕获。compare 完成不等于可以发布，需要检查 policy.allows_publication；默认策略阻止 High/Critical。更新使用 updateFrom 和原始分发 APKG。原生报告与 JSON 快照的字段命名不同，应区分 highestRisk/highest_risk。TypeScript 按 ES2022、NodeNext 配置编译再运行 .mjs。来源：[Node API](https://ankiforge.dev/zh-cn/docs/node-api/index.md)、[安装与可运行程序](https://ankiforge.dev/zh-cn/docs/node-quickstart/index.md)。",
+      "observations": [
+        "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names.",
+        "The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "zh-CN",
+      "id": "json-update",
+      "entryUrl": "http://127.0.0.1:49754/zh-cn/llms.txt",
+      "entryBody": "022-zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "json-to-anki",
+          "label": "用 JSON 数据生成并更新 Anki 牌组",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/json-to-anki/index.md",
+          "route": "/zh-cn/docs/json-to-anki/index.md"
+        },
+        {
+          "topic": "updates",
+          "label": "用稳定笔记 ID 更新 Anki 牌组",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/updates/index.md",
+          "route": "/zh-cn/docs/updates/index.md"
+        },
+        {
+          "topic": "media",
+          "label": "为 Anki 卡片添加图片与音频",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/media/index.md",
+          "route": "/zh-cn/docs/media/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "023-zh-cn_docs_json-to-anki_index.md.body",
+        "024-zh-cn_docs_updates_index.md.body",
+        "025-zh-cn_docs_media_index.md.body"
+      ],
+      "answer": "中文 JSON 指南提供三种 SDK 的完整程序。将两份 JSON、cell.png、tone.wav 放在 recipe/，使用新的输出目录；Python 路径为 `python main.py recipe output/python`。程序先保存原始 v1.apkg，再比较 v2、写 comparison.json，使用 update_from(baseline) 预备候选包，检查其 review.json 中策略并发布同一文件。biology-json 命名空间与每行持久 id 是稳定身份；每版应有 3 条笔记、3 张卡片、2 个媒体资源，第一次答案变化对应 RISK.NOTE_CHANGED，没有新增或删除笔记。原始 v1 和报告要保留。Anki 重新导出不能替代更新基线；导入不能同步删除，也不能保证较新本地修改或复习计划。发布前需用目标客户端验证。来源：[JSON 示例](https://ankiforge.dev/zh-cn/docs/json-to-anki/index.md)、[身份与更新策略](https://ankiforge.dev/zh-cn/docs/updates/index.md)、[媒体](https://ankiforge.dev/zh-cn/docs/media/index.md)。",
+      "observations": [
+        "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result.",
+        "Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "zh-CN",
+      "id": "compatibility-constraints",
+      "entryUrl": "http://127.0.0.1:49754/zh-cn/llms.txt",
+      "entryBody": "026-zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "compatibility",
+          "label": "兼容性与发布",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/compatibility/index.md",
+          "route": "/zh-cn/docs/compatibility/index.md"
+        },
+        {
+          "topic": "build-guarantees",
+          "label": "构建与输出保证",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/build-guarantees/index.md",
+          "route": "/zh-cn/docs/build-guarantees/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "027-zh-cn_docs_compatibility_index.md.body",
+        "028-zh-cn_docs_build-guarantees_index.md.body"
+      ],
+      "answer": "根域名中文兼容性页明确区分公开包、已验证环境和客户端行为。0.3.1 的记录覆盖 Rust 1.92、Node 22.13 及 22/24/26、CPython 3.11–3.14；原生目标为 macOS arm64/x64、Linux x64 glibc、Windows x64。它没有承诺所有主机都可运行；Node 浏览器/Electron/Bun/musl/Linux或Windows ARM64 与其他 Python 实现、自由线程和子解释器需另外验证。导出不需 Anki，而导入、播放、字段合并、本地编辑与复习历史仍由客户端条件决定。更新必须保留原始分发包。构建保证还说明：临时文件随最后所有者删除，检查预算为有限值，原子替换仅针对单文件，晚期失败可能已经发布但持久性未确认。正文说明预备发布已在公开 0.3.1 中，虽仍有旧的“源码”小标题。来源：[兼容性](https://ankiforge.dev/zh-cn/docs/compatibility/index.md)、[构建保证](https://ankiforge.dev/zh-cn/docs/build-guarantees/index.md)。",
+      "observations": [
+        "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability.",
+        "The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests."
+      ],
+      "status": "passed",
+      "openIssues": [
+        {
+          "id": "machine-root-zh-CN-build-guarantees-heading",
+          "severity": "minor",
+          "route": "/zh-cn/docs/build-guarantees/index.md",
+          "observation": "The subsection heading “源码中的预备发布” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "id": "python-install",
+      "entryUrl": "http://127.0.0.1:49754/es/llms.txt",
+      "entryBody": "029-es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "python-quickstart",
+          "label": "Genera un APKG de Anki con Python",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/python-quickstart/index.md",
+          "route": "/es/docs/python-quickstart/index.md"
+        },
+        {
+          "topic": "compatibility",
+          "label": "Compatibilidad de Anki Forge y entornos verificados",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/compatibility/index.md",
+          "route": "/es/docs/compatibility/index.md"
+        },
+        {
+          "topic": "python-api",
+          "label": "API de Python",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/python-api/index.md",
+          "route": "/es/docs/python-api/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "030-es_docs_python-quickstart_index.md.body",
+        "031-es_docs_compatibility_index.md.body",
+        "032-es_docs_python-api_index.md.body"
+      ],
+      "answer": "El índice de IA en español del dominio raíz lleva a una guía completa de Python. Crea y activa un entorno virtual, instala `ankiforge==0.3.1` con pip y guarda el ejemplo Project/Note/BuildOptions en main.py. Al ejecutar `python main.py` obtienes spanish.apkg persistente, con hola → hello en el mazo Spanish. El requisito es CPython convencional 3.11+ con wheel compatible; las versiones verificadas registradas son 3.11–3.14. En Windows activa el entorno con `.venv\\Scripts\\Activate.ps1`. Mantén el espacio de nombres spanish y la clave es:hola cuando cambies el texto. Anki se usa para importar el archivo, no para generarlo. La referencia aclara que liberar un archivo persistente conserva su ruta, mientras que el temporal depende del último propietario. Fuentes: [guía de Python](https://ankiforge.dev/es/docs/python-quickstart/index.md), [plataformas](https://ankiforge.dev/es/docs/compatibility/index.md), [API y archivos](https://ankiforge.dev/es/docs/python-api/index.md).",
+      "observations": [
+        "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example.",
+        "Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "es",
+      "id": "node-api",
+      "entryUrl": "http://127.0.0.1:49754/es/llms.txt",
+      "entryBody": "033-es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "node-api",
+          "label": "API de Node y TypeScript",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/node-api/index.md",
+          "route": "/es/docs/node-api/index.md"
+        },
+        {
+          "topic": "node-quickstart",
+          "label": "Genera un APKG de Anki con Node.js",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/node-quickstart/index.md",
+          "route": "/es/docs/node-quickstart/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "034-es_docs_node-api_index.md.body",
+        "035-es_docs_node-quickstart_index.md.body"
+      ],
+      "answer": "La documentación española del dominio raíz permite identificar y usar la API pública de Node. Con Node.js 22.13+, instala `npm install --include=optional ankiforge@0.3.1`; elige ESM con .mjs o CommonJS con require. Project añade notas con claves explícitas; `await project.build(BuildOptions.to(path))` devuelve artifact, report y snapshot. Conserva un propietario mientras lees una ruta temporal; cerrar uno persistente no borra el archivo. Las operaciones de generación/comparación capturan una instantánea al invocarse. Una comparación correcta todavía puede denegar publicar; la política predeterminada bloquea High/Critical. Para actualizar, usa updateFrom con el APKG original. Distingue las propiedades nativas highestRisk de highest_risk en JSON. TypeScript usa ES2022/NodeNext y el archivo .mjs compilado. Fuentes: [referencia](https://ankiforge.dev/es/docs/node-api/index.md), [instalación y ejemplo](https://ankiforge.dev/es/docs/node-quickstart/index.md).",
+      "observations": [
+        "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names.",
+        "The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "es",
+      "id": "json-update",
+      "entryUrl": "http://127.0.0.1:49754/es/llms.txt",
+      "entryBody": "036-es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "json-to-anki",
+          "label": "Genera y actualiza mazos de Anki desde JSON",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/json-to-anki/index.md",
+          "route": "/es/docs/json-to-anki/index.md"
+        },
+        {
+          "topic": "updates",
+          "label": "Actualiza mazos de Anki con ID de nota estables",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/updates/index.md",
+          "route": "/es/docs/updates/index.md"
+        },
+        {
+          "topic": "media",
+          "label": "Añade imágenes y audio a tus tarjetas Anki",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/media/index.md",
+          "route": "/es/docs/media/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "037-es_docs_json-to-anki_index.md.body",
+        "038-es_docs_updates_index.md.body",
+        "039-es_docs_media_index.md.body"
+      ],
+      "answer": "La receta española del dominio raíz parte de dos JSON y dos archivos multimedia en recipe/. Selecciona uno de los tres programas completos; con Python ejecuta `python main.py recipe output/python` después de instalar 0.3.1, usando una salida nueva. Se conserva v1.apkg, se compara v2 y se escribe comparison.json; después se prepara la actualización desde ese original, se revisa de nuevo la política y se publica el candidato ya revisado. El resultado esperado es tres notas, tres tarjetas y dos recursos por versión; RISK.NOTE_CHANGED describe el cambio de la primera respuesta, sin altas ni bajas. Conserva biology-json y los ID persistentes de las filas. No uses una reexportación de Anki como referencia. Las eliminaciones omitidas, los cambios locales y el historial de repaso requieren comprobar el cliente; un build correcto no garantiza esos efectos. Fuentes: [JSON](https://ankiforge.dev/es/docs/json-to-anki/index.md), [actualización e identidad](https://ankiforge.dev/es/docs/updates/index.md), [medios](https://ankiforge.dev/es/docs/media/index.md).",
+      "observations": [
+        "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result.",
+        "Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "es",
+      "id": "compatibility-constraints",
+      "entryUrl": "http://127.0.0.1:49754/es/llms.txt",
+      "entryBody": "040-es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "compatibility",
+          "label": "Compatibilidad de Anki Forge y entornos verificados",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/compatibility/index.md",
+          "route": "/es/docs/compatibility/index.md"
+        },
+        {
+          "topic": "build-guarantees",
+          "label": "Garantías de generación y de los archivos APKG",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/build-guarantees/index.md",
+          "route": "/es/docs/build-guarantees/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "041-es_docs_compatibility_index.md.body",
+        "042-es_docs_build-guarantees_index.md.body"
+      ],
+      "answer": "El dominio raíz conserva una matriz fechada para el paquete 0.3.1: Rust 1.92, Node 22.13 y ramas 22/24/26, CPython convencional 3.11–3.14. Los destinos nativos son macOS arm64/x64, Linux x64 glibc y Windows x64. No se equipara disponibilidad con ejecución probada en cualquier equipo: navegador, Electron, Bun, musl y Linux/Windows ARM64 no forman parte de las pruebas registradas de Node; otros Python e intérpretes sin GIL o subintérpretes se validan aparte. Un APKG generado no certifica importación, reproducción ni conservación de ediciones o repasos en cada Anki. Para actualizar hay que conservar el original. Las garantías de salida distinguen vida útil temporal, presupuestos finitos y reemplazo atómico por archivo. Si falla tarde, puede haberse publicado con durabilidad no confirmada; consulta el estado antes de reintentar. La publicación preparada sí forma parte de 0.3.1. Fuentes: [compatibilidad](https://ankiforge.dev/es/docs/compatibility/index.md), [garantías](https://ankiforge.dev/es/docs/build-guarantees/index.md).",
+      "observations": [
+        "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability.",
+        "The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests."
+      ],
+      "status": "passed",
+      "openIssues": []
+    }
+  ]
+}

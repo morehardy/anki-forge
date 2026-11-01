@@ -1,0 +1,337 @@
+{
+  "reviewerRun": "/root/spanish_spec/machine-reading-2026-10-31",
+  "readOrigin": "http://127.0.0.1:49754",
+  "method": "Fetch this locale llms afresh for each task, parse actual linked URLs, follow matching same-locale Markdown links on loopback with canonical path preserved. Content judgement and answers are authored separately after reading the captured bodies.",
+  "tasks": [
+    {
+      "locale": "en",
+      "id": "python-install",
+      "entryUrl": "http://127.0.0.1:49754/llms.txt",
+      "entryBody": "001-llms.txt.body",
+      "followed": [
+        {
+          "topic": "python-quickstart",
+          "label": "Generate Anki flashcards with Python",
+          "canonicalUrl": "https://ankiforge.dev/docs/python-quickstart/index.md",
+          "route": "/docs/python-quickstart/index.md"
+        },
+        {
+          "topic": "compatibility",
+          "label": "Compatibility and releases",
+          "canonicalUrl": "https://ankiforge.dev/docs/compatibility/index.md",
+          "route": "/docs/compatibility/index.md"
+        },
+        {
+          "topic": "python-api",
+          "label": "Python API",
+          "canonicalUrl": "https://ankiforge.dev/docs/python-api/index.md",
+          "route": "/docs/python-api/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "002-docs_python-quickstart_index.md.body",
+        "003-docs_compatibility_index.md.body",
+        "004-docs_python-api_index.md.body"
+      ]
+    },
+    {
+      "locale": "en",
+      "id": "node-api",
+      "entryUrl": "http://127.0.0.1:49754/llms.txt",
+      "entryBody": "005-llms.txt.body",
+      "followed": [
+        {
+          "topic": "node-api",
+          "label": "Node and TypeScript API",
+          "canonicalUrl": "https://ankiforge.dev/docs/node-api/index.md",
+          "route": "/docs/node-api/index.md"
+        },
+        {
+          "topic": "node-quickstart",
+          "label": "Generate Anki flashcards with Node.js",
+          "canonicalUrl": "https://ankiforge.dev/docs/node-quickstart/index.md",
+          "route": "/docs/node-quickstart/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "006-docs_node-api_index.md.body",
+        "007-docs_node-quickstart_index.md.body"
+      ]
+    },
+    {
+      "locale": "en",
+      "id": "json-update",
+      "entryUrl": "http://127.0.0.1:49754/llms.txt",
+      "entryBody": "008-llms.txt.body",
+      "followed": [
+        {
+          "topic": "json-to-anki",
+          "label": "Generate and update Anki decks from JSON",
+          "canonicalUrl": "https://ankiforge.dev/docs/json-to-anki/index.md",
+          "route": "/docs/json-to-anki/index.md"
+        },
+        {
+          "topic": "updates",
+          "label": "Update Anki decks with stable note IDs",
+          "canonicalUrl": "https://ankiforge.dev/docs/updates/index.md",
+          "route": "/docs/updates/index.md"
+        },
+        {
+          "topic": "media",
+          "label": "Add images and audio to Anki cards",
+          "canonicalUrl": "https://ankiforge.dev/docs/media/index.md",
+          "route": "/docs/media/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "009-docs_json-to-anki_index.md.body",
+        "010-docs_updates_index.md.body",
+        "011-docs_media_index.md.body"
+      ]
+    },
+    {
+      "locale": "en",
+      "id": "compatibility-constraints",
+      "entryUrl": "http://127.0.0.1:49754/llms.txt",
+      "entryBody": "012-llms.txt.body",
+      "followed": [
+        {
+          "topic": "compatibility",
+          "label": "Compatibility and releases",
+          "canonicalUrl": "https://ankiforge.dev/docs/compatibility/index.md",
+          "route": "/docs/compatibility/index.md"
+        },
+        {
+          "topic": "build-guarantees",
+          "label": "Build and output guarantees",
+          "canonicalUrl": "https://ankiforge.dev/docs/build-guarantees/index.md",
+          "route": "/docs/build-guarantees/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "013-docs_compatibility_index.md.body",
+        "014-docs_build-guarantees_index.md.body"
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "id": "python-install",
+      "entryUrl": "http://127.0.0.1:49754/zh-cn/llms.txt",
+      "entryBody": "015-zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "python-quickstart",
+          "label": "用 Python 生成 Anki 卡片",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/python-quickstart/index.md",
+          "route": "/zh-cn/docs/python-quickstart/index.md"
+        },
+        {
+          "topic": "compatibility",
+          "label": "兼容性与发布",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/compatibility/index.md",
+          "route": "/zh-cn/docs/compatibility/index.md"
+        },
+        {
+          "topic": "python-api",
+          "label": "Python API",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/python-api/index.md",
+          "route": "/zh-cn/docs/python-api/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "016-zh-cn_docs_python-quickstart_index.md.body",
+        "017-zh-cn_docs_compatibility_index.md.body",
+        "018-zh-cn_docs_python-api_index.md.body"
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "id": "node-api",
+      "entryUrl": "http://127.0.0.1:49754/zh-cn/llms.txt",
+      "entryBody": "019-zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "node-api",
+          "label": "Node 与 TypeScript API",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/node-api/index.md",
+          "route": "/zh-cn/docs/node-api/index.md"
+        },
+        {
+          "topic": "node-quickstart",
+          "label": "用 Node.js 生成 Anki 卡片",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/node-quickstart/index.md",
+          "route": "/zh-cn/docs/node-quickstart/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "020-zh-cn_docs_node-api_index.md.body",
+        "021-zh-cn_docs_node-quickstart_index.md.body"
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "id": "json-update",
+      "entryUrl": "http://127.0.0.1:49754/zh-cn/llms.txt",
+      "entryBody": "022-zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "json-to-anki",
+          "label": "用 JSON 数据生成并更新 Anki 牌组",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/json-to-anki/index.md",
+          "route": "/zh-cn/docs/json-to-anki/index.md"
+        },
+        {
+          "topic": "updates",
+          "label": "用稳定笔记 ID 更新 Anki 牌组",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/updates/index.md",
+          "route": "/zh-cn/docs/updates/index.md"
+        },
+        {
+          "topic": "media",
+          "label": "为 Anki 卡片添加图片与音频",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/media/index.md",
+          "route": "/zh-cn/docs/media/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "023-zh-cn_docs_json-to-anki_index.md.body",
+        "024-zh-cn_docs_updates_index.md.body",
+        "025-zh-cn_docs_media_index.md.body"
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "id": "compatibility-constraints",
+      "entryUrl": "http://127.0.0.1:49754/zh-cn/llms.txt",
+      "entryBody": "026-zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "compatibility",
+          "label": "兼容性与发布",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/compatibility/index.md",
+          "route": "/zh-cn/docs/compatibility/index.md"
+        },
+        {
+          "topic": "build-guarantees",
+          "label": "构建与输出保证",
+          "canonicalUrl": "https://ankiforge.dev/zh-cn/docs/build-guarantees/index.md",
+          "route": "/zh-cn/docs/build-guarantees/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "027-zh-cn_docs_compatibility_index.md.body",
+        "028-zh-cn_docs_build-guarantees_index.md.body"
+      ]
+    },
+    {
+      "locale": "es",
+      "id": "python-install",
+      "entryUrl": "http://127.0.0.1:49754/es/llms.txt",
+      "entryBody": "029-es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "python-quickstart",
+          "label": "Genera un APKG de Anki con Python",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/python-quickstart/index.md",
+          "route": "/es/docs/python-quickstart/index.md"
+        },
+        {
+          "topic": "compatibility",
+          "label": "Compatibilidad de Anki Forge y entornos verificados",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/compatibility/index.md",
+          "route": "/es/docs/compatibility/index.md"
+        },
+        {
+          "topic": "python-api",
+          "label": "API de Python",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/python-api/index.md",
+          "route": "/es/docs/python-api/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "030-es_docs_python-quickstart_index.md.body",
+        "031-es_docs_compatibility_index.md.body",
+        "032-es_docs_python-api_index.md.body"
+      ]
+    },
+    {
+      "locale": "es",
+      "id": "node-api",
+      "entryUrl": "http://127.0.0.1:49754/es/llms.txt",
+      "entryBody": "033-es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "node-api",
+          "label": "API de Node y TypeScript",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/node-api/index.md",
+          "route": "/es/docs/node-api/index.md"
+        },
+        {
+          "topic": "node-quickstart",
+          "label": "Genera un APKG de Anki con Node.js",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/node-quickstart/index.md",
+          "route": "/es/docs/node-quickstart/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "034-es_docs_node-api_index.md.body",
+        "035-es_docs_node-quickstart_index.md.body"
+      ]
+    },
+    {
+      "locale": "es",
+      "id": "json-update",
+      "entryUrl": "http://127.0.0.1:49754/es/llms.txt",
+      "entryBody": "036-es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "json-to-anki",
+          "label": "Genera y actualiza mazos de Anki desde JSON",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/json-to-anki/index.md",
+          "route": "/es/docs/json-to-anki/index.md"
+        },
+        {
+          "topic": "updates",
+          "label": "Actualiza mazos de Anki con ID de nota estables",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/updates/index.md",
+          "route": "/es/docs/updates/index.md"
+        },
+        {
+          "topic": "media",
+          "label": "Añade imágenes y audio a tus tarjetas Anki",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/media/index.md",
+          "route": "/es/docs/media/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "037-es_docs_json-to-anki_index.md.body",
+        "038-es_docs_updates_index.md.body",
+        "039-es_docs_media_index.md.body"
+      ]
+    },
+    {
+      "locale": "es",
+      "id": "compatibility-constraints",
+      "entryUrl": "http://127.0.0.1:49754/es/llms.txt",
+      "entryBody": "040-es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "compatibility",
+          "label": "Compatibilidad de Anki Forge y entornos verificados",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/compatibility/index.md",
+          "route": "/es/docs/compatibility/index.md"
+        },
+        {
+          "topic": "build-guarantees",
+          "label": "Garantías de generación y de los archivos APKG",
+          "canonicalUrl": "https://ankiforge.dev/es/docs/build-guarantees/index.md",
+          "route": "/es/docs/build-guarantees/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "041-es_docs_compatibility_index.md.body",
+        "042-es_docs_build-guarantees_index.md.body"
+      ]
+    }
+  ]
+}

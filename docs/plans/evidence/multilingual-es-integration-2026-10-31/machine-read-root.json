@@ -1,0 +1,1443 @@
+{
+  "schemaVersion": 1,
+  "kind": "machine-read",
+  "status": "passed",
+  "mode": "release-candidate",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/spanish_spec/independent-machine-root-2026-10-31",
+  "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es"
+  ],
+  "readOrigin": "http://127.0.0.1:49754",
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/root-origin-manifest.json",
+    "sha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+    "commit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a"
+  },
+  "reviewMethod": {
+    "scope": "12 actual reading tasks: 3 locales × Python installation, Node API, JSON update, compatibility constraints.",
+    "artifactVerification": {
+      "manifestRecordsChecked": 380,
+      "mismatches": 0
+    },
+    "allMachineBindings": "Every manifest index.md and llms.txt is bound after full artifact byte/size validation. Semantic reading scope is the locale indices and 9 task documents per locale, not a claim to have read all Markdown pages.",
+    "httpEvidenceDirectory": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/",
+    "observations": "Fresh HTTP GET of each locale llms at the beginning of every task, parsing its actual links and following same-locale Markdown. Read captured text, including task instructions, API tables, example operations and limitations; author the answers below independently. The other deployment was separately fetched/read; its task bodies were also compared after exact origin/base substitution. No previous acceptance answers were imported.",
+    "limitations": "These are readings of frozen local build artifacts, not requests to the live public deployment or SDK/client execution. The HTTP metadata records actual loopback headers, not assumed production-host headers."
+  },
+  "resourceBindings": [
+    {
+      "route": "/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "4e5216863390dda212498929bc8d85a8f3db2b6994aa7cb6a7a14549b00f9e64"
+    },
+    {
+      "route": "/blog/your-first-anki-deck/index.md",
+      "sha256": "43bd3ceb5cf6b4fefb1d504386374b53379a630e0eb6a6ec548d20b1f72d2e5b"
+    },
+    {
+      "route": "/docs/ai-anki-cards/index.md",
+      "sha256": "9745b22b1eef834acd7824a662f24b0bd2a83ba2fa41ea1ee606fbee6e21fa3a"
+    },
+    {
+      "route": "/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "d3fa07417f3752acc3f105b95f2dd49fab31a78cb3828ac022688a971d281e4e"
+    },
+    {
+      "route": "/docs/api/index.md",
+      "sha256": "78633f690be8373213053679b29209d7b17bc1ad85585d87eca45e4aec1f5e19"
+    },
+    {
+      "route": "/docs/build-guarantees/index.md",
+      "sha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d"
+    },
+    {
+      "route": "/docs/cards/index.md",
+      "sha256": "582cc9aa34838f85ab2b7098d606331c28274b8dc47c87efc7dc3bc835244677"
+    },
+    {
+      "route": "/docs/compatibility/index.md",
+      "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+    },
+    {
+      "route": "/docs/concepts/index.md",
+      "sha256": "2b07722c9bfbdb2e8fefe578ab6fdc7fe38812d684f3474eb015c17493ba73d6"
+    },
+    {
+      "route": "/docs/csv-to-anki/index.md",
+      "sha256": "0428ebe47ff80585c636b10f362bd6c90ba95e44b7c0c567d7c073a31b97d662"
+    },
+    {
+      "route": "/docs/custom-notetypes/index.md",
+      "sha256": "1ec524ad2e9100e94a376e6e672c79a177bc9b32bc7d3d3bd48a6b66e985f2cf"
+    },
+    {
+      "route": "/docs/development/index.md",
+      "sha256": "38e8514202721f6a59b3e955089238eeb0cd0a2da40f84e687781674930fa07f"
+    },
+    {
+      "route": "/docs/genanki-migration/index.md",
+      "sha256": "fb1788925c8e1ac5141dee8594d55f797bf7949b16d97c592c329eaacdf3e1ba"
+    },
+    {
+      "route": "/docs/image-occlusion/index.md",
+      "sha256": "0bfe48487e90d7ef0701a6fc4a2ac02e36ccb1990adf8009782879aa59c8bd69"
+    },
+    {
+      "route": "/docs/index.md",
+      "sha256": "2589240ac602a461fcd26375953f959f50610b1efc34301771fb5b9a612062ff"
+    },
+    {
+      "route": "/docs/installation/index.md",
+      "sha256": "d8e5e1b617b5319efec59c50eace336bbfae67ead940b8d00a423c0614e3ed60"
+    },
+    {
+      "route": "/docs/json-to-anki/index.md",
+      "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e"
+    },
+    {
+      "route": "/docs/languages/index.md",
+      "sha256": "20118dbc34eaf14ef16f924a52e471a432b913b4aeca09d9139d271075197d04"
+    },
+    {
+      "route": "/docs/media/index.md",
+      "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1"
+    },
+    {
+      "route": "/docs/node-api/index.md",
+      "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810"
+    },
+    {
+      "route": "/docs/node-quickstart/index.md",
+      "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33"
+    },
+    {
+      "route": "/docs/python-api/index.md",
+      "sha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af"
+    },
+    {
+      "route": "/docs/python-diagnostics/index.md",
+      "sha256": "7c55655214b864f9bf4de14874b933a99f842399f7a0c632e71ad32d0373bb5b"
+    },
+    {
+      "route": "/docs/python-migration/index.md",
+      "sha256": "e048cc0d961bdded62c1d3184d901e4cf0e0d315fe291c47049a59928117af72"
+    },
+    {
+      "route": "/docs/python-quickstart/index.md",
+      "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3"
+    },
+    {
+      "route": "/docs/quickstart/index.md",
+      "sha256": "e8786297738d765f984fb3f55f853eda49528930303d165a3f4ed036ec6f903c"
+    },
+    {
+      "route": "/docs/rust-api/index.md",
+      "sha256": "98d57a4e45b11113366315510c596444dd94dc264105db2a8a5e9d9f0a747296"
+    },
+    {
+      "route": "/docs/rust-guide/index.md",
+      "sha256": "58d18a4d00adc8aee9778b48db2d54822326b06921b65987a4109ddc840f3194"
+    },
+    {
+      "route": "/docs/templates/index.md",
+      "sha256": "c76ff0654af9c938570e2534a57fbd875d9b8a896373067d239ffbedfb0b95a2"
+    },
+    {
+      "route": "/docs/troubleshooting/index.md",
+      "sha256": "ed47bd814c901d4a4c69001b91d5e00c89deaef5c5ecfb77ccea8b54cc6d2286"
+    },
+    {
+      "route": "/docs/updates/index.md",
+      "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db"
+    },
+    {
+      "route": "/es/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "17f7f5408b3cefcc1dc8d5cff2d95a64b245e6d993c5c0a0e5640a934416002f"
+    },
+    {
+      "route": "/es/blog/your-first-anki-deck/index.md",
+      "sha256": "811e0eeb6867bd23a928e9087268ed17d24164c05ccd997c3ad8878110bd495c"
+    },
+    {
+      "route": "/es/docs/ai-anki-cards/index.md",
+      "sha256": "99743cb1706d0b12b1ecb2ace07456115532e55fccfe49e98ef701593f967c70"
+    },
+    {
+      "route": "/es/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "1751babf393a61988a9f057ce42511b4a931922c6c7688098a85c9cd36e371c6"
+    },
+    {
+      "route": "/es/docs/api/index.md",
+      "sha256": "d6a2df886ad2d8d95711a031f995bbd9ed717d50c2333b2f536123fa089989ca"
+    },
+    {
+      "route": "/es/docs/build-guarantees/index.md",
+      "sha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe"
+    },
+    {
+      "route": "/es/docs/cards/index.md",
+      "sha256": "a725e95db861f7275481cbcbe2f4d93a756f9504beaa95efcb9f91b833b50c21"
+    },
+    {
+      "route": "/es/docs/compatibility/index.md",
+      "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+    },
+    {
+      "route": "/es/docs/concepts/index.md",
+      "sha256": "f2d42f3acc058095a096bfcd47263e275e1837c62e29401f42bcc282e8839757"
+    },
+    {
+      "route": "/es/docs/csv-to-anki/index.md",
+      "sha256": "c0636dd2ac60d9b20c62ede43d226f43de4e43bee6982146670fc0ac05623b02"
+    },
+    {
+      "route": "/es/docs/custom-notetypes/index.md",
+      "sha256": "cd79fd039a0bc5444f14fda465ef813231ee14c296184668ff0fbe5d66e0d5cf"
+    },
+    {
+      "route": "/es/docs/development/index.md",
+      "sha256": "4ba123d0ebdd9c92084656cad77d701230ee4b32cda03ebc0bbc34774863ae96"
+    },
+    {
+      "route": "/es/docs/genanki-migration/index.md",
+      "sha256": "725f3857424a3acc6aca08f222685a0548b65293ea7b1e99ccbbd4bbfb6edc56"
+    },
+    {
+      "route": "/es/docs/image-occlusion/index.md",
+      "sha256": "32dc813fb179accd309e7029424cb03587112bea4db10761b359627882f038f6"
+    },
+    {
+      "route": "/es/docs/index.md",
+      "sha256": "cc78c766b4da6e90411988938c404247f4561f076f9b825c334acef94a6bf5c1"
+    },
+    {
+      "route": "/es/docs/installation/index.md",
+      "sha256": "c2684786f4b65987f50ffbad71514f588156472cbcaf6801a35ccc55b3acd70a"
+    },
+    {
+      "route": "/es/docs/json-to-anki/index.md",
+      "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed"
+    },
+    {
+      "route": "/es/docs/languages/index.md",
+      "sha256": "4bc4d5ac42b66a76bb63c300af3b6c373a25bd8c572ece54e2bb27509cab1c63"
+    },
+    {
+      "route": "/es/docs/media/index.md",
+      "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d"
+    },
+    {
+      "route": "/es/docs/node-api/index.md",
+      "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e"
+    },
+    {
+      "route": "/es/docs/node-quickstart/index.md",
+      "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898"
+    },
+    {
+      "route": "/es/docs/python-api/index.md",
+      "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956"
+    },
+    {
+      "route": "/es/docs/python-diagnostics/index.md",
+      "sha256": "71a0a087d4474e98868848e0dcefedd32067b8a01ab7cd49b1774a0ae5532f83"
+    },
+    {
+      "route": "/es/docs/python-migration/index.md",
+      "sha256": "ee0155e3d170643f6e8204354f9ab3152a8b91256dfeeb8b5e32c664afb490e5"
+    },
+    {
+      "route": "/es/docs/python-quickstart/index.md",
+      "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56"
+    },
+    {
+      "route": "/es/docs/quickstart/index.md",
+      "sha256": "42f01fa3284bb45f1f1b2c2d677092554bb6b41083b66964ed23567128ac419e"
+    },
+    {
+      "route": "/es/docs/rust-api/index.md",
+      "sha256": "da277a083aa616be09ba8696c522f8cced4d7b613619d521fd301acedce5a03c"
+    },
+    {
+      "route": "/es/docs/rust-guide/index.md",
+      "sha256": "205b0d8e65cc17f0e56755dc0e178d5e38bcdc52d2520f28795a78c2fdaa76be"
+    },
+    {
+      "route": "/es/docs/templates/index.md",
+      "sha256": "6659e01328ade2f67b2fae0b87eb79b13445647efd5b3a27f80e7f556e39c8be"
+    },
+    {
+      "route": "/es/docs/troubleshooting/index.md",
+      "sha256": "092ff59b379d229faf9f469a549b19db43b3662cfe0590e170262ab70ea44a69"
+    },
+    {
+      "route": "/es/docs/updates/index.md",
+      "sha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391"
+    },
+    {
+      "route": "/es/llms.txt",
+      "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8"
+    },
+    {
+      "route": "/llms.txt",
+      "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f"
+    },
+    {
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "50cd652ceef20a48a4c74610a19398b231959ffb9d4dd4076b7337ff7e315161"
+    },
+    {
+      "route": "/zh-cn/blog/your-first-anki-deck/index.md",
+      "sha256": "e82bf53033a3cd2a15d4e2c92dcc936b0be2fb575b83f8e12e78f9e40ef28291"
+    },
+    {
+      "route": "/zh-cn/docs/ai-anki-cards/index.md",
+      "sha256": "d41495f72cf015aaa880eb9d85b41be3002512d9997c148bee6da0b4b3086ac6"
+    },
+    {
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "461f89203af0dc34a83d059cb9d4d3903ad5d3e163a502cfe2dd5b5566a685fd"
+    },
+    {
+      "route": "/zh-cn/docs/api/index.md",
+      "sha256": "22b2a28e881312cdf227c8b23bb9fc7c451c06890980ff47cc0979c40ed0a0bd"
+    },
+    {
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "sha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22"
+    },
+    {
+      "route": "/zh-cn/docs/cards/index.md",
+      "sha256": "46ceeb701e734b6f104492c2eef7678596fcfa768407346cc53aa00094dac378"
+    },
+    {
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88"
+    },
+    {
+      "route": "/zh-cn/docs/concepts/index.md",
+      "sha256": "b964d090bf2700988229952e67365f4a3f4948328b925ba0f50a54783df89778"
+    },
+    {
+      "route": "/zh-cn/docs/csv-to-anki/index.md",
+      "sha256": "be2d5b64a5df7d603129517e460cad11fbac5c6a4e7037b94381fd94e0041428"
+    },
+    {
+      "route": "/zh-cn/docs/custom-notetypes/index.md",
+      "sha256": "f34dd1c38da4a42edbdceff9116ea9da2b09fb734a65a41fb317cd656741d682"
+    },
+    {
+      "route": "/zh-cn/docs/development/index.md",
+      "sha256": "956050812e0c79f55142ea8365b5950c92200361fc213083eb4e8deadbf7f07a"
+    },
+    {
+      "route": "/zh-cn/docs/genanki-migration/index.md",
+      "sha256": "91dd3c944180673b82f7fcd52b7bb4f24426e859398de6c6b98ca9c83bfbca10"
+    },
+    {
+      "route": "/zh-cn/docs/image-occlusion/index.md",
+      "sha256": "9e799305a38afa3142a800041f4305b28234ef92c606f7cf1490e7aade238e88"
+    },
+    {
+      "route": "/zh-cn/docs/index.md",
+      "sha256": "30ee017d9f493d9ac91cb82a4c61c05001d36c96fb57819394134b9151636a98"
+    },
+    {
+      "route": "/zh-cn/docs/installation/index.md",
+      "sha256": "c92a6acb0d2d7763e39d59b1d6e6cb9b75b9f0ba2342c94ca417a9737b69fb98"
+    },
+    {
+      "route": "/zh-cn/docs/json-to-anki/index.md",
+      "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91"
+    },
+    {
+      "route": "/zh-cn/docs/languages/index.md",
+      "sha256": "bd745fd45a07f2e3cbc7a3c326ce0f4af98466ba7dd96384e298d75e206ce504"
+    },
+    {
+      "route": "/zh-cn/docs/media/index.md",
+      "sha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c"
+    },
+    {
+      "route": "/zh-cn/docs/node-api/index.md",
+      "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9"
+    },
+    {
+      "route": "/zh-cn/docs/node-quickstart/index.md",
+      "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360"
+    },
+    {
+      "route": "/zh-cn/docs/python-api/index.md",
+      "sha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0"
+    },
+    {
+      "route": "/zh-cn/docs/python-diagnostics/index.md",
+      "sha256": "f2cf9f19e3820a65520b68f835f24ee2c7216f191393eb7496e2b25ba49a43ee"
+    },
+    {
+      "route": "/zh-cn/docs/python-migration/index.md",
+      "sha256": "b974fffe335a99894d210100f0171c21e7299ae013265eec61cd085b4344a890"
+    },
+    {
+      "route": "/zh-cn/docs/python-quickstart/index.md",
+      "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69"
+    },
+    {
+      "route": "/zh-cn/docs/quickstart/index.md",
+      "sha256": "e8771b9e3b9b0e70e7ca09cbebc74fc6a80489d113f8d696521502beb0ceed23"
+    },
+    {
+      "route": "/zh-cn/docs/rust-api/index.md",
+      "sha256": "5f7cb36f50163e1ab80da13727d6808a8acc92f7b309155883a61d264eeec572"
+    },
+    {
+      "route": "/zh-cn/docs/rust-guide/index.md",
+      "sha256": "f1ecb13c0ba1c9c8468daccbc20caf7a19e6eed9e0a6ac91dc04bd52bfc994f7"
+    },
+    {
+      "route": "/zh-cn/docs/templates/index.md",
+      "sha256": "31d7234cdf081f6a508a2247e7c06232ceb83c8ccaceb4a8640e4149f72e6157"
+    },
+    {
+      "route": "/zh-cn/docs/troubleshooting/index.md",
+      "sha256": "c161530b7a94a4f5cc66f8e4a7077a0e8301d5fbe904951ac7ed395e3161fabf"
+    },
+    {
+      "route": "/zh-cn/docs/updates/index.md",
+      "sha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408"
+    },
+    {
+      "route": "/zh-cn/llms.txt",
+      "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e"
+    }
+  ],
+  "entries": {
+    "en": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/llms.txt",
+            "http://127.0.0.1:49754/docs/python-quickstart/index.md",
+            "http://127.0.0.1:49754/docs/compatibility/index.md",
+            "http://127.0.0.1:49754/docs/python-api/index.md"
+          ],
+          "answer": "The root-domain llms index links directly to the English Python quickstart. Its runnable path is: create/activate a virtual environment, install `ankiforge==0.3.1` with pip, save the supplied Project/Note/BuildOptions example as `main.py`, and run `python main.py`. The result is persistent `spanish.apkg` containing hola → hello in the Spanish deck. Use ordinary CPython 3.11+ and a matching native wheel; the documented test range is 3.11–3.14, not every Python implementation. Windows has its own activation command, `.venv\\Scripts\\Activate.ps1`. Namespace `spanish` and note key `es:hola` must remain stable across edits. Anki is needed to import/view the result, not for generation; the API explains that closing a persistent artifact does not delete its file. Sources: [quickstart](https://ankiforge.dev/docs/python-quickstart/index.md), [runtime coverage](https://ankiforge.dev/docs/compatibility/index.md), [artifact API](https://ankiforge.dev/docs/python-api/index.md).",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/001-llms.txt.body",
+              "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+              "description": "Exact HTTP response body read for en/python-install: http://127.0.0.1:49754/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/001-llms.txt.http.json",
+              "sha256": "bea32fa73c83c26750ab34c2850cf526ccb198273f41f47b1f72061d9c70f4cb",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/002-docs_python-quickstart_index.md.body",
+              "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+              "description": "Exact HTTP response body read for en/python-install: http://127.0.0.1:49754/docs/python-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/002-docs_python-quickstart_index.md.http.json",
+              "sha256": "87e6a2559716117ca4c9e11be3ba77627e7ab4cba368a0dcf110cae475ddf49a",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/docs/python-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/003-docs_compatibility_index.md.body",
+              "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+              "description": "Exact HTTP response body read for en/python-install: http://127.0.0.1:49754/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/003-docs_compatibility_index.md.http.json",
+              "sha256": "b94824a227b6882d9c1b7d5677b86917702774b5db0a84800b513878c0ea3f36",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/004-docs_python-api_index.md.body",
+              "sha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af",
+              "description": "Exact HTTP response body read for en/python-install: http://127.0.0.1:49754/docs/python-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/004-docs_python-api_index.md.http.json",
+              "sha256": "9291350830b257f7bfb3772858939a2f4aeff07839fb698ebc55fbb16578f9a5",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/docs/python-api/index.md"
+            },
+            {
+              "route": "/docs/python-quickstart/index.md",
+              "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+              "observation": "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example. Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose. Selected from llms as “Generate Anki flashcards with Python”."
+            },
+            {
+              "route": "/docs/compatibility/index.md",
+              "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+              "observation": "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example. Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose. Selected from llms as “Compatibility and releases”."
+            },
+            {
+              "route": "/docs/python-api/index.md",
+              "sha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af",
+              "observation": "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example. Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose. Selected from llms as “Python API”."
+            }
+          ],
+          "openIssues": [
+            {
+              "id": "machine-root-en-python-api-heading",
+              "severity": "minor",
+              "route": "/docs/python-api/index.md",
+              "observation": "The subsection heading “Source API details” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+              "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+            }
+          ]
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/llms.txt",
+            "http://127.0.0.1:49754/docs/node-api/index.md",
+            "http://127.0.0.1:49754/docs/node-quickstart/index.md"
+          ],
+          "answer": "The root artifact provides the actual Node/TypeScript reference, not a fallback page. Start on Node 22.13+ with `npm install --include=optional ankiforge@0.3.1`; use `.mjs` for ESM or require for CommonJS. `Project.add` collects an explicitly keyed note, while `await project.build(BuildOptions.to(path))` returns output with artifact, report and snapshot. Retain an owner while reading temporary paths; persistent paths survive close. Media loading, bundle loading, build and comparison are asynchronous. Compare's success must be separated from `policy.allows_publication`; default policy blocks High/Critical findings. For update calls, preserve the original APKG and use `updateFrom`. Read native properties in camelCase and Rust-compatible snapshot properties in snake_case. TypeScript's documented path uses NodeNext, ES2022 and emitted `.mjs`. Sources: [API](https://ankiforge.dev/docs/node-api/index.md), [installation and runnable example](https://ankiforge.dev/docs/node-quickstart/index.md).",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/005-llms.txt.body",
+              "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+              "description": "Exact HTTP response body read for en/node-api: http://127.0.0.1:49754/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/005-llms.txt.http.json",
+              "sha256": "3367cb593130420cbf8e9d3702abf56c114f07d8d94baaf1c1f082308f59931a",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/006-docs_node-api_index.md.body",
+              "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+              "description": "Exact HTTP response body read for en/node-api: http://127.0.0.1:49754/docs/node-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/006-docs_node-api_index.md.http.json",
+              "sha256": "809449c4134775383b5e17592f0994a0af6cc7bc973c52dc2b164bc476bced69",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/docs/node-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/007-docs_node-quickstart_index.md.body",
+              "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+              "description": "Exact HTTP response body read for en/node-api: http://127.0.0.1:49754/docs/node-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/007-docs_node-quickstart_index.md.http.json",
+              "sha256": "4ad9fb78c78ccb40438df0b794cb0820186bb5652e35408a97faf79d80ac0e7e",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/docs/node-quickstart/index.md"
+            },
+            {
+              "route": "/docs/node-api/index.md",
+              "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+              "observation": "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names. The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation. Selected from llms as “Node and TypeScript API”."
+            },
+            {
+              "route": "/docs/node-quickstart/index.md",
+              "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+              "observation": "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names. The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation. Selected from llms as “Generate Anki flashcards with Node.js”."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/llms.txt",
+            "http://127.0.0.1:49754/docs/json-to-anki/index.md",
+            "http://127.0.0.1:49754/docs/updates/index.md",
+            "http://127.0.0.1:49754/docs/media/index.md"
+          ],
+          "answer": "The three linked English guides provide a complete update path. Download the four recipe inputs into recipe/, choose the documented Rust/Python/TypeScript program, and use a fresh output directory. In Python, `python main.py recipe output/python` generates v1, records a comparison against it, prepares v2 with `update_from(baseline)`, checks the prepared comparison and publishes that candidate. The stable namespace is biology-json and each row's durable id is its note key. Both packages should contain 3 notes, 3 cards and 2 media assets; the new version changes the first answer and records RISK.NOTE_CHANGED without additions/removals. Keep the original v1 distribution and the reports. Never replace that baseline with an Anki re-export. Test first import and subsequent update in the target client, including local edits/scheduling; omission is not deletion synchronization. Sources: [JSON workflow](https://ankiforge.dev/docs/json-to-anki/index.md), [identity and policy](https://ankiforge.dev/docs/updates/index.md), [media behavior](https://ankiforge.dev/docs/media/index.md).",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/008-llms.txt.body",
+              "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+              "description": "Exact HTTP response body read for en/json-update: http://127.0.0.1:49754/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/008-llms.txt.http.json",
+              "sha256": "aa93a61d3d10d98bc99d05d27f18c4f5220a6a3b36fd09c1ac980dcd3f23849b",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/009-docs_json-to-anki_index.md.body",
+              "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+              "description": "Exact HTTP response body read for en/json-update: http://127.0.0.1:49754/docs/json-to-anki/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/009-docs_json-to-anki_index.md.http.json",
+              "sha256": "48b2975387f666a1ab147d514b8a2f370de0bfb69b7932caa3f132147193a50a",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/docs/json-to-anki/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/010-docs_updates_index.md.body",
+              "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+              "description": "Exact HTTP response body read for en/json-update: http://127.0.0.1:49754/docs/updates/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/010-docs_updates_index.md.http.json",
+              "sha256": "9e02a0818117f4a0d92fdf37d1fb712d64c4d12617114d2cfead24b0139f889e",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/docs/updates/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/011-docs_media_index.md.body",
+              "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+              "description": "Exact HTTP response body read for en/json-update: http://127.0.0.1:49754/docs/media/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/011-docs_media_index.md.http.json",
+              "sha256": "3d72d600b2276244a85cbb1b683cbb47e560ef86ab6a5837f4ab8410a3faf088",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/docs/media/index.md"
+            },
+            {
+              "route": "/docs/json-to-anki/index.md",
+              "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+              "observation": "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result. Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims. Selected from llms as “Generate and update Anki decks from JSON”."
+            },
+            {
+              "route": "/docs/updates/index.md",
+              "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+              "observation": "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result. Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims. Selected from llms as “Update Anki decks with stable note IDs”."
+            },
+            {
+              "route": "/docs/media/index.md",
+              "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+              "observation": "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result. Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims. Selected from llms as “Add images and audio to Anki cards”."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/llms.txt",
+            "http://127.0.0.1:49754/docs/compatibility/index.md",
+            "http://127.0.0.1:49754/docs/build-guarantees/index.md"
+          ],
+          "answer": "The root-domain compatibility text reports a dated 0.3.1 verification matrix: Rust 1.92, Node 22.13 plus current 22/24/26, and CPython 3.11–3.14. Its native targets are macOS arm64/x64, Linux x64 glibc and Windows x64; it explicitly excludes a universal host/runtime guarantee. Node's recorded scope excludes browser, Electron, Bun, musl and ARM64 Linux/Windows. Other Python implementations and free-threaded/subinterpreter use require separate validation. Build success certifies an APKG artifact, not every Anki import, renderer, codec, local edit or schedule. Updates need the original distribution evidence. The output guide distinguishes persistent and last-owner temporary files, hard inspection failures, per-file atomic replacement, and late failure after publication with unconfirmed durability. Prepared publication is included in public 0.3.1 despite the older English subsection heading. Sources: [compatibility](https://ankiforge.dev/docs/compatibility/index.md), [output guarantees](https://ankiforge.dev/docs/build-guarantees/index.md).",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/012-llms.txt.body",
+              "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+              "description": "Exact HTTP response body read for en/compatibility-constraints: http://127.0.0.1:49754/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/012-llms.txt.http.json",
+              "sha256": "46da7cd87eaad38ca02feaff7279dce1ca15f97d821f79f8c79768dae059f908",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/013-docs_compatibility_index.md.body",
+              "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+              "description": "Exact HTTP response body read for en/compatibility-constraints: http://127.0.0.1:49754/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/013-docs_compatibility_index.md.http.json",
+              "sha256": "49935f091105d901d103c8d0583fe4d4b586c1a6f0e35e169be9fb862af94486",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/014-docs_build-guarantees_index.md.body",
+              "sha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d",
+              "description": "Exact HTTP response body read for en/compatibility-constraints: http://127.0.0.1:49754/docs/build-guarantees/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/014-docs_build-guarantees_index.md.http.json",
+              "sha256": "1bf828e750c381892c73be893aa4e136054589aaf7511972d2f16a03f751137a",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/docs/build-guarantees/index.md"
+            },
+            {
+              "route": "/docs/compatibility/index.md",
+              "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+              "observation": "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability. The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests. Selected from llms as “Compatibility and releases”."
+            },
+            {
+              "route": "/docs/build-guarantees/index.md",
+              "sha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d",
+              "observation": "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability. The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests. Selected from llms as “Build and output guarantees”."
+            }
+          ],
+          "openIssues": [
+            {
+              "id": "machine-root-en-build-guarantees-heading",
+              "severity": "minor",
+              "route": "/docs/build-guarantees/index.md",
+              "observation": "The subsection heading “Prepared publication from source” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+              "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+            }
+          ]
+        }
+      ],
+      "openIssues": [
+        {
+          "id": "machine-root-en-python-api-heading",
+          "severity": "minor",
+          "route": "/docs/python-api/index.md",
+          "observation": "The subsection heading “Source API details” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        },
+        {
+          "id": "machine-root-en-build-guarantees-heading",
+          "severity": "minor",
+          "route": "/docs/build-guarantees/index.md",
+          "observation": "The subsection heading “Prepared publication from source” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        }
+      ]
+    },
+    "zh-CN": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/zh-cn/llms.txt",
+            "http://127.0.0.1:49754/zh-cn/docs/python-quickstart/index.md",
+            "http://127.0.0.1:49754/zh-cn/docs/compatibility/index.md",
+            "http://127.0.0.1:49754/zh-cn/docs/python-api/index.md"
+          ],
+          "answer": "从根域名的中文 llms 入口可以直接到达中文 Python 入门页。操作顺序是创建并激活 .venv，用 `python -m pip install ankiforge==0.3.1` 安装，再将 Project/Note/BuildOptions 完整示例存为 main.py，执行 `python main.py`。会生成持久文件 spanish.apkg，其中 Spanish 牌组含 hola → hello。运行环境要求普通 CPython 3.11+ 和匹配 wheel；已记录验证的是 3.11–3.14。Windows 激活命令为 `.venv\\Scripts\\Activate.ps1`。命名空间 spanish 和键 es:hola 是后续编辑应保留的身份。生成不依赖安装 Anki，导入查看才使用 Anki；API 还区分了临时文件所有权和持久文件清理后的保留行为。来源：[Python 入门](https://ankiforge.dev/zh-cn/docs/python-quickstart/index.md)、[平台覆盖](https://ankiforge.dev/zh-cn/docs/compatibility/index.md)、[Python API](https://ankiforge.dev/zh-cn/docs/python-api/index.md)。",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/015-zh-cn_llms.txt.body",
+              "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+              "description": "Exact HTTP response body read for zh-CN/python-install: http://127.0.0.1:49754/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/015-zh-cn_llms.txt.http.json",
+              "sha256": "da416b14405552c4d16c3bafe1cedcdfb70d0aa9aba5ab48a3d56239d27831e5",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/016-zh-cn_docs_python-quickstart_index.md.body",
+              "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+              "description": "Exact HTTP response body read for zh-CN/python-install: http://127.0.0.1:49754/zh-cn/docs/python-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/016-zh-cn_docs_python-quickstart_index.md.http.json",
+              "sha256": "bc16d4d1bcd0cd2f76235705abe3aec693849cdb0a23e4f5b2a79cf98713e191",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/docs/python-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/017-zh-cn_docs_compatibility_index.md.body",
+              "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+              "description": "Exact HTTP response body read for zh-CN/python-install: http://127.0.0.1:49754/zh-cn/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/017-zh-cn_docs_compatibility_index.md.http.json",
+              "sha256": "8136199042ef29123607d398f5066a11b527d0e247ca629912e6b0f0b249d6f1",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/018-zh-cn_docs_python-api_index.md.body",
+              "sha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0",
+              "description": "Exact HTTP response body read for zh-CN/python-install: http://127.0.0.1:49754/zh-cn/docs/python-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/018-zh-cn_docs_python-api_index.md.http.json",
+              "sha256": "22b36fe7fa69bbf57cfd7683487bc67d04007240b1a6975d076f52d8ebc0b908",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/docs/python-api/index.md"
+            },
+            {
+              "route": "/zh-cn/docs/python-quickstart/index.md",
+              "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+              "observation": "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example. Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose. Selected from llms as “用 Python 生成 Anki 卡片”."
+            },
+            {
+              "route": "/zh-cn/docs/compatibility/index.md",
+              "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+              "observation": "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example. Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose. Selected from llms as “兼容性与发布”."
+            },
+            {
+              "route": "/zh-cn/docs/python-api/index.md",
+              "sha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0",
+              "observation": "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example. Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose. Selected from llms as “Python API”."
+            }
+          ],
+          "openIssues": [
+            {
+              "id": "machine-root-zh-CN-python-api-heading",
+              "severity": "minor",
+              "route": "/zh-cn/docs/python-api/index.md",
+              "observation": "The subsection heading “源码 API 详情” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+              "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+            }
+          ]
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/zh-cn/llms.txt",
+            "http://127.0.0.1:49754/zh-cn/docs/node-api/index.md",
+            "http://127.0.0.1:49754/zh-cn/docs/node-quickstart/index.md"
+          ],
+          "answer": "根域名中文 API 给出了实际公开 Node 接口。Node.js 22.13+ 下运行 `npm install --include=optional ankiforge@0.3.1`，使用 .mjs 或 CommonJS 的 require。Project 添加显式稳定键的笔记后，异步 build 返回 artifact、report 和 snapshot；临时路径需要存活的所有者，持久文件在 close 后仍存在。媒体和模板包读取、build、compare 都采用异步操作，其中项目状态在调用时捕获。compare 完成不等于可以发布，需要检查 policy.allows_publication；默认策略阻止 High/Critical。更新使用 updateFrom 和原始分发 APKG。原生报告与 JSON 快照的字段命名不同，应区分 highestRisk/highest_risk。TypeScript 按 ES2022、NodeNext 配置编译再运行 .mjs。来源：[Node API](https://ankiforge.dev/zh-cn/docs/node-api/index.md)、[安装与可运行程序](https://ankiforge.dev/zh-cn/docs/node-quickstart/index.md)。",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/019-zh-cn_llms.txt.body",
+              "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+              "description": "Exact HTTP response body read for zh-CN/node-api: http://127.0.0.1:49754/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/019-zh-cn_llms.txt.http.json",
+              "sha256": "c2ec4c691f77a75419b30859873ed99327876aa1057d2adc86e544eb83e6aa6f",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/020-zh-cn_docs_node-api_index.md.body",
+              "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9",
+              "description": "Exact HTTP response body read for zh-CN/node-api: http://127.0.0.1:49754/zh-cn/docs/node-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/020-zh-cn_docs_node-api_index.md.http.json",
+              "sha256": "f181cd77065ad267d68f74fddf5f3550661f504a76d8b33810d95a89387c7e66",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/docs/node-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/021-zh-cn_docs_node-quickstart_index.md.body",
+              "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+              "description": "Exact HTTP response body read for zh-CN/node-api: http://127.0.0.1:49754/zh-cn/docs/node-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/021-zh-cn_docs_node-quickstart_index.md.http.json",
+              "sha256": "185db7525726a5cd27205118e5738f54d4156402fcb397a3b590f2e571d25eb8",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/docs/node-quickstart/index.md"
+            },
+            {
+              "route": "/zh-cn/docs/node-api/index.md",
+              "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9",
+              "observation": "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names. The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation. Selected from llms as “Node 与 TypeScript API”."
+            },
+            {
+              "route": "/zh-cn/docs/node-quickstart/index.md",
+              "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+              "observation": "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names. The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation. Selected from llms as “用 Node.js 生成 Anki 卡片”."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/zh-cn/llms.txt",
+            "http://127.0.0.1:49754/zh-cn/docs/json-to-anki/index.md",
+            "http://127.0.0.1:49754/zh-cn/docs/updates/index.md",
+            "http://127.0.0.1:49754/zh-cn/docs/media/index.md"
+          ],
+          "answer": "中文 JSON 指南提供三种 SDK 的完整程序。将两份 JSON、cell.png、tone.wav 放在 recipe/，使用新的输出目录；Python 路径为 `python main.py recipe output/python`。程序先保存原始 v1.apkg，再比较 v2、写 comparison.json，使用 update_from(baseline) 预备候选包，检查其 review.json 中策略并发布同一文件。biology-json 命名空间与每行持久 id 是稳定身份；每版应有 3 条笔记、3 张卡片、2 个媒体资源，第一次答案变化对应 RISK.NOTE_CHANGED，没有新增或删除笔记。原始 v1 和报告要保留。Anki 重新导出不能替代更新基线；导入不能同步删除，也不能保证较新本地修改或复习计划。发布前需用目标客户端验证。来源：[JSON 示例](https://ankiforge.dev/zh-cn/docs/json-to-anki/index.md)、[身份与更新策略](https://ankiforge.dev/zh-cn/docs/updates/index.md)、[媒体](https://ankiforge.dev/zh-cn/docs/media/index.md)。",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/022-zh-cn_llms.txt.body",
+              "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+              "description": "Exact HTTP response body read for zh-CN/json-update: http://127.0.0.1:49754/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/022-zh-cn_llms.txt.http.json",
+              "sha256": "0070098d2565158e60369346fd643f286f37b0cebf694b68af5834648245e4dd",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/023-zh-cn_docs_json-to-anki_index.md.body",
+              "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+              "description": "Exact HTTP response body read for zh-CN/json-update: http://127.0.0.1:49754/zh-cn/docs/json-to-anki/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/023-zh-cn_docs_json-to-anki_index.md.http.json",
+              "sha256": "c16ee37e8c671fe43540834645a488ef5e0857934bc626725922d22b95baf8f0",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/docs/json-to-anki/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/024-zh-cn_docs_updates_index.md.body",
+              "sha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408",
+              "description": "Exact HTTP response body read for zh-CN/json-update: http://127.0.0.1:49754/zh-cn/docs/updates/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/024-zh-cn_docs_updates_index.md.http.json",
+              "sha256": "4597831e2ff97ac5273eb4eef54a481b72dada55170697372fe84ed6a80a91f3",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/docs/updates/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/025-zh-cn_docs_media_index.md.body",
+              "sha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c",
+              "description": "Exact HTTP response body read for zh-CN/json-update: http://127.0.0.1:49754/zh-cn/docs/media/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/025-zh-cn_docs_media_index.md.http.json",
+              "sha256": "9feffb04a098d8c32de13ba0f21184b7bd86f677b094172d9e63bb0762fdb214",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/docs/media/index.md"
+            },
+            {
+              "route": "/zh-cn/docs/json-to-anki/index.md",
+              "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+              "observation": "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result. Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims. Selected from llms as “用 JSON 数据生成并更新 Anki 牌组”."
+            },
+            {
+              "route": "/zh-cn/docs/updates/index.md",
+              "sha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408",
+              "observation": "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result. Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims. Selected from llms as “用稳定笔记 ID 更新 Anki 牌组”."
+            },
+            {
+              "route": "/zh-cn/docs/media/index.md",
+              "sha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c",
+              "observation": "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result. Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims. Selected from llms as “为 Anki 卡片添加图片与音频”."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/zh-cn/llms.txt",
+            "http://127.0.0.1:49754/zh-cn/docs/compatibility/index.md",
+            "http://127.0.0.1:49754/zh-cn/docs/build-guarantees/index.md"
+          ],
+          "answer": "根域名中文兼容性页明确区分公开包、已验证环境和客户端行为。0.3.1 的记录覆盖 Rust 1.92、Node 22.13 及 22/24/26、CPython 3.11–3.14；原生目标为 macOS arm64/x64、Linux x64 glibc、Windows x64。它没有承诺所有主机都可运行；Node 浏览器/Electron/Bun/musl/Linux或Windows ARM64 与其他 Python 实现、自由线程和子解释器需另外验证。导出不需 Anki，而导入、播放、字段合并、本地编辑与复习历史仍由客户端条件决定。更新必须保留原始分发包。构建保证还说明：临时文件随最后所有者删除，检查预算为有限值，原子替换仅针对单文件，晚期失败可能已经发布但持久性未确认。正文说明预备发布已在公开 0.3.1 中，虽仍有旧的“源码”小标题。来源：[兼容性](https://ankiforge.dev/zh-cn/docs/compatibility/index.md)、[构建保证](https://ankiforge.dev/zh-cn/docs/build-guarantees/index.md)。",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/026-zh-cn_llms.txt.body",
+              "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+              "description": "Exact HTTP response body read for zh-CN/compatibility-constraints: http://127.0.0.1:49754/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/026-zh-cn_llms.txt.http.json",
+              "sha256": "0a8eb6fd38258f034636ae983c3233dbb94ca1a6698b4ef0caa00452b84b2ca5",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/027-zh-cn_docs_compatibility_index.md.body",
+              "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+              "description": "Exact HTTP response body read for zh-CN/compatibility-constraints: http://127.0.0.1:49754/zh-cn/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/027-zh-cn_docs_compatibility_index.md.http.json",
+              "sha256": "11f91b6e599bdb678c4326d1f7ab44eabcf844319ba0c42666d0e77179ff1ae3",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/028-zh-cn_docs_build-guarantees_index.md.body",
+              "sha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22",
+              "description": "Exact HTTP response body read for zh-CN/compatibility-constraints: http://127.0.0.1:49754/zh-cn/docs/build-guarantees/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/028-zh-cn_docs_build-guarantees_index.md.http.json",
+              "sha256": "b9cbf906867606883588676655131fb82bfd6751e65d3c7d59aa4af63c963579",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/zh-cn/docs/build-guarantees/index.md"
+            },
+            {
+              "route": "/zh-cn/docs/compatibility/index.md",
+              "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+              "observation": "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability. The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests. Selected from llms as “兼容性与发布”."
+            },
+            {
+              "route": "/zh-cn/docs/build-guarantees/index.md",
+              "sha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22",
+              "observation": "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability. The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests. Selected from llms as “构建与输出保证”."
+            }
+          ],
+          "openIssues": [
+            {
+              "id": "machine-root-zh-CN-build-guarantees-heading",
+              "severity": "minor",
+              "route": "/zh-cn/docs/build-guarantees/index.md",
+              "observation": "The subsection heading “源码中的预备发布” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+              "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+            }
+          ]
+        }
+      ],
+      "openIssues": [
+        {
+          "id": "machine-root-zh-CN-python-api-heading",
+          "severity": "minor",
+          "route": "/zh-cn/docs/python-api/index.md",
+          "observation": "The subsection heading “源码 API 详情” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        },
+        {
+          "id": "machine-root-zh-CN-build-guarantees-heading",
+          "severity": "minor",
+          "route": "/zh-cn/docs/build-guarantees/index.md",
+          "observation": "The subsection heading “源码中的预备发布” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        }
+      ]
+    },
+    "es": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/es/llms.txt",
+            "http://127.0.0.1:49754/es/docs/python-quickstart/index.md",
+            "http://127.0.0.1:49754/es/docs/compatibility/index.md",
+            "http://127.0.0.1:49754/es/docs/python-api/index.md"
+          ],
+          "answer": "El índice de IA en español del dominio raíz lleva a una guía completa de Python. Crea y activa un entorno virtual, instala `ankiforge==0.3.1` con pip y guarda el ejemplo Project/Note/BuildOptions en main.py. Al ejecutar `python main.py` obtienes spanish.apkg persistente, con hola → hello en el mazo Spanish. El requisito es CPython convencional 3.11+ con wheel compatible; las versiones verificadas registradas son 3.11–3.14. En Windows activa el entorno con `.venv\\Scripts\\Activate.ps1`. Mantén el espacio de nombres spanish y la clave es:hola cuando cambies el texto. Anki se usa para importar el archivo, no para generarlo. La referencia aclara que liberar un archivo persistente conserva su ruta, mientras que el temporal depende del último propietario. Fuentes: [guía de Python](https://ankiforge.dev/es/docs/python-quickstart/index.md), [plataformas](https://ankiforge.dev/es/docs/compatibility/index.md), [API y archivos](https://ankiforge.dev/es/docs/python-api/index.md).",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/029-es_llms.txt.body",
+              "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+              "description": "Exact HTTP response body read for es/python-install: http://127.0.0.1:49754/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/029-es_llms.txt.http.json",
+              "sha256": "d377575ff5e5028217c827c37e4c8f8c340acce070eb444651e6e3d0342b48a1",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/030-es_docs_python-quickstart_index.md.body",
+              "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+              "description": "Exact HTTP response body read for es/python-install: http://127.0.0.1:49754/es/docs/python-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/030-es_docs_python-quickstart_index.md.http.json",
+              "sha256": "ae111e92943ae6793d58773f53c5093de116a97b5bc966bd03d5a874d8076a87",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/docs/python-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/031-es_docs_compatibility_index.md.body",
+              "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+              "description": "Exact HTTP response body read for es/python-install: http://127.0.0.1:49754/es/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/031-es_docs_compatibility_index.md.http.json",
+              "sha256": "6ec55c3750481c389f3577f4f5b769a60da3fb30cd9bb5910990081cb59b198e",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/032-es_docs_python-api_index.md.body",
+              "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+              "description": "Exact HTTP response body read for es/python-install: http://127.0.0.1:49754/es/docs/python-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/032-es_docs_python-api_index.md.http.json",
+              "sha256": "ccc3087d74ecab0a8e9e44a05928da527f398c2a1623fd6e2eb184b7cab9090a",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/docs/python-api/index.md"
+            },
+            {
+              "route": "/es/docs/python-quickstart/index.md",
+              "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+              "observation": "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example. Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose. Selected from llms as “Genera un APKG de Anki con Python”."
+            },
+            {
+              "route": "/es/docs/compatibility/index.md",
+              "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+              "observation": "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example. Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose. Selected from llms as “Compatibilidad de Anki Forge y entornos verificados”."
+            },
+            {
+              "route": "/es/docs/python-api/index.md",
+              "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+              "observation": "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example. Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose. Selected from llms as “API de Python”."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/es/llms.txt",
+            "http://127.0.0.1:49754/es/docs/node-api/index.md",
+            "http://127.0.0.1:49754/es/docs/node-quickstart/index.md"
+          ],
+          "answer": "La documentación española del dominio raíz permite identificar y usar la API pública de Node. Con Node.js 22.13+, instala `npm install --include=optional ankiforge@0.3.1`; elige ESM con .mjs o CommonJS con require. Project añade notas con claves explícitas; `await project.build(BuildOptions.to(path))` devuelve artifact, report y snapshot. Conserva un propietario mientras lees una ruta temporal; cerrar uno persistente no borra el archivo. Las operaciones de generación/comparación capturan una instantánea al invocarse. Una comparación correcta todavía puede denegar publicar; la política predeterminada bloquea High/Critical. Para actualizar, usa updateFrom con el APKG original. Distingue las propiedades nativas highestRisk de highest_risk en JSON. TypeScript usa ES2022/NodeNext y el archivo .mjs compilado. Fuentes: [referencia](https://ankiforge.dev/es/docs/node-api/index.md), [instalación y ejemplo](https://ankiforge.dev/es/docs/node-quickstart/index.md).",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/033-es_llms.txt.body",
+              "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+              "description": "Exact HTTP response body read for es/node-api: http://127.0.0.1:49754/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/033-es_llms.txt.http.json",
+              "sha256": "c557d85bf4e8ad86303256c6a8ebf203006b496cc96480dd451c1f4e93bae10b",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/034-es_docs_node-api_index.md.body",
+              "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+              "description": "Exact HTTP response body read for es/node-api: http://127.0.0.1:49754/es/docs/node-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/034-es_docs_node-api_index.md.http.json",
+              "sha256": "659ab123c5149d9dcb79149d58f7aaed67c9153593053e6b727ceff9817d4190",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/docs/node-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/035-es_docs_node-quickstart_index.md.body",
+              "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+              "description": "Exact HTTP response body read for es/node-api: http://127.0.0.1:49754/es/docs/node-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/035-es_docs_node-quickstart_index.md.http.json",
+              "sha256": "cada46392b8153fd33dc203b0966ddec9094c65688f6005fe9caf797847f82f5",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/docs/node-quickstart/index.md"
+            },
+            {
+              "route": "/es/docs/node-api/index.md",
+              "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+              "observation": "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names. The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation. Selected from llms as “API de Node y TypeScript”."
+            },
+            {
+              "route": "/es/docs/node-quickstart/index.md",
+              "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+              "observation": "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names. The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation. Selected from llms as “Genera un APKG de Anki con Node.js”."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/es/llms.txt",
+            "http://127.0.0.1:49754/es/docs/json-to-anki/index.md",
+            "http://127.0.0.1:49754/es/docs/updates/index.md",
+            "http://127.0.0.1:49754/es/docs/media/index.md"
+          ],
+          "answer": "La receta española del dominio raíz parte de dos JSON y dos archivos multimedia en recipe/. Selecciona uno de los tres programas completos; con Python ejecuta `python main.py recipe output/python` después de instalar 0.3.1, usando una salida nueva. Se conserva v1.apkg, se compara v2 y se escribe comparison.json; después se prepara la actualización desde ese original, se revisa de nuevo la política y se publica el candidato ya revisado. El resultado esperado es tres notas, tres tarjetas y dos recursos por versión; RISK.NOTE_CHANGED describe el cambio de la primera respuesta, sin altas ni bajas. Conserva biology-json y los ID persistentes de las filas. No uses una reexportación de Anki como referencia. Las eliminaciones omitidas, los cambios locales y el historial de repaso requieren comprobar el cliente; un build correcto no garantiza esos efectos. Fuentes: [JSON](https://ankiforge.dev/es/docs/json-to-anki/index.md), [actualización e identidad](https://ankiforge.dev/es/docs/updates/index.md), [medios](https://ankiforge.dev/es/docs/media/index.md).",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/036-es_llms.txt.body",
+              "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+              "description": "Exact HTTP response body read for es/json-update: http://127.0.0.1:49754/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/036-es_llms.txt.http.json",
+              "sha256": "b99a45b48337ac7626400cbcabb55ad92092416471927327c32474d809bfa646",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/037-es_docs_json-to-anki_index.md.body",
+              "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+              "description": "Exact HTTP response body read for es/json-update: http://127.0.0.1:49754/es/docs/json-to-anki/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/037-es_docs_json-to-anki_index.md.http.json",
+              "sha256": "e917d3fb16ad8841c4516eac02b8f0636df0254c3830b41bf9526abbc4f524bd",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/docs/json-to-anki/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/038-es_docs_updates_index.md.body",
+              "sha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391",
+              "description": "Exact HTTP response body read for es/json-update: http://127.0.0.1:49754/es/docs/updates/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/038-es_docs_updates_index.md.http.json",
+              "sha256": "2d4e95155df92d15bc714c2cb64a905c7d6c693212cb765357934188cb0ebc97",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/docs/updates/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/039-es_docs_media_index.md.body",
+              "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+              "description": "Exact HTTP response body read for es/json-update: http://127.0.0.1:49754/es/docs/media/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/039-es_docs_media_index.md.http.json",
+              "sha256": "476944d2d5c89781a8ef862c051ac49e5a4a815df3c3c190d061c1052082e34d",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/docs/media/index.md"
+            },
+            {
+              "route": "/es/docs/json-to-anki/index.md",
+              "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+              "observation": "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result. Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims. Selected from llms as “Genera y actualiza mazos de Anki desde JSON”."
+            },
+            {
+              "route": "/es/docs/updates/index.md",
+              "sha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391",
+              "observation": "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result. Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims. Selected from llms as “Actualiza mazos de Anki con ID de nota estables”."
+            },
+            {
+              "route": "/es/docs/media/index.md",
+              "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+              "observation": "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result. Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims. Selected from llms as “Añade imágenes y audio a tus tarjetas Anki”."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:49754/es/llms.txt",
+            "http://127.0.0.1:49754/es/docs/compatibility/index.md",
+            "http://127.0.0.1:49754/es/docs/build-guarantees/index.md"
+          ],
+          "answer": "El dominio raíz conserva una matriz fechada para el paquete 0.3.1: Rust 1.92, Node 22.13 y ramas 22/24/26, CPython convencional 3.11–3.14. Los destinos nativos son macOS arm64/x64, Linux x64 glibc y Windows x64. No se equipara disponibilidad con ejecución probada en cualquier equipo: navegador, Electron, Bun, musl y Linux/Windows ARM64 no forman parte de las pruebas registradas de Node; otros Python e intérpretes sin GIL o subintérpretes se validan aparte. Un APKG generado no certifica importación, reproducción ni conservación de ediciones o repasos en cada Anki. Para actualizar hay que conservar el original. Las garantías de salida distinguen vida útil temporal, presupuestos finitos y reemplazo atómico por archivo. Si falla tarde, puede haberse publicado con durabilidad no confirmada; consulta el estado antes de reintentar. La publicación preparada sí forma parte de 0.3.1. Fuentes: [compatibilidad](https://ankiforge.dev/es/docs/compatibility/index.md), [garantías](https://ankiforge.dev/es/docs/build-guarantees/index.md).",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/session.json",
+              "sha256": "782f4d167107112241cdf11074b3369b7bf9775562352f16fdf1b97d15663340",
+              "description": "Stopped HTTP session: exact SITE_* configuration, all 380 artifact records verified, actual request sequence and response metadata."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-plan.json",
+              "sha256": "01d3447168ca4c9a2560e8e6f5a233bb5d62cffbac7ac62ca8d18f5cd44899a8",
+              "description": "Actual per-task llms starting URL and selected same-locale Markdown links parsed from that fetched index."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/reading-assessment.json",
+              "sha256": "fffcad1f7d2116029cbe84d4693493fa5ef8c46f50ce2cc061d48a6f77743a6e",
+              "description": "Independently authored current-artifact task answers and substantive reading observations, recorded after examining the response text."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/040-es_llms.txt.body",
+              "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+              "description": "Exact HTTP response body read for es/compatibility-constraints: http://127.0.0.1:49754/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/040-es_llms.txt.http.json",
+              "sha256": "c31e9bea231e6db0e7a53da3819c8c2c499e62cf04b6acf325ad18e03764633d",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/041-es_docs_compatibility_index.md.body",
+              "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+              "description": "Exact HTTP response body read for es/compatibility-constraints: http://127.0.0.1:49754/es/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/041-es_docs_compatibility_index.md.http.json",
+              "sha256": "c92f659998f5115de449a676e848817a1cff082384b9b55f2f1ba6bbc6942718",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/042-es_docs_build-guarantees_index.md.body",
+              "sha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe",
+              "description": "Exact HTTP response body read for es/compatibility-constraints: http://127.0.0.1:49754/es/docs/build-guarantees/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root/042-es_docs_build-guarantees_index.md.http.json",
+              "sha256": "9834804828bde6b2e256c1c655bd140517510332085e6f7fd2f26352cf611bd1",
+              "description": "Actual GET status, headers, UTF-8 checks and frozen-manifest body binding for http://127.0.0.1:49754/es/docs/build-guarantees/index.md"
+            },
+            {
+              "route": "/es/docs/compatibility/index.md",
+              "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+              "observation": "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability. The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests. Selected from llms as “Compatibilidad de Anki Forge y entornos verificados”."
+            },
+            {
+              "route": "/es/docs/build-guarantees/index.md",
+              "sha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe",
+              "observation": "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability. The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests. Selected from llms as “Garantías de generación y de los archivos APKG”."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    }
+  },
+  "openIssues": [
+    {
+      "id": "machine-root-en-python-api-heading",
+      "severity": "minor",
+      "route": "/docs/python-api/index.md",
+      "observation": "The subsection heading “Source API details” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+      "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+    },
+    {
+      "id": "machine-root-en-build-guarantees-heading",
+      "severity": "minor",
+      "route": "/docs/build-guarantees/index.md",
+      "observation": "The subsection heading “Prepared publication from source” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+      "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+    },
+    {
+      "id": "machine-root-zh-CN-python-api-heading",
+      "severity": "minor",
+      "route": "/zh-cn/docs/python-api/index.md",
+      "observation": "The subsection heading “源码 API 详情” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+      "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+    },
+    {
+      "id": "machine-root-zh-CN-build-guarantees-heading",
+      "severity": "minor",
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "observation": "The subsection heading “源码中的预备发布” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+      "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+    }
+  ]
+}

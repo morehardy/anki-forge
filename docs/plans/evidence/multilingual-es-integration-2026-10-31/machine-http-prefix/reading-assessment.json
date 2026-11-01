@@ -1,0 +1,468 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/spanish_spec/independent-machine-prefix-2026-10-31",
+  "completedAt": "2026-11-01T04:04:03.480Z",
+  "readOrigin": "http://127.0.0.1:65349",
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/prefix-origin-manifest.json",
+    "sha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
+    "commit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
+    "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es"
+    ]
+  },
+  "method": "Fresh HTTP GET of each locale llms at the beginning of every task, parsing its actual links and following same-locale Markdown. Read captured text, including task instructions, API tables, example operations and limitations; author the answers below independently. The other deployment was separately fetched/read; its task bodies were also compared after exact origin/base substitution. No previous acceptance answers were imported.",
+  "limitations": "These are readings of frozen local build artifacts, not requests to the live public deployment or SDK/client execution. The HTTP metadata records actual loopback headers, not assumed production-host headers.",
+  "tasks": [
+    {
+      "locale": "en",
+      "id": "python-install",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/llms.txt",
+      "entryBody": "004-anki-forge_llms.txt.body",
+      "followed": [
+        {
+          "topic": "python-quickstart",
+          "label": "Generate Anki flashcards with Python",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/docs/python-quickstart/index.md",
+          "route": "/anki-forge/docs/python-quickstart/index.md"
+        },
+        {
+          "topic": "compatibility",
+          "label": "Compatibility and releases",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/docs/compatibility/index.md",
+          "route": "/anki-forge/docs/compatibility/index.md"
+        },
+        {
+          "topic": "python-api",
+          "label": "Python API",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/docs/python-api/index.md",
+          "route": "/anki-forge/docs/python-api/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "005-anki-forge_docs_python-quickstart_index.md.body",
+        "006-anki-forge_docs_compatibility_index.md.body",
+        "007-anki-forge_docs_python-api_index.md.body"
+      ],
+      "answer": "Use ordinary CPython 3.11+ with a wheel matching your platform; the documented release checks cover 3.11–3.14. Create and activate `.venv` (`python -m venv .venv`, then `. .venv/bin/activate`; PowerShell uses `.venv\\Scripts\\Activate.ps1`) and run `python -m pip install ankiforge==0.3.1`. Save the guide's program as `main.py`: create `Project('spanish', default_deck='Spanish')`, add key `es:hola` with `Note.basic('hola', 'hello')`, then build with `BuildOptions.to('spanish.apkg')`. `python main.py` produces a persistent APKG; exporting does not require Anki. Preserve the namespace and note key for future edits. The API distinguishes persistent output from temporary artifacts whose last owner controls lifetime. Sources: [Python quickstart](https://morehardy.github.io/anki-forge/docs/python-quickstart/index.md), [platform coverage](https://morehardy.github.io/anki-forge/docs/compatibility/index.md), [Python API](https://morehardy.github.io/anki-forge/docs/python-api/index.md).",
+      "observations": [
+        "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example.",
+        "Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose."
+      ],
+      "status": "passed",
+      "openIssues": [
+        {
+          "id": "machine-prefix-en-python-api-heading",
+          "severity": "minor",
+          "route": "/anki-forge/docs/python-api/index.md",
+          "observation": "The subsection heading “Source API details” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "id": "node-api",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/llms.txt",
+      "entryBody": "008-anki-forge_llms.txt.body",
+      "followed": [
+        {
+          "topic": "node-api",
+          "label": "Node and TypeScript API",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/docs/node-api/index.md",
+          "route": "/anki-forge/docs/node-api/index.md"
+        },
+        {
+          "topic": "node-quickstart",
+          "label": "Generate Anki flashcards with Node.js",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/docs/node-quickstart/index.md",
+          "route": "/anki-forge/docs/node-quickstart/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "009-anki-forge_docs_node-api_index.md.body",
+        "010-anki-forge_docs_node-quickstart_index.md.body"
+      ],
+      "answer": "The linked Node API is the Project-based public interface. With Node.js 22.13+, install `ankiforge@0.3.1` using `npm install --include=optional`; this includes the matching native dependency. Create `new Project('spanish').defaultDeck('Spanish')`, add an explicitly keyed `Note.basic`, then await `project.build(BuildOptions.to('spanish.apkg'))`. Close the returned persistent artifact when finished; its file remains on disk. Build/compare capture a project snapshot at invocation, and media/bundle reads are asynchronous. A successful compare can still disallow publication: inspect the policy separately. Native report properties use forms such as `highestRisk`, while JSON snapshots use `highest_risk` and `allows_publication`. TypeScript uses NodeNext/ES2022, `typescript` and `@types/node`; compile `.mts` with `npx tsc`, then run the generated `.mjs`. Sources: [Node API](https://morehardy.github.io/anki-forge/docs/node-api/index.md), [Node quickstart](https://morehardy.github.io/anki-forge/docs/node-quickstart/index.md).",
+      "observations": [
+        "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names.",
+        "The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "en",
+      "id": "json-update",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/llms.txt",
+      "entryBody": "011-anki-forge_llms.txt.body",
+      "followed": [
+        {
+          "topic": "json-to-anki",
+          "label": "Generate and update Anki decks from JSON",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/docs/json-to-anki/index.md",
+          "route": "/anki-forge/docs/json-to-anki/index.md"
+        },
+        {
+          "topic": "updates",
+          "label": "Update Anki decks with stable note IDs",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/docs/updates/index.md",
+          "route": "/anki-forge/docs/updates/index.md"
+        },
+        {
+          "topic": "media",
+          "label": "Add images and audio to Anki cards",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/docs/media/index.md",
+          "route": "/anki-forge/docs/media/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "012-anki-forge_docs_json-to-anki_index.md.body",
+        "013-anki-forge_docs_updates_index.md.body",
+        "014-anki-forge_docs_media_index.md.body"
+      ],
+      "answer": "Place `v1.json`, `v2.json`, `cell.png` and `tone.wav` in `recipe/`; the audio is a generated tone. The application parses JSON containing namespace, deck and durable note IDs; the SDK composes notes and APKGs. For the Python path, install 0.3.1, save the supplied complete script as `main.py`, then run `python main.py recipe output/python` in a fresh output directory. It builds original `v1.apkg`, compares the v2 project, saves `comparison.json`, prepares an update using that original baseline, checks the prepared report again, and publishes the same reviewed candidate. Expect three notes/cards and two media files, `RISK.NOTE_CHANGED`, and no additions/removals. Keep `biology-json` and the IDs stable. An Anki re-export is not a valid baseline; imports do not synchronize deletions or guarantee a learner's scheduling/local edits. Sources: [JSON recipe](https://morehardy.github.io/anki-forge/docs/json-to-anki/index.md), [update conditions](https://morehardy.github.io/anki-forge/docs/updates/index.md), [media](https://morehardy.github.io/anki-forge/docs/media/index.md).",
+      "observations": [
+        "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result.",
+        "Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "en",
+      "id": "compatibility-constraints",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/llms.txt",
+      "entryBody": "015-anki-forge_llms.txt.body",
+      "followed": [
+        {
+          "topic": "compatibility",
+          "label": "Compatibility and releases",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/docs/compatibility/index.md",
+          "route": "/anki-forge/docs/compatibility/index.md"
+        },
+        {
+          "topic": "build-guarantees",
+          "label": "Build and output guarantees",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/docs/build-guarantees/index.md",
+          "route": "/anki-forge/docs/build-guarantees/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "016-anki-forge_docs_compatibility_index.md.body",
+        "017-anki-forge_docs_build-guarantees_index.md.body"
+      ],
+      "answer": "The compatibility page dates its public-package check to 2026-10-13 and names version 0.3.1. Recorded runtimes include Rust 1.92, Node 22.13/current 22, 24 and 26, and ordinary CPython 3.11–3.14. Native packages cover macOS arm64/x64, Linux x64 GNU/glibc and Windows x64; availability does not prove every host works. Browser/Electron/Bun, Alpine/musl and Linux/Windows ARM64 are outside the documented Node verification; other Python implementations, free-threaded interpreters and subinterpreters need separate validation. Export needs no Anki, but import, rendering, codecs and review-state behavior require target-client tests. Retain the original APKG for updates. Temporary files require a live artifact owner. Atomic replacement covers an individual APKG, not an accompanying JSON report or universal crash durability; inspect late-error publication facts. Inspection limits apply separately to baseline/candidate and zero means zero. Sources: [compatibility](https://morehardy.github.io/anki-forge/docs/compatibility/index.md), [build guarantees](https://morehardy.github.io/anki-forge/docs/build-guarantees/index.md).",
+      "observations": [
+        "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability.",
+        "The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests."
+      ],
+      "status": "passed",
+      "openIssues": [
+        {
+          "id": "machine-prefix-en-build-guarantees-heading",
+          "severity": "minor",
+          "route": "/anki-forge/docs/build-guarantees/index.md",
+          "observation": "The subsection heading “Prepared publication from source” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        }
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "id": "python-install",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/zh-cn/llms.txt",
+      "entryBody": "018-anki-forge_zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "python-quickstart",
+          "label": "用 Python 生成 Anki 卡片",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/zh-cn/docs/python-quickstart/index.md",
+          "route": "/anki-forge/zh-cn/docs/python-quickstart/index.md"
+        },
+        {
+          "topic": "compatibility",
+          "label": "兼容性与发布",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/zh-cn/docs/compatibility/index.md",
+          "route": "/anki-forge/zh-cn/docs/compatibility/index.md"
+        },
+        {
+          "topic": "python-api",
+          "label": "Python API",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/zh-cn/docs/python-api/index.md",
+          "route": "/anki-forge/zh-cn/docs/python-api/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "019-anki-forge_zh-cn_docs_python-quickstart_index.md.body",
+        "020-anki-forge_zh-cn_docs_compatibility_index.md.body",
+        "021-anki-forge_zh-cn_docs_python-api_index.md.body"
+      ],
+      "answer": "使用普通 CPython 3.11+ 和匹配平台的 wheel；文档记录的发布检查覆盖 3.11–3.14。先运行 `python -m venv .venv`，再用 `. .venv/bin/activate` 激活；Windows PowerShell 使用 `.venv\\Scripts\\Activate.ps1`。安装命令是 `python -m pip install ankiforge==0.3.1`。将完整示例保存为 `main.py`：建立 `Project('spanish', default_deck='Spanish')`，用稳定键 `es:hola` 添加 `Note.basic('hola', 'hello')`，再通过 `BuildOptions.to('spanish.apkg')` 构建。运行 `python main.py`，会得到持久保存的 APKG，导出阶段无需安装 Anki。后续编辑保留命名空间和笔记键；临时文件与持久文件的寿命不同，报告不会保留文件。依据：[Python 入门](https://morehardy.github.io/anki-forge/zh-cn/docs/python-quickstart/index.md)、[已验证环境](https://morehardy.github.io/anki-forge/zh-cn/docs/compatibility/index.md)、[Python API](https://morehardy.github.io/anki-forge/zh-cn/docs/python-api/index.md)。",
+      "observations": [
+        "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example.",
+        "Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose."
+      ],
+      "status": "passed",
+      "openIssues": [
+        {
+          "id": "machine-prefix-zh-CN-python-api-heading",
+          "severity": "minor",
+          "route": "/anki-forge/zh-cn/docs/python-api/index.md",
+          "observation": "The subsection heading “源码 API 详情” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        }
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "id": "node-api",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/zh-cn/llms.txt",
+      "entryBody": "022-anki-forge_zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "node-api",
+          "label": "Node 与 TypeScript API",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/zh-cn/docs/node-api/index.md",
+          "route": "/anki-forge/zh-cn/docs/node-api/index.md"
+        },
+        {
+          "topic": "node-quickstart",
+          "label": "用 Node.js 生成 Anki 卡片",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/zh-cn/docs/node-quickstart/index.md",
+          "route": "/anki-forge/zh-cn/docs/node-quickstart/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "023-anki-forge_zh-cn_docs_node-api_index.md.body",
+        "024-anki-forge_zh-cn_docs_node-quickstart_index.md.body"
+      ],
+      "answer": "Node.js 要求 22.13+，使用 `npm install --include=optional ankiforge@0.3.1` 安装公开包及匹配的原生依赖。从 `ankiforge` 导入 Project、Note 和 BuildOptions，用显式稳定键添加笔记，再 `await project.build(BuildOptions.to('spanish.apkg'))`。关闭持久产物对象后文件仍存在；最后一个临时产物所有者关闭后临时文件会删除。build/compare 在调用时捕获项目快照，之后编辑不改变该请求。比较完成不代表允许发布，要单独检查 policy。原生比较对象使用 `highestRisk`，JSON 快照使用 `highest_risk`、`allows_publication`，不能机械改成 camelCase。TypeScript 安装 typescript/@types/node，使用 ES2022、NodeNext 配置，经 `npx tsc` 编译后执行 `.mjs`。依据：[Node API](https://morehardy.github.io/anki-forge/zh-cn/docs/node-api/index.md)、[Node 入门](https://morehardy.github.io/anki-forge/zh-cn/docs/node-quickstart/index.md)。",
+      "observations": [
+        "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names.",
+        "The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "zh-CN",
+      "id": "json-update",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/zh-cn/llms.txt",
+      "entryBody": "025-anki-forge_zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "json-to-anki",
+          "label": "用 JSON 数据生成并更新 Anki 牌组",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/zh-cn/docs/json-to-anki/index.md",
+          "route": "/anki-forge/zh-cn/docs/json-to-anki/index.md"
+        },
+        {
+          "topic": "updates",
+          "label": "用稳定笔记 ID 更新 Anki 牌组",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/zh-cn/docs/updates/index.md",
+          "route": "/anki-forge/zh-cn/docs/updates/index.md"
+        },
+        {
+          "topic": "media",
+          "label": "为 Anki 卡片添加图片与音频",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/zh-cn/docs/media/index.md",
+          "route": "/anki-forge/zh-cn/docs/media/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "026-anki-forge_zh-cn_docs_json-to-anki_index.md.body",
+        "027-anki-forge_zh-cn_docs_updates_index.md.body",
+        "028-anki-forge_zh-cn_docs_media_index.md.body"
+      ],
+      "answer": "先把 v1.json、v2.json、cell.png 和 tone.wav 放入 recipe/；音频是短合成音。调用方解析 JSON 中的 namespace、deck 和持久笔记 id，Anki Forge 负责构造内容和 APKG。Python 示例安装 0.3.1 后保存为 main.py，在新的输出目录运行 `python main.py recipe output/python`。它生成原始 v1.apkg，比较 v2 并保存 comparison.json，再基于原始包预备候选版本、检查 review.json 中的策略，最后发布同一候选文件。预期每版 3 条笔记、3 张卡片、2 个媒体文件；仅有 RISK.NOTE_CHANGED，没有增删笔记。保持 biology-json 命名空间和三个业务键不变。Anki 重新导出的文件不能作基线；省略笔记不会同步删除，客户端本地编辑和复习调度仍需验证。依据：[JSON 流程](https://morehardy.github.io/anki-forge/zh-cn/docs/json-to-anki/index.md)、[更新条件](https://morehardy.github.io/anki-forge/zh-cn/docs/updates/index.md)、[媒体规则](https://morehardy.github.io/anki-forge/zh-cn/docs/media/index.md)。",
+      "observations": [
+        "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result.",
+        "Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "zh-CN",
+      "id": "compatibility-constraints",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/zh-cn/llms.txt",
+      "entryBody": "029-anki-forge_zh-cn_llms.txt.body",
+      "followed": [
+        {
+          "topic": "compatibility",
+          "label": "兼容性与发布",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/zh-cn/docs/compatibility/index.md",
+          "route": "/anki-forge/zh-cn/docs/compatibility/index.md"
+        },
+        {
+          "topic": "build-guarantees",
+          "label": "构建与输出保证",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/zh-cn/docs/build-guarantees/index.md",
+          "route": "/anki-forge/zh-cn/docs/build-guarantees/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "030-anki-forge_zh-cn_docs_compatibility_index.md.body",
+        "031-anki-forge_zh-cn_docs_build-guarantees_index.md.body"
+      ],
+      "answer": "兼容性页将公开包 0.3.1 的核对日期写为 2026-10-13；已记录 Rust 1.92、Node 22.13 及当前 22/24/26、普通 CPython 3.11–3.14 的检查。原生包覆盖 macOS arm64/x64、Linux x64 GNU/glibc、Windows x64，不能据此推断每台机器都测试通过。Node 的浏览器、Electron、Bun、Alpine/musl、Linux/Windows ARM64，以及其他 Python 实现、自由线程/子解释器需要另行验证。普通导出无需 Anki，实际导入、播放、字段变化和复习历史取决于客户端。更新须保留原始分发 APKG；临时输出须保留文件所有者。APKG 原子替换是单文件保证，独立 JSON 不属于同一事务，晚期失败可能已经发布而持久性未确认。检查预算分别用于基线与候选包，零不是无限制。依据：[兼容性](https://morehardy.github.io/anki-forge/zh-cn/docs/compatibility/index.md)、[构建保证](https://morehardy.github.io/anki-forge/zh-cn/docs/build-guarantees/index.md)。",
+      "observations": [
+        "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability.",
+        "The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests."
+      ],
+      "status": "passed",
+      "openIssues": [
+        {
+          "id": "machine-prefix-zh-CN-build-guarantees-heading",
+          "severity": "minor",
+          "route": "/anki-forge/zh-cn/docs/build-guarantees/index.md",
+          "observation": "The subsection heading “源码中的预备发布” suggests source-only scope, but its immediately following paragraph explicitly includes the capability in public 0.3.1. Full-text reading resolves the ambiguity; the required task remains actionable.",
+          "recommendation": "Update the displayed subsection heading while preserving stable anchors."
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "id": "python-install",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/es/llms.txt",
+      "entryBody": "032-anki-forge_es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "python-quickstart",
+          "label": "Genera un APKG de Anki con Python",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/es/docs/python-quickstart/index.md",
+          "route": "/anki-forge/es/docs/python-quickstart/index.md"
+        },
+        {
+          "topic": "compatibility",
+          "label": "Compatibilidad de Anki Forge y entornos verificados",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/es/docs/compatibility/index.md",
+          "route": "/anki-forge/es/docs/compatibility/index.md"
+        },
+        {
+          "topic": "python-api",
+          "label": "API de Python",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/es/docs/python-api/index.md",
+          "route": "/anki-forge/es/docs/python-api/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "033-anki-forge_es_docs_python-quickstart_index.md.body",
+        "034-anki-forge_es_docs_compatibility_index.md.body",
+        "035-anki-forge_es_docs_python-api_index.md.body"
+      ],
+      "answer": "Usa CPython convencional 3.11 o posterior con un wheel para tu plataforma; las comprobaciones registradas abarcan 3.11–3.14. Crea `.venv` con `python -m venv .venv`, actívalo con `. .venv/bin/activate` (en PowerShell, `.venv\\Scripts\\Activate.ps1`) e instala `python -m pip install ankiforge==0.3.1`. Guarda el programa completo como `main.py`: crea `Project('spanish', default_deck='Spanish')`, añade `Note.basic('hola', 'hello')` con la clave `es:hola` y genera `BuildOptions.to('spanish.apkg')`. Ejecuta `python main.py`; el archivo persiste y puede importarse en Anki. No necesitas Anki para exportar. Conserva el espacio de nombres y la clave al editar. La API distingue este archivo persistente de una salida temporal que desaparece al liberar su último propietario. Fuentes: [inicio con Python](https://morehardy.github.io/anki-forge/es/docs/python-quickstart/index.md), [compatibilidad](https://morehardy.github.io/anki-forge/es/docs/compatibility/index.md), [API de Python](https://morehardy.github.io/anki-forge/es/docs/python-api/index.md).",
+      "observations": [
+        "The locale llms link reaches the corresponding localized Python quickstart; its body retains the complete venv/pip command sequence and runnable Project/Note/BuildOptions example.",
+        "Runtime and matching-wheel constraints are qualified by recorded verification scope. The persistent output name, stable identity and no-Anki-needed-for-export condition can be extracted from prose."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "es",
+      "id": "node-api",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/es/llms.txt",
+      "entryBody": "036-anki-forge_es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "node-api",
+          "label": "API de Node y TypeScript",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/es/docs/node-api/index.md",
+          "route": "/anki-forge/es/docs/node-api/index.md"
+        },
+        {
+          "topic": "node-quickstart",
+          "label": "Genera un APKG de Anki con Node.js",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/es/docs/node-quickstart/index.md",
+          "route": "/anki-forge/es/docs/node-quickstart/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "037-anki-forge_es_docs_node-api_index.md.body",
+        "038-anki-forge_es_docs_node-quickstart_index.md.body"
+      ],
+      "answer": "El paquete usa el modelo Project y requiere Node.js 22.13 o posterior. Instala `npm install --include=optional ankiforge@0.3.1` para incluir la dependencia nativa. En un archivo `.mjs`, crea un Project, añade una nota con clave estable y espera `project.build(BuildOptions.to('spanish.apkg'))`; `await output.artifact.close()` libera el objeto y conserva el archivo persistente. La generación y la comparación son asíncronas y capturan el proyecto al invocarse. Una comparación terminada puede bloquear la publicación: comprueba su política. Los objetos usan propiedades como `highestRisk`, mientras que las instantáneas JSON conservan `highest_risk` y `allows_publication`. Para TypeScript instala typescript y @types/node, configura ES2022/NodeNext, compila con `npx tsc` y ejecuta el `.mjs` generado. Fuentes: [API de Node](https://morehardy.github.io/anki-forge/es/docs/node-api/index.md), [primeros pasos](https://morehardy.github.io/anki-forge/es/docs/node-quickstart/index.md).",
+      "observations": [
+        "The localized API table identifies Project, Note, async build/compare and output/report/artifact roles without translating method names.",
+        "The body distinguishes completed comparison from permission to publish, camelCase native properties from snake_case snapshots, temporary versus persistent ownership, and NodeNext TypeScript compilation."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "es",
+      "id": "json-update",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/es/llms.txt",
+      "entryBody": "039-anki-forge_es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "json-to-anki",
+          "label": "Genera y actualiza mazos de Anki desde JSON",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/es/docs/json-to-anki/index.md",
+          "route": "/anki-forge/es/docs/json-to-anki/index.md"
+        },
+        {
+          "topic": "updates",
+          "label": "Actualiza mazos de Anki con ID de nota estables",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/es/docs/updates/index.md",
+          "route": "/anki-forge/es/docs/updates/index.md"
+        },
+        {
+          "topic": "media",
+          "label": "Añade imágenes y audio a tus tarjetas Anki",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/es/docs/media/index.md",
+          "route": "/anki-forge/es/docs/media/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "040-anki-forge_es_docs_json-to-anki_index.md.body",
+        "041-anki-forge_es_docs_updates_index.md.body",
+        "042-anki-forge_es_docs_media_index.md.body"
+      ],
+      "answer": "Coloca v1.json, v2.json, cell.png y tone.wav en recipe/; el audio de muestra es un tono. La aplicación interpreta el JSON y sus ID persistentes; Anki Forge genera las notas y el APKG. Con el programa Python completo y el paquete 0.3.1, ejecuta `python main.py recipe output/python` en un directorio de salida nuevo. El flujo guarda v1.apkg, compara v2, escribe comparison.json y prepara una actualización a partir del APKG original. Revisa también la política del candidato preparado en review.json y publica ese mismo archivo. Cada versión contiene tres notas, tres tarjetas y dos recursos; solo cambia una respuesta, sin notas añadidas o eliminadas. Mantén biology-json y las claves de negocio. Una reexportación desde Anki no conserva las pruebas necesarias; la importación tampoco sincroniza eliminaciones ni garantiza el historial de repaso o las ediciones locales. Fuentes: [receta JSON](https://morehardy.github.io/anki-forge/es/docs/json-to-anki/index.md), [actualizaciones](https://morehardy.github.io/anki-forge/es/docs/updates/index.md), [recursos multimedia](https://morehardy.github.io/anki-forge/es/docs/media/index.md).",
+      "observations": [
+        "The guide identifies four input files, caller-parsed JSON, durable IDs, complete SDK programs and the 3-note/3-card/2-media expected result.",
+        "Its comparison and prepared-publication steps preserve the original v1 APKG and review the same candidate; updated prose explicitly limits Anki re-export, omission/deletion and scheduling/local-edit claims."
+      ],
+      "status": "passed",
+      "openIssues": []
+    },
+    {
+      "locale": "es",
+      "id": "compatibility-constraints",
+      "entryUrl": "http://127.0.0.1:65349/anki-forge/es/llms.txt",
+      "entryBody": "043-anki-forge_es_llms.txt.body",
+      "followed": [
+        {
+          "topic": "compatibility",
+          "label": "Compatibilidad de Anki Forge y entornos verificados",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/es/docs/compatibility/index.md",
+          "route": "/anki-forge/es/docs/compatibility/index.md"
+        },
+        {
+          "topic": "build-guarantees",
+          "label": "Garantías de generación y de los archivos APKG",
+          "canonicalUrl": "https://morehardy.github.io/anki-forge/es/docs/build-guarantees/index.md",
+          "route": "/anki-forge/es/docs/build-guarantees/index.md"
+        }
+      ],
+      "bodyFiles": [
+        "044-anki-forge_es_docs_compatibility_index.md.body",
+        "045-anki-forge_es_docs_build-guarantees_index.md.body"
+      ],
+      "answer": "La página fecha su comprobación de los paquetes 0.3.1 el 2026-10-13: Rust 1.92, Node 22.13 y ramas 22/24/26, y CPython convencional 3.11–3.14. Hay paquetes nativos para macOS arm64/x64, Linux x64 GNU/glibc y Windows x64; esto no demuestra que todos los equipos funcionen. Browser, Electron, Bun, Alpine/musl y Linux/Windows ARM64 quedan fuera de la verificación de Node; otros Python, intérpretes sin GIL y subintérpretes necesitan pruebas aparte. La exportación no requiere Anki, pero importación, códecs y cambios en la colección dependen del cliente. Conserva el APKG original para actualizar y un propietario vivo para archivos temporales. El reemplazo atómico es por archivo: no incluye un informe JSON separado ni garantiza la durabilidad tras un fallo. Un error tardío puede ocurrir después de publicar; revisa sus datos. Los límites se aplican a base y candidato por separado; cero no significa ilimitado. Fuentes: [compatibilidad](https://morehardy.github.io/anki-forge/es/docs/compatibility/index.md), [garantías](https://morehardy.github.io/anki-forge/es/docs/build-guarantees/index.md).",
+      "observations": [
+        "The locale-specific compatibility table states dated package/runtime/platform verification and explicit exclusions, rather than claiming universal portability.",
+        "The output guide separates persistent/temporary ownership, hard inspection limits, per-file atomic replacement and late durability failure; Anki client imports/playback require their own tests."
+      ],
+      "status": "passed",
+      "openIssues": []
+    }
+  ]
+}

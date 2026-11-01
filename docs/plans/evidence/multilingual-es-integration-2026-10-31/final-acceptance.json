@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "scope": "Spanish integration local release acceptance",
+  "sourceCommit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
+  "baseCommit": "e5d3d66a12e5ab9a2c161b65c7e055a3677f3f79",
+  "spanishBranchCommit": "991187c33ac438f10d2b3f7b56586724ab661052",
+  "locales": [
+    "en",
+    "zh-CN",
+    "es"
+  ],
+  "topicsPerLocale": 34,
+  "sourceReviews": {
+    "technical": 102,
+    "linguistic": 102,
+    "critical": 0,
+    "major": 0,
+    "minorLanguageObservations": 34
+  },
+  "checks": {
+    "unitTests": 144,
+    "astroFiles": 123,
+    "astroErrors": 0,
+    "astroWarnings": 0,
+    "completeRustPrograms": 14,
+    "inspectedExampleApkgs": 23,
+    "freshPublicSdks": [
+      "rust",
+      "python",
+      "node"
+    ],
+    "independentUsageTasks": 36,
+    "independentMachineReadTasks": 24
+  },
+  "deployments": {
+    "prefix": {
+      "status": "passed",
+      "manifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
+      "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
+      "checks": 8,
+      "browserTests": 23,
+      "htmlPages": 103,
+      "machineResources": 96,
+      "search": {
+        "en": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        },
+        "zh-CN": {
+          "core": 12,
+          "positive": 24,
+          "negative": 5
+        },
+        "es": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        }
+      },
+      "rebuild": "passed"
+    },
+    "root": {
+      "status": "passed",
+      "manifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+      "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
+      "checks": 8,
+      "browserTests": 23,
+      "htmlPages": 103,
+      "machineResources": 96,
+      "search": {
+        "en": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        },
+        "zh-CN": {
+          "core": 12,
+          "positive": 24,
+          "negative": 5
+        },
+        "es": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        }
+      },
+      "rebuild": "passed"
+    }
+  },
+  "externalStatusAtLocalAcceptance": {
+    "ci": "not-yet-run",
+    "deployed": false
+  }
+}

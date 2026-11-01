@@ -1,0 +1,3972 @@
+{
+  "schemaVersion": 1,
+  "mode": "release-candidate",
+  "status": "passed",
+  "manifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+  "querySetSha256": "6aff7ac950081d4796cb1291cfd942630f4176d9fea70947168be58ac4ef62b2",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "summaries": {
+    "en": {
+      "core": 12,
+      "positive": 25,
+      "negative": 5
+    },
+    "zh-CN": {
+      "core": 12,
+      "positive": 24,
+      "negative": 5
+    },
+    "es": {
+      "core": 12,
+      "positive": 25,
+      "negative": 5
+    }
+  },
+  "results": {
+    "en": [
+      {
+        "id": "en-core-01",
+        "query": "Rust apkg export",
+        "top3": [
+          {
+            "url": "/docs/quickstart/",
+            "title": "Generate Anki flashcards with Rust",
+            "excerpt": "flashcards with Rust. Use Rust 1.92 or later. For another language, choose Node / TypeScript or Python. Install. Terminal window cargo new anki-deck. cd anki-deck. cargo add ankiforge@0.3.1. Export your",
+            "score": 21.57279240250022,
+            "matchedTerms": [
+              "Rust",
+              "apkg",
+              "export"
+            ],
+            "pageId": "quickstart"
+          },
+          {
+            "url": "/blog/your-first-anki-deck/",
+            "title": "Build your first Anki deck with Rust",
+            "excerpt": "your first Anki deck with Rust. From a short Rust program to a Spanish flashcard you can open in Anki. TutorialSeptember 22, 2026. When your notes already live in a",
+            "score": 13.179849874956894,
+            "matchedTerms": [
+              "Rust",
+              "apkg",
+              "export"
+            ],
+            "pageId": "blog:your-first-anki-deck"
+          },
+          {
+            "url": "/docs/rust-api/",
+            "title": "Rust API guide",
+            "excerpt": "Rust API guide. Common values are available at the crate root: Project, Note, NoteType, Field, Template, Content, Media, BuildOptions, and BuildOutput. The public domain modules are note, schema, media, build,",
+            "score": 9.762851759227328,
+            "matchedTerms": [
+              "Rust",
+              "apkg",
+              "export"
+            ],
+            "pageId": "rust-api"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-02",
+        "query": "TypeScript create Anki deck",
+        "top3": [
+          {
+            "url": "/docs/node-api/",
+            "title": "Node and TypeScript API",
+            "excerpt": "and TypeScript API. The ankiforge entry point exposes the sole Project authoring model. Types are defined in the public source, report classes, and JSON snapshot declarations. Start with the quick",
+            "score": 16.557144046422383,
+            "matchedTerms": [
+              "Node.js",
+              "create",
+              "anki",
+              "deck"
+            ],
+            "pageId": "node-api"
+          },
+          {
+            "url": "/docs/node-quickstart/",
+            "title": "Generate Anki flashcards with Node.js",
+            "excerpt": "Install ankiforge from npm, generate Anki flashcards with Node.js or TypeScript, and export an APKG deck you can import into Anki.",
+            "score": 15.021928299174716,
+            "matchedTerms": [
+              "Node.js",
+              "anki",
+              "deck"
+            ],
+            "pageId": "node-quickstart"
+          },
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "and update Anki decks from JSON. Read three biology questions from JSON, add a shared image and audio clip, and export an original APKG plus a reviewed answer-only update. Each",
+            "score": 14.14779594359059,
+            "matchedTerms": [
+              "Node.js",
+              "create",
+              "anki",
+              "deck"
+            ],
+            "pageId": "json-to-anki"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-03",
+        "query": "Python questions to apkg",
+        "top3": [
+          {
+            "url": "/docs/python-quickstart/",
+            "title": "Generate Anki flashcards with Python",
+            "excerpt": "Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki.",
+            "score": 14.549843251090346,
+            "matchedTerms": [
+              "Python",
+              "apkg"
+            ],
+            "pageId": "python-quickstart"
+          },
+          {
+            "url": "/docs/python-api/",
+            "title": "Python API",
+            "excerpt": "Python API. The SDK calls the default Rust public API through a native extension. It includes py.typed and checked public signatures. Start with the quickstart. Project and note values. Entry",
+            "score": 10.354675080825213,
+            "matchedTerms": [
+              "review",
+              "Python",
+              "apkg"
+            ],
+            "pageId": "python-api"
+          },
+          {
+            "url": "/docs/python-diagnostics/",
+            "title": "Python diagnostics",
+            "excerpt": "Python diagnostics. A successful build returns BuildOutput with a guaranteed artifact. A failed build raises BuildError with observations and publication facts. Diagnostics alone never determine success. import json. from ankiforge",
+            "score": 10.354675080825213,
+            "matchedTerms": [
+              "review",
+              "Python",
+              "apkg"
+            ],
+            "pageId": "python-diagnostics"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-04",
+        "query": "JSON deck images audio",
+        "top3": [
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "update Anki decks from JSON. Read three biology questions from JSON, add a shared image and audio clip, and export an original APKG plus a reviewed answer-only update. Each release",
+            "score": 15.13790110607107,
+            "matchedTerms": [
+              "image",
+              "audio",
+              "JSON",
+              "deck"
+            ],
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/docs/media/",
+            "title": "Add images and audio to Anki cards",
+            "excerpt": "Add images and audio to generated Anki cards with Rust, Python or Node.js. Import files, compose card content, and manage export names, MIME types and budgets.",
+            "score": 8.365869529325037,
+            "matchedTerms": [
+              "image",
+              "audio"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/",
+            "title": "Generate Anki flashcardsfrom your data.",
+            "excerpt": "across five measured workloads. Rust Project API · Apple M1 Pro · 10-run medians. Text, images, audio. Faster in all five tests. Each workload contains 1,000 Basic notes, covering text-only,",
+            "score": 7.33873527885911,
+            "matchedTerms": [
+              "image",
+              "audio",
+              "JSON",
+              "deck"
+            ],
+            "pageId": "home"
+          }
+        ],
+        "kind": "core",
+        "intentId": "json-with-media",
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-05",
+        "query": "update deck original apkg",
+        "top3": [
+          {
+            "url": "/docs/updates/",
+            "title": "Update Anki decks with stable note IDs",
+            "excerpt": "Update Anki decks with stable note IDs. Publish corrections or new cards for an Anki deck you have already distributed. Stable note IDs help Anki Forge and Anki recognize existing",
+            "score": 29.918532226146706,
+            "matchedTerms": [
+              "baseline",
+              "update",
+              "deck"
+            ],
+            "pageId": "updates"
+          },
+          {
+            "url": "/blog/stable-ids-and-deck-updates/",
+            "title": "A note’s identity should outlive its wording",
+            "excerpt": "How stable IDs and a build baseline work together when you update a generated Anki deck.",
+            "score": 20.911143695654573,
+            "matchedTerms": [
+              "baseline",
+              "update",
+              "deck"
+            ],
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "and update Anki decks from JSON. Read three biology questions from JSON, add a shared image and audio clip, and export an original APKG plus a reviewed answer-only update. Each",
+            "score": 7.215392798893193,
+            "matchedTerms": [
+              "baseline",
+              "update",
+              "deck"
+            ],
+            "pageId": "json-to-anki"
+          }
+        ],
+        "kind": "core",
+        "intentId": "update-original-baseline",
+        "expectedPageIds": [
+          "updates"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-06",
+        "query": "Anki Forge genanki comparison",
+        "top3": [
+          {
+            "url": "/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge vs genanki: choose for your workflow",
+            "excerpt": "Anki Forge vs genanki: choose for your workflow. Consider Anki Forge when you are designing a repeatable publishing workflow and need owned media, structured diagnostics, comparison and policy review before",
+            "score": 23.62787877516383,
+            "matchedTerms": [
+              "anki",
+              "forge",
+              "genanki",
+              "comparison"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/docs/genanki-migration/",
+            "title": "Move from genanki",
+            "excerpt": "Understand content, template and media behavior when moving to Anki Forge.",
+            "score": 9.088277566062034,
+            "matchedTerms": [
+              "anki",
+              "forge",
+              "genanki"
+            ],
+            "pageId": "genanki-migration"
+          },
+          {
+            "url": "/",
+            "title": "Generate Anki flashcardsfrom your data.",
+            "excerpt": "install command. npm install --include=optional ankiforge@0.3.1 Build with Node / TypeScript Python. CPython 3.11+Copy install command. python -m pip install ankiforge==0.3.1 Build with Python Use Anki Forge with AI. Choose",
+            "score": 9.079363584820833,
+            "matchedTerms": [
+              "anki",
+              "forge",
+              "genanki",
+              "comparison"
+            ],
+            "pageId": "home"
+          }
+        ],
+        "kind": "core",
+        "intentId": "compare-genanki",
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-07",
+        "query": "migrate genanki preserve note identity",
+        "top3": [
+          {
+            "url": "/docs/genanki-migration/",
+            "title": "Move from genanki",
+            "excerpt": "Understand content, template and media behavior when moving to Anki Forge.",
+            "score": 72.39469318881733,
+            "matchedTerms": [
+              "stable ID",
+              "migration",
+              "genanki"
+            ],
+            "pageId": "genanki-migration"
+          },
+          {
+            "url": "/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge vs genanki: choose for your workflow",
+            "excerpt": "Forge vs genanki: choose for your workflow. Consider Anki Forge when you are designing a repeatable publishing workflow and need owned media, structured diagnostics, comparison and policy review before releasing",
+            "score": 17.75806546482067,
+            "matchedTerms": [
+              "stable ID",
+              "migration",
+              "genanki"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/docs/python-migration/",
+            "title": "Python API transition",
+            "excerpt": "Use the current owned-value SDK and understand the clean-slate boundary.",
+            "score": 12.718679629084354,
+            "matchedTerms": [
+              "stable ID",
+              "migration"
+            ],
+            "pageId": "python-migration"
+          }
+        ],
+        "kind": "core",
+        "intentId": "migrate-genanki",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-08",
+        "query": "card image pronunciation audio",
+        "top3": [
+          {
+            "url": "/docs/media/",
+            "title": "Add images and audio to Anki cards",
+            "excerpt": "Add images and audio to Anki cards. Package images and audio into generated Anki cards, such as vocabulary cards with pronunciation audio or diagram questions. Anki Forge copies the files",
+            "score": 56.49640878111407,
+            "matchedTerms": [
+              "audio",
+              "image",
+              "card"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "Read JSON with Rust, Python or TypeScript, package images and audio, then review an answer-only APKG update.",
+            "score": 8.506299254131577,
+            "matchedTerms": [
+              "audio",
+              "image"
+            ],
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/docs/image-occlusion/",
+            "title": "Generate Anki Image Occlusion cards",
+            "excerpt": "Create Anki Image Occlusion cards programmatically from an image and the rectangle masks you supply, in either occlusion mode, with Rust, Python or Node.js.",
+            "score": 6.957503098009126,
+            "matchedTerms": [
+              "image",
+              "card"
+            ],
+            "pageId": "image-occlusion"
+          }
+        ],
+        "kind": "core",
+        "intentId": "attach-image-audio",
+        "expectedPageIds": [
+          "media"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-09",
+        "query": "sentence multiple cloze deletions",
+        "top3": [
+          {
+            "url": "/docs/cards/",
+            "title": "Generate Anki Basic and Cloze flashcards",
+            "excerpt": "Basic and Cloze flashcards. Generate Anki Basic (question-and-answer) and Cloze (fill-in-the-blank) cards from code instead of adding them one at a time in Anki. A Basic note has a front",
+            "score": 49.689315415005886,
+            "matchedTerms": [
+              "Cloze",
+              "sentence",
+              "multiple",
+              "deletions"
+            ],
+            "pageId": "cards"
+          },
+          {
+            "url": "/docs/updates/",
+            "title": "Update Anki decks with stable note IDs",
+            "excerpt": "Release a new version of a generated Anki deck: keep stable note IDs, build from the previous original APKG and review the comparison before publishing.",
+            "score": 1.425514198601678,
+            "matchedTerms": [
+              "deletions"
+            ],
+            "pageId": "updates"
+          },
+          {
+            "url": "/docs/templates/",
+            "title": "Reusable Anki card templates, CSS and media",
+            "excerpt": "Load a reusable Anki note type from one bundle of card templates, CSS and media, for normal or Cloze cards, with Rust, Python or Node.js.",
+            "score": 1.1502940178984706,
+            "matchedTerms": [
+              "Cloze"
+            ],
+            "pageId": "templates"
+          }
+        ],
+        "kind": "core",
+        "intentId": "create-cloze",
+        "expectedPageIds": [
+          "cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-10",
+        "query": "custom card front back fields",
+        "top3": [
+          {
+            "url": "/docs/templates/",
+            "title": "Reusable Anki card templates, CSS and media",
+            "excerpt": "Anki card templates, CSS and media. Reuse the same Anki card design across decks: keep a note type’s templates, CSS and media in one directory and load it for normal",
+            "score": 19.896491361704378,
+            "matchedTerms": [
+              "custom",
+              "card",
+              "front",
+              "back",
+              "fields"
+            ],
+            "pageId": "templates"
+          },
+          {
+            "url": "/docs/custom-notetypes/",
+            "title": "Custom note types",
+            "excerpt": "Custom note types. Complete a model once, then create notes from it. The returned NoteType is immutable and can be reused in functions or multiple projects. A note holds its",
+            "score": 19.486643763334264,
+            "matchedTerms": [
+              "custom",
+              "card",
+              "front",
+              "back",
+              "fields"
+            ],
+            "pageId": "custom-notetypes"
+          },
+          {
+            "url": "/docs/cards/",
+            "title": "Generate Anki Basic and Cloze flashcards",
+            "excerpt": "previous distribution. Text, fields and card identity. Both Basic and Cloze strings are Text. Use Content::html for intentional HTML; Cloze deletion syntax is still recognized inside Text. back_extra is the",
+            "score": 14.665481632787177,
+            "matchedTerms": [
+              "custom",
+              "card",
+              "front",
+              "back",
+              "fields"
+            ],
+            "pageId": "cards"
+          }
+        ],
+        "kind": "core",
+        "intentId": "custom-card-template",
+        "expectedPageIds": [
+          "templates",
+          "custom-notetypes"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-11",
+        "query": "hide anatomy diagram labels",
+        "top3": [
+          {
+            "url": "/docs/image-occlusion/",
+            "title": "Generate Anki Image Occlusion cards",
+            "excerpt": "Create Anki Image Occlusion cards programmatically from an image and the rectangle masks you supply, in either occlusion mode, with Rust, Python or Node.js.",
+            "score": 28.726624372322533,
+            "matchedTerms": [
+              "hide",
+              "labels"
+            ],
+            "pageId": "image-occlusion"
+          }
+        ],
+        "kind": "core",
+        "intentId": "create-image-occlusion",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-core-12",
+        "query": "deck generation error fix",
+        "top3": [
+          {
+            "url": "/docs/troubleshooting/",
+            "title": "Troubleshooting",
+            "excerpt": "Resolve installation, media, template, identity and output errors.",
+            "score": 10.41780979115951,
+            "matchedTerms": [
+              "troubleshooting"
+            ],
+            "pageId": "troubleshooting"
+          },
+          {
+            "url": "/docs/",
+            "title": "Build Anki decks from code",
+            "excerpt": "Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.",
+            "score": 3.9841783929530545,
+            "matchedTerms": [
+              "deck",
+              "generation"
+            ],
+            "pageId": "docs"
+          },
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "Read JSON with Rust, Python or TypeScript, package images and audio, then review an answer-only APKG update.",
+            "score": 3.9841783929530545,
+            "matchedTerms": [
+              "deck",
+              "generation"
+            ],
+            "pageId": "json-to-anki"
+          }
+        ],
+        "kind": "core",
+        "intentId": "repair-generation-error",
+        "expectedPageIds": [
+          "troubleshooting"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-01",
+        "query": "deck grouping notes",
+        "top3": [
+          {
+            "url": "/docs/concepts/",
+            "title": "Core concepts",
+            "excerpt": "Projects, owned notes and media, stable keys, text and update identity.",
+            "score": 14.387371636790224,
+            "matchedTerms": [
+              "definition"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/docs/custom-notetypes/",
+            "title": "Custom note types",
+            "excerpt": "Declare fields, card templates and generation rules for your own content.",
+            "score": 4.196316727397148,
+            "matchedTerms": [
+              "definition"
+            ],
+            "pageId": "custom-notetypes"
+          },
+          {
+            "url": "/docs/",
+            "title": "Build Anki decks from code",
+            "excerpt": "Anki decks from code. Anki Forge turns notes, templates and media into Anki .apkg files. Use it when your learning content lives in code or structured data and you want",
+            "score": 1.5106740218629733,
+            "matchedTerms": [
+              "definition"
+            ],
+            "pageId": "docs"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-deck",
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-02",
+        "query": "note fields versus cards",
+        "top3": [
+          {
+            "url": "/docs/concepts/",
+            "title": "Core concepts",
+            "excerpt": "keys. Models, fields and templates. NoteType::builder(key) accumulates declarations; .build() validates and returns a shareable immutable model. model.note() creates a note holding it. Built-in Basic, Cloze and Image Occlusion notes carry",
+            "score": 11.662885757518557,
+            "matchedTerms": [
+              "versus",
+              "note",
+              "fields",
+              "cards"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge vs genanki: choose for your workflow",
+            "excerpt": "Compare Anki APKG authoring workflows, runtime requirements, update review and migration costs.",
+            "score": 6.627037212425508,
+            "matchedTerms": [
+              "versus"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/docs/custom-notetypes/",
+            "title": "Custom note types",
+            "excerpt": "Declare fields, card templates and generation rules for your own content.",
+            "score": 6.305388673160623,
+            "matchedTerms": [
+              "note",
+              "fields",
+              "cards"
+            ],
+            "pageId": "custom-notetypes"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-note",
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-03",
+        "query": "one note multiple cards",
+        "top3": [
+          {
+            "url": "/docs/concepts/",
+            "title": "Core concepts",
+            "excerpt": "Project and note. A Project is one publication with a stable namespace. It can place notes in several Anki decks: default_deck supplies the fallback and Note::deck overrides it. A deck",
+            "score": 12.636828082797866,
+            "matchedTerms": [
+              "multiple",
+              "one"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/docs/cards/",
+            "title": "Generate Anki Basic and Cloze flashcards",
+            "excerpt": "the Cloze cards separately hide Madrid and Spain. Author the notes. This function is extracted from the complete executable. Its verify helper checks the successful output’s note/card/media counts. fn cards(output:",
+            "score": 5.364268215108237,
+            "matchedTerms": [
+              "multiple",
+              "one"
+            ],
+            "pageId": "cards"
+          },
+          {
+            "url": "/docs/image-occlusion/",
+            "title": "Generate Anki Image Occlusion cards",
+            "excerpt": "Image Occlusion cards. Generate Anki Image Occlusion cards programmatically: supply an image and rectangle coordinates, and Anki Forge builds a note with one card per mask, ready to import. Use",
+            "score": 2.6786255095740623,
+            "matchedTerms": [
+              "multiple",
+              "one"
+            ],
+            "pageId": "image-occlusion"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-card",
+        "expectedPageIds": [
+          "concepts",
+          "cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-04",
+        "query": "APKG package contents",
+        "top3": [
+          {
+            "url": "/docs/concepts/",
+            "title": "Core concepts",
+            "excerpt": "Projects, owned notes and media, stable keys, text and update identity.",
+            "score": 5.278813447656337,
+            "matchedTerms": [
+              "contents"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/",
+            "title": "Generate Anki flashcardsfrom your data.",
+            "excerpt": "OcclusionBack. Nucleus. Anki deck. showcase. .apkg4 cards / 3 media files. Four card types. One Anki deck. Choose your language. Export spanish.apkg with the public 0.3.1 package. Normal export needs",
+            "score": 0.9237923533398591,
+            "matchedTerms": [
+              "contents"
+            ],
+            "pageId": "home"
+          },
+          {
+            "url": "/docs/build-guarantees/",
+            "title": "Build and output guarantees",
+            "excerpt": "publication. For updates, retain the previous original distribution APKG as an immutable baseline and choose a separate output destination. Baseline evidence and candidate content are checked before publication. Policy rejection",
+            "score": 0.9237923533398591,
+            "matchedTerms": [
+              "contents"
+            ],
+            "pageId": "build-guarantees"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-apkg",
+        "expectedPageIds": [
+          "concepts",
+          "compatibility"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-05",
+        "query": "genanki migration compatibility",
+        "top3": [
+          {
+            "url": "/docs/genanki-migration/",
+            "title": "Move from genanki",
+            "excerpt": "Understand content, template and media behavior when moving to Anki Forge.",
+            "score": 36.37861296663217,
+            "matchedTerms": [
+              "migration",
+              "genanki"
+            ],
+            "pageId": "genanki-migration"
+          },
+          {
+            "url": "/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge vs genanki: choose for your workflow",
+            "excerpt": "Forge vs genanki: choose for your workflow. Consider Anki Forge when you are designing a repeatable publishing workflow and need owned media, structured diagnostics, comparison and policy review before releasing",
+            "score": 15.882256440066717,
+            "matchedTerms": [
+              "compatibility",
+              "migration",
+              "genanki"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/docs/python-migration/",
+            "title": "Python API transition",
+            "excerpt": "Use the current owned-value SDK and understand the clean-slate boundary.",
+            "score": 14.13341103360556,
+            "matchedTerms": [
+              "compatibility",
+              "migration"
+            ],
+            "pageId": "python-migration"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-genanki",
+        "expectedPageIds": [
+          "anki-forge-vs-genanki",
+          "genanki-migration"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-06",
+        "query": "Image Occlusion diagram masks",
+        "top3": [
+          {
+            "url": "/docs/image-occlusion/",
+            "title": "Generate Anki Image Occlusion cards",
+            "excerpt": "Anki Image Occlusion cards. Generate Anki Image Occlusion cards programmatically: supply an image and rectangle coordinates, and Anki Forge builds a note with one card per mask, ready to import.",
+            "score": 43.289172676881094,
+            "matchedTerms": [
+              "image occlusion",
+              "diagram",
+              "masks"
+            ],
+            "pageId": "image-occlusion"
+          },
+          {
+            "url": "/docs/ai-anki-cards/",
+            "title": "AI-assisted Anki flashcards: from notes to APKG",
+            "excerpt": "questions, use Cloze cards. For diagram labels, use Image Occlusion with the image and mask coordinates you provide; this does not automatically detect labels in an image. Keep the original",
+            "score": 5.330530572856571,
+            "matchedTerms": [
+              "image occlusion",
+              "diagram",
+              "masks"
+            ],
+            "pageId": "ai-anki-cards"
+          },
+          {
+            "url": "/docs/node-api/",
+            "title": "Node and TypeScript API",
+            "excerpt": "can be reused across projects; incompatible definitions under one model key fail atomically. Media and Image Occlusion. await Media.file(path, limits?) and await Media.bytes(Uint8Array, mime, limits?) return owned snapshots. Source files",
+            "score": 5.330530572856571,
+            "matchedTerms": [
+              "image occlusion",
+              "diagram",
+              "masks"
+            ],
+            "pageId": "node-api"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-image-occlusion",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-07",
+        "query": "namespace stable note key",
+        "top3": [
+          {
+            "url": "/blog/stable-ids-and-deck-updates/",
+            "title": "A note’s identity should outlive its wording",
+            "excerpt": "articles A note’s identity should outlive its wording. How stable IDs and a build baseline work together when you update a generated Anki deck. EngineeringSeptember 22, 2026. A generated deck",
+            "score": 10.947060102865478,
+            "matchedTerms": [
+              "stable ID",
+              "stable",
+              "note",
+              "key"
+            ],
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/docs/python-migration/",
+            "title": "Python API transition",
+            "excerpt": "Deck or Project with optional stable ID. Project(namespace, default_deck=...). add_note(note) and content-derived identity. add(stable_key, note). Mutable NoteType and add_notetype. NoteType.builder(key)...build(), then model.note(). String model references. Notes own their validated model.",
+            "score": 9.612593278785791,
+            "matchedTerms": [
+              "stable ID",
+              "stable",
+              "note",
+              "key"
+            ],
+            "pageId": "python-migration"
+          },
+          {
+            "url": "/docs/concepts/",
+            "title": "Core concepts",
+            "excerpt": "Project and note. A Project is one publication with a stable namespace. It can place notes in several Anki decks: default_deck supplies the fallback and Note::deck overrides it. A deck",
+            "score": 9.305098998725818,
+            "matchedTerms": [
+              "stable ID",
+              "stable",
+              "note",
+              "key"
+            ],
+            "pageId": "concepts"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-namespace-note-key",
+        "expectedPageIds": [
+          "updates",
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-terminology-08",
+        "query": "Cloze c1 c2",
+        "top3": [
+          {
+            "url": "/docs/cards/",
+            "title": "Generate Anki Basic and Cloze flashcards",
+            "excerpt": "Basic and Cloze flashcards. Generate Anki Basic (question-and-answer) and Cloze (fill-in-the-blank) cards from code instead of adding them one at a time in Anki. A Basic note has a front",
+            "score": 34.54225216761215,
+            "matchedTerms": [
+              "Cloze",
+              "c1",
+              "c2"
+            ],
+            "pageId": "cards"
+          },
+          {
+            "url": "/docs/templates/",
+            "title": "Reusable Anki card templates, CSS and media",
+            "excerpt": "note_type: key: language-cloze. name: Language Cloze. cloze_field: text. fields: - key: text. name: Sentence. sort: true. required: true. - key: extra. name: Extra. templates: - key: cloze. name: Cloze. front_file:",
+            "score": 9.234529206465256,
+            "matchedTerms": [
+              "Cloze",
+              "c1",
+              "c2"
+            ],
+            "pageId": "templates"
+          },
+          {
+            "url": "/examples/",
+            "title": "A little code.Something to remember.",
+            "excerpt": "Explore Basic, Cloze, media, and Image Occlusion cards built with Anki Forge. Read their Rust source and download the generated Anki decks.",
+            "score": 1.3137209089443147,
+            "matchedTerms": [
+              "Cloze"
+            ],
+            "pageId": "examples"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-cloze",
+        "expectedPageIds": [
+          "cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-variant-01",
+        "query": "json deck sound files",
+        "top3": [
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "update Anki decks from JSON. Read three biology questions from JSON, add a shared image and audio clip, and export an original APKG plus a reviewed answer-only update. Each release",
+            "score": 16.13075402611995,
+            "matchedTerms": [
+              "audio",
+              "JSON",
+              "deck",
+              "files"
+            ],
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/",
+            "title": "Generate Anki flashcardsfrom your data.",
+            "excerpt": "media in reusable template bundles. Explore templates From your first deck to the next update. Start with a CSV spreadsheet, JSON data or cards drafted with an AI assistant. Follow",
+            "score": 8.905651738309304,
+            "matchedTerms": [
+              "audio",
+              "JSON",
+              "deck",
+              "files"
+            ],
+            "pageId": "home"
+          },
+          {
+            "url": "/docs/media/",
+            "title": "Add images and audio to Anki cards",
+            "excerpt": "Add images and audio to generated Anki cards with Rust, Python or Node.js. Import files, compose card content, and manage export names, MIME types and budgets.",
+            "score": 8.835496748689707,
+            "matchedTerms": [
+              "audio",
+              "files"
+            ],
+            "pageId": "media"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-json-audio",
+        "expectedPageIds": [
+          "json-to-anki",
+          "media"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-variant-02",
+        "query": "change answer same note",
+        "top3": [
+          {
+            "url": "/docs/updates/",
+            "title": "Update Anki decks with stable note IDs",
+            "excerpt": "decks with stable note IDs. Publish corrections or new cards for an Anki deck you have already distributed. Stable note IDs help Anki Forge and Anki recognize existing notes instead",
+            "score": 11.870850396442208,
+            "matchedTerms": [
+              "change",
+              "answer",
+              "same",
+              "note"
+            ],
+            "pageId": "updates"
+          },
+          {
+            "url": "/docs/cards/",
+            "title": "Generate Anki Basic and Cloze flashcards",
+            "excerpt": "separately hide Madrid and Spain. Author the notes. This function is extracted from the complete executable. Its verify helper checks the successful output’s note/card/media counts. fn cards(output: &Path) -> anyhow::Result<()>",
+            "score": 10.651032822509004,
+            "matchedTerms": [
+              "change",
+              "answer",
+              "same",
+              "note"
+            ],
+            "pageId": "cards"
+          },
+          {
+            "url": "/blog/stable-ids-and-deck-updates/",
+            "title": "A note’s identity should outlive its wording",
+            "excerpt": "How stable IDs and a build baseline work together when you update a generated Anki deck.",
+            "score": 7.742456425582032,
+            "matchedTerms": [
+              "answer",
+              "same",
+              "note"
+            ],
+            "pageId": "blog:stable-ids-and-deck-updates"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-answer-update",
+        "expectedPageIds": [
+          "updates"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-variant-03",
+        "query": "hide diagram labels",
+        "top3": [
+          {
+            "url": "/docs/image-occlusion/",
+            "title": "Generate Anki Image Occlusion cards",
+            "excerpt": "mask, ready to import. Use it to produce diagram questions in batches without drawing masks in Anki’s editor. It does not detect labels in the image; you provide the coordinates.",
+            "score": 28.726624372322533,
+            "matchedTerms": [
+              "hide",
+              "labels"
+            ],
+            "pageId": "image-occlusion"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-cover-diagram",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-variant-04",
+        "query": "switch genanki to ankiforge",
+        "top3": [
+          {
+            "url": "/",
+            "title": "Generate Anki flashcardsfrom your data.",
+            "excerpt": "Keep HTML, CSS, and media in reusable template bundles. Explore templates From your first deck to the next update. Start with a CSV spreadsheet, JSON data or cards drafted with",
+            "score": 6.827666676437449,
+            "matchedTerms": [
+              "switch",
+              "genanki",
+              "ankiforge"
+            ],
+            "pageId": "home"
+          },
+          {
+            "url": "/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge vs genanki: choose for your workflow",
+            "excerpt": "Compare Anki APKG authoring workflows, runtime requirements, update review and migration costs.",
+            "score": 3.3561721809644185,
+            "matchedTerms": [
+              "genanki"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/docs/genanki-migration/",
+            "title": "Move from genanki",
+            "excerpt": "Understand content, template and media behavior when moving to Anki Forge.",
+            "score": 3.3561721809644185,
+            "matchedTerms": [
+              "genanki"
+            ],
+            "pageId": "genanki-migration"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-switch-genanki",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-variant-05",
+        "query": "imported deck missing picture",
+        "top3": [
+          {
+            "url": "/docs/troubleshooting/",
+            "title": "Troubleshooting",
+            "excerpt": "Resolve installation, media, template, identity and output errors.",
+            "score": 8.915693607621831,
+            "matchedTerms": [
+              "troubleshooting"
+            ],
+            "pageId": "troubleshooting"
+          },
+          {
+            "url": "/",
+            "title": "Generate Anki flashcardsfrom your data.",
+            "excerpt": "types. Keep HTML, CSS, and media in reusable template bundles. Explore templates From your first deck to the next update. Start with a CSV spreadsheet, JSON data or cards drafted",
+            "score": 5.739650965581863,
+            "matchedTerms": [
+              "troubleshooting",
+              "image",
+              "imported",
+              "deck"
+            ],
+            "pageId": "home"
+          },
+          {
+            "url": "/docs/media/",
+            "title": "Add images and audio to Anki cards",
+            "excerpt": "Add images and audio to generated Anki cards with Rust, Python or Node.js. Import files, compose card content, and manage export names, MIME types and budgets.",
+            "score": 4.587210010628498,
+            "matchedTerms": [
+              "image",
+              "imported"
+            ],
+            "pageId": "media"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-missing-picture",
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "passed": true
+      },
+      {
+        "id": "en-negative-01",
+        "query": "zxqvnj 847261 qqqrzz",
+        "top3": [],
+        "kind": "negative",
+        "intentId": "negative-gibberish",
+        "expectedPageIds": [],
+        "passed": true,
+        "expectedBoundary": "Meaningless input has no supported task or expected page. An empty result is allowed; the interface must remain usable and offer a way to revise the query.",
+        "boundaryReviewRequired": false
+      },
+      {
+        "id": "en-negative-02",
+        "query": "ankiforge-project-v1 unchanged input",
+        "top3": [
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "Normal export needs no Anki installation. Maintained by Anki Forge maintainers · reviewed 2026-10-25. Shared inputs. Download v1.json, v2.json, cell.png and tone.wav. The image is a cell diagram; the audio",
+            "score": 10.885080221656317,
+            "matchedTerms": [
+              "ankiforge",
+              "project",
+              "v1",
+              "unchanged",
+              "input"
+            ],
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/docs/node-api/",
+            "title": "Node and TypeScript API",
+            "excerpt": "NativeLoadError reports missing, incompatible or stale native packages. Addition context. Failed additions leave the project unchanged. Structured context records the original note/model keys and the target, with optional conflict or",
+            "score": 6.7303926874654305,
+            "matchedTerms": [
+              "ankiforge",
+              "project",
+              "unchanged",
+              "input"
+            ],
+            "pageId": "node-api"
+          },
+          {
+            "url": "/docs/rust-guide/",
+            "title": "Rust authoring guide",
+            "excerpt": "Projects, validation, media and updates through the supported Rust API.",
+            "score": 2.540335231808563,
+            "matchedTerms": [
+              "ankiforge",
+              "project"
+            ],
+            "pageId": "rust-guide"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-old-schema",
+        "expectedPageIds": [
+          "json-to-anki",
+          "troubleshooting",
+          "rust-guide"
+        ],
+        "passed": true,
+        "expectedBoundary": "The public 0.3.1 tool requires ankiforge-project-v2 and rejects v1. A result may explain that the input must be converted; it must not present unchanged v1 as accepted input. Empty results are allowed.",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "en-negative-03",
+        "query": "Anki re-export update baseline",
+        "top3": [
+          {
+            "url": "/docs/updates/",
+            "title": "Update Anki decks with stable note IDs",
+            "excerpt": "Update Anki decks with stable note IDs. Publish corrections or new cards for an Anki deck you have already distributed. Stable note IDs help Anki Forge and Anki recognize existing",
+            "score": 28.509140399582442,
+            "matchedTerms": [
+              "baseline",
+              "update"
+            ],
+            "pageId": "updates"
+          },
+          {
+            "url": "/blog/stable-ids-and-deck-updates/",
+            "title": "A note’s identity should outlive its wording",
+            "excerpt": "its own is only one part of a repeatable update workflow. Give the next build a baseline. A previous package tells Anki Forge what was exported before. Use it when",
+            "score": 22.101135279267215,
+            "matchedTerms": [
+              "baseline",
+              "update"
+            ],
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/docs/concepts/",
+            "title": "Core concepts",
+            "excerpt": "Projects, owned notes and media, stable keys, text and update identity.",
+            "score": 5.8390540870671,
+            "matchedTerms": [
+              "baseline",
+              "update"
+            ],
+            "pageId": "concepts"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-reexport-baseline",
+        "expectedPageIds": [
+          "updates",
+          "compatibility",
+          "troubleshooting"
+        ],
+        "passed": true,
+        "expectedBoundary": "Updates require the previous original distribution APKG. An Anki re-export is not a valid replacement baseline; a result may explain this requirement. Empty results are allowed.",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "en-negative-04",
+        "query": "PNG renamed wrong.mp3 audio",
+        "top3": [
+          {
+            "url": "/docs/media/",
+            "title": "Add images and audio to Anki cards",
+            "excerpt": "images and audio to Anki cards. Package images and audio into generated Anki cards, such as vocabulary cards with pronunciation audio or diagram questions. Anki Forge copies the files you",
+            "score": 34.239730448689855,
+            "matchedTerms": [
+              "audio",
+              "png",
+              "renamed",
+              "wrong"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/docs/rust-guide/",
+            "title": "Rust authoring guide",
+            "excerpt": "playback. Raw HTML and explicit assets retain their existing behavior. Export renaming does not change MIME: a PNG renamed wrong.mp3 passes image addition but can still fail build’s independent sniffing/extension",
+            "score": 7.81209657506789,
+            "matchedTerms": [
+              "audio",
+              "png",
+              "renamed",
+              "wrong"
+            ],
+            "pageId": "rust-guide"
+          },
+          {
+            "url": "/docs/json-to-anki/",
+            "title": "Generate and update Anki decks from JSON",
+            "excerpt": "Read JSON with Rust, Python or TypeScript, package images and audio, then review an answer-only APKG update.",
+            "score": 1.4926436790679602,
+            "matchedTerms": [
+              "audio"
+            ],
+            "pageId": "json-to-anki"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-mime-rename",
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "passed": true,
+        "expectedBoundary": "Renaming a file does not convert its bytes or retained media MIME. A PNG renamed wrong.mp3 can fail the independent build sniff or extension check. Results must direct the reader to correct media input or actual conversion, not promise conversion by renaming. Empty results are allowed.",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "en-negative-05",
+        "query": "directly reset Anki review history",
+        "top3": [
+          {
+            "url": "/docs/compatibility/",
+            "title": "Compatibility and releases",
+            "excerpt": "Published packages, verified environments and Anki client conditions.",
+            "score": 11.10115440092498,
+            "matchedTerms": [
+              "review",
+              "anki",
+              "history"
+            ],
+            "pageId": "compatibility"
+          },
+          {
+            "url": "/docs/ai-anki-cards/",
+            "title": "AI-assisted Anki flashcards: from notes to APKG",
+            "excerpt": "Draft Anki cards with an AI assistant, review the answers, then export an APKG using Anki Forge. Follow a CSV workflow or use a coding-assistant brief.",
+            "score": 1.1965209677591804,
+            "matchedTerms": [
+              "review",
+              "anki"
+            ],
+            "pageId": "ai-anki-cards"
+          },
+          {
+            "url": "/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge vs genanki: choose for your workflow",
+            "excerpt": "Compare Anki APKG authoring workflows, runtime requirements, update review and migration costs.",
+            "score": 1.1965209677591804,
+            "matchedTerms": [
+              "review",
+              "anki"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-edit-study-progress",
+        "expectedPageIds": [
+          "compatibility",
+          "updates"
+        ],
+        "passed": true,
+        "expectedBoundary": "The library generates APKGs and does not directly modify an installed Anki collection or study progress. A result may explain the package and client import boundary; it must not promise direct review-history edits. Empty results are allowed.",
+        "boundaryReviewRequired": true
+      }
+    ],
+    "zh-CN": [
+      {
+        "id": "zh-CN-core-01",
+        "query": "Rust 导出 apkg",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/quickstart/",
+            "title": "用 Rust 生成 Anki 卡片",
+            "excerpt": "用 Rust 生成 Anki 卡片. 使用 Rust 1.92 或更高版本。其他语言可选择 Node / TypeScript 或 Python。 安装. 终端窗口",
+            "score": 22.564589425168826,
+            "matchedTerms": [
+              "Rust",
+              "导出",
+              "apkg"
+            ],
+            "pageId": "quickstart"
+          },
+          {
+            "url": "/zh-cn/blog/your-first-anki-deck/",
+            "title": "用 Rust 构建第一个 Anki 牌组",
+            "excerpt": "文章 用 Rust 构建第一个 Anki 牌组. 从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。 教程2026",
+            "score": 13.664295905693642,
+            "matchedTerms": [
+              "Rust",
+              "导出",
+              "apkg"
+            ],
+            "pageId": "blog:your-first-anki-deck"
+          },
+          {
+            "url": "/zh-cn/docs/rust-guide/",
+            "title": "Rust 编写指南",
+            "excerpt": "Rust 编写指南. 一个 Project 描述一次发布。用稳定命名空间创建项目，以稳定键添加笔记，再构建 APKG。常用类型直接",
+            "score": 10.121700670884179,
+            "matchedTerms": [
+              "Rust",
+              "导出",
+              "apkg"
+            ],
+            "pageId": "rust-guide"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-02",
+        "query": "TypeScript 创建 Anki 牌组",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/node-api/",
+            "title": "Node 与 TypeScript API",
+            "excerpt": "与 TypeScript API. ankiforge 入口提供唯一的 Project 内容编写模型。类型定义位于公开源码、报告类及 JSON 快照声明。从入门开始",
+            "score": 15.702066014608647,
+            "matchedTerms": [
+              "Node.js",
+              "创建",
+              "anki"
+            ],
+            "pageId": "node-api"
+          },
+          {
+            "url": "/zh-cn/docs/json-to-anki/",
+            "title": "用 JSON 数据生成并更新 Anki 牌组",
+            "excerpt": "生成并更新 Anki 牌组. 从 JSON 读取三个生物学问题，添加共享图片与音频，导出原始 APKG 和经过检查的仅修改",
+            "score": 11.973187606001977,
+            "matchedTerms": [
+              "Node.js",
+              "创建",
+              "anki"
+            ],
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/zh-cn/docs/node-quickstart/",
+            "title": "用 Node.js 生成 Anki 卡片",
+            "excerpt": "从 npm 安装 ankiforge，用 Node.js 或 TypeScript 生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。",
+            "score": 8.834506197877793,
+            "matchedTerms": [
+              "Node.js",
+              "anki"
+            ],
+            "pageId": "node-quickstart"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-03",
+        "query": "Python 问答 生成牌组",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/python-quickstart/",
+            "title": "用 Python 生成 Anki 卡片",
+            "excerpt": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。",
+            "score": 37.55892164560558,
+            "matchedTerms": [
+              "Python",
+              "问答",
+              "生成"
+            ],
+            "pageId": "python-quickstart"
+          },
+          {
+            "url": "/zh-cn/docs/csv-to-anki/",
+            "title": "CSV 转 Anki：用 Python 批量生成卡片",
+            "excerpt": "Anki：用 Python 批量生成卡片. 用 Python 和 Anki Forge 将词汇表转换为 Anki .apkg 文件。本示例读取包含 id、front",
+            "score": 13.195626498807776,
+            "matchedTerms": [
+              "Python",
+              "问答",
+              "生成"
+            ],
+            "pageId": "csv-to-anki"
+          },
+          {
+            "url": "/zh-cn/",
+            "title": "从你的数据批量生成 Anki 卡片。",
+            "excerpt": ". CPython 3.11+复制安装命令. python -m pip install ankiforge==0.3.1 用 Python 开始 让 AI 帮你编写牌组",
+            "score": 10.83335987409555,
+            "matchedTerms": [
+              "Python",
+              "问答",
+              "生成"
+            ],
+            "pageId": "home"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-04",
+        "query": "JSON 牌组 图片 音频",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/media/",
+            "title": "为 Anki 卡片添加图片与音频",
+            "excerpt": "用 Rust、Python 或 Node.js 为生成的 Anki 卡片添加图片和音频：导入文件、组合卡片内容，并管理导出名称、MIME 类型与媒体预算。",
+            "score": 13.133135012643997,
+            "matchedTerms": [
+              "图片",
+              "音频"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/zh-cn/docs/json-to-anki/",
+            "title": "用 JSON 数据生成并更新 Anki 牌组",
+            "excerpt": "用 JSON 数据生成并更新 Anki 牌组. 从 JSON 读取三个生物学问题，添加共享图片与音频，导出原始 APKG 和经过检查",
+            "score": 12.761444871996511,
+            "matchedTerms": [
+              "JSON",
+              "图片",
+              "音频"
+            ],
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/zh-cn/",
+            "title": "从你的数据批量生成 Anki 卡片。",
+            "excerpt": "从第一个牌组到下一次更新. 从 CSV 表格、JSON 数据或 AI 起草的卡片开始，按完整教程导出牌组，",
+            "score": 5.609742690059688,
+            "matchedTerms": [
+              "JSON",
+              "图片",
+              "音频"
+            ],
+            "pageId": "home"
+          }
+        ],
+        "kind": "core",
+        "intentId": "json-with-media",
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-05",
+        "query": "更新牌组 原始 apkg",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/updates/",
+            "title": "用稳定笔记 ID 更新 Anki 牌组",
+            "excerpt": "笔记 ID 更新 Anki 牌组. 为已经分发的 Anki 牌组发布修正或新增卡片。稳定笔记 ID 帮助 Anki Forge 和 Anki 识别已有",
+            "score": 19.504260914635726,
+            "matchedTerms": [
+              "基线",
+              "更新"
+            ],
+            "pageId": "updates"
+          },
+          {
+            "url": "/zh-cn/blog/stable-ids-and-deck-updates/",
+            "title": "笔记身份应当比措辞更持久",
+            "excerpt": "更新生成的 Anki 牌组时，稳定 ID 与构建基线如何共同发挥作用。",
+            "score": 14.866559940145592,
+            "matchedTerms": [
+              "基线",
+              "更新"
+            ],
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/zh-cn/docs/json-to-anki/",
+            "title": "用 JSON 数据生成并更新 Anki 牌组",
+            "excerpt": "数据生成并更新 Anki 牌组. 从 JSON 读取三个生物学问题，添加共享图片与音频，导出原始 APKG 和经过检查的仅",
+            "score": 4.073782702426633,
+            "matchedTerms": [
+              "基线",
+              "更新"
+            ],
+            "pageId": "json-to-anki"
+          }
+        ],
+        "kind": "core",
+        "intentId": "update-original-baseline",
+        "expectedPageIds": [
+          "updates"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-06",
+        "query": "Anki Forge genanki 选型",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge 与 genanki：如何选择",
+            "excerpt": "Anki Forge 与 genanki：如何选择. 如果正在设计可重复的发布流程，需要拥有所有权的媒体、结构化诊断，以及发布",
+            "score": 55.36462518516637,
+            "matchedTerms": [
+              "对比",
+              "anki",
+              "forge",
+              "genanki"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/zh-cn/docs/languages/",
+            "title": "选择开发语言",
+            "excerpt": "输入生成并更新牌组，或按自己的工作流程比较 Anki Forge 与 genanki。 添加图片与音频、创建自定义笔记类型，",
+            "score": 7.100467110115306,
+            "matchedTerms": [
+              "对比",
+              "anki",
+              "forge",
+              "genanki"
+            ],
+            "pageId": "languages"
+          },
+          {
+            "url": "/zh-cn/",
+            "title": "从你的数据批量生成 Anki 卡片。",
+            "excerpt": "数据 批量生成 Anki 卡片。 Anki Forge 是开源 Anki APKG 生成库，以 Rust 为核心，提供 Rust、Python 和 Node.js 接口。",
+            "score": 6.138228328027433,
+            "matchedTerms": [
+              "对比",
+              "anki",
+              "forge",
+              "genanki"
+            ],
+            "pageId": "home"
+          }
+        ],
+        "kind": "core",
+        "intentId": "compare-genanki",
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-07",
+        "query": "genanki 迁移 保持笔记身份",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/genanki-migration/",
+            "title": "从 genanki 迁移",
+            "excerpt": "了解迁入 Anki Forge 时内容、模板与媒体行为的变化。",
+            "score": 40.99541960724738,
+            "matchedTerms": [
+              "稳定键",
+              "迁移",
+              "genanki"
+            ],
+            "pageId": "genanki-migration"
+          },
+          {
+            "url": "/zh-cn/docs/python-migration/",
+            "title": "Python API 迁移",
+            "excerpt": "使用当前拥有值所有权的 SDK，理解新版 API 的迁移边界。",
+            "score": 13.15505710890818,
+            "matchedTerms": [
+              "稳定键",
+              "迁移"
+            ],
+            "pageId": "python-migration"
+          },
+          {
+            "url": "/zh-cn/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge 与 genanki：如何选择",
+            "excerpt": "比较 Anki APKG 编写流程、运行环境、更新检查和迁移成本。",
+            "score": 10.036994258184558,
+            "matchedTerms": [
+              "稳定键",
+              "迁移",
+              "genanki"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          }
+        ],
+        "kind": "core",
+        "intentId": "migrate-genanki",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-08",
+        "query": "卡片 图片 发音音频",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/media/",
+            "title": "为 Anki 卡片添加图片与音频",
+            "excerpt": "Anki 卡片添加图片与音频. 把图片和音频打包进生成的 Anki 卡片，例如带发音音频的单词卡或示意图题目。",
+            "score": 53.47965958245625,
+            "matchedTerms": [
+              "图片",
+              "音频",
+              "卡片"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/zh-cn/docs/json-to-anki/",
+            "title": "用 JSON 数据生成并更新 Anki 牌组",
+            "excerpt": "用 Rust、Node 或 Python 读取 JSON，打包图片和音频，再检查仅修改答案的更新。",
+            "score": 14.701258073256755,
+            "matchedTerms": [
+              "图片",
+              "音频",
+              "卡片"
+            ],
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/zh-cn/docs/image-occlusion/",
+            "title": "生成 Anki 图片遮挡卡片",
+            "excerpt": "用代码批量生成 Anki 图片遮挡卡片：提供图片和矩形遮罩坐标，支持两种遮挡模式，可使用 Rust、Python 或 Node.js。",
+            "score": 6.00633670248875,
+            "matchedTerms": [
+              "图片",
+              "卡片"
+            ],
+            "pageId": "image-occlusion"
+          }
+        ],
+        "kind": "core",
+        "intentId": "attach-image-audio",
+        "expectedPageIds": [
+          "media"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-09",
+        "query": "句子 多处挖空",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/cards/",
+            "title": "生成 Anki 问答卡片与 Cloze 填空卡片",
+            "excerpt": "用代码批量生成 Anki 问答（Basic）卡片与 Cloze 填空卡片。经过验证的 Rust 示例用两条笔记生成三张卡片。",
+            "score": 16.685021253015552,
+            "matchedTerms": [
+              "Cloze"
+            ],
+            "pageId": "cards"
+          },
+          {
+            "url": "/zh-cn/docs/templates/",
+            "title": "复用 Anki 卡片模板、CSS 与媒体",
+            "excerpt": "从一个模板包加载可复用的 Anki 笔记类型，包含卡片模板、CSS 和媒体，支持普通与 Cloze 卡片，可使用 Rust、Python 或 Node.js。",
+            "score": 4.727422688354406,
+            "matchedTerms": [
+              "Cloze"
+            ],
+            "pageId": "templates"
+          },
+          {
+            "url": "/zh-cn/examples/",
+            "title": "一点代码，留住值得记忆的内容。",
+            "excerpt": "探索用 Anki Forge 制作的 Basic、Cloze、媒体和图片遮挡卡片，阅读 Rust 源码并下载生成的 Anki 牌组。",
+            "score": 4.727422688354406,
+            "matchedTerms": [
+              "Cloze"
+            ],
+            "pageId": "examples"
+          }
+        ],
+        "kind": "core",
+        "intentId": "create-cloze",
+        "expectedPageIds": [
+          "cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-10",
+        "query": "自定义卡片 正反面 字段",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/cards/",
+            "title": "生成 Anki 问答卡片与 Cloze 填空卡片",
+            "excerpt": "用代码批量生成 Anki 问答（Basic）卡片与 Cloze 填空卡片。经过验证的 Rust 示例用两条笔记生成三张卡片。",
+            "score": 12.14456128146087,
+            "matchedTerms": [
+              "卡片",
+              "正反面",
+              "正反",
+              "反面"
+            ],
+            "pageId": "cards"
+          },
+          {
+            "url": "/zh-cn/docs/custom-notetypes/",
+            "title": "自定义笔记类型",
+            "excerpt": "为自己的内容定义字段、卡片模板与生成规则。",
+            "score": 11.254756368351595,
+            "matchedTerms": [
+              "自定义",
+              "卡片"
+            ],
+            "pageId": "custom-notetypes"
+          },
+          {
+            "url": "/zh-cn/blog/your-first-anki-deck/",
+            "title": "用 Rust 构建第一个 Anki 牌组",
+            "excerpt": "从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。",
+            "score": 11.137810544591686,
+            "matchedTerms": [
+              "卡片",
+              "正反面",
+              "正反",
+              "反面"
+            ],
+            "pageId": "blog:your-first-anki-deck"
+          }
+        ],
+        "kind": "core",
+        "intentId": "custom-card-template",
+        "expectedPageIds": [
+          "templates",
+          "custom-notetypes"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-11",
+        "query": "解剖图 遮住标注",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/image-occlusion/",
+            "title": "生成 Anki 图片遮挡卡片",
+            "excerpt": "用代码批量生成 Anki 图片遮挡卡片：提供图片和矩形遮罩坐标，支持两种遮挡模式，可使用 Rust、Python 或 Node.js。",
+            "score": 7.979617881200704,
+            "matchedTerms": [
+              "遮住"
+            ],
+            "pageId": "image-occlusion"
+          }
+        ],
+        "kind": "core",
+        "intentId": "create-image-occlusion",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-core-12",
+        "query": "生成牌组 报错修复",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/troubleshooting/",
+            "title": "排查问题",
+            "excerpt": "解决安装、媒体、模板、身份与输出错误。",
+            "score": 42.42922853970471,
+            "matchedTerms": [
+              "排错",
+              "生成"
+            ],
+            "pageId": "troubleshooting"
+          },
+          {
+            "url": "/zh-cn/docs/python-diagnostics/",
+            "title": "Python 诊断",
+            "excerpt": "理解原生内容编写错误、构建报告和更新证据。",
+            "score": 3.8301364126450648,
+            "matchedTerms": [
+              "排错"
+            ],
+            "pageId": "python-diagnostics"
+          },
+          {
+            "url": "/zh-cn/docs/rust-guide/",
+            "title": "Rust 编写指南",
+            "excerpt": "或编辑时，保存并复用所选键。 更新已分发的牌组. 向 update_from 提供上一次原始分发 APKG。完整",
+            "score": 3.1935434951915536,
+            "matchedTerms": [
+              "排错",
+              "生成"
+            ],
+            "pageId": "rust-guide"
+          }
+        ],
+        "kind": "core",
+        "intentId": "repair-generation-error",
+        "expectedPageIds": [
+          "troubleshooting"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-01",
+        "query": "牌组 笔记 分组",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。",
+            "score": 10.407606332328639,
+            "matchedTerms": [
+              "定义"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/zh-cn/docs/custom-notetypes/",
+            "title": "自定义笔记类型",
+            "excerpt": "为自己的内容定义字段、卡片模板与生成规则。",
+            "score": 6.0711036938583725,
+            "matchedTerms": [
+              "定义"
+            ],
+            "pageId": "custom-notetypes"
+          },
+          {
+            "url": "/zh-cn/docs/templates/",
+            "title": "复用 Anki 卡片模板、CSS 与媒体",
+            "excerpt": "从一个模板包加载可复用的 Anki 笔记类型，包含卡片模板、CSS 和媒体，支持普通与 Cloze 卡片，可使用 Rust、Python 或 Node.js。",
+            "score": 3.0355518469291862,
+            "matchedTerms": [
+              "定义"
+            ],
+            "pageId": "templates"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-deck",
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-02",
+        "query": "笔记 字段 卡片 区别",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "排序后保持不变。显示名称和文本不是身份键。 模型、字段与模板. NoteType::builder(key) 收集声明；",
+            "score": 7.366944120888695,
+            "matchedTerms": [
+              "定义"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/zh-cn/docs/custom-notetypes/",
+            "title": "自定义笔记类型",
+            "excerpt": "为自己的内容定义字段、卡片模板与生成规则。",
+            "score": 4.297384070518405,
+            "matchedTerms": [
+              "定义"
+            ],
+            "pageId": "custom-notetypes"
+          },
+          {
+            "url": "/zh-cn/docs/templates/",
+            "title": "复用 Anki 卡片模板、CSS 与媒体",
+            "excerpt": "Anki 卡片模板、CSS 与媒体. 在多个牌组中复用同一套 Anki 卡片设计：把笔记类型的模板、CSS 和媒体放在",
+            "score": 2.1486920352592027,
+            "matchedTerms": [
+              "定义"
+            ],
+            "pageId": "templates"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-note",
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-03",
+        "query": "一条笔记 多张卡片",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/cards/",
+            "title": "生成 Anki 问答卡片与 Cloze 填空卡片",
+            "excerpt": "问答卡片与 Cloze 填空卡片. 用代码批量生成 Anki 问答（Basic）卡片和 Cloze 填空（挖空）卡片，无需在 Anki 中逐",
+            "score": 6.4451594786232596,
+            "matchedTerms": [
+              "多张",
+              "一条"
+            ],
+            "pageId": "cards"
+          },
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。",
+            "score": 3.8995922895871824,
+            "matchedTerms": [
+              "多张"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/zh-cn/blog/your-first-anki-deck/",
+            "title": "用 Rust 构建第一个 Anki 牌组",
+            "excerpt": "从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。",
+            "score": 1.8956351407715473,
+            "matchedTerms": [
+              "一条"
+            ],
+            "pageId": "blog:your-first-anki-deck"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-card",
+        "expectedPageIds": [
+          "concepts",
+          "cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-04",
+        "query": "APKG 包含内容",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "也会被包含。库不会从任意 HTML 或脚本中自动发现文件内容。 构建与更新. 成功构建返回保证包含 APKG 的输出",
+            "score": 3.8228793185436545,
+            "matchedTerms": [
+              "内容"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/zh-cn/docs/csv-to-anki/",
+            "title": "CSV 转 Anki：用 Python 批量生成卡片",
+            "excerpt": "。 本次转换不需要额外的表格处理库或 AI 服务。 生成 APKG. 将以下程序保存为 csv_to_anki.py，",
+            "score": 2.2300129358171317,
+            "matchedTerms": [
+              "内容"
+            ],
+            "pageId": "csv-to-anki"
+          },
+          {
+            "url": "/zh-cn/docs/media/",
+            "title": "为 Anki 卡片添加图片与音频",
+            "excerpt": ".apkg\")))?; verify(&built, 1, 1, 3)?; Ok(()). } 组合内容",
+            "score": 2.2300129358171317,
+            "matchedTerms": [
+              "内容"
+            ],
+            "pageId": "media"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-apkg",
+        "expectedPageIds": [
+          "concepts",
+          "compatibility"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-05",
+        "query": "genanki 迁移 兼容性",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/genanki-migration/",
+            "title": "从 genanki 迁移",
+            "excerpt": "了解迁入 Anki Forge 时内容、模板与媒体行为的变化。",
+            "score": 37.586727942944414,
+            "matchedTerms": [
+              "迁移",
+              "genanki"
+            ],
+            "pageId": "genanki-migration"
+          },
+          {
+            "url": "/zh-cn/docs/python-migration/",
+            "title": "Python API 迁移",
+            "excerpt": "使用当前拥有值所有权的 SDK，理解新版 API 的迁移边界。",
+            "score": 20.631756872113744,
+            "matchedTerms": [
+              "兼容性",
+              "迁移"
+            ],
+            "pageId": "python-migration"
+          },
+          {
+            "url": "/zh-cn/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge 与 genanki：如何选择",
+            "excerpt": "Forge 与 genanki：如何选择. 如果正在设计可重复的发布流程，需要拥有所有权的媒体、结构化诊断，以及发布更新",
+            "score": 18.70651892866986,
+            "matchedTerms": [
+              "兼容性",
+              "迁移",
+              "genanki"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-genanki",
+        "expectedPageIds": [
+          "anki-forge-vs-genanki",
+          "genanki-migration"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-06",
+        "query": "图片遮挡 Image Occlusion 遮罩",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/image-occlusion/",
+            "title": "生成 Anki 图片遮挡卡片",
+            "excerpt": "?; Ok(()). } 多个遮罩与模式. 此独立示例需要 fixtures/occlusion.png，解码后的图像至少为",
+            "score": 19.550009476177223,
+            "matchedTerms": [
+              "图片遮挡"
+            ],
+            "pageId": "image-occlusion"
+          },
+          {
+            "url": "/zh-cn/examples/",
+            "title": "一点代码，留住值得记忆的内容。",
+            "excerpt": ". 图片遮挡. 带稳定键的矩形遮住细胞剖面图中的细胞核。下载牌组与此预览使用相同图像和遮罩。",
+            "score": 5.539169351583546,
+            "matchedTerms": [
+              "图片遮挡"
+            ],
+            "pageId": "examples"
+          },
+          {
+            "url": "/zh-cn/docs/node-api/",
+            "title": "Node 与 TypeScript API",
+            "excerpt": "同一模型键下不兼容的定义会原子地失败。 媒体与图片遮挡. await Media.file(path, limits?) 和 await",
+            "score": 1.6617508054750638,
+            "matchedTerms": [
+              "图片遮挡"
+            ],
+            "pageId": "node-api"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-image-occlusion",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-07",
+        "query": "命名空间 稳定笔记键",
+        "top3": [
+          {
+            "url": "/zh-cn/blog/stable-ids-and-deck-updates/",
+            "title": "笔记身份应当比措辞更持久",
+            "excerpt": "全部文章 笔记身份应当比措辞更持久. 更新生成的 Anki 牌组时，稳定 ID 与构建基线如何共同发挥作用。 工程2026",
+            "score": 13.856630572308955,
+            "matchedTerms": [
+              "稳定键",
+              "稳定",
+              "笔记"
+            ],
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/zh-cn/docs/updates/",
+            "title": "用稳定笔记 ID 更新 Anki 牌组",
+            "excerpt": "用稳定笔记 ID 更新 Anki 牌组. 为已经分发的 Anki 牌组发布修正或新增卡片。稳定笔记 ID 帮助 Anki Forge 和 Anki",
+            "score": 13.134898849036428,
+            "matchedTerms": [
+              "稳定键",
+              "稳定",
+              "笔记"
+            ],
+            "pageId": "updates"
+          },
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": ". Project 与笔记. 一个 Project 表示一次具有稳定命名空间的发布。它可以把笔记放入多个 Anki 牌组：default_deck 提供",
+            "score": 9.58827144956659,
+            "matchedTerms": [
+              "稳定键",
+              "稳定",
+              "笔记"
+            ],
+            "pageId": "concepts"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-namespace-note-key",
+        "expectedPageIds": [
+          "updates",
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-terminology-08",
+        "query": "Cloze c1 c2 挖空",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/cards/",
+            "title": "生成 Anki 问答卡片与 Cloze 填空卡片",
+            "excerpt": "问答卡片与 Cloze 填空卡片. 用代码批量生成 Anki 问答（Basic）卡片和 Cloze 填空（挖空）卡片，无需在 Anki 中逐",
+            "score": 36.219125826194876,
+            "matchedTerms": [
+              "Cloze",
+              "c1",
+              "c2"
+            ],
+            "pageId": "cards"
+          },
+          {
+            "url": "/zh-cn/docs/templates/",
+            "title": "复用 Anki 卡片模板、CSS 与媒体",
+            "excerpt": "从一个模板包加载可复用的 Anki 笔记类型，包含卡片模板、CSS 和媒体，支持普通与 Cloze 卡片，可使用 Rust、Python 或 Node.js。",
+            "score": 1.1370349341663422,
+            "matchedTerms": [
+              "Cloze"
+            ],
+            "pageId": "templates"
+          },
+          {
+            "url": "/zh-cn/examples/",
+            "title": "一点代码，留住值得记忆的内容。",
+            "excerpt": "探索用 Anki Forge 制作的 Basic、Cloze、媒体和图片遮挡卡片，阅读 Rust 源码并下载生成的 Anki 牌组。",
+            "score": 1.1370349341663422,
+            "matchedTerms": [
+              "Cloze"
+            ],
+            "pageId": "examples"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-cloze",
+        "expectedPageIds": [
+          "cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-variant-01",
+        "query": "JSON 做牌组 打包 mp3",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/json-to-anki/",
+            "title": "用 JSON 数据生成并更新 Anki 牌组",
+            "excerpt": "用 Rust、Node 或 Python 读取 JSON，打包图片和音频，再检查仅修改答案的更新。",
+            "score": 24.002110935014343,
+            "matchedTerms": [
+              "JSON",
+              "音频",
+              "打包"
+            ],
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/zh-cn/docs/media/",
+            "title": "为 Anki 卡片添加图片与音频",
+            "excerpt": "用 Rust、Python 或 Node.js 为生成的 Anki 卡片添加图片和音频：导入文件、组合卡片内容，并管理导出名称、MIME 类型与媒体预算。",
+            "score": 21.36274566252862,
+            "matchedTerms": [
+              "音频",
+              "打包"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/zh-cn/",
+            "title": "从你的数据批量生成 Anki 卡片。",
+            "excerpt": "用 Python、Node.js 或 Rust 批量生成 Anki 卡片并导出 APKG。开源生成库提供 CSV、JSON 和 AI 辅助制卡流程，支持媒体与牌组更新。",
+            "score": 1.6835801885569988,
+            "matchedTerms": [
+              "JSON"
+            ],
+            "pageId": "home"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-json-audio",
+        "expectedPageIds": [
+          "json-to-anki",
+          "media"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-variant-02",
+        "query": "改答案 保持 note key",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/updates/",
+            "title": "用稳定笔记 ID 更新 Anki 牌组",
+            "excerpt": "发布生成牌组的新版本：保持稳定笔记 ID，以上一版原始 APKG 为基线构建，并在分发前检查比较结果。",
+            "score": 11.482451332964366,
+            "matchedTerms": [
+              "答案",
+              "保持",
+              "note"
+            ],
+            "pageId": "updates"
+          },
+          {
+            "url": "/zh-cn/docs/troubleshooting/",
+            "title": "排查问题",
+            "excerpt": "解决安装、媒体、模板、身份与输出错误。",
+            "score": 4.89379891603007,
+            "matchedTerms": [
+              "note",
+              "key"
+            ],
+            "pageId": "troubleshooting"
+          },
+          {
+            "url": "/zh-cn/docs/ai-anki-cards/",
+            "title": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+            "excerpt": "让 AI 助手根据笔记起草卡片，核对答案后用 Anki Forge 导出 APKG。提供 CSV 制卡流程和编程助手任务说明入口。",
+            "score": 1.530340898543468,
+            "matchedTerms": [
+              "答案"
+            ],
+            "pageId": "ai-anki-cards"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-answer-update",
+        "expectedPageIds": [
+          "updates"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-variant-03",
+        "query": "示意图 遮名称 复习题",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/media/",
+            "title": "为 Anki 卡片添加图片与音频",
+            "excerpt": "用 Rust、Python 或 Node.js 为生成的 Anki 卡片添加图片和音频：导入文件、组合卡片内容，并管理导出名称、MIME 类型与媒体预算。",
+            "score": 4.159491353768954,
+            "matchedTerms": [
+              "名称"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。",
+            "score": 3.4662427948074614,
+            "matchedTerms": [
+              "名称"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/zh-cn/docs/custom-notetypes/",
+            "title": "自定义笔记类型",
+            "excerpt": "为自己的内容定义字段、卡片模板与生成规则。",
+            "score": 3.4662427948074614,
+            "matchedTerms": [
+              "名称"
+            ],
+            "pageId": "custom-notetypes"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-cover-diagram",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-variant-04",
+        "query": "genanki 脚本 换 ankiforge",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/python-quickstart/",
+            "title": "用 Python 生成 Anki 卡片",
+            "excerpt": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。",
+            "score": 7.772698272304359,
+            "matchedTerms": [
+              "脚本",
+              "ankiforge"
+            ],
+            "pageId": "python-quickstart"
+          },
+          {
+            "url": "/zh-cn/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge 与 genanki：如何选择",
+            "excerpt": "比较 Anki APKG 编写流程、运行环境、更新检查和迁移成本。",
+            "score": 4.087603326700609,
+            "matchedTerms": [
+              "genanki"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/zh-cn/docs/genanki-migration/",
+            "title": "从 genanki 迁移",
+            "excerpt": "了解迁入 Anki Forge 时内容、模板与媒体行为的变化。",
+            "score": 4.087603326700609,
+            "matchedTerms": [
+              "genanki"
+            ],
+            "pageId": "genanki-migration"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-switch-genanki",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-variant-05",
+        "query": "导入 Anki 图片不显示",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/media/",
+            "title": "为 Anki 卡片添加图片与音频",
+            "excerpt": "用 Rust、Python 或 Node.js 为生成的 Anki 卡片添加图片和音频：导入文件、组合卡片内容，并管理导出名称、MIME 类型与媒体预算。",
+            "score": 14.973511221904934,
+            "matchedTerms": [
+              "图片",
+              "导入",
+              "anki"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/zh-cn/docs/image-occlusion/",
+            "title": "生成 Anki 图片遮挡卡片",
+            "excerpt": "生成 Anki 图片遮挡卡片. 用代码批量生成 Anki 图片遮挡（图片挖空）卡片：提供图片和矩形坐标，Anki Forge 生成笔记，",
+            "score": 11.200981362739938,
+            "matchedTerms": [
+              "图片",
+              "导入",
+              "anki",
+              "显示"
+            ],
+            "pageId": "image-occlusion"
+          },
+          {
+            "url": "/zh-cn/examples/",
+            "title": "一点代码，留住值得记忆的内容。",
+            "excerpt": "下载音频。显示答案 已显示问题。 下载 ear-training.apkg 1 条笔记 · 1 张卡片 · 2 个媒体文件. 图片遮挡",
+            "score": 7.517583717284277,
+            "matchedTerms": [
+              "图片",
+              "导入",
+              "anki",
+              "显示"
+            ],
+            "pageId": "examples"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-missing-picture",
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "passed": true
+      },
+      {
+        "id": "zh-CN-negative-01",
+        "query": "zxqvnj 847261 qqqrzz",
+        "top3": [],
+        "kind": "negative",
+        "intentId": "negative-gibberish",
+        "expectedPageIds": [],
+        "passed": true,
+        "expectedBoundary": "无意义输入没有对应任务或预期页面。允许无结果；搜索界面应保持可用，并允许修改查询。",
+        "boundaryReviewRequired": false
+      },
+      {
+        "id": "zh-CN-negative-02",
+        "query": "ankiforge-project-v1 原样输入",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/rust-guide/",
+            "title": "Rust 编写指南",
+            "excerpt": ".DECLARED_MIME_MISMATCH。 工具输入现在要求 ankiforge-project-v2，且没有顶层 name；v1 被拒绝。契约包为 2",
+            "score": 16.37968622845583,
+            "matchedTerms": [
+              "ankiforge",
+              "project",
+              "v1",
+              "输入"
+            ],
+            "pageId": "rust-guide"
+          },
+          {
+            "url": "/zh-cn/docs/node-quickstart/",
+            "title": "用 Node.js 生成 Anki 卡片",
+            "excerpt": "从 npm 安装 ankiforge，用 Node.js 或 TypeScript 生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。",
+            "score": 1.535634442932125,
+            "matchedTerms": [
+              "ankiforge"
+            ],
+            "pageId": "node-quickstart"
+          },
+          {
+            "url": "/zh-cn/docs/python-quickstart/",
+            "title": "用 Python 生成 Anki 卡片",
+            "excerpt": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。",
+            "score": 1.535634442932125,
+            "matchedTerms": [
+              "ankiforge"
+            ],
+            "pageId": "python-quickstart"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-old-schema",
+        "expectedPageIds": [
+          "json-to-anki",
+          "troubleshooting",
+          "rust-guide"
+        ],
+        "passed": true,
+        "expectedBoundary": "公开 0.3.1 工具要求 ankiforge-project-v2，拒绝 v1。结果可以说明需要转换输入，不能声称原样接受 v1。允许无结果。",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "zh-CN-negative-03",
+        "query": "Anki 重导出 更新基线",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/updates/",
+            "title": "用稳定笔记 ID 更新 Anki 牌组",
+            "excerpt": "发布生成牌组的新版本：保持稳定笔记 ID，以上一版原始 APKG 为基线构建，并在分发前检查比较结果。",
+            "score": 37.09891549480227,
+            "matchedTerms": [
+              "基线",
+              "更新",
+              "anki"
+            ],
+            "pageId": "updates"
+          },
+          {
+            "url": "/zh-cn/blog/stable-ids-and-deck-updates/",
+            "title": "笔记身份应当比措辞更持久",
+            "excerpt": "更新生成的 Anki 牌组时，稳定 ID 与构建基线如何共同发挥作用。",
+            "score": 27.598556097846345,
+            "matchedTerms": [
+              "基线",
+              "更新",
+              "anki"
+            ],
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。",
+            "score": 7.155588324267877,
+            "matchedTerms": [
+              "基线",
+              "更新",
+              "anki"
+            ],
+            "pageId": "concepts"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-reexport-baseline",
+        "expectedPageIds": [
+          "updates",
+          "compatibility",
+          "troubleshooting"
+        ],
+        "passed": true,
+        "expectedBoundary": "更新要求保留上一份原始分发 APKG；Anki 重导出包不能替代有效基线。结果可以解释这一要求。允许无结果。",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "zh-CN-negative-04",
+        "query": "PNG 改名 wrong.mp3 音频",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/media/",
+            "title": "为 Anki 卡片添加图片与音频",
+            "excerpt": "用 Rust、Python 或 Node.js 为生成的 Anki 卡片添加图片和音频：导入文件、组合卡片内容，并管理导出名称、MIME 类型与媒体预算。",
+            "score": 24.37245180991989,
+            "matchedTerms": [
+              "音频"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/zh-cn/docs/json-to-anki/",
+            "title": "用 JSON 数据生成并更新 Anki 牌组",
+            "excerpt": "用 Rust、Node 或 Python 读取 JSON，打包图片和音频，再检查仅修改答案的更新。",
+            "score": 6.905528012810635,
+            "matchedTerms": [
+              "音频"
+            ],
+            "pageId": "json-to-anki"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-mime-rename",
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "passed": true,
+        "expectedBoundary": "改文件名不会转换实际字节或媒体保留的 MIME；PNG 改名 wrong.mp3 可能在独立构建的内容嗅探或扩展名检查中失败。结果应指向正确媒体输入或实际转换，不能承诺改名即可转换。允许无结果。",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "zh-CN-negative-05",
+        "query": "直接重置 Anki 复习记录",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/rust-guide/",
+            "title": "Rust 编写指南",
+            "excerpt": "通过受支持的 Rust API 创建 Project、校验内容、处理媒体与更新。",
+            "score": 7.940982087804574,
+            "matchedTerms": [
+              "anki",
+              "记录"
+            ],
+            "pageId": "rust-guide"
+          },
+          {
+            "url": "/zh-cn/docs/",
+            "title": "用代码生成 Anki 牌组",
+            "excerpt": "选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。",
+            "score": 1.277441794504335,
+            "matchedTerms": [
+              "复习题",
+              "anki"
+            ],
+            "pageId": "docs"
+          },
+          {
+            "url": "/zh-cn/docs/updates/",
+            "title": "用稳定笔记 ID 更新 Anki 牌组",
+            "excerpt": "发布生成牌组的新版本：保持稳定笔记 ID，以上一版原始 APKG 为基线构建，并在分发前检查比较结果。",
+            "score": 1.277441794504335,
+            "matchedTerms": [
+              "复习题",
+              "anki"
+            ],
+            "pageId": "updates"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "negative-edit-study-progress",
+        "expectedPageIds": [
+          "compatibility",
+          "updates"
+        ],
+        "passed": true,
+        "expectedBoundary": "该库生成 APKG，不直接修改已安装 Anki 的集合或学习进度。结果可以解释生成包与客户端导入的边界，不能承诺直接编辑复习记录。允许无结果。",
+        "boundaryReviewRequired": true
+      }
+    ],
+    "es": [
+      {
+        "id": "es-core-01",
+        "query": "crear primer mazo Rust",
+        "top3": [
+          {
+            "url": "/es/blog/your-first-anki-deck/",
+            "title": "Crea tu primer mazo de Anki con Rust",
+            "excerpt": "los artículos Crea tu primer mazo de Anki con Rust. De un pequeño programa en Rust a una tarjeta de vocabulario en español que puedes abrir en Anki. Tutorial22 de",
+            "score": 51.969749287462086,
+            "matchedTerms": [
+              "inicio rápido",
+              "crear",
+              "Rust"
+            ],
+            "pageId": "blog:your-first-anki-deck"
+          },
+          {
+            "url": "/es/docs/quickstart/",
+            "title": "Genera un APKG de Anki con Rust",
+            "excerpt": "Instala el paquete de Rust, crea una tarjeta de vocabulario y exporta un archivo APKG persistente con un programa completo.",
+            "score": 37.89291342704518,
+            "matchedTerms": [
+              "inicio rápido",
+              "crear",
+              "Rust"
+            ],
+            "pageId": "quickstart"
+          },
+          {
+            "url": "/es/docs/languages/",
+            "title": "Elige tu lenguaje de programación",
+            "excerpt": "para generar mazos de Anki a partir de tus datos. Los tres pueden exportar un archivo persistente spanish.apkg sin instalar Anki. Lenguaje Paquete publicado Instalación Primer mazo completo Rust. ankiforge",
+            "score": 5.684191328316165,
+            "matchedTerms": [
+              "inicio rápido",
+              "crear",
+              "Rust"
+            ],
+            "pageId": "languages"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-02",
+        "query": "crear tarjetas Python",
+        "top3": [
+          {
+            "url": "/es/docs/python-quickstart/",
+            "title": "Genera un APKG de Anki con Python",
+            "excerpt": "de Anki con Python. Crea y activa un entorno virtual e instala el paquete publicado en PyPI: Ventana de terminal python -m venv .venv. . .venv/bin/activate. python -m pip install",
+            "score": 26.027227578599152,
+            "matchedTerms": [
+              "Python",
+              "crear",
+              "tarjetas"
+            ],
+            "pageId": "python-quickstart"
+          },
+          {
+            "url": "/es/docs/csv-to-anki/",
+            "title": "CSV a Anki: crea tarjetas con Python",
+            "excerpt": "a Anki: crea tarjetas con Python. Convierte una hoja de vocabulario en un archivo .apkg de Anki con Python y Anki Forge. Este ejemplo lee un CSV UTF-8 con las",
+            "score": 20.61486190020897,
+            "matchedTerms": [
+              "Python",
+              "crear",
+              "tarjetas"
+            ],
+            "pageId": "csv-to-anki"
+          },
+          {
+            "url": "/es/docs/ai-anki-cards/",
+            "title": "Crea tarjetas de Anki con ayuda de IA",
+            "excerpt": "Crea tarjetas de Anki con ayuda de IA. Usa un asistente de IA para preparar pares de preguntas y respuestas a partir de tus apuntes, compruébalos con el material original",
+            "score": 14.655275613688987,
+            "matchedTerms": [
+              "Python",
+              "crear",
+              "tarjetas"
+            ],
+            "pageId": "ai-anki-cards"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-03",
+        "query": "generar APKG Node.js",
+        "top3": [
+          {
+            "url": "/es/docs/node-quickstart/",
+            "title": "Genera un APKG de Anki con Node.js",
+            "excerpt": "Genera un APKG de Anki con Node.js. Usa Node.js 22.13 o posterior. En un directorio nuevo de aplicación: Ventana de terminal mkdir anki-deck. cd anki-deck. npm install --include=optional ankiforge@0.3.1. Este",
+            "score": 36.21970285949825,
+            "matchedTerms": [
+              "crear",
+              "Node.js",
+              "apkg"
+            ],
+            "pageId": "node-quickstart"
+          },
+          {
+            "url": "/es/docs/json-to-anki/",
+            "title": "Genera y actualiza mazos de Anki desde JSON",
+            "excerpt": "Genera y actualiza mazos de Anki desde JSON. Lee tres preguntas de biología desde JSON, añade una imagen y un fragmento de audio compartidos y exporta un APKG original junto",
+            "score": 13.278039445860928,
+            "matchedTerms": [
+              "crear",
+              "Node.js",
+              "apkg"
+            ],
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/es/docs/ai-anki-cards/",
+            "title": "Crea tarjetas de Anki con ayuda de IA",
+            "excerpt": "la edites; no pidas al asistente que vuelva a generar los ID de un mazo existente. Convierte las tarjetas revisadas en un APKG. Sigue CSV a Anki con Python para",
+            "score": 12.215019464740429,
+            "matchedTerms": [
+              "crear",
+              "Node.js",
+              "apkg"
+            ],
+            "pageId": "ai-anki-cards"
+          }
+        ],
+        "kind": "core",
+        "intentId": "first-apkg-node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-04",
+        "query": "JSON a Anki con imagen y audio",
+        "top3": [
+          {
+            "url": "/es/docs/media/",
+            "title": "Añade imágenes y audio a tus tarjetas Anki",
+            "excerpt": "imágenes y audio a tus tarjetas Anki. Incluye imágenes y audio en las tarjetas Anki que generes, por ejemplo, tarjetas de vocabulario con audio de pronunciación o preguntas sobre diagramas.",
+            "score": 27.948416705384737,
+            "matchedTerms": [
+              "imagen",
+              "audio",
+              "JSON",
+              "anki"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/es/docs/json-to-anki/",
+            "title": "Genera y actualiza mazos de Anki desde JSON",
+            "excerpt": "Genera y actualiza mazos de Anki desde JSON. Lee tres preguntas de biología desde JSON, añade una imagen y un fragmento de audio compartidos y exporta un APKG original junto",
+            "score": 13.424340123891632,
+            "matchedTerms": [
+              "imagen",
+              "audio",
+              "JSON",
+              "anki"
+            ],
+            "pageId": "json-to-anki"
+          },
+          {
+            "url": "/es/docs/",
+            "title": "Crea mazos de Anki con código",
+            "excerpt": "de Anki con código. Anki Forge convierte notas, plantillas y recursos multimedia en archivos .apkg de Anki. Úsalo cuando tu contenido de estudio esté en código o datos estructurados y",
+            "score": 9.457638451622037,
+            "matchedTerms": [
+              "imagen",
+              "audio",
+              "JSON",
+              "anki"
+            ],
+            "pageId": "docs"
+          }
+        ],
+        "kind": "core",
+        "intentId": "json-media",
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-05",
+        "query": "añadir imágenes y sonido",
+        "top3": [
+          {
+            "url": "/es/docs/media/",
+            "title": "Añade imágenes y audio a tus tarjetas Anki",
+            "excerpt": "Añade imágenes y audio a tus tarjetas Anki. Incluye imágenes y audio en las tarjetas Anki que generes, por ejemplo, tarjetas de vocabulario con audio de pronunciación o preguntas sobre",
+            "score": 30.84596661004431,
+            "matchedTerms": [
+              "imagen",
+              "audio",
+              "anadir"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/es/docs/",
+            "title": "Crea mazos de Anki con código",
+            "excerpt": "Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles.",
+            "score": 10.609270302224173,
+            "matchedTerms": [
+              "imagen",
+              "audio",
+              "anadir"
+            ],
+            "pageId": "docs"
+          },
+          {
+            "url": "/es/docs/rust-guide/",
+            "title": "Guía de desarrollo con Rust",
+            "excerpt": "target/docs-examples. Errores al añadir notas y categorías multimedia. Project utiliza un espacio de nombres estable y un mazo predeterminado opcional; no tiene un título de presentación. NoteType, Field y Template",
+            "score": 5.176999504226313,
+            "matchedTerms": [
+              "imagen",
+              "audio",
+              "anadir"
+            ],
+            "pageId": "rust-guide"
+          }
+        ],
+        "kind": "core",
+        "intentId": "media",
+        "expectedPageIds": [
+          "media"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-06",
+        "query": "crear tarjetas Cloze",
+        "top3": [
+          {
+            "url": "/es/docs/cards/",
+            "title": "Crea tarjetas Basic y Cloze de Anki",
+            "excerpt": "Crea tarjetas Basic y Cloze de Anki. Genera desde código tarjetas Basic de Anki (pregunta y respuesta) y Cloze (texto con huecos), en lugar de añadirlas una a una en",
+            "score": 8.595925609537234,
+            "matchedTerms": [
+              "Cloze",
+              "tarjetas"
+            ],
+            "pageId": "cards"
+          },
+          {
+            "url": "/es/examples/",
+            "title": "Un poco de código.Algo que recordar.",
+            "excerpt": "1 tarjeta · 0 archivos multimedia. Cloze. Oculta una palabra en su contexto con la sintaxis Cloze de Anki. Esta nota tiene un solo hueco, por lo que genera una",
+            "score": 6.802638396577874,
+            "matchedTerms": [
+              "Cloze",
+              "crear",
+              "tarjetas"
+            ],
+            "pageId": "examples"
+          },
+          {
+            "url": "/es/",
+            "title": "Genera tarjetas Ankia partir de tus datos.",
+            "excerpt": "Genera tarjetas Anki a partir de tus datos. Anki Forge es una biblioteca de código abierto para generar archivos APKG de Anki, con un núcleo en Rust y API para",
+            "score": 6.336834529154135,
+            "matchedTerms": [
+              "Cloze",
+              "crear",
+              "tarjetas"
+            ],
+            "pageId": "home"
+          }
+        ],
+        "kind": "core",
+        "intentId": "cloze",
+        "expectedPageIds": [
+          "cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-07",
+        "query": "ocultar etiquetas de una imagen",
+        "top3": [
+          {
+            "url": "/es/docs/image-occlusion/",
+            "title": "Genera tarjetas Anki con oclusión de imágenes",
+            "excerpt": "oclusión de imágenes. Genera tarjetas de oclusión de imágenes de Anki desde código: proporciona una imagen y las coordenadas de los rectángulos, y Anki Forge crea una nota con una",
+            "score": 43.23455934413677,
+            "matchedTerms": [
+              "ocultar",
+              "imagen",
+              "etiquetas"
+            ],
+            "pageId": "image-occlusion"
+          },
+          {
+            "url": "/es/docs/media/",
+            "title": "Añade imágenes y audio a tus tarjetas Anki",
+            "excerpt": "Añade imágenes y audio a las tarjetas Anki que generes con Rust, Python o Node.js. Importa archivos, combina contenido y gestiona nombres de exportación, tipos MIME y límites de importación.",
+            "score": 4.100061895591095,
+            "matchedTerms": [
+              "imagen"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/es/docs/troubleshooting/",
+            "title": "Soluciona errores de Anki Forge",
+            "excerpt": "Diagnostica errores de instalación, notas, recursos multimedia, plantillas, identidad y publicación de archivos.",
+            "score": 1.7124748392260571,
+            "matchedTerms": [
+              "etiquetas"
+            ],
+            "pageId": "troubleshooting"
+          }
+        ],
+        "kind": "core",
+        "intentId": "occlusion",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-08",
+        "query": "actualizar respuestas sin cambiar identificadores",
+        "top3": [
+          {
+            "url": "/es/blog/stable-ids-and-deck-updates/",
+            "title": "Identidades estables para actualizar mazos de Anki",
+            "excerpt": "Cómo combinar ID estables y un paquete de referencia al actualizar un mazo de Anki generado.",
+            "score": 9.801904152273464,
+            "matchedTerms": [
+              "actualizar",
+              "cambiar"
+            ],
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/es/docs/updates/",
+            "title": "Actualiza mazos de Anki con ID de nota estables",
+            "excerpt": "Publica una nueva versión de un mazo de Anki generado: conserva los ID de nota estables, parte del APKG original anterior y revisa la comparación antes de distribuirlo.",
+            "score": 9.801904152273464,
+            "matchedTerms": [
+              "actualizar",
+              "cambiar"
+            ],
+            "pageId": "updates"
+          },
+          {
+            "url": "/es/docs/ai-anki-cards/",
+            "title": "Crea tarjetas de Anki con ayuda de IA",
+            "excerpt": "Prepara tarjetas a partir de tus apuntes con un asistente de IA, revisa las respuestas y exporta un APKG con Anki Forge mediante CSV o código.",
+            "score": 1.8535700120265723,
+            "matchedTerms": [
+              "respuestas"
+            ],
+            "pageId": "ai-anki-cards"
+          }
+        ],
+        "kind": "core",
+        "intentId": "answer-update",
+        "expectedPageIds": [
+          "updates"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-09",
+        "query": "APKG original o reexportado de Anki",
+        "top3": [
+          {
+            "url": "/es/blog/stable-ids-and-deck-updates/",
+            "title": "Identidades estables para actualizar mazos de Anki",
+            "excerpt": "Cómo combinar ID estables y un paquete de referencia al actualizar un mazo de Anki generado.",
+            "score": 19.522630354474224,
+            "matchedTerms": [
+              "paquete de referencia",
+              "anki"
+            ],
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/es/docs/updates/",
+            "title": "Actualiza mazos de Anki con ID de nota estables",
+            "excerpt": "mazos de Anki con ID de nota estables. Publica correcciones o tarjetas nuevas para un mazo de Anki que ya hayas distribuido. Los ID de nota estables ayudan a Anki",
+            "score": 19.522630354474224,
+            "matchedTerms": [
+              "paquete de referencia",
+              "anki"
+            ],
+            "pageId": "updates"
+          },
+          {
+            "url": "/es/docs/concepts/",
+            "title": "Conceptos fundamentales de Anki Forge",
+            "excerpt": "Entiende proyectos, notas, mazos, claves estables, recursos multimedia y la identidad de las actualizaciones.",
+            "score": 5.153631433356987,
+            "matchedTerms": [
+              "paquete de referencia",
+              "anki"
+            ],
+            "pageId": "concepts"
+          }
+        ],
+        "kind": "core",
+        "intentId": "original-baseline",
+        "expectedPageIds": [
+          "updates"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-10",
+        "query": "alternativa a genanki",
+        "top3": [
+          {
+            "url": "/es/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge frente a genanki: cuál elegir",
+            "excerpt": "Anki Forge frente a genanki: cuál elegir. Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas que el proyecto conserve los recursos multimedia, diagnósticos estructurados, comparaciones",
+            "score": 58.56328171479615,
+            "matchedTerms": [
+              "frente a",
+              "genanki"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/es/docs/genanki-migration/",
+            "title": "Pasar de genanki a Anki Forge",
+            "excerpt": "Adapta notas, modelos, plantillas y recursos multimedia de genanki al modelo de Anki Forge y sus claves estables.",
+            "score": 13.279566435336639,
+            "matchedTerms": [
+              "frente a",
+              "genanki"
+            ],
+            "pageId": "genanki-migration"
+          },
+          {
+            "url": "/es/docs/build-guarantees/",
+            "title": "Garantías de generación y de los archivos APKG",
+            "excerpt": "Comprende la vida útil de los archivos, los límites de inspección y la publicación de una versión candidata revisada.",
+            "score": 1.3627726724005291,
+            "matchedTerms": [
+              "frente a"
+            ],
+            "pageId": "build-guarantees"
+          }
+        ],
+        "kind": "core",
+        "intentId": "library-choice",
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-11",
+        "query": "migrar desde genanki",
+        "top3": [
+          {
+            "url": "/es/docs/genanki-migration/",
+            "title": "Pasar de genanki a Anki Forge",
+            "excerpt": "de genanki a Anki Forge. ¿Todavía estás eligiendo una biblioteca? Lee Anki Forge frente a genanki. Anki Forge utiliza claves de datos estables, modelos inmutables validados, instantáneas multimedia con propiedad",
+            "score": 50.025325884058454,
+            "matchedTerms": [
+              "migrar",
+              "genanki"
+            ],
+            "pageId": "genanki-migration"
+          },
+          {
+            "url": "/es/docs/anki-forge-vs-genanki/",
+            "title": "Anki Forge frente a genanki: cuál elegir",
+            "excerpt": "frente a genanki: cuál elegir. Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas que el proyecto conserve los recursos multimedia, diagnósticos estructurados, comparaciones y una",
+            "score": 11.79554461489335,
+            "matchedTerms": [
+              "migrar",
+              "genanki"
+            ],
+            "pageId": "anki-forge-vs-genanki"
+          },
+          {
+            "url": "/es/docs/python-migration/",
+            "title": "Transición a la nueva API de Python",
+            "excerpt": "Adapta tu código al SDK actual de Python y conoce los límites de compatibilidad con la API anterior.",
+            "score": 9.188127074606836,
+            "matchedTerms": [
+              "migrar"
+            ],
+            "pageId": "python-migration"
+          }
+        ],
+        "kind": "core",
+        "intentId": "genanki-migration",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-core-12",
+        "query": "error clave de nota duplicada",
+        "top3": [
+          {
+            "url": "/es/docs/troubleshooting/",
+            "title": "Soluciona errores de Anki Forge",
+            "excerpt": "Soluciona errores de Anki Forge. Usa los valores estructurados kind y code de la operación fallida, junto con su cadena de causas y sus observaciones. El texto visible está pensado",
+            "score": 97.24017327154388,
+            "matchedTerms": [
+              "solución de problemas",
+              "clave",
+              "nota",
+              "duplicada"
+            ],
+            "pageId": "troubleshooting"
+          },
+          {
+            "url": "/es/blog/your-first-anki-deck/",
+            "title": "Crea tu primer mazo de Anki con Rust",
+            "excerpt": "De un pequeño programa en Rust a una tarjeta de vocabulario en español que puedes abrir en Anki.",
+            "score": 3.5431035056539772,
+            "matchedTerms": [
+              "solución de problemas",
+              "clave",
+              "nota"
+            ],
+            "pageId": "blog:your-first-anki-deck"
+          },
+          {
+            "url": "/es/docs/rust-guide/",
+            "title": "Guía de desarrollo con Rust",
+            "excerpt": "los archivos. Identidad estable de las notas. Utiliza una clave duradera del registro de origen en project.add(key, note). El espacio de nombres del proyecto y las claves de modelos, campos",
+            "score": 2.040680898539995,
+            "matchedTerms": [
+              "solución de problemas",
+              "clave",
+              "nota"
+            ],
+            "pageId": "rust-guide"
+          }
+        ],
+        "kind": "core",
+        "intentId": "diagnostics",
+        "expectedPageIds": [
+          "troubleshooting",
+          "python-diagnostics"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-terminology-01",
+        "query": "espacio de nombres y claves estables",
+        "top3": [
+          {
+            "url": "/es/blog/stable-ids-and-deck-updates/",
+            "title": "Identidades estables para actualizar mazos de Anki",
+            "excerpt": "los artículos Identidades estables para actualizar mazos de Anki. Cómo combinar ID estables y un paquete de referencia al actualizar un mazo de Anki generado. Ingeniería22 de septiembre de 2026.",
+            "score": 3.0833587082984915,
+            "matchedTerms": [
+              "clave estable"
+            ],
+            "pageId": "blog:stable-ids-and-deck-updates"
+          },
+          {
+            "url": "/es/docs/concepts/",
+            "title": "Conceptos fundamentales de Anki Forge",
+            "excerpt": "fundamentales de Anki Forge. Proyecto y nota. Un Project representa una publicación con un espacio de nombres estable. Puede distribuir notas entre varios mazos de Anki: default_deck define el mazo",
+            "score": 3.0833587082984915,
+            "matchedTerms": [
+              "clave estable"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/es/docs/custom-notetypes/",
+            "title": "Crea tipos de nota personalizados para Anki",
+            "excerpt": "repositorio descargado. Abre jp-core.apkg en Anki. Claves y nombres. Field::new y Template::new reciben claves estables. .name establece un nombre visible; si no se indica, se usa la clave como nombre.",
+            "score": 3.0833587082984915,
+            "matchedTerms": [
+              "clave estable"
+            ],
+            "pageId": "custom-notetypes"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "stable-identity",
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-terminology-02",
+        "query": "diferencia entre nota tarjeta y mazo",
+        "top3": [
+          {
+            "url": "/es/docs/concepts/",
+            "title": "Conceptos fundamentales de Anki Forge",
+            "excerpt": "Forge. Proyecto y nota. Un Project representa una publicación con un espacio de nombres estable. Puede distribuir notas entre varios mazos de Anki: default_deck define el mazo predeterminado y Note::deck",
+            "score": 14.387371636790224,
+            "matchedTerms": [
+              "definición"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/es/docs/custom-notetypes/",
+            "title": "Crea tipos de nota personalizados para Anki",
+            "excerpt": "Define campos, plantillas y reglas de generación con claves estables y modelos inmutables reutilizables.",
+            "score": 4.196316727397148,
+            "matchedTerms": [
+              "definición"
+            ],
+            "pageId": "custom-notetypes"
+          },
+          {
+            "url": "/es/docs/",
+            "title": "Crea mazos de Anki con código",
+            "excerpt": "Crea mazos de Anki con código. Anki Forge convierte notas, plantillas y recursos multimedia en archivos .apkg de Anki. Úsalo cuando tu contenido de estudio esté en código o datos",
+            "score": 1.5106740218629733,
+            "matchedTerms": [
+              "definición"
+            ],
+            "pageId": "docs"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "note-card-deck",
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-terminology-03",
+        "query": "BuildOptions Python",
+        "top3": [
+          {
+            "url": "/es/docs/python-quickstart/",
+            "title": "Genera un APKG de Anki con Python",
+            "excerpt": "de Anki con Python. Crea y activa un entorno virtual e instala el paquete publicado en PyPI: Ventana de terminal python -m venv .venv. . .venv/bin/activate. python -m pip install",
+            "score": 13.60690711550111,
+            "matchedTerms": [
+              "Python",
+              "buildoptions"
+            ],
+            "pageId": "python-quickstart"
+          },
+          {
+            "url": "/es/docs/python-api/",
+            "title": "API de Python",
+            "excerpt": "de Python. El SDK llama a la API pública predeterminada de Rust mediante una extensión nativa. Incluye py.typed y firmas públicas verificadas. Empieza por la guía de inicio. Valores de",
+            "score": 10.079190455926748,
+            "matchedTerms": [
+              "Python",
+              "buildoptions"
+            ],
+            "pageId": "python-api"
+          },
+          {
+            "url": "/es/docs/python-diagnostics/",
+            "title": "Diagnósticos de Python",
+            "excerpt": "de Python. Una generación correcta devuelve BuildOutput con un archivo de salida garantizado. Una generación fallida lanza BuildError con observaciones y datos sobre la publicación. Los diagnósticos por sí solos",
+            "score": 10.079190455926748,
+            "matchedTerms": [
+              "Python",
+              "buildoptions"
+            ],
+            "pageId": "python-diagnostics"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "python-api",
+        "expectedPageIds": [
+          "python-api"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-terminology-04",
+        "query": "TypeScript tipos declaraciones",
+        "top3": [
+          {
+            "url": "/es/docs/node-api/",
+            "title": "API de Node y TypeScript",
+            "excerpt": "Node y TypeScript. El punto de entrada ankiforge expone un único modelo de creación de contenido basado en Project. Los tipos se definen en el código fuente público, las clases",
+            "score": 28.641008493090045,
+            "matchedTerms": [
+              "Node.js",
+              "tipos",
+              "declaraciones"
+            ],
+            "pageId": "node-api"
+          },
+          {
+            "url": "/es/docs/node-quickstart/",
+            "title": "Genera un APKG de Anki con Node.js",
+            "excerpt": "No necesitas instalar Anki para exportarlo. TypeScript y siguientes pasos. El tutorial de JSON a Anki incluye el proceso completo de compilación y ejecución de TypeScript. Usa .mjs para ESM",
+            "score": 22.406249754905538,
+            "matchedTerms": [
+              "Node.js",
+              "tipos",
+              "declaraciones"
+            ],
+            "pageId": "node-quickstart"
+          },
+          {
+            "url": "/es/docs/media/",
+            "title": "Añade imágenes y audio a tus tarjetas Anki",
+            "excerpt": "Añade imágenes y audio a las tarjetas Anki que generes con Rust, Python o Node.js. Importa archivos, combina contenido y gestiona nombres de exportación, tipos MIME y límites de importación.",
+            "score": 4.22066809739999,
+            "matchedTerms": [
+              "Node.js",
+              "tipos"
+            ],
+            "pageId": "media"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "node-api",
+        "expectedPageIds": [
+          "node-api"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-terminology-05",
+        "query": "plantillas CSS fuentes",
+        "top3": [
+          {
+            "url": "/es/docs/templates/",
+            "title": "Reutiliza plantillas de Anki, CSS y recursos multimedia",
+            "excerpt": "Reutiliza plantillas de Anki, CSS y recursos multimedia. Reutiliza el mismo diseño de tarjetas Anki en distintos mazos: guarda las plantillas, el CSS y los recursos multimedia de un tipo",
+            "score": 13.197033619140845,
+            "matchedTerms": [
+              "plantilla"
+            ],
+            "pageId": "templates"
+          },
+          {
+            "url": "/es/docs/development/",
+            "title": "Compila los SDK desde el código fuente",
+            "excerpt": "Compila los SDK y ejecuta los ejemplos desde el repositorio. Distingue estas compilaciones de los paquetes publicados.",
+            "score": 6.231932542372065,
+            "matchedTerms": [
+              "plantilla"
+            ],
+            "pageId": "development"
+          },
+          {
+            "url": "/es/docs/",
+            "title": "Crea mazos de Anki con código",
+            "excerpt": "Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles.",
+            "score": 3.739159525423239,
+            "matchedTerms": [
+              "plantilla"
+            ],
+            "pageId": "docs"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "template-bundles",
+        "expectedPageIds": [
+          "templates"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-terminology-06",
+        "query": "modelos y campos personalizados",
+        "top3": [
+          {
+            "url": "/es/docs/custom-notetypes/",
+            "title": "Crea tipos de nota personalizados para Anki",
+            "excerpt": "de nota personalizados para Anki. Finaliza un modelo una sola vez y luego crea notas a partir de él. El NoteType devuelto es inmutable y se puede reutilizar en funciones",
+            "score": 23.950075407547736,
+            "matchedTerms": [
+              "tipo de nota",
+              "modelos"
+            ],
+            "pageId": "custom-notetypes"
+          },
+          {
+            "url": "/es/docs/concepts/",
+            "title": "Conceptos fundamentales de Anki Forge",
+            "excerpt": "visibles y el texto no son claves de identidad. Modelos, campos y plantillas. NoteType::builder(key) reúne las declaraciones; .build() las valida y devuelve un modelo inmutable que se puede compartir. model.note()",
+            "score": 6.967446697651837,
+            "matchedTerms": [
+              "tipo de nota",
+              "modelos"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/es/docs/rust-guide/",
+            "title": "Guía de desarrollo con Rust",
+            "excerpt": "error original como origen. Modelos y recursos. Un NoteType completado es inmutable y se puede compartir. Llama a model.note(), asigna los campos por su clave estable y añade el resultado",
+            "score": 4.608389262324013,
+            "matchedTerms": [
+              "tipo de nota",
+              "modelos"
+            ],
+            "pageId": "rust-guide"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "custom-note-types",
+        "expectedPageIds": [
+          "custom-notetypes"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-terminology-07",
+        "query": "versiones plataformas compatibles",
+        "top3": [
+          {
+            "url": "/es/docs/compatibility/",
+            "title": "Compatibilidad de Anki Forge y entornos verificados",
+            "excerpt": "la versión 0.3.1, según la comprobación del 2026-10-13. Empieza con Rust, Node / TypeScript o Python. Interfaz Paquete Entorno de ejecución y verificación Rust. ankiforge 0.3.1. Rust 1.92.0 y la",
+            "score": 26.95347740529992,
+            "matchedTerms": [
+              "compatibilidad",
+              "versiones"
+            ],
+            "pageId": "compatibility"
+          },
+          {
+            "url": "/es/docs/csv-to-anki/",
+            "title": "CSV a Anki: crea tarjetas con Python",
+            "excerpt": "mismo espacio de nombres para las sucesivas versiones de este mazo. Instala Anki Forge. Usa CPython estándar 3.11 o posterior en una plataforma compatible. Crea y activa un entorno virtual:",
+            "score": 3.0547274392673245,
+            "matchedTerms": [
+              "compatibilidad",
+              "versiones"
+            ],
+            "pageId": "csv-to-anki"
+          },
+          {
+            "url": "/es/docs/python-migration/",
+            "title": "Transición a la nueva API de Python",
+            "excerpt": "Adapta tu código al SDK actual de Python y conoce los límites de compatibilidad con la API anterior.",
+            "score": 2.0364849595115495,
+            "matchedTerms": [
+              "compatibilidad"
+            ],
+            "pageId": "python-migration"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "compatibility",
+        "expectedPageIds": [
+          "compatibility"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-terminology-08",
+        "query": "CSV Excel a APKG",
+        "top3": [
+          {
+            "url": "/es/docs/csv-to-anki/",
+            "title": "CSV a Anki: crea tarjetas con Python",
+            "excerpt": "Genera el APKG. Guarda lo siguiente como csv_to_anki.py junto a cards.csv o descarga el script: \"\"\"Convert a UTF-8 id,front,back CSV into a persistent Basic-card APKG.\"\"\". import argparse. import csv. from",
+            "score": 15.6729484244362,
+            "matchedTerms": [
+              "CSV",
+              "apkg"
+            ],
+            "pageId": "csv-to-anki"
+          },
+          {
+            "url": "/es/",
+            "title": "Genera tarjetas Ankia partir de tus datos.",
+            "excerpt": "Genera tarjetas y mazos APKG de Anki con las API de código abierto para Python, Node.js y Rust. Empieza con CSV, JSON o un flujo asistido por IA.",
+            "score": 10.877157878839459,
+            "matchedTerms": [
+              "CSV",
+              "apkg"
+            ],
+            "pageId": "home"
+          },
+          {
+            "url": "/es/docs/ai-anki-cards/",
+            "title": "Crea tarjetas de Anki con ayuda de IA",
+            "excerpt": "Prepara tarjetas a partir de tus apuntes con un asistente de IA, revisa las respuestas y exporta un APKG con Anki Forge mediante CSV o código.",
+            "score": 10.877157878839459,
+            "matchedTerms": [
+              "CSV",
+              "apkg"
+            ],
+            "pageId": "ai-anki-cards"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "csv-recipe",
+        "expectedPageIds": [
+          "csv-to-anki"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-variant-01",
+        "query": "instalacion de python",
+        "top3": [
+          {
+            "url": "/es/docs/python-quickstart/",
+            "title": "Genera un APKG de Anki con Python",
+            "excerpt": "APKG de Anki con Python. Crea y activa un entorno virtual e instala el paquete publicado en PyPI: Ventana de terminal python -m venv .venv. . .venv/bin/activate. python -m pip",
+            "score": 30.59583389515857,
+            "matchedTerms": [
+              "instalar",
+              "Python"
+            ],
+            "pageId": "python-quickstart"
+          },
+          {
+            "url": "/es/docs/python-diagnostics/",
+            "title": "Diagnósticos de Python",
+            "excerpt": "Diagnósticos de Python. Una generación correcta devuelve BuildOutput con un archivo de salida garantizado. Una generación fallida lanza BuildError con observaciones y datos sobre la publicación. Los diagnósticos por sí",
+            "score": 6.581291353489838,
+            "matchedTerms": [
+              "instalar",
+              "Python"
+            ],
+            "pageId": "python-diagnostics"
+          },
+          {
+            "url": "/es/docs/python-migration/",
+            "title": "Transición a la nueva API de Python",
+            "excerpt": "nueva API de Python. Utiliza python -m pip install ankiforge y from ankiforge import .... La antigua distribución anki-forge y el nombre de importación anki_forge no son alias de compatibilidad.",
+            "score": 6.581291353489838,
+            "matchedTerms": [
+              "instalar",
+              "Python"
+            ],
+            "pageId": "python-migration"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "accent-install",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-variant-02",
+        "query": "oclusion imagenes",
+        "top3": [
+          {
+            "url": "/es/docs/image-occlusion/",
+            "title": "Genera tarjetas Anki con oclusión de imágenes",
+            "excerpt": "Anki con oclusión de imágenes. Genera tarjetas de oclusión de imágenes de Anki desde código: proporciona una imagen y las coordenadas de los rectángulos, y Anki Forge crea una nota",
+            "score": 19.137586722908463,
+            "matchedTerms": [
+              "imagen",
+              "oclusión de imágenes"
+            ],
+            "pageId": "image-occlusion"
+          },
+          {
+            "url": "/es/examples/",
+            "title": "Un poco de código.Algo que recordar.",
+            "excerpt": "respuesta Pregunta visible. Descargar ear-training.apkg 1 nota · 1 tarjeta · 2 archivos multimedia. Oclusión de imágenes. Un rectángulo con clave oculta el núcleo en un dibujo de una célula",
+            "score": 5.422316238157397,
+            "matchedTerms": [
+              "imagen",
+              "oclusión de imágenes"
+            ],
+            "pageId": "examples"
+          },
+          {
+            "url": "/es/docs/media/",
+            "title": "Añade imágenes y audio a tus tarjetas Anki",
+            "excerpt": "Añade imágenes y audio a las tarjetas Anki que generes con Rust, Python o Node.js. Importa archivos, combina contenido y gestiona nombres de exportación, tipos MIME y límites de importación.",
+            "score": 3.578842334532415,
+            "matchedTerms": [
+              "imagen"
+            ],
+            "pageId": "media"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "accent-occlusion",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-variant-03",
+        "query": "flashcards desde apuntes con IA",
+        "top3": [
+          {
+            "url": "/es/docs/ai-anki-cards/",
+            "title": "Crea tarjetas de Anki con ayuda de IA",
+            "excerpt": "Prepara tarjetas a partir de tus apuntes con un asistente de IA, revisa las respuestas y exporta un APKG con Anki Forge mediante CSV o código.",
+            "score": 18.054802194049124,
+            "matchedTerms": [
+              "IA",
+              "apuntes"
+            ],
+            "pageId": "ai-anki-cards"
+          },
+          {
+            "url": "/es/docs/csv-to-anki/",
+            "title": "CSV a Anki: crea tarjetas con Python",
+            "excerpt": "Anki: crea tarjetas con Python. Convierte una hoja de vocabulario en un archivo .apkg de Anki con Python y Anki Forge. Este ejemplo lee un CSV UTF-8 con las columnas",
+            "score": 4.113106693136256,
+            "matchedTerms": [
+              "IA",
+              "apuntes"
+            ],
+            "pageId": "csv-to-anki"
+          },
+          {
+            "url": "/es/docs/python-quickstart/",
+            "title": "Genera un APKG de Anki con Python",
+            "excerpt": "APKG de Anki con Python. Crea y activa un entorno virtual e instala el paquete publicado en PyPI: Ventana de terminal python -m venv .venv. . .venv/bin/activate. python -m pip",
+            "score": 4.113106693136256,
+            "matchedTerms": [
+              "IA",
+              "apuntes"
+            ],
+            "pageId": "python-quickstart"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "ai-drafting",
+        "expectedPageIds": [
+          "ai-anki-cards"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-variant-04",
+        "query": "exportar mazo Rust código",
+        "top3": [
+          {
+            "url": "/es/blog/your-first-anki-deck/",
+            "title": "Crea tu primer mazo de Anki con Rust",
+            "excerpt": "artículos Crea tu primer mazo de Anki con Rust. De un pequeño programa en Rust a una tarjeta de vocabulario en español que puedes abrir en Anki. Tutorial22 de septiembre",
+            "score": 36.99499672178043,
+            "matchedTerms": [
+              "crear",
+              "Rust",
+              "mazo",
+              "codigo"
+            ],
+            "pageId": "blog:your-first-anki-deck"
+          },
+          {
+            "url": "/es/docs/quickstart/",
+            "title": "Genera un APKG de Anki con Rust",
+            "excerpt": "Instala el paquete de Rust, crea una tarjeta de vocabulario y exporta un archivo APKG persistente con un programa completo.",
+            "score": 14.589052042103319,
+            "matchedTerms": [
+              "crear",
+              "Rust",
+              "mazo"
+            ],
+            "pageId": "quickstart"
+          },
+          {
+            "url": "/es/docs/ai-anki-cards/",
+            "title": "Crea tarjetas de Anki con ayuda de IA",
+            "excerpt": "con el material original y utiliza Anki Forge para exportar un mazo .apkg. En este flujo, Anki Forge es una biblioteca de código abierto para generar paquetes de Anki: el",
+            "score": 13.924034924436022,
+            "matchedTerms": [
+              "crear",
+              "Rust",
+              "mazo",
+              "codigo"
+            ],
+            "pageId": "ai-anki-cards"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "export-synonym",
+        "expectedPageIds": [
+          "quickstart",
+          "rust-guide"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-variant-05",
+        "query": "audio mp3 wav en tarjetas",
+        "top3": [
+          {
+            "url": "/es/docs/media/",
+            "title": "Añade imágenes y audio a tus tarjetas Anki",
+            "excerpt": "imágenes y audio a tus tarjetas Anki. Incluye imágenes y audio en las tarjetas Anki que generes, por ejemplo, tarjetas de vocabulario con audio de pronunciación o preguntas sobre diagramas.",
+            "score": 31.468568053198325,
+            "matchedTerms": [
+              "audio",
+              "tarjetas"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/es/docs/",
+            "title": "Crea mazos de Anki con código",
+            "excerpt": "Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles.",
+            "score": 8.449184059055577,
+            "matchedTerms": [
+              "audio",
+              "tarjetas"
+            ],
+            "pageId": "docs"
+          },
+          {
+            "url": "/es/docs/json-to-anki/",
+            "title": "Genera y actualiza mazos de Anki desde JSON",
+            "excerpt": "Lee JSON con Rust, Python o TypeScript, incluye imágenes y audio y revisa una actualización de APKG que solo cambia una respuesta.",
+            "score": 8.449184059055577,
+            "matchedTerms": [
+              "audio",
+              "tarjetas"
+            ],
+            "pageId": "json-to-anki"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "audio-formats",
+        "expectedPageIds": [
+          "media"
+        ],
+        "passed": true
+      },
+      {
+        "id": "es-negative-01",
+        "query": "zxqvplmnrrt",
+        "top3": [],
+        "kind": "negative",
+        "intentId": "nonsense",
+        "expectedPageIds": [],
+        "passed": true,
+        "expectedBoundary": "No results for unrelated or meaningless input.",
+        "boundaryReviewRequired": false
+      },
+      {
+        "id": "es-negative-02",
+        "query": "998877665544332211",
+        "top3": [],
+        "kind": "negative",
+        "intentId": "numeric",
+        "expectedPageIds": [],
+        "passed": true,
+        "expectedBoundary": "No results for unrelated or meaningless input.",
+        "boundaryReviewRequired": false
+      },
+      {
+        "id": "es-negative-03",
+        "query": "desfragmentar fotones cuánticos",
+        "top3": [],
+        "kind": "negative",
+        "intentId": "unrelated",
+        "expectedPageIds": [],
+        "passed": true,
+        "expectedBoundary": "No results for unrelated or meaningless input.",
+        "boundaryReviewRequired": false
+      },
+      {
+        "id": "es-negative-04",
+        "query": "usar Node en navegador sin servidor",
+        "top3": [
+          {
+            "url": "/es/docs/compatibility/",
+            "title": "Compatibilidad de Anki Forge y entornos verificados",
+            "excerpt": "Consulta los paquetes públicos, los entornos probados y las condiciones de importación y reproducción en Anki.",
+            "score": 18.857593869817705,
+            "matchedTerms": [
+              "navegador",
+              "Node.js"
+            ],
+            "pageId": "compatibility"
+          },
+          {
+            "url": "/es/docs/node-api/",
+            "title": "API de Node y TypeScript",
+            "excerpt": "Métodos públicos de Node, operaciones asíncronas, opciones de generación, gestión de archivos de salida e informes.",
+            "score": 1.7996910324984996,
+            "matchedTerms": [
+              "Node.js"
+            ],
+            "pageId": "node-api"
+          },
+          {
+            "url": "/es/docs/node-quickstart/",
+            "title": "Genera un APKG de Anki con Node.js",
+            "excerpt": "Instala el paquete publicado de Node.js y exporta tu primer mazo con un programa completo. Continúa con TypeScript, imágenes y actualizaciones.",
+            "score": 1.7996910324984996,
+            "matchedTerms": [
+              "Node.js"
+            ],
+            "pageId": "node-quickstart"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "browser-runtime",
+        "expectedPageIds": [
+          "compatibility"
+        ],
+        "passed": true,
+        "expectedBoundary": "No results, or a matching page explicitly describing the verified runtime boundary; never a promise of unsupported browser/Alpine operation.",
+        "boundaryReviewRequired": true
+      },
+      {
+        "id": "es-negative-05",
+        "query": "instalar Node en Alpine musl",
+        "top3": [
+          {
+            "url": "/es/docs/node-quickstart/",
+            "title": "Genera un APKG de Anki con Node.js",
+            "excerpt": "Instala el paquete publicado de Node.js y exporta tu primer mazo con un programa completo. Continúa con TypeScript, imágenes y actualizaciones.",
+            "score": 16.108021263714743,
+            "matchedTerms": [
+              "instalar",
+              "Node.js"
+            ],
+            "pageId": "node-quickstart"
+          },
+          {
+            "url": "/es/docs/compatibility/",
+            "title": "Compatibilidad de Anki Forge y entornos verificados",
+            "excerpt": "de la verificación registrada de Node. Las guías de importación multimedia por lotes y publicación preparada están disponibles en los paquetes públicos 0.3.1. Importación y reproducción en Anki. La exportación",
+            "score": 11.382376162094872,
+            "matchedTerms": [
+              "instalar",
+              "compatibilidad",
+              "Node.js"
+            ],
+            "pageId": "compatibility"
+          },
+          {
+            "url": "/es/docs/languages/",
+            "title": "Elige tu lenguaje de programación",
+            "excerpt": "Instala el paquete publicado de Rust, Node.js o Python y exporta tu primer mazo de Anki.",
+            "score": 9.578249409846107,
+            "matchedTerms": [
+              "instalar",
+              "compatibilidad",
+              "Node.js"
+            ],
+            "pageId": "languages"
+          }
+        ],
+        "kind": "negative",
+        "intentId": "unverified-platform",
+        "expectedPageIds": [
+          "compatibility",
+          "troubleshooting"
+        ],
+        "passed": true,
+        "expectedBoundary": "No results, or a matching page explicitly describing the verified runtime boundary; never a promise of unsupported browser/Alpine operation.",
+        "boundaryReviewRequired": true
+      }
+    ]
+  }
+}

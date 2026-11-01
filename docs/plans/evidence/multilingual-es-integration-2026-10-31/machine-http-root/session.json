@@ -1,0 +1,1238 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "independent AI machine-read reviewer (/root/spanish_spec)",
+  "readOrigin": "http://127.0.0.1:49754",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "environment": {
+    "SITE_URL": "https://ankiforge.dev",
+    "SITE_BASE": "/",
+    "SITE_CUSTOM_DOMAIN": "ankiforge.dev"
+  },
+  "artifact": "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/target/spanish-integration/root-artifact",
+  "artifactVerification": {
+    "manifestRecordsChecked": 380,
+    "mismatches": 0
+  },
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/root-origin-manifest.json",
+    "sha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+    "commit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
+    "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es"
+    ]
+  },
+  "artifactEmbeddedManifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+  "server": {
+    "module": "website/scripts/serve-built-site.mjs",
+    "moduleSha256": "8255e4a118f4558d32557811ecbf57902c2f6b41ff0a8122ee10c453b36f0565",
+    "wrapper": "serve.mjs",
+    "wrapperSha256": "4ca10f1f327b154e2ee63d4ebd05f8eaa83cb7bf426e910cbba73b4feb0dbb2a",
+    "node": "v24.19.0",
+    "pid": 72418
+  },
+  "startedAt": "2026-11-01T03:59:38.114Z",
+  "fetches": [
+    {
+      "purpose": "en python-install: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "en python-install: start with locale llms index",
+        "/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:42.119Z",
+      "results": [
+        {
+          "route": "/llms.txt",
+          "url": "http://127.0.0.1:49754/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+          "bytes": 5791,
+          "bodyFile": "001-llms.txt.body",
+          "metadataFile": "001-llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:42.159Z"
+    },
+    {
+      "purpose": "en python-install: follow llms links Generate Anki flashcards with Python | Compatibility and releases | Python API",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "en python-install: follow llms links Generate Anki flashcards with Python | Compatibility and releases | Python API",
+        "/docs/python-quickstart/index.md",
+        "/docs/compatibility/index.md",
+        "/docs/python-api/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:42.208Z",
+      "results": [
+        {
+          "route": "/docs/python-quickstart/index.md",
+          "url": "http://127.0.0.1:49754/docs/python-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+          "bytes": 2287,
+          "bodyFile": "002-docs_python-quickstart_index.md.body",
+          "metadataFile": "002-docs_python-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:49754/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+          "bytes": 3238,
+          "bodyFile": "003-docs_compatibility_index.md.body",
+          "metadataFile": "003-docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/docs/python-api/index.md",
+          "url": "http://127.0.0.1:49754/docs/python-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af",
+          "bytes": 9269,
+          "bodyFile": "004-docs_python-api_index.md.body",
+          "metadataFile": "004-docs_python-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:42.251Z"
+    },
+    {
+      "purpose": "en node-api: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "en node-api: start with locale llms index",
+        "/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:42.329Z",
+      "results": [
+        {
+          "route": "/llms.txt",
+          "url": "http://127.0.0.1:49754/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+          "bytes": 5791,
+          "bodyFile": "005-llms.txt.body",
+          "metadataFile": "005-llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:42.367Z"
+    },
+    {
+      "purpose": "en node-api: follow llms links Node and TypeScript API | Generate Anki flashcards with Node.js",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "en node-api: follow llms links Node and TypeScript API | Generate Anki flashcards with Node.js",
+        "/docs/node-api/index.md",
+        "/docs/node-quickstart/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:42.414Z",
+      "results": [
+        {
+          "route": "/docs/node-api/index.md",
+          "url": "http://127.0.0.1:49754/docs/node-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+          "bytes": 13145,
+          "bodyFile": "006-docs_node-api_index.md.body",
+          "metadataFile": "006-docs_node-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/docs/node-quickstart/index.md",
+          "url": "http://127.0.0.1:49754/docs/node-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+          "bytes": 2251,
+          "bodyFile": "007-docs_node-quickstart_index.md.body",
+          "metadataFile": "007-docs_node-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:42.455Z"
+    },
+    {
+      "purpose": "en json-update: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "en json-update: start with locale llms index",
+        "/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:42.536Z",
+      "results": [
+        {
+          "route": "/llms.txt",
+          "url": "http://127.0.0.1:49754/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+          "bytes": 5791,
+          "bodyFile": "008-llms.txt.body",
+          "metadataFile": "008-llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:42.573Z"
+    },
+    {
+      "purpose": "en json-update: follow llms links Generate and update Anki decks from JSON | Update Anki decks with stable note IDs | Add images and audio to Anki cards",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "en json-update: follow llms links Generate and update Anki decks from JSON | Update Anki decks with stable note IDs | Add images and audio to Anki cards",
+        "/docs/json-to-anki/index.md",
+        "/docs/updates/index.md",
+        "/docs/media/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:42.623Z",
+      "results": [
+        {
+          "route": "/docs/json-to-anki/index.md",
+          "url": "http://127.0.0.1:49754/docs/json-to-anki/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+          "bytes": 11160,
+          "bodyFile": "009-docs_json-to-anki_index.md.body",
+          "metadataFile": "009-docs_json-to-anki_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/docs/updates/index.md",
+          "url": "http://127.0.0.1:49754/docs/updates/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+          "bytes": 8070,
+          "bodyFile": "010-docs_updates_index.md.body",
+          "metadataFile": "010-docs_updates_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/docs/media/index.md",
+          "url": "http://127.0.0.1:49754/docs/media/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+          "bytes": 8154,
+          "bodyFile": "011-docs_media_index.md.body",
+          "metadataFile": "011-docs_media_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:42.667Z"
+    },
+    {
+      "purpose": "en compatibility-constraints: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "en compatibility-constraints: start with locale llms index",
+        "/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:42.743Z",
+      "results": [
+        {
+          "route": "/llms.txt",
+          "url": "http://127.0.0.1:49754/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+          "bytes": 5791,
+          "bodyFile": "012-llms.txt.body",
+          "metadataFile": "012-llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:42.780Z"
+    },
+    {
+      "purpose": "en compatibility-constraints: follow llms links Compatibility and releases | Build and output guarantees",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "en compatibility-constraints: follow llms links Compatibility and releases | Build and output guarantees",
+        "/docs/compatibility/index.md",
+        "/docs/build-guarantees/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:42.828Z",
+      "results": [
+        {
+          "route": "/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:49754/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+          "bytes": 3238,
+          "bodyFile": "013-docs_compatibility_index.md.body",
+          "metadataFile": "013-docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/docs/build-guarantees/index.md",
+          "url": "http://127.0.0.1:49754/docs/build-guarantees/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d",
+          "bytes": 5557,
+          "bodyFile": "014-docs_build-guarantees_index.md.body",
+          "metadataFile": "014-docs_build-guarantees_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:42.871Z"
+    },
+    {
+      "purpose": "zh-CN python-install: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "zh-CN python-install: start with locale llms index",
+        "/zh-cn/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:42.952Z",
+      "results": [
+        {
+          "route": "/zh-cn/llms.txt",
+          "url": "http://127.0.0.1:49754/zh-cn/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+          "bytes": 5702,
+          "bodyFile": "015-zh-cn_llms.txt.body",
+          "metadataFile": "015-zh-cn_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:42.997Z"
+    },
+    {
+      "purpose": "zh-CN python-install: follow llms links 用 Python 生成 Anki 卡片 | 兼容性与发布 | Python API",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "zh-CN python-install: follow llms links 用 Python 生成 Anki 卡片 | 兼容性与发布 | Python API",
+        "/zh-cn/docs/python-quickstart/index.md",
+        "/zh-cn/docs/compatibility/index.md",
+        "/zh-cn/docs/python-api/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:43.066Z",
+      "results": [
+        {
+          "route": "/zh-cn/docs/python-quickstart/index.md",
+          "url": "http://127.0.0.1:49754/zh-cn/docs/python-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+          "bytes": 2302,
+          "bodyFile": "016-zh-cn_docs_python-quickstart_index.md.body",
+          "metadataFile": "016-zh-cn_docs_python-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/zh-cn/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:49754/zh-cn/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+          "bytes": 3114,
+          "bodyFile": "017-zh-cn_docs_compatibility_index.md.body",
+          "metadataFile": "017-zh-cn_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/zh-cn/docs/python-api/index.md",
+          "url": "http://127.0.0.1:49754/zh-cn/docs/python-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0",
+          "bytes": 8567,
+          "bodyFile": "018-zh-cn_docs_python-api_index.md.body",
+          "metadataFile": "018-zh-cn_docs_python-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:43.113Z"
+    },
+    {
+      "purpose": "zh-CN node-api: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "zh-CN node-api: start with locale llms index",
+        "/zh-cn/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:43.195Z",
+      "results": [
+        {
+          "route": "/zh-cn/llms.txt",
+          "url": "http://127.0.0.1:49754/zh-cn/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+          "bytes": 5702,
+          "bodyFile": "019-zh-cn_llms.txt.body",
+          "metadataFile": "019-zh-cn_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:43.235Z"
+    },
+    {
+      "purpose": "zh-CN node-api: follow llms links Node 与 TypeScript API | 用 Node.js 生成 Anki 卡片",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "zh-CN node-api: follow llms links Node 与 TypeScript API | 用 Node.js 生成 Anki 卡片",
+        "/zh-cn/docs/node-api/index.md",
+        "/zh-cn/docs/node-quickstart/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:43.282Z",
+      "results": [
+        {
+          "route": "/zh-cn/docs/node-api/index.md",
+          "url": "http://127.0.0.1:49754/zh-cn/docs/node-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9",
+          "bytes": 12167,
+          "bodyFile": "020-zh-cn_docs_node-api_index.md.body",
+          "metadataFile": "020-zh-cn_docs_node-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/zh-cn/docs/node-quickstart/index.md",
+          "url": "http://127.0.0.1:49754/zh-cn/docs/node-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+          "bytes": 2260,
+          "bodyFile": "021-zh-cn_docs_node-quickstart_index.md.body",
+          "metadataFile": "021-zh-cn_docs_node-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:43.327Z"
+    },
+    {
+      "purpose": "zh-CN json-update: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "zh-CN json-update: start with locale llms index",
+        "/zh-cn/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:43.409Z",
+      "results": [
+        {
+          "route": "/zh-cn/llms.txt",
+          "url": "http://127.0.0.1:49754/zh-cn/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+          "bytes": 5702,
+          "bodyFile": "022-zh-cn_llms.txt.body",
+          "metadataFile": "022-zh-cn_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:43.446Z"
+    },
+    {
+      "purpose": "zh-CN json-update: follow llms links 用 JSON 数据生成并更新 Anki 牌组 | 用稳定笔记 ID 更新 Anki 牌组 | 为 Anki 卡片添加图片与音频",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "zh-CN json-update: follow llms links 用 JSON 数据生成并更新 Anki 牌组 | 用稳定笔记 ID 更新 Anki 牌组 | 为 Anki 卡片添加图片与音频",
+        "/zh-cn/docs/json-to-anki/index.md",
+        "/zh-cn/docs/updates/index.md",
+        "/zh-cn/docs/media/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:43.495Z",
+      "results": [
+        {
+          "route": "/zh-cn/docs/json-to-anki/index.md",
+          "url": "http://127.0.0.1:49754/zh-cn/docs/json-to-anki/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+          "bytes": 11012,
+          "bodyFile": "023-zh-cn_docs_json-to-anki_index.md.body",
+          "metadataFile": "023-zh-cn_docs_json-to-anki_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/zh-cn/docs/updates/index.md",
+          "url": "http://127.0.0.1:49754/zh-cn/docs/updates/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408",
+          "bytes": 7506,
+          "bodyFile": "024-zh-cn_docs_updates_index.md.body",
+          "metadataFile": "024-zh-cn_docs_updates_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/zh-cn/docs/media/index.md",
+          "url": "http://127.0.0.1:49754/zh-cn/docs/media/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c",
+          "bytes": 7853,
+          "bodyFile": "025-zh-cn_docs_media_index.md.body",
+          "metadataFile": "025-zh-cn_docs_media_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:43.539Z"
+    },
+    {
+      "purpose": "zh-CN compatibility-constraints: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "zh-CN compatibility-constraints: start with locale llms index",
+        "/zh-cn/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:43.618Z",
+      "results": [
+        {
+          "route": "/zh-cn/llms.txt",
+          "url": "http://127.0.0.1:49754/zh-cn/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+          "bytes": 5702,
+          "bodyFile": "026-zh-cn_llms.txt.body",
+          "metadataFile": "026-zh-cn_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:43.656Z"
+    },
+    {
+      "purpose": "zh-CN compatibility-constraints: follow llms links 兼容性与发布 | 构建与输出保证",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "zh-CN compatibility-constraints: follow llms links 兼容性与发布 | 构建与输出保证",
+        "/zh-cn/docs/compatibility/index.md",
+        "/zh-cn/docs/build-guarantees/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:43.704Z",
+      "results": [
+        {
+          "route": "/zh-cn/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:49754/zh-cn/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+          "bytes": 3114,
+          "bodyFile": "027-zh-cn_docs_compatibility_index.md.body",
+          "metadataFile": "027-zh-cn_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/zh-cn/docs/build-guarantees/index.md",
+          "url": "http://127.0.0.1:49754/zh-cn/docs/build-guarantees/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22",
+          "bytes": 4851,
+          "bodyFile": "028-zh-cn_docs_build-guarantees_index.md.body",
+          "metadataFile": "028-zh-cn_docs_build-guarantees_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:43.748Z"
+    },
+    {
+      "purpose": "es python-install: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "es python-install: start with locale llms index",
+        "/es/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:43.831Z",
+      "results": [
+        {
+          "route": "/es/llms.txt",
+          "url": "http://127.0.0.1:49754/es/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+          "bytes": 6968,
+          "bodyFile": "029-es_llms.txt.body",
+          "metadataFile": "029-es_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:43.870Z"
+    },
+    {
+      "purpose": "es python-install: follow llms links Genera un APKG de Anki con Python | Compatibilidad de Anki Forge y entornos verificados | API de Python",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "es python-install: follow llms links Genera un APKG de Anki con Python | Compatibilidad de Anki Forge y entornos verificados | API de Python",
+        "/es/docs/python-quickstart/index.md",
+        "/es/docs/compatibility/index.md",
+        "/es/docs/python-api/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:43.918Z",
+      "results": [
+        {
+          "route": "/es/docs/python-quickstart/index.md",
+          "url": "http://127.0.0.1:49754/es/docs/python-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+          "bytes": 2601,
+          "bodyFile": "030-es_docs_python-quickstart_index.md.body",
+          "metadataFile": "030-es_docs_python-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/es/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:49754/es/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+          "bytes": 4040,
+          "bodyFile": "031-es_docs_compatibility_index.md.body",
+          "metadataFile": "031-es_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/es/docs/python-api/index.md",
+          "url": "http://127.0.0.1:49754/es/docs/python-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+          "bytes": 11256,
+          "bodyFile": "032-es_docs_python-api_index.md.body",
+          "metadataFile": "032-es_docs_python-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:43.965Z"
+    },
+    {
+      "purpose": "es node-api: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "es node-api: start with locale llms index",
+        "/es/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:44.047Z",
+      "results": [
+        {
+          "route": "/es/llms.txt",
+          "url": "http://127.0.0.1:49754/es/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+          "bytes": 6968,
+          "bodyFile": "033-es_llms.txt.body",
+          "metadataFile": "033-es_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:44.085Z"
+    },
+    {
+      "purpose": "es node-api: follow llms links API de Node y TypeScript | Genera un APKG de Anki con Node.js",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "es node-api: follow llms links API de Node y TypeScript | Genera un APKG de Anki con Node.js",
+        "/es/docs/node-api/index.md",
+        "/es/docs/node-quickstart/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:44.134Z",
+      "results": [
+        {
+          "route": "/es/docs/node-api/index.md",
+          "url": "http://127.0.0.1:49754/es/docs/node-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+          "bytes": 15825,
+          "bodyFile": "034-es_docs_node-api_index.md.body",
+          "metadataFile": "034-es_docs_node-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/es/docs/node-quickstart/index.md",
+          "url": "http://127.0.0.1:49754/es/docs/node-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+          "bytes": 2574,
+          "bodyFile": "035-es_docs_node-quickstart_index.md.body",
+          "metadataFile": "035-es_docs_node-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:44.175Z"
+    },
+    {
+      "purpose": "es json-update: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "es json-update: start with locale llms index",
+        "/es/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:44.260Z",
+      "results": [
+        {
+          "route": "/es/llms.txt",
+          "url": "http://127.0.0.1:49754/es/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+          "bytes": 6968,
+          "bodyFile": "036-es_llms.txt.body",
+          "metadataFile": "036-es_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:44.306Z"
+    },
+    {
+      "purpose": "es json-update: follow llms links Genera y actualiza mazos de Anki desde JSON | Actualiza mazos de Anki con ID de nota estables | Añade imágenes y audio a tus tarjetas Anki",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "es json-update: follow llms links Genera y actualiza mazos de Anki desde JSON | Actualiza mazos de Anki con ID de nota estables | Añade imágenes y audio a tus tarjetas Anki",
+        "/es/docs/json-to-anki/index.md",
+        "/es/docs/updates/index.md",
+        "/es/docs/media/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:44.382Z",
+      "results": [
+        {
+          "route": "/es/docs/json-to-anki/index.md",
+          "url": "http://127.0.0.1:49754/es/docs/json-to-anki/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+          "bytes": 11911,
+          "bodyFile": "037-es_docs_json-to-anki_index.md.body",
+          "metadataFile": "037-es_docs_json-to-anki_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/es/docs/updates/index.md",
+          "url": "http://127.0.0.1:49754/es/docs/updates/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391",
+          "bytes": 9323,
+          "bodyFile": "038-es_docs_updates_index.md.body",
+          "metadataFile": "038-es_docs_updates_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/es/docs/media/index.md",
+          "url": "http://127.0.0.1:49754/es/docs/media/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+          "bytes": 9814,
+          "bodyFile": "039-es_docs_media_index.md.body",
+          "metadataFile": "039-es_docs_media_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:44.426Z"
+    },
+    {
+      "purpose": "es compatibility-constraints: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "es compatibility-constraints: start with locale llms index",
+        "/es/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:44.506Z",
+      "results": [
+        {
+          "route": "/es/llms.txt",
+          "url": "http://127.0.0.1:49754/es/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+          "bytes": 6968,
+          "bodyFile": "040-es_llms.txt.body",
+          "metadataFile": "040-es_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:44.544Z"
+    },
+    {
+      "purpose": "es compatibility-constraints: follow llms links Compatibilidad de Anki Forge y entornos verificados | Garantías de generación y de los archivos APKG",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-root",
+        "es compatibility-constraints: follow llms links Compatibilidad de Anki Forge y entornos verificados | Garantías de generación y de los archivos APKG",
+        "/es/docs/compatibility/index.md",
+        "/es/docs/build-guarantees/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:44.593Z",
+      "results": [
+        {
+          "route": "/es/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:49754/es/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+          "bytes": 4040,
+          "bodyFile": "041-es_docs_compatibility_index.md.body",
+          "metadataFile": "041-es_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/es/docs/build-guarantees/index.md",
+          "url": "http://127.0.0.1:49754/es/docs/build-guarantees/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe",
+          "bytes": 7106,
+          "bodyFile": "042-es_docs_build-guarantees_index.md.body",
+          "metadataFile": "042-es_docs_build-guarantees_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:44.635Z"
+    }
+  ],
+  "stoppedAt": "2026-11-01T04:03:19.491Z"
+}
