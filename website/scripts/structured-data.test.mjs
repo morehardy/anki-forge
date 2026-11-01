@@ -30,7 +30,7 @@ test('third-language graphs use the exact build set and retain shared entity ide
   assert.deepEqual(nodes.find(node => node['@type'] === 'WebSite').inLanguage, buildLocales);
   assert.equal(nodes.find(node => node['@type'] === 'SoftwareApplication')['@id'], 'https://example.org/project/#software');
   assert.equal(nodes.find(node => node['@type'] === 'TechArticle')['@id'], `${page.canonical}#article`);
-  assert.throws(() => buildStructuredData(page, context), /outside the build/);
+  assert.throws(() => buildStructuredData(page, { ...context, buildLocales: ['en', 'zh-CN'] }), /outside the build/);
 });
 
 test('JSON-LD serialization cannot close its script element and round trips Unicode', () => {

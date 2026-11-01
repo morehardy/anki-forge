@@ -14,9 +14,9 @@ test('draft translations are excluded together and mismatched status fails', asy
   ];
   await writeFile(path.join(directory, 'en.mdx'), '---\ndraft: true\n---\nDraft\n');
   await writeFile(path.join(directory, 'zh.mdx'), '---\ndraft: true\n---\n草稿\n');
-  assert.deepEqual((await publishedPages(directory, registry)).map(page => page.id), ['home']);
+  assert.deepEqual((await publishedPages(directory, registry, ['en', 'zh-CN'])).map(page => page.id), ['home']);
   await writeFile(path.join(directory, 'zh.mdx'), '---\ndraft: false\n---\nPublished\n');
-  await assert.rejects(publishedPages(directory, registry), /draft status must match/);
+  await assert.rejects(publishedPages(directory, registry, ['en', 'zh-CN']), /draft status must match/);
 });
 
 test('the third build language participates in draft checks while planned sources stay unread', async t => {

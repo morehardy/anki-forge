@@ -1,0 +1,56 @@
+---
+locale: zh-CN
+translationKey: your-first-anki-deck
+title: 用 Rust 构建第一个 Anki 牌组
+description: 从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。
+date: 2026-09-22
+category: Tutorial
+---
+
+import CodeBlock from '../../../components/CodeBlock.astro';
+import { quickstartSource } from '../../../lib/examples';
+import { sitePath, repository } from '../../../lib/site';
+
+当笔记已经保存在脚本、数据集或一组文件中时，生成 Anki 牌组可以让内容编写过程更容易重复。源文件可以在 Git 中审阅，每次导出都是可再次执行的一步。
+
+从一个单词开始：**hola**。我们希望卡片正面显示西班牙语问候语，背面显示其英语含义。
+
+<span id="a-complete-program" data-section-alias="a-complete-program"></span>
+
+## 完整程序
+
+这是仓库中的最小 Rust 示例：
+
+<CodeBlock code={quickstartSource} />
+
+`Project::new("spanish")` 创建命名空间，`Note::basic("hola", "hello")` 创建 Basic 笔记，`project.add("es:hola", note)` 分配稳定键，`build(BuildOptions::to(...))` 写出包。
+
+`build` 只在成功后返回 `BuildOutput`。`?` 运算符传播类型化失败，让脚本能够以错误退出。
+
+<span id="install-and-run" data-section-alias="install-and-run"></span>
+
+## 安装与运行
+
+按<a href={sitePath('/zh-cn/docs/quickstart/')}>当前入门指南</a>安装公开包并执行运行命令。若要在自己的项目中使用同一程序，参考<a href={sitePath('/zh-cn/docs/installation/')}>集成到应用</a>。
+
+导出后，将 `spanish.apkg` 导入 Anki，显示第一张卡片的答案。
+
+如果想先检查结果，本站的<a href={sitePath('/zh-cn/examples/#basic')}>Basic 示例</a>也提供可下载包。
+
+<span id="give-the-note-an-identity" data-section-alias="give-the-note-an-identity"></span>
+
+## 为笔记指定身份
+
+字符串 `es:hola` 是 `spanish` 命名空间内显式的稳定笔记键。它标识是哪条笔记，与答案的措辞无关。之后可以把“hello”扩展为“hello; hi”，同时保持相同 ID。
+
+每条逻辑笔记使用不同 ID。如果源数据已有词汇条目 ID 等持久键，就可以从它开始。不要仅根据将来可能编辑的文本派生身份。
+
+更新已分发牌组还需要发布历史。保留原始旧包，并遵循<a href={sitePath('/zh-cn/docs/updates/')}>文档中的更新流程</a>。
+
+<span id="grow-from-one-note" data-section-alias="grow-from-one-note"></span>
+
+## 从一条笔记扩展
+
+另一句问候语可以创建为另一条 Basic 笔记，并使用新键添加。句子中的缺失单词可以使用<a href={sitePath('/zh-cn/examples/#cloze')}>Cloze 笔记</a>。更丰富的卡片可通过项目 API 定义字段和模板，并将图片或音频与笔记一起打包。
+
+<a href={sitePath('/zh-cn/docs/rust-guide/')}>Rust 编写指南</a>继续介绍诊断、媒体和可重复构建。<a href={`${repository}/tree/main/anki_forge/examples`}>仓库示例</a>提供可以继续扩展的可运行程序。

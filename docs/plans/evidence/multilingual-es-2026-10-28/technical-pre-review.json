@@ -1,0 +1,3351 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/independent_technical_source_review/2026-10-28/es-full-pre-read-31",
+  "reviewedAt": "2026-10-28T08:54:46.050Z",
+  "workspace": "/Users/hp/.codex/worktrees/multilingual-spanish/anki-forge",
+  "status": "full-spanish-content-pre-review-complete-final-binding-pending",
+  "scope": {
+    "spanishLongform": 31,
+    "docs": 29,
+    "articles": 2,
+    "uiKeys": 210,
+    "metadataPages": 29,
+    "finalHashApproval": false,
+    "sourceReadyApproval": false
+  },
+  "method": "Independently read every complete Spanish page, not just fences, against the previously fully reviewed current English facts/tasks/programs and actual technical source witnesses. Prior common source snapshot reused only for exact unchanged files; six actual shared deltas separately read; no arbitrary score automation. Each entry quotes actual Spanish spans and checked conditions; section markers were read semantically.",
+  "priorCommonReview": {
+    "path": "technical-common-prior-review.json",
+    "sha256": "7bb41db6c35070e24f74ead6442865f6be50051543513997a6b5ae9a50257518",
+    "originalPath": "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review.json",
+    "reviewerRun": "/root/independent_technical_source_review/2026-10-28/stable-theme-scopes-34",
+    "authorshipDisclosure": "This reviewer did not author the website prose, model labels/routes, templates or SDK examples. During this delta the reviewer was explicitly assigned and authored the supplied-root current-page metadata and home-wordmark dependency fixes in content-review-inputs.mjs plus their negative tests. Accordingly this record is independent content/model-data review, not independent approval of that parser implementation. Parser code cross-review is assigned separately by the coordinator; do not cite this record as its independent code approval."
+  },
+  "sharedPriorInputProof": {
+    "priorSnapshot": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-stable-theme-scopes-34.json",
+      "sha256": "102ae86a3242300fb64c025245102831637560b6e2e32ca041c456d8dbe32622",
+      "scope": "Only stable contextual ThemeControl names and Header scope prop reviewed as new changes; unchanged prior full content evidence reused with exact-byte proof."
+    },
+    "filesCompared": 130,
+    "unchangedFiles": 124,
+    "allUnchanged": false,
+    "unchanged": [
+      {
+        "path": "anki_forge/examples/docs_publication.rs",
+        "sha256": "65e6404ee7381d73709dca0ada96cdb7923650ddd1cc330447884864d552a85b"
+      },
+      {
+        "path": "anki_forge/examples/docs_workflow.rs",
+        "sha256": "2ab71f370ca174b256d1ba56e8b8cccc34fda5918a1fe25fe29626b061d25d86"
+      },
+      {
+        "path": "anki_forge/examples/json_to_anki.rs",
+        "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+      },
+      {
+        "path": "anki_forge/examples/target_api_basic.rs",
+        "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+      },
+      {
+        "path": "anki_forge/examples/target_api_custom_notetype.rs",
+        "sha256": "2951c058e9c3376fbe115b199a010830445c5765c923f9f66f6406a724d9cd13"
+      },
+      {
+        "path": "anki_forge/examples/website_showcase.rs",
+        "sha256": "458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3"
+      },
+      {
+        "path": "bindings/node/examples/json_to_anki.mts",
+        "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+      },
+      {
+        "path": "bindings/node/examples/quickstart.mjs",
+        "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+      },
+      {
+        "path": "bindings/python/MIGRATION.md",
+        "sha256": "ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2"
+      },
+      {
+        "path": "bindings/python/examples/csv_to_anki.py",
+        "sha256": "5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc"
+      },
+      {
+        "path": "bindings/python/examples/json_to_anki.py",
+        "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+      },
+      {
+        "path": "bindings/python/examples/quickstart.py",
+        "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+      },
+      {
+        "path": "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+        "sha256": "842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34"
+      },
+      {
+        "path": "docs/ai-anki-cards.md",
+        "sha256": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5"
+      },
+      {
+        "path": "docs/anki-forge-vs-genanki.md",
+        "sha256": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4"
+      },
+      {
+        "path": "docs/api-overview.md",
+        "sha256": "a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b"
+      },
+      {
+        "path": "docs/benchmark-presentation.json",
+        "sha256": "487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074"
+      },
+      {
+        "path": "docs/build-guarantees.md",
+        "sha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83"
+      },
+      {
+        "path": "docs/cards.md",
+        "sha256": "ae6830f58bbb9560be689099ae5728a2f42573da0c201dc34621fc13435c6b0a"
+      },
+      {
+        "path": "docs/compatibility.md",
+        "sha256": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c"
+      },
+      {
+        "path": "docs/concepts.md",
+        "sha256": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279"
+      },
+      {
+        "path": "docs/csv-to-anki.md",
+        "sha256": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486"
+      },
+      {
+        "path": "docs/custom-notetypes.md",
+        "sha256": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1"
+      },
+      {
+        "path": "docs/image-occlusion.md",
+        "sha256": "8584c7b31832078f1e03fd7287867cc5008c88a87e6340dca843d8ba33de9651"
+      },
+      {
+        "path": "docs/installation.md",
+        "sha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81"
+      },
+      {
+        "path": "docs/json-to-anki.md",
+        "sha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021"
+      },
+      {
+        "path": "docs/media.md",
+        "sha256": "e1144d2a2c90cb2905df6c6e00e06a7a59a99a6bebf6e226ff573d420a03756b"
+      },
+      {
+        "path": "docs/node/api.md",
+        "sha256": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726"
+      },
+      {
+        "path": "docs/node/quick-start.md",
+        "sha256": "1538750a51685097fd4dad38f8612b4bcb717ca44bbac76ccadaca30ce72a3e8"
+      },
+      {
+        "path": "docs/performance/20261008/comparison.csv",
+        "sha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999"
+      },
+      {
+        "path": "docs/python/api.md",
+        "sha256": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004"
+      },
+      {
+        "path": "docs/python/diagnostics.md",
+        "sha256": "b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28"
+      },
+      {
+        "path": "docs/python/genanki-migration.md",
+        "sha256": "3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f"
+      },
+      {
+        "path": "docs/python/quick-start.md",
+        "sha256": "482dc6d2277c0ff5d8574dc0a88dd1cb301dcfff733ae6a97f1367a7d99c7f55"
+      },
+      {
+        "path": "docs/recipes/csv-to-anki/cards.csv",
+        "sha256": "216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64"
+      },
+      {
+        "path": "docs/rust-api.md",
+        "sha256": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a"
+      },
+      {
+        "path": "docs/rust-guide.md",
+        "sha256": "5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf"
+      },
+      {
+        "path": "docs/source-builds.md",
+        "sha256": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac"
+      },
+      {
+        "path": "docs/template-bundles.md",
+        "sha256": "d049c66a6aedecea885c24bda2d5d0a6d0e65ec5558211217456a75b21032f53"
+      },
+      {
+        "path": "docs/troubleshooting.md",
+        "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+      },
+      {
+        "path": "docs/updates.md",
+        "sha256": "86de1d53b26e1780b31d622ad6700be1a36f7a52120cd053b4da32c4966696ef"
+      },
+      {
+        "path": "docs/zh-cn/ai-anki-cards.md",
+        "sha256": "49a557471ff9ab2a4ae8cc9c4b7d7fe12307a928bb3c66d2c0d2082119e4c1ae"
+      },
+      {
+        "path": "docs/zh-cn/anki-forge-vs-genanki.md",
+        "sha256": "fe79c48acc7247921f08a8403b3a24e3ae29ba0977b220c7eab06e779a6fbbea"
+      },
+      {
+        "path": "docs/zh-cn/api.md",
+        "sha256": "e6cc07f90a030bd3a24ff7d53d8569010772600e9cdff582edd906a851bc925d"
+      },
+      {
+        "path": "docs/zh-cn/build-guarantees.md",
+        "sha256": "5d7f6e975cd181ec7fe980b9a2e3f223bf50f99b0fb65207e8dfbf183eaf17af"
+      },
+      {
+        "path": "docs/zh-cn/cards.md",
+        "sha256": "e4a8ebb6f650310f9d2c953ba823f5dc7877ecf49f21a8499973d6a9ad56e8f3"
+      },
+      {
+        "path": "docs/zh-cn/compatibility.md",
+        "sha256": "617bfe97d87e825467371377e8711d757469b6d007d4ca7fb9962f6ab10ed87c"
+      },
+      {
+        "path": "docs/zh-cn/concepts.md",
+        "sha256": "d96916d3e573822c4bc9f918a0b00f86fefad8062a8d42330a5942b18f017823"
+      },
+      {
+        "path": "docs/zh-cn/csv-to-anki.md",
+        "sha256": "a42ecf3bc3b7d2bf4dda6a248569f3fa7c35918a21e8436f36893b08cd5ef50f"
+      },
+      {
+        "path": "docs/zh-cn/custom-notetypes.md",
+        "sha256": "ef1fa002f9f75f63ba5d7751e8acc7aa20dbff58c8f431c860d52f39fd130682"
+      },
+      {
+        "path": "docs/zh-cn/development.md",
+        "sha256": "fd8598bdbc120b1a955a56ef0971407eb63f9146f2fb49a8191abcdf62089968"
+      },
+      {
+        "path": "docs/zh-cn/genanki-migration.md",
+        "sha256": "d484bf3260f897ad2f7f7e49e7397d2ddf81c65e56017316c0a527c08e7d2e83"
+      },
+      {
+        "path": "docs/zh-cn/image-occlusion.md",
+        "sha256": "3639491364d28125552bd216b28a2317fa51c3793d4044ffed1eab1997589173"
+      },
+      {
+        "path": "docs/zh-cn/index.md",
+        "sha256": "fa3257852f1c090ccb804ebb6758b469e89a847573486dce4a297a4c85936079"
+      },
+      {
+        "path": "docs/zh-cn/installation.md",
+        "sha256": "aad9da7f5ec2507e69ee4c6d060b9287d0ad193236f2010175e17227dcf6714f"
+      },
+      {
+        "path": "docs/zh-cn/json-to-anki.md",
+        "sha256": "134964c1647cbdf5856e01914ff1c9b04f9dcc3339fcd90f323462a256ed7f64"
+      },
+      {
+        "path": "docs/zh-cn/languages.md",
+        "sha256": "90f4543ae0c33e8ba9ee9732b14ef3ce9d45231d851efa4d157f54789a3bebf9"
+      },
+      {
+        "path": "docs/zh-cn/media.md",
+        "sha256": "98d0136e6ef67fdc71a0df8f2adebaad3558a3e03e1607597c078a408e4e2d05"
+      },
+      {
+        "path": "docs/zh-cn/node-api.md",
+        "sha256": "4ac2fbc3679542af661a2ff5172ad2d9b20daa575d3b5cf2deefcc4b06a0f07f"
+      },
+      {
+        "path": "docs/zh-cn/node-quickstart.md",
+        "sha256": "8b0675746f54b7b0a6111201006ad668378a231a831c61c3b5eb9f955454f3ac"
+      },
+      {
+        "path": "docs/zh-cn/python-api.md",
+        "sha256": "29db80f1af39809197c38e33a6af315501da5586a4ecc6a01f77202773ddddfd"
+      },
+      {
+        "path": "docs/zh-cn/python-diagnostics.md",
+        "sha256": "18fa83415cf6e7e1b1e57d44f2c66ff5240d21663bb1520fbc8a0ae53e01704f"
+      },
+      {
+        "path": "docs/zh-cn/python-migration.md",
+        "sha256": "d3ba868ff20b98f54538e366263bea6f2f86799e355748db84e5e021bb235979"
+      },
+      {
+        "path": "docs/zh-cn/python-quickstart.md",
+        "sha256": "499fc2d46f54500b417320b0ff4862b0dcaa9faf5c08e0d28797d61aaeba7c2e"
+      },
+      {
+        "path": "docs/zh-cn/quickstart.md",
+        "sha256": "e16b86d580ed7f336ebfcf3d46917cd171a3e44ed7536981f09fccd856b8dbbd"
+      },
+      {
+        "path": "docs/zh-cn/rust-api.md",
+        "sha256": "7d4432c78d62063d5205b9524765456674ad12aad23201a035e433fac7517de9"
+      },
+      {
+        "path": "docs/zh-cn/rust-guide.md",
+        "sha256": "0766dabbb020a38c80f1edd9fca8f167c77f7a6d4f5abd1e5f5fa2ff078a13de"
+      },
+      {
+        "path": "docs/zh-cn/templates.md",
+        "sha256": "c60e2b8d7a569537d652dddab89a8347afd7982119ed6f6aedec85461f37327d"
+      },
+      {
+        "path": "docs/zh-cn/troubleshooting.md",
+        "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+      },
+      {
+        "path": "docs/zh-cn/updates.md",
+        "sha256": "135912b5feea3a94d60a1e8f34b9efc155bedb3eec4e36c7229f3496baa38543"
+      },
+      {
+        "path": "website/astro.config.mjs",
+        "sha256": "ddb68f8f3cf680bb1ff86444ea82bdb1fbb04ec2e95c61e7de02a5a1c3ab66d8"
+      },
+      {
+        "path": "website/legacy-sections.json",
+        "sha256": "7549ad8d40adb58bd69b400f62c7ab4fa718dfe50dbac37be6d981213d01ed30"
+      },
+      {
+        "path": "website/locale-model.mjs",
+        "sha256": "e357763d9ba16adc611f8f49ce6742fc37e783f2fbbbcada934f5990ab4fa8c7"
+      },
+      {
+        "path": "website/release-locales.json",
+        "sha256": "fbbeda31c5c7b0104034586844d44b50e034db8d5bdae1b091408970000572f1"
+      },
+      {
+        "path": "website/scripts/benchmark-presentation.mjs",
+        "sha256": "0b0d7bdd3fbab28b50881b57a74859c508c21380459b37313cedd3c290fb05c1"
+      },
+      {
+        "path": "website/scripts/content-contract.test.mjs",
+        "sha256": "4f32de9b6c9a20946faf2777dc776a8b34df3f399cec89fa074395280f1598e9"
+      },
+      {
+        "path": "website/scripts/search-documents.mjs",
+        "sha256": "7f712d7d3d22d5c0886572d33b731787cc9ffc8f4e154dd2c98f36a491afe696"
+      },
+      {
+        "path": "website/search-concepts.json",
+        "sha256": "2e9d7e0130eae3ac5ba7ba1ebe9521db2ceaba365858e8d749cc2db2869b36a1"
+      },
+      {
+        "path": "website/search-terms.json",
+        "sha256": "1e33ab534b9b13df687a841289064a12fa7faf531150f9aea17984076eabc4f9"
+      },
+      {
+        "path": "website/search.config.mjs",
+        "sha256": "4381563e2e59fed7aa4780a92f81ecf827714dc1cbd59e89e8673a2c1fe543df"
+      },
+      {
+        "path": "website/section-contracts.json",
+        "sha256": "9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b"
+      },
+      {
+        "path": "website/src/components/AiQuickstart.astro",
+        "sha256": "755e96c650604d7949125b9967f25992b3f5fd62e9d18debdfd27671ef3a7a84"
+      },
+      {
+        "path": "website/src/components/ArticlePage.astro",
+        "sha256": "813acecf25d6f42d1d6c840c35cad3ee5b1634e7e289c27c422cb09fb94e5ebb"
+      },
+      {
+        "path": "website/src/components/BlogPage.astro",
+        "sha256": "a3b1b7f73d75c98b9b7aafb64c4a714b01cba099fd225b0f0316d7fb778269ac"
+      },
+      {
+        "path": "website/src/components/BrandMark.astro",
+        "sha256": "6cb4983d7143f2d240868ebffae9bae8bf179f074bf3abb13b092b8f667407c0"
+      },
+      {
+        "path": "website/src/components/CardPreview.astro",
+        "sha256": "dc851faa961636a75707ac08ba9ebc832a3542283d020ac96df3f2e99b9baaa1"
+      },
+      {
+        "path": "website/src/components/CodeBlock.astro",
+        "sha256": "9a26a31b6a637d60d56f97d1e8a6eef17446bded2212c4b0551ace29f6c9ddec"
+      },
+      {
+        "path": "website/src/components/CopyBlock.astro",
+        "sha256": "dd2b299819d3095c0fdfe3af8755d0375ed3e1b3f8eafd0c855b530b3c357812"
+      },
+      {
+        "path": "website/src/components/DocsFooter.astro",
+        "sha256": "de1fbd0f7d4d71dc9b391c79088f26652dd9201eb5ed7133020d4cc41235f8f2"
+      },
+      {
+        "path": "website/src/components/DocsHeader.astro",
+        "sha256": "f1066072fdf18f19cd1b78581469e1b802a395776452b39b52f937e8156a0848"
+      },
+      {
+        "path": "website/src/components/DocsSearch.astro",
+        "sha256": "587a877356eda345e0d66ea9cd4d33f25426230ea2aeb4f435556a954b24d16a"
+      },
+      {
+        "path": "website/src/components/ExampleWorkbench.astro",
+        "sha256": "486b5faf302b0c1d161c947937c518748969e86fb9625651f8db054b82a8b9b8"
+      },
+      {
+        "path": "website/src/components/ExamplesPage.astro",
+        "sha256": "8b10e1280635172c69029b94cbc8765fa95593f221772af1bd338c0373d95649"
+      },
+      {
+        "path": "website/src/components/Footer.astro",
+        "sha256": "320057dbcae7f74003f143530ba4629c5ad0aed324605db3e1c68fb5e8b038b3"
+      },
+      {
+        "path": "website/src/components/Header.astro",
+        "sha256": "274b6257bbc39d36ec2e4f53e8f60955b93d2aaa141617a0eab2d26613f2ccd6"
+      },
+      {
+        "path": "website/src/components/HomePage.astro",
+        "sha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439"
+      },
+      {
+        "path": "website/src/components/HomeShowcase.astro",
+        "sha256": "4515f6b70dff73e28bf312949577946bf8bb6435d39e7661da6ebe602610784e"
+      },
+      {
+        "path": "website/src/components/Icon.astro",
+        "sha256": "37eb6e14469523e5d6aa4c588c3e230c8366972caee5b12c1e70d9f0179384ee"
+      },
+      {
+        "path": "website/src/components/InstallCommand.astro",
+        "sha256": "28d216c4936193691ef41595109cdf2ce460bf8dcfd2786df232a2d3855d76c1"
+      },
+      {
+        "path": "website/src/components/LanguageSwitcher.astro",
+        "sha256": "9d3c5658fc3c42fe5162f5f1883dde73f6aa23a11a4adcc2ca7955a1a1050c57"
+      },
+      {
+        "path": "website/src/components/PerformanceEvidence.astro",
+        "sha256": "ed9c4b797037499fe36c1553cfcfc94dd489086b883d8d77ff60dc94ac72e2ef"
+      },
+      {
+        "path": "website/src/components/PostCard.astro",
+        "sha256": "cf73be0f12d07293ae02128cf62fb5ec49064011d7375a831453a9214eef5b47"
+      },
+      {
+        "path": "website/src/components/ThemeControl.astro",
+        "sha256": "724d65736240a3271f9e65511437d09e4f01034dc1882853a4556cb0021903cd"
+      },
+      {
+        "path": "website/src/components/UpdateDemo.astro",
+        "sha256": "79956a12d3aea601c80736115918e4552d7f64cff32e8c6c6734bd8296936c99"
+      },
+      {
+        "path": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+        "sha256": "77e2a04feaec5959d73f2aa008412203cc598bcdbfbffb6823ced93c03cfb0c7"
+      },
+      {
+        "path": "website/src/content/blog/your-first-anki-deck.mdx",
+        "sha256": "957379c92c61b6d5f3569da4b41be4d6f593aa0374f0fc97576d3630b4a2e7a0"
+      },
+      {
+        "path": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+        "sha256": "66922194e8fcbc6bb137a4fbc0b55f47c19fc38d4b4159f4b4a14d2b6a901589"
+      },
+      {
+        "path": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+        "sha256": "db5acd23e97e05d1303baa88af2fef9b1a94e9f11398eb11e2cedfced33d5841"
+      },
+      {
+        "path": "website/src/content/docs/docs/index.mdx",
+        "sha256": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c"
+      },
+      {
+        "path": "website/src/content/docs/docs/languages.mdx",
+        "sha256": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24"
+      },
+      {
+        "path": "website/src/content/docs/docs/quickstart.mdx",
+        "sha256": "678a5696fb13166a8f5a3232d737efac8da5169bdbb55c148f9807d235a02cd6"
+      },
+      {
+        "path": "website/src/content/i18n/en.json",
+        "sha256": "52ac3f26f729435f0682de9b384c1c740cf275c6dd9cd8539eb4fb8c56605187"
+      },
+      {
+        "path": "website/src/content/i18n/zh-CN.json",
+        "sha256": "44e533587105bc7fafc6d8eb13d42c4153c67a6c6fa32c24193b7a3d75cec4e8"
+      },
+      {
+        "path": "website/src/i18n/client-messages.mjs",
+        "sha256": "69cbebbb402b9db84912c0514ac209650768079c5e7158c6e9e0da77222a5368"
+      },
+      {
+        "path": "website/src/i18n/en.json",
+        "sha256": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848"
+      },
+      {
+        "path": "website/src/i18n/format-message.mjs",
+        "sha256": "8d0c482c34a744ccc4add7e6087c68a36e4cce433f97825e82be3bd03b0d3c76"
+      },
+      {
+        "path": "website/src/i18n/zh-CN.json",
+        "sha256": "f2cd71a222b1cf4370662a8e46726a1c238977c4bbe57dccc2b900ce7449c093"
+      },
+      {
+        "path": "website/src/layouts/SiteLayout.astro",
+        "sha256": "04c73e6602a4a5010efd8a4601072daf43f70508a21ebe1da5a73bdf0c0360c3"
+      },
+      {
+        "path": "website/src/lib/examples.ts",
+        "sha256": "aa92e39a4ba31c22bc9e11dd5c6ec7a5ebfb93081f001da29e465c8ebd11d457"
+      },
+      {
+        "path": "website/src/lib/search-terms.mjs",
+        "sha256": "c6f10080708189333263efcd40971231207fa5686a4bc45803db738633f7e93c"
+      },
+      {
+        "path": "website/src/lib/search.mjs",
+        "sha256": "22f649c4b5d6dda48541cf91c7d201206dd2210a9bd37101d30e16d36461c1c2"
+      },
+      {
+        "path": "website/src/route-middleware.ts",
+        "sha256": "2f27fd73b1381f2ccba6822be4da01be19d38a7b753756f8c4d30e7a642f657d"
+      },
+      {
+        "path": "website/src/scripts/docs-search.ts",
+        "sha256": "801800476a39fc989a6f9741d0934e1aec2e84410c1bd7cb7094c71317cc3922"
+      },
+      {
+        "path": "website/src/scripts/site.ts",
+        "sha256": "76767efa229f1f6286226ae4226cc3902b303fb4c4b148066b02fc6aece57036"
+      }
+    ],
+    "changedShared": [
+      {
+        "path": "docs/ai-quickstart.json",
+        "previousSha256": "c5a14089ea49b3aaadd6a6966e34237c737afa853fe0fcebcae5854a954606c5",
+        "currentSha256": "c6650236b837698c14f714f4d2bb587ee177a0e16caf461a9104dc23a59b7908"
+      },
+      {
+        "path": "website/language-briefs.json",
+        "previousSha256": "a721f0d5ca2478ece225c6d8432a3d33c41f230f0fb50171b98295e652852b4e",
+        "currentSha256": "1b0653b024218d027dae3aed95a2f636cdba287305de032f11b3876817a15b43"
+      },
+      {
+        "path": "website/scripts/content-review-inputs.mjs",
+        "previousSha256": "e22eb2351b6d8bede6b6619e089565f3ac33db0d93cdc75ad503aaa993cb4a21",
+        "currentSha256": "d75c4869e972843384601f5a22f933497c6a3f6f75e2b6f8bbfc33616ff32af2"
+      },
+      {
+        "path": "website/site-model.mjs",
+        "previousSha256": "7cfab12d586121fea3cc862d0efafe70a2bb8f7563715c90010b6909bd96a24d",
+        "currentSha256": "7fde34eb378e21b4209cf1fcc3c3b284b197d95edae3930adbea413d5ffcfc08"
+      },
+      {
+        "path": "website/src/i18n/messages.mjs",
+        "previousSha256": "a8f52d1df8eac07604ee34e626d39bae81596eba66429baf875763a62d853104",
+        "currentSha256": "84ad48f11ec45d0679aa50206d52c27648514015c20f31269876823b72509393"
+      },
+      {
+        "path": "website/src/lib/ai-quickstart.mjs",
+        "previousSha256": "f9567627f5edec69ab09ff3fb8a855231e82b4e893c3e0f0961c16bed018153c",
+        "currentSha256": "8bb8df054e098db366d6513c66c7c50c08903c28fce19f4ef8aace63ffc73d60"
+      }
+    ]
+  },
+  "inputSnapshot": {
+    "path": "technical-pre-read-input-snapshot.json",
+    "sha256": "28b4550ddb85139e5fd5658901854f61eff267351f58a7c289e2e535ae03e18e"
+  },
+  "versionEvidence": [
+    {
+      "source": "docs/ai-quickstart.json",
+      "fact": "publicVersion0.3.1; Rust1.92+/Node22.13+/standardCPython3.11+; actual published-runtime coverage bounded by dated evidence."
+    },
+    {
+      "source": "anki_forge/CHANGELOG.md",
+      "fact": "0.3.1 dated2026-10-13 leaves public authoring API/embedded bundle2.1.0 unchanged from0.3.0; prepared publication/batch were public0.3.0, not source-only."
+    },
+    {
+      "source": "contracts/manifest.yaml",
+      "fact": "bundle_version2.1.0 separate from crate0.3.1; schema2.0.0, project-v2/identity-v1 not conflated."
+    },
+    {
+      "source": "bindings/python/src/ankiforge/_loader.py",
+      "fact": "binding/core0.3.1,contract2.1.0,protocol1 reject older sameversion native binaries; Node native.ts protocol6."
+    }
+  ],
+  "uiReview": {
+    "source": "website/src/i18n/es.json",
+    "keys": 210,
+    "technicalStatus": "pre-reviewed-in-source-awaiting-rendered-candidate",
+    "evidence": [
+      {
+        "keys": [
+          "home.title",
+          "home.description",
+          "home.intro",
+          "home.install"
+        ],
+        "span": "Genera tarjetas y mazos APKG de Anki con las API de código abierto para Python, Node.js y Rust. Empieza con CSV, JSON o un flujo asistido por IA.",
+        "checkedFact": "Open-source public Rust/Python/Node generation; CSV/JSON/AI are linked caller workflows, no built-in converter or AI service."
+      },
+      {
+        "keys": [
+          "home.evolveDescription",
+          "update.warning",
+          "examples.limitations"
+        ],
+        "span": "Conserva el APKG original de distribución. Las opciones de importación y los cambios locales más recientes afectan a las actualizaciones.",
+        "checkedFact": "Original distribution baseline retained; stableID does not override local edits/client import settings; preview not actual collection simulation."
+      },
+      {
+        "keys": [
+          "examples.combined",
+          "examples.cloze",
+          "examples.media",
+          "examples.occlusion"
+        ],
+        "span": "Descargar el mazo de cuatro tarjetas",
+        "checkedFact": "Actual website_showcase yields4notes/4cards/3media; singlecloze1card, customauditorymodel, sameocclusion image/mask; sharedprogramunchanged."
+      },
+      {
+        "keys": [
+          "card.waveform",
+          "card.sine",
+          "card.concert"
+        ],
+        "span": "Un segundo de la nota la de afinación.",
+        "checkedFact": "Waveform and one-secondconcertA refer to website_showcase synthesized440Hz tone; docs/media separately uses pixel/silencefixture and makes no waveformpromise."
+      },
+      {
+        "keys": [
+          "ai.description",
+          "ai.privacy"
+        ],
+        "span": "Opcional. Tu solicitud permanece únicamente en esta página.",
+        "checkedFact": "Current site brief generator is local text composition; no upload/model invocation; final Spanishprompt registration pending separate audit."
+      },
+      {
+        "keys": [
+          "performance.description",
+          "performance.limitations",
+          "performance.medians"
+        ],
+        "span": "Estas pruebas miden la generación del mazo, no la velocidad de importación o de repaso en Anki. Los resultados pueden variar con otro equipo u otras cargas de trabajo.",
+        "checkedFact": "20261008 archived RustProjectAPI vsgenanki0.13.1 M1Pro five1000Basicworkloads tenrunmedians; not currentNodePython/import/review speed."
+      },
+      {
+        "keys": [
+          "machine.version",
+          "machine.constraints",
+          "machine.history",
+          "machine.optional"
+        ],
+        "span": "Artículo histórico publicado el {date}.",
+        "checkedFact": "Versionplaceholder bound sharedpublicconfig; originalAPKG/clientconditions; datedhistoricalarticle; protocolOptional unchanged."
+      },
+      {
+        "keys": [
+          "count.notes",
+          "count.cards",
+          "count.media",
+          "hero.counts"
+        ],
+        "span": "{\"type\":\"plural\",\"variable\":\"count\",\"forms\":{\"one\":\"{count} tarjeta\",\"many\":\"{count} tarjetas\",\"other\":\"{count} tarjetas\"}}",
+        "checkedFact": "Complete plural countphrases distinguish note/card/media, one/many/other use samecount; no false equivalent note/cardcount."
+      },
+      {
+        "keys": [
+          "copy.*",
+          "search.*",
+          "nav.*",
+          "error.*"
+        ],
+        "span": "No se pudo cargar la búsqueda. Comprueba la conexión y vuelve a intentarlo.",
+        "checkedFact": "Copyselectionfallback vs successfulcopy, loadretryerror vs emptysearch, theme/system labels and404navigation retain existing actual behaviors."
+      }
+    ],
+    "openIssues": []
+  },
+  "metadataReview": {
+    "status": "all29source-metadata-pre-reviewed-in-context-final-binding-pending",
+    "entries": {
+      "docs": {
+        "title": "Crea mazos de Anki con código",
+        "description": "Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "Correctly distinguishes note fields, notetype/templates producing cards and deck destination; Project ownership is not a second deck registry.",
+          "Accurately scopes authoring examples to Rust, CSV to Python and JSON to three SDKs; public-language entry table points to complete tasks.",
+          "Update link describes retention of identity/revision evidence instead of promising automatic collection synchronization."
+        ]
+      },
+      "languages": {
+        "title": "Elige tu lenguaje de programación",
+        "description": "Instala el paquete publicado de Rust, Node.js o Python y exporta tu primer mazo de Anki.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "Matches public quickstart runtimes Rust1.92+/Node22.13+, CPython standard3.11–3.14 observed wheels; no unsupported interpreter guarantee.",
+          "Export-only independence; later compatibility link covers actual clients.",
+          "Source-build guidance remains a separate workflow; all public installs pinned0.3.1."
+        ]
+      },
+      "quickstart": {
+        "title": "Genera un APKG de Anki con Rust",
+        "description": "Instala el paquete de Rust, crea una tarjeta de vocabulario y exporta un archivo APKG persistente con un programa completo.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "Exact target_api_basic.rs Project spanish/defaultDeck Spanish/add es:hola, Basic hola/hello, BuildOptions::to spanish.apkg and cargo run sequence preserved.",
+          "Correct persistent output path; no Anki installation needed for export.",
+          "Namespace+key identify logical note; next steps explicitly retain original APKG baseline before updates."
+        ]
+      },
+      "json-to-anki": {
+        "title": "Genera y actualiza mazos de Anki desde JSON",
+        "description": "Lee JSON con Rust, Python o TypeScript, incluye imágenes y audio y revisa una actualización de APKG que solo cambia una respuesta.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "Allthreeexactsourceprograms parse callerJSON, stable biology-json/threeIDs and sharedcellPNG/tone;1answerchanged, noadded/removed notes, RISK.NOTE_CHANGED.",
+          "Imagecelldiagram/tonegeneratednot speech; appvalidates untrusteddata schema and SDKonlyauthor/build.",
+          "Completedcomparison thenactual preparedcandidate review, two policychecks, freshoutputdirectory, originalv1retained, persistentv2. Public0.3.1 install/runtime and TypeScript6.0.3/@typesnode24.13.6 compile/run complete.",
+          "Originalbaseline notAnkireexport; localedits/schema/clientsettings, noomissiondeletes and no learnerreviewguarantee preserved."
+        ]
+      },
+      "csv-to-anki": {
+        "title": "CSV a Anki: crea tarjetas con Python",
+        "description": "Convierte una hoja de vocabulario CSV UTF-8 en un APKG con un script completo de Python, ID de nota estables y comprobaciones de importación.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "NativeAnki textimport openly acknowledged; programmable repeatable ownIDs/APKGdistributionvalue, xlsxfirstUTF8CSV; nostrawman.",
+          "Exact stdlibcsv.DictReader(strict=True), utf-8-sig/newline empty, exactid/front/back orderedheader, threefieldsnonnullnonblank, trimmeduniqueIDs, emptydataset/existingdestination rejection.",
+          "SourceCSV3rows→Spanishdeck3notes/3Basiccards/0media, exact printedoutput and invocation namespace spanish-vocabulary; no new genericSDKCSV API.",
+          "StableIDsnecessarybutnot guaranteedoverwrite; originaldistribution kept, followupdatecomparisonworkflow."
+        ]
+      },
+      "ai-anki-cards": {
+        "title": "Crea tarjetas de Anki con ayuda de IA",
+        "description": "Prepara tarjetas a partir de tus apuntes con un asistente de IA, revisa las respuestas y exporta un APKG con Anki Forge mediante CSV o código.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "Sitebriefbuilderlocaltextonly; assistantdrafts content/scripts, localRust/Node/Python SDKbuildsAPKG.",
+          "Separate extractiontoolandhuman/readertextreview; no invented built-inPDF/OCR.",
+          "Englishshared3noteCSVprompt/sample unchanged, verify eachfact/no unbackedanswers, durableIDassignment/updates correctlyretained.",
+          "IOneeds callersuppliedimage+maskcoordinates; successAPKGdoesnotvalidateAI factualquality, originalbaseline/clientconditions preserved."
+        ]
+      },
+      "anki-forge-vs-genanki": {
+        "title": "Anki Forge frente a genanki: cuál elegir",
+        "description": "Compara la creación de APKG, los entornos de ejecución, la revisión de actualizaciones y los costes de migración de Anki Forge y genanki.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "genankiguid/customIDs/media/reimportupdatessupported; no exclusiveidentity/unfaircomparison.",
+          "Historical20261008 RustProjectAPI vsgenanki0.13.1 M1Pro1000Basic/fiveworkloads, somehighermemory; not currentPythonNode speedguarantee.",
+          "No automaticlegacyGUIDmapping/losslessmigration/reviewhistoryguarantee; migrationcost andkeepingworkinggenanki considered."
+        ]
+      },
+      "development": {
+        "title": "Compila los SDK desde el código fuente",
+        "description": "Compila los SDK y ejecuta los ejemplos desde el repositorio. Distingue estas compilaciones de los paquetes publicados.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "Development/source instructions separatepublishedinstall, Rust1.92 pinned/Node22.13+/sourceCPython3.11–3.12 distinction.",
+          "Setup/build/pack localfacade+platformnative then explicitofflinenooptional appinstall, notregistryinstall; matchedcheckoutbinary required.",
+          "Correct pinnedmaturin develop --manifest-path ... --locked withvenv, normalwheelruntime noCargo."
+        ]
+      },
+      "installation": {
+        "title": "Integra Anki Forge en tu aplicación de Rust",
+        "description": "Instala el crate publicado, configura las dependencias de Cargo y elige cómo añadir recursos multimedia y actualizaciones.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "Rust crate public default features are empty; no repository-only feature required for ordinary authoring.",
+          "Caller adds serde derive and serde_json; JSON tutorial supplies its own parser, not invented SDK import API.",
+          "Native linker/toolchain platform requirement retained, listed platforms not unconditional target support."
+        ]
+      },
+      "node-quickstart": {
+        "title": "Genera un APKG de Anki con Node.js",
+        "description": "Instala el paquete publicado de Node.js y exporta tu primer mazo con un programa completo. Continúa con TypeScript, imágenes y actualizaciones.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "Correct native optional dependency installation, Node22.13+ and verified platform link.",
+          "Exact quickstart.mjs builds persistent output, awaits artifact.close; no file loss inferred from close.",
+          "ESM/CJS entry points and TS declarations retained, complete TypeScript recipe linked."
+        ]
+      },
+      "python-quickstart": {
+        "title": "Genera un APKG de Anki con Python",
+        "description": "Instala el wheel publicado de Python y crea tu primer archivo APKG de Anki con un programa completo y claves de nota estables.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-onboarding.json",
+        "technicalEvidence": [
+          "venv activation includes PowerShell exception and published0.3.1 wheel/platform matching; release observations limited3.11–3.14.",
+          "Exact quickstart.py creates one persistent Basic hola→hello note/card with stable identity.",
+          "Correct export boundary; user imports persistent APKG separately."
+        ]
+      },
+      "concepts": {
+        "title": "Conceptos fundamentales de Anki Forge",
+        "description": "Entiende proyectos, notas, mazos, claves estables, recursos multimedia y la identidad de las actualizaciones.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-authoring.json",
+        "technicalEvidence": [
+          "Mandatory namespace/source keys, duplicate atomic add failure, immutable finalized notetypes and independent display names retained.",
+          "Text/explicit HTML/Cloze syntax/content sequence and typed media dependencies remain distinct; arbitrary strings do not discover resource bytes.",
+          "Original APKG evidence required, comparison vs policy/error distinction and client/scheduling validation retained."
+        ]
+      },
+      "cards": {
+        "title": "Crea tarjetas Basic y Cloze de Anki",
+        "description": "Genera dos notas y tres tarjetas con un ejemplo completo de Rust, y conserva la identidad de tus tarjetas.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-authoring.json",
+        "technicalEvidence": [
+          "docs_workflow cards exact Basic1+Cloze c1/c2 =>2notes/3cards/0media; named artifacts/cards.apkg and source fixtures unchanged.",
+          "Cloze numbering bounds, no cards without omission, ordinal identity changes require update review.",
+          "Correct builtin field key and Text vs Content::html distinction; add requires stable key, duplicate not overwritten."
+        ]
+      },
+      "custom-notetypes": {
+        "title": "Crea tipos de nota personalizados para Anki",
+        "description": "Define campos, plantillas y reglas de generación con claves estables y modelos inmutables reutilizables.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-authoring.json",
+        "technicalEvidence": [
+          "Exact source program jp-vocab/expr/meaning/recognition; model note retains validated model across projects.",
+          "Names separate; compiled fields/filters/sections/browser templates use keys, byte spans retained, no silent normalization.",
+          "One sort field, optional unassigned fields empty, Anki default or explicit all/any and cloze_field; identical model-key reuse only, conflict atomic."
+        ]
+      },
+      "media": {
+        "title": "Añade imágenes y audio a tus tarjetas Anki",
+        "description": "Importa recursos multimedia, combina contenido tipado y controla los nombres, tipos MIME y límites de importación.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-authoring.json",
+        "technicalEvidence": [
+          "Snapshot ownership only after read/validation success; clones share storage; no atomic-filesystem-read guarantee during concurrent source modification.",
+          "Exact byte-vs-schema-character bound and128é=256-byte counterexample retained; NFC/case conflicts, explicit asset retention and literal sound filename escaping checked.",
+          "Native bytes not64KiB capped; per-asset limit before read, JSON inline early abort observed lower bound, decoded/inspection budgets separate.",
+          "Public0.3.1 batch preserves input order, <16 sequential, join/cleanup/first-error order, Python GIL release and Node workers correctly scoped.",
+          "Live snapshot budget64MiB/process, >1MiB spills and lazy16MiB encoded pool per preparation; explicitly not RSS bound.",
+          "Typed image MIME image/*, sound audio/*|video/*, constructors infallible and independent build-extension validation; wrong.mp3 PNG addition can pass then MEDIA.DECLARED_MIME_MISMATCH."
+        ]
+      },
+      "image-occlusion": {
+        "title": "Genera tarjetas Anki con oclusión de imágenes",
+        "description": "Crea preguntas sobre imágenes con máscaras rectangulares y conserva su identidad al actualizar el mazo.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-authoring.json",
+        "technicalEvidence": [
+          "Exact docs_workflow1note/1card/1media, standalone2mask2cards example uses min80×80 input.",
+          "Finite post-EXIF displayed-image pixel rectangles, positive/in-bounds dims, PNG/JPEG/GIF/WebP/BMP full decode and256MiB decoded budget separate.",
+          "Default HideAllGuessOne/alternate HideOneGuessOne, note builder reserved image/occlusion fields; stable mask ordinals1–500, restore same key, omit not delete learner card."
+        ]
+      },
+      "templates": {
+        "title": "Reutiliza plantillas de Anki, CSS y recursos multimedia",
+        "description": "Carga paquetes de plantillas normales o Cloze con campos, CSS y recursos explícitos validados antes de exportar.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-authoring.json",
+        "technicalEvidence": [
+          "Exact fixture manifest version/fields/template files/target Languages::Cloze preserved; one note produces2cards and0media.",
+          "Full bundle load snapshots bytes before return; cleanup partial resources on failure; typed immutable model reused.",
+          "Template/CSS2MiB UTF8 and media default/custom bound,255-byte export names, path traversal/external symlink rejection, unknown properties and true typed causes retained."
+        ]
+      },
+      "updates": {
+        "title": "Actualiza mazos de Anki con ID de nota estables",
+        "description": "Compara versiones y genera actualizaciones desde un APKG original de distribución con pruebas de identidad verificadas.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-authoring.json",
+        "technicalEvidence": [
+          "Original complete identity-v1 evidence required, Anki re-export explicitly unsupported; namespace/keys/revisions/history preserve mapping, no silent recovery.",
+          "Default High/Critical block; allow entire registered category, evidence unchanged; absent/corrupt evidence/namespace/limits hard errors; create-only policy invalid.",
+          "No learner deletion sync/scheduling guarantee; field/template/sort/schema import behavior and local newer edits require target-client tests.",
+          "Public0.3.1 prepare/review/publish same candidate, separate archived baseline path. Historical1199196 example note retained as source-revision statement; benchmark not measuring this flow."
+        ]
+      },
+      "build-guarantees": {
+        "title": "Garantías de generación y de los archivos APKG",
+        "description": "Comprende la vida útil de los archivos, los límites de inspección y la publicación de una versión candidata revisada.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-authoring.json",
+        "technicalEvidence": [
+          "Guaranteed artifact only on BuildOutput success; temporary last-owner cleanup, persistent survival, persist_to retains source owner; Rust anchored absolute paths.",
+          "Per-file atomic replacement vs durability explicit; PublicationSnapshot path/stage/temporary/confirmed distinction preserved; native path JSON encoding accurate.",
+          "Independent finite baseline/candidate budgets, not process isolation; Node snapshot-at-call project semantics retained.",
+          "0.3.1 prepared candidate bound paths/options; close/consume on all outcomes, report no ownership, no cancellation afterpublish begins and duration excludes review."
+        ]
+      },
+      "troubleshooting": {
+        "title": "Soluciona errores de Anki Forge",
+        "description": "Diagnostica errores de instalación, notas, recursos multimedia, plantillas, identidad y publicación de archivos.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-authoring.json",
+        "technicalEvidence": [
+          "Use kind/code/causes/observations, not message text; completed comparison mayblock without throwing.",
+          "Correct remedies key not display name, duplicate/required/model conflicts, finalize builder, typedmedia vs explicitassets and portable names.",
+          "Publication/durability evidence before retry; keep last temporaryowner, original APKG base, same policy comparison/build, no allow of invalid evidence."
+        ]
+      },
+      "compatibility": {
+        "title": "Compatibilidad de Anki Forge y entornos verificados",
+        "description": "Consulta los paquetes públicos, los entornos probados y las condiciones de importación y reproducción en Anki.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-authoring.json",
+        "technicalEvidence": [
+          "Public Rust/npm/PyPI0.3.1 remains dated observation, Node16/Python16 package-install checks, four published native platforms correctly enumerated.",
+          "Browser/Electron/Bun/Alpine-musl/ARM64 LinuxWindows excluded; standard CPython3.11–3.14 observed, no-GIL/alternate/subinterpreter separate.",
+          "Dated20261008 benchmark40=20perimplementation, not every client/GUI/audio; original baseline/reexport/no deletion/client schema/scheduling conditions intact."
+        ]
+      },
+      "rust-guide": {
+        "title": "Guía de desarrollo con Rust",
+        "description": "Crea proyectos, valida notas, gestiona recursos multimedia y actualiza mazos con la API pública de Rust.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-reference.json",
+        "technicalEvidence": [
+          "Matches contracts/manifest.yaml and public0.3.1 changelog; independent crate/contract axes, project-v2 no top-levelname, identity-v1 unchanged.",
+          "Correct key/fields/required/deck/tags/dependency checks and model finalization; no mandatory separate validation registry.",
+          "AddContext/AddTarget/AddDetail, Some([])root vs node indices and byte spans, nonexhaustive enums handling retained; MIME addition vs laterbuild checks distinct."
+        ]
+      },
+      "api": {
+        "title": "Resumen de la API pública",
+        "description": "Encuentra las API de Rust, Python y Node para crear notas, añadir recursos multimedia, diagnosticar errores y revisar actualizaciones.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-reference.json",
+        "technicalEvidence": [
+          "Public MIT ankiforge APIs and taskmatrix correct, no invented separate hostedservice.",
+          "Stable projectnamespace+notekey necessary, original completebaselineevidence additionally required.",
+          "Output ownership guarantees linked separately from runtime/package compatibility."
+        ]
+      },
+      "rust-api": {
+        "title": "Referencia de la API de Rust",
+        "description": "Consulta los métodos de creación de contenido, las opciones de generación, los informes y los errores públicos de Rust.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-reference.json",
+        "technicalEvidence": [
+          "All12finite limits checked against build_api/limits.rs:2GiB archive/100000entries/16MiBcentral/1GiBzipentry/4GiBziptotal/64KiBmeta/16MiBmap/64MiBidentity/512MiBcollection/256MiBmedia/4GiBdecoded/64MiBzstd.",
+          "Inherent snapshot/kind/code, BuildReport observation DTO vs Output/Error outcome DTO; native PathSnapshot restoration original platform only.",
+          "Prepared0.3.1 single candidate+boundpaths/policy, consumed ownership, latepublication facts, native stagingmanifest omission vs internaltools preserved."
+        ]
+      },
+      "node-api": {
+        "title": "API de Node y TypeScript",
+        "description": "Métodos públicos de Node, operaciones asíncronas, opciones de generación, gestión de archivos de salida e informes.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-reference.json",
+        "technicalEvidence": [
+          "Native report .baselineCounts/.highestRisk/.durationMs vs snake_case snapshot, comparison null safety, distinct policy and report fields match API.",
+          "Node-specific capturedcwd semantics, worker async requests own immutable project snapshot; close/clone/persist retain correct owners.",
+          "u64limits+unknown option rejection, zero literalbudget, readonly snapshots; error cause/sourceDetails/details preserve structured facts.",
+          "Public0.3.1 nativeprotocol6 shared-version mismatch detection; copy-on-write not promisedlowerRSS/timerlatency; prepared singleuse statusreason retained."
+        ]
+      },
+      "python-api": {
+        "title": "API de Python",
+        "description": "Project, recursos multimedia, opciones de generación, informes y gestión de la vida útil de los archivos temporales.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-reference.json",
+        "technicalEvidence": [
+          "Immutable new Note, builder updated copies, TypedDict snake_case error context, Field/Template signatures and GenerationRule forms correct.",
+          "Project native work releasesGIL but shared object simultaneoususe rejected; afterfork recreate native values, inheritedcleanup cannot remove parentfiles.",
+          "Matches _loader.py explicit version/protocol checks and changelog0.3.1. Prepared close/consumed, no cancel ongoingpublish and latefailure facts retained.",
+          "ES-TECH-001 corrected and actually reread: ImageOcclusionBuilder.build returns Note, not a model-finalization operation. Basic/Cloze table also now explicitly creates notes with builtin models."
+        ]
+      },
+      "python-diagnostics": {
+        "title": "Diagnósticos de Python",
+        "description": "Interpreta los errores nativos, los informes de generación y las pruebas y políticas de actualización de Anki Forge.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-reference.json",
+        "technicalEvidence": [
+          "Python completed high-risk comparison not error; CompareError partial report and no fake outcome from diagnosticseverity.",
+          "Structureddetails/source_details/causes/native __cause__ carry I/O/resource evidence; report noownership, Output/Error truthful publication state.",
+          "Unix bytepaths restore os.fsdecode(bytes), Windows UTF16units platform-specific; actual artifact.path pathlib.Path; media/bundle/inspection budgets separate and mandatory checks cannotdisable."
+        ]
+      },
+      "python-migration": {
+        "title": "Transición a la nueva API de Python",
+        "description": "Adapta tu código al SDK actual de Python y conoce los límites de compatibilidad con la API anterior.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-reference.json",
+        "technicalEvidence": [
+          "Distribution/import ankiforge vs removed anki-forge/anki_forge, inprocessPyO3 not subprocess; sourceextension rebuild retained.",
+          "Old optionalartifact/diagnosticoutcome patterns replaced by guaranteedoutput/structurederrors; Text notimplicitHTML and stablemaskkeys correctlymapped.",
+          "Only complete currentoriginalbaselines; oldbundles/APKGevidence not silentlyrecovered."
+        ]
+      },
+      "genanki-migration": {
+        "title": "Pasar de genanki a Anki Forge",
+        "description": "Adapta notas, modelos, plantillas y recursos multimedia de genanki al modelo de Anki Forge y sus claves estables.",
+        "source": "docs/plans/evidence/multilingual-es-2026-10-28/metadata-reference.json",
+        "technicalEvidence": [
+          "New authoringmodelnot drop-in; durablebusinesskeys separatefrompresentation and content. Exact Pythoncustommodel example preserved.",
+          "Content-derivedidentity onlyif deliberateimporterrequirement; assign/storekeys outsideSDK when sourcehasnone.",
+          "No arbitrarylegacy recovery; firstnewdistribution deliberateidentitychange unless separatelyvalidatedmapping, no losslessmigrationpromise."
+        ]
+      }
+    },
+    "openIssues": []
+  },
+  "issues": [
+    {
+      "id": "ES-TECH-001",
+      "pageId": "python-api",
+      "locale": "es",
+      "sectionId": "media-and-occlusion",
+      "span": "Al completar el modelo se decodifica la imagen",
+      "category": "accuracy/terminology",
+      "severity": "minor",
+      "explanation": "The object being finalized is ImageOcclusionBuilder and build() returns Note, not NoteType/model. Surrounding signature, returned Note and limits are otherwise correct, so the error does not block understanding of the workflow.",
+      "proposedFix": "Al llamar a `.build()` se decodifica la imagen y se validan...",
+      "evidence": [
+        "bindings/python/src/ankiforge/note.py ImageOcclusionBuilder.build(self) -> Note; return Note(invoke(_native.NativeNote.image_occlusion,...))",
+        "English python/api.md says “Finalization decodes the image”, without calling it a model."
+      ],
+      "resolution": {
+        "status": "closed",
+        "verifiedSpan": "Al llamar a `.build()` se decodifica la imagen",
+        "evidence": "Actually reread corrected complete python-api.md; API source still returns Note. Basic/Cloze table now says Crea una nota con el modelo ...; public batch/prepared heading no longer implies source-only."
+      },
+      "verifierRun": "/root/independent_technical_source_review/2026-10-28/es-full-pre-read-31"
+    }
+  ],
+  "summary": {
+    "critical": 0,
+    "major": 0,
+    "minorOpen": 0,
+    "minorClosed": 1,
+    "contentFullReadComplete": true,
+    "approved": false
+  },
+  "pendingFinalAudit": [
+    "Actual es locale metadata/catalog/framework translation registration and release selection; no current sourceReady/fallback approval.",
+    "Spanish AI prompt/placeholder, seven semantic requirements, metadata JSON and framework dictionary have been read; final expanded active-language links and candidate input binding still require closure.",
+    "Final68English/Chinese entries require only actually changed shared inputs, explicitly reusing prior full evidence; source/dependency unchanged proof must be redone at final binding.",
+    "Final scope is34topics×3locale=102entries;31Spanishlongform does not by itself approve3template-only pages before actual template/model binding.",
+    "Spanish search vocabulary/concept data and semantic heading/link rendering, if added after this pre-read, require targeted source review.",
+    "ES-TECH-001 corrected and reread; keep issue history and final-binding digest of actual corrected page."
+  ],
+  "execution": {
+    "sdkProgramsExecuted": false,
+    "buildExecuted": false,
+    "browserExecuted": false,
+    "searchAcceptanceExecuted": false,
+    "reason": "Source-content pre-review only. Shared public program inputs are exact unchanged sources; no new execution claim. New localized executable inputs, if any, require corresponding rerun by task owner."
+  },
+  "entries": [
+    {
+      "pageId": "docs",
+      "locale": "es",
+      "source": "docs/es/index.md",
+      "reviewedSourceSha256": "ac237d7de9b07b2d8517690a35763d341a57f5e331a6c7a5ff7636655f3f13f7",
+      "reviewedSnapshot": "technical-input-snapshot/ac237d7de9b07b2d8517690a35763d341a57f5e331a6c7a5ff7636655f3f13f7",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Una nota contiene campos",
+            "line": 19,
+            "checkedFact": "Correctly distinguishes note fields, notetype/templates producing cards and deck destination; Project ownership is not a second deck registry."
+          },
+          {
+            "span": "Las guías de tipos de tarjeta usan ejemplos ejecutables de Rust",
+            "line": 33,
+            "checkedFact": "Accurately scopes authoring examples to Rust, CSV to Python and JSON to three SDKs; public-language entry table points to complete tasks."
+          },
+          {
+            "span": "conserva las pruebas de identidad y revisión entre versiones",
+            "line": 31,
+            "checkedFact": "Update link describes retention of identity/revision evidence instead of promising automatic collection synchronization."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "start-with-your-language",
+              "heading": "Empieza con tu lenguaje",
+              "line": 4
+            },
+            {
+              "id": "understand-the-pieces",
+              "heading": "Entiende las piezas",
+              "line": 17
+            },
+            {
+              "id": "build-your-next-feature",
+              "heading": "Añade la siguiente función",
+              "line": 22
+            },
+            {
+              "id": "find-answers-and-contribute",
+              "heading": "Encuentra respuestas y participa",
+              "line": 36
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "docs",
+        "locale": "en",
+        "sourceHash": "88fefc753b1848c7e1394999b440ece697bd8b7a48f69aa19bc172a344cb985d",
+        "targetHash": "8c502b9087400c8d73c62b58310d903716d15940d3248ab485c350d1b6d8ce50",
+        "technicalDependencyHash": "354cafacc69ac62e19d77f7d13347b7d1f4f3280dc65890412a994371d5f8468",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "languages",
+      "locale": "es",
+      "source": "docs/es/languages.md",
+      "reviewedSourceSha256": "194b998bd39e93ba3f49c0a663b0c0f7c1b7b1cff2e90c7d01f1e86bfa21e200",
+      "reviewedSnapshot": "technical-input-snapshot/194b998bd39e93ba3f49c0a663b0c0f7c1b7b1cff2e90c7d01f1e86bfa21e200",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Rust requiere la versión 1.92 o posterior. Node requiere Node 22.13 o posterior",
+            "line": 9,
+            "checkedFact": "Matches public quickstart runtimes Rust1.92+/Node22.13+, CPython standard3.11–3.14 observed wheels; no unsupported interpreter guarantee."
+          },
+          {
+            "span": "sin instalar Anki",
+            "line": 1,
+            "checkedFact": "Export-only independence; later compatibility link covers actual clients."
+          },
+          {
+            "span": "funciones disponibles solo en el código fuente",
+            "line": 18,
+            "checkedFact": "Source-build guidance remains a separate workflow; all public installs pinned0.3.1."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "next-tasks",
+              "heading": "Qué hacer después",
+              "line": 12
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "languages",
+        "locale": "en",
+        "sourceHash": "49c1f95f083fb8e31202a4769ee3ddcfe7443fa484948a461119b9fa9b3fd316",
+        "targetHash": "46311e1f3b59efe48269a21776b20d218428569ea30452cd0617826248dac773",
+        "technicalDependencyHash": "4131ee6ebde54bd54cd3520e9a856ae2415bd1c2e0d230abd56a892380ebf13b",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "quickstart",
+      "locale": "es",
+      "source": "docs/es/quickstart.md",
+      "reviewedSourceSha256": "cbd9b899cfe7dba028def67878e19c53e0a9e6497c29b9fdd2204cd4798f3a20",
+      "reviewedSnapshot": "technical-input-snapshot/cbd9b899cfe7dba028def67878e19c53e0a9e6497c29b9fdd2204cd4798f3a20",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Guarda este programa completo como `src/main.rs`",
+            "line": 15,
+            "checkedFact": "Exact target_api_basic.rs Project spanish/defaultDeck Spanish/add es:hola, Basic hola/hello, BuildOptions::to spanish.apkg and cargo run sequence preserved."
+          },
+          {
+            "span": "El programa escribe el archivo persistente `spanish.apkg`",
+            "line": 35,
+            "checkedFact": "Correct persistent output path; no Anki installation needed for export."
+          },
+          {
+            "span": "identifican esta nota aunque cambie su contenido",
+            "line": 37,
+            "checkedFact": "Namespace+key identify logical note; next steps explicitly retain original APKG baseline before updates."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "install",
+              "heading": "Instalación",
+              "line": 4
+            },
+            {
+              "id": "export-your-first-deck",
+              "heading": "Exporta tu primer mazo",
+              "line": 13
+            },
+            {
+              "id": "continue",
+              "heading": "Continúa",
+              "line": 40
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "quickstart",
+        "locale": "en",
+        "sourceHash": "2656185e3933aa37b027e9b79ed111e83c3e625dcbc9d2f0f181934d1d4b0c3b",
+        "targetHash": "0bbe32aeb37b56c50baa14fd8485423a948115f5f3d818ba04a5956fba3a1024",
+        "technicalDependencyHash": "1fc86f055aa464588c7740c7aeeddb68814b1945ba2aea322a31a6a606588b83",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "installation",
+      "locale": "es",
+      "source": "docs/es/installation.md",
+      "reviewedSourceSha256": "dc03cf4b3633c162b880edd08188dee868dbb1919537df6543c5a0d8eb8e3c3f",
+      "reviewedSnapshot": "technical-input-snapshot/dc03cf4b3633c162b880edd08188dee868dbb1919537df6543c5a0d8eb8e3c3f",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "No hay características de Cargo activadas de forma predeterminada",
+            "line": 14,
+            "checkedFact": "Rust crate public default features are empty; no repository-only feature required for ordinary authoring."
+          },
+          {
+            "span": "El SDK no ofrece un conversor genérico de JSON o CSV.",
+            "line": 25,
+            "checkedFact": "Caller adds serde derive and serde_json; JSON tutorial supplies its own parser, not invented SDK import API."
+          },
+          {
+            "span": "Rust 1.92 es la versión mínima",
+            "line": 16,
+            "checkedFact": "Native linker/toolchain platform requirement retained, listed platforms not unconditional target support."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "cargo-dependencies",
+              "heading": "Dependencias de Cargo",
+              "line": 12
+            },
+            {
+              "id": "choose-the-next-guide",
+              "heading": "Elige la siguiente guía",
+              "line": 28
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "installation",
+        "locale": "en",
+        "sourceHash": "f21c79cb6d35a1379bb52d49eb48e14d0317382e0d0217545e42c6ae99fc248c",
+        "targetHash": "26111e88ba8d05580ec43649eb7dce8a6455913450ffb83071b009444458ee45",
+        "technicalDependencyHash": "19c57eb213f1c26ca37f96f28acde4b10914d657c1a26378269ae5436055fa97",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "node-quickstart",
+      "locale": "es",
+      "source": "docs/es/node-quickstart.md",
+      "reviewedSourceSha256": "d3bbb1b778ac54b0a6ad0f29b8ec715c3b183f33562f74aeaf505783877cdf70",
+      "reviewedSnapshot": "technical-input-snapshot/d3bbb1b778ac54b0a6ad0f29b8ec715c3b183f33562f74aeaf505783877cdf70",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "npm install --include=optional ankiforge@0.3.1",
+            "line": 8,
+            "checkedFact": "Correct native optional dependency installation, Node22.13+ and verified platform link."
+          },
+          {
+            "span": "Cerrar el objeto que gestiona el artefacto persistente deja el archivo en el disco.",
+            "line": 34,
+            "checkedFact": "Exact quickstart.mjs builds persistent output, awaits artifact.close; no file loss inferred from close."
+          },
+          {
+            "span": "Usa `.mjs` para ESM o `require('ankiforge')` para CommonJS",
+            "line": 41,
+            "checkedFact": "ESM/CJS entry points and TS declarations retained, complete TypeScript recipe linked."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "export-a-deck",
+              "heading": "Exporta un mazo",
+              "line": 14
+            },
+            {
+              "id": "typescript-and-next-tasks",
+              "heading": "TypeScript y siguientes pasos",
+              "line": 37
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "node-quickstart",
+        "locale": "en",
+        "sourceHash": "242b91f7575196c46b197a0cf97d7327554aaec1c7df081610b2b3433b750b34",
+        "targetHash": "022bc7fd0194a0083ae1cbf945de52a6149a13144d2e1ff96428c7f778cf362f",
+        "technicalDependencyHash": "4660a3ffa23ee53d105deb0ba6b09731d4ab3db8a2a3fdb8140892678ed84db7",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "python-quickstart",
+      "locale": "es",
+      "source": "docs/es/python-quickstart.md",
+      "reviewedSourceSha256": "e933a64e8b9e6f274dc4b45fb0a9bf5fc010a237fdb274719c6b5a1ff49399d9",
+      "reviewedSnapshot": "technical-input-snapshot/e933a64e8b9e6f274dc4b45fb0a9bf5fc010a237fdb274719c6b5a1ff49399d9",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "CPython estándar 3.11 o posterior",
+            "line": 11,
+            "checkedFact": "venv activation includes PowerShell exception and published0.3.1 wheel/platform matching; release observations limited3.11–3.14."
+          },
+          {
+            "span": "Conserva el espacio de nombres `spanish` y la clave de nota `es:hola`",
+            "line": 33,
+            "checkedFact": "Exact quickstart.py creates one persistent Basic hola→hello note/card with stable identity."
+          },
+          {
+            "span": "No necesitas instalar Anki para exportarlo.",
+            "line": 33,
+            "checkedFact": "Correct export boundary; user imports persistent APKG separately."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "export-a-deck",
+              "heading": "Exporta un mazo",
+              "line": 14
+            },
+            {
+              "id": "continue",
+              "heading": "Continúa",
+              "line": 36
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "python-quickstart",
+        "locale": "en",
+        "sourceHash": "17b7fc671298c23ade933cc990dc3e450a51e90df54713607cb1db5edae84186",
+        "targetHash": "f1b2d6ed1361c3d816dcf784966a61c25bcc47934c42e745168f90d3c459c243",
+        "technicalDependencyHash": "a4f4782aef023681222ce8a65f87bd660582fd957e789158f20a5d89d6d9e5a3",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "concepts",
+      "locale": "es",
+      "source": "docs/es/concepts.md",
+      "reviewedSourceSha256": "be7aeded92b0e32b8953b3356c0e92b3cfdbe5462a071e743bceacf1c74967cf",
+      "reviewedSnapshot": "technical-input-snapshot/be7aeded92b0e32b8953b3356c0e92b3cfdbe5462a071e743bceacf1c74967cf",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Los nombres visibles y el texto no son claves de identidad.",
+            "line": 8,
+            "checkedFact": "Mandatory namespace/source keys, duplicate atomic add failure, immutable finalized notetypes and independent display names retained."
+          },
+          {
+            "span": "Text escapa el HTML",
+            "line": 20,
+            "checkedFact": "Text/explicit HTML/Cloze syntax/content sequence and typed media dependencies remain distinct; arbitrary strings do not discover resource bytes."
+          },
+          {
+            "span": "Los hallazgos de riesgo alto bloquean las actualizaciones de forma predeterminada",
+            "line": 36,
+            "checkedFact": "Original APKG evidence required, comparison vs policy/error distinction and client/scheduling validation retained."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "project-and-note",
+              "heading": "Proyecto y nota",
+              "line": 4
+            },
+            {
+              "id": "models-fields-and-templates",
+              "heading": "Modelos, campos y plantillas",
+              "line": 11
+            },
+            {
+              "id": "text-and-html",
+              "heading": "Texto y HTML",
+              "line": 18
+            },
+            {
+              "id": "media-ownership",
+              "heading": "Cómo se conservan los recursos multimedia",
+              "line": 25
+            },
+            {
+              "id": "build-and-update",
+              "heading": "Generación y actualización",
+              "line": 32
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "concepts",
+        "locale": "en",
+        "sourceHash": "cec801428d3b2ebd0d827ae4ca95ceb44fdc2605d376319999542a12c61fd559",
+        "targetHash": "3b8f8ed6f3d1644978f6e2fe133ed388cbfa00a245eea06ce81953f7869d377f",
+        "technicalDependencyHash": "76f2a6f9a54c03b6d88db45444f40d998d7b6469982d695bcc497813a76dc4ca",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "cards",
+      "locale": "es",
+      "source": "docs/es/cards.md",
+      "reviewedSourceSha256": "31d50b09b0abab3868292098b0853b8c4b30d604177511a9c01f0aaeb2ff4faa",
+      "reviewedSnapshot": "technical-input-snapshot/31d50b09b0abab3868292098b0853b8c4b30d604177511a9c01f0aaeb2ff4faa",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Este ejemplo crea dos notas y tres tarjetas.",
+            "line": 3,
+            "checkedFact": "docs_workflow cards exact Basic1+Cloze c1/c2 =>2notes/3cards/0media; named artifacts/cards.apkg and source fixtures unchanged."
+          },
+          {
+            "span": "Se admiten números de omisión del 1 al 500",
+            "line": 42,
+            "checkedFact": "Cloze numbering bounds, no cards without omission, ordinal identity changes require update review."
+          },
+          {
+            "span": "`back_extra` es la clave del campo adicional",
+            "line": 40,
+            "checkedFact": "Correct builtin field key and Text vs Content::html distinction; add requires stable key, duplicate not overwritten."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "author-the-notes",
+              "heading": "Escribe las notas",
+              "line": 14
+            },
+            {
+              "id": "text-fields-and-card-identity",
+              "heading": "Texto, campos e identidad de las tarjetas",
+              "line": 38
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "cards",
+        "locale": "en",
+        "sourceHash": "ab0282be92cc10afa369f99ffabfa693efb4c06149a71a4d6dbe017c758860d2",
+        "targetHash": "38c38b8a18ce4717d139109c682a081cc8331c647ec3daa3cb21da7cdc35bf0d",
+        "technicalDependencyHash": "ae870f3a188244eb905fb4ba563cee96ed5d3e823af2a24bf6fde6937c43d8a5",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "media",
+      "locale": "es",
+      "source": "docs/es/media.md",
+      "reviewedSourceSha256": "7d3163d9a9fed7702c309dcb695f18e3a5ede35fdb80b8e060772cb6df901d7c",
+      "reviewedSnapshot": "technical-input-snapshot/7d3163d9a9fed7702c309dcb695f18e3a5ede35fdb80b8e060772cb6df901d7c",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Tras una importación correcta, modificar o eliminar el archivo de origen no puede cambiar el recurso.",
+            "line": 3,
+            "checkedFact": "Snapshot ownership only after read/validation success; clones share storage; no atomic-filesystem-read guarantee during concurrent source modification."
+          },
+          {
+            "span": "El nombre de exportación completo, incluida la extensión, tiene un límite de 255 bytes UTF-8.",
+            "line": 77,
+            "checkedFact": "Exact byte-vs-schema-character bound and128é=256-byte counterexample retained; NFC/case conflicts, explicit asset retention and literal sound filename escaping checked."
+          },
+          {
+            "span": "El límite de importación predeterminado es de 256 MiB por recurso",
+            "line": 79,
+            "checkedFact": "Native bytes not64KiB capped; per-asset limit before read, JSON inline early abort observed lower bound, decoded/inspection budgets separate."
+          },
+          {
+            "span": "un máximo de cuatro trabajadores por llamada",
+            "line": 109,
+            "checkedFact": "Public0.3.1 batch preserves input order, <16 sequential, join/cleanup/first-error order, Python GIL release and Node workers correctly scoped."
+          },
+          {
+            "span": "**64 MiB**",
+            "line": 111,
+            "checkedFact": "Live snapshot budget64MiB/process, >1MiB spills and lazy16MiB encoded pool per preparation; explicitly not RSS bound."
+          },
+          {
+            "span": "`NOTE.MEDIA_USAGE_INVALID`",
+            "line": 88,
+            "checkedFact": "Typed image MIME image/*, sound audio/*|video/*, constructors infallible and independent build-extension validation; wrong.mp3 PNG addition can pass then MEDIA.DECLARED_MIME_MISMATCH."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "execute-the-media-workflow",
+              "heading": "Ejecuta el flujo de trabajo multimedia",
+              "line": 6
+            },
+            {
+              "id": "compose-content-and-explicit-assets",
+              "heading": "Combina contenido y recursos explícitos",
+              "line": 35
+            },
+            {
+              "id": "names-mime-and-budgets",
+              "heading": "Nombres, tipos MIME y límites",
+              "line": 71
+            },
+            {
+              "id": "typed-image-and-sound-usage",
+              "heading": "Uso tipado de imágenes y sonidos",
+              "line": 86
+            },
+            {
+              "id": "batch-media-import",
+              "heading": "Importación de recursos multimedia por lotes",
+              "line": 93
+            },
+            {
+              "id": "batch-behavior-and-budgets",
+              "heading": "Comportamiento y límites de los lotes",
+              "line": 107
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "media",
+        "locale": "en",
+        "sourceHash": "41ea1b80904b5a435bcc34a340c8e26bd8c19c7bda0b947884489caedeb12841",
+        "targetHash": "d8cc31edb2ae1873dad003390a2a37385e532b778776fa7ba48bebb8b5f506f8",
+        "technicalDependencyHash": "5f24116437e3237ace7bcdcb572e07c822a48d117fa6e3836ad604972b6e8b26",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "custom-notetypes",
+      "locale": "es",
+      "source": "docs/es/custom-notetypes.md",
+      "reviewedSourceSha256": "8f23b6466b8e1b695ebdd3d3c27fdaed5e063876bf132d3da46bc7b7d4e5f6de",
+      "reviewedSnapshot": "technical-input-snapshot/8f23b6466b8e1b695ebdd3d3c27fdaed5e063876bf132d3da46bc7b7d4e5f6de",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "El `NoteType` devuelto es inmutable",
+            "line": 3,
+            "checkedFact": "Exact source program jp-vocab/expr/meaning/recognition; model note retains validated model across projects."
+          },
+          {
+            "span": "La asignación de campos solo acepta claves",
+            "line": 49,
+            "checkedFact": "Names separate; compiled fields/filters/sections/browser templates use keys, byte spans retained, no silent normalization."
+          },
+          {
+            "span": "`required()` rechaza el contenido ausente o vacío",
+            "line": 54,
+            "checkedFact": "One sort field, optional unassigned fields empty, Anki default or explicit all/any and cloze_field; identical model-key reuse only, conflict atomic."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "executable-example",
+              "heading": "Ejemplo ejecutable",
+              "line": 6
+            },
+            {
+              "id": "keys-and-names",
+              "heading": "Claves y nombres",
+              "line": 45
+            },
+            {
+              "id": "validation-and-generation",
+              "heading": "Validación y generación",
+              "line": 52
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "custom-notetypes",
+        "locale": "en",
+        "sourceHash": "c3cc45c50a6fa17d143478b24fa2a82af223a6259e8832a21c2e3f9a03501e58",
+        "targetHash": "7ffc6fde539e994d70eba9c750aa00be6be2908b447e37ea6725856837e69966",
+        "technicalDependencyHash": "636954125a477835514e3922ab80b78dc73d378c1e2cbf926bc42784d4a7fd1a",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "templates",
+      "locale": "es",
+      "source": "docs/es/templates.md",
+      "reviewedSourceSha256": "2fdc635586c11437d820c298ae6ce77106baedd4eeed4d3c45a8c444df678a86",
+      "reviewedSnapshot": "technical-input-snapshot/2fdc635586c11437d820c298ae6ce77106baedd4eeed4d3c45a8c444df678a86",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "format_version: template-bundle-v2",
+            "line": 21,
+            "checkedFact": "Exact fixture manifest version/fields/template files/target Languages::Cloze preserved; one note produces2cards and0media."
+          },
+          {
+            "span": "El modelo devuelto no depende del directorio de origen.",
+            "line": 87,
+            "checkedFact": "Full bundle load snapshots bytes before return; cleanup partial resources on failure; typed immutable model reused."
+          },
+          {
+            "span": "El manifiesto tiene un límite de 256 KiB",
+            "line": 106,
+            "checkedFact": "Template/CSS2MiB UTF8 and media default/custom bound,255-byte export names, path traversal/external symlink rejection, unknown properties and true typed causes retained."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "run-the-bundled-example",
+              "heading": "Ejecuta el ejemplo con el paquete de plantillas",
+              "line": 6
+            },
+            {
+              "id": "manifest-and-template-references",
+              "heading": "Manifiesto y referencias de las plantillas",
+              "line": 15
+            },
+            {
+              "id": "load-and-reuse-a-model",
+              "heading": "Carga y reutiliza un modelo",
+              "line": 49
+            },
+            {
+              "id": "assets-and-budgets",
+              "heading": "Recursos y límites",
+              "line": 90
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "templates",
+        "locale": "en",
+        "sourceHash": "e1aa1b0ee57c05aadd166230ac449e3d1f7d0f001bfc3ef26a497408644be2f3",
+        "targetHash": "11461e477b99af1070494caa540fbe5f09dd915a5a997161f18ceb77e842e942",
+        "technicalDependencyHash": "e530b7ad90db489ffa75d11cff9a64a03089ffb8772d981c3cf7b2c165a032a1",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "es",
+      "source": "docs/es/image-occlusion.md",
+      "reviewedSourceSha256": "e03836337300741cde5ae757d08a49be9d8a322dd9b7f376e7b0bcd805aa58d3",
+      "reviewedSnapshot": "technical-input-snapshot/e03836337300741cde5ae757d08a49be9d8a322dd9b7f376e7b0bcd805aa58d3",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Cada máscara necesita una clave estable",
+            "line": 3,
+            "checkedFact": "Exact docs_workflow1note/1card/1media, standalone2mask2cards example uses min80×80 input."
+          },
+          {
+            "span": "después de aplicar la orientación EXIF",
+            "line": 55,
+            "checkedFact": "Finite post-EXIF displayed-image pixel rectangles, positive/in-bounds dims, PNG/JPEG/GIF/WebP/BMP full decode and256MiB decoded budget separate."
+          },
+          {
+            "span": "Las máscaras eliminadas reservan sus números",
+            "line": 59,
+            "checkedFact": "Default HideAllGuessOne/alternate HideOneGuessOne, note builder reserved image/occlusion fields; stable mask ordinals1–500, restore same key, omit not delete learner card."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "run-the-example",
+              "heading": "Ejecuta el ejemplo",
+              "line": 6
+            },
+            {
+              "id": "multiple-masks-and-modes",
+              "heading": "Varias máscaras y modos",
+              "line": 31
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "image-occlusion",
+        "locale": "en",
+        "sourceHash": "d272a3eb57191f819701082174e6d64e33692e40396ba9d37de44d1c4d1ea32a",
+        "targetHash": "c98e1030b31e8c093f076d85039f076feb4c3f6dbb61bf6168f0b9b67f6c210e",
+        "technicalDependencyHash": "31fffda216fe1f8e17239b24f28e776b47eb9d4935c9c9ea1cc2a075595b2628",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "updates",
+      "locale": "es",
+      "source": "docs/es/updates.md",
+      "reviewedSourceSha256": "0436b39ff9f8e40200c14a02d93ad250f1141483671540ad313b9b53b15d68d2",
+      "reviewedSnapshot": "technical-input-snapshot/0436b39ff9f8e40200c14a02d93ad250f1141483671540ad313b9b53b15d68d2",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "**APKG original de distribución**",
+            "line": 3,
+            "checkedFact": "Original complete identity-v1 evidence required, Anki re-export explicitly unsupported; namespace/keys/revisions/history preserve mapping, no silent recovery."
+          },
+          {
+            "span": "acepta **todos los hallazgos de esa categoría**",
+            "line": 67,
+            "checkedFact": "Default High/Critical block; allow entire registered category, evidence unchanged; absent/corrupt evidence/namespace/limits hard errors; create-only policy invalid."
+          },
+          {
+            "span": "Un APKG es un paquete de distribución; no sincroniza eliminaciones.",
+            "line": 81,
+            "checkedFact": "No learner deletion sync/scheduling guarantee; field/template/sort/schema import behavior and local newer edits require target-client tests."
+          },
+          {
+            "span": "La preparación no publica el archivo de destino.",
+            "line": 130,
+            "checkedFact": "Public0.3.1 prepare/review/publish same candidate, separate archived baseline path. Historical1199196 example note retained as source-revision statement; benchmark not measuring this flow."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "run-two-versions-and-compare",
+              "heading": "Genera dos versiones y compáralas",
+              "line": 6
+            },
+            {
+              "id": "policy-and-inspection-limits",
+              "heading": "Política y límites de inspección",
+              "line": 40
+            },
+            {
+              "id": "evidence-and-identity",
+              "heading": "Pruebas e identidad",
+              "line": 72
+            },
+            {
+              "id": "client-import-behavior-and-release-review",
+              "heading": "Importación en el cliente y revisión de versiones",
+              "line": 79
+            },
+            {
+              "id": "build-once-review-then-publish",
+              "heading": "Genera una vez, revisa y publica",
+              "line": 90
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "updates",
+        "locale": "en",
+        "sourceHash": "13f838e1e0ac856ce780a57b2bf940d04bde5330a11bbe151b88204a53a6d9c6",
+        "targetHash": "22665a560caa99b867a37b9271d754b32e34886d3f03517c96b4c5b9a049454b",
+        "technicalDependencyHash": "487b2a03867333696524e1d5107d85dd03e216cdeee9b90b2cb6a5b2c80aec08",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "es",
+      "source": "docs/es/build-guarantees.md",
+      "reviewedSourceSha256": "a9783373464d0dc6dab67c4fb6b9acb9a12a22dac3c6294ade252055e58e5211",
+      "reviewedSnapshot": "technical-input-snapshot/a9783373464d0dc6dab67c4fb6b9acb9a12a22dac3c6294ade252055e58e5211",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Un informe o una instantánea JSON no alargan la vida del archivo.",
+            "line": 16,
+            "checkedFact": "Guaranteed artifact only on BuildOutput success; temporary last-owner cleanup, persistent survival, persist_to retains source owner; Rust anchored absolute paths."
+          },
+          {
+            "span": "Puede producirse un error tardío después de publicar",
+            "line": 29,
+            "checkedFact": "Per-file atomic replacement vs durability explicit; PublicationSnapshot path/stage/temporary/confirmed distinction preserved; native path JSON encoding accurate."
+          },
+          {
+            "span": "Un límite de cero no significa ilimitado.",
+            "line": 36,
+            "checkedFact": "Independent finite baseline/candidate budgets, not process isolation; Node snapshot-at-call project semantics retained."
+          },
+          {
+            "span": "Cada intento de publicación consume el objeto",
+            "line": 52,
+            "checkedFact": "0.3.1 prepared candidate bound paths/options; close/consume on all outcomes, report no ownership, no cancellation afterpublish begins and duration excludes review."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "temporary-and-persistent-artifacts",
+              "heading": "Archivos temporales y persistentes",
+              "line": 6
+            },
+            {
+              "id": "baselines-and-publication",
+              "heading": "Bases de actualización y publicación",
+              "line": 23
+            },
+            {
+              "id": "inspection-limits",
+              "heading": "Límites de inspección",
+              "line": 34
+            },
+            {
+              "id": "concurrent-work",
+              "heading": "Trabajo concurrente",
+              "line": 39
+            },
+            {
+              "id": "prepared-publication-from-source",
+              "heading": "Publicación preparada",
+              "line": 46
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "build-guarantees",
+        "locale": "en",
+        "sourceHash": "00b70c5794ecffd007056a2252416386c540feab21672ec2ff525ef594d79e0d",
+        "targetHash": "a4f027e08c5f5c28a5e75d7dff1847a0212b29ee7f8993ec0241728b2fad6362",
+        "technicalDependencyHash": "784ebac278153cb8e17a9a372711893f8d161ebc3fa7a2a641c3c3663c3e7f0a",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "compatibility",
+      "locale": "es",
+      "source": "docs/es/compatibility.md",
+      "reviewedSourceSha256": "b317fb1db494e0c041d18b2b9e966b0ea265be2c5bed59ae1821a576fc397f5a",
+      "reviewedSnapshot": "technical-input-snapshot/b317fb1db494e0c041d18b2b9e966b0ea265be2c5bed59ae1821a576fc397f5a",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "según la comprobación del 2026-10-13",
+            "line": 6,
+            "checkedFact": "Public Rust/npm/PyPI0.3.1 remains dated observation, Node16/Python16 package-install checks, four published native platforms correctly enumerated."
+          },
+          {
+            "span": "quedan fuera de la verificación registrada de Node",
+            "line": 14,
+            "checkedFact": "Browser/Electron/Bun/Alpine-musl/ARM64 LinuxWindows excluded; standard CPython3.11–3.14 observed, no-GIL/alternate/subinterpreter separate."
+          },
+          {
+            "span": "40 comprobaciones de importación",
+            "line": 21,
+            "checkedFact": "Dated20261008 benchmark40=20perimplementation, not every client/GUI/audio; original baseline/reexport/no deletion/client schema/scheduling conditions intact."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "packages-and-verified-environments",
+              "heading": "Paquetes y entornos verificados",
+              "line": 4
+            },
+            {
+              "id": "anki-import-and-playback",
+              "heading": "Importación y reproducción en Anki",
+              "line": 19
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "compatibility",
+        "locale": "en",
+        "sourceHash": "0df2001e3ee18beafdb1986c9831d40ce684bcfde6a28b8be61fca4df3809c1d",
+        "targetHash": "2e26c9e37fc65d7517b10a32c56f40881c06f1189146981d0bcb2cd882b2267c",
+        "technicalDependencyHash": "da20030b84972d65c2803c3ce648d5239fc2a074fcf451ac80e83e6fb2f1e34d",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "es",
+      "source": "docs/es/troubleshooting.md",
+      "reviewedSourceSha256": "3096c6a6e87d8ac623b26ccba13382e7ddd5087bab79840e7151b44b9cc351a7",
+      "reviewedSnapshot": "technical-input-snapshot/3096c6a6e87d8ac623b26ccba13382e7ddd5087bab79840e7151b44b9cc351a7",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Una operación fallida y una comparación completada cuya política bloquea la publicación son resultados distintos.",
+            "line": 3,
+            "checkedFact": "Use kind/code/causes/observations, not message text; completed comparison mayblock without throwing."
+          },
+          {
+            "span": "`NOTE.FIELD_UNKNOWN`",
+            "line": 25,
+            "checkedFact": "Correct remedies key not display name, duplicate/required/model conflicts, finalize builder, typedmedia vs explicitassets and portable names."
+          },
+          {
+            "span": "puede devolverse un error después de que el destino ya se haya publicado",
+            "line": 57,
+            "checkedFact": "Publication/durability evidence before retry; keep last temporaryowner, original APKG base, same policy comparison/build, no allow of invalid evidence."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "installation",
+              "heading": "Instalación",
+              "line": 6
+            },
+            {
+              "id": "models-and-notes",
+              "heading": "Modelos y notas",
+              "line": 19
+            },
+            {
+              "id": "media-and-templates",
+              "heading": "Recursos multimedia y plantillas",
+              "line": 35
+            },
+            {
+              "id": "updates-and-outputs",
+              "heading": "Actualizaciones y archivos de salida",
+              "line": 51
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "troubleshooting",
+        "locale": "en",
+        "sourceHash": "69cfd78a6a274917c60c7e6a5369488a9ba310c26c225cfccd2b8f7fd669e911",
+        "targetHash": "1a265876e368b314c8d60096a05b72d4a081455be8462fd4915c0bbfa5da1d9b",
+        "technicalDependencyHash": "071ada282b21e5303e9671ce7c32330d56416ee1827ac68a7f5f3e779cf7b987",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "rust-guide",
+      "locale": "es",
+      "source": "docs/es/rust-guide.md",
+      "reviewedSourceSha256": "b222d50298d64c963810deefae73386a16f8920826d6c34ffa52920070e705b4",
+      "reviewedSnapshot": "technical-input-snapshot/b222d50298d64c963810deefae73386a16f8920826d6c34ffa52920070e705b4",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "El paquete de contrato es 2.1.0",
+            "line": 66,
+            "checkedFact": "Matches contracts/manifest.yaml and public0.3.1 changelog; independent crate/contract axes, project-v2 no top-levelname, identity-v1 unchanged."
+          },
+          {
+            "span": "`Project::add` comprueba de forma atómica",
+            "line": 24,
+            "checkedFact": "Correct key/fields/required/deck/tags/dependency checks and model finalization; no mandatory separate validation registry."
+          },
+          {
+            "span": "El `content_path` de un campo es `None`",
+            "line": 62,
+            "checkedFact": "AddContext/AddTarget/AddDetail, Some([])root vs node indices and byte spans, nonexhaustive enums handling retained; MIME addition vs laterbuild checks distinct."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "projects-and-diagnostics",
+              "heading": "Proyectos y diagnósticos",
+              "line": 6
+            },
+            {
+              "id": "models-and-assets",
+              "heading": "Modelos y recursos",
+              "line": 29
+            },
+            {
+              "id": "output-ownership",
+              "heading": "Propiedad del archivo de salida",
+              "line": 36
+            },
+            {
+              "id": "stable-note-identity",
+              "heading": "Identidad estable de las notas",
+              "line": 41
+            },
+            {
+              "id": "updating-distributed-decks",
+              "heading": "Actualizar mazos distribuidos",
+              "line": 46
+            },
+            {
+              "id": "addition-errors-and-media-categories",
+              "heading": "Errores al añadir notas y categorías multimedia",
+              "line": 60
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "rust-guide",
+        "locale": "en",
+        "sourceHash": "20d900221daccfc05ea34ca9ea55f02de5f255834463fc8cf359d63bdf1d7fc9",
+        "targetHash": "177fc78f658b45d5bbfa46cdaa10a486a0c80feff9f64075aefeeb5d78486e04",
+        "technicalDependencyHash": "03328afd686f4e5255540fec38ab7ce768ac15e4ae0f0912c8723a63b5245012",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "api",
+      "locale": "es",
+      "source": "docs/es/api.md",
+      "reviewedSourceSha256": "b5a1917ba788bc8ce4f3abfca1366a75fb232ffffcf26582223affbb4993f595",
+      "reviewedSnapshot": "technical-input-snapshot/b5a1917ba788bc8ce4f3abfca1366a75fb232ffffcf26582223affbb4993f595",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "núcleo en Rust e interfaces para Rust, Python y Node.js",
+            "line": 3,
+            "checkedFact": "Public MIT ankiforge APIs and taskmatrix correct, no invented separate hostedservice."
+          },
+          {
+            "span": "Una reexportación desde Anki no sustituye",
+            "line": 15,
+            "checkedFact": "Stable projectnamespace+notekey necessary, original completebaselineevidence additionally required."
+          },
+          {
+            "span": "quién mantiene vivos los archivos",
+            "line": 20,
+            "checkedFact": "Output ownership guarantees linked separately from runtime/package compatibility."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "stable-note-identity",
+              "heading": "Identidad estable de las notas",
+              "line": 13
+            },
+            {
+              "id": "start-with-a-task",
+              "heading": "Empieza por una tarea",
+              "line": 18
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "api",
+        "locale": "en",
+        "sourceHash": "e3b9a4aa66a20842fc4ac95e8a59b00337bd286cd1bde24672d3754685216de0",
+        "targetHash": "d3d8abf9c3f2e4e1393fab08650891959d575ca0d7d2249a10c6b832d53f2db8",
+        "technicalDependencyHash": "ca3735a1ab15640530e9949b8d5a8897f329fa2412d5cc200c9b8fa7ddd44fcd",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "es",
+      "source": "docs/es/rust-api.md",
+      "reviewedSourceSha256": "b4ecb8204b1d85c594863d976e7603283d3e935db197d5c5283e6d3ff4b08507",
+      "reviewedSnapshot": "technical-input-snapshot/b4ecb8204b1d85c594863d976e7603283d3e935db197d5c5283e6d3ff4b08507",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Todos los valores son `u64`; cero significa cero",
+            "line": 38,
+            "checkedFact": "All12finite limits checked against build_api/limits.rs:2GiB archive/100000entries/16MiBcentral/1GiBzipentry/4GiBziptotal/64KiBmeta/16MiBmap/64MiBidentity/512MiBcollection/256MiBmedia/4GiBdecoded/64MiBzstd."
+          },
+          {
+            "span": "No se necesita ningún trait de extensión.",
+            "line": 63,
+            "checkedFact": "Inherent snapshot/kind/code, BuildReport observation DTO vs Output/Error outcome DTO; native PathSnapshot restoration original platform only."
+          },
+          {
+            "span": "No se puede restaurar desde JSON ni reintentar con un propietario ya consumido.",
+            "line": 104,
+            "checkedFact": "Prepared0.3.1 single candidate+boundpaths/policy, consumed ownership, latepublication facts, native stagingmanifest omission vs internaltools preserved."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "authoring",
+              "heading": "Crear contenido",
+              "line": 6
+            },
+            {
+              "id": "content-and-media",
+              "heading": "Contenido y recursos multimedia",
+              "line": 25
+            },
+            {
+              "id": "build-options",
+              "heading": "Opciones de generación",
+              "line": 34
+            },
+            {
+              "id": "build-compare-and-output",
+              "heading": "Generación, comparación y salida",
+              "line": 54
+            },
+            {
+              "id": "reports-and-errors",
+              "heading": "Informes y errores",
+              "line": 61
+            },
+            {
+              "id": "addition-context",
+              "heading": "Contexto al añadir notas",
+              "line": 70
+            },
+            {
+              "id": "review-once-publish-once",
+              "heading": "Revisa una vez y publica una vez",
+              "line": 77
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "rust-api",
+        "locale": "en",
+        "sourceHash": "7dd171f814cfd9ba479c3dfaea2f615b6d05de6bb92f83c6cc6444808fcfb7d7",
+        "targetHash": "7084e4ed59c52919d49d45e75add32fa7bf993b237fbc35a5da73278573f7679",
+        "technicalDependencyHash": "e764fcb3667f2089eaa188c651ebd7c144a803cb70f09766fcd9a08435a4123d",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "node-api",
+      "locale": "es",
+      "source": "docs/es/node-api.md",
+      "reviewedSourceSha256": "d9c8e1e5141ab411cead74a2167694b7d94d13405c13c55f4ab8cfb674ed5d13",
+      "reviewedSnapshot": "technical-input-snapshot/d9c8e1e5141ab411cead74a2167694b7d94d13405c13c55f4ab8cfb674ed5d13",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "no son copias en camelCase del informe nativo",
+            "line": 75,
+            "checkedFact": "Native report .baselineCounts/.highestRisk/.durationMs vs snake_case snapshot, comparison null safety, distinct policy and report fields match API."
+          },
+          {
+            "span": "`persistTo` fija los destinos relativos al directorio de trabajo capturado por la generación original",
+            "line": 86,
+            "checkedFact": "Node-specific capturedcwd semantics, worker async requests own immutable project snapshot; close/clone/persist retain correct owners."
+          },
+          {
+            "span": "Los valores son enteros seguros no negativos o `bigint`",
+            "line": 79,
+            "checkedFact": "u64limits+unknown option rejection, zero literalbudget, readonly snapshots; error cause/sourceDetails/details preserve structured facts."
+          },
+          {
+            "span": "Utiliza binarios del protocolo 6",
+            "line": 144,
+            "checkedFact": "Public0.3.1 nativeprotocol6 shared-version mismatch detection; copy-on-write not promisedlowerRSS/timerlatency; prepared singleuse statusreason retained."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "project-and-notes",
+              "heading": "Proyecto y notas",
+              "line": 6
+            },
+            {
+              "id": "immutable-models",
+              "heading": "Modelos inmutables",
+              "line": 23
+            },
+            {
+              "id": "media-and-image-occlusion",
+              "heading": "Recursos multimedia y oclusión de imágenes",
+              "line": 45
+            },
+            {
+              "id": "build-compare-and-output",
+              "heading": "Generación, comparación y salida",
+              "line": 64
+            },
+            {
+              "id": "artifact-lifetime-and-concurrency",
+              "heading": "Vida útil del archivo de salida y concurrencia",
+              "line": 82
+            },
+            {
+              "id": "errors",
+              "heading": "Errores",
+              "line": 95
+            },
+            {
+              "id": "addition-context",
+              "heading": "Contexto al añadir notas",
+              "line": 102
+            },
+            {
+              "id": "batch-media-and-prepared-publication",
+              "heading": "Recursos multimedia por lotes y publicación preparada",
+              "line": 111
+            },
+            {
+              "id": "prepare-review-and-publish",
+              "heading": "Preparar, revisar y publicar",
+              "line": 116
+            },
+            {
+              "id": "typescript",
+              "heading": "TypeScript",
+              "line": 147
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "node-api",
+        "locale": "en",
+        "sourceHash": "c1afed92c67ff547a56a1011107395f14dd62da03ce1ec99bff8d8e5f5238c19",
+        "targetHash": "84ac7f50b1a61aaebdefd5286914d385cab10debb628539537195e7c393e5d22",
+        "technicalDependencyHash": "4fe2b7984520ce75221317401d8e8cd93c17cf4bcc511fa97e763db81a0b8728",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "python-api",
+      "locale": "es",
+      "source": "docs/es/python-api.md",
+      "reviewedSourceSha256": "a8d45ed551b810ebf0d55019ffd9bad8a6345c6d63a93b90bf9039f018b8ee47",
+      "reviewedSnapshot": "technical-input-snapshot/a8d45ed551b810ebf0d55019ffd9bad8a6345c6d63a93b90bf9039f018b8ee47",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "`note.field(key, content)`",
+            "line": 16,
+            "checkedFact": "Immutable new Note, builder updated copies, TypedDict snake_case error context, Field/Template signatures and GenerationRule forms correct."
+          },
+          {
+            "span": "`BINDING.PROJECT_BUSY`",
+            "line": 67,
+            "checkedFact": "Project native work releasesGIL but shared object simultaneoususe rejected; afterfork recreate native values, inheritedcleanup cannot remove parentfiles."
+          },
+          {
+            "span": "el protocolo de enlace nativo 1 y el paquete de contrato 2.1.0",
+            "line": 104,
+            "checkedFact": "Matches _loader.py explicit version/protocol checks and changelog0.3.1. Prepared close/consumed, no cancel ongoingpublish and latefailure facts retained."
+          },
+          {
+            "span": "Al llamar a `.build()`",
+            "line": 42,
+            "checkedFact": "ES-TECH-001 corrected and actually reread: ImageOcclusionBuilder.build returns Note, not a model-finalization operation. Basic/Cloze table also now explicitly creates notes with builtin models."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "project-and-note-values",
+              "heading": "Valores de proyecto y nota",
+              "line": 6
+            },
+            {
+              "id": "models-and-templates",
+              "heading": "Modelos y plantillas",
+              "line": 23
+            },
+            {
+              "id": "media-and-occlusion",
+              "heading": "Recursos multimedia y oclusión",
+              "line": 30
+            },
+            {
+              "id": "operations-and-results",
+              "heading": "Operaciones y resultados",
+              "line": 45
+            },
+            {
+              "id": "errors-and-concurrency",
+              "heading": "Errores y concurrencia",
+              "line": 63
+            },
+            {
+              "id": "addition-context",
+              "heading": "Contexto al añadir notas",
+              "line": 70
+            },
+            {
+              "id": "source-api-details",
+              "heading": "Operaciones por lotes y publicación preparada",
+              "line": 77
+            },
+            {
+              "id": "prepare-review-and-publish",
+              "heading": "Preparar, revisar y publicar",
+              "line": 82
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "python-api",
+        "locale": "en",
+        "sourceHash": "23231361730fc86a9453f4e30d327071a5c1dffac04b7d8042231065b69feecd",
+        "targetHash": "671684d979711ea22807cbf0997062f4a98985fb4faeec9d742106377e4eb0e1",
+        "technicalDependencyHash": "8b9d6b35fc998b9f017dbb09002c8f5b5848fd9f01f51e6c98a1de5f52eafdc7",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "python-diagnostics",
+      "locale": "es",
+      "source": "docs/es/python-diagnostics.md",
+      "reviewedSourceSha256": "8f1456b53eed097da5869b1c45bd9c02e2d9857b9a1581d2aaf261d97ff3b879",
+      "reviewedSnapshot": "technical-input-snapshot/8f1456b53eed097da5869b1c45bd9c02e2d9857b9a1581d2aaf261d97ff3b879",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Comprueba `comparison.allows_publication`",
+            "line": 35,
+            "checkedFact": "Python completed high-risk comparison not error; CompareError partial report and no fake outcome from diagnosticseverity."
+          },
+          {
+            "span": "`details['limit_exceeded']`",
+            "line": 60,
+            "checkedFact": "Structureddetails/source_details/causes/native __cause__ carry I/O/resource evidence; report noownership, Output/Error truthful publication state."
+          },
+          {
+            "span": "`surrogateescape`",
+            "line": 64,
+            "checkedFact": "Unix bytepaths restore os.fsdecode(bytes), Windows UTF16units platform-specific; actual artifact.path pathlib.Path; media/bundle/inspection budgets separate and mandatory checks cannotdisable."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "compare-before-publication",
+              "heading": "Comparar antes de publicar",
+              "line": 25
+            },
+            {
+              "id": "budgets-and-artifact-ownership",
+              "heading": "Límites y propiedad del archivo de salida",
+              "line": 51
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "python-diagnostics",
+        "locale": "en",
+        "sourceHash": "6c6f50bebce899d752b3e01abe517fe9e91c367fb6e5e0554f2f30def48a7233",
+        "targetHash": "c843111e69fa828b71b8954531edfb7830cfe502a0165f26c25dc71aabac0833",
+        "technicalDependencyHash": "7eb0dc332c45d3df78b3d4b680176b2c75b4cb7509d3598e818a5da4528e6027",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "python-migration",
+      "locale": "es",
+      "source": "docs/es/python-migration.md",
+      "reviewedSourceSha256": "638eef94d9c8ea3bf26baad4172603ebe1f5b7ef45df7534f2c821815a429283",
+      "reviewedSnapshot": "technical-input-snapshot/638eef94d9c8ea3bf26baad4172603ebe1f5b7ef45df7534f2c821815a429283",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "no son alias de compatibilidad",
+            "line": 3,
+            "checkedFact": "Distribution/import ankiforge vs removed anki-forge/anki_forge, inprocessPyO3 not subprocess; sourceextension rebuild retained."
+          },
+          {
+            "span": "Las instantáneas de Output/Error proporcionan el resultado real",
+            "line": 18,
+            "checkedFact": "Old optionalartifact/diagnosticoutcome patterns replaced by guaranteedoutput/structurederrors; Text notimplicitHTML and stablemaskkeys correctlymapped."
+          },
+          {
+            "span": "no se recuperan automáticamente",
+            "line": 22,
+            "checkedFact": "Only complete currentoriginalbaselines; oldbundles/APKGevidence not silentlyrecovered."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "python-migration",
+        "locale": "en",
+        "sourceHash": "5ac48ffdc496d023f5ccbeba90d63a68f2d9bb0c22fadc369a23e6720ba7edda",
+        "targetHash": "0a2766df09308a94251e2b963967b036c9968a71214753216b0c95b4046dde95",
+        "technicalDependencyHash": "865455ae7ec4445b411b29f51458b87cda3c19694170f01fc7e0dd6a9108da34",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "es",
+      "source": "docs/es/genanki-migration.md",
+      "reviewedSourceSha256": "bc8f20e0bd240af5251c5216b63e3e522c350366d1e4c8d1b16a4840152d7271",
+      "reviewedSnapshot": "technical-input-snapshot/bc8f20e0bd240af5251c5216b63e3e522c350366d1e4c8d1b16a4840152d7271",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "no emula los objetos de genanki",
+            "line": 5,
+            "checkedFact": "New authoringmodelnot drop-in; durablebusinesskeys separatefrompresentation and content. Exact Pythoncustommodel example preserved."
+          },
+          {
+            "span": "No calcules un hash del contenido actual de los campos",
+            "line": 30,
+            "checkedFact": "Content-derivedidentity onlyif deliberateimporterrequirement; assign/storekeys outsideSDK when sourcehasnone."
+          },
+          {
+            "span": "ni promete convertir automáticamente los ID numéricos o GUID existentes de genanki",
+            "line": 36,
+            "checkedFact": "No arbitrarylegacy recovery; firstnewdistribution deliberateidentitychange unless separatelyvalidatedmapping, no losslessmigrationpromise."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "genanki-migration",
+        "locale": "en",
+        "sourceHash": "ae4f1e925358257dca02be54f592a274c56cecf4384e4e7151e7f29c6b3fecdc",
+        "targetHash": "8454764365c14549d118552a7363befd4648385b28ff7012c8e6e30e16b10da2",
+        "technicalDependencyHash": "865455ae7ec4445b411b29f51458b87cda3c19694170f01fc7e0dd6a9108da34",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "json-to-anki",
+      "locale": "es",
+      "source": "docs/es/json-to-anki.md",
+      "reviewedSourceSha256": "2294cd3ed93fe33b3d176dc92b89f84f97ea87788d923b0580e6947494382a17",
+      "reviewedSnapshot": "technical-input-snapshot/2294cd3ed93fe33b3d176dc92b89f84f97ea87788d923b0580e6947494382a17",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "**3 notas, 3 tarjetas y 2 archivos multimedia**",
+            "line": 3,
+            "checkedFact": "Allthreeexactsourceprograms parse callerJSON, stable biology-json/threeIDs and sharedcellPNG/tone;1answerchanged, noadded/removed notes, RISK.NOTE_CHANGED."
+          },
+          {
+            "span": "no una palabra pronunciada",
+            "line": 10,
+            "checkedFact": "Imagecelldiagram/tonegeneratednot speech; appvalidates untrusteddata schema and SDKonlyauthor/build."
+          },
+          {
+            "span": "`comparison.json` y `review.json`",
+            "line": 262,
+            "checkedFact": "Completedcomparison thenactual preparedcandidate review, two policychecks, freshoutputdirectory, originalv1retained, persistentv2. Public0.3.1 install/runtime and TypeScript6.0.3/@typesnode24.13.6 compile/run complete."
+          },
+          {
+            "span": "Comparar o generar correctamente un paquete no garantiza el estado de repaso",
+            "line": 266,
+            "checkedFact": "Originalbaseline notAnkireexport; localedits/schema/clientsettings, noomissiondeletes and no learnerreviewguarantee preserved."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "shared-inputs",
+              "heading": "Archivos de entrada compartidos",
+              "line": 8
+            },
+            {
+              "id": "rust",
+              "heading": "Rust",
+              "line": 24
+            },
+            {
+              "id": "python",
+              "heading": "Python",
+              "line": 115
+            },
+            {
+              "id": "node",
+              "heading": "Node",
+              "line": 181
+            },
+            {
+              "id": "check-and-import-the-result",
+              "heading": "Comprueba e importa el resultado",
+              "line": 260
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "json-to-anki",
+        "locale": "en",
+        "sourceHash": "0d72a60a123af14051c9a38991fcc3aa961b725c01c3033e1a5c400fd214314d",
+        "targetHash": "7ba7458dd534135b700f7952c2ae870716180a275ef2f9b1d44b24d3932e11b5",
+        "technicalDependencyHash": "0bbca62544385b97badf39ef4e839d90d08a4baa8ae6e44dd036852fc74f31da",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "csv-to-anki",
+      "locale": "es",
+      "source": "docs/es/csv-to-anki.md",
+      "reviewedSourceSha256": "b913be7c1051dcd98d8b0f611b7b02745898c57212393ee457b581188aa778c3",
+      "reviewedSnapshot": "technical-input-snapshot/b913be7c1051dcd98d8b0f611b7b02745898c57212393ee457b581188aa778c3",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Anki ya admite",
+            "line": 5,
+            "checkedFact": "NativeAnki textimport openly acknowledged; programmable repeatable ownIDs/APKGdistributionvalue, xlsxfirstUTF8CSV; nostrawman."
+          },
+          {
+            "span": "El script admite una marca de orden de bytes UTF-8",
+            "line": 21,
+            "checkedFact": "Exact stdlibcsv.DictReader(strict=True), utf-8-sig/newline empty, exactid/front/back orderedheader, threefieldsnonnullnonblank, trimmeduniqueIDs, emptydataset/existingdestination rejection."
+          },
+          {
+            "span": "**tres notas y tres tarjetas Basic**",
+            "line": 94,
+            "checkedFact": "SourceCSV3rows→Spanishdeck3notes/3Basiccards/0media, exact printedoutput and invocation namespace spanish-vocabulary; no new genericSDKCSV API."
+          },
+          {
+            "span": "las modificaciones locales más recientes también afectan",
+            "line": 114,
+            "checkedFact": "StableIDsnecessarybutnot guaranteedoverwrite; originaldistribution kept, followupdatecomparisonworkflow."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "prepare-csv",
+              "heading": "Prepara el CSV",
+              "line": 8
+            },
+            {
+              "id": "install",
+              "heading": "Instala Anki Forge",
+              "line": 26
+            },
+            {
+              "id": "convert",
+              "heading": "Genera el APKG",
+              "line": 39
+            },
+            {
+              "id": "verify-and-extend",
+              "heading": "Importa, comprueba y amplía",
+              "line": 103
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "csv-to-anki",
+        "locale": "en",
+        "sourceHash": "db0c2fc48551c0c230e7380330d8a81214e9920ce7bb0fb8847107b1f0264b61",
+        "targetHash": "6f404cf96ecfdbd0e85e6eb3559c198a597562d048eb5fa48227e38acd68f754",
+        "technicalDependencyHash": "c54446180497da8341a60846cb5374719a6e2de090c718cb7d78a98c3d36f554",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "ai-anki-cards",
+      "locale": "es",
+      "source": "docs/es/ai-anki-cards.md",
+      "reviewedSourceSha256": "8b80fffb4cbd0839fbe2c6d816a4e68d68eb0150d81b8551f8fee47777a2de08",
+      "reviewedSnapshot": "technical-input-snapshot/8b80fffb4cbd0839fbe2c6d816a4e68d68eb0150d81b8551f8fee47777a2de08",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "no llama a ningún modelo de IA ni sube tus apuntes",
+            "line": 5,
+            "checkedFact": "Sitebriefbuilderlocaltextonly; assistantdrafts content/scripts, localRust/Node/Python SDKbuildsAPKG."
+          },
+          {
+            "span": "la extracción de PDF y el OCR quedan fuera",
+            "line": 10,
+            "checkedFact": "Separate extractiontoolandhuman/readertextreview; no invented built-inPDF/OCR."
+          },
+          {
+            "span": "no pidas al asistente que vuelva a generar los ID",
+            "line": 42,
+            "checkedFact": "Englishshared3noteCSVprompt/sample unchanged, verify eachfact/no unbackedanswers, durableIDassignment/updates correctlyretained."
+          },
+          {
+            "span": "no detecta automáticamente las etiquetas de una imagen",
+            "line": 58,
+            "checkedFact": "IOneeds callersuppliedimage+maskcoordinates; successAPKGdoesnotvalidateAI factualquality, originalbaseline/clientconditions preserved."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "choose-input",
+              "heading": "Empieza con material que puedas comprobar",
+              "line": 8
+            },
+            {
+              "id": "draft-cards",
+              "heading": "Pide tarjetas en formato CSV",
+              "line": 15
+            },
+            {
+              "id": "export-apkg",
+              "heading": "Convierte las tarjetas revisadas en un APKG",
+              "line": 45
+            },
+            {
+              "id": "check-result",
+              "heading": "Revisa las tarjetas antes de estudiar",
+              "line": 54
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "ai-anki-cards",
+        "locale": "en",
+        "sourceHash": "043c0efa86dfc63e21bb8a6878fdf537179d549ed5f25bfc9bcea9c42a3e09b7",
+        "targetHash": "34dc2b5d5d783438e59f805d312544b50882724ecd938ee5c3ef50ffb57a362c",
+        "technicalDependencyHash": "b06682f5840ed82311af003b387d967ca56ac914fa3ffcd10a7530d0d2381de1",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "development",
+      "locale": "es",
+      "source": "docs/es/development.md",
+      "reviewedSourceSha256": "722d645a9ecac60caddb18c2e097e82b3190f4e7480a615ac5804e111f56a3d2",
+      "reviewedSnapshot": "technical-input-snapshot/722d645a9ecac60caddb18c2e097e82b3190f4e7480a615ac5804e111f56a3d2",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "Para los paquetes publicados de `0.3.1`",
+            "line": 3,
+            "checkedFact": "Development/source instructions separatepublishedinstall, Rust1.92 pinned/Node22.13+/sourceCPython3.11–3.12 distinction."
+          },
+          {
+            "span": "npm run pack:local",
+            "line": 25,
+            "checkedFact": "Setup/build/pack localfacade+platformnative then explicitofflinenooptional appinstall, notregistryinstall; matchedcheckoutbinary required."
+          },
+          {
+            "span": "maturin==1.15.0",
+            "line": 33,
+            "checkedFact": "Correct pinnedmaturin develop --manifest-path ... --locked withvenv, normalwheelruntime noCargo."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "source-builds",
+              "heading": "Compilación desde el código fuente",
+              "line": 8
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "development",
+        "locale": "en",
+        "sourceHash": "5844886b45b7f234a534634395fc1abef62d22e8ce7c927dd50fce666d868e40",
+        "targetHash": "b5ad35752dd2814f76a6701a37fba7ac1d966a6e884b2dba617d65fb0c795455",
+        "technicalDependencyHash": "1f076fb993f4032a135625d42463ab176905f8a352b58f6459d9c25c45aa0ce5",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "es",
+      "source": "docs/es/anki-forge-vs-genanki.md",
+      "reviewedSourceSha256": "04cc37e1506ddd0f5ed2616d9d70ea05ab07363c50d165980d6fdae068f4bf14",
+      "reviewedSnapshot": "technical-input-snapshot/04cc37e1506ddd0f5ed2616d9d70ea05ab07363c50d165980d6fdae068f4bf14",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "No es correcto presentar la identidad estable como una función exclusiva",
+            "line": 24,
+            "checkedFact": "genankiguid/customIDs/media/reimportupdatessupported; no exclusiveidentity/unfaircomparison."
+          },
+          {
+            "span": "entre un 45,7 y un 53,9 % menos de tiempo de exportación",
+            "line": 31,
+            "checkedFact": "Historical20261008 RustProjectAPI vsgenanki0.13.1 M1Pro1000Basic/fiveworkloads, somehighermemory; not currentPythonNode speedguarantee."
+          },
+          {
+            "span": "una migración sin pérdidas",
+            "line": 26,
+            "checkedFact": "No automaticlegacyGUIDmapping/losslessmigration/reviewhistoryguarantee; migrationcost andkeepingworkinggenanki considered."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "the-same-small-task",
+              "heading": "La misma tarea sencilla",
+              "line": 17
+            },
+            {
+              "id": "existing-genanki-decks",
+              "heading": "Mazos de genanki existentes",
+              "line": 22
+            },
+            {
+              "id": "historical-performance-evidence",
+              "heading": "Datos históricos de rendimiento",
+              "line": 29
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "anki-forge-vs-genanki",
+        "locale": "en",
+        "sourceHash": "a06784508ba9f1d51b6ec9add19691deef217724423332bb54ce8a3b794f7e17",
+        "targetHash": "4f70b2dd228f8dbfa49b2c1f96767b64b946851ad25c65d6296908ec8fb0214f",
+        "technicalDependencyHash": "773700daaa175981ac0b2d29c48b8f9244495cc2e8636931b0d2b1ddf5292e7f",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "es",
+      "source": "website/src/content/blog/es/your-first-anki-deck.mdx",
+      "reviewedSourceSha256": "bc5e76bc4534a13bb2fd5a47f0f1a20d5831d8bcd2477a2b09549bb4830dbc33",
+      "reviewedSnapshot": "technical-input-snapshot/bc5e76bc4534a13bb2fd5a47f0f1a20d5831d8bcd2477a2b09549bb4830dbc33",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "date: 2026-09-22",
+            "line": 6,
+            "checkedFact": "Exact historicpublicationdate matchesEnglish; title/description aboutoneBasicRusttutorial, noautomaticversionfreshening."
+          },
+          {
+            "span": "`build` solo devuelve `BuildOutput` cuando termina correctamente",
+            "line": 27,
+            "checkedFact": "ImportedsharedquickstartSourcestillactual completeprogram; stable spanish/es:hola distinctidentityfromeditableanswer."
+          },
+          {
+            "span": "Conserva el paquete anterior original",
+            "line": 45,
+            "checkedFact": "Current publicquickstart/install links explicitlycurrent, historicalarticle notdeclaredcurrentrelease; sharedmedia/APKG/source URLsunchanged, otherlinksSpanish."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "a-complete-program",
+              "heading": "Un programa completo",
+              "line": 19
+            },
+            {
+              "id": "install-and-run",
+              "heading": "Instalar y ejecutar",
+              "line": 30
+            },
+            {
+              "id": "give-the-note-an-identity",
+              "heading": "Dar una identidad a la nota",
+              "line": 39
+            },
+            {
+              "id": "grow-from-one-note",
+              "heading": "Ampliar el ejemplo",
+              "line": 48
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "blog:your-first-anki-deck",
+        "locale": "en",
+        "sourceHash": "6ddb6fb238860e9f5d886f9269450f56c046f20a87a90657bd1850f78e19f7e2",
+        "targetHash": "02b6e10f026fb72353a8404f36dff6fb22e34babd9c864193586770911d10f89",
+        "technicalDependencyHash": "096a5f96e0f36f385cb232693178422ab715da6eb7003dce7991e1205690fa98",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "es",
+      "source": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+      "reviewedSourceSha256": "bf66e4f95e043fba8947fec7d323b2a427418564eca960ef923365bdc180a1d8",
+      "reviewedSnapshot": "technical-input-snapshot/bf66e4f95e043fba8947fec7d323b2a427418564eca960ef923365bdc180a1d8",
+      "status": "pre-read-complete-awaiting-final-binding",
+      "technical": {
+        "status": "pending",
+        "reason": "Full semantic source pre-review complete; final locale wiring/source candidate and any actual corrections still require targeted closure.",
+        "evidence": [
+          {
+            "span": "date: 2026-09-22",
+            "line": 6,
+            "checkedFact": "Exact historicpublicationdate/categoryEngineering/translationKey matchesEnglish; sourceupdateExample retained."
+          },
+          {
+            "span": "una reexportación desde Anki no sirve",
+            "line": 47,
+            "checkedFact": "Same originalAPKGcompleteidentity/revisionevidence baseline checkedagainstactualDB/media, differentoutputpath."
+          },
+          {
+            "span": "no anula esas decisiones",
+            "line": 56,
+            "checkedFact": "NoteID plusprojectnamespace only identitycomponent; clientsettings/localedits/Ankiversion decideimport, no all-local-state preservationpromise."
+          }
+        ],
+        "sectionReview": {
+          "method": "Read each marker and its following Spanish task section semantically; no positional-heading mapping.",
+          "bindings": [
+            {
+              "id": "separate-identity-from-content",
+              "heading": "Separar la identidad del contenido",
+              "line": 27
+            },
+            {
+              "id": "give-the-next-build-a-baseline",
+              "heading": "Dar un paquete de referencia a la siguiente generación",
+              "line": 34
+            },
+            {
+              "id": "keep-the-original-distributed-package",
+              "heading": "Conservar el paquete original distribuido",
+              "line": 45
+            },
+            {
+              "id": "inspect-the-build-and-the-import",
+              "heading": "Revisar la generación y la importación",
+              "line": 52
+            }
+          ],
+          "requiredSectionsPresent": true
+        },
+        "openIssues": []
+      },
+      "linguistic": {
+        "status": "pending"
+      },
+      "englishEvidence": {
+        "review": "technical-common-prior-review.json",
+        "pageId": "blog:stable-ids-and-deck-updates",
+        "locale": "en",
+        "sourceHash": "b3a9025cbfcd33da07b0b6a3b2216d5e619e015c0270b3c980f6406413536ad6",
+        "targetHash": "f23eca86cafe0eec68bde27d539ff1961a36e1d5bcdcf9c0eb099a8d2d029e6c",
+        "technicalDependencyHash": "118366f959246f646ec74374dfd973b39fcef063d57ae495c9d02873614dddc2",
+        "method": "Complete prior English prose/program review reused after exact byte comparison; shared integration deltas separately tracked; Spanish full prose newly read."
+      }
+    }
+  ],
+  "correctionRecheck": [
+    {
+      "path": "docs/es/ai-anki-cards.md",
+      "before": "Anki Forge es la biblioteca de generación de código abierto",
+      "after": "Anki Forge es una biblioteca de código abierto para generar paquetes de Anki",
+      "status": "independently-rechecked",
+      "checkedFact": "Localized expression now names actual Cargo features/match/builder/generation/update task with same API facts and links."
+    },
+    {
+      "path": "docs/es/installation.md",
+      "before": "Las funciones predeterminadas están vacías; el código normal de una aplicación no necesita funciones exclusivas del repositorio.",
+      "after": "No hay características de Cargo activadas de forma predeterminada; el código normal de una aplicación no necesita las características exclusivas del repositorio.",
+      "status": "independently-rechecked",
+      "checkedFact": "Localized expression now names actual Cargo features/match/builder/generation/update task with same API facts and links."
+    },
+    {
+      "path": "docs/es/rust-guide.md",
+      "before": "Al hacer correspondencia sobre estas enumeraciones no exhaustivas, utiliza",
+      "after": "Al usar `match` con estas enumeraciones no exhaustivas, utiliza",
+      "status": "independently-rechecked",
+      "checkedFact": "Localized expression now names actual Cargo features/match/builder/generation/update task with same API facts and links."
+    },
+    {
+      "path": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+      "before": ">guía de desarrollo</a> describe las actualizaciones",
+      "after": ">guía de actualización</a> describe las actualizaciones",
+      "status": "independently-rechecked",
+      "checkedFact": "Localized expression now names actual Cargo features/match/builder/generation/update task with same API facts and links."
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "before": "## Detalles de la API del código fuente",
+      "after": "## Operaciones por lotes y publicación preparada",
+      "status": "independently-rechecked",
+      "checkedFact": "Note vs model correct, public0.3.1 batch/prepared heading correct; no fenced code changed by these exact text corrections."
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "before": "Al completar el modelo se decodifica la imagen",
+      "after": "Al llamar a `.build()` se decodifica la imagen",
+      "status": "independently-rechecked",
+      "checkedFact": "Note vs model correct, public0.3.1 batch/prepared heading correct; no fenced code changed by these exact text corrections."
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "before": "| `Note.basic(front, back)` | Modelo Basic integrado;",
+      "after": "| `Note.basic(front, back)` | Crea una nota con el modelo Basic integrado;",
+      "status": "independently-rechecked",
+      "checkedFact": "Note vs model correct, public0.3.1 batch/prepared heading correct; no fenced code changed by these exact text corrections."
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "before": "| `Note.cloze(text)` | Modelo Cloze integrado;",
+      "after": "| `Note.cloze(text)` | Crea una nota con el modelo Cloze integrado;",
+      "status": "independently-rechecked",
+      "checkedFact": "Note vs model correct, public0.3.1 batch/prepared heading correct; no fenced code changed by these exact text corrections."
+    }
+  ],
+  "sharedDeltaReview": {
+    "status": "actual-content-delta-read-awaiting-final-candidate",
+    "files": [
+      {
+        "path": "docs/ai-quickstart.json",
+        "previousSha256": "c5a14089ea49b3aaadd6a6966e34237c737afa853fe0fcebcae5854a954606c5",
+        "currentSha256": "c6650236b837698c14f714f4d2bb587ee177a0e16caf461a9104dc23a59b7908"
+      },
+      {
+        "path": "website/language-briefs.json",
+        "previousSha256": "a721f0d5ca2478ece225c6d8432a3d33c41f230f0fb50171b98295e652852b4e",
+        "currentSha256": "1b0653b024218d027dae3aed95a2f636cdba287305de032f11b3876817a15b43"
+      },
+      {
+        "path": "website/scripts/content-review-inputs.mjs",
+        "previousSha256": "e22eb2351b6d8bede6b6619e089565f3ac33db0d93cdc75ad503aaa993cb4a21",
+        "currentSha256": "d75c4869e972843384601f5a22f933497c6a3f6f75e2b6f8bbfc33616ff32af2"
+      },
+      {
+        "path": "website/site-model.mjs",
+        "previousSha256": "7cfab12d586121fea3cc862d0efafe70a2bb8f7563715c90010b6909bd96a24d",
+        "currentSha256": "7fde34eb378e21b4209cf1fcc3c3b284b197d95edae3930adbea413d5ffcfc08"
+      },
+      {
+        "path": "website/src/i18n/messages.mjs",
+        "previousSha256": "a8f52d1df8eac07604ee34e626d39bae81596eba66429baf875763a62d853104",
+        "currentSha256": "84ad48f11ec45d0679aa50206d52c27648514015c20f31269876823b72509393"
+      },
+      {
+        "path": "website/src/lib/ai-quickstart.mjs",
+        "previousSha256": "f9567627f5edec69ab09ff3fb8a855231e82b4e893c3e0f0961c16bed018153c",
+        "currentSha256": "8bb8df054e098db366d6513c66c7c50c08903c28fce19f4ef8aace63ffc73d60"
+      }
+    ],
+    "programsAndEnglishChineseProseUnchanged": true,
+    "aiPublicConfigAndOldPromptsUnchanged": true,
+    "evidence": [
+      "Actually read complete Spanish AI prompt: public ankiforge0.3.1 API only; no git/path/internal/source-only/unpublished/invented methods; smallest complete file-named program; persistent APKG; stable namespace/note keys; exact run/expected output/verification; original distribution APKG not Anki re-export; targeted questions only. No new SDK feature promise.",
+      "Actually read requestPlaceholders for en/zh/es. Existing en/zh empty-request text is identical to previous helper literals. renderPrompt now requires a registered localized placeholder and uses it only for empty/whitespace request; one-pass replacement leaves replacement values uninterpreted. Install/runtime/public version/language programs and old en/zh prompt strings are byte-identical in JSON values.",
+      "Actually read en/zh/es aiPromptContract seven language-specific requirements. They express genuine publicPackage/publicApi/persistent/identity/run/verification/baseline semantics; exact substring validation alone is not content approval. AI validator now checks current release locale selection; final es enabled render/links pending.",
+      "Actually read all29 new locale-metadata.json values and compare to the three author metadata records: same page tasks/promises, no invented capabilities. site-model reads those values only for non-en/zh selected locales; en/zh literal metadata unchanged. Spanish sidebar groups/nav labels add correct current task labels without changing group IDs/order/destinations.",
+      "Actually read framework es dictionary: heading anchors preserve {{title}}, Pagefind [SEARCH_TERM]/[COUNT]/[DIFFERENT_TERM] and load/clear/result statuses retained; all11 strings current Spanish labels. messages.mjs only adds es import/catalog registration; translator implementation unchanged.",
+      "Actual parser delta reads same locale-metadata JSON for current-page metadata/sidebar and includes it in input files. This is source-data consistency review only. Reviewer authored earlier supplied-root metadata/wordmark parser fixes and retains that disclosure; current implementation independent cross-review remains assigned to another reviewer."
+    ],
+    "openIssues": []
+  },
+  "aiPromptReview": {
+    "source": "docs/ai-quickstart.json",
+    "locale": "es",
+    "prompt": "Ayúdame a usar Anki Forge {version} en una aplicación de {language}.\nRequisito del entorno: {runtime}\n\nUtiliza el paquete publicado `ankiforge` y solo la API pública documentada para\nesta versión. No uses dependencias git/path, herramientas internas, API que solo\nestén disponibles en el código fuente, métodos sin publicar ni métodos inventados.\n\nMi objetivo:\n{request}\n\nPor favor:\n1. Revisa el proyecto existente antes de modificar archivos.\n2. Indica la configuración y el comando de instalación exactos: {install}\n3. Crea el programa completo más pequeño que se pueda ejecutar e indica cada archivo que haya que crear o modificar.\n4. Genera un archivo `.apkg` persistente y usa un espacio de nombres y claves de nota estables.\n5. Incluye el comando de ejecución, el resultado esperado y un paso de verificación.\n6. Si hacen falta archivos multimedia, plantillas propias, oclusión de imágenes o\n   actualizaciones, sigue el proceso documentado en lugar de aproximar la API.\n   Para actualizar, conserva el APKG original de distribución anterior como\n   referencia; no uses un paquete reexportado desde Anki.\n7. Pregunta solo lo necesario para aclarar el lenguaje, el formato de entrada,\n   la ruta de salida o la regla de identidad.\n\nGuía de primeros pasos: {quickstart}",
+    "placeholder": "<describe tu tarea>",
+    "status": "semantically-pre-reviewed-awaiting-final-active-render",
+    "openIssues": []
+  },
+  "protectedPrograms": {
+    "method": "Actual static equality of complete directive-bound code against current executable sources/regions, not SDK execution; semantic prose review separate.",
+    "count": 16,
+    "entries": [
+      {
+        "pageId": "quickstart",
+        "source": "docs/es/quickstart.md",
+        "program": "anki_forge/examples/target_api_basic.rs",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "node-quickstart",
+        "source": "docs/es/node-quickstart.md",
+        "program": "bindings/node/examples/quickstart.mjs",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "python-quickstart",
+        "source": "docs/es/python-quickstart.md",
+        "program": "bindings/python/examples/quickstart.py",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "cards",
+        "source": "docs/es/cards.md",
+        "program": "anki_forge/examples/docs_workflow.rs#cards",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "media",
+        "source": "docs/es/media.md",
+        "program": "anki_forge/examples/docs_workflow.rs#media",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "custom-notetypes",
+        "source": "docs/es/custom-notetypes.md",
+        "program": "anki_forge/examples/target_api_custom_notetype.rs",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "templates",
+        "source": "docs/es/templates.md",
+        "program": "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "templates",
+        "source": "docs/es/templates.md",
+        "program": "anki_forge/examples/docs_workflow.rs#bundle",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "image-occlusion",
+        "source": "docs/es/image-occlusion.md",
+        "program": "anki_forge/examples/docs_workflow.rs#occlusion",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "updates",
+        "source": "docs/es/updates.md",
+        "program": "anki_forge/examples/docs_workflow.rs#updates",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "updates",
+        "source": "docs/es/updates.md",
+        "program": "anki_forge/examples/docs_publication.rs",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "json-to-anki",
+        "source": "docs/es/json-to-anki.md",
+        "program": "anki_forge/examples/json_to_anki.rs",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "json-to-anki",
+        "source": "docs/es/json-to-anki.md",
+        "program": "bindings/python/examples/json_to_anki.py",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "json-to-anki",
+        "source": "docs/es/json-to-anki.md",
+        "program": "bindings/node/examples/json_to_anki.mts",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "csv-to-anki",
+        "source": "docs/es/csv-to-anki.md",
+        "program": "docs/recipes/csv-to-anki/cards.csv",
+        "status": "exact-protected-source-match"
+      },
+      {
+        "pageId": "csv-to-anki",
+        "source": "docs/es/csv-to-anki.md",
+        "program": "bindings/python/examples/csv_to_anki.py",
+        "status": "exact-protected-source-match"
+      }
+    ]
+  },
+  "sdkDependencyIdentity": {
+    "path": "technical-sdk-dependency-identity.json",
+    "sha256": "4fe5e34834ae49dd54ccc9ed58fc93ef934a0caf69c17d8a48357ab457651df7",
+    "files": 185,
+    "allIdentical": true,
+    "sdkExecutionClaim": false
+  }
+}

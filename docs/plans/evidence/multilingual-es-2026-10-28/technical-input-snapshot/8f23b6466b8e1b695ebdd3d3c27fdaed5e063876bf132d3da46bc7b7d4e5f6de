@@ -1,0 +1,60 @@
+# Tipos de nota personalizados
+
+Finaliza un modelo una sola vez y luego crea notas a partir de él. El `NoteType` devuelto es inmutable y se puede reutilizar en funciones o en varios proyectos. Cada nota conserva su modelo, por lo que no puede hacer referencia por error al nombre de un modelo que no se haya registrado.
+
+<!-- section: executable-example -->
+## Ejemplo ejecutable
+
+El ejemplo define claves estables y nombres visibles por separado, asigna los valores mediante las claves y utiliza esas mismas claves en las plantillas.
+
+<!-- source: anki_forge/examples/target_api_custom_notetype.rs -->
+```rust
+use ankiforge::schema::GenerationRule;
+use ankiforge::{BuildOptions, Field, NoteType, Project, Template};
+
+fn main() -> anyhow::Result<()> {
+    let vocab = NoteType::builder("jp-vocab")
+        .name("Japanese Vocabulary")
+        .field(Field::new("expr").name("Expression").sort().required())
+        .field(Field::new("meaning").name("Meaning").required())
+        .template(
+            Template::new("recognition")
+                .name("Recognition")
+                .front("{{expr}}")
+                .back("{{FrontSide}}<hr id=\"answer\">{{meaning}}")
+                .generate_when(GenerationRule::all(["expr"])),
+        )
+        .build()?;
+    let mut project = Project::new("jp-core")?.default_deck("Japanese::Core");
+    project.add(
+        "taberu",
+        vocab
+            .note()
+            .field("expr", "食べる")
+            .field("meaning", "to eat"),
+    )?;
+    project.build(BuildOptions::to("jp-core.apkg"))?;
+    Ok(())
+}
+```
+<!-- /source -->
+
+Ejecuta `cargo run --locked -p ankiforge --example target_api_custom_notetype` desde el repositorio descargado. Abre `jp-core.apkg` en Anki.
+
+<!-- section: keys-and-names -->
+## Claves y nombres
+
+`Field::new` y `Template::new` reciben claves estables. `.name` establece un nombre visible; si no se indica, se usa la clave como nombre. No se genera ningún identificador a partir del nombre. Las claves vacías, con espacios en blanco, en conflicto o reservadas impiden finalizar el modelo. Los nombres pueden contener chino u otro texto Unicode sin cambiar las claves de identidad.
+
+Las plantillas enlazan las claves y se compilan con los nombres de campo de Anki. Esto abarca el anverso y el reverso, las plantillas del explorador, las secciones condicionales, los filtros y Cloze. El resto del HTML, los espacios y el texto de los scripts se conservan. Las referencias desconocidas provocan un error que señala el intervalo de bytes del origen. La asignación de campos solo acepta claves: no elimina espacios ni normaliza las mayúsculas de forma silenciosa.
+
+<!-- section: validation-and-generation -->
+## Validación y generación
+
+`required()` rechaza el contenido ausente o vacío de una nota. Los campos que no lo usan se pueden omitir y se muestran vacíos. `sort()` selecciona el campo de ordenación; solo puede seleccionarlo un campo. La generación usa la regla predeterminada de Anki, salvo que una plantilla establezca explícitamente `GenerationRule::all` o `any`. Estas reglas hacen referencia a las claves de los campos. `builder.cloze_field(key)` selecciona el comportamiento Cloze de un modelo personalizado.
+
+`builder.asset(media)` declara una dependencia de CSS, fuentes, scripts o HTML sin procesar cuyos datos se conservan. El contenido tipado de imagen y sonido de las notas incorpora los recursos automáticamente. Los recursos explícitos permanecen en la salida aunque no se encuentre ninguna referencia estática.
+
+Una misma clave de modelo solo se puede reutilizar en un proyecto si la definición es idéntica. Una definición en conflicto provoca un fallo atómico al añadir una nota. Los cambios de nombres visibles, campos o plantillas en versiones posteriores requieren [un análisis de actualización](/docs/updates/), aunque sus claves estables no cambien.
+
+Para reutilizar archivos y recursos, utiliza [un paquete de plantillas](/docs/templates/).

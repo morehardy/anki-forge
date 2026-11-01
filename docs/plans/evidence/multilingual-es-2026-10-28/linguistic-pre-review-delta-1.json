@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-Spanish-linguistic-pre-review-targeted-delta",
+  "status": "draft-awaiting-final-candidate",
+  "reviewerRun": "/root/independent_linguistic_source_review/es-pre-review-2026-10-28",
+  "initialPreReview": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/linguistic-pre-review-initial.json",
+    "sha256": "11f8ada3d0a8ff1417815804b00d5c85712779b660347cd435024d9b94f19ebd"
+  },
+  "inputCapture": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/linguistic-pre-read-delta-1.json",
+    "sha256": "cf605a68f2a4c262d33ffec1bb74713b596e20199ff3a6d8b7da9c529c891361"
+  },
+  "changedPreviouslyReadFiles": [
+    "docs/es/ai-anki-cards.md",
+    "docs/es/installation.md",
+    "docs/es/python-api.md",
+    "docs/es/rust-guide.md",
+    "website/src/content/blog/es/stable-ids-and-deck-updates.mdx"
+  ],
+  "unchangedInitialFiles": 30,
+  "protectedFencedContentUnchanged": {
+    "docs/es/ai-anki-cards.md": true,
+    "docs/es/installation.md": true,
+    "docs/es/python-api.md": true,
+    "docs/es/rust-guide.md": true,
+    "website/src/content/blog/es/stable-ids-and-deck-updates.mdx": true
+  },
+  "resolvedIssues": [
+    "ES-L001",
+    "ES-L002",
+    "ES-L003",
+    "ES-L004",
+    "ES-L005",
+    "ES-L006",
+    "ES-L007"
+  ],
+  "evidence": [
+    {
+      "path": "docs/es/python-api.md",
+      "line": 42,
+      "quote": "Al llamar a `.build()` se decodifica la imagen",
+      "assessment": "Actual returned Note and builder validation stage are now explicit; model/note confusion fixed. ES-L001 resolved after rereading the whole sentence."
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "line": 14,
+      "quote": "Crea una nota con el modelo Basic integrado",
+      "assessment": "Both Basic and Cloze rows explicitly create a note retaining its built-in model. ES-L007 resolved."
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "line": 77,
+      "quote": "## Operaciones por lotes y publicación preparada",
+      "assessment": "Task heading now agrees with public 0.3.1 availability; source-api-details marker unchanged. ES-L005 resolved."
+    },
+    {
+      "path": "docs/es/ai-anki-cards.md",
+      "line": 3,
+      "quote": "Anki Forge es una biblioteca de código abierto para generar paquetes de Anki",
+      "assessment": "Open-source library scope is APKG generation, separate from assistant code writing. ES-L002 resolved."
+    },
+    {
+      "path": "docs/es/ai-anki-cards.md",
+      "line": 31,
+      "quote": "También puedes dar estas instrucciones en español; conserva el encabezado `id,front,back`, los ID y las reglas de revisión.",
+      "assessment": "Natural explanation permits Spanish instructions while preserving CSV/ID protocol; unchanged English reproducible example is deliberate, not a missing translation."
+    },
+    {
+      "path": "docs/es/installation.md",
+      "line": 14,
+      "quote": "No hay características de Cargo activadas de forma predeterminada",
+      "assessment": "Cargo features are no longer called functions. ES-L003 resolved with accurate compilation-feature terminology."
+    },
+    {
+      "path": "docs/es/rust-guide.md",
+      "line": 62,
+      "quote": "Al usar `match` con estas enumeraciones no exhaustivas",
+      "assessment": "Uses familiar Rust syntax and avoids literal correspondence calque. ES-L004 resolved."
+    },
+    {
+      "path": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+      "line": 49,
+      "quote": "guía de actualización",
+      "assessment": "Link label now matches updates destination. ES-L006 resolved."
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "jsonPath": "prompts.es",
+      "quote": "Ayúdame a usar Anki Forge {version} en una aplicación de {language}.",
+      "assessment": "Complete es prompt actually read: direct request, public version, runtime, install, minimal complete program, persistent APKG, stable namespace/note keys, run/verification and original nonreexport baseline. Commands/API names remain protocol. One minor calque in item 6 recorded separately."
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "jsonPath": "requestPlaceholders.es",
+      "quote": "<describe tu tarea>",
+      "assessment": "Natural empty-request placeholder, with interpolation names version/language/runtime/request/install/quickstart all preserved."
+    },
+    {
+      "path": "website/src/lib/ai-quickstart.mjs",
+      "line": 22,
+      "quote": "quickstart: new URL(pagePath(language === 'rust' ? 'quickstart' : `${language}-quickstart`, locale), selected.quickstart).href,",
+      "assessment": "Localized quickstart link and per-locale request fallback match es labels. Component supplies locale to renderPrompt for server/no-JS/client templates. es is not yet selected for release at this snapshot; no executed es prompt or final artifact acceptance claimed."
+    },
+    {
+      "path": "website/src/content/i18n/es.json",
+      "line": 2,
+      "quote": "Sección titulada «{{title}}»",
+      "assessment": "Natural accessible heading description; exact {{title}} token preserved."
+    },
+    {
+      "path": "website/src/content/i18n/es.json",
+      "line": 3,
+      "quote": "Limpiar / Cargar más resultados / Buscar página / Filtros",
+      "assessment": "Actually read all 11 current override keys. Action labels are concise; no implication of language-changing search."
+    },
+    {
+      "path": "website/src/content/i18n/es.json",
+      "line": 7,
+      "quote": "Ningún resultado para: [SEARCH_TERM]",
+      "assessment": "Empty, one/many, alternative query, suggestion and searching states are idiomatic; [COUNT], [SEARCH_TERM], [DIFFERENT_TERM] preserved. Loading/error are supplied by already read search.loading/search.error."
+    },
+    {
+      "path": "website/src/components/DocsSearch.astro",
+      "line": 9,
+      "quote": "const labels = {",
+      "assessment": "Read actual label wiring: framework clear/zero/one/many/searching and catalog loading/error in one component. Current stock search.label/search.cancelLabel/search.ctrlKey translations cannot yet be independently checked in this worktree because installed Starlight files were not present at the attempted local paths; final closure must include actual stock inputs."
+    },
+    {
+      "path": "website/site-model.mjs",
+      "line": 273,
+      "quote": "Empieza aquí / Guías / Guías por lenguaje / Referencia / Ayuda",
+      "assessment": "Actual es sidebar groups are normal task/reference nouns with a coherent order. They map to the 29 already actually read page titles, including source-build and migration tasks."
+    },
+    {
+      "path": "website/site-model.mjs",
+      "line": 281,
+      "quote": "Guía / Ejemplos / Blog",
+      "assessment": "Actual top navigation labels are natural and Header uses locale-specific labels and aria-current for the active section."
+    },
+    {
+      "path": "website/locale-model.mjs",
+      "line": 7,
+      "quote": "label: 'Español'",
+      "assessment": "Correct autonym and es locale/format/lang values; LanguageSwitcher menu shows current autonym and other locale targets. No automatic approval of unselected locales."
+    },
+    {
+      "path": "website/src/components/Footer.astro",
+      "line": 16,
+      "quote": "footerNavigation.map",
+      "assessment": "Actual es footer keys previously read resolve to Artículos, RSS, Licencia MIT, Repositorio de GitHub and Índice de documentación para IA; actions match destinations."
+    },
+    {
+      "path": "website/site-model.mjs",
+      "line": 291,
+      "quote": "nextTasks",
+      "assessment": "Homepage next task order JSON, CSV, AI, comparison reuses actual es catalog text already read, and all destinations were fully read. Existing nextTitle retained; no heading-migration approval."
+    },
+    {
+      "path": "website/locale-metadata.json",
+      "jsonPath": "locales.es",
+      "assessment": "29 actual integrated title/description pairs exactly equal the three proposals independently read in full. Reuse is explicit and supported by value equality; no new title promise introduced."
+    }
+  ],
+  "metadataMatchesActualProposals": 29,
+  "frameworkOverrideKeyCount": 11,
+  "noProductSourceModified": true,
+  "noBuildOrSearchQueriesRun": true,
+  "noApprovalOrFinalHashProduced": true
+}

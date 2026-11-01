@@ -1,0 +1,62 @@
+---
+locale: zh-CN
+translationKey: stable-ids-and-deck-updates
+title: 笔记身份应当比措辞更持久
+description: 更新生成的 Anki 牌组时，稳定 ID 与构建基线如何共同发挥作用。
+date: 2026-09-22
+category: Engineering
+---
+
+import CodeBlock from '../../../components/CodeBlock.astro';
+import { updateExample } from '../../../lib/examples';
+import { sitePath } from '../../../lib/site';
+
+生成的牌组很少在首次导出后就不再改变。定义会完善，例子会更清楚，错误会被修正。下一次构建需要知道哪些笔记仍是原来的笔记，只是内容有所改善。
+
+考虑这个小改动：
+
+| 字段 | 第一版 | 下一版 |
+| --- | --- | --- |
+| 正面 | hola | hola |
+| 背面 | hello | hello; hi |
+| 稳定 ID | es:hola | es:hola |
+
+含义扩展了，逻辑笔记仍是同一条。
+
+<span id="separate-identity-from-content" data-section-alias="separate-identity-from-content"></span>
+
+## 将身份与内容分开
+
+显式稳定 ID 为笔记提供持久键。编辑笔记时保留该 ID，创建另一条逻辑笔记时选择新 ID。
+
+身份还具有项目上下文。同一牌组的各次发布应保持项目命名空间一致。仅笔记 ID 本身只是可重复更新流程的一部分。
+
+<span id="give-the-next-build-a-baseline" data-section-alias="give-the-next-build-a-baseline"></span>
+
+## 为下一次构建提供基线
+
+之前的包告诉 Anki Forge 上次导出了什么。构建修订后的项目时使用它：
+
+<CodeBlock code={updateExample.source} />
+
+此片段中，`project` 包含修订后的笔记，`previous` 指向版本 1，`next` 是版本 2 的独立路径。<a href={sitePath('/generated/website_showcase.rs')}>完整示例</a>包含两个项目的定义，并验证保留了一条笔记的身份。
+
+输入包与输出包应使用不同路径。覆盖基线会丢失理解和验证发布所需的证据。
+
+<span id="keep-the-original-distributed-package" data-section-alias="keep-the-original-distributed-package"></span>
+
+## 保留原始分发包
+
+每个生成包都携带完整的身份和修订证据。下一次构建会将证据与实际数据库和媒体核对后，才复用身份。保留实际分发的原始包；Anki 重新导出的包不是受支持的基线。
+
+<a href={sitePath('/zh-cn/docs/updates/')}>编写指南</a>说明严格更新、风险策略和客户端导入限制。
+
+<span id="inspect-the-build-and-the-import" data-section-alias="inspect-the-build-and-the-import"></span>
+
+## 检查构建与导入
+
+分发前检查构建报告及其更新安全诊断。如果构建无法协调某条笔记的身份，应调查源数据和基线，不能仅把存在输出文件当作更新正确的证据。
+
+之后 Anki 会应用自己的导入行为。导入设置、已有笔记内容、本地编辑和 Anki 版本都可能影响结果。稳定身份帮助匹配笔记，但不会覆盖这些选择，也不承诺每次导入都保留本地状态的每一个方面。
+
+<a href={sitePath('/zh-cn/examples/#updates')}>双版本示例</a>提供两个包，可以先尝试一次小而可检查的更新，再设计自己的发布流程。

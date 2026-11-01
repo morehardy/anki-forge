@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "scope": "author-mechanical-translation-checks",
+  "locale": "es",
+  "author": "/root/spanish_docs_onboarding",
+  "status": "mechanical-checks-passed",
+  "independentAiApproval": false,
+  "checksActuallyExecuted": [
+    "sectionMapping for all11 explicit es documents against current semantic contracts",
+    "Exact ordered fenced content comparison for all8 English Markdown sources",
+    "Each displayed source directive matched complete repository source bytes",
+    "MDX Rust quickstart shell fences compared byte for byte",
+    "Internal prose links inspected: canonical site paths used for automatic localization; no hardcoded English production links or broken source-relative paths found"
+  ],
+  "limitations": [
+    "No site build, independent linguistic/technical approval, browser acceptance or SDK rerun performed.",
+    "The English AI prompt inside its protected fenced input remains verbatim, as required by the protected-code contract."
+  ],
+  "documents": [
+    {
+      "id": "docs",
+      "source": "website/src/content/docs/docs/index.mdx",
+      "sourceSha256": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c",
+      "target": "docs/es/index.md",
+      "targetSha256": "ac237d7de9b07b2d8517690a35763d341a57f5e331a6c7a5ff7636655f3f13f7",
+      "semanticSectionMarkers": [
+        "start-with-your-language",
+        "understand-the-pieces",
+        "build-your-next-feature",
+        "find-answers-and-contribute"
+      ],
+      "fenceCount": 0,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    },
+    {
+      "id": "languages",
+      "source": "website/src/content/docs/docs/languages.mdx",
+      "sourceSha256": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24",
+      "target": "docs/es/languages.md",
+      "targetSha256": "194b998bd39e93ba3f49c0a663b0c0f7c1b7b1cff2e90c7d01f1e86bfa21e200",
+      "semanticSectionMarkers": [
+        "next-tasks"
+      ],
+      "fenceCount": 0,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    },
+    {
+      "id": "quickstart",
+      "source": "website/src/content/docs/docs/quickstart.mdx",
+      "sourceSha256": "678a5696fb13166a8f5a3232d737efac8da5169bdbb55c148f9807d235a02cd6",
+      "target": "docs/es/quickstart.md",
+      "targetSha256": "cbd9b899cfe7dba028def67878e19c53e0a9e6497c29b9fdd2204cd4798f3a20",
+      "semanticSectionMarkers": [
+        "install",
+        "export-your-first-deck",
+        "continue"
+      ],
+      "fenceCount": 3,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    },
+    {
+      "id": "json-to-anki",
+      "source": "docs/json-to-anki.md",
+      "sourceSha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "target": "docs/es/json-to-anki.md",
+      "targetSha256": "2294cd3ed93fe33b3d176dc92b89f84f97ea87788d923b0580e6947494382a17",
+      "semanticSectionMarkers": [
+        "shared-inputs",
+        "rust",
+        "python",
+        "node",
+        "check-and-import-the-result"
+      ],
+      "fenceCount": 10,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    },
+    {
+      "id": "csv-to-anki",
+      "source": "docs/csv-to-anki.md",
+      "sourceSha256": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486",
+      "target": "docs/es/csv-to-anki.md",
+      "targetSha256": "b913be7c1051dcd98d8b0f611b7b02745898c57212393ee457b581188aa778c3",
+      "semanticSectionMarkers": [
+        "prepare-csv",
+        "install",
+        "convert",
+        "verify-and-extend"
+      ],
+      "fenceCount": 5,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    },
+    {
+      "id": "ai-anki-cards",
+      "source": "docs/ai-anki-cards.md",
+      "sourceSha256": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5",
+      "target": "docs/es/ai-anki-cards.md",
+      "targetSha256": "bed020d6ce2408fdeede8d90ab7f6cc0f875cbdb1e8d3c849a07ba8a4d4b71f1",
+      "semanticSectionMarkers": [
+        "choose-input",
+        "draft-cards",
+        "export-apkg",
+        "check-result"
+      ],
+      "fenceCount": 2,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    },
+    {
+      "id": "anki-forge-vs-genanki",
+      "source": "docs/anki-forge-vs-genanki.md",
+      "sourceSha256": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+      "target": "docs/es/anki-forge-vs-genanki.md",
+      "targetSha256": "04cc37e1506ddd0f5ed2616d9d70ea05ab07363c50d165980d6fdae068f4bf14",
+      "semanticSectionMarkers": [
+        "the-same-small-task",
+        "existing-genanki-decks",
+        "historical-performance-evidence"
+      ],
+      "fenceCount": 0,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    },
+    {
+      "id": "development",
+      "source": "docs/source-builds.md",
+      "sourceSha256": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac",
+      "target": "docs/es/development.md",
+      "targetSha256": "722d645a9ecac60caddb18c2e097e82b3190f4e7480a615ac5804e111f56a3d2",
+      "semanticSectionMarkers": [
+        "source-builds"
+      ],
+      "fenceCount": 3,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    },
+    {
+      "id": "installation",
+      "source": "docs/installation.md",
+      "sourceSha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "target": "docs/es/installation.md",
+      "targetSha256": "e0328719cfbb1d168163f91d8beb33d8be70a77ed8ae2a1f9ff058fa53060ad0",
+      "semanticSectionMarkers": [
+        "cargo-dependencies",
+        "choose-the-next-guide"
+      ],
+      "fenceCount": 2,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    },
+    {
+      "id": "node-quickstart",
+      "source": "docs/node/quick-start.md",
+      "sourceSha256": "1538750a51685097fd4dad38f8612b4bcb717ca44bbac76ccadaca30ce72a3e8",
+      "target": "docs/es/node-quickstart.md",
+      "targetSha256": "d3bbb1b778ac54b0a6ad0f29b8ec715c3b183f33562f74aeaf505783877cdf70",
+      "semanticSectionMarkers": [
+        "export-a-deck",
+        "typescript-and-next-tasks"
+      ],
+      "fenceCount": 3,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    },
+    {
+      "id": "python-quickstart",
+      "source": "docs/python/quick-start.md",
+      "sourceSha256": "482dc6d2277c0ff5d8574dc0a88dd1cb301dcfff733ae6a97f1367a7d99c7f55",
+      "target": "docs/es/python-quickstart.md",
+      "targetSha256": "e933a64e8b9e6f274dc4b45fb0a9bf5fc010a237fdb274719c6b5a1ff49399d9",
+      "semanticSectionMarkers": [
+        "export-a-deck",
+        "continue"
+      ],
+      "fenceCount": 3,
+      "fencedInputs": "English Markdown code blocks copied byte for byte; MDX quickstart shell blocks separately compared and complete Rust program matched actual source directive."
+    }
+  ]
+}

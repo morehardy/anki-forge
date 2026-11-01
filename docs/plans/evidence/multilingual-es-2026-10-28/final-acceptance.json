@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-release-candidate",
+  "status": "passed",
+  "sourceCommit": "a9b3fa044f1ae166ecd8007d68f3b864230ddc00",
+  "inputSha256": "73cf2748ad2da0e9a4d2e304cec702b89d9137677f24cf1f9f41d1c133519a16",
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es"
+  ],
+  "topicsPerLocale": 34,
+  "normalHtml": 102,
+  "separate404": 1,
+  "markdown": 93,
+  "llms": 3,
+  "spanishAuthoredLongforms": 31,
+  "spanishUiMessages": 210,
+  "spanishFrameworkOverrides": 11,
+  "sourceTechnicalReviews": 102,
+  "sourceLinguisticReviews": 102,
+  "sourceScoreRange": [
+    4,
+    5
+  ],
+  "unitTests": {
+    "passed": 145,
+    "failed": 0,
+    "skipped": 0
+  },
+  "astro": {
+    "files": 122,
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "actualRebuildScopeFilesPerConfiguration": 199,
+  "browserTestsPerConfiguration": 23,
+  "actualUsageTasks": 36,
+  "actualProgramClipboardComparisons": 36,
+  "actualInputDownloads": 24,
+  "independentAiMachineReadTasks": 24,
+  "actualMachineHttpResponses": 30,
+  "search": {
+    "en": {
+      "core": 12,
+      "positive": 25,
+      "negative": 5
+    },
+    "zh-CN": {
+      "core": 12,
+      "positive": 24,
+      "negative": 5
+    },
+    "es": {
+      "core": 12,
+      "positive": 25,
+      "negative": 5
+    }
+  },
+  "queryProvenance": "AI-seeded acceptance cases; Spanish task inventory was visible to query author, blind vocabulary author did not read queries/results. All30 Spanish queries and expected sets stayed fixed throughout retrieval changes. Not observed demand or volume.",
+  "executionReuse": "19/20 original input files unchanged; localization-only control JSON differs but publicVersion/languages/sitePromptUrl are equal. 185 SDK files,5 English installation docs and3 executed basic-program copies match. Actual unchanged SDK executions are explicitly reused, not claimed as fresh runs.",
+  "knownMinorLimitations": [
+    "Existing zh-CN-variant-03 missed image-occlusion in top3, within precommitted positive>=23/25 gate; English/Chinese23minor expression observations remain.",
+    "An independent metadata-only holdout retained an existing update-article/updates ordering miss; originalexpectedsets were not changed."
+  ],
+  "engineering": {
+    "root": {
+      "path": "docs/plans/evidence/multilingual-es-2026-10-28/engineering-final/root/release-evidence.json",
+      "sha256": "7c199b660827c0ea98e0b6bd9f389a13aa462c41782ca347a3e928c8123f0d4d",
+      "status": "passed",
+      "manifestSha256": "0752b3b828c357a967f04386785b938f1e610e987909a5a248860dbbc723a51f",
+      "artifactSha256": "0f86d0c881fa469f372fbfc0be8f790d98bafa64362e39dc540e7a26e1d3eb7d",
+      "checks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "rebuildScopeFiles": 199
+    },
+    "prefix": {
+      "path": "docs/plans/evidence/multilingual-es-2026-10-28/engineering-final/prefix/release-evidence.json",
+      "sha256": "0fa616fdf38c9cf14ac82bc701161b6afdc90d183b215cae158994323353e239",
+      "status": "passed",
+      "manifestSha256": "902fa8a830df7a869a09cceb2a69efd3e976bafe6158ebec35544282e325dad2",
+      "artifactSha256": "54635dafd2df9a8604908adeea632e563812b5d0b102e1e0e8ae0bda9f0b6c23",
+      "checks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "rebuildScopeFiles": 199
+    }
+  },
+  "notClaimed": [
+    "GitHub CI execution",
+    "push or production deployment",
+    "production MIME/indexing/traffic/ranking or external AI platform recommendation uplift",
+    "new Anki GUI import execution",
+    "fresh repeated SDK execution for every language"
+  ]
+}

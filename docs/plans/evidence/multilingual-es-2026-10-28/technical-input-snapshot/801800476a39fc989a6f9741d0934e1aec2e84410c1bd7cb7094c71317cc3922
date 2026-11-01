@@ -1,0 +1,213 @@
+type SearchDocument = {
+  id: string; type: string; url: string; title: string; description: string;
+  terms: string[]; excerpt?: string; score?: number;
+};
+type PagefindData = {
+  url: string; excerpt?: string; meta?: { title?: string };
+  sub_results?: { url: string; title?: string; excerpt?: string }[];
+};
+type PagefindInstance = {
+  init(): Promise<void>;
+  search(query: string): Promise<{ results: { data(): Promise<PagefindData> }[] }>;
+  destroy(): Promise<void>;
+};
+type SearchIndex = {
+  schemaVersion: number; locale: string; documents: SearchDocument[]; concepts: Record<string, unknown>;
+};
+type SearchResources = {
+  index: SearchIndex; pagefind: PagefindInstance;
+  rank(query: string, documents: SearchDocument[], locale: string, options: { pagefindResults: PagefindData[]; concepts: Record<string, unknown> }): SearchDocument[];
+};
+
+function initializeSearch(search: HTMLElement) {
+  if (search.dataset.initialized) return;
+  search.dataset.initialized = 'true';
+  const openButton = search.querySelector<HTMLButtonElement>('[data-open-modal]')!;
+  const closeButton = search.querySelector<HTMLButtonElement>('[data-close-modal]')!;
+  const dialog = search.querySelector<HTMLDialogElement>('dialog')!;
+  const frame = search.querySelector<HTMLElement>('.dialog-frame')!;
+  const input = search.querySelector<HTMLInputElement>('.pagefind-ui__search-input')!;
+  const clearButton = search.querySelector<HTMLButtonElement>('.pagefind-ui__search-clear')!;
+  const results = search.querySelector<HTMLUListElement>('.pagefind-ui__results')!;
+  const message = search.querySelector<HTMLElement>('.pagefind-ui__message')!;
+  const feedback = search.querySelector<HTMLElement>('[data-search-feedback]')!;
+  const labels: Record<string, string> = JSON.parse(search.dataset.translations || '{}');
+  const options = JSON.parse(search.dataset.searchOptions || '{}');
+  const locale = search.dataset.locale!;
+  let resources: Promise<SearchResources> | undefined;
+  let loadAttempt = 0;
+  let request = 0;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let returnFocus: HTMLElement | null = null;
+
+  const translated = (key: string, query = '', count = 0) => (labels[key] || '').replaceAll('[SEARCH_TERM]', () => query).replaceAll('[COUNT]', () => String(count));
+  const localUrl = (value: string) => {
+    try {
+      const url = new URL(value, location.origin);
+      return url.origin === location.origin && ['http:', 'https:'].includes(url.protocol) ? url : null;
+    } catch { return null; }
+  };
+  const pageKey = (value: string) => localUrl(value)?.pathname;
+
+  async function loadResources(): Promise<SearchResources> {
+    if (resources) return resources;
+    const attempt = loadAttempt++;
+    const moduleUrl = new URL(search.dataset.pagefind!, location.origin);
+    const engineUrl = new URL(search.dataset.searchEngine!, location.origin);
+    if (attempt) {
+      moduleUrl.searchParams.set('search_retry', String(attempt));
+      engineUrl.searchParams.set('search_retry', String(attempt));
+    }
+    resources = (async () => {
+      const [pagefindModule, engine, response] = await Promise.all([
+        import(/* @vite-ignore */ moduleUrl.href),
+        import(/* @vite-ignore */ engineUrl.href),
+        fetch(search.dataset.searchIndex!),
+      ]);
+      if (!response.ok) throw new Error('Search index unavailable');
+      const index: SearchIndex = await response.json();
+      if (index.schemaVersion !== 1 || index.locale !== locale || !Array.isArray(index.documents) || typeof engine.rankSearchDocuments !== 'function') throw new Error('Invalid search index');
+      const basePath = new URL('./', moduleUrl).pathname;
+      const baseUrl = basePath.replace(/pagefind\/$/, '');
+      const pagefind: PagefindInstance = pagefindModule.createInstance({ ...options, basePath, baseUrl });
+      try { await pagefind.init(); }
+      catch (error) { await pagefind.destroy(); throw error; }
+      return { index, pagefind, rank: engine.rankSearchDocuments };
+    })().catch(error => { resources = undefined; throw error; });
+    return resources;
+  }
+
+  function renderDocuments(documents: SearchDocument[], pagefindResults: PagefindData[]) {
+    results.replaceChildren();
+    const fragment = document.createDocumentFragment();
+    for (const item of documents) {
+      const url = localUrl(item.url);
+      if (!url) continue;
+      const result = document.createElement('li');
+      result.className = 'pagefind-ui__result';
+      const heading = document.createElement('p');
+      heading.className = 'pagefind-ui__result-title';
+      const link = document.createElement('a');
+      link.className = 'pagefind-ui__result-link';
+      link.href = url.href;
+      link.textContent = item.title;
+      heading.append(link);
+      result.append(heading);
+      const excerpt = document.createElement('p');
+      excerpt.className = 'pagefind-ui__result-excerpt';
+      excerpt.textContent = item.excerpt || item.description;
+      result.append(excerpt);
+      const original = pagefindResults.find(entry => pageKey(entry.url) === url.pathname);
+      const seen = new Set<string>();
+      for (const sub of original?.sub_results || []) {
+        const target = localUrl(sub.url);
+        if (!target || target.pathname !== url.pathname || !target.hash || seen.has(target.href)) continue;
+        seen.add(target.href);
+        const nested = document.createElement('div');
+        nested.className = 'pagefind-ui__result-nested';
+        const section = document.createElement('a');
+        section.className = 'pagefind-ui__subresult-link';
+        section.href = target.href;
+        section.textContent = sub.title || item.title;
+        nested.append(section);
+        result.append(nested);
+      }
+      fragment.append(result);
+    }
+    results.append(fragment);
+  }
+
+  async function runSearch(query: string, token: number) {
+    try {
+      const loaded = await loadResources();
+      if (token !== request || !dialog.open) return;
+      const response = await loaded.pagefind.search(query);
+      const pagefindResults = await Promise.all(response.results.slice(0, 20).map(result => result.data()));
+      if (token !== request || !dialog.open || input.value.trim() !== query) return;
+      const ranked = loaded.rank(query, loaded.index.documents, loaded.index.locale, { pagefindResults, concepts: loaded.index.concepts });
+      renderDocuments(ranked, pagefindResults);
+      feedback.textContent = '';
+      message.textContent = translated(ranked.length ? ranked.length === 1 ? 'one_result' : 'many_results' : 'zero_results', query, ranked.length);
+    } catch {
+      if (token !== request || !dialog.open) return;
+      const failed = resources;
+      resources = undefined;
+      void failed?.then(loaded => loaded.pagefind.destroy()).catch(() => {});
+      results.replaceChildren();
+      message.textContent = '';
+      feedback.textContent = translated('error');
+    }
+  }
+
+  function searchInput() {
+    clearTimeout(timer);
+    const token = ++request;
+    const query = input.value.trim();
+    clearButton.hidden = !query;
+    results.replaceChildren();
+    if (!query) {
+      message.textContent = '';
+      feedback.textContent = '';
+      return;
+    }
+    message.textContent = translated('searching', query);
+    feedback.textContent = translated('loading');
+    timer = setTimeout(() => { void runSearch(query, token); }, 80);
+  }
+
+  async function openModal() {
+    if (dialog.open) return;
+    const focused = document.activeElement;
+    returnFocus = focused instanceof HTMLElement && focused !== document.body && focused !== document.documentElement && !dialog.contains(focused) ? focused : openButton;
+    dialog.showModal();
+    document.body.setAttribute('data-search-modal-open', '');
+    input.focus();
+    const token = ++request;
+    feedback.textContent = translated('loading');
+    try {
+      await loadResources();
+      if (!dialog.open || token !== request) return;
+      feedback.textContent = '';
+      if (input.value.trim()) searchInput();
+    } catch {
+      if (dialog.open && token === request) feedback.textContent = translated('error');
+    }
+  }
+
+  function closeModal() { if (dialog.open) dialog.close(); }
+  openButton.addEventListener('click', () => { void openModal(); });
+  closeButton.addEventListener('click', closeModal);
+  dialog.addEventListener('click', event => {
+    if (event.target instanceof Element && event.target.closest('a')) closeModal();
+    else if (event.target instanceof Node && !frame.contains(event.target)) closeModal();
+  });
+  dialog.addEventListener('close', () => {
+    request++;
+    clearTimeout(timer);
+    document.body.removeAttribute('data-search-modal-open');
+    (returnFocus?.isConnected ? returnFocus : openButton).focus();
+  });
+  window.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && dialog.open) {
+      // Search inputs otherwise consume Escape to clear their value.
+      event.preventDefault();
+      closeModal();
+      return;
+    }
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      if (dialog.open) closeModal(); else void openModal();
+    }
+  });
+  input.addEventListener('input', searchInput);
+  clearButton.addEventListener('click', () => { input.value = ''; searchInput(); input.focus(); });
+  search.querySelector('form')!.addEventListener('submit', event => { event.preventDefault(); searchInput(); });
+  if (/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+    const platformKey = openButton.querySelector('[data-platform-key]');
+    if (platformKey) platformKey.textContent = '⌘';
+    openButton.setAttribute('aria-keyshortcuts', 'Meta+K');
+  }
+  openButton.disabled = false;
+}
+
+for (const search of document.querySelectorAll<HTMLElement>('site-search')) initializeSearch(search);

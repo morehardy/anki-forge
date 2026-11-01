@@ -1,0 +1,72 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import HomeShowcase from './HomeShowcase.astro';
+import PerformanceEvidence from './PerformanceEvidence.astro';
+import ExampleWorkbench from './ExampleWorkbench.astro';
+import UpdateDemo from './UpdateDemo.astro';
+import Icon from './Icon.astro';
+import AiQuickstart from './AiQuickstart.astro';
+import InstallCommand from './InstallCommand.astro';
+import aiQuickstart from '../generated/ai-quickstart.json';
+import { sitePath } from '../lib/site';
+import '../styles/home.css';
+import { pagePath, nextTasks } from '../../site-model.mjs';
+import { createTranslator } from '../i18n/messages.mjs';
+interface Props { locale?: string }
+const { locale = 'en' } = Astro.props;
+const t = createTranslator(locale);
+const href = (id: string, section = '') => sitePath(pagePath(id, locale, section));
+
+---
+<SiteLayout locale={locale} title={t('home.title')} description={t('home.description')}>
+  <div class="container">
+    <section class="home-hero" data-module="hero" aria-labelledby="hero-title">
+      <div class="home-hero-copy">
+        <h1 id="hero-title">{t('home.hero1')}<br /><span>{t('home.hero2')}</span></h1>
+        <p>{t('home.intro')}</p>
+        <div class="hero-actions"><a class="button" href={href('languages')}>{t('home.first')} <Icon name="arrowRight" /></a><a class="text-link" href={href('json-to-anki')}>{t('home.json')} <Icon name="arrowRight" /></a></div>
+      </div>
+      <HomeShowcase locale={locale} />
+    </section>
+    <section class="home-install" data-module="install" aria-labelledby="install-heading">
+      <div><h2 id="install-heading">{t('home.choose')}</h2><p>{t('home.install', { version: aiQuickstart.publicVersion })}</p></div>
+      <div class="home-language-grid">
+        {(['rust', 'node', 'python'] as const).map(key => [key, aiQuickstart.languages[key]] as const).map(([key, language]) => (
+          <article>
+            <h3>{language.label}</h3>
+            <InstallCommand command={language.install} runtime={language.runtime} locale={locale} />
+            <a class="text-link" href={href(key === 'rust' ? 'quickstart' : `${key}-quickstart`)}>{t('home.buildWith', { language: language.label })} <Icon name="arrowRight" /></a>
+          </article>
+        ))}
+      </div>
+    </section>
+    <AiQuickstart locale={locale} />
+    <PerformanceEvidence locale={locale} />
+
+    <section class="home-examples" data-module="examples" aria-labelledby="examples-heading">
+      <div class="home-examples-heading"><h2 id="examples-heading">{t('home.try')}</h2><p>{t('home.tryDescription')}</p></div>
+      <ExampleWorkbench locale={locale} />
+      <div class="home-more-cards"><span>{t('home.further')}</span><a href={href('custom-notetypes')}>{t('home.templates')} <Icon name="arrowRight" /></a><a href={href('image-occlusion')}>{t('home.occlusion')} <Icon name="arrowRight" /></a><a href={href('media')}>{t('home.media')} <Icon name="arrowRight" /></a></div>
+    </section>
+
+    <section class="section identity-section" data-module="updates" aria-labelledby="identity-heading" data-reveal>
+      <div class="section-copy">
+        <h2 id="identity-heading">{t('home.evolve1')}<br />{t('home.evolve2')}</h2>
+        <p>{t('home.evolveDescription')}</p>
+        <a class="text-link" href={href('updates')}>{t('home.updates')} <Icon name="arrowRight" /></a>
+      </div>
+      <UpdateDemo locale={locale} />
+    </section>
+
+    <section class="features" data-module="features" aria-label={t('home.features')} data-reveal>
+      <div class="feature"><Icon name="scan" /><div><h3>{t('home.validateTitle')}</h3><p>{t('home.validateDescription')}</p><a class="text-link" href={href('rust-guide', 'projects-and-diagnostics')}>{t('home.validation')} <Icon name="arrowRight" /></a></div></div>
+      <div class="feature"><Icon name="palette" /><div><h3>{t('home.templateTitle')}</h3><p>{t('home.templateDescription')}</p><a class="text-link" href={href('templates')}>{t('home.templateLink')} <Icon name="arrowRight" /></a></div></div>
+    </section>
+
+    <section class="section" data-module="next" aria-labelledby="next-heading">
+      <span id="workflow-heading" data-section-alias="next-heading"></span>
+      <h2 id="next-heading">{t('home.nextTitle')}</h2><p>{t('home.nextDescription')}</p>
+      <div class="hero-actions">{nextTasks.map(task => <a class={task.primary ? 'button' : 'text-link'} href={href(task.pageId)}>{t(task.label)} <Icon name="arrowRight" /></a>)}</div>
+    </section>
+  </div>
+</SiteLayout>

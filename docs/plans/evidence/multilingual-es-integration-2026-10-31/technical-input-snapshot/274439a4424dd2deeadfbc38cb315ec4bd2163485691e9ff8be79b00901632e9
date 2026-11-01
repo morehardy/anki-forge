@@ -1,0 +1,47 @@
+---
+title: Generate Anki flashcards with Rust
+description: Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.
+---
+
+import CodeBlock from '../../../components/CodeBlock.astro';
+import { quickstartSource } from '../../../lib/examples';
+import { sitePath } from '../../../lib/site';
+
+Use Rust 1.92 or later. For another language, choose
+<a href={sitePath('/docs/languages/')}>Node / TypeScript or Python</a>.
+
+## Install
+
+```sh
+cargo new anki-deck
+cd anki-deck
+cargo add ankiforge@0.3.1
+```
+
+## Export your first deck
+
+Save this complete program as `src/main.rs`:
+
+<CodeBlock code={quickstartSource} />
+
+```sh
+cargo run
+```
+
+The program writes a persistent `spanish.apkg`. Open it in Anki, import it and
+study **hola → hello** in the **Spanish** deck. Exporting needs no Anki installation.
+
+The namespace `spanish` and stable key `es:hola` identify this note through later
+content changes. You can also <a href={sitePath('/generated/spanish.apkg')}>download the website's Basic example</a>.
+
+## Continue
+
+Follow the <a href={sitePath('/docs/json-to-anki/#rust')}>JSON to Anki recipe</a> for a complete media and update task.
+
+Add <a href={sitePath('/docs/media/')}>images and audio</a>,
+<a href={sitePath('/docs/custom-notetypes/')}>custom note types</a>, or
+<a href={sitePath('/docs/image-occlusion/')}>Image Occlusion</a>.
+Keep the original distribution APKG before
+<a href={sitePath('/docs/updates/')}>comparing and publishing an update</a>.
+Read the <a href={sitePath('/docs/rust-api/')}>Rust API</a> or
+<a href={sitePath('/docs/compatibility/')}>verified environments</a> for details.

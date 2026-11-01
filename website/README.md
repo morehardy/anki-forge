@@ -76,7 +76,7 @@ compatibility constraints. Record each question, the URLs actually read, the
 answer, and the independent technical review against the same manifest. Local reading is useful
 for development but does not replace this post-deployment check.
 
-## English and Chinese content
+## Published language content
 
 `site-model.mjs` owns stable topic IDs, routes, locale metadata, navigation order,
 document groups, authoritative sources and required capabilities. Each public page
@@ -84,12 +84,12 @@ type has one component; route wrappers only choose the language and content.
 All documentation uses native Starlight locales and Pagefind. Missing translations
 are build errors; English fallback cannot satisfy the translation contract.
 
-The model currently contains 32 topics in both languages. This is an inventory,
+The model currently contains 34 topics in English, Simplified Chinese and Spanish. This is an inventory,
 not a permanent count: source and artifact checks independently discover new,
-missing or unregistered content. Chinese documentation is authored in
-`../docs/zh-cn/`; `prepare:site` generates ignored Starlight files. Edit links point
+missing or unregistered content. Translated documentation is authored in
+`../docs/{zh-cn,es}/`; `prepare:site` generates ignored Starlight files. Edit links point
 to the authored source. Blog posts require a matching `translationKey`, `locale`,
-date and category in both language directories.
+date and category in every released language directory.
 
 Short UI messages, including clipboard failures, screen-reader feedback, social
 image text and search failures, live in `src/i18n/<locale>.json`. Starlight and

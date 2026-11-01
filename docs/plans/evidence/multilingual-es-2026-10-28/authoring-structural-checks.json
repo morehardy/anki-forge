@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "kind": "translation-author-structural-checks",
+  "locale": "es",
+  "author": "/root/spanish_docs_authoring",
+  "independentReview": false,
+  "status": "passed-structural-only",
+  "checks": [
+    "Every source and target fenced block is byte-identical, including fence language and shell/text/JSON bodies.",
+    "Every required semantic section is covered by an explicit marker and accepted by the real sectionMapping parser.",
+    "Every /docs/ prose link points to a registered topic. Actual localized render/browser/links and independent language/technical review remain coordinator work."
+  ],
+  "entries": [
+    {
+      "id": "concepts",
+      "source": "docs/concepts.md",
+      "sourceSha256": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279",
+      "target": "docs/es/concepts.md",
+      "targetSha256": "be7aeded92b0e32b8953b3356c0e92b3cfdbe5462a071e743bceacf1c74967cf",
+      "fencedBlocks": 0,
+      "fencedBlocksByteIdentical": true,
+      "headingCount": 5,
+      "semanticSections": {
+        "proyecto-y-nota": "project-and-note",
+        "modelos-campos-y-plantillas": "models-fields-and-templates",
+        "texto-y-html": "text-and-html",
+        "cómo-se-conservan-los-recursos-multimedia": "media-ownership",
+        "generación-y-actualización": "build-and-update"
+      },
+      "internalTargetsRegistered": true
+    },
+    {
+      "id": "cards",
+      "source": "docs/cards.md",
+      "sourceSha256": "ae6830f58bbb9560be689099ae5728a2f42573da0c201dc34621fc13435c6b0a",
+      "target": "docs/es/cards.md",
+      "targetSha256": "31d50b09b0abab3868292098b0853b8c4b30d604177511a9c01f0aaeb2ff4faa",
+      "fencedBlocks": 2,
+      "fencedBlocksByteIdentical": true,
+      "headingCount": 2,
+      "semanticSections": {
+        "escribe-las-notas": "author-the-notes",
+        "texto-campos-e-identidad-de-las-tarjetas": "text-fields-and-card-identity"
+      },
+      "internalTargetsRegistered": true
+    },
+    {
+      "id": "custom-notetypes",
+      "source": "docs/custom-notetypes.md",
+      "sourceSha256": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1",
+      "target": "docs/es/custom-notetypes.md",
+      "targetSha256": "8f23b6466b8e1b695ebdd3d3c27fdaed5e063876bf132d3da46bc7b7d4e5f6de",
+      "fencedBlocks": 1,
+      "fencedBlocksByteIdentical": true,
+      "headingCount": 3,
+      "semanticSections": {
+        "ejemplo-ejecutable": "executable-example",
+        "claves-y-nombres": "keys-and-names",
+        "validación-y-generación": "validation-and-generation"
+      },
+      "internalTargetsRegistered": true
+    },
+    {
+      "id": "media",
+      "source": "docs/media.md",
+      "sourceSha256": "e1144d2a2c90cb2905df6c6e00e06a7a59a99a6bebf6e226ff573d420a03756b",
+      "target": "docs/es/media.md",
+      "targetSha256": "7d3163d9a9fed7702c309dcb695f18e3a5ede35fdb80b8e060772cb6df901d7c",
+      "fencedBlocks": 4,
+      "fencedBlocksByteIdentical": true,
+      "headingCount": 6,
+      "semanticSections": {
+        "ejecuta-el-flujo-de-trabajo-multimedia": "execute-the-media-workflow",
+        "combina-contenido-y-recursos-explícitos": "compose-content-and-explicit-assets",
+        "nombres-tipos-mime-y-límites": "names-mime-and-budgets",
+        "uso-tipado-de-imágenes-y-sonidos": "typed-image-and-sound-usage",
+        "importación-de-recursos-multimedia-por-lotes": "batch-media-import",
+        "comportamiento-y-límites-de-los-lotes": "batch-behavior-and-budgets"
+      },
+      "internalTargetsRegistered": true
+    },
+    {
+      "id": "image-occlusion",
+      "source": "docs/image-occlusion.md",
+      "sourceSha256": "8584c7b31832078f1e03fd7287867cc5008c88a87e6340dca843d8ba33de9651",
+      "target": "docs/es/image-occlusion.md",
+      "targetSha256": "e03836337300741cde5ae757d08a49be9d8a322dd9b7f376e7b0bcd805aa58d3",
+      "fencedBlocks": 3,
+      "fencedBlocksByteIdentical": true,
+      "headingCount": 2,
+      "semanticSections": {
+        "ejecuta-el-ejemplo": "run-the-example",
+        "varias-máscaras-y-modos": "multiple-masks-and-modes"
+      },
+      "internalTargetsRegistered": true
+    },
+    {
+      "id": "templates",
+      "source": "docs/template-bundles.md",
+      "sourceSha256": "d049c66a6aedecea885c24bda2d5d0a6d0e65ec5558211217456a75b21032f53",
+      "target": "docs/es/templates.md",
+      "targetSha256": "2fdc635586c11437d820c298ae6ce77106baedd4eeed4d3c45a8c444df678a86",
+      "fencedBlocks": 5,
+      "fencedBlocksByteIdentical": true,
+      "headingCount": 4,
+      "semanticSections": {
+        "ejecuta-el-ejemplo-con-el-paquete-de-plantillas": "run-the-bundled-example",
+        "manifiesto-y-referencias-de-las-plantillas": "manifest-and-template-references",
+        "carga-y-reutiliza-un-modelo": "load-and-reuse-a-model",
+        "recursos-y-límites": "assets-and-budgets"
+      },
+      "internalTargetsRegistered": true
+    },
+    {
+      "id": "updates",
+      "source": "docs/updates.md",
+      "sourceSha256": "86de1d53b26e1780b31d622ad6700be1a36f7a52120cd053b4da32c4966696ef",
+      "target": "docs/es/updates.md",
+      "targetSha256": "0436b39ff9f8e40200c14a02d93ad250f1141483671540ad313b9b53b15d68d2",
+      "fencedBlocks": 5,
+      "fencedBlocksByteIdentical": true,
+      "headingCount": 5,
+      "semanticSections": {
+        "genera-dos-versiones-y-compáralas": "run-two-versions-and-compare",
+        "política-y-límites-de-inspección": "policy-and-inspection-limits",
+        "pruebas-e-identidad": "evidence-and-identity",
+        "importación-en-el-cliente-y-revisión-de-versiones": "client-import-behavior-and-release-review",
+        "genera-una-vez-revisa-y-publica": "build-once-review-then-publish"
+      },
+      "internalTargetsRegistered": true
+    },
+    {
+      "id": "build-guarantees",
+      "source": "docs/build-guarantees.md",
+      "sourceSha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+      "target": "docs/es/build-guarantees.md",
+      "targetSha256": "a9783373464d0dc6dab67c4fb6b9acb9a12a22dac3c6294ade252055e58e5211",
+      "fencedBlocks": 0,
+      "fencedBlocksByteIdentical": true,
+      "headingCount": 5,
+      "semanticSections": {
+        "archivos-temporales-y-persistentes": "temporary-and-persistent-artifacts",
+        "bases-de-actualización-y-publicación": "baselines-and-publication",
+        "límites-de-inspección": "inspection-limits",
+        "trabajo-concurrente": "concurrent-work",
+        "publicación-preparada": "prepared-publication-from-source"
+      },
+      "internalTargetsRegistered": true
+    },
+    {
+      "id": "troubleshooting",
+      "source": "docs/troubleshooting.md",
+      "sourceSha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699",
+      "target": "docs/es/troubleshooting.md",
+      "targetSha256": "3096c6a6e87d8ac623b26ccba13382e7ddd5087bab79840e7151b44b9cc351a7",
+      "fencedBlocks": 0,
+      "fencedBlocksByteIdentical": true,
+      "headingCount": 4,
+      "semanticSections": {
+        "instalación": "installation",
+        "modelos-y-notas": "models-and-notes",
+        "recursos-multimedia-y-plantillas": "media-and-templates",
+        "actualizaciones-y-archivos-de-salida": "updates-and-outputs"
+      },
+      "internalTargetsRegistered": true
+    },
+    {
+      "id": "compatibility",
+      "source": "docs/compatibility.md",
+      "sourceSha256": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c",
+      "target": "docs/es/compatibility.md",
+      "targetSha256": "b317fb1db494e0c041d18b2b9e966b0ea265be2c5bed59ae1821a576fc397f5a",
+      "fencedBlocks": 0,
+      "fencedBlocksByteIdentical": true,
+      "headingCount": 2,
+      "semanticSections": {
+        "paquetes-y-entornos-verificados": "packages-and-verified-environments",
+        "importación-y-reproducción-en-anki": "anki-import-and-playback"
+      },
+      "internalTargetsRegistered": true
+    }
+  ]
+}

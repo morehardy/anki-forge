@@ -1,0 +1,1598 @@
+{
+  "schemaVersion": 1,
+  "locale": "es",
+  "scope": "Vocabulary draft derived from the 31 Spanish docs/articles, never a quality or release approval.",
+  "unchangedEngineSha256": "22f649c4b5d6dda48541cf91c7d201206dd2210a9bd37101d30e16d36461c1c2",
+  "method": {
+    "sources": [
+      "docs/es/*.md",
+      "website/src/content/blog/es/*.mdx",
+      "website/src/lib/search.mjs",
+      "website/search-concepts.json",
+      "website/search-terms.json schema and existing page IDs"
+    ],
+    "excluded": [
+      "all search query files",
+      "all query results",
+      "acceptance expectations",
+      "runtime ranking experiments"
+    ],
+    "phrasePolicy": "Short topical terms, literal API identifiers and ordinary semantic aliases. No full-query to page-ID table.",
+    "accentPolicy": "Engine NFKC/NFD normalization removes accents; aliases retain natural Spanish spelling, without redundant unaccented copies.",
+    "morphologyPolicy": "Spanish has no stemmer in the unchanged engine. Common singular/plural and noun/infinitive/imperative variants are explicit concept data.",
+    "normalPages": "home/examples/blog-list receive no extra search terms; their real title/description/pageTitle remain the source of navigation retrieval."
+  },
+  "pages": [
+    {
+      "pageId": "docs",
+      "source": "docs/es/index.md",
+      "sourceSha256": "ac237d7de9b07b2d8517690a35763d341a57f5e331a6c7a5ff7636655f3f13f7",
+      "termCount": 12,
+      "terms": [
+        "documentación de Anki Forge",
+        "guía de creación de mazos",
+        "generación de APKG",
+        "contenido de estudio estructurado",
+        "publicación periódica de mazos",
+        "notas y plantillas",
+        "campos y tarjetas",
+        "recursos multimedia",
+        "biblioteca de código abierto",
+        "navegación de las guías",
+        "Rust Python y Node.js",
+        "flujo de creación y distribución"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "Anki Forge convierte notas, plantillas y recursos multimedia en archivos `.apkg` de Anki."
+        },
+        {
+          "line": 19,
+          "text": "Una nota contiene campos; un tipo de nota y sus plantillas convierten esos campos en tarjetas."
+        },
+        {
+          "line": 19,
+          "text": "Los mazos agrupan las tarjetas resultantes en Anki."
+        }
+      ],
+      "rationale": "Vocabulario de orientación y alcance del conjunto de guías. Los nombres de funciones concretas se reservan a sus páginas; esta página describe el flujo y las piezas generales."
+    },
+    {
+      "pageId": "languages",
+      "source": "docs/es/languages.md",
+      "sourceSha256": "194b998bd39e93ba3f49c0a663b0c0f7c1b7b1cff2e90c7d01f1e86bfa21e200",
+      "termCount": 12,
+      "terms": [
+        "elegir lenguaje de programación",
+        "elección de SDK",
+        "Rust Node TypeScript Python",
+        "paquetes publicados",
+        "crate de Rust",
+        "paquete npm",
+        "wheel de CPython",
+        "primer mazo por lenguaje",
+        "requisitos del entorno de ejecución",
+        "exportar APKG sin Anki",
+        "bindings de lenguaje",
+        "instalación desde PyPI"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "Usa Rust, Node / TypeScript o Python para generar mazos de Anki a partir de tus datos."
+        },
+        {
+          "line": 1,
+          "text": "Los tres pueden exportar un archivo persistente `spanish.apkg` sin instalar Anki."
+        },
+        {
+          "line": 9,
+          "text": "Python utiliza un wheel nativo para un intérprete CPython estándar;"
+        }
+      ],
+      "rationale": "Selección entre los tres paquetes públicos y sus requisitos. «Bindings» es un alias técnico habitual de las interfaces de lenguaje; no implica soporte para otros intérpretes."
+    },
+    {
+      "pageId": "quickstart",
+      "source": "docs/es/quickstart.md",
+      "sourceSha256": "cbd9b899cfe7dba028def67878e19c53e0a9e6497c29b9fdd2204cd4798f3a20",
+      "termCount": 12,
+      "terms": [
+        "inicio rápido con Rust",
+        "primer mazo de Anki con Rust",
+        "primeras tarjetas en Rust",
+        "tutorial inicial de Rust",
+        "cargo new anki-deck",
+        "cargo add ankiforge",
+        "cargo run",
+        "src/main.rs",
+        "exportar APKG con Rust",
+        "archivo persistente spanish.apkg",
+        "clave estable es:hola",
+        "espacio de nombres spanish"
+      ],
+      "excerpts": [
+        {
+          "line": 13,
+          "text": "## Exporta tu primer mazo"
+        },
+        {
+          "line": 15,
+          "text": "Guarda este programa completo como `src/main.rs`:"
+        },
+        {
+          "line": 35,
+          "text": "El programa escribe el archivo persistente `spanish.apkg`."
+        }
+      ],
+      "rationale": "Inicio ejecutable del paquete de Rust. Las claves y el archivo español proceden del ejemplo real, sin trasladar aquí la API avanzada."
+    },
+    {
+      "pageId": "installation",
+      "source": "docs/es/installation.md",
+      "sourceSha256": "dc03cf4b3633c162b880edd08188dee868dbb1919537df6543c5a0d8eb8e3c3f",
+      "termCount": 12,
+      "terms": [
+        "instalar Anki Forge en Rust",
+        "integración en una aplicación Cargo",
+        "crate publicado ankiforge",
+        "cargo add ankiforge",
+        "dependencia del crate",
+        "versión mínima de Rust",
+        "enlazador de Rust",
+        "herramientas de compilación",
+        "features predeterminadas vacías",
+        "dependencia serde derive",
+        "dependencia serde_json",
+        "exportación sin instalar Anki"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Instala el crate publicado en tu aplicación Cargo existente:"
+        },
+        {
+          "line": 14,
+          "text": "No hay características de Cargo activadas de forma predeterminada;"
+        },
+        {
+          "line": 18,
+          "text": "Para leer JSON, añade explícitamente el análisis en tu aplicación:"
+        }
+      ],
+      "rationale": "Integración del crate en un proyecto existente, enlazado y dependencias de análisis. La distinción con el inicio rápido y con la compilación desde el repositorio se mantiene explícita."
+    },
+    {
+      "pageId": "development",
+      "source": "docs/es/development.md",
+      "sourceSha256": "722d645a9ecac60caddb18c2e097e82b3190f4e7480a615ac5804e111f56a3d2",
+      "termCount": 13,
+      "terms": [
+        "compilar SDK desde el código fuente",
+        "desarrollo del repositorio",
+        "repositorio descargado",
+        "complemento nativo de Node",
+        "npm run pack:local",
+        "paquete de interfaz y paquete nativo",
+        "instalación npm sin conexión",
+        "archivos tar locales",
+        "extensión nativa con Maturin",
+        "maturin develop",
+        "dependencia path de Cargo",
+        "cadena de herramientas fijada",
+        "versiones de interfaz y binario nativo"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Usa esta guía para desarrollar en el repositorio y probar cambios aún no publicados."
+        },
+        {
+          "line": 19,
+          "text": "Compila el complemento nativo de Node desde esta copia del repositorio:"
+        },
+        {
+          "line": 37,
+          "text": "No mezcles las capas de interfaz del código fuente con binarios nativos de versiones anteriores del registro."
+        }
+      ],
+      "rationale": "Términos de construcción local de los bindings y separación entre paquetes publicados y compilaciones fuente. No se anuncia una ruta de instalación pública alternativa."
+    },
+    {
+      "pageId": "rust-guide",
+      "source": "docs/es/rust-guide.md",
+      "sourceSha256": "b222d50298d64c963810deefae73386a16f8920826d6c34ffa52920070e705b4",
+      "termCount": 14,
+      "terms": [
+        "creación de contenido con Rust",
+        "ciclo de vida de Project",
+        "adición atómica de notas",
+        "modelos inmutables compartidos",
+        "claves estables de origen",
+        "errores estructurados de Rust",
+        "AddError::context",
+        "AddTarget y AddDetail",
+        "Content::sequence",
+        "propiedad del archivo temporal",
+        "actualizar con update_from",
+        "ankiforge-project-v2",
+        "categorías MIME al añadir notas",
+        "BuildOutput y BuildReport"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Un `Project` describe una publicación."
+        },
+        {
+          "line": 24,
+          "text": "`Project::add` comprueba de forma atómica la clave de la nota, las referencias a campos, los campos obligatorios, el mazo, las etiquetas y los conflictos entre dependencias."
+        },
+        {
+          "line": 62,
+          "text": "Consulta las claves de nota y modelo en `AddError::context()`"
+        }
+      ],
+      "rationale": "Guía del modelo de programación de Rust: proyecto, valores que conservan sus datos, adición atómica, errores y vida del artefacto. Los nombres técnicos son entradas literales del texto."
+    },
+    {
+      "pageId": "api",
+      "source": "docs/es/api.md",
+      "sourceSha256": "b5a1917ba788bc8ce4f3abfca1366a75fb232ffffcf26582223affbb4993f595",
+      "termCount": 11,
+      "terms": [
+        "resumen de la API pública",
+        "referencia de interfaces SDK",
+        "API Rust Python Node.js",
+        "crear notas y modelos",
+        "generar APKG por código",
+        "API de recursos multimedia",
+        "API de diagnósticos",
+        "comparar y publicar actualizaciones",
+        "biblioteca de código abierto",
+        "navegación de la referencia",
+        "identidad estable de las notas"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Resumen de la API pública"
+        },
+        {
+          "line": 3,
+          "text": "con un núcleo en Rust e interfaces para Rust, Python y Node.js."
+        },
+        {
+          "line": 3,
+          "text": "Utiliza el paquete público `ankiforge` para crear notas, empaquetar recursos multimedia y revisar las actualizaciones"
+        }
+      ],
+      "rationale": "Directorio de operaciones y referencias de los tres SDK. Evita atribuir al resumen una firma o un comportamiento específico de un binding."
+    },
+    {
+      "pageId": "rust-api",
+      "source": "docs/es/rust-api.md",
+      "sourceSha256": "b4ecb8204b1d85c594863d976e7603283d3e935db197d5c5283e6d3ff4b08507",
+      "termCount": 16,
+      "terms": [
+        "referencia de la API de Rust",
+        "módulos públicos de dominio",
+        "Project::new y Project::add",
+        "FieldKey y TemplateKey",
+        "BuildOptions::temporary",
+        "InspectLimits",
+        "BuildOutput::artifact",
+        "BuildReport::snapshot",
+        "PathSnapshot::into_path_buf",
+        "std::error::Error",
+        "AddError::context",
+        "UpdatePolicy::fail_on",
+        "preparar revisar y publicar",
+        "Project::prepare_publication",
+        "rutas nativas sin pérdida",
+        "Content::text y Content::html"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Los módulos públicos de dominio son `note`, `schema`, `media`, `build`, `update` y `diagnostics`."
+        },
+        {
+          "line": 22,
+          "text": "`schema::FieldKey` y `TemplateKey` son tipos distintos."
+        },
+        {
+          "line": 56,
+          "text": "`BuildOutput::artifact()` devuelve una referencia a `build::ApkgArtifact`"
+        }
+      ],
+      "rationale": "Referencia de firmas, tipos y contratos de Rust. Se incluyen identificadores reales de inspección, informes, rutas y preparación; no se traducen los símbolos de la API."
+    },
+    {
+      "pageId": "node-quickstart",
+      "source": "docs/es/node-quickstart.md",
+      "sourceSha256": "d3bbb1b778ac54b0a6ad0f29b8ec715c3b183f33562f74aeaf505783877cdf70",
+      "termCount": 12,
+      "terms": [
+        "inicio rápido con Node.js",
+        "primer mazo con JavaScript",
+        "empezar con TypeScript",
+        "generar tarjetas con Node",
+        "npm install ankiforge",
+        "dependencia nativa opcional",
+        "main.mjs",
+        "node main.mjs",
+        "módulos ESM",
+        "CommonJS require",
+        "primer APKG persistente",
+        "cerrar el objeto del artefacto"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Genera un APKG de Anki con Node.js"
+        },
+        {
+          "line": 11,
+          "text": "y la dependencia nativa opcional correspondiente."
+        },
+        {
+          "line": 41,
+          "text": "Usa `.mjs` para ESM o `require('ankiforge')` para CommonJS."
+        }
+      ],
+      "rationale": "Entrada de instalación y primer programa de Node. TypeScript figura como continuación real y las alternativas ESM/CJS se nombran en la guía, sin confundirla con la referencia de métodos."
+    },
+    {
+      "pageId": "node-api",
+      "source": "docs/es/node-api.md",
+      "sourceSha256": "d9c8e1e5141ab411cead74a2167694b7d94d13405c13c55f4ab8cfb674ed5d13",
+      "termCount": 17,
+      "terms": [
+        "referencia de la API Node.js",
+        "JavaScript SDK",
+        "declaraciones de tipos TypeScript",
+        "tsconfig.json NodeNext",
+        "npx tsc",
+        "generación y comparación asíncronas",
+        "Promise y workers",
+        "instantáneas inmutables de Project",
+        "Uint8Array multimedia",
+        "NoteType.fromBundle",
+        "BuildOptions.updateFrom",
+        "preparePublication",
+        "PreparedPublicationStateError",
+        "artifact.persistTo",
+        "informes camelCase e instantáneas snake_case",
+        "causes y sourceDetails",
+        "rutas PathSnapshot"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# API de Node y TypeScript"
+        },
+        {
+          "line": 92,
+          "text": "La generación y la comparación se ejecutan de forma asíncrona sobre una instantánea del proyecto"
+        },
+        {
+          "line": 75,
+          "text": "Los nombres de los campos de las instantáneas coinciden con el JSON de Rust"
+        }
+      ],
+      "rationale": "Referencia del binding Node: tipado, trabajo asíncrono, modelos inmutables y propiedad de artefactos. Las grafías camelCase, snake_case y los símbolos proceden de las tablas y ejemplos."
+    },
+    {
+      "pageId": "python-quickstart",
+      "source": "docs/es/python-quickstart.md",
+      "sourceSha256": "e933a64e8b9e6f274dc4b45fb0a9bf5fc010a237fdb274719c6b5a1ff49399d9",
+      "termCount": 12,
+      "terms": [
+        "inicio rápido con Python",
+        "primer mazo de Anki en Python",
+        "script de tarjetas Python",
+        "pip install ankiforge",
+        "python -m venv",
+        "entorno virtual",
+        "Activate.ps1 en Windows",
+        "wheel de CPython",
+        "main.py",
+        "python main.py",
+        "from ankiforge import",
+        "primer APKG persistente"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Genera un APKG de Anki con Python"
+        },
+        {
+          "line": 3,
+          "text": "Crea y activa un entorno virtual e instala el"
+        },
+        {
+          "line": 16,
+          "text": "Guarda lo siguiente como `main.py`:"
+        }
+      ],
+      "rationale": "Tarea inicial de instalación, entorno virtual y exportación de Python. Los comandos, nombre de fichero y wheel están respaldados por el ejemplo ejecutable y sus requisitos."
+    },
+    {
+      "pageId": "python-api",
+      "source": "docs/es/python-api.md",
+      "sourceSha256": "a8d45ed551b810ebf0d55019ffd9bad8a6345c6d63a93b90bf9039f018b8ee47",
+      "termCount": 16,
+      "terms": [
+        "referencia de la API Python",
+        "firmas públicas py.typed",
+        "valores inmutables de notas",
+        "NoteType.builder",
+        "Content.sequence",
+        "Media.bytes",
+        "MediaLimits",
+        "max_identity_bytes",
+        "ApkgArtifact y gestor de contexto",
+        "copy.copy del artefacto",
+        "liberar el GIL",
+        "BINDING.PROJECT_BUSY",
+        "BINDING.FORKED_OBJECT",
+        "project.prepare_publication",
+        "PreparedPublicationStateError",
+        "excepciones nativas encadenadas"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Incluye `py.typed` y firmas públicas verificadas."
+        },
+        {
+          "line": 58,
+          "text": "Copiarlo con `copy.copy` conserva otro propietario; un gestor de contexto libera ese propietario al salir."
+        },
+        {
+          "line": 67,
+          "text": "Las operaciones nativas de Project liberan el GIL y rechazan el uso simultáneo del mismo objeto"
+        }
+      ],
+      "rationale": "Referencia del binding Python: tipos, ownership mediante gestores de contexto, concurrencia, fork y publicación preparada. Se conserva la terminología de Python y sus errores públicos."
+    },
+    {
+      "pageId": "python-diagnostics",
+      "source": "docs/es/python-diagnostics.md",
+      "sourceSha256": "8f1456b53eed097da5869b1c45bd9c02e2d9857b9a1581d2aaf261d97ff3b879",
+      "termCount": 14,
+      "terms": [
+        "diagnósticos de Python",
+        "política de actualización en Python",
+        "BuildError.snapshot",
+        "CompareError.report",
+        "source_details",
+        "causes y __cause__",
+        "details limit_exceeded",
+        "comparison.allows_publication",
+        "RISK.NOTE_REMOVED",
+        "PersistError y datos de publicación",
+        "rutas nativas surrogateescape",
+        "BINDING.EXTENSION_UNAVAILABLE",
+        "BINDING.VERSION_MISMATCH",
+        "límites de inspección Python"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Diagnósticos de Python y política de actualización"
+        },
+        {
+          "line": 35,
+          "text": "Comprueba `comparison.allows_publication` para conocer la decisión de la política."
+        },
+        {
+          "line": 60,
+          "text": "los datos del recurso, el límite y el valor observado se conservan en `details['limit_exceeded']`"
+        }
+      ],
+      "rationale": "Diagnóstico estructurado y política de actualización del binding Python, con sus campos y clases concretas. No se presenta una excepción de dominio como prueba automática de que no se publicó nada."
+    },
+    {
+      "pageId": "python-migration",
+      "source": "docs/es/python-migration.md",
+      "sourceSha256": "638eef94d9c8ea3bf26baad4172603ebe1f5b7ef45df7534f2c821815a429283",
+      "termCount": 13,
+      "terms": [
+        "migración de la API Python",
+        "transición a la nueva API",
+        "distribución anki-forge retirada",
+        "nombre de importación anki_forge",
+        "sustituir la antigua API Deck",
+        "add_note a add con clave estable",
+        "registro de modelos retirado",
+        "modelos inmutables",
+        "HTML implícito a Content.html",
+        "archivo de bloqueo anterior",
+        "subproceso a enlace PyO3",
+        "sin capa de compatibilidad",
+        "recompilar la extensión con Maturin"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Transición a la nueva API de Python"
+        },
+        {
+          "line": 3,
+          "text": "La antigua distribución `anki-forge` y el nombre de importación `anki_forge` no son alias de compatibilidad."
+        },
+        {
+          "line": 5,
+          "text": "No se conserva una capa de compatibilidad con la API anterior."
+        }
+      ],
+      "rationale": "Correspondencias explícitas de la API Python retirada a la actual. Los términos de retirada se usan para búsqueda histórica, sin declarar alias ni compatibilidad que no existen."
+    },
+    {
+      "pageId": "genanki-migration",
+      "source": "docs/es/genanki-migration.md",
+      "sourceSha256": "bc8f20e0bd240af5251c5216b63e3e522c350366d1e4c8d1b16a4840152d7271",
+      "termCount": 13,
+      "terms": [
+        "migrar desde genanki",
+        "pasar de genanki a Anki Forge",
+        "genanki Model a NoteType",
+        "genanki Deck a Project",
+        "sustituir escritura de Package",
+        "ID numéricos de modelo",
+        "límite de migración de GUID",
+        "claves persistentes de negocio",
+        "claves frente a nombres de campos",
+        "rutas multimedia a Media.file",
+        "texto plano frente a Content.html",
+        "primera distribución con nueva identidad",
+        "correspondencia validada de identidades"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Pasar de genanki a Anki Forge"
+        },
+        {
+          "line": 5,
+          "text": "no emula los objetos de genanki"
+        },
+        {
+          "line": 36,
+          "text": "Este flujo no recupera la identidad de paquetes antiguos arbitrarios ni promete convertir automáticamente los ID numéricos o GUID existentes de genanki."
+        }
+      ],
+      "rationale": "Migración del modelo de autoría de genanki y límite de identidad. «Package» nombra el objeto de genanki cuya escritura se sustituye, no una API compatible del SDK nuevo."
+    },
+    {
+      "pageId": "concepts",
+      "source": "docs/es/concepts.md",
+      "sourceSha256": "be7aeded92b0e32b8953b3356c0e92b3cfdbe5462a071e743bceacf1c74967cf",
+      "termCount": 14,
+      "terms": [
+        "conceptos fundamentales",
+        "diferencia entre nota tarjeta y mazo",
+        "relación de Project con los mazos",
+        "campos y tipos de nota",
+        "modelos y plantillas",
+        "espacio de nombres",
+        "claves estables y nombres visibles",
+        "agrupación de tarjetas en mazos",
+        "texto sin formato frente a HTML",
+        "escape de HTML",
+        "dependencias multimedia tipadas",
+        "copias de datos multimedia",
+        "informe frente a archivo de salida",
+        "pruebas de identidad de una actualización"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Conceptos fundamentales"
+        },
+        {
+          "line": 6,
+          "text": "Puede distribuir notas entre varios mazos de Anki:"
+        },
+        {
+          "line": 8,
+          "text": "Una `Note` contiene su modelo y su contenido."
+        },
+        {
+          "line": 34,
+          "text": "Un informe contiene observaciones; una instantánea es información JSON y no mantiene ningún archivo en uso."
+        }
+      ],
+      "rationale": "Glosario conceptual y relación entre modelo, nota, tarjetas y destino; también diferencia informes y artefactos. «Agrupación» para mazos es un alias explicativo de la relación, no una nueva operación de autoría."
+    },
+    {
+      "pageId": "cards",
+      "source": "docs/es/cards.md",
+      "sourceSha256": "31d50b09b0abab3868292098b0853b8c4b30d604177511a9c01f0aaeb2ff4faa",
+      "termCount": 15,
+      "terms": [
+        "tarjetas Basic de pregunta y respuesta",
+        "anverso y reverso",
+        "tarjetas Cloze",
+        "completar huecos",
+        "rellenar huecos",
+        "omisión de texto",
+        "sintaxis de omisión Cloze",
+        "pista de una omisión",
+        "varios números de omisión",
+        "{{c1::answer}}",
+        "{{c1::answer::hint}}",
+        "campo adicional back_extra",
+        "dos notas y tres tarjetas",
+        "Note::basic y Note::cloze",
+        "identidad de las tarjetas Cloze"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Una nota Basic tiene anverso y reverso."
+        },
+        {
+          "line": 3,
+          "text": "Una nota Cloze genera una tarjeta por cada número de omisión admitido."
+        },
+        {
+          "line": 42,
+          "text": "Usa `{{c1::answer}}` o `{{c1::answer::hint}}`."
+        }
+      ],
+      "rationale": "Basic y Cloze, sus caras y la sintaxis de huecos con pistas. «Rellenar huecos» es un equivalente natural de completar/omitir; los números y las dos notas pertenecen al ejemplo real."
+    },
+    {
+      "pageId": "custom-notetypes",
+      "source": "docs/es/custom-notetypes.md",
+      "sourceSha256": "8f23b6466b8e1b695ebdd3d3c27fdaed5e063876bf132d3da46bc7b7d4e5f6de",
+      "termCount": 15,
+      "terms": [
+        "tipos de nota personalizados",
+        "modelo personalizado de Anki",
+        "definir campos",
+        "diseñar anverso y reverso",
+        "plantillas de tarjeta personalizadas",
+        "NoteType::builder",
+        "Field::required",
+        "Field::sort",
+        "GenerationRule::all",
+        "GenerationRule::any",
+        "generación condicional de tarjetas",
+        "campo Cloze personalizado",
+        "claves y nombres visibles",
+        "{{FrontSide}}",
+        "conflicto de definiciones de modelo"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Tipos de nota personalizados"
+        },
+        {
+          "line": 49,
+          "text": "Esto abarca el anverso y el reverso, las plantillas del explorador, las secciones condicionales, los filtros y Cloze."
+        },
+        {
+          "line": 54,
+          "text": "Estas reglas hacen referencia a las claves de los campos."
+        }
+      ],
+      "rationale": "Diseño de modelos, campos y plantillas del anverso/reverso, con condiciones de generación. Las grafías de API y FrontSide están en el código ejecutable de la página."
+    },
+    {
+      "pageId": "templates",
+      "source": "docs/es/templates.md",
+      "sourceSha256": "2fdc635586c11437d820c298ae6ce77106baedd4eeed4d3c45a8c444df678a86",
+      "termCount": 14,
+      "terms": [
+        "paquetes de plantillas",
+        "modelo reutilizable desde archivos",
+        "anki-template.yaml",
+        "template-bundle-v2",
+        "NoteType::from_bundle",
+        "manifiesto YAML del tipo de nota",
+        "plantillas anverso reverso y explorador",
+        "CSS y fuentes",
+        "claves de campo en plantillas",
+        "rutas relativas dentro del paquete",
+        "nombre fijo export_as",
+        "límites de texto UTF-8",
+        "dependencias multimedia explícitas",
+        "paquete Cloze personalizado"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Un paquete de plantillas reúne una declaración de modelo reutilizable, el texto de las plantillas, CSS y todas las dependencias multimedia declaradas explícitamente."
+        },
+        {
+          "line": 17,
+          "text": "El archivo del manifiesto se llama `anki-template.yaml`."
+        },
+        {
+          "line": 106,
+          "text": "Se rechazan las rutas absolutas, las rutas que salen del paquete y los enlaces simbólicos que apuntan fuera de él."
+        }
+      ],
+      "rationale": "Carga reutilizable del bundle YAML/HTML/CSS y sus recursos; la validación de rutas, nombres y límites se describe sin convertirla en capacidades de descubrimiento automático."
+    },
+    {
+      "pageId": "media",
+      "source": "docs/es/media.md",
+      "sourceSha256": "7d3163d9a9fed7702c309dcb695f18e3a5ede35fdb80b8e060772cb6df901d7c",
+      "termCount": 16,
+      "terms": [
+        "añadir imágenes a tarjetas",
+        "incluir audio y sonidos",
+        "adjuntar archivos multimedia",
+        "Media::file",
+        "Media::bytes",
+        "Content::sequence",
+        "with_export_name",
+        "validación MIME",
+        "conflicto de nombres de exportación",
+        "fuentes y recursos CSS",
+        "límite de importación multimedia",
+        "importación multimedia por lotes",
+        "Media::files",
+        "copias inmutables de datos multimedia",
+        "presupuesto de memoria multimedia",
+        "referencias image y sound"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Un valor `Media` conserva una copia inmutable de los datos."
+        },
+        {
+          "line": 66,
+          "text": "Los valores tipados `image()` y `sound()` conservan las dependencias hasta la exportación."
+        },
+        {
+          "line": 109,
+          "text": "Usa `Media::files(paths)` en Rust, `await Media.files(paths)` en Node o `Media.files(paths)` en Python"
+        }
+      ],
+      "rationale": "Registro de imágenes/sonido, recursos explícitos, instantáneas y lotes. Adjuntar/incluir/añadir son variantes de la tarea descrita; no implican subida ni un servicio externo."
+    },
+    {
+      "pageId": "image-occlusion",
+      "source": "docs/es/image-occlusion.md",
+      "sourceSha256": "e03836337300741cde5ae757d08a49be9d8a322dd9b7f376e7b0bcd805aa58d3",
+      "termCount": 16,
+      "terms": [
+        "oclusión de imágenes",
+        "image occlusion",
+        "enmascarar una imagen",
+        "ocultar etiquetas de un diagrama",
+        "tapar nombres de una ilustración",
+        "preguntas sobre regiones de una imagen",
+        "máscaras rectangulares",
+        "Mask::rect",
+        "HideAllGuessOne",
+        "HideOneGuessOne",
+        "claves estables de máscaras",
+        "coordenadas en píxeles",
+        "orientación EXIF",
+        "límite de imagen decodificada",
+        "números ordinales de las tarjetas",
+        "Note::image_occlusion"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Crea una nota estructurada de oclusión de imágenes a partir de una imagen cuyos datos se conservan y de varios rectángulos."
+        },
+        {
+          "line": 55,
+          "text": "Cada máscara con clave produce su propia tarjeta Cloze."
+        },
+        {
+          "line": 55,
+          "text": "Las coordenadas son valores finitos en píxeles sobre la imagen mostrada, después de aplicar la orientación EXIF."
+        }
+      ],
+      "rationale": "Equivalentes naturales de cubrir regiones con máscaras, además de símbolos y límites. Etiquetas/diagrama/ilustración describen el uso educativo de la máscara; no prometen detección automática de nombres."
+    },
+    {
+      "pageId": "updates",
+      "source": "docs/es/updates.md",
+      "sourceSha256": "0436b39ff9f8e40200c14a02d93ad250f1141483671540ad313b9b53b15d68d2",
+      "termCount": 18,
+      "terms": [
+        "actualizar un mazo distribuido",
+        "actualizar notas existentes",
+        "cambiar una respuesta",
+        "APKG original de distribución",
+        "paquete de referencia",
+        "comparar antes de publicar",
+        "CompareOptions::against",
+        "BuildOptions::update_from",
+        "UpdatePolicy",
+        "RISK.NOTE_REMOVED",
+        "GUID estables de notas",
+        "pruebas de identidad y revisión",
+        "reexportación de Anki no válida como base",
+        "ediciones locales y programación de repaso",
+        "publicación preparada",
+        "prepare_publication",
+        "revisar y publicar el mismo candidato",
+        "omitir notas no sincroniza eliminaciones"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Genera cada versión nueva a partir del **APKG original de distribución** anterior"
+        },
+        {
+          "line": 74,
+          "text": "La reexportación desde Anki no conserva estas pruebas y no sirve como base de una actualización."
+        },
+        {
+          "line": 81,
+          "text": "Un APKG es un paquete de distribución; no sincroniza eliminaciones."
+        },
+        {
+          "line": 94,
+          "text": "Genera una vez, inspecciona el informe y publica después el mismo archivo candidato."
+        }
+      ],
+      "rationale": "Flujo de actualización con base original, análisis de riesgos y publicación preparada. Los términos de historial y repaso quedan ligados a actualización; no se promete preservar toda la planificación del cliente."
+    },
+    {
+      "pageId": "build-guarantees",
+      "source": "docs/es/build-guarantees.md",
+      "sourceSha256": "a9783373464d0dc6dab67c4fb6b9acb9a12a22dac3c6294ade252055e58e5211",
+      "termCount": 16,
+      "terms": [
+        "garantías de generación de APKG",
+        "vida útil del archivo temporal",
+        "archivo de salida persistente",
+        "último propietario del artefacto",
+        "artifact.persist_to",
+        "reemplazo atómico del APKG",
+        "fase de publicación",
+        "confirmación de durabilidad",
+        "fallo tardío de persistencia",
+        "informe frente a instantánea de salida",
+        "rutas nativas serializadas",
+        "límites de inspección",
+        "candidato preparado privado",
+        "propietario consumido al publicar",
+        "destinos relativos",
+        "BuildOutput y BuildError"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "`Project::build` solo devuelve `BuildOutput` después de una operación correcta, con un archivo APKG garantizado."
+        },
+        {
+          "line": 27,
+          "text": "La publicación reemplaza el APKG de forma atómica."
+        },
+        {
+          "line": 29,
+          "text": "Puede producirse un error tardío después de publicar, por ejemplo al confirmar la persistencia."
+        },
+        {
+          "line": 52,
+          "text": "Cada intento de publicación consume el objeto que mantiene la versión candidata"
+        }
+      ],
+      "rationale": "Contratos de archivo, vida útil, atomicidad, rutas y hechos de publicación. «Artefacto/propietario» enlaza las propiedades de la API con el texto explicativo de los objetos que conservan el archivo."
+    },
+    {
+      "pageId": "troubleshooting",
+      "source": "docs/es/troubleshooting.md",
+      "sourceSha256": "3096c6a6e87d8ac623b26ccba13382e7ddd5087bab79840e7151b44b9cc351a7",
+      "termCount": 19,
+      "terms": [
+        "solución de problemas",
+        "diagnosticar errores de generación",
+        "fallo de carga del paquete nativo",
+        "versiones nativas y JavaScript incompatibles",
+        "etiquetas SO CPU del wheel",
+        "NOTE.KEY_DUPLICATE",
+        "NOTE.FIELD_UNKNOWN",
+        "NOTE.FIELD_REQUIRED",
+        "NOTE.MODEL_CONFLICT",
+        "HTML como texto literal",
+        "faltan tarjetas Cloze",
+        "MIME distinto del contenido",
+        "conflicto de nombres de exportación",
+        "falta un recurso CSS",
+        "fallo al cargar paquete de plantillas",
+        "límite de inspección superado",
+        "ruta temporal desaparecida",
+        "base de actualización no válida",
+        "clave de nota duplicada"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Usa los valores estructurados `kind` y `code` de la operación fallida"
+        },
+        {
+          "line": 30,
+          "text": "| Faltan tarjetas Cloze |"
+        },
+        {
+          "line": 45,
+          "text": "| Falla la carga de un paquete de plantillas |"
+        },
+        {
+          "line": 57,
+          "text": "Si desaparece una ruta temporal, conserva el objeto de salida o del archivo"
+        }
+      ],
+      "rationale": "Síntomas transversales y códigos de error de los tres SDK. El vocabulario genérico de diagnóstico se concentra aquí y el de Python se especializa en la página correspondiente."
+    },
+    {
+      "pageId": "compatibility",
+      "source": "docs/es/compatibility.md",
+      "sourceSha256": "b317fb1db494e0c041d18b2b9e966b0ea265be2c5bed59ae1821a576fc397f5a",
+      "termCount": 14,
+      "terms": [
+        "compatibilidad de plataformas",
+        "entornos verificados",
+        "versión mínima de Rust",
+        "versiones de Node.js compatibles",
+        "wheels de CPython",
+        "macOS arm64 y x64",
+        "Linux GNU glibc",
+        "Windows x64",
+        "alcance de Alpine musl",
+        "Bun y Electron no verificados",
+        "compatibilidad con clientes de Anki",
+        "importación y reproducción multimedia",
+        "pruebas de publicación",
+        "condiciones del historial de repaso"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Compatibilidad"
+        },
+        {
+          "line": 14,
+          "text": "Los paquetes nativos publicados cubren macOS arm64/x64, Linux x64 GNU/glibc y Windows x64."
+        },
+        {
+          "line": 14,
+          "text": "Los navegadores, Electron, Bun, Alpine/musl y Linux/Windows ARM64 quedan fuera de la verificación registrada de Node."
+        },
+        {
+          "line": 21,
+          "text": "La importación, la representación y la reproducción multimedia siguen dependiendo de la versión, los códecs y la configuración de importación del cliente de destino."
+        }
+      ],
+      "rationale": "Matriz real de runtimes, paquetes y clientes. Alpine/Bun/Electron se indexan como alcance o ausencia de verificación, nunca como soporte general."
+    },
+    {
+      "pageId": "json-to-anki",
+      "source": "docs/es/json-to-anki.md",
+      "sourceSha256": "2294cd3ed93fe33b3d176dc92b89f84f97ea87788d923b0580e6947494382a17",
+      "termCount": 15,
+      "terms": [
+        "JSON a Anki",
+        "JSON a APKG",
+        "generar tarjetas desde JSON",
+        "datos estructurados a mazo",
+        "JSON.parse",
+        "json.loads",
+        "serde_json",
+        "JSON con Python Rust y TypeScript",
+        "creación de notas por lotes",
+        "imagen y audio compartidos",
+        "actualización de una respuesta",
+        "comparison.json y review.json",
+        "ID persistentes de negocio",
+        "namespace biology-json",
+        "APKG original y candidato preparado"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Lee tres preguntas de biología desde JSON, añade una imagen y un fragmento de audio compartidos"
+        },
+        {
+          "line": 21,
+          "text": "Tu aplicación analiza el JSON; Anki Forge se encarga de crear el contenido y generar el APKG."
+        },
+        {
+          "line": 262,
+          "text": "`comparison.json` y `review.json` registran `RISK.NOTE_CHANGED`"
+        }
+      ],
+      "rationale": "Receta multilenguaje completa de análisis JSON, contenido multimedia y segunda versión. Los analizadores son del programa de aplicación, no un conversor universal del SDK."
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "source": "docs/es/anki-forge-vs-genanki.md",
+      "sourceSha256": "04cc37e1506ddd0f5ed2616d9d70ea05ab07363c50d165980d6fdae068f4bf14",
+      "termCount": 12,
+      "terms": [
+        "Anki Forge frente a genanki",
+        "comparativa de bibliotecas Anki",
+        "alternativa a genanki",
+        "elegir una biblioteca APKG",
+        "bibliotecas de tarjetas Python",
+        "comparación de flujos de publicación",
+        "coste de dependencias nativas",
+        "coste de migración desde genanki",
+        "comparación de GUID",
+        "benchmark histórico de Rust",
+        "tiempo de exportación y memoria máxima",
+        "límites de las mediciones de rendimiento"
+      ],
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Anki Forge frente a genanki"
+        },
+        {
+          "line": 3,
+          "text": "Conserva un flujo de genanki ya probado"
+        },
+        {
+          "line": 31,
+          "text": "La prueba no midió el rendimiento actual de los procesos de Python o Node"
+        }
+      ],
+      "rationale": "Decisión entre bibliotecas, costes de ejecución/migración y rendimiento histórico con límites. «Alternativa» es una categoría comparativa, no una recomendación incondicional de migrar."
+    },
+    {
+      "pageId": "csv-to-anki",
+      "source": "docs/es/csv-to-anki.md",
+      "sourceSha256": "b913be7c1051dcd98d8b0f611b7b02745898c57212393ee457b581188aa778c3",
+      "termCount": 12,
+      "terms": [
+        "CSV a Anki con Python",
+        "CSV a APKG",
+        "hoja de vocabulario a tarjetas",
+        "hoja de cálculo a mazo",
+        "exportar Excel como CSV UTF-8",
+        "columnas id front back",
+        "script csv_to_anki.py",
+        "creación por lotes de tarjetas Basic",
+        "ID de nota únicos",
+        "cabecera y comillas CSV",
+        "marca de orden de bytes UTF-8",
+        "vocabulary-v1.apkg"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Este ejemplo lee un CSV UTF-8 con las columnas `id`, `front` y `back`"
+        },
+        {
+          "line": 5,
+          "text": "Primero debes guardar los archivos Excel `.xlsx` como CSV UTF-8."
+        },
+        {
+          "line": 21,
+          "text": "Rechaza los ID duplicados, los valores ausentes, las columnas adicionales y la entrada vacía."
+        }
+      ],
+      "rationale": "Conversión repetible de vocabulario tabular con la biblioteca estándar de Python, validación CSV e identidad explícita. No se indexa como lector directo de XLSX."
+    },
+    {
+      "pageId": "ai-anki-cards",
+      "source": "docs/es/ai-anki-cards.md",
+      "sourceSha256": "8b80fffb4cbd0839fbe2c6d816a4e68d68eb0150d81b8551f8fee47777a2de08",
+      "termCount": 13,
+      "terms": [
+        "tarjetas de Anki con ayuda de IA",
+        "apuntes a tarjetas",
+        "borrador de preguntas y respuestas",
+        "asistente de programación",
+        "instrucciones para un asistente",
+        "revisar respuestas de IA",
+        "comprobar con el material original",
+        "CSV revisado a APKG",
+        "ID únicos para notas nuevas",
+        "generación local con Python Node y Rust",
+        "texto de PDF extraído previamente",
+        "contenido de estudio revisado",
+        "Skill opcional de Anki Forge"
+      ],
+      "excerpts": [
+        {
+          "line": 3,
+          "text": "Usa un asistente de IA para preparar pares de preguntas y respuestas a partir de tus apuntes"
+        },
+        {
+          "line": 10,
+          "text": "la extracción de PDF y el OCR quedan fuera de esta biblioteca."
+        },
+        {
+          "line": 56,
+          "text": "Una exportación correcta confirma que se ha generado un paquete; no demuestra que las respuestas de la IA sean correctas"
+        }
+      ],
+      "rationale": "Proceso asistido de borrador, revisión factual y exportación local. PDF se nombra únicamente como entrada cuyo texto debe extraer otra herramienta; no se crean términos de OCR automático."
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "source": "website/src/content/blog/es/your-first-anki-deck.mdx",
+      "sourceSha256": "bc5e76bc4534a13bb2fd5a47f0f1a20d5831d8bcd2477a2b09549bb4830dbc33",
+      "termCount": 12,
+      "terms": [
+        "primer mazo de Anki con Rust",
+        "tutorial de una tarjeta de vocabulario",
+        "saludo hola en español",
+        "anverso español y reverso inglés",
+        "creación repetible en Git",
+        "nota Basic",
+        "Project::new spanish",
+        "clave es:hola",
+        "identidad de una entrada de vocabulario",
+        "propagación de errores tipados",
+        "ampliar desde una nota",
+        "primera exportación APKG"
+      ],
+      "excerpts": [
+        {
+          "line": 4,
+          "text": "title: Crea tu primer mazo de Anki con Rust"
+        },
+        {
+          "line": 16,
+          "text": "Empieza con una palabra: **hola**."
+        },
+        {
+          "line": 27,
+          "text": "El operador `?` propaga un fallo tipado"
+        }
+      ],
+      "rationale": "Artículo introductorio con una sola palabra y motivación de identidad, distinto de la guía de instalación canónica."
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "source": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+      "sourceSha256": "bf66e4f95e043fba8947fec7d323b2a427418564eca960ef923365bdc180a1d8",
+      "termCount": 12,
+      "terms": [
+        "identidades estables entre versiones",
+        "clave de nota independiente del contenido",
+        "cambiar la respuesta con el mismo ID",
+        "espacio de nombres entre publicaciones",
+        "paquete de referencia para actualizar",
+        "conservar el original distribuido",
+        "rutas distintas de base y salida",
+        "pruebas de identidad y revisión",
+        "reexportación de Anki incompatible",
+        "modificaciones locales al importar",
+        "ID estable y estado de repaso",
+        "revisar el informe antes de distribuir"
+      ],
+      "excerpts": [
+        {
+          "line": 4,
+          "text": "title: Identidades estables para actualizar mazos de Anki"
+        },
+        {
+          "line": 24,
+          "text": "La nota lógica sigue siendo la misma."
+        },
+        {
+          "line": 42,
+          "text": "Mantén el paquete de entrada y el de salida en rutas diferentes."
+        },
+        {
+          "line": 56,
+          "text": "La identidad estable ayuda a identificar la nota correspondiente"
+        }
+      ],
+      "rationale": "Motivación de la identidad separada del texto, del paquete original y de las decisiones de importación del cliente; no presenta el ID como una copia del historial de repaso."
+    }
+  ],
+  "concepts": [
+    {
+      "conceptId": "__language",
+      "sourcePageIds": [
+        "docs",
+        "languages",
+        "concepts"
+      ],
+      "sourcePaths": [
+        "docs/es/index.md",
+        "docs/es/languages.md",
+        "docs/es/concepts.md"
+      ],
+      "rationale": "Palabras funcionales españolas; no se eliminan términos de dominio como nota, tarjeta, mazo, APKG o nombres de lenguajes. El motor normaliza los acentos, por lo que no se duplican las grafías sin tilde."
+    },
+    {
+      "conceptId": "python",
+      "sourcePageIds": [
+        "python-quickstart",
+        "python-api"
+      ],
+      "sourcePaths": [
+        "docs/es/python-quickstart.md",
+        "docs/es/python-api.md"
+      ],
+      "rationale": "Python/CPython/pip nombran el mismo SDK, no la intención de referencia o instalación por sí sola."
+    },
+    {
+      "conceptId": "node",
+      "sourcePageIds": [
+        "node-quickstart",
+        "node-api"
+      ],
+      "sourcePaths": [
+        "docs/es/node-quickstart.md",
+        "docs/es/node-api.md"
+      ],
+      "rationale": "Node, JavaScript y TypeScript comparten el binding Node de estas guías; npm es su instalador."
+    },
+    {
+      "conceptId": "rust",
+      "sourcePageIds": [
+        "quickstart",
+        "installation"
+      ],
+      "sourcePaths": [
+        "docs/es/quickstart.md",
+        "docs/es/installation.md"
+      ],
+      "rationale": "Rust/Cargo/crate identifican el SDK nativo de Rust."
+    },
+    {
+      "conceptId": "quickstart",
+      "sourcePageIds": [
+        "quickstart",
+        "node-quickstart",
+        "python-quickstart",
+        "blog:your-first-anki-deck"
+      ],
+      "sourcePaths": [
+        "docs/es/quickstart.md",
+        "docs/es/node-quickstart.md",
+        "docs/es/python-quickstart.md",
+        "website/src/content/blog/es/your-first-anki-deck.mdx"
+      ],
+      "rationale": "Formas de inicio y primer resultado; quickstart/getting started son equivalentes técnicos de inicio rápido."
+    },
+    {
+      "conceptId": "reference",
+      "sourcePageIds": [
+        "api",
+        "rust-api",
+        "node-api",
+        "python-api"
+      ],
+      "sourcePaths": [
+        "docs/es/api.md",
+        "docs/es/rust-api.md",
+        "docs/es/node-api.md",
+        "docs/es/python-api.md"
+      ],
+      "rationale": "Nombres de consulta de firmas y métodos; se mantiene separado el rol API del inicio."
+    },
+    {
+      "conceptId": "installation",
+      "sourcePageIds": [
+        "installation",
+        "node-quickstart",
+        "python-quickstart"
+      ],
+      "sourcePaths": [
+        "docs/es/installation.md",
+        "docs/es/node-quickstart.md",
+        "docs/es/python-quickstart.md"
+      ],
+      "rationale": "Infinitivo, sustantivo e imperativo de instalación, más la preparación del entorno y dependencias."
+    },
+    {
+      "conceptId": "development",
+      "sourcePageIds": [
+        "development"
+      ],
+      "sourcePaths": [
+        "docs/es/development.md"
+      ],
+      "rationale": "Señala trabajo con código fuente, tarballs locales y extensión nativa, no la descarga de los paquetes publicados."
+    },
+    {
+      "conceptId": "comparison",
+      "sourcePageIds": [
+        "anki-forge-vs-genanki"
+      ],
+      "sourcePaths": [
+        "docs/es/anki-forge-vs-genanki.md"
+      ],
+      "rationale": "Selección o comparación entre bibliotecas. El sentido más específico de diferencias entre piezas del dominio lleva contexto en fundamentals."
+    },
+    {
+      "conceptId": "migration",
+      "sourcePageIds": [
+        "python-migration",
+        "genanki-migration"
+      ],
+      "sourcePaths": [
+        "docs/es/python-migration.md",
+        "docs/es/genanki-migration.md"
+      ],
+      "rationale": "Transición de objetos/API anteriores a los modelos actuales; las variantes no implican recuperación automática de identidades."
+    },
+    {
+      "conceptId": "updates",
+      "sourcePageIds": [
+        "updates",
+        "blog:stable-ids-and-deck-updates"
+      ],
+      "sourcePaths": [
+        "docs/es/updates.md",
+        "website/src/content/blog/es/stable-ids-and-deck-updates.mdx"
+      ],
+      "rationale": "Las palabras de versión y conservación del historial requieren contexto de actualización/publicación. Repaso aislado pertenece a learning."
+    },
+    {
+      "conceptId": "baseline",
+      "sourcePageIds": [
+        "updates",
+        "blog:stable-ids-and-deck-updates",
+        "python-diagnostics"
+      ],
+      "sourcePaths": [
+        "docs/es/updates.md",
+        "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+        "docs/es/python-diagnostics.md"
+      ],
+      "rationale": "Paquete original/de referencia y reexportación: nombra la condición de la base, sin afirmar que la reexportación sea aceptada."
+    },
+    {
+      "conceptId": "identity",
+      "sourcePageIds": [
+        "concepts",
+        "rust-guide",
+        "blog:stable-ids-and-deck-updates"
+      ],
+      "sourcePaths": [
+        "docs/es/concepts.md",
+        "docs/es/rust-guide.md",
+        "website/src/content/blog/es/stable-ids-and-deck-updates.mdx"
+      ],
+      "rationale": "Correspondencia entre clave estable, ID, GUID y espacio de nombres; no equivale al estado de repaso del cliente."
+    },
+    {
+      "conceptId": "diagnostics",
+      "sourcePageIds": [
+        "troubleshooting",
+        "python-diagnostics"
+      ],
+      "sourcePaths": [
+        "docs/es/troubleshooting.md",
+        "docs/es/python-diagnostics.md"
+      ],
+      "rationale": "Sustantivos, síntomas y verbos de fallo. El rol genérico y la preferencia SDK la resuelve el motor sin páginas fijadas en el vocabulario."
+    },
+    {
+      "conceptId": "media",
+      "sourcePageIds": [
+        "media"
+      ],
+      "sourcePaths": [
+        "docs/es/media.md"
+      ],
+      "rationale": "Recursos multimedia y archivos adjuntos nombran dependencias conservadas y exportadas por el programa."
+    },
+    {
+      "conceptId": "images",
+      "sourcePageIds": [
+        "media",
+        "image-occlusion"
+      ],
+      "sourcePaths": [
+        "docs/es/media.md",
+        "docs/es/image-occlusion.md"
+      ],
+      "rationale": "Singular/plural y equivalentes foto/ilustración de la imagen suministrada por el usuario; no promete generar imágenes."
+    },
+    {
+      "conceptId": "audio",
+      "sourcePageIds": [
+        "media",
+        "json-to-anki"
+      ],
+      "sourcePaths": [
+        "docs/es/media.md",
+        "docs/es/json-to-anki.md"
+      ],
+      "rationale": "Sonido, voz o pronunciación son usos de recursos de audio; el ejemplo JSON contiene un tono, no voz sintética."
+    },
+    {
+      "conceptId": "occlusion",
+      "sourcePageIds": [
+        "image-occlusion",
+        "ai-anki-cards"
+      ],
+      "sourcePaths": [
+        "docs/es/image-occlusion.md",
+        "docs/es/ai-anki-cards.md"
+      ],
+      "rationale": "Nombre de la función y vocabulario de máscaras/rectángulos; se conserva el término técnico inglés. La página de IA nombra expresamente las etiquetas de un diagrama como caso de uso de esta función."
+    },
+    {
+      "conceptId": "cloze",
+      "sourcePageIds": [
+        "cards"
+      ],
+      "sourcePaths": [
+        "docs/es/cards.md"
+      ],
+      "rationale": "Completar o rellenar huecos expresa la omisión textual Cloze, con plural y forma nominal."
+    },
+    {
+      "conceptId": "templates",
+      "sourcePageIds": [
+        "templates",
+        "custom-notetypes"
+      ],
+      "sourcePaths": [
+        "docs/es/templates.md",
+        "docs/es/custom-notetypes.md"
+      ],
+      "rationale": "Archivos y dependencias reutilizables de plantillas. Fuente es también tipografía en contexto CSS; el código fuente se reconoce mediante frases de development."
+    },
+    {
+      "conceptId": "note-types",
+      "sourcePageIds": [
+        "custom-notetypes"
+      ],
+      "sourcePaths": [
+        "docs/es/custom-notetypes.md"
+      ],
+      "rationale": "Modelo, campos y reglas condicionales son piezas del esquema de notas, no una operación de edición de contenido existente."
+    },
+    {
+      "conceptId": "compatibility",
+      "sourcePageIds": [
+        "compatibility"
+      ],
+      "sourcePaths": [
+        "docs/es/compatibility.md"
+      ],
+      "rationale": "Consulta de soporte/plataformas y runtimes. Los nombres fuera de verificación se incluyen como consultas de alcance, no como afirmación de soporte."
+    },
+    {
+      "conceptId": "csv",
+      "sourcePageIds": [
+        "csv-to-anki"
+      ],
+      "sourcePaths": [
+        "docs/es/csv-to-anki.md"
+      ],
+      "rationale": "CSV, hoja de cálculo y vocabulario tabular se conectan por el flujo de exportación previa a UTF-8; XLSX no se lee directamente."
+    },
+    {
+      "conceptId": "json",
+      "sourcePageIds": [
+        "json-to-anki"
+      ],
+      "sourcePaths": [
+        "docs/es/json-to-anki.md"
+      ],
+      "rationale": "JSON y datos estructurados representan la entrada que analiza el programa de aplicación."
+    },
+    {
+      "conceptId": "ai",
+      "sourcePageIds": [
+        "ai-anki-cards"
+      ],
+      "sourcePaths": [
+        "docs/es/ai-anki-cards.md"
+      ],
+      "rationale": "IA/AI y asistente son alternativas del borrador y ayuda de programación, con comprobación humana del contenido."
+    },
+    {
+      "conceptId": "text",
+      "sourcePageIds": [
+        "concepts",
+        "cards",
+        "troubleshooting"
+      ],
+      "sourcePaths": [
+        "docs/es/concepts.md",
+        "docs/es/cards.md",
+        "docs/es/troubleshooting.md"
+      ],
+      "rationale": "Text/HTML y escape explican la diferencia entre texto literal y marcado intencional."
+    },
+    {
+      "conceptId": "fundamentals",
+      "sourcePageIds": [
+        "concepts",
+        "docs"
+      ],
+      "sourcePaths": [
+        "docs/es/concepts.md",
+        "docs/es/index.md"
+      ],
+      "rationale": "Preguntas de significado y relación requieren una pieza del dominio; el predicado y su sujeto se consumen como un concepto, sin mapear una frase a una URL."
+    },
+    {
+      "conceptId": "package-structure",
+      "sourcePageIds": [
+        "concepts",
+        "build-guarantees"
+      ],
+      "sourcePaths": [
+        "docs/es/concepts.md",
+        "docs/es/build-guarantees.md"
+      ],
+      "rationale": "La composición o contenido solo adquiere este sentido con paquete/APKG/exportación; evita tratar cualquier contenido de tarjeta como estructura de paquete."
+    },
+    {
+      "conceptId": "learning",
+      "sourcePageIds": [
+        "cards",
+        "image-occlusion",
+        "ai-anki-cards"
+      ],
+      "sourcePaths": [
+        "docs/es/cards.md",
+        "docs/es/image-occlusion.md",
+        "docs/es/ai-anki-cards.md"
+      ],
+      "rationale": "Repaso, estudio y práctica se ponderan poco y no activan el rol de publicación de actualizaciones."
+    },
+    {
+      "conceptId": "customization",
+      "sourcePageIds": [
+        "custom-notetypes"
+      ],
+      "sourcePaths": [
+        "docs/es/custom-notetypes.md"
+      ],
+      "rationale": "Personalización y diseño solo se aplican a campos, caras o esquema; no convierte cualquier edición de respuesta en diseño de modelos."
+    },
+    {
+      "conceptId": "schema-editing",
+      "sourcePageIds": [
+        "custom-notetypes"
+      ],
+      "sourcePaths": [
+        "docs/es/custom-notetypes.md"
+      ],
+      "rationale": "Añadir/ampliar/crear requiere campo, tipo de nota o modelo; añadir una imagen no activa este rol."
+    },
+    {
+      "conceptId": "cardinality",
+      "sourcePageIds": [
+        "cards",
+        "concepts"
+      ],
+      "sourcePaths": [
+        "docs/es/cards.md",
+        "docs/es/concepts.md"
+      ],
+      "rationale": "Vocabulario cuantitativo exige simultáneamente nota y tarjeta, para distinguir la relación de multiplicidad de una colección de imágenes o archivos."
+    },
+    {
+      "conceptId": "occlusion-action",
+      "sourcePageIds": [
+        "image-occlusion",
+        "ai-anki-cards"
+      ],
+      "sourcePaths": [
+        "docs/es/image-occlusion.md",
+        "docs/es/ai-anki-cards.md"
+      ],
+      "rationale": "Ocultar/tapar/cubrir requiere imagen o diagrama. No confunde ocultar una respuesta textual con una máscara de imagen, ni implica reconocer etiquetas automáticamente."
+    }
+  ],
+  "limitations": [
+    "A source-backed alias describes an operation or its limits; it is not a guarantee of client import behavior, support for every runtime, or automatic migration.",
+    "No extraction or OCR capability is assigned to AI-assisted cards; PDF text must be extracted separately.",
+    "Spanish inflections beyond the explicit concept variants rely on lexical or Pagefind body matches; no algorithm changes or language-specific code are proposed.",
+    "Independent native-language and technical/coverage reviews are still required, and frozen acceptance checks belong to the root agent after the draft is fixed."
+  ]
+}

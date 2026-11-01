@@ -1,0 +1,34 @@
+import { createTranslator, createClientMessages } from './i18n/messages.mjs';
+import { searchTermsFor } from './lib/search-terms.mjs';
+import { serializeClientMessages } from './i18n/client-messages.mjs';
+import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
+import { resolvePage, locales, localeIds } from '../site-model.mjs';
+import { siteConfig, withBase } from '../site.config.mjs';
+import { repository } from '../site.config.mjs';
+import { createPageMetadata, metadataLinks, mergeMetadataHead, socialImageUrl } from './lib/page-metadata.mjs';
+import { buildStructuredData, serializeJsonLd } from './lib/structured-data.mjs';
+import publicInstall from './generated/ai-quickstart.json';
+
+export const onRequest = defineRouteMiddleware(context => {
+  const route = context.locals.starlightRoute;
+  if (route.isFallback) throw new Error(`Untranslated documentation: ${route.id}`);
+  const resolved = resolvePage(context.url.pathname, siteConfig.base);
+  if (!resolved || resolved.locale !== route.lang) throw new Error(`Unregistered or mismatched documentation: ${route.id}/${route.lang}`);
+  const { page, locale } = resolved;
+  const t = createTranslator(locale);
+  const metadata = createPageMetadata(page, locale, siteConfig, { title: route.entry.data.title, description: route.entry.data.description || page.description?.[locale] || '' });
+  const noindex = route.head.some(item => item.tag === 'meta' && item.attrs?.name === 'robots' && /\bnoindex\b/i.test(String(item.attrs?.content || '')));
+  const additions: typeof route.head = [
+    ...(!noindex ? metadataLinks(metadata, siteConfig).map(attrs => ({ tag: 'link' as const, attrs })) : []),
+    { tag: 'meta', attrs: { property: 'og:locale', content: locales[locale].og } },
+    { tag: 'meta', attrs: { property: 'og:image', content: socialImageUrl(locale, siteConfig) } },
+    { tag: 'meta', attrs: { property: 'og:image:alt', content: t('site.socialAlt') } },
+    { tag: 'meta', attrs: { name: 'anki-forge:page-id', content: page.id } },
+    { tag: 'meta', attrs: { name: 'anki-forge:content-source', content: page.sources[locale] } },
+    { tag: 'meta', attrs: { name: 'anki-forge:search-terms', 'data-pagefind-meta': 'search_terms[content]', content: searchTermsFor(page, locale) } },
+    { tag: 'link', attrs: { rel: 'alternate', type: 'application/rss+xml', title: t('blog.feedTitle'), href: withBase(`${locales[locale].prefix}/rss.xml`, siteConfig.base) } },
+    { tag: 'script', attrs: { type: 'application/json', 'data-anki-forge-messages': '' }, content: serializeClientMessages(createClientMessages(locale)) },
+  ];
+  if (!noindex) additions.push({ tag: 'script', attrs: { type: 'application/ld+json', 'data-anki-forge-schema': '' }, content: serializeJsonLd(buildStructuredData(metadata, { siteConfig, repository, publicInstall, homeDescription: t('home.intro'), buildLocales: localeIds })) });
+  route.head = mergeMetadataHead(route.head, additions);
+});

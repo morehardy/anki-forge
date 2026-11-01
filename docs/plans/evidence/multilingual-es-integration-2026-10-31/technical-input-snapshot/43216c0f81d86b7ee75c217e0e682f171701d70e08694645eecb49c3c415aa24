@@ -1,0 +1,32 @@
+---
+title: Choose your language
+description: Install the public Rust, Node or Python package and export your first Anki deck.
+---
+
+import { sitePath } from '../../../lib/site';
+
+Use Rust, Node / TypeScript or Python to connect Anki deck generation to your data.
+All three can export a persistent `spanish.apkg` without installing Anki.
+
+| Language | Public package | Install | Complete first deck |
+| --- | --- | --- | --- |
+| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.1` | <a href={sitePath('/docs/quickstart/')}>Rust quickstart</a> |
+| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.1` | <a href={sitePath('/docs/node-quickstart/')}>Node quickstart</a> |
+| Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.1` | <a href={sitePath('/docs/python-quickstart/')}>Python quickstart</a> |
+
+Rust needs Rust 1.92+. Node needs Node 22.13+ and a matching native optional dependency.
+Python uses a native wheel for an ordinary CPython interpreter; CPython 3.11–3.14
+are verified in recorded release checks. See <a href={sitePath('/docs/compatibility/')}>verified environments</a>.
+
+## Next tasks
+
+Generate and update a deck from <a href={sitePath('/docs/json-to-anki/')}>shared JSON, image and audio inputs</a>, or compare <a href={sitePath('/docs/anki-forge-vs-genanki/')}>Anki Forge and genanki</a> for your workflow.
+
+Add <a href={sitePath('/docs/media/')}>images and audio</a>,
+create <a href={sitePath('/docs/custom-notetypes/')}>custom note types</a>, or
+<a href={sitePath('/docs/updates/')}>compare and update a distributed deck</a>.
+
+For TypeScript, use the <a href={sitePath('/docs/node-api/#typescript')}>compiler configuration</a>.
+For genanki, read the <a href={sitePath('/docs/genanki-migration/')}>migration guide</a>.
+Repository development and source-only capabilities have their own
+<a href={sitePath('/docs/development/#source-builds')}>source build instructions</a>.

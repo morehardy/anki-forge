@@ -1,0 +1,1037 @@
+{
+  "locales": {
+    "en": {
+      "prefix": "",
+      "lang": "en",
+      "og": "en_US",
+      "label": "English",
+      "format": "en-US",
+      "starlightKey": "root",
+      "dir": "ltr"
+    },
+    "zh-CN": {
+      "prefix": "/zh-cn",
+      "lang": "zh-CN",
+      "og": "zh_CN",
+      "label": "简体中文",
+      "format": "zh-CN",
+      "starlightKey": "zh-cn",
+      "dir": "ltr"
+    },
+    "es": {
+      "prefix": "/es",
+      "lang": "es",
+      "og": "es_ES",
+      "label": "Español",
+      "format": "es",
+      "starlightKey": "es",
+      "dir": "ltr"
+    }
+  },
+  "localeMenu": [
+    {
+      "id": "en",
+      "label": "English",
+      "prefix": "",
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "id": "zh-CN",
+      "label": "简体中文",
+      "prefix": "/zh-cn",
+      "lang": "zh-CN",
+      "dir": "ltr"
+    },
+    {
+      "id": "es",
+      "label": "Español",
+      "prefix": "/es",
+      "lang": "es",
+      "dir": "ltr"
+    }
+  ],
+  "navigation": [
+    {
+      "id": "docs",
+      "label": {
+        "en": "Guide",
+        "zh-CN": "指南",
+        "es": "Guía"
+      }
+    },
+    {
+      "id": "examples",
+      "label": {
+        "en": "Examples",
+        "zh-CN": "示例",
+        "es": "Ejemplos"
+      }
+    },
+    {
+      "id": "blog",
+      "label": {
+        "en": "Blog",
+        "zh-CN": "博客",
+        "es": "Blog"
+      }
+    }
+  ],
+  "footerNavigation": [
+    {
+      "id": "articles",
+      "pageId": "blog",
+      "resource": "",
+      "label": "footer.articles"
+    },
+    {
+      "id": "feed",
+      "pageId": "",
+      "resource": "feed",
+      "label": "footer.rss"
+    },
+    {
+      "id": "license",
+      "pageId": "",
+      "resource": "license",
+      "label": "footer.license"
+    },
+    {
+      "id": "repository",
+      "pageId": "",
+      "resource": "repository",
+      "label": "nav.repository"
+    }
+  ],
+  "nextTasks": [
+    {
+      "pageId": "json-to-anki",
+      "label": "home.json",
+      "primary": true
+    },
+    {
+      "pageId": "csv-to-anki",
+      "label": "home.csv",
+      "primary": false
+    },
+    {
+      "pageId": "ai-anki-cards",
+      "label": "home.aiCards",
+      "primary": false
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "label": "home.compare",
+      "primary": false
+    }
+  ],
+  "docGroups": [
+    {
+      "label": "Start here",
+      "zh": "从这里开始",
+      "es": "Empieza aquí",
+      "ids": [
+        "docs",
+        "languages",
+        "quickstart",
+        "installation",
+        "concepts",
+        "anki-forge-vs-genanki"
+      ],
+      "labels": {
+        "en": "Start here",
+        "zh-CN": "从这里开始",
+        "es": "Empieza aquí"
+      }
+    },
+    {
+      "label": "Guides",
+      "zh": "使用指南",
+      "es": "Guías",
+      "ids": [
+        "csv-to-anki",
+        "json-to-anki",
+        "ai-anki-cards",
+        "cards",
+        "media",
+        "custom-notetypes",
+        "templates",
+        "image-occlusion",
+        "updates"
+      ],
+      "labels": {
+        "en": "Guides",
+        "zh-CN": "使用指南",
+        "es": "Guías"
+      }
+    },
+    {
+      "label": "Language guides",
+      "zh": "开发语言指南",
+      "es": "Guías por lenguaje",
+      "ids": [
+        "rust-guide",
+        "node-quickstart",
+        "python-quickstart",
+        "python-migration",
+        "genanki-migration"
+      ],
+      "labels": {
+        "en": "Language guides",
+        "zh-CN": "开发语言指南",
+        "es": "Guías por lenguaje"
+      }
+    },
+    {
+      "label": "Reference",
+      "zh": "参考",
+      "es": "Referencia",
+      "collapsed": true,
+      "ids": [
+        "api",
+        "rust-api",
+        "node-api",
+        "python-api",
+        "build-guarantees",
+        "compatibility"
+      ],
+      "labels": {
+        "en": "Reference",
+        "zh-CN": "参考",
+        "es": "Referencia"
+      }
+    },
+    {
+      "label": "Help",
+      "zh": "帮助",
+      "es": "Ayuda",
+      "ids": [
+        "troubleshooting",
+        "python-diagnostics",
+        "development"
+      ],
+      "labels": {
+        "en": "Help",
+        "zh-CN": "帮助",
+        "es": "Ayuda"
+      }
+    }
+  ],
+  "metadata": [
+    {
+      "pageId": "home",
+      "type": "home",
+      "route": "/",
+      "sources": {
+        "en": "website/src/components/HomePage.astro",
+        "zh-CN": "website/src/components/HomePage.astro",
+        "es": "website/src/components/HomePage.astro"
+      },
+      "title": {
+        "en": "Anki flashcard generator for developers",
+        "zh-CN": "开源 Anki 卡片生成工具：用代码批量制卡",
+        "es": "Generador de tarjetas Anki para desarrolladores"
+      },
+      "description": {
+        "en": "Generate Anki flashcards and APKG decks with open-source Python, Node.js and Rust APIs. Start with CSV, JSON or an AI-assisted workflow.",
+        "zh-CN": "用 Python、Node.js 或 Rust 批量生成 Anki 卡片并导出 APKG。开源生成库提供 CSV、JSON 和 AI 辅助制卡流程，支持媒体与牌组更新。",
+        "es": "Genera tarjetas y mazos APKG de Anki con las API de código abierto para Python, Node.js y Rust. Empieza con CSV, JSON o un flujo asistido por IA."
+      }
+    },
+    {
+      "pageId": "examples",
+      "type": "examples",
+      "route": "/examples/",
+      "sources": {
+        "en": "website/src/components/ExamplesPage.astro",
+        "zh-CN": "website/src/components/ExamplesPage.astro",
+        "es": "website/src/components/ExamplesPage.astro"
+      },
+      "title": {
+        "en": "Card examples",
+        "zh-CN": "卡片示例",
+        "es": "Ejemplos de tarjetas"
+      },
+      "description": {
+        "en": "Explore Basic, Cloze, media, and Image Occlusion cards built with Anki Forge. Read their Rust source and download the generated Anki decks.",
+        "zh-CN": "探索用 Anki Forge 制作的 Basic、Cloze、媒体和图片遮挡卡片，阅读 Rust 源码并下载生成的 Anki 牌组。",
+        "es": "Explora tarjetas Basic, Cloze, multimedia y de oclusión de imágenes creadas con Anki Forge. Consulta su código Rust y descarga los mazos generados."
+      }
+    },
+    {
+      "pageId": "blog",
+      "type": "blog-list",
+      "route": "/blog/",
+      "sources": {
+        "en": "website/src/components/BlogPage.astro",
+        "zh-CN": "website/src/components/BlogPage.astro",
+        "es": "website/src/components/BlogPage.astro"
+      },
+      "title": {
+        "en": "Blog",
+        "zh-CN": "博客",
+        "es": "Blog"
+      },
+      "description": {
+        "en": "Practical guides and engineering decisions behind Anki Forge.",
+        "zh-CN": "Anki Forge 的实用指南与工程决策。",
+        "es": "Guías prácticas y decisiones de ingeniería de Anki Forge."
+      }
+    },
+    {
+      "pageId": "docs",
+      "type": "docs",
+      "route": "/docs/",
+      "sources": {
+        "en": "website/src/content/docs/docs/index.mdx",
+        "zh-CN": "docs/zh-cn/index.md",
+        "es": "docs/es/index.md",
+        "pt-BR": "docs/pt-br/index.md",
+        "ja": "docs/ja/index.md",
+        "de": "docs/de/index.md",
+        "fr": "docs/fr/index.md",
+        "ru": "docs/ru/index.md"
+      },
+      "title": {
+        "en": "Build Anki decks from code",
+        "zh-CN": "用代码生成 Anki 牌组",
+        "es": "Crea mazos de Anki con código"
+      },
+      "description": {
+        "en": "Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.",
+        "zh-CN": "选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。",
+        "es": "Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles."
+      }
+    },
+    {
+      "pageId": "languages",
+      "type": "docs",
+      "route": "/docs/languages/",
+      "sources": {
+        "en": "website/src/content/docs/docs/languages.mdx",
+        "zh-CN": "docs/zh-cn/languages.md",
+        "es": "docs/es/languages.md",
+        "pt-BR": "docs/pt-br/languages.md",
+        "ja": "docs/ja/languages.md",
+        "de": "docs/de/languages.md",
+        "fr": "docs/fr/languages.md",
+        "ru": "docs/ru/languages.md"
+      },
+      "title": {
+        "en": "Choose your language",
+        "zh-CN": "选择开发语言",
+        "es": "Elige tu lenguaje de programación"
+      },
+      "description": {
+        "en": "Install the public Rust, Node or Python package and export your first Anki deck.",
+        "zh-CN": "安装公开 Rust、Node 或 Python 包，导出第一个 Anki 牌组。",
+        "es": "Instala el paquete publicado de Rust, Node.js o Python y exporta tu primer mazo de Anki."
+      }
+    },
+    {
+      "pageId": "quickstart",
+      "type": "docs",
+      "route": "/docs/quickstart/",
+      "sources": {
+        "en": "website/src/content/docs/docs/quickstart.mdx",
+        "zh-CN": "docs/zh-cn/quickstart.md",
+        "es": "docs/es/quickstart.md",
+        "pt-BR": "docs/pt-br/quickstart.md",
+        "ja": "docs/ja/quickstart.md",
+        "de": "docs/de/quickstart.md",
+        "fr": "docs/fr/quickstart.md",
+        "ru": "docs/ru/quickstart.md"
+      },
+      "title": {
+        "en": "Generate an Anki APKG with Rust",
+        "zh-CN": "用 Rust 生成 Anki APKG",
+        "es": "Genera un APKG de Anki con Rust"
+      },
+      "description": {
+        "en": "Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.",
+        "zh-CN": "安装公开 Rust 包，编写西班牙语卡片并导出持久保存的 APKG。",
+        "es": "Instala el paquete de Rust, crea una tarjeta de vocabulario y exporta un archivo APKG persistente con un programa completo."
+      }
+    },
+    {
+      "pageId": "json-to-anki",
+      "type": "docs",
+      "route": "/docs/json-to-anki/",
+      "sources": {
+        "en": "docs/json-to-anki.md",
+        "zh-CN": "docs/zh-cn/json-to-anki.md",
+        "es": "docs/es/json-to-anki.md",
+        "pt-BR": "docs/pt-br/json-to-anki.md",
+        "ja": "docs/ja/json-to-anki.md",
+        "de": "docs/de/json-to-anki.md",
+        "fr": "docs/fr/json-to-anki.md",
+        "ru": "docs/ru/json-to-anki.md"
+      },
+      "title": {
+        "en": "Generate and update Anki decks from JSON",
+        "zh-CN": "用 JSON 数据生成并更新 Anki 牌组",
+        "es": "Genera y actualiza mazos de Anki desde JSON"
+      },
+      "description": {
+        "en": "Read JSON with Rust, Python or TypeScript, package images and audio, then review an answer-only APKG update.",
+        "zh-CN": "用 Rust、Node 或 Python 读取 JSON，打包图片和音频，再检查仅修改答案的更新。",
+        "es": "Lee JSON con Rust, Python o TypeScript, incluye imágenes y audio y revisa una actualización de APKG que solo cambia una respuesta."
+      }
+    },
+    {
+      "pageId": "csv-to-anki",
+      "type": "docs",
+      "route": "/docs/csv-to-anki/",
+      "sources": {
+        "en": "docs/csv-to-anki.md",
+        "zh-CN": "docs/zh-cn/csv-to-anki.md",
+        "es": "docs/es/csv-to-anki.md",
+        "pt-BR": "docs/pt-br/csv-to-anki.md",
+        "ja": "docs/ja/csv-to-anki.md",
+        "de": "docs/de/csv-to-anki.md",
+        "fr": "docs/fr/csv-to-anki.md",
+        "ru": "docs/ru/csv-to-anki.md"
+      },
+      "title": {
+        "en": "CSV to Anki: generate flashcards with Python",
+        "zh-CN": "CSV 转 Anki：用 Python 批量生成卡片",
+        "es": "CSV a Anki: crea tarjetas con Python"
+      },
+      "description": {
+        "en": "Convert a UTF-8 vocabulary spreadsheet to an Anki APKG with a complete Python script, sample CSV, stable note IDs and import checks.",
+        "zh-CN": "用完整 Python 脚本将 UTF-8 CSV 词汇表转换为 Anki APKG，包含示例数据、稳定笔记 ID 和导入检查步骤。",
+        "es": "Convierte una hoja de vocabulario CSV UTF-8 en un APKG con un script completo de Python, ID de nota estables y comprobaciones de importación."
+      }
+    },
+    {
+      "pageId": "ai-anki-cards",
+      "type": "docs",
+      "route": "/docs/ai-anki-cards/",
+      "sources": {
+        "en": "docs/ai-anki-cards.md",
+        "zh-CN": "docs/zh-cn/ai-anki-cards.md",
+        "es": "docs/es/ai-anki-cards.md",
+        "pt-BR": "docs/pt-br/ai-anki-cards.md",
+        "ja": "docs/ja/ai-anki-cards.md",
+        "de": "docs/de/ai-anki-cards.md",
+        "fr": "docs/fr/ai-anki-cards.md",
+        "ru": "docs/ru/ai-anki-cards.md"
+      },
+      "title": {
+        "en": "AI-assisted Anki flashcards: from notes to APKG",
+        "zh-CN": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+        "es": "Crea tarjetas de Anki con ayuda de IA"
+      },
+      "description": {
+        "en": "Draft Anki cards with an AI assistant, review the answers, then export an APKG using Anki Forge. Follow a CSV workflow or use a coding-assistant brief.",
+        "zh-CN": "让 AI 助手根据笔记起草卡片，核对答案后用 Anki Forge 导出 APKG。提供 CSV 制卡流程和编程助手任务说明入口。",
+        "es": "Prepara tarjetas a partir de tus apuntes con un asistente de IA, revisa las respuestas y exporta un APKG con Anki Forge mediante CSV o código."
+      }
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "type": "docs",
+      "route": "/docs/anki-forge-vs-genanki/",
+      "sources": {
+        "en": "docs/anki-forge-vs-genanki.md",
+        "zh-CN": "docs/zh-cn/anki-forge-vs-genanki.md",
+        "es": "docs/es/anki-forge-vs-genanki.md",
+        "pt-BR": "docs/pt-br/anki-forge-vs-genanki.md",
+        "ja": "docs/ja/anki-forge-vs-genanki.md",
+        "de": "docs/de/anki-forge-vs-genanki.md",
+        "fr": "docs/fr/anki-forge-vs-genanki.md",
+        "ru": "docs/ru/anki-forge-vs-genanki.md"
+      },
+      "title": {
+        "en": "Anki Forge vs genanki: choose for your workflow",
+        "zh-CN": "Anki Forge 与 genanki：如何选择",
+        "es": "Anki Forge frente a genanki: cuál elegir"
+      },
+      "description": {
+        "en": "Compare Anki APKG authoring workflows, runtime requirements, update review and migration costs.",
+        "zh-CN": "比较 Anki APKG 编写流程、运行环境、更新检查和迁移成本。",
+        "es": "Compara la creación de APKG, los entornos de ejecución, la revisión de actualizaciones y los costes de migración de Anki Forge y genanki."
+      }
+    },
+    {
+      "pageId": "development",
+      "type": "docs",
+      "route": "/docs/development/",
+      "sources": {
+        "en": "docs/source-builds.md",
+        "zh-CN": "docs/zh-cn/development.md",
+        "es": "docs/es/development.md",
+        "pt-BR": "docs/pt-br/development.md",
+        "ja": "docs/ja/development.md",
+        "de": "docs/de/development.md",
+        "fr": "docs/fr/development.md",
+        "ru": "docs/ru/development.md"
+      },
+      "title": {
+        "en": "Build SDKs from source",
+        "zh-CN": "从源码构建 SDK",
+        "es": "Compila los SDK desde el código fuente"
+      },
+      "description": {
+        "en": "Build SDKs and examples from a source checkout.",
+        "zh-CN": "从仓库源码构建 SDK，运行示例并区分公开包与源码功能。",
+        "es": "Compila los SDK y ejecuta los ejemplos desde el repositorio. Distingue estas compilaciones de los paquetes publicados."
+      }
+    },
+    {
+      "pageId": "rust-guide",
+      "type": "docs",
+      "route": "/docs/rust-guide/",
+      "sources": {
+        "en": "docs/rust-guide.md",
+        "zh-CN": "docs/zh-cn/rust-guide.md",
+        "es": "docs/es/rust-guide.md",
+        "pt-BR": "docs/pt-br/rust-guide.md",
+        "ja": "docs/ja/rust-guide.md",
+        "de": "docs/de/rust-guide.md",
+        "fr": "docs/fr/rust-guide.md",
+        "ru": "docs/ru/rust-guide.md"
+      },
+      "title": {
+        "en": "Rust authoring guide",
+        "zh-CN": "Rust 编写指南",
+        "es": "Guía de desarrollo con Rust"
+      },
+      "description": {
+        "en": "Projects, validation, media and updates through the supported Rust API.",
+        "zh-CN": "通过受支持的 Rust API 创建 Project、校验内容、处理媒体与更新。",
+        "es": "Crea proyectos, valida notas, gestiona recursos multimedia y actualiza mazos con la API pública de Rust."
+      }
+    },
+    {
+      "pageId": "templates",
+      "type": "docs",
+      "route": "/docs/templates/",
+      "sources": {
+        "en": "docs/template-bundles.md",
+        "zh-CN": "docs/zh-cn/templates.md",
+        "es": "docs/es/templates.md",
+        "pt-BR": "docs/pt-br/templates.md",
+        "ja": "docs/ja/templates.md",
+        "de": "docs/de/templates.md",
+        "fr": "docs/fr/templates.md",
+        "ru": "docs/ru/templates.md"
+      },
+      "title": {
+        "en": "Reusable Anki card templates, CSS and media",
+        "zh-CN": "复用 Anki 卡片模板、CSS 与媒体",
+        "es": "Reutiliza plantillas de Anki, CSS y recursos multimedia"
+      },
+      "description": {
+        "en": "Import complete reusable Cloze and normal templates, CSS and media.",
+        "zh-CN": "导入完整的普通与 Cloze 模板、CSS 和媒体。",
+        "es": "Carga paquetes de plantillas normales o Cloze con campos, CSS y recursos explícitos validados antes de exportar."
+      }
+    },
+    {
+      "pageId": "api",
+      "type": "docs",
+      "route": "/docs/api/",
+      "sources": {
+        "en": "docs/api-overview.md",
+        "zh-CN": "docs/zh-cn/api.md",
+        "es": "docs/es/api.md",
+        "pt-BR": "docs/pt-br/api.md",
+        "ja": "docs/ja/api.md",
+        "de": "docs/de/api.md",
+        "fr": "docs/fr/api.md",
+        "ru": "docs/ru/api.md"
+      },
+      "title": {
+        "en": "Public API overview",
+        "zh-CN": "公开 API 总览",
+        "es": "Resumen de la API pública"
+      },
+      "description": {
+        "en": "Find Rust, Python and Node APIs for authoring, media, diagnostics and updates.",
+        "zh-CN": "查找 Rust、Node 和 Python 的内容编写、媒体、诊断与更新 API。",
+        "es": "Encuentra las API de Rust, Python y Node para crear notas, añadir recursos multimedia, diagnosticar errores y revisar actualizaciones."
+      }
+    },
+    {
+      "pageId": "installation",
+      "type": "docs",
+      "route": "/docs/installation/",
+      "sources": {
+        "en": "docs/installation.md",
+        "zh-CN": "docs/zh-cn/installation.md",
+        "es": "docs/es/installation.md",
+        "pt-BR": "docs/pt-br/installation.md",
+        "ja": "docs/ja/installation.md",
+        "de": "docs/de/installation.md",
+        "fr": "docs/fr/installation.md",
+        "ru": "docs/ru/installation.md"
+      },
+      "title": {
+        "en": "Add to your application",
+        "zh-CN": "集成到应用",
+        "es": "Integra Anki Forge en tu aplicación de Rust"
+      },
+      "description": {
+        "en": "Integrate the Rust crate, configure Cargo dependencies and choose the next guide.",
+        "zh-CN": "安装公开 Rust 包，配置 Cargo 依赖并选择下一步指南。",
+        "es": "Instala el crate publicado, configura las dependencias de Cargo y elige cómo añadir recursos multimedia y actualizaciones."
+      }
+    },
+    {
+      "pageId": "concepts",
+      "type": "docs",
+      "route": "/docs/concepts/",
+      "sources": {
+        "en": "docs/concepts.md",
+        "zh-CN": "docs/zh-cn/concepts.md",
+        "es": "docs/es/concepts.md",
+        "pt-BR": "docs/pt-br/concepts.md",
+        "ja": "docs/ja/concepts.md",
+        "de": "docs/de/concepts.md",
+        "fr": "docs/fr/concepts.md",
+        "ru": "docs/ru/concepts.md"
+      },
+      "title": {
+        "en": "Core concepts",
+        "zh-CN": "核心概念",
+        "es": "Conceptos fundamentales de Anki Forge"
+      },
+      "description": {
+        "en": "Projects, owned notes and media, stable keys, text and update identity.",
+        "zh-CN": "理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。",
+        "es": "Entiende proyectos, notas, mazos, claves estables, recursos multimedia y la identidad de las actualizaciones."
+      }
+    },
+    {
+      "pageId": "cards",
+      "type": "docs",
+      "route": "/docs/cards/",
+      "sources": {
+        "en": "docs/cards.md",
+        "zh-CN": "docs/zh-cn/cards.md",
+        "es": "docs/es/cards.md",
+        "pt-BR": "docs/pt-br/cards.md",
+        "ja": "docs/ja/cards.md",
+        "de": "docs/de/cards.md",
+        "fr": "docs/fr/cards.md",
+        "ru": "docs/ru/cards.md"
+      },
+      "title": {
+        "en": "Generate Anki Basic and Cloze flashcards",
+        "zh-CN": "生成 Anki 问答卡片与 Cloze 填空卡片",
+        "es": "Crea tarjetas Basic y Cloze de Anki"
+      },
+      "description": {
+        "en": "Build two notes and three cards with a complete verified Rust example.",
+        "zh-CN": "运行完整 Rust 示例，用两个笔记生成三张卡片。",
+        "es": "Genera dos notas y tres tarjetas con un ejemplo completo de Rust, y conserva la identidad de tus tarjetas."
+      }
+    },
+    {
+      "pageId": "custom-notetypes",
+      "type": "docs",
+      "route": "/docs/custom-notetypes/",
+      "sources": {
+        "en": "docs/custom-notetypes.md",
+        "zh-CN": "docs/zh-cn/custom-notetypes.md",
+        "es": "docs/es/custom-notetypes.md",
+        "pt-BR": "docs/pt-br/custom-notetypes.md",
+        "ja": "docs/ja/custom-notetypes.md",
+        "de": "docs/de/custom-notetypes.md",
+        "fr": "docs/fr/custom-notetypes.md",
+        "ru": "docs/ru/custom-notetypes.md"
+      },
+      "title": {
+        "en": "Custom note types",
+        "zh-CN": "自定义笔记类型",
+        "es": "Crea tipos de nota personalizados para Anki"
+      },
+      "description": {
+        "en": "Declare fields, card templates and generation rules for your own content.",
+        "zh-CN": "为自己的内容定义字段、卡片模板与生成规则。",
+        "es": "Define campos, plantillas y reglas de generación con claves estables y modelos inmutables reutilizables."
+      }
+    },
+    {
+      "pageId": "media",
+      "type": "docs",
+      "route": "/docs/media/",
+      "sources": {
+        "en": "docs/media.md",
+        "zh-CN": "docs/zh-cn/media.md",
+        "es": "docs/es/media.md",
+        "pt-BR": "docs/pt-br/media.md",
+        "ja": "docs/ja/media.md",
+        "de": "docs/de/media.md",
+        "fr": "docs/fr/media.md",
+        "ru": "docs/ru/media.md"
+      },
+      "title": {
+        "en": "Add images and audio to Anki cards",
+        "zh-CN": "为 Anki 卡片添加图片与音频",
+        "es": "Añade imágenes y audio a tus tarjetas Anki"
+      },
+      "description": {
+        "en": "Import images and audio, compose typed content, and manage export names, MIME types and media budgets.",
+        "zh-CN": "导入图片和音频，组合类型化内容，并管理导出名称、MIME 类型与媒体预算。",
+        "es": "Importa recursos multimedia, combina contenido tipado y controla los nombres, tipos MIME y límites de importación."
+      }
+    },
+    {
+      "pageId": "image-occlusion",
+      "type": "docs",
+      "route": "/docs/image-occlusion/",
+      "sources": {
+        "en": "docs/image-occlusion.md",
+        "zh-CN": "docs/zh-cn/image-occlusion.md",
+        "es": "docs/es/image-occlusion.md",
+        "pt-BR": "docs/pt-br/image-occlusion.md",
+        "ja": "docs/ja/image-occlusion.md",
+        "de": "docs/de/image-occlusion.md",
+        "fr": "docs/fr/image-occlusion.md",
+        "ru": "docs/ru/image-occlusion.md"
+      },
+      "title": {
+        "en": "Generate Anki Image Occlusion cards",
+        "zh-CN": "生成 Anki 图片遮挡卡片",
+        "es": "Genera tarjetas Anki con oclusión de imágenes"
+      },
+      "description": {
+        "en": "Create rectangle-based image questions in both occlusion modes.",
+        "zh-CN": "用矩形区域创建图像问题，了解两种遮挡模式。",
+        "es": "Crea preguntas sobre imágenes con máscaras rectangulares y conserva su identidad al actualizar el mazo."
+      }
+    },
+    {
+      "pageId": "updates",
+      "type": "docs",
+      "route": "/docs/updates/",
+      "sources": {
+        "en": "docs/updates.md",
+        "zh-CN": "docs/zh-cn/updates.md",
+        "es": "docs/es/updates.md",
+        "pt-BR": "docs/pt-br/updates.md",
+        "ja": "docs/ja/updates.md",
+        "de": "docs/de/updates.md",
+        "fr": "docs/fr/updates.md",
+        "ru": "docs/ru/updates.md"
+      },
+      "title": {
+        "en": "Update Anki decks with stable note IDs",
+        "zh-CN": "用稳定笔记 ID 更新 Anki 牌组",
+        "es": "Actualiza mazos de Anki con ID de nota estables"
+      },
+      "description": {
+        "en": "Compare and build releases using verified original APKG baselines.",
+        "zh-CN": "以原始 APKG 为基线比较并构建新版本。",
+        "es": "Compara versiones y genera actualizaciones desde un APKG original de distribución con pruebas de identidad verificadas."
+      }
+    },
+    {
+      "pageId": "build-guarantees",
+      "type": "docs",
+      "route": "/docs/build-guarantees/",
+      "sources": {
+        "en": "docs/build-guarantees.md",
+        "zh-CN": "docs/zh-cn/build-guarantees.md",
+        "es": "docs/es/build-guarantees.md",
+        "pt-BR": "docs/pt-br/build-guarantees.md",
+        "ja": "docs/ja/build-guarantees.md",
+        "de": "docs/de/build-guarantees.md",
+        "fr": "docs/fr/build-guarantees.md",
+        "ru": "docs/ru/build-guarantees.md"
+      },
+      "title": {
+        "en": "Build and output guarantees",
+        "zh-CN": "构建与输出保证",
+        "es": "Garantías de generación y de los archivos APKG"
+      },
+      "description": {
+        "en": "Understand temporary artifacts, path protection and candidate publication.",
+        "zh-CN": "理解临时产物、路径保护和候选版本发布。",
+        "es": "Comprende la vida útil de los archivos, los límites de inspección y la publicación de una versión candidata revisada."
+      }
+    },
+    {
+      "pageId": "troubleshooting",
+      "type": "docs",
+      "route": "/docs/troubleshooting/",
+      "sources": {
+        "en": "docs/troubleshooting.md",
+        "zh-CN": "docs/zh-cn/troubleshooting.md",
+        "es": "docs/es/troubleshooting.md",
+        "pt-BR": "docs/pt-br/troubleshooting.md",
+        "ja": "docs/ja/troubleshooting.md",
+        "de": "docs/de/troubleshooting.md",
+        "fr": "docs/fr/troubleshooting.md",
+        "ru": "docs/ru/troubleshooting.md"
+      },
+      "title": {
+        "en": "Troubleshooting",
+        "zh-CN": "排查问题",
+        "es": "Soluciona errores de Anki Forge"
+      },
+      "description": {
+        "en": "Resolve installation, media, template, identity and output errors.",
+        "zh-CN": "解决安装、媒体、模板、身份与输出错误。",
+        "es": "Diagnostica errores de instalación, notas, recursos multimedia, plantillas, identidad y publicación de archivos."
+      }
+    },
+    {
+      "pageId": "compatibility",
+      "type": "docs",
+      "route": "/docs/compatibility/",
+      "sources": {
+        "en": "docs/compatibility.md",
+        "zh-CN": "docs/zh-cn/compatibility.md",
+        "es": "docs/es/compatibility.md",
+        "pt-BR": "docs/pt-br/compatibility.md",
+        "ja": "docs/ja/compatibility.md",
+        "de": "docs/de/compatibility.md",
+        "fr": "docs/fr/compatibility.md",
+        "ru": "docs/ru/compatibility.md"
+      },
+      "title": {
+        "en": "Compatibility and releases",
+        "zh-CN": "兼容性与发布",
+        "es": "Compatibilidad de Anki Forge y entornos verificados"
+      },
+      "description": {
+        "en": "Published packages, verified environments and Anki client conditions.",
+        "zh-CN": "查看公开包、已验证运行环境和 Anki 客户端条件。",
+        "es": "Consulta los paquetes públicos, los entornos probados y las condiciones de importación y reproducción en Anki."
+      }
+    },
+    {
+      "pageId": "rust-api",
+      "type": "docs",
+      "route": "/docs/rust-api/",
+      "sources": {
+        "en": "docs/rust-api.md",
+        "zh-CN": "docs/zh-cn/rust-api.md",
+        "es": "docs/es/rust-api.md",
+        "pt-BR": "docs/pt-br/rust-api.md",
+        "ja": "docs/ja/rust-api.md",
+        "de": "docs/de/rust-api.md",
+        "fr": "docs/fr/rust-api.md",
+        "ru": "docs/ru/rust-api.md"
+      },
+      "title": {
+        "en": "Rust API guide",
+        "zh-CN": "Rust API 指南",
+        "es": "Referencia de la API de Rust"
+      },
+      "description": {
+        "en": "Find public authoring methods, build defaults, reports and diagnostic behavior.",
+        "zh-CN": "查找内容编写方法、构建默认值、报告和诊断行为。",
+        "es": "Consulta los métodos de creación de contenido, las opciones de generación, los informes y los errores públicos de Rust."
+      }
+    },
+    {
+      "pageId": "node-quickstart",
+      "type": "docs",
+      "route": "/docs/node-quickstart/",
+      "sources": {
+        "en": "docs/node/quick-start.md",
+        "zh-CN": "docs/zh-cn/node-quickstart.md",
+        "es": "docs/es/node-quickstart.md",
+        "pt-BR": "docs/pt-br/node-quickstart.md",
+        "ja": "docs/ja/node-quickstart.md",
+        "de": "docs/de/node-quickstart.md",
+        "fr": "docs/fr/node-quickstart.md",
+        "ru": "docs/ru/node-quickstart.md"
+      },
+      "title": {
+        "en": "Generate an Anki APKG with Node.js",
+        "zh-CN": "用 Node.js 生成 Anki APKG",
+        "es": "Genera un APKG de Anki con Node.js"
+      },
+      "description": {
+        "en": "Install the public Node package and export your first deck.",
+        "zh-CN": "安装公开 Node 包并导出第一个牌组。",
+        "es": "Instala el paquete publicado de Node.js y exporta tu primer mazo con un programa completo. Continúa con TypeScript, imágenes y actualizaciones."
+      }
+    },
+    {
+      "pageId": "node-api",
+      "type": "docs",
+      "route": "/docs/node-api/",
+      "sources": {
+        "en": "docs/node/api.md",
+        "zh-CN": "docs/zh-cn/node-api.md",
+        "es": "docs/es/node-api.md",
+        "pt-BR": "docs/pt-br/node-api.md",
+        "ja": "docs/ja/node-api.md",
+        "de": "docs/de/node-api.md",
+        "fr": "docs/fr/node-api.md",
+        "ru": "docs/ru/node-api.md"
+      },
+      "title": {
+        "en": "Node and TypeScript API",
+        "zh-CN": "Node 与 TypeScript API",
+        "es": "API de Node y TypeScript"
+      },
+      "description": {
+        "en": "Public methods, async behavior, build options and reports.",
+        "zh-CN": "公开方法、异步行为、构建选项和报告。",
+        "es": "Métodos públicos de Node, operaciones asíncronas, opciones de generación, gestión de archivos de salida e informes."
+      }
+    },
+    {
+      "pageId": "python-quickstart",
+      "type": "docs",
+      "route": "/docs/python-quickstart/",
+      "sources": {
+        "en": "docs/python/quick-start.md",
+        "zh-CN": "docs/zh-cn/python-quickstart.md",
+        "es": "docs/es/python-quickstart.md",
+        "pt-BR": "docs/pt-br/python-quickstart.md",
+        "ja": "docs/ja/python-quickstart.md",
+        "de": "docs/de/python-quickstart.md",
+        "fr": "docs/fr/python-quickstart.md",
+        "ru": "docs/ru/python-quickstart.md"
+      },
+      "title": {
+        "en": "Generate an Anki APKG with Python",
+        "zh-CN": "用 Python 生成 Anki APKG",
+        "es": "Genera un APKG de Anki con Python"
+      },
+      "description": {
+        "en": "Install the public Python wheel and generate your first Anki APKG.",
+        "zh-CN": "安装公开 Python wheel 并生成第一个 Anki APKG。",
+        "es": "Instala el wheel publicado de Python y crea tu primer archivo APKG de Anki con un programa completo y claves de nota estables."
+      }
+    },
+    {
+      "pageId": "python-api",
+      "type": "docs",
+      "route": "/docs/python-api/",
+      "sources": {
+        "en": "docs/python/api.md",
+        "zh-CN": "docs/zh-cn/python-api.md",
+        "es": "docs/es/python-api.md",
+        "pt-BR": "docs/pt-br/python-api.md",
+        "ja": "docs/ja/python-api.md",
+        "de": "docs/de/python-api.md",
+        "fr": "docs/fr/python-api.md",
+        "ru": "docs/ru/python-api.md"
+      },
+      "title": {
+        "en": "Python API",
+        "zh-CN": "Python API",
+        "es": "API de Python"
+      },
+      "description": {
+        "en": "Project, media, build options, reports and temporary artifact ownership.",
+        "zh-CN": "Project、媒体、构建选项、报告和临时产物的所有权。",
+        "es": "Project, recursos multimedia, opciones de generación, informes y gestión de la vida útil de los archivos temporales."
+      }
+    },
+    {
+      "pageId": "python-diagnostics",
+      "type": "docs",
+      "route": "/docs/python-diagnostics/",
+      "sources": {
+        "en": "docs/python/diagnostics.md",
+        "zh-CN": "docs/zh-cn/python-diagnostics.md",
+        "es": "docs/es/python-diagnostics.md",
+        "pt-BR": "docs/pt-br/python-diagnostics.md",
+        "ja": "docs/ja/python-diagnostics.md",
+        "de": "docs/de/python-diagnostics.md",
+        "fr": "docs/fr/python-diagnostics.md",
+        "ru": "docs/ru/python-diagnostics.md"
+      },
+      "title": {
+        "en": "Python diagnostics",
+        "zh-CN": "Python 诊断",
+        "es": "Diagnósticos de Python"
+      },
+      "description": {
+        "en": "Understand native authoring errors, build reports and update evidence.",
+        "zh-CN": "理解原生内容编写错误、构建报告和更新证据。",
+        "es": "Interpreta los errores nativos, los informes de generación y las pruebas y políticas de actualización de Anki Forge."
+      }
+    },
+    {
+      "pageId": "python-migration",
+      "type": "docs",
+      "route": "/docs/python-migration/",
+      "sources": {
+        "en": "bindings/python/MIGRATION.md",
+        "zh-CN": "docs/zh-cn/python-migration.md",
+        "es": "docs/es/python-migration.md",
+        "pt-BR": "docs/pt-br/python-migration.md",
+        "ja": "docs/ja/python-migration.md",
+        "de": "docs/de/python-migration.md",
+        "fr": "docs/fr/python-migration.md",
+        "ru": "docs/ru/python-migration.md"
+      },
+      "title": {
+        "en": "Python API transition",
+        "zh-CN": "Python API 迁移",
+        "es": "Transición a la nueva API de Python"
+      },
+      "description": {
+        "en": "Use the current owned-value SDK and understand the clean-slate boundary.",
+        "zh-CN": "使用当前拥有值所有权的 SDK，理解新版 API 的迁移边界。",
+        "es": "Adapta tu código al SDK actual de Python y conoce los límites de compatibilidad con la API anterior."
+      }
+    },
+    {
+      "pageId": "genanki-migration",
+      "type": "docs",
+      "route": "/docs/genanki-migration/",
+      "sources": {
+        "en": "docs/python/genanki-migration.md",
+        "zh-CN": "docs/zh-cn/genanki-migration.md",
+        "es": "docs/es/genanki-migration.md",
+        "pt-BR": "docs/pt-br/genanki-migration.md",
+        "ja": "docs/ja/genanki-migration.md",
+        "de": "docs/de/genanki-migration.md",
+        "fr": "docs/fr/genanki-migration.md",
+        "ru": "docs/ru/genanki-migration.md"
+      },
+      "title": {
+        "en": "Move from genanki",
+        "zh-CN": "从 genanki 迁移",
+        "es": "Pasar de genanki a Anki Forge"
+      },
+      "description": {
+        "en": "Understand content, template and media behavior when moving to Anki Forge.",
+        "zh-CN": "了解迁入 Anki Forge 时内容、模板与媒体行为的变化。",
+        "es": "Adapta notas, modelos, plantillas y recursos multimedia de genanki al modelo de Anki Forge y sus claves estables."
+      }
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "type": "article",
+      "route": "/blog/your-first-anki-deck/",
+      "sources": {
+        "en": "website/src/content/blog/your-first-anki-deck.mdx",
+        "zh-CN": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+        "es": "website/src/content/blog/es/your-first-anki-deck.mdx",
+        "pt-BR": "website/src/content/blog/pt-br/your-first-anki-deck.mdx",
+        "ja": "website/src/content/blog/ja/your-first-anki-deck.mdx",
+        "de": "website/src/content/blog/de/your-first-anki-deck.mdx",
+        "fr": "website/src/content/blog/fr/your-first-anki-deck.mdx",
+        "ru": "website/src/content/blog/ru/your-first-anki-deck.mdx"
+      }
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "type": "article",
+      "route": "/blog/stable-ids-and-deck-updates/",
+      "sources": {
+        "en": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+        "zh-CN": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+        "es": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+        "pt-BR": "website/src/content/blog/pt-br/stable-ids-and-deck-updates.mdx",
+        "ja": "website/src/content/blog/ja/stable-ids-and-deck-updates.mdx",
+        "de": "website/src/content/blog/de/stable-ids-and-deck-updates.mdx",
+        "fr": "website/src/content/blog/fr/stable-ids-and-deck-updates.mdx",
+        "ru": "website/src/content/blog/ru/stable-ids-and-deck-updates.mdx"
+      }
+    }
+  ]
+}

@@ -1,0 +1,2201 @@
+{
+  "reviewerRun": "/root/spanish_standards/independent-technical-source-2026-10-31",
+  "createdAt": "2026-11-01T03:55:47.330811+00:00",
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/source-review-candidate.json",
+    "sha256": "5063845cfabbebf15787ee652ba49b0567ee03f3da7ea794afd947b6db679bb9"
+  },
+  "pinnedMain": "e5d3d66a12e5ab9a2c161b65c7e055a3677f3f79",
+  "pinnedSpanish": "991187c33ac438f10d2b3f7b56586724ab661052",
+  "scope": [
+    "Independent technical source review. Fresh semantic read of all 29 ES documents, two ES articles, entire ES UI/framework dictionaries, AI prompt/constraint data, locale model migration, search additions and briefs. Re-read six changed ES bodies and five metadata descriptions after the final integration correction.",
+    "EN/zh-CN longforms, render/runtime code and SDK dependencies are assessed by explicit unchanged-input reuse of the prior independent main review, with byte comparisons against pinned main and verified immutable prior blobs. EN/zh-CN metadata/search/AI fields are semantically equal to main; no claim to have newly re-read every unchanged EN/zh-CN paragraph.",
+    "Current main runtime/validators retained. ES model metadata lives in existing locale maps; AI constraints live in promptContracts.es. Read-only probe checks all 102 current triples/input lists, 29 metadata records, 64 code fences/canonical program instances and 9 prompt cases. This is not an SDK execution, browser, artifact-build or live deployment review."
+  ],
+  "files": [
+    {
+      "path": "anki_forge/examples/docs_publication.rs",
+      "sha256": "65e6404ee7381d73709dca0ada96cdb7923650ddd1cc330447884864d552a85b",
+      "bytes": 871,
+      "snapshotPath": "technical-input-snapshot/65e6404ee7381d73709dca0ada96cdb7923650ddd1cc330447884864d552a85b",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "anki_forge/examples/docs_workflow.rs",
+      "sha256": "2ab71f370ca174b256d1ba56e8b8cccc34fda5918a1fe25fe29626b061d25d86",
+      "bytes": 4370,
+      "snapshotPath": "technical-input-snapshot/2ab71f370ca174b256d1ba56e8b8cccc34fda5918a1fe25fe29626b061d25d86",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287",
+      "bytes": 2468,
+      "snapshotPath": "technical-input-snapshot/5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "bytes": 368,
+      "snapshotPath": "technical-input-snapshot/c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "anki_forge/examples/target_api_custom_notetype.rs",
+      "sha256": "2951c058e9c3376fbe115b199a010830445c5765c923f9f66f6406a724d9cd13",
+      "bytes": 957,
+      "snapshotPath": "technical-input-snapshot/2951c058e9c3376fbe115b199a010830445c5765c923f9f66f6406a724d9cd13",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "anki_forge/examples/website_showcase.rs",
+      "sha256": "458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3",
+      "bytes": 10161,
+      "snapshotPath": "technical-input-snapshot/458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a",
+      "bytes": 2402,
+      "snapshotPath": "technical-input-snapshot/e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+      "bytes": 309,
+      "snapshotPath": "technical-input-snapshot/b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "bindings/python/MIGRATION.md",
+      "sha256": "ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2",
+      "bytes": 1813,
+      "snapshotPath": "technical-input-snapshot/ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "bindings/python/examples/csv_to_anki.py",
+      "sha256": "5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc",
+      "bytes": 1786,
+      "snapshotPath": "technical-input-snapshot/5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962",
+      "bytes": 1960,
+      "snapshotPath": "technical-input-snapshot/a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+      "bytes": 240,
+      "snapshotPath": "technical-input-snapshot/636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+      "sha256": "842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34",
+      "bytes": 436,
+      "snapshotPath": "technical-input-snapshot/842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/ai-anki-cards.md",
+      "sha256": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5",
+      "bytes": 4014,
+      "snapshotPath": "technical-input-snapshot/10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "sha256": "53f6f0b9b1471fde4083f772594674f588bb690da20b7d87d8fb1967b6b23678",
+      "bytes": 5235,
+      "snapshotPath": "technical-input-snapshot/53f6f0b9b1471fde4083f772594674f588bb690da20b7d87d8fb1967b6b23678",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": []
+    },
+    {
+      "path": "docs/anki-forge-vs-genanki.md",
+      "sha256": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+      "bytes": 3689,
+      "snapshotPath": "technical-input-snapshot/0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/api-overview.md",
+      "sha256": "a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b",
+      "bytes": 1452,
+      "snapshotPath": "technical-input-snapshot/a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/benchmark-presentation.json",
+      "sha256": "487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074",
+      "bytes": 385,
+      "snapshotPath": "technical-input-snapshot/487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/build-guarantees.md",
+      "sha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+      "bytes": 5340,
+      "snapshotPath": "technical-input-snapshot/8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/cards.md",
+      "sha256": "8de0e93bf4a3b94d18d8214687d78b70a32b53e16b2369692da7c624f028d5f8",
+      "bytes": 2482,
+      "snapshotPath": "technical-input-snapshot/8de0e93bf4a3b94d18d8214687d78b70a32b53e16b2369692da7c624f028d5f8",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/compatibility.md",
+      "sha256": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c",
+      "bytes": 2742,
+      "snapshotPath": "technical-input-snapshot/30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/concepts.md",
+      "sha256": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279",
+      "bytes": 3028,
+      "snapshotPath": "technical-input-snapshot/1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/csv-to-anki.md",
+      "sha256": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486",
+      "bytes": 5566,
+      "snapshotPath": "technical-input-snapshot/5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/custom-notetypes.md",
+      "sha256": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1",
+      "bytes": 3207,
+      "snapshotPath": "technical-input-snapshot/6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/ai-anki-cards.md",
+      "sha256": "8b80fffb4cbd0839fbe2c6d816a4e68d68eb0150d81b8551f8fee47777a2de08",
+      "bytes": 4783,
+      "snapshotPath": "technical-input-snapshot/8b80fffb4cbd0839fbe2c6d816a4e68d68eb0150d81b8551f8fee47777a2de08",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/anki-forge-vs-genanki.md",
+      "sha256": "04cc37e1506ddd0f5ed2616d9d70ea05ab07363c50d165980d6fdae068f4bf14",
+      "bytes": 4723,
+      "snapshotPath": "technical-input-snapshot/04cc37e1506ddd0f5ed2616d9d70ea05ab07363c50d165980d6fdae068f4bf14",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/api.md",
+      "sha256": "b5a1917ba788bc8ce4f3abfca1366a75fb232ffffcf26582223affbb4993f595",
+      "bytes": 1884,
+      "snapshotPath": "technical-input-snapshot/b5a1917ba788bc8ce4f3abfca1366a75fb232ffffcf26582223affbb4993f595",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/build-guarantees.md",
+      "sha256": "a9783373464d0dc6dab67c4fb6b9acb9a12a22dac3c6294ade252055e58e5211",
+      "bytes": 7067,
+      "snapshotPath": "technical-input-snapshot/a9783373464d0dc6dab67c4fb6b9acb9a12a22dac3c6294ade252055e58e5211",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/cards.md",
+      "sha256": "9e88723fba1f06d142694dcfb3bea0ab654696ab230bbd0ee93d74a9d4424ffa",
+      "bytes": 2978,
+      "snapshotPath": "technical-input-snapshot/9e88723fba1f06d142694dcfb3bea0ab654696ab230bbd0ee93d74a9d4424ffa",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": []
+    },
+    {
+      "path": "docs/es/compatibility.md",
+      "sha256": "b317fb1db494e0c041d18b2b9e966b0ea265be2c5bed59ae1821a576fc397f5a",
+      "bytes": 3729,
+      "snapshotPath": "technical-input-snapshot/b317fb1db494e0c041d18b2b9e966b0ea265be2c5bed59ae1821a576fc397f5a",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/concepts.md",
+      "sha256": "be7aeded92b0e32b8953b3356c0e92b3cfdbe5462a071e743bceacf1c74967cf",
+      "bytes": 4295,
+      "snapshotPath": "technical-input-snapshot/be7aeded92b0e32b8953b3356c0e92b3cfdbe5462a071e743bceacf1c74967cf",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/csv-to-anki.md",
+      "sha256": "b913be7c1051dcd98d8b0f611b7b02745898c57212393ee457b581188aa778c3",
+      "bytes": 6085,
+      "snapshotPath": "technical-input-snapshot/b913be7c1051dcd98d8b0f611b7b02745898c57212393ee457b581188aa778c3",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/custom-notetypes.md",
+      "sha256": "e06cf470c302ec013c67b5baf77580f1022f11984e2b84c5c567d664e6579ba1",
+      "bytes": 3980,
+      "snapshotPath": "technical-input-snapshot/e06cf470c302ec013c67b5baf77580f1022f11984e2b84c5c567d664e6579ba1",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/development.md",
+      "sha256": "722d645a9ecac60caddb18c2e097e82b3190f4e7480a615ac5804e111f56a3d2",
+      "bytes": 1995,
+      "snapshotPath": "technical-input-snapshot/722d645a9ecac60caddb18c2e097e82b3190f4e7480a615ac5804e111f56a3d2",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/genanki-migration.md",
+      "sha256": "6ef6e1e61293f9bfa0553c0d6ee44298324d5ce50231bfc6b7736a3d3314fd3a",
+      "bytes": 3958,
+      "snapshotPath": "technical-input-snapshot/6ef6e1e61293f9bfa0553c0d6ee44298324d5ce50231bfc6b7736a3d3314fd3a",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": []
+    },
+    {
+      "path": "docs/es/image-occlusion.md",
+      "sha256": "bd4e2015b1dbcce582508b373dcb8f45d52256993b29202b0f144f350e491a32",
+      "bytes": 4129,
+      "snapshotPath": "technical-input-snapshot/bd4e2015b1dbcce582508b373dcb8f45d52256993b29202b0f144f350e491a32",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": []
+    },
+    {
+      "path": "docs/es/index.md",
+      "sha256": "ac237d7de9b07b2d8517690a35763d341a57f5e331a6c7a5ff7636655f3f13f7",
+      "bytes": 3272,
+      "snapshotPath": "technical-input-snapshot/ac237d7de9b07b2d8517690a35763d341a57f5e331a6c7a5ff7636655f3f13f7",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/installation.md",
+      "sha256": "dc03cf4b3633c162b880edd08188dee868dbb1919537df6543c5a0d8eb8e3c3f",
+      "bytes": 2099,
+      "snapshotPath": "technical-input-snapshot/dc03cf4b3633c162b880edd08188dee868dbb1919537df6543c5a0d8eb8e3c3f",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/json-to-anki.md",
+      "sha256": "2294cd3ed93fe33b3d176dc92b89f84f97ea87788d923b0580e6947494382a17",
+      "bytes": 11885,
+      "snapshotPath": "technical-input-snapshot/2294cd3ed93fe33b3d176dc92b89f84f97ea87788d923b0580e6947494382a17",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/languages.md",
+      "sha256": "194b998bd39e93ba3f49c0a663b0c0f7c1b7b1cff2e90c7d01f1e86bfa21e200",
+      "bytes": 1869,
+      "snapshotPath": "technical-input-snapshot/194b998bd39e93ba3f49c0a663b0c0f7c1b7b1cff2e90c7d01f1e86bfa21e200",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/media.md",
+      "sha256": "d43e58143be9ff485a1d501854a997ffb6e2095aa15da04a23e382a0370302da",
+      "bytes": 9871,
+      "snapshotPath": "technical-input-snapshot/d43e58143be9ff485a1d501854a997ffb6e2095aa15da04a23e382a0370302da",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": []
+    },
+    {
+      "path": "docs/es/node-api.md",
+      "sha256": "12770ed45358ed5837941fc53122b3d21b4e2b6da8eca31e4754b7b4b9979970",
+      "bytes": 16000,
+      "snapshotPath": "technical-input-snapshot/12770ed45358ed5837941fc53122b3d21b4e2b6da8eca31e4754b7b4b9979970",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/node-quickstart.md",
+      "sha256": "d3bbb1b778ac54b0a6ad0f29b8ec715c3b183f33562f74aeaf505783877cdf70",
+      "bytes": 2188,
+      "snapshotPath": "technical-input-snapshot/d3bbb1b778ac54b0a6ad0f29b8ec715c3b183f33562f74aeaf505783877cdf70",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "sha256": "a8d45ed551b810ebf0d55019ffd9bad8a6345c6d63a93b90bf9039f018b8ee47",
+      "bytes": 11317,
+      "snapshotPath": "technical-input-snapshot/a8d45ed551b810ebf0d55019ffd9bad8a6345c6d63a93b90bf9039f018b8ee47",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/python-diagnostics.md",
+      "sha256": "8f1456b53eed097da5869b1c45bd9c02e2d9857b9a1581d2aaf261d97ff3b879",
+      "bytes": 6394,
+      "snapshotPath": "technical-input-snapshot/8f1456b53eed097da5869b1c45bd9c02e2d9857b9a1581d2aaf261d97ff3b879",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/python-migration.md",
+      "sha256": "638eef94d9c8ea3bf26baad4172603ebe1f5b7ef45df7534f2c821815a429283",
+      "bytes": 2277,
+      "snapshotPath": "technical-input-snapshot/638eef94d9c8ea3bf26baad4172603ebe1f5b7ef45df7534f2c821815a429283",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/python-quickstart.md",
+      "sha256": "e933a64e8b9e6f274dc4b45fb0a9bf5fc010a237fdb274719c6b5a1ff49399d9",
+      "bytes": 2166,
+      "snapshotPath": "technical-input-snapshot/e933a64e8b9e6f274dc4b45fb0a9bf5fc010a237fdb274719c6b5a1ff49399d9",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/quickstart.md",
+      "sha256": "cbd9b899cfe7dba028def67878e19c53e0a9e6497c29b9fdd2204cd4798f3a20",
+      "bytes": 1757,
+      "snapshotPath": "technical-input-snapshot/cbd9b899cfe7dba028def67878e19c53e0a9e6497c29b9fdd2204cd4798f3a20",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/rust-api.md",
+      "sha256": "633feb34058663f28393f6d14cbd112e39e95061ee8c795eae73cc2129139491",
+      "bytes": 11229,
+      "snapshotPath": "technical-input-snapshot/633feb34058663f28393f6d14cbd112e39e95061ee8c795eae73cc2129139491",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/rust-guide.md",
+      "sha256": "b222d50298d64c963810deefae73386a16f8920826d6c34ffa52920070e705b4",
+      "bytes": 6877,
+      "snapshotPath": "technical-input-snapshot/b222d50298d64c963810deefae73386a16f8920826d6c34ffa52920070e705b4",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/templates.md",
+      "sha256": "e89f1b6b0c5766205ac36fae7bf326afa2a604ce117106ca1ddea272ec753956",
+      "bytes": 6645,
+      "snapshotPath": "technical-input-snapshot/e89f1b6b0c5766205ac36fae7bf326afa2a604ce117106ca1ddea272ec753956",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": []
+    },
+    {
+      "path": "docs/es/troubleshooting.md",
+      "sha256": "3096c6a6e87d8ac623b26ccba13382e7ddd5087bab79840e7151b44b9cc351a7",
+      "bytes": 5424,
+      "snapshotPath": "technical-input-snapshot/3096c6a6e87d8ac623b26ccba13382e7ddd5087bab79840e7151b44b9cc351a7",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/es/updates.md",
+      "sha256": "19380eb677013ee27ca173e7d4719e6003ca8a7847337349185ce2b5164976d0",
+      "bytes": 9395,
+      "snapshotPath": "technical-input-snapshot/19380eb677013ee27ca173e7d4719e6003ca8a7847337349185ce2b5164976d0",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": []
+    },
+    {
+      "path": "docs/image-occlusion.md",
+      "sha256": "3e54b44010c3420fff223ce8a4bf0a1bb095dd27a6fd3d4b1517d6a05a7f85a5",
+      "bytes": 3531,
+      "snapshotPath": "technical-input-snapshot/3e54b44010c3420fff223ce8a4bf0a1bb095dd27a6fd3d4b1517d6a05a7f85a5",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/installation.md",
+      "sha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "bytes": 1565,
+      "snapshotPath": "technical-input-snapshot/ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/json-to-anki.md",
+      "sha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "bytes": 10963,
+      "snapshotPath": "technical-input-snapshot/4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/media.md",
+      "sha256": "c2d0a5d292d6b320d47892926767ef782355935e8f9cefade9b930e2f6b62c02",
+      "bytes": 7982,
+      "snapshotPath": "technical-input-snapshot/c2d0a5d292d6b320d47892926767ef782355935e8f9cefade9b930e2f6b62c02",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/node/api.md",
+      "sha256": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726",
+      "bytes": 12791,
+      "snapshotPath": "technical-input-snapshot/fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/node/quick-start.md",
+      "sha256": "084c9c550e430907e7c77de653458fdc11a393136b8c4a24f1e64e8c03e2113e",
+      "bytes": 1816,
+      "snapshotPath": "technical-input-snapshot/084c9c550e430907e7c77de653458fdc11a393136b8c4a24f1e64e8c03e2113e",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/performance/20261008/comparison.csv",
+      "sha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999",
+      "bytes": 8435,
+      "snapshotPath": "technical-input-snapshot/252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/python/api.md",
+      "sha256": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+      "bytes": 8987,
+      "snapshotPath": "technical-input-snapshot/95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/python/diagnostics.md",
+      "sha256": "b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28",
+      "bytes": 5192,
+      "snapshotPath": "technical-input-snapshot/b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/python/genanki-migration.md",
+      "sha256": "3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f",
+      "bytes": 3210,
+      "snapshotPath": "technical-input-snapshot/3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/python/quick-start.md",
+      "sha256": "394405423e6036cf8a11725eae7fb25adf1ba927df4fe68f690baee409258b42",
+      "bytes": 1795,
+      "snapshotPath": "technical-input-snapshot/394405423e6036cf8a11725eae7fb25adf1ba927df4fe68f690baee409258b42",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/recipes/csv-to-anki/cards.csv",
+      "sha256": "216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64",
+      "bytes": 86,
+      "snapshotPath": "technical-input-snapshot/216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/rust-api.md",
+      "sha256": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a",
+      "bytes": 9054,
+      "snapshotPath": "technical-input-snapshot/1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/rust-guide.md",
+      "sha256": "5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf",
+      "bytes": 5286,
+      "snapshotPath": "technical-input-snapshot/5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/source-builds.md",
+      "sha256": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac",
+      "bytes": 1619,
+      "snapshotPath": "technical-input-snapshot/a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/template-bundles.md",
+      "sha256": "8695e7f6f40d19911dd072a16bd5d07f43e2a250618eb6c0aefc06a39451f53f",
+      "bytes": 5455,
+      "snapshotPath": "technical-input-snapshot/8695e7f6f40d19911dd072a16bd5d07f43e2a250618eb6c0aefc06a39451f53f",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699",
+      "bytes": 4101,
+      "snapshotPath": "technical-input-snapshot/dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/updates.md",
+      "sha256": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+      "bytes": 7916,
+      "snapshotPath": "technical-input-snapshot/26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/ai-anki-cards.md",
+      "sha256": "49a557471ff9ab2a4ae8cc9c4b7d7fe12307a928bb3c66d2c0d2082119e4c1ae",
+      "bytes": 3700,
+      "snapshotPath": "technical-input-snapshot/49a557471ff9ab2a4ae8cc9c4b7d7fe12307a928bb3c66d2c0d2082119e4c1ae",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/anki-forge-vs-genanki.md",
+      "sha256": "fe79c48acc7247921f08a8403b3a24e3ae29ba0977b220c7eab06e779a6fbbea",
+      "bytes": 3329,
+      "snapshotPath": "technical-input-snapshot/fe79c48acc7247921f08a8403b3a24e3ae29ba0977b220c7eab06e779a6fbbea",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/api.md",
+      "sha256": "e6cc07f90a030bd3a24ff7d53d8569010772600e9cdff582edd906a851bc925d",
+      "bytes": 1405,
+      "snapshotPath": "technical-input-snapshot/e6cc07f90a030bd3a24ff7d53d8569010772600e9cdff582edd906a851bc925d",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/build-guarantees.md",
+      "sha256": "5d7f6e975cd181ec7fe980b9a2e3f223bf50f99b0fb65207e8dfbf183eaf17af",
+      "bytes": 4640,
+      "snapshotPath": "technical-input-snapshot/5d7f6e975cd181ec7fe980b9a2e3f223bf50f99b0fb65207e8dfbf183eaf17af",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/cards.md",
+      "sha256": "cbf569294454cda932ec7b3976a992d81ba4b020fb14105e8360539535c94e14",
+      "bytes": 2455,
+      "snapshotPath": "technical-input-snapshot/cbf569294454cda932ec7b3976a992d81ba4b020fb14105e8360539535c94e14",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/compatibility.md",
+      "sha256": "617bfe97d87e825467371377e8711d757469b6d007d4ca7fb9962f6ab10ed87c",
+      "bytes": 2610,
+      "snapshotPath": "technical-input-snapshot/617bfe97d87e825467371377e8711d757469b6d007d4ca7fb9962f6ab10ed87c",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/concepts.md",
+      "sha256": "d96916d3e573822c4bc9f918a0b00f86fefad8062a8d42330a5942b18f017823",
+      "bytes": 2830,
+      "snapshotPath": "technical-input-snapshot/d96916d3e573822c4bc9f918a0b00f86fefad8062a8d42330a5942b18f017823",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/csv-to-anki.md",
+      "sha256": "a42ecf3bc3b7d2bf4dda6a248569f3fa7c35918a21e8436f36893b08cd5ef50f",
+      "bytes": 5326,
+      "snapshotPath": "technical-input-snapshot/a42ecf3bc3b7d2bf4dda6a248569f3fa7c35918a21e8436f36893b08cd5ef50f",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/custom-notetypes.md",
+      "sha256": "ef1fa002f9f75f63ba5d7751e8acc7aa20dbff58c8f431c860d52f39fd130682",
+      "bytes": 3060,
+      "snapshotPath": "technical-input-snapshot/ef1fa002f9f75f63ba5d7751e8acc7aa20dbff58c8f431c860d52f39fd130682",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/development.md",
+      "sha256": "fd8598bdbc120b1a955a56ef0971407eb63f9146f2fb49a8191abcdf62089968",
+      "bytes": 1534,
+      "snapshotPath": "technical-input-snapshot/fd8598bdbc120b1a955a56ef0971407eb63f9146f2fb49a8191abcdf62089968",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/genanki-migration.md",
+      "sha256": "d484bf3260f897ad2f7f7e49e7397d2ddf81c65e56017316c0a527c08e7d2e83",
+      "bytes": 3010,
+      "snapshotPath": "technical-input-snapshot/d484bf3260f897ad2f7f7e49e7397d2ddf81c65e56017316c0a527c08e7d2e83",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/image-occlusion.md",
+      "sha256": "050e752c61b9735d2f97648491d0ee95cb8a30ca2d5d429845c81f1ff4d18957",
+      "bytes": 3361,
+      "snapshotPath": "technical-input-snapshot/050e752c61b9735d2f97648491d0ee95cb8a30ca2d5d429845c81f1ff4d18957",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/index.md",
+      "sha256": "fa3257852f1c090ccb804ebb6758b469e89a847573486dce4a297a4c85936079",
+      "bytes": 2395,
+      "snapshotPath": "technical-input-snapshot/fa3257852f1c090ccb804ebb6758b469e89a847573486dce4a297a4c85936079",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/installation.md",
+      "sha256": "aad9da7f5ec2507e69ee4c6d060b9287d0ad193236f2010175e17227dcf6714f",
+      "bytes": 1409,
+      "snapshotPath": "technical-input-snapshot/aad9da7f5ec2507e69ee4c6d060b9287d0ad193236f2010175e17227dcf6714f",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/json-to-anki.md",
+      "sha256": "134964c1647cbdf5856e01914ff1c9b04f9dcc3339fcd90f323462a256ed7f64",
+      "bytes": 10817,
+      "snapshotPath": "technical-input-snapshot/134964c1647cbdf5856e01914ff1c9b04f9dcc3339fcd90f323462a256ed7f64",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/languages.md",
+      "sha256": "90f4543ae0c33e8ba9ee9732b14ef3ce9d45231d851efa4d157f54789a3bebf9",
+      "bytes": 1540,
+      "snapshotPath": "technical-input-snapshot/90f4543ae0c33e8ba9ee9732b14ef3ce9d45231d851efa4d157f54789a3bebf9",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/media.md",
+      "sha256": "a2a3ebf687d9a30e1624340839f3c8262eeff6b5defecf958a034db5f55a8b65",
+      "bytes": 7666,
+      "snapshotPath": "technical-input-snapshot/a2a3ebf687d9a30e1624340839f3c8262eeff6b5defecf958a034db5f55a8b65",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/node-api.md",
+      "sha256": "4ac2fbc3679542af661a2ff5172ad2d9b20daa575d3b5cf2deefcc4b06a0f07f",
+      "bytes": 11810,
+      "snapshotPath": "technical-input-snapshot/4ac2fbc3679542af661a2ff5172ad2d9b20daa575d3b5cf2deefcc4b06a0f07f",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/node-quickstart.md",
+      "sha256": "1c4fff521f3492cc60bfd6f262fa752ab5d2c27057300b3d19cbbe74df3f3207",
+      "bytes": 1781,
+      "snapshotPath": "technical-input-snapshot/1c4fff521f3492cc60bfd6f262fa752ab5d2c27057300b3d19cbbe74df3f3207",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/python-api.md",
+      "sha256": "29db80f1af39809197c38e33a6af315501da5586a4ecc6a01f77202773ddddfd",
+      "bytes": 8292,
+      "snapshotPath": "technical-input-snapshot/29db80f1af39809197c38e33a6af315501da5586a4ecc6a01f77202773ddddfd",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/python-diagnostics.md",
+      "sha256": "18fa83415cf6e7e1b1e57d44f2c66ff5240d21663bb1520fbc8a0ae53e01704f",
+      "bytes": 4581,
+      "snapshotPath": "technical-input-snapshot/18fa83415cf6e7e1b1e57d44f2c66ff5240d21663bb1520fbc8a0ae53e01704f",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/python-migration.md",
+      "sha256": "d3ba868ff20b98f54538e366263bea6f2f86799e355748db84e5e021bb235979",
+      "bytes": 1647,
+      "snapshotPath": "technical-input-snapshot/d3ba868ff20b98f54538e366263bea6f2f86799e355748db84e5e021bb235979",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/python-quickstart.md",
+      "sha256": "929ffb6991e445fd4a97347abda9bc17d380ca64d25511e0869d9a64a9f2bbd6",
+      "bytes": 1759,
+      "snapshotPath": "technical-input-snapshot/929ffb6991e445fd4a97347abda9bc17d380ca64d25511e0869d9a64a9f2bbd6",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/quickstart.md",
+      "sha256": "e16b86d580ed7f336ebfcf3d46917cd171a3e44ed7536981f09fccd856b8dbbd",
+      "bytes": 1462,
+      "snapshotPath": "technical-input-snapshot/e16b86d580ed7f336ebfcf3d46917cd171a3e44ed7536981f09fccd856b8dbbd",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/rust-api.md",
+      "sha256": "7d4432c78d62063d5205b9524765456674ad12aad23201a035e433fac7517de9",
+      "bytes": 8417,
+      "snapshotPath": "technical-input-snapshot/7d4432c78d62063d5205b9524765456674ad12aad23201a035e433fac7517de9",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/rust-guide.md",
+      "sha256": "0766dabbb020a38c80f1edd9fca8f167c77f7a6d4f5abd1e5f5fa2ff078a13de",
+      "bytes": 4845,
+      "snapshotPath": "technical-input-snapshot/0766dabbb020a38c80f1edd9fca8f167c77f7a6d4f5abd1e5f5fa2ff078a13de",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/templates.md",
+      "sha256": "14e4a855f6dc2486b6e180523477e7919f946f0c44263dee6495f126c615cb76",
+      "bytes": 5243,
+      "snapshotPath": "technical-input-snapshot/14e4a855f6dc2486b6e180523477e7919f946f0c44263dee6495f126c615cb76",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/troubleshooting.md",
+      "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f",
+      "bytes": 3649,
+      "snapshotPath": "technical-input-snapshot/85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "docs/zh-cn/updates.md",
+      "sha256": "83b373f4166efb68518dc8d4f9954b2015748e71e8bdb2bd55abcc377854207c",
+      "bytes": 7330,
+      "snapshotPath": "technical-input-snapshot/83b373f4166efb68518dc8d4f9954b2015748e71e8bdb2bd55abcc377854207c",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "website/language-briefs.json",
+      "sha256": "29a40b5553535668741756670ae786ef57a1b496b8b7daa55e7db865f85de335",
+      "bytes": 3870,
+      "snapshotPath": "technical-input-snapshot/29a40b5553535668741756670ae786ef57a1b496b8b7daa55e7db865f85de335",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": []
+    },
+    {
+      "path": "website/legacy-sections.json",
+      "sha256": "33ea3784cb8bdfc2ef9db95b3f6ce901667cf3a6ddf8fa1e377051c2eee59c0a",
+      "bytes": 767,
+      "snapshotPath": "technical-input-snapshot/33ea3784cb8bdfc2ef9db95b3f6ce901667cf3a6ddf8fa1e377051c2eee59c0a",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "website/locale-model.mjs",
+      "sha256": "e357763d9ba16adc611f8f49ce6742fc37e783f2fbbbcada934f5990ab4fa8c7",
+      "bytes": 3646,
+      "snapshotPath": "technical-input-snapshot/e357763d9ba16adc611f8f49ce6742fc37e783f2fbbbcada934f5990ab4fa8c7",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/release-locales.json",
+      "sha256": "cc66324bb02a79a2e6a1df038b0475f76208391ed5b135fed8e41a7dec87d11e",
+      "bytes": 77,
+      "snapshotPath": "technical-input-snapshot/cc66324bb02a79a2e6a1df038b0475f76208391ed5b135fed8e41a7dec87d11e",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/scripts/benchmark-presentation.mjs",
+      "sha256": "0b0d7bdd3fbab28b50881b57a74859c508c21380459b37313cedd3c290fb05c1",
+      "bytes": 2302,
+      "snapshotPath": "technical-input-snapshot/0b0d7bdd3fbab28b50881b57a74859c508c21380459b37313cedd3c290fb05c1",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/scripts/search-documents.mjs",
+      "sha256": "7f712d7d3d22d5c0886572d33b731787cc9ffc8f4e154dd2c98f36a491afe696",
+      "bytes": 3562,
+      "snapshotPath": "technical-input-snapshot/7f712d7d3d22d5c0886572d33b731787cc9ffc8f4e154dd2c98f36a491afe696",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/search-concepts.json",
+      "sha256": "ffc24ecae35e7582b30674a9817ad66ad13230fd8a8feb86bd0355fece54e973",
+      "bytes": 35768,
+      "snapshotPath": "technical-input-snapshot/ffc24ecae35e7582b30674a9817ad66ad13230fd8a8feb86bd0355fece54e973",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/search-terms.json",
+      "sha256": "94111782fcddc4e57e4442d413ce5d8cef8eae502375c87b9f40913c95d81fde",
+      "bytes": 44348,
+      "snapshotPath": "technical-input-snapshot/94111782fcddc4e57e4442d413ce5d8cef8eae502375c87b9f40913c95d81fde",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/search.config.mjs",
+      "sha256": "4381563e2e59fed7aa4780a92f81ecf827714dc1cbd59e89e8673a2c1fe543df",
+      "bytes": 342,
+      "snapshotPath": "technical-input-snapshot/4381563e2e59fed7aa4780a92f81ecf827714dc1cbd59e89e8673a2c1fe543df",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/section-contracts.json",
+      "sha256": "9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b",
+      "bytes": 20474,
+      "snapshotPath": "technical-input-snapshot/9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/site-model.mjs",
+      "sha256": "bc6dfda4db15836e0c9124fa61fab0b8ad0c6eaf4cb885876c655101487336f8",
+      "bytes": 24436,
+      "snapshotPath": "technical-input-snapshot/bc6dfda4db15836e0c9124fa61fab0b8ad0c6eaf4cb885876c655101487336f8",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": []
+    },
+    {
+      "path": "website/src/components/AiQuickstart.astro",
+      "sha256": "755e96c650604d7949125b9967f25992b3f5fd62e9d18debdfd27671ef3a7a84",
+      "bytes": 3102,
+      "snapshotPath": "technical-input-snapshot/755e96c650604d7949125b9967f25992b3f5fd62e9d18debdfd27671ef3a7a84",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/ArticlePage.astro",
+      "sha256": "813acecf25d6f42d1d6c840c35cad3ee5b1634e7e289c27c422cb09fb94e5ebb",
+      "bytes": 1629,
+      "snapshotPath": "technical-input-snapshot/813acecf25d6f42d1d6c840c35cad3ee5b1634e7e289c27c422cb09fb94e5ebb",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/BlogPage.astro",
+      "sha256": "a3b1b7f73d75c98b9b7aafb64c4a714b01cba099fd225b0f0316d7fb778269ac",
+      "bytes": 977,
+      "snapshotPath": "technical-input-snapshot/a3b1b7f73d75c98b9b7aafb64c4a714b01cba099fd225b0f0316d7fb778269ac",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/BrandMark.astro",
+      "sha256": "6cb4983d7143f2d240868ebffae9bae8bf179f074bf3abb13b092b8f667407c0",
+      "bytes": 436,
+      "snapshotPath": "technical-input-snapshot/6cb4983d7143f2d240868ebffae9bae8bf179f074bf3abb13b092b8f667407c0",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/CardPreview.astro",
+      "sha256": "dc851faa961636a75707ac08ba9ebc832a3542283d020ac96df3f2e99b9baaa1",
+      "bytes": 3469,
+      "snapshotPath": "technical-input-snapshot/dc851faa961636a75707ac08ba9ebc832a3542283d020ac96df3f2e99b9baaa1",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/CodeBlock.astro",
+      "sha256": "9a26a31b6a637d60d56f97d1e8a6eef17446bded2212c4b0551ace29f6c9ddec",
+      "bytes": 1054,
+      "snapshotPath": "technical-input-snapshot/9a26a31b6a637d60d56f97d1e8a6eef17446bded2212c4b0551ace29f6c9ddec",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/CopyBlock.astro",
+      "sha256": "dd2b299819d3095c0fdfe3af8755d0375ed3e1b3f8eafd0c855b530b3c357812",
+      "bytes": 1172,
+      "snapshotPath": "technical-input-snapshot/dd2b299819d3095c0fdfe3af8755d0375ed3e1b3f8eafd0c855b530b3c357812",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/DocsFooter.astro",
+      "sha256": "de1fbd0f7d4d71dc9b391c79088f26652dd9201eb5ed7133020d4cc41235f8f2",
+      "bytes": 803,
+      "snapshotPath": "technical-input-snapshot/de1fbd0f7d4d71dc9b391c79088f26652dd9201eb5ed7133020d4cc41235f8f2",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/DocsHeader.astro",
+      "sha256": "f1066072fdf18f19cd1b78581469e1b802a395776452b39b52f937e8156a0848",
+      "bytes": 1349,
+      "snapshotPath": "technical-input-snapshot/f1066072fdf18f19cd1b78581469e1b802a395776452b39b52f937e8156a0848",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/DocsSearch.astro",
+      "sha256": "587a877356eda345e0d66ea9cd4d33f25426230ea2aeb4f435556a954b24d16a",
+      "bytes": 7290,
+      "snapshotPath": "technical-input-snapshot/587a877356eda345e0d66ea9cd4d33f25426230ea2aeb4f435556a954b24d16a",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/ExampleWorkbench.astro",
+      "sha256": "486b5faf302b0c1d161c947937c518748969e86fb9625651f8db054b82a8b9b8",
+      "bytes": 2075,
+      "snapshotPath": "technical-input-snapshot/486b5faf302b0c1d161c947937c518748969e86fb9625651f8db054b82a8b9b8",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/ExamplesPage.astro",
+      "sha256": "8b10e1280635172c69029b94cbc8765fa95593f221772af1bd338c0373d95649",
+      "bytes": 2846,
+      "snapshotPath": "technical-input-snapshot/8b10e1280635172c69029b94cbc8765fa95593f221772af1bd338c0373d95649",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/Footer.astro",
+      "sha256": "320057dbcae7f74003f143530ba4629c5ad0aed324605db3e1c68fb5e8b038b3",
+      "bytes": 1292,
+      "snapshotPath": "technical-input-snapshot/320057dbcae7f74003f143530ba4629c5ad0aed324605db3e1c68fb5e8b038b3",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/Header.astro",
+      "sha256": "274b6257bbc39d36ec2e4f53e8f60955b93d2aaa141617a0eab2d26613f2ccd6",
+      "bytes": 1855,
+      "snapshotPath": "technical-input-snapshot/274b6257bbc39d36ec2e4f53e8f60955b93d2aaa141617a0eab2d26613f2ccd6",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/HomePage.astro",
+      "sha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439",
+      "bytes": 4507,
+      "snapshotPath": "technical-input-snapshot/46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/HomeShowcase.astro",
+      "sha256": "4515f6b70dff73e28bf312949577946bf8bb6435d39e7661da6ebe602610784e",
+      "bytes": 3810,
+      "snapshotPath": "technical-input-snapshot/4515f6b70dff73e28bf312949577946bf8bb6435d39e7661da6ebe602610784e",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/Icon.astro",
+      "sha256": "37eb6e14469523e5d6aa4c588c3e230c8366972caee5b12c1e70d9f0179384ee",
+      "bytes": 1780,
+      "snapshotPath": "technical-input-snapshot/37eb6e14469523e5d6aa4c588c3e230c8366972caee5b12c1e70d9f0179384ee",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/InstallCommand.astro",
+      "sha256": "28d216c4936193691ef41595109cdf2ce460bf8dcfd2786df232a2d3855d76c1",
+      "bytes": 456,
+      "snapshotPath": "technical-input-snapshot/28d216c4936193691ef41595109cdf2ce460bf8dcfd2786df232a2d3855d76c1",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/LanguageSwitcher.astro",
+      "sha256": "9d3c5658fc3c42fe5162f5f1883dde73f6aa23a11a4adcc2ca7955a1a1050c57",
+      "bytes": 3082,
+      "snapshotPath": "technical-input-snapshot/9d3c5658fc3c42fe5162f5f1883dde73f6aa23a11a4adcc2ca7955a1a1050c57",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/PerformanceEvidence.astro",
+      "sha256": "ed9c4b797037499fe36c1553cfcfc94dd489086b883d8d77ff60dc94ac72e2ef",
+      "bytes": 2604,
+      "snapshotPath": "technical-input-snapshot/ed9c4b797037499fe36c1553cfcfc94dd489086b883d8d77ff60dc94ac72e2ef",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/PostCard.astro",
+      "sha256": "cf73be0f12d07293ae02128cf62fb5ec49064011d7375a831453a9214eef5b47",
+      "bytes": 949,
+      "snapshotPath": "technical-input-snapshot/cf73be0f12d07293ae02128cf62fb5ec49064011d7375a831453a9214eef5b47",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/ThemeControl.astro",
+      "sha256": "724d65736240a3271f9e65511437d09e4f01034dc1882853a4556cb0021903cd",
+      "bytes": 3953,
+      "snapshotPath": "technical-input-snapshot/724d65736240a3271f9e65511437d09e4f01034dc1882853a4556cb0021903cd",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/components/UpdateDemo.astro",
+      "sha256": "79956a12d3aea601c80736115918e4552d7f64cff32e8c6c6734bd8296936c99",
+      "bytes": 1759,
+      "snapshotPath": "technical-input-snapshot/79956a12d3aea601c80736115918e4552d7f64cff32e8c6c6734bd8296936c99",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+      "sha256": "9d95cdcff3d90abdc8f6b0cf86c65068cdce6a365e6aec122897040ecd807e88",
+      "bytes": 4329,
+      "snapshotPath": "technical-input-snapshot/9d95cdcff3d90abdc8f6b0cf86c65068cdce6a365e6aec122897040ecd807e88",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/blog/es/your-first-anki-deck.mdx",
+      "sha256": "b86ab97d72d76aebd7e4a07fc4a56124dc839a2ca87219c8acf5052efe4c3dfd",
+      "bytes": 3815,
+      "snapshotPath": "technical-input-snapshot/b86ab97d72d76aebd7e4a07fc4a56124dc839a2ca87219c8acf5052efe4c3dfd",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+      "sha256": "77e2a04feaec5959d73f2aa008412203cc598bcdbfbffb6823ced93c03cfb0c7",
+      "bytes": 3058,
+      "snapshotPath": "technical-input-snapshot/77e2a04feaec5959d73f2aa008412203cc598bcdbfbffb6823ced93c03cfb0c7",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/blog/your-first-anki-deck.mdx",
+      "sha256": "957379c92c61b6d5f3569da4b41be4d6f593aa0374f0fc97576d3630b4a2e7a0",
+      "bytes": 2956,
+      "snapshotPath": "technical-input-snapshot/957379c92c61b6d5f3569da4b41be4d6f593aa0374f0fc97576d3630b4a2e7a0",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+      "sha256": "66922194e8fcbc6bb137a4fbc0b55f47c19fc38d4b4159f4b4a14d2b6a901589",
+      "bytes": 3143,
+      "snapshotPath": "technical-input-snapshot/66922194e8fcbc6bb137a4fbc0b55f47c19fc38d4b4159f4b4a14d2b6a901589",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+      "sha256": "db5acd23e97e05d1303baa88af2fef9b1a94e9f11398eb11e2cedfced33d5841",
+      "bytes": 3047,
+      "snapshotPath": "technical-input-snapshot/db5acd23e97e05d1303baa88af2fef9b1a94e9f11398eb11e2cedfced33d5841",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/docs/docs/index.mdx",
+      "sha256": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c",
+      "bytes": 3269,
+      "snapshotPath": "technical-input-snapshot/d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/docs/docs/languages.mdx",
+      "sha256": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24",
+      "bytes": 2059,
+      "snapshotPath": "technical-input-snapshot/43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/docs/docs/quickstart.mdx",
+      "sha256": "274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9",
+      "bytes": 1633,
+      "snapshotPath": "technical-input-snapshot/274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "website/src/content/i18n/en.json",
+      "sha256": "52ac3f26f729435f0682de9b384c1c740cf275c6dd9cd8539eb4fb8c56605187",
+      "bytes": 674,
+      "snapshotPath": "technical-input-snapshot/52ac3f26f729435f0682de9b384c1c740cf275c6dd9cd8539eb4fb8c56605187",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/i18n/es.json",
+      "sha256": "5118266f72a1826052442fe0f679b670b031525ea5fdc12cfd2ed60d78fb3117",
+      "bytes": 709,
+      "snapshotPath": "technical-input-snapshot/5118266f72a1826052442fe0f679b670b031525ea5fdc12cfd2ed60d78fb3117",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/content/i18n/zh-CN.json",
+      "sha256": "44e533587105bc7fafc6d8eb13d42c4153c67a6c6fa32c24193b7a3d75cec4e8",
+      "bytes": 723,
+      "snapshotPath": "technical-input-snapshot/44e533587105bc7fafc6d8eb13d42c4153c67a6c6fa32c24193b7a3d75cec4e8",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/i18n/client-messages.mjs",
+      "sha256": "69cbebbb402b9db84912c0514ac209650768079c5e7158c6e9e0da77222a5368",
+      "bytes": 532,
+      "snapshotPath": "technical-input-snapshot/69cbebbb402b9db84912c0514ac209650768079c5e7158c6e9e0da77222a5368",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/i18n/en.json",
+      "sha256": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848",
+      "bytes": 12539,
+      "snapshotPath": "technical-input-snapshot/1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/i18n/es.json",
+      "sha256": "df2db211fa90c9314f64a32948106a3b1085ed01a74ffe82d679a945e126fab8",
+      "bytes": 14315,
+      "snapshotPath": "technical-input-snapshot/df2db211fa90c9314f64a32948106a3b1085ed01a74ffe82d679a945e126fab8",
+      "reviewMode": "fresh complete Spanish prose/catalog read; executable fences compared against current English/canonical source",
+      "equalsPinnedMain": false,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/i18n/format-message.mjs",
+      "sha256": "8d0c482c34a744ccc4add7e6087c68a36e4cce433f97825e82be3bd03b0d3c76",
+      "bytes": 1516,
+      "snapshotPath": "technical-input-snapshot/8d0c482c34a744ccc4add7e6087c68a36e4cce433f97825e82be3bd03b0d3c76",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/i18n/messages.mjs",
+      "sha256": "b420861d215ef2880416667b604ad90fe25096e71473c1a96fecd501956e8f3f",
+      "bytes": 2625,
+      "snapshotPath": "technical-input-snapshot/b420861d215ef2880416667b604ad90fe25096e71473c1a96fecd501956e8f3f",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "website/src/i18n/zh-CN.json",
+      "sha256": "f2cd71a222b1cf4370662a8e46726a1c238977c4bbe57dccc2b900ce7449c093",
+      "bytes": 12144,
+      "snapshotPath": "technical-input-snapshot/f2cd71a222b1cf4370662a8e46726a1c238977c4bbe57dccc2b900ce7449c093",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/layouts/SiteLayout.astro",
+      "sha256": "04c73e6602a4a5010efd8a4601072daf43f70508a21ebe1da5a73bdf0c0360c3",
+      "bytes": 4940,
+      "snapshotPath": "technical-input-snapshot/04c73e6602a4a5010efd8a4601072daf43f70508a21ebe1da5a73bdf0c0360c3",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/lib/ai-quickstart.mjs",
+      "sha256": "2dc9cb28633282a7ef93778d9250505e87044bbcbab38387b58b24fcf7dea600",
+      "bytes": 1413,
+      "snapshotPath": "technical-input-snapshot/2dc9cb28633282a7ef93778d9250505e87044bbcbab38387b58b24fcf7dea600",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": false,
+      "matchesVerifiedPriorSnapshots": [
+        "main"
+      ]
+    },
+    {
+      "path": "website/src/lib/examples.ts",
+      "sha256": "aa92e39a4ba31c22bc9e11dd5c6ec7a5ebfb93081f001da29e465c8ebd11d457",
+      "bytes": 1484,
+      "snapshotPath": "technical-input-snapshot/aa92e39a4ba31c22bc9e11dd5c6ec7a5ebfb93081f001da29e465c8ebd11d457",
+      "reviewMode": "fresh shared source/data semantic read and comparison",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/lib/search-terms.mjs",
+      "sha256": "c6f10080708189333263efcd40971231207fa5686a4bc45803db738633f7e93c",
+      "bytes": 888,
+      "snapshotPath": "technical-input-snapshot/c6f10080708189333263efcd40971231207fa5686a4bc45803db738633f7e93c",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/lib/search.mjs",
+      "sha256": "22f649c4b5d6dda48541cf91c7d201206dd2210a9bd37101d30e16d36461c1c2",
+      "bytes": 12240,
+      "snapshotPath": "technical-input-snapshot/22f649c4b5d6dda48541cf91c7d201206dd2210a9bd37101d30e16d36461c1c2",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/route-middleware.ts",
+      "sha256": "2f27fd73b1381f2ccba6822be4da01be19d38a7b753756f8c4d30e7a642f657d",
+      "bytes": 2946,
+      "snapshotPath": "technical-input-snapshot/2f27fd73b1381f2ccba6822be4da01be19d38a7b753756f8c4d30e7a642f657d",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/scripts/docs-search.ts",
+      "sha256": "801800476a39fc989a6f9741d0934e1aec2e84410c1bd7cb7094c71317cc3922",
+      "bytes": 9836,
+      "snapshotPath": "technical-input-snapshot/801800476a39fc989a6f9741d0934e1aec2e84410c1bd7cb7094c71317cc3922",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    },
+    {
+      "path": "website/src/scripts/site.ts",
+      "sha256": "76767efa229f1f6286226ae4226cc3902b303fb4c4b148066b02fc6aece57036",
+      "bytes": 10968,
+      "snapshotPath": "technical-input-snapshot/76767efa229f1f6286226ae4226cc3902b303fb4c4b148066b02fc6aece57036",
+      "reviewMode": "read bytes and verify unchanged baseline; reuse documented prior semantic review",
+      "equalsPinnedMain": true,
+      "equalsPinnedSpanish": true,
+      "matchesVerifiedPriorSnapshots": [
+        "main",
+        "spanish"
+      ]
+    }
+  ],
+  "supportingFiles": [
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "bytes": 368
+    },
+    {
+      "path": "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+      "sha256": "842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34",
+      "bytes": 436
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-audit.json",
+      "sha256": "08dc7ec78750439641d5545b745d4248f327a99f2f4561fb3b1c8431c2ec7e5b",
+      "bytes": 29253
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-search-vocabulary-delta-3.json",
+      "sha256": "23d281e492d86420a6790091c8a5b0e474ce9f366e2b79e68643d287b046148e",
+      "bytes": 101198
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-task-descriptions-34.json",
+      "sha256": "293e82dc61967d571e53884f5a0778c6c6c039a18a3ea47865092f8736a97cae",
+      "bytes": 47643
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review.json",
+      "sha256": "dca0c765ef68fb90b19984bb3109d6e6ae4c6a10939da0e5e5d754d7dd2587f3",
+      "bytes": 2060793
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-34-audit.json",
+      "sha256": "a802efe2c1911942077ed3a98a23f29e6a8e70cd82351e0e2fab1d41767c8e5d",
+      "bytes": 135710
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-2026-10-28/source-review-candidate-102-article-aliases.json",
+      "sha256": "9d04c153a91ee98f0f43fd6952db7464a800ddd5826c34cf9eb37e492f53ae32",
+      "bytes": 265371
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-2026-10-28/technical-article-aliases-audit-102.json",
+      "sha256": "81479cdcd8c067213ac68b5b27c5de4f1d069d67644585cb241306286c71a702",
+      "bytes": 54150
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-2026-10-28/technical-search-vocabulary-final.json",
+      "sha256": "74b94434a2df0b1635d573904478bfb618d01c4ea320b36dcd2ce78a2d5eb02e",
+      "bytes": 81937
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-2026-10-28/technical-source-input-snapshot-article-aliases-102.json",
+      "sha256": "043b1940739ec5ca61381d6b2c44eea98038d2b4fadb146b33547db9d2e10d08",
+      "bytes": 46907
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-2026-10-28/technical-source-review.json",
+      "sha256": "50a6ce05a8aaba7fe3d7859825c14c637599c0266f66ecc3436b8cf29cfe260f",
+      "bytes": 2459889
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/source-review-candidate.json",
+      "sha256": "5063845cfabbebf15787ee652ba49b0567ee03f3da7ea794afd947b6db679bb9",
+      "bytes": 261087
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/technical-source-probe.mjs",
+      "sha256": "e19b57f04227da37241094dbf95027665f686a094c23da79a159263b515fd4a9",
+      "bytes": 7799
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/technical-structural-probe.json",
+      "sha256": "1df56ad74b4017c32c940d82866e122c96f63fa121d7532fad8c4a64be1e943d",
+      "bytes": 63156
+    },
+    {
+      "path": "website/scripts/ai-quickstart.mjs",
+      "sha256": "08002f2eaf942a2d68fedbf587cbe25ea6de407656408f56f674038e3af8dd45",
+      "bytes": 8862
+    },
+    {
+      "path": "website/scripts/content-review-inputs.mjs",
+      "sha256": "bbebf13ae6759e186225c47ea7b112ae422d61204a1b04c0aee0624c2498dda0",
+      "bytes": 14486
+    },
+    {
+      "path": "website/scripts/record-content-review.mjs",
+      "sha256": "254907af912c61c7dc7f995fc2d02b872dcbcc5edfbbc73584e199994c96cd32",
+      "bytes": 3293
+    },
+    {
+      "path": "website/scripts/third-locale.test.mjs",
+      "sha256": "fc982ac86ce2707aa9813c9e70ab2896b736a8d4d06f411fe2a654d6050847f2",
+      "bytes": 4712
+    },
+    {
+      "path": "website/search-queries.json",
+      "sha256": "6aff7ac950081d4796cb1291cfd942630f4176d9fea70947168be58ac4ef62b2",
+      "bytes": 36657
+    }
+  ],
+  "priorEvidence": {
+    "main": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review.json",
+      "sha256": "dca0c765ef68fb90b19984bb3109d6e6ae4c6a10939da0e5e5d754d7dd2587f3",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-29/python-qa",
+      "verifiedReferences": {
+        "inputSnapshot": {
+          "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-task-descriptions-34.json",
+          "sha256": "293e82dc61967d571e53884f5a0778c6c6c039a18a3ea47865092f8736a97cae"
+        },
+        "taskDescriptionsAudit": {
+          "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-34-audit.json",
+          "sha256": "a802efe2c1911942077ed3a98a23f29e6a8e70cd82351e0e2fab1d41767c8e5d"
+        },
+        "pythonQaAudit": {
+          "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-audit.json",
+          "sha256": "08dc7ec78750439641d5545b745d4248f327a99f2f4561fb3b1c8431c2ec7e5b"
+        },
+        "searchVocabularyAudit": {
+          "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-search-vocabulary-delta-3.json",
+          "sha256": "23d281e492d86420a6790091c8a5b0e474ce9f366e2b79e68643d287b046148e"
+        }
+      },
+      "verifiedImmutableInputBlobs": 127
+    },
+    "spanish": {
+      "path": "docs/plans/evidence/multilingual-es-2026-10-28/technical-source-review.json",
+      "sha256": "50a6ce05a8aaba7fe3d7859825c14c637599c0266f66ecc3436b8cf29cfe260f",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/es-article-aliases-102",
+      "verifiedReferences": {
+        "inputSnapshot": {
+          "path": "docs/plans/evidence/multilingual-es-2026-10-28/technical-source-input-snapshot-article-aliases-102.json",
+          "sha256": "043b1940739ec5ca61381d6b2c44eea98038d2b4fadb146b33547db9d2e10d08"
+        },
+        "articleAliasesAudit": {
+          "path": "docs/plans/evidence/multilingual-es-2026-10-28/technical-article-aliases-audit-102.json",
+          "sha256": "81479cdcd8c067213ac68b5b27c5de4f1d069d67644585cb241306286c71a702"
+        },
+        "sourceCandidate": {
+          "path": "docs/plans/evidence/multilingual-es-2026-10-28/source-review-candidate-102-article-aliases.json",
+          "sha256": "9d04c153a91ee98f0f43fd6952db7464a800ddd5826c34cf9eb37e492f53ae32"
+        },
+        "searchVocabularyAudit": {
+          "path": "docs/plans/evidence/multilingual-es-2026-10-28/technical-search-vocabulary-final.json",
+          "sha256": "74b94434a2df0b1635d573904478bfb618d01c4ea320b36dcd2ce78a2d5eb02e"
+        }
+      },
+      "verifiedImmutableInputBlobs": 179
+    }
+  },
+  "delta": {
+    "candidateFileCount": 160,
+    "byteIdenticalToPinnedMain": 121,
+    "byteIdenticalToPinnedSpanish": 133,
+    "verifiedPriorMainMatches": 121,
+    "verifiedPriorSpanishMatches": 133,
+    "differentFromBothPinnedTrees": [
+      "docs/ai-quickstart.json",
+      "docs/es/cards.md",
+      "docs/es/genanki-migration.md",
+      "docs/es/image-occlusion.md",
+      "docs/es/media.md",
+      "docs/es/templates.md",
+      "docs/es/updates.md",
+      "website/language-briefs.json",
+      "website/site-model.mjs"
+    ],
+    "reReviewedFinalSpanishBodies": [
+      "docs/es/cards.md",
+      "docs/es/image-occlusion.md",
+      "docs/es/media.md",
+      "docs/es/templates.md",
+      "docs/es/updates.md",
+      "docs/es/genanki-migration.md"
+    ],
+    "reason": "Three-language menu/search/AI/metadata inputs intentionally invalidate older composite hashes. New hashes are supported by independent source observations and current closure checks; old reviewed statuses were not copied by hash replacement alone."
+  }
+}
