@@ -1,0 +1,9 @@
+---
+import mark from '../../../docs/assets/brand/ankiforge.svg?raw';
+const themedMark = mark.replace('style="color:#116e60"', '').replace('fill="#fdfefd"', 'fill="var(--af-bg)"');
+---
+<span class="brand-mark" aria-hidden="true" set:html={themedMark} />
+<style>
+  .brand-mark { display: inline-flex; width: 29px; height: 29px; flex-shrink: 0; color: var(--af-accent); }
+  .brand-mark :global(svg) { width: 100%; height: 100%; }
+</style>

@@ -1,0 +1,29 @@
+---
+interface Props { locale?: string }
+const { locale = 'en' } = Astro.props;
+import { createTranslator } from '../i18n/messages.mjs';
+const t = createTranslator(locale);
+import benchmark from '../generated/benchmark.json';
+const { results, maxTime, minimumSaved, maximumSaved } = benchmark;
+const advantage = (saved: number) => t(saved >= 0 ? 'performance.less' : 'performance.more', { value: Math.abs(saved).toFixed(1) });
+---
+<section data-module="performance" class="home-performance" aria-labelledby="performance-heading">
+  <div class="home-performance-summary">
+    <div class="home-performance-title"><h2 id="performance-heading">{t('performance.title')}</h2><p>Rust Project API / genanki 0.13.1 · {t('performance.workload')}</p></div>
+    <div class="home-performance-metric"><strong>{results[0].rust.toFixed(1)}<span> ms</span></strong><span>{t('performance.export', { notes: benchmark.notes.toLocaleString(locale) })}</span></div>
+    {minimumSaved >= 0 && <div class="home-performance-metric"><strong>{minimumSaved.toFixed(1)}–{maximumSaved.toFixed(1)}<span>%</span></strong><span>{t('performance.range')}</span></div>}
+  </div>
+  <p class="home-performance-context">Rust Project API · Apple M1 Pro · {t('performance.medians')}</p>
+  <div class="home-benchmark" data-reveal>
+    <div class="home-benchmark-intro"><h3>{t('performance.media')}<br />{t('performance.faster')}</h3><p>{t('performance.description', { notes: benchmark.notes.toLocaleString(locale), minimum: minimumSaved.toFixed(1), maximum: maximumSaved.toFixed(1) })}</p></div>
+    <div class="home-benchmark-chart" aria-label={t('performance.chart')}>
+      <div class="home-benchmark-key"><span><i class="home-key-rust"></i>Anki Forge Rust</span><span><i class="home-key-genanki"></i>genanki</span></div>
+      {results.map(result => <div class="home-benchmark-row" data-profile={result.profile} style={`--rust-width: ${result.rust / maxTime * 100}%; --genanki-width: ${result.genanki / maxTime * 100}%`}>
+        <div class="home-benchmark-label"><span>{t(`performance.${result.profile}`)}</span><strong>{advantage(result.saved)}</strong></div>
+        <div class="home-benchmark-bars" aria-hidden="true"><span class="home-rust-bar"></span><span class="home-genanki-bar"></span></div>
+        <p>{result.rust.toFixed(1)} ms <span>/ {result.genanki.toFixed(1)} ms</span></p>
+      </div>)}
+    </div>
+  </div>
+  <p class="example-footnote">{t('performance.limitations')} <a href={`https://github.com/morehardy/anki-forge/tree/${benchmark.evidenceCommit}/${benchmark.dataset}`}>{t('performance.method')}</a></p>
+</section>

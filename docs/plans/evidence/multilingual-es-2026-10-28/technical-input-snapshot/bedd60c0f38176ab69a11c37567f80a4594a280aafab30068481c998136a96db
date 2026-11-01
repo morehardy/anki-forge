@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "status": "implemented-awaiting-independent-recheck",
+  "notAnApproval": true,
+  "changes": [
+    {
+      "path": "docs/es/ai-anki-cards.md",
+      "before": "Anki Forge es la biblioteca de generación de código abierto",
+      "after": "Anki Forge es una biblioteca de código abierto para generar paquetes de Anki"
+    },
+    {
+      "path": "docs/es/installation.md",
+      "before": "Las funciones predeterminadas están vacías; el código normal de una aplicación no necesita funciones exclusivas del repositorio.",
+      "after": "No hay características de Cargo activadas de forma predeterminada; el código normal de una aplicación no necesita las características exclusivas del repositorio."
+    },
+    {
+      "path": "docs/es/rust-guide.md",
+      "before": "Al hacer correspondencia sobre estas enumeraciones no exhaustivas, utiliza",
+      "after": "Al usar `match` con estas enumeraciones no exhaustivas, utiliza"
+    },
+    {
+      "path": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+      "before": ">guía de desarrollo</a> describe las actualizaciones",
+      "after": ">guía de actualización</a> describe las actualizaciones"
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "before": "## Detalles de la API del código fuente",
+      "after": "## Operaciones por lotes y publicación preparada"
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "before": "Al completar el modelo se decodifica la imagen",
+      "after": "Al llamar a `.build()` se decodifica la imagen"
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "before": "| `Note.basic(front, back)` | Modelo Basic integrado;",
+      "after": "| `Note.basic(front, back)` | Crea una nota con el modelo Basic integrado;"
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "before": "| `Note.cloze(text)` | Modelo Cloze integrado;",
+      "after": "| `Note.cloze(text)` | Crea una nota con el modelo Cloze integrado;"
+    }
+  ],
+  "protectedCodeUnchanged": true
+}

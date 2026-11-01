@@ -1,0 +1,59 @@
+{
+  "reviewerRun": "/root/spanish_standards/independent-usage-ci-rebuild-a9f3face-2026-11-01",
+  "checkedAt": "2026-11-01T04:24:54.568Z",
+  "method": "Exact current post-build-reviews.mjs validateReport executed in memory; only import and repository resolution adjusted to expose the private function. No validator or source edits.",
+  "validator": {
+    "path": "website/scripts/post-build-reviews.mjs",
+    "sha256": "108d5987f9c44e7cec854ff7d6417c4c6735bdcaa5db5bcf1e97e8da46b7405f"
+  },
+  "entries": [
+    {
+      "environment": "prefix",
+      "status": "passed",
+      "report": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-prefix.json",
+        "sha256": "ebba88c8d03e50804f4ef5028bba39552bdf4dd7917e473c6f73626567755c75"
+      },
+      "manifest": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/prefix-ci-origin-manifest.json",
+        "sha256": "3acb0fc02295a3822a6318e35f238b82d44bfb81234b42a65750faca23c25ad3"
+      },
+      "result": {
+        "kind": "usage-tasks",
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-prefix.json",
+        "sha256": "ebba88c8d03e50804f4ef5028bba39552bdf4dd7917e473c6f73626567755c75",
+        "bytes": 221268,
+        "reviewerRun": "/root/spanish_standards/independent-usage-ci-rebuild-a9f3face-2026-11-01/prefix",
+        "originManifestSha256": "3acb0fc02295a3822a6318e35f238b82d44bfb81234b42a65750faca23c25ad3",
+        "originCommit": "a9f3facef528369976712b81ead4c99c162b2907",
+        "currentManifestSha256": "3acb0fc02295a3822a6318e35f238b82d44bfb81234b42a65750faca23c25ad3",
+        "reused": false,
+        "resourceScopeSha256": "03ff159e404d49b9c263423ea428a332563fc9e23b5f6b01d736a4613e240004"
+      }
+    },
+    {
+      "environment": "root",
+      "status": "passed",
+      "report": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-root.json",
+        "sha256": "b407146d7829e41087122c85872ffd94e2ca9756e9e5592741373099157dd1fa"
+      },
+      "manifest": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/root-ci-origin-manifest.json",
+        "sha256": "23a68acba10e58db19a800fbae548e8005c7d05d03aae37f4ca7cc4209599552"
+      },
+      "result": {
+        "kind": "usage-tasks",
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-root.json",
+        "sha256": "b407146d7829e41087122c85872ffd94e2ca9756e9e5592741373099157dd1fa",
+        "bytes": 218373,
+        "reviewerRun": "/root/spanish_standards/independent-usage-ci-rebuild-a9f3face-2026-11-01/root",
+        "originManifestSha256": "23a68acba10e58db19a800fbae548e8005c7d05d03aae37f4ca7cc4209599552",
+        "originCommit": "a9f3facef528369976712b81ead4c99c162b2907",
+        "currentManifestSha256": "23a68acba10e58db19a800fbae548e8005c7d05d03aae37f4ca7cc4209599552",
+        "reused": false,
+        "resourceScopeSha256": "f50ff835523ba46f2b8b0361ff3adf1e486d9de5650b3c4028fc28f3a9afcb0c"
+      }
+    }
+  ]
+}

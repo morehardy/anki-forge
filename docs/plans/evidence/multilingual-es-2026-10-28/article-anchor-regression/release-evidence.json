@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-engineering",
+  "status": "failed",
+  "engineeringStatus": "failed",
+  "engineeringOnly": true,
+  "startedAt": "2026-10-28T09:30:38.262Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "checks": [
+    {
+      "name": "check:content",
+      "command": [
+        "npm",
+        "run",
+        "check:content"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 2739,
+      "log": {
+        "file": "01-check-content.log",
+        "sha256": "a1389801725ed2ad44fc0ec79d1d44e234e28bcf301c29f2188742fc483de3a3",
+        "bytes": 327
+      }
+    },
+    {
+      "name": "check:site",
+      "command": [
+        "npm",
+        "run",
+        "check:site"
+      ],
+      "status": "failed",
+      "exitCode": 1,
+      "signal": null,
+      "durationMs": 1794,
+      "log": {
+        "file": "02-check-site.log",
+        "sha256": "c65bc3b91a44dd8042f080266ddddbc9844ac6f7ff7318bc3abb339a95a9cbe0",
+        "bytes": 3867
+      }
+    }
+  ],
+  "identity": {
+    "commit": "ea9fc91c5c4e82ff78cd01c0a73776614557d313",
+    "inputSha256": "77a3c80c0f49401ec27008f67cd2b8a2df3183090301e5ea8b434cfe5f069081",
+    "configuration": {
+      "site": "https://ankiforge.dev",
+      "base": "/",
+      "customDomain": "ankiforge.dev"
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es"
+    ]
+  },
+  "manifestSha256": "325db85196dcaf7ded7e2348bb604c67da92c31a2dc2eaf442c1b5714fa85228",
+  "artifactSha256": "e6de3c3935b9498e68880c13a3fdcab6450f5ff999aee3b1b85a3d0676e0e3de",
+  "fileCount": 382,
+  "artifactUnchanged": true,
+  "finishedAt": "2026-10-28T09:30:43.199Z",
+  "error": "check:site failed; inspect 02-check-site.log\n\n'failed' !== 'passed'\n"
+}

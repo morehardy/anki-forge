@@ -242,28 +242,21 @@ test('release language menus fingerprint active locale data without reading plan
     const after = await modelSamples(directory);
     for (const key of Object.keys(before)) assert.notEqual(after[key].targetHash, before[key].targetHash, `${from}: ${key}`);
   }
-  await writeFile(model, original.replace("label: 'Español'", "label: 'Español revisado'").replace("  es: {", "  it: { prefix: '/it', lang: 'it', label: 'Italiano', dir: 'ltr' },\n  es: {") + '\n// No planned-language source files exist in this fixture.\n');
+  await writeFile(model, original.replace("label: 'Português do Brasil'", "label: 'Português revisado'").replace("  es: {", "  it: { prefix: '/it', lang: 'it', label: 'Italiano', dir: 'ltr' },\n  es: {") + '\n// No planned-language source files exist in this fixture.\n');
   assert.deepEqual(await modelSamples(directory), before, 'inactive locale records do not change selected-language review inputs');
 });
 
 test('a third release locale is fingerprinted from its own model data', async t => {
   const directory = await fixture(t);
   const website = path.join(directory, 'website');
-  await writeFile(path.join(website, 'release-locales.json'), JSON.stringify({ schemaVersion: 1, locales: ['en', 'zh-CN', 'es'] }));
-  for (const catalogs of ['src/i18n', 'src/content/i18n']) await copyFile(path.join(website, catalogs, 'en.json'), path.join(website, catalogs, 'es.json'));
-  const briefs = JSON.parse(await readFile(path.join(website, 'language-briefs.json'), 'utf8'));
-  await writeFile(path.join(website, 'language-briefs.json'), JSON.stringify({ ...briefs, es: briefs.en }));
   const page = pages.find(page => page.id === 'concepts');
-  await mkdir(path.dirname(path.join(directory, page.sources.es)), { recursive: true });
-  await copyFile(path.join(directory, page.sources['zh-CN']), path.join(directory, page.sources.es));
   const model = path.join(website, 'site-model.mjs');
-  const spanish = (await readFile(model, 'utf8')).replace(/(["'])zh-CN\1: (["'])(?:(?!\2)[^\\]|\\.)*\2/g, match => `${match}, "es": "Texto revisado"`);
-  const title = `"zh-CN": ${JSON.stringify(page.title['zh-CN'])}, "es": "Texto revisado"`;
+  const spanish = await readFile(model, 'utf8');
+  const title = `"es": ${JSON.stringify(page.title.es)}`;
   assert.ok(spanish.includes(title));
   const sample = async () => Object.fromEntries(await Promise.all(['en', 'zh-CN', 'es'].map(async locale => [locale, await reviewInputs(page, locale, directory)])));
-  await writeFile(model, spanish);
   const before = await sample();
-  await writeFile(model, spanish.replace(title, title.replace('Texto revisado', 'Conceptos básicos')));
+  await writeFile(model, spanish.replace(title, '"es": "Fundamentos del modelo de notas"'));
   const after = await sample();
   assert.notEqual(after.es.targetHash, before.es.targetHash, 'the Spanish title is a Spanish review input');
   assert.deepEqual(after.en, before.en);

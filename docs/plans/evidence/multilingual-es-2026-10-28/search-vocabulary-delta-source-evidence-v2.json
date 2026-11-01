@@ -1,0 +1,861 @@
+{
+  "schemaVersion": 1,
+  "locale": "es",
+  "status": "blind-author-delta-v2-awaiting-independent-review",
+  "parentProposal": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/search-vocabulary-proposal.json",
+    "sha256": "4d950b82c7833e7c992bbbb8a8ca3a398e76dbf5619070dfb9d883fca4f34484"
+  },
+  "proposal": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/search-vocabulary-proposal-v2.json",
+    "sha256": "c42d63a2d940f03864a02c028f586e0317dc11f89d7af2dd7a61c3047b391b00"
+  },
+  "delta": {
+    "unchanged": [
+      "all 31 pages of searchTerms",
+      "all existing Spanish concept entries",
+      "search engine source",
+      "normal-page metadata and descriptions",
+      "shared JSON and release files"
+    ],
+    "addedConcepts": {
+      "creation": {
+        "definition": {
+          "terms": [
+            "crear",
+            "crea",
+            "creación",
+            "generar",
+            "genera",
+            "generación",
+            "exportar",
+            "exporta",
+            "exportación",
+            "hacer",
+            "producir"
+          ],
+          "requiresAll": [
+            [
+              "Python",
+              "CPython",
+              "pip",
+              "Rust",
+              "Cargo",
+              "Node.js",
+              "Node",
+              "JavaScript",
+              "TypeScript",
+              "npm",
+              "JS"
+            ],
+            [
+              "tarjeta",
+              "tarjetas",
+              "flashcard",
+              "flashcards",
+              "mazo",
+              "mazos",
+              "APKG"
+            ]
+          ],
+          "roles": [
+            "quickstart",
+            "guide"
+          ],
+          "weight": 0.35
+        },
+        "rationale": "Generic creation/export verbs require both an SDK name and a card/deck/APKG object. The concept is weak (weight 0.35), has no intent flag, and names quickstart/guide roles. Existing API, schema and update intents keep their existing priority; matching input/media/card-kind evidence is retained. It contains no page IDs or complete query phrases."
+      },
+      "browser-runtime": {
+        "definition": {
+          "terms": [
+            "navegador",
+            "navegadores",
+            "browser",
+            "browsers",
+            "web"
+          ],
+          "requiresAll": [
+            [
+              "Node.js",
+              "Node",
+              "JavaScript",
+              "TypeScript",
+              "npm",
+              "JS"
+            ],
+            [
+              "ejecutar",
+              "ejecución",
+              "funcionar",
+              "funciona",
+              "funcionan",
+              "correr",
+              "soporte",
+              "compatible",
+              "compatibilidad",
+              "nativo",
+              "nativa",
+              "dependencia",
+              "paquete"
+            ]
+          ],
+          "roles": [
+            "compatibility"
+          ],
+          "intent": true
+        },
+        "rationale": "Browser vocabulary requires Node/JavaScript/TypeScript/npm context and execution/compatibility/native-package context at the same time. This identifies a verified-runtime boundary described by compatibility, not browser support and not an ordinary template preview. Browser/browser(s)/web and JS are technical lexical aliases of the same source-backed context, without new support claims."
+      }
+    }
+  },
+  "sourceEvidence": [
+    {
+      "conceptId": "creation",
+      "source": "docs/es/python-quickstart.md",
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Genera un APKG de Anki con Python"
+        },
+        {
+          "line": 14,
+          "text": "## Exporta un mazo"
+        },
+        {
+          "line": 16,
+          "text": "Guarda lo siguiente como `main.py`:"
+        }
+      ],
+      "sha256": "e933a64e8b9e6f274dc4b45fb0a9bf5fc010a237fdb274719c6b5a1ff49399d9"
+    },
+    {
+      "conceptId": "creation",
+      "source": "docs/es/node-quickstart.md",
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# Genera un APKG de Anki con Node.js"
+        },
+        {
+          "line": 14,
+          "text": "## Exporta un mazo"
+        },
+        {
+          "line": 34,
+          "text": "No necesitas instalar Anki para exportarlo."
+        }
+      ],
+      "sha256": "d3bbb1b778ac54b0a6ad0f29b8ec715c3b183f33562f74aeaf505783877cdf70"
+    },
+    {
+      "conceptId": "creation",
+      "source": "docs/es/quickstart.md",
+      "excerpts": [
+        {
+          "line": 13,
+          "text": "## Exporta tu primer mazo"
+        },
+        {
+          "line": 15,
+          "text": "Guarda este programa completo como `src/main.rs`:"
+        }
+      ],
+      "sha256": "cbd9b899cfe7dba028def67878e19c53e0a9e6497c29b9fdd2204cd4798f3a20"
+    },
+    {
+      "conceptId": "browser-runtime",
+      "source": "docs/es/compatibility.md",
+      "excerpts": [
+        {
+          "line": 14,
+          "text": "Los navegadores, Electron, Bun, Alpine/musl y Linux/Windows ARM64 quedan fuera de la verificación registrada de Node."
+        }
+      ],
+      "sha256": "b317fb1db494e0c041d18b2b9e966b0ea265be2c5bed59ae1821a576fc397f5a"
+    },
+    {
+      "conceptId": "browser-runtime",
+      "source": "docs/es/node-quickstart.md",
+      "excerpts": [
+        {
+          "line": 11,
+          "text": "y la dependencia nativa opcional correspondiente."
+        }
+      ],
+      "sha256": "d3bbb1b778ac54b0a6ad0f29b8ec715c3b183f33562f74aeaf505783877cdf70"
+    }
+  ],
+  "validation": {
+    "runtime": "Node v24.19.0",
+    "mode": "unchanged pure rankSearchDocuments over actual generated Spanish metadata, with pagefindResults omitted",
+    "metadataPath": "website/dist/generated/search-es.json",
+    "metadataSha256": "91d3fdd7ce04a532ecfb217efe9c1b8bc05fcb2dd0f91dda7dc29321d6487327",
+    "enginePath": "website/src/lib/search.mjs",
+    "engineSha256": "22f649c4b5d6dda48541cf91c7d201206dd2210a9bd37101d30e16d36461c1c2",
+    "provenance": "These 10 holdouts and their acceptable page sets were independently fixed in the draft script before its first ranking run. No frozen acceptance query, expected-page file or acceptance result was read. Expectations are unchanged, including the recorded failure.",
+    "passedExactPageAssertions": 9,
+    "totalExactPageAssertions": 10,
+    "observations": [
+      {
+        "id": "plain-python-authoring",
+        "input": "crear tarjetas Anki con Python",
+        "acceptable": [
+          "python-quickstart"
+        ],
+        "principle": "Generic creation plus SDK begins with an executable first deck.",
+        "before": [
+          {
+            "id": "python-quickstart",
+            "score": 11.809765218869366,
+            "matchedTerms": [
+              "Python",
+              "tarjetas",
+              "anki"
+            ]
+          },
+          {
+            "id": "api",
+            "score": 9.843944973086428,
+            "matchedTerms": [
+              "Python",
+              "crear",
+              "anki"
+            ]
+          },
+          {
+            "id": "blog",
+            "score": 7.41179798473724,
+            "matchedTerms": [
+              "crear",
+              "anki"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "python-quickstart",
+            "score": 42.43290845444883,
+            "matchedTerms": [
+              "Python",
+              "crear",
+              "tarjetas",
+              "anki"
+            ]
+          },
+          {
+            "id": "csv-to-anki",
+            "score": 31.642564204464712,
+            "matchedTerms": [
+              "Python",
+              "crear",
+              "tarjetas",
+              "anki"
+            ]
+          },
+          {
+            "id": "ai-anki-cards",
+            "score": 24.094931951067004,
+            "matchedTerms": [
+              "Python",
+              "crear",
+              "tarjetas",
+              "anki"
+            ]
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "plain-js-export",
+        "input": "exportar un mazo desde JavaScript",
+        "acceptable": [
+          "node-quickstart"
+        ],
+        "principle": "Generic export plus Node SDK begins with the Node guide.",
+        "before": [
+          {
+            "id": "languages",
+            "score": 13.626877219696345,
+            "matchedTerms": [
+              "Node.js",
+              "exportar",
+              "mazo"
+            ]
+          },
+          {
+            "id": "node-quickstart",
+            "score": 10.641747597046772,
+            "matchedTerms": [
+              "Node.js",
+              "mazo"
+            ]
+          },
+          {
+            "id": "csv-to-anki",
+            "score": 5.340859600457538,
+            "matchedTerms": [
+              "exportar",
+              "mazo"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "node-quickstart",
+            "score": 37.38936119948085,
+            "matchedTerms": [
+              "Node.js",
+              "crear",
+              "mazo"
+            ]
+          },
+          {
+            "id": "json-to-anki",
+            "score": 15.344572044457673,
+            "matchedTerms": [
+              "Node.js",
+              "crear",
+              "mazo"
+            ]
+          },
+          {
+            "id": "languages",
+            "score": 7.982733800475054,
+            "matchedTerms": [
+              "Node.js",
+              "crear",
+              "mazo"
+            ]
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "specific-json",
+        "input": "generar tarjetas JSON con Python",
+        "acceptable": [
+          "json-to-anki"
+        ],
+        "principle": "An explicit input recipe outranks general creation.",
+        "before": [
+          {
+            "id": "json-to-anki",
+            "score": 24.66639045039283,
+            "matchedTerms": [
+              "Python",
+              "JSON",
+              "generar",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "home",
+            "score": 9.305511967247542,
+            "matchedTerms": [
+              "Python",
+              "JSON",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "python-quickstart",
+            "score": 5.784652759793714,
+            "matchedTerms": [
+              "Python",
+              "tarjetas"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "json-to-anki",
+            "score": 35.40167283026639,
+            "matchedTerms": [
+              "crear",
+              "Python",
+              "JSON",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "home",
+            "score": 15.229065619637959,
+            "matchedTerms": [
+              "crear",
+              "Python",
+              "JSON",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "python-quickstart",
+            "score": 14.01693823974473,
+            "matchedTerms": [
+              "crear",
+              "Python",
+              "tarjetas"
+            ]
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "specific-media",
+        "input": "añadir audio a tarjetas usando Python",
+        "acceptable": [
+          "media",
+          "python-api"
+        ],
+        "principle": "Explicit audio work remains a media or matching SDK API task.",
+        "before": [
+          {
+            "id": "media",
+            "score": 29.701135905037678,
+            "matchedTerms": [
+              "audio",
+              "anadir",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "docs",
+            "score": 16.342173365346913,
+            "matchedTerms": [
+              "Python",
+              "audio",
+              "anadir",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "json-to-anki",
+            "score": 7.073754090628585,
+            "matchedTerms": [
+              "Python",
+              "audio",
+              "tarjetas"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "media",
+            "score": 29.701135905037678,
+            "matchedTerms": [
+              "audio",
+              "anadir",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "docs",
+            "score": 16.342173365346913,
+            "matchedTerms": [
+              "Python",
+              "audio",
+              "anadir",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "json-to-anki",
+            "score": 7.073754090628585,
+            "matchedTerms": [
+              "Python",
+              "audio",
+              "tarjetas"
+            ]
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "specific-schema",
+        "input": "crear tipos de nota personalizados con Python",
+        "acceptable": [
+          "custom-notetypes",
+          "python-api"
+        ],
+        "principle": "Custom schema work remains more specific than first-deck creation.",
+        "before": [
+          {
+            "id": "custom-notetypes",
+            "score": 23.772852228533228,
+            "matchedTerms": [
+              "tipo de nota",
+              "personalizados"
+            ]
+          },
+          {
+            "id": "api",
+            "score": 3.4429946962036464,
+            "matchedTerms": [
+              "Python",
+              "crear"
+            ]
+          },
+          {
+            "id": "blog",
+            "score": 3.038084182586823,
+            "matchedTerms": [
+              "crear"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "custom-notetypes",
+            "score": 23.772852228533228,
+            "matchedTerms": [
+              "tipo de nota",
+              "personalizados"
+            ]
+          },
+          {
+            "id": "api",
+            "score": 3.4429946962036464,
+            "matchedTerms": [
+              "Python",
+              "crear"
+            ]
+          },
+          {
+            "id": "blog",
+            "score": 3.038084182586823,
+            "matchedTerms": [
+              "crear"
+            ]
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "specific-reference",
+        "input": "consultar API para crear tarjetas Python",
+        "acceptable": [
+          "python-api"
+        ],
+        "principle": "Explicit reference intent outranks generic creation.",
+        "before": [
+          {
+            "id": "api",
+            "score": 35.438392808270514,
+            "matchedTerms": [
+              "Python",
+              "API",
+              "crear"
+            ]
+          },
+          {
+            "id": "python-api",
+            "score": 18.61005262174318,
+            "matchedTerms": [
+              "Python",
+              "API"
+            ]
+          },
+          {
+            "id": "python-migration",
+            "score": 5.427932014675093,
+            "matchedTerms": [
+              "Python",
+              "API"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "python-api",
+            "score": 29.022924348709267,
+            "matchedTerms": [
+              "Python",
+              "API"
+            ]
+          },
+          {
+            "id": "api",
+            "score": 19.1859237157508,
+            "matchedTerms": [
+              "Python",
+              "crear",
+              "API"
+            ]
+          },
+          {
+            "id": "home",
+            "score": 10.748817898777943,
+            "matchedTerms": [
+              "Python",
+              "crear",
+              "API",
+              "tarjetas"
+            ]
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "browser-execution",
+        "input": "ejecutar Node.js en el navegador",
+        "acceptable": [
+          "compatibility"
+        ],
+        "principle": "SDK execution in a browser asks about the verified runtime boundary.",
+        "before": [
+          {
+            "id": "node-quickstart",
+            "score": 15.088736994020353,
+            "matchedTerms": [
+              "Node.js"
+            ]
+          },
+          {
+            "id": "node-api",
+            "score": 11.176842217792853,
+            "matchedTerms": [
+              "Node.js"
+            ]
+          },
+          {
+            "id": "home",
+            "score": 4.191315831672319,
+            "matchedTerms": [
+              "Node.js"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "compatibility",
+            "score": 19.87328141227365,
+            "matchedTerms": [
+              "navegador",
+              "Node.js"
+            ]
+          },
+          {
+            "id": "node-api",
+            "score": 2.144905245882066,
+            "matchedTerms": [
+              "Node.js"
+            ]
+          },
+          {
+            "id": "node-quickstart",
+            "score": 2.144905245882066,
+            "matchedTerms": [
+              "Node.js"
+            ]
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "browser-preview",
+        "input": "vista previa en navegador de las plantillas",
+        "acceptable": [
+          "templates"
+        ],
+        "principle": "A template preview does not become a runtime compatibility question.",
+        "before": [
+          {
+            "id": "templates",
+            "score": 14.694252971385307,
+            "matchedTerms": [
+              "plantilla"
+            ]
+          },
+          {
+            "id": "development",
+            "score": 6.938952792043061,
+            "matchedTerms": [
+              "plantilla"
+            ]
+          },
+          {
+            "id": "docs",
+            "score": 4.163371675225837,
+            "matchedTerms": [
+              "plantilla"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "templates",
+            "score": 14.694252971385307,
+            "matchedTerms": [
+              "plantilla"
+            ]
+          },
+          {
+            "id": "development",
+            "score": 6.938952792043061,
+            "matchedTerms": [
+              "plantilla"
+            ]
+          },
+          {
+            "id": "docs",
+            "score": 4.163371675225837,
+            "matchedTerms": [
+              "plantilla"
+            ]
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "specific-update",
+        "input": "crear una nueva versión del mazo Python con el APKG original",
+        "acceptable": [
+          "updates",
+          "python-api",
+          "json-to-anki"
+        ],
+        "principle": "The original package and new version identify an update task.",
+        "before": [
+          {
+            "id": "blog:stable-ids-and-deck-updates",
+            "score": 16.915886321175915,
+            "matchedTerms": [
+              "actualizar",
+              "paquete de referencia",
+              "mazo"
+            ]
+          },
+          {
+            "id": "updates",
+            "score": 16.226927949896904,
+            "matchedTerms": [
+              "actualizar",
+              "paquete de referencia",
+              "mazo"
+            ]
+          },
+          {
+            "id": "json-to-anki",
+            "score": 7.475481046657469,
+            "matchedTerms": [
+              "actualizar",
+              "paquete de referencia",
+              "Python",
+              "mazo"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "blog:stable-ids-and-deck-updates",
+            "score": 24.785022729517976,
+            "matchedTerms": [
+              "actualizar",
+              "paquete de referencia",
+              "mazo"
+            ]
+          },
+          {
+            "id": "updates",
+            "score": 23.775566377800487,
+            "matchedTerms": [
+              "actualizar",
+              "paquete de referencia",
+              "mazo"
+            ]
+          },
+          {
+            "id": "json-to-anki",
+            "score": 13.689076813948349,
+            "matchedTerms": [
+              "actualizar",
+              "paquete de referencia",
+              "Python",
+              "crear",
+              "mazo"
+            ]
+          }
+        ],
+        "passed": false
+      },
+      {
+        "id": "specific-cloze",
+        "input": "generar tarjetas Cloze con Python",
+        "acceptable": [
+          "cards",
+          "python-api"
+        ],
+        "principle": "An explicit card kind outranks general first-deck creation.",
+        "before": [
+          {
+            "id": "cards",
+            "score": 10.422954713972056,
+            "matchedTerms": [
+              "Cloze",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "json-to-anki",
+            "score": 6.46254442906987,
+            "matchedTerms": [
+              "Python",
+              "generar",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "python-quickstart",
+            "score": 3.7791427873010366,
+            "matchedTerms": [
+              "Python",
+              "tarjetas"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "cards",
+            "score": 19.16830476510413,
+            "matchedTerms": [
+              "crear",
+              "Cloze",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "python-quickstart",
+            "score": 15.328405863375096,
+            "matchedTerms": [
+              "crear",
+              "Python",
+              "tarjetas"
+            ]
+          },
+          {
+            "id": "csv-to-anki",
+            "score": 12.007388831613742,
+            "matchedTerms": [
+              "crear",
+              "Python",
+              "tarjetas"
+            ]
+          }
+        ],
+        "passed": true
+      }
+    ],
+    "existingFailure": {
+      "id": "specific-update",
+      "beforeTop1": "blog:stable-ids-and-deck-updates",
+      "afterTop1": "blog:stable-ids-and-deck-updates",
+      "comment": "Both versions rank the existing stable-identity/update article first and the updates guide second. The assertion intentionally remains failed because that article was not in the independently fixed acceptable-page set. The update task intent is preserved; no algorithm or expectation was adjusted for it."
+    }
+  },
+  "limitations": [
+    "The check uses current real HTML-derived metadata and the unchanged ranker only; no Pagefind retrieval, body snippets, browser execution, generated-site rebuild or frozen acceptance run was performed by this author.",
+    "The generic creation signal is positive-context vocabulary, not a grammatical parser; specific-task coverage depends on the existing concept definitions and actual document evidence.",
+    "Browser-runtime vocabulary routes users to the compatibility boundary; it does not assert that native Node packages run in web browsers.",
+    "This is an authored delta and an explicitly bounded holdout check, not independent native-language approval, technical approval or release approval."
+  ]
+}

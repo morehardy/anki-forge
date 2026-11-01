@@ -1,0 +1,1064 @@
+{
+  "schemaVersion": 1,
+  "kind": "machine-read",
+  "mode": "release-candidate",
+  "status": "passed",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/final_spec_review/actual-machine-http-root-final-multilingual-es-2026-10-28",
+  "reviewedAt": "2026-10-28T09:43:58.361Z",
+  "inputSha256": "73cf2748ad2da0e9a4d2e304cec702b89d9137677f24cf1f9f41d1c133519a16",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es"
+  ],
+  "readOrigin": "http://127.0.0.1:57271",
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/origin-manifest.json",
+    "sha256": "0752b3b828c357a967f04386785b938f1e610e987909a5a248860dbbc723a51f",
+    "commit": "a9b3fa044f1ae166ecd8007d68f3b864230ddc00"
+  },
+  "resourceBindings": [
+    {
+      "route": "/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "4e5216863390dda212498929bc8d85a8f3db2b6994aa7cb6a7a14549b00f9e64"
+    },
+    {
+      "route": "/blog/your-first-anki-deck/index.md",
+      "sha256": "43bd3ceb5cf6b4fefb1d504386374b53379a630e0eb6a6ec548d20b1f72d2e5b"
+    },
+    {
+      "route": "/docs/ai-anki-cards/index.md",
+      "sha256": "9745b22b1eef834acd7824a662f24b0bd2a83ba2fa41ea1ee606fbee6e21fa3a"
+    },
+    {
+      "route": "/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "d3fa07417f3752acc3f105b95f2dd49fab31a78cb3828ac022688a971d281e4e"
+    },
+    {
+      "route": "/docs/api/index.md",
+      "sha256": "78633f690be8373213053679b29209d7b17bc1ad85585d87eca45e4aec1f5e19"
+    },
+    {
+      "route": "/docs/build-guarantees/index.md",
+      "sha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d"
+    },
+    {
+      "route": "/docs/cards/index.md",
+      "sha256": "aab5c07d71579a3d23e7daa7dfe9301341cef112672d73fcb220cfdd27b93ec3"
+    },
+    {
+      "route": "/docs/compatibility/index.md",
+      "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+    },
+    {
+      "route": "/docs/concepts/index.md",
+      "sha256": "2b07722c9bfbdb2e8fefe578ab6fdc7fe38812d684f3474eb015c17493ba73d6"
+    },
+    {
+      "route": "/docs/csv-to-anki/index.md",
+      "sha256": "0428ebe47ff80585c636b10f362bd6c90ba95e44b7c0c567d7c073a31b97d662"
+    },
+    {
+      "route": "/docs/custom-notetypes/index.md",
+      "sha256": "1ec524ad2e9100e94a376e6e672c79a177bc9b32bc7d3d3bd48a6b66e985f2cf"
+    },
+    {
+      "route": "/docs/development/index.md",
+      "sha256": "38e8514202721f6a59b3e955089238eeb0cd0a2da40f84e687781674930fa07f"
+    },
+    {
+      "route": "/docs/genanki-migration/index.md",
+      "sha256": "fb1788925c8e1ac5141dee8594d55f797bf7949b16d97c592c329eaacdf3e1ba"
+    },
+    {
+      "route": "/docs/image-occlusion/index.md",
+      "sha256": "edd171a793a59fbfcb7d1a5b065ee80d1e0e55ea0a64b3f5b2e7086b12ebbd1c"
+    },
+    {
+      "route": "/docs/index.md",
+      "sha256": "2589240ac602a461fcd26375953f959f50610b1efc34301771fb5b9a612062ff"
+    },
+    {
+      "route": "/docs/installation/index.md",
+      "sha256": "d8e5e1b617b5319efec59c50eace336bbfae67ead940b8d00a423c0614e3ed60"
+    },
+    {
+      "route": "/docs/json-to-anki/index.md",
+      "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e"
+    },
+    {
+      "route": "/docs/languages/index.md",
+      "sha256": "20118dbc34eaf14ef16f924a52e471a432b913b4aeca09d9139d271075197d04"
+    },
+    {
+      "route": "/docs/media/index.md",
+      "sha256": "77e7e5d479e15f7f15a982f5ac79a53861e2995e8ba5d224200d86944f3a407d"
+    },
+    {
+      "route": "/docs/node-api/index.md",
+      "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810"
+    },
+    {
+      "route": "/docs/node-quickstart/index.md",
+      "sha256": "ab17748c05b50f6bf91a46fbe891bbea4b67e1be9595b402af689a3081637c0a"
+    },
+    {
+      "route": "/docs/python-api/index.md",
+      "sha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af"
+    },
+    {
+      "route": "/docs/python-diagnostics/index.md",
+      "sha256": "7c55655214b864f9bf4de14874b933a99f842399f7a0c632e71ad32d0373bb5b"
+    },
+    {
+      "route": "/docs/python-migration/index.md",
+      "sha256": "e048cc0d961bdded62c1d3184d901e4cf0e0d315fe291c47049a59928117af72"
+    },
+    {
+      "route": "/docs/python-quickstart/index.md",
+      "sha256": "82edf1d256c00cc749ac44c1f9856496e4198d1b839e8b80346ca5e8e52d774b"
+    },
+    {
+      "route": "/docs/quickstart/index.md",
+      "sha256": "015f398a176bb921088b56cd0a7e2d6adfaaf26a39870924f748c9f12ffe3804"
+    },
+    {
+      "route": "/docs/rust-api/index.md",
+      "sha256": "98d57a4e45b11113366315510c596444dd94dc264105db2a8a5e9d9f0a747296"
+    },
+    {
+      "route": "/docs/rust-guide/index.md",
+      "sha256": "58d18a4d00adc8aee9778b48db2d54822326b06921b65987a4109ddc840f3194"
+    },
+    {
+      "route": "/docs/templates/index.md",
+      "sha256": "40c5ddf6831231df335509f6f4d3cf51e49cbaeca215efeb5b662aedfa26c32a"
+    },
+    {
+      "route": "/docs/troubleshooting/index.md",
+      "sha256": "ed47bd814c901d4a4c69001b91d5e00c89deaef5c5ecfb77ccea8b54cc6d2286"
+    },
+    {
+      "route": "/docs/updates/index.md",
+      "sha256": "534459fc358e94e308fed814da7fddbb5e069f12c6546baddcb1976cfbdb66ce"
+    },
+    {
+      "route": "/es/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "17f7f5408b3cefcc1dc8d5cff2d95a64b245e6d993c5c0a0e5640a934416002f"
+    },
+    {
+      "route": "/es/blog/your-first-anki-deck/index.md",
+      "sha256": "811e0eeb6867bd23a928e9087268ed17d24164c05ccd997c3ad8878110bd495c"
+    },
+    {
+      "route": "/es/docs/ai-anki-cards/index.md",
+      "sha256": "99743cb1706d0b12b1ecb2ace07456115532e55fccfe49e98ef701593f967c70"
+    },
+    {
+      "route": "/es/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "1751babf393a61988a9f057ce42511b4a931922c6c7688098a85c9cd36e371c6"
+    },
+    {
+      "route": "/es/docs/api/index.md",
+      "sha256": "d6a2df886ad2d8d95711a031f995bbd9ed717d50c2333b2f536123fa089989ca"
+    },
+    {
+      "route": "/es/docs/build-guarantees/index.md",
+      "sha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe"
+    },
+    {
+      "route": "/es/docs/cards/index.md",
+      "sha256": "35419052d29e392805b83fd1ac3d050645a37570a0c11a890e08c9e8f272726d"
+    },
+    {
+      "route": "/es/docs/compatibility/index.md",
+      "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+    },
+    {
+      "route": "/es/docs/concepts/index.md",
+      "sha256": "f2d42f3acc058095a096bfcd47263e275e1837c62e29401f42bcc282e8839757"
+    },
+    {
+      "route": "/es/docs/csv-to-anki/index.md",
+      "sha256": "c0636dd2ac60d9b20c62ede43d226f43de4e43bee6982146670fc0ac05623b02"
+    },
+    {
+      "route": "/es/docs/custom-notetypes/index.md",
+      "sha256": "cd79fd039a0bc5444f14fda465ef813231ee14c296184668ff0fbe5d66e0d5cf"
+    },
+    {
+      "route": "/es/docs/development/index.md",
+      "sha256": "4ba123d0ebdd9c92084656cad77d701230ee4b32cda03ebc0bbc34774863ae96"
+    },
+    {
+      "route": "/es/docs/genanki-migration/index.md",
+      "sha256": "5aefe654a88817cb02b931e62b739450806444b999c02dec6dcec871772570d4"
+    },
+    {
+      "route": "/es/docs/image-occlusion/index.md",
+      "sha256": "c1f18a749e2b7ebb422e82774d5a205684602ec628390aec8557e9bd23c17628"
+    },
+    {
+      "route": "/es/docs/index.md",
+      "sha256": "cc78c766b4da6e90411988938c404247f4561f076f9b825c334acef94a6bf5c1"
+    },
+    {
+      "route": "/es/docs/installation/index.md",
+      "sha256": "c2684786f4b65987f50ffbad71514f588156472cbcaf6801a35ccc55b3acd70a"
+    },
+    {
+      "route": "/es/docs/json-to-anki/index.md",
+      "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed"
+    },
+    {
+      "route": "/es/docs/languages/index.md",
+      "sha256": "4bc4d5ac42b66a76bb63c300af3b6c373a25bd8c572ece54e2bb27509cab1c63"
+    },
+    {
+      "route": "/es/docs/media/index.md",
+      "sha256": "75c94846c132a09c5761bd4aec28ac45c5a69c555459a2c4e559d862316a259e"
+    },
+    {
+      "route": "/es/docs/node-api/index.md",
+      "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e"
+    },
+    {
+      "route": "/es/docs/node-quickstart/index.md",
+      "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898"
+    },
+    {
+      "route": "/es/docs/python-api/index.md",
+      "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956"
+    },
+    {
+      "route": "/es/docs/python-diagnostics/index.md",
+      "sha256": "71a0a087d4474e98868848e0dcefedd32067b8a01ab7cd49b1774a0ae5532f83"
+    },
+    {
+      "route": "/es/docs/python-migration/index.md",
+      "sha256": "ee0155e3d170643f6e8204354f9ab3152a8b91256dfeeb8b5e32c664afb490e5"
+    },
+    {
+      "route": "/es/docs/python-quickstart/index.md",
+      "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56"
+    },
+    {
+      "route": "/es/docs/quickstart/index.md",
+      "sha256": "42f01fa3284bb45f1f1b2c2d677092554bb6b41083b66964ed23567128ac419e"
+    },
+    {
+      "route": "/es/docs/rust-api/index.md",
+      "sha256": "da277a083aa616be09ba8696c522f8cced4d7b613619d521fd301acedce5a03c"
+    },
+    {
+      "route": "/es/docs/rust-guide/index.md",
+      "sha256": "205b0d8e65cc17f0e56755dc0e178d5e38bcdc52d2520f28795a78c2fdaa76be"
+    },
+    {
+      "route": "/es/docs/templates/index.md",
+      "sha256": "22a67d96800c733086cbd9ab3bc6723265d63caf01cb94fab17b2682240da0ee"
+    },
+    {
+      "route": "/es/docs/troubleshooting/index.md",
+      "sha256": "092ff59b379d229faf9f469a549b19db43b3662cfe0590e170262ab70ea44a69"
+    },
+    {
+      "route": "/es/docs/updates/index.md",
+      "sha256": "c2d7f4b045e9c0cca680ad82361f2fb3ed30ad1cea8213a6a59d7a3c3f620d13"
+    },
+    {
+      "route": "/es/llms.txt",
+      "sha256": "b9d882584541738adac55a3bbb8efcdf2689012a148cb52b5931aea8f4da7079"
+    },
+    {
+      "route": "/llms.txt",
+      "sha256": "b986049e88198d880b3f86e4f2403cb93221a8614713251d90ea23f9e76b0cfc"
+    },
+    {
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "50cd652ceef20a48a4c74610a19398b231959ffb9d4dd4076b7337ff7e315161"
+    },
+    {
+      "route": "/zh-cn/blog/your-first-anki-deck/index.md",
+      "sha256": "e82bf53033a3cd2a15d4e2c92dcc936b0be2fb575b83f8e12e78f9e40ef28291"
+    },
+    {
+      "route": "/zh-cn/docs/ai-anki-cards/index.md",
+      "sha256": "d41495f72cf015aaa880eb9d85b41be3002512d9997c148bee6da0b4b3086ac6"
+    },
+    {
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "461f89203af0dc34a83d059cb9d4d3903ad5d3e163a502cfe2dd5b5566a685fd"
+    },
+    {
+      "route": "/zh-cn/docs/api/index.md",
+      "sha256": "22b2a28e881312cdf227c8b23bb9fc7c451c06890980ff47cc0979c40ed0a0bd"
+    },
+    {
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "sha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22"
+    },
+    {
+      "route": "/zh-cn/docs/cards/index.md",
+      "sha256": "d408f9f86d531ae94d1c6c25347929282411db5ec1dc91a63ced0342be586232"
+    },
+    {
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88"
+    },
+    {
+      "route": "/zh-cn/docs/concepts/index.md",
+      "sha256": "b964d090bf2700988229952e67365f4a3f4948328b925ba0f50a54783df89778"
+    },
+    {
+      "route": "/zh-cn/docs/csv-to-anki/index.md",
+      "sha256": "be2d5b64a5df7d603129517e460cad11fbac5c6a4e7037b94381fd94e0041428"
+    },
+    {
+      "route": "/zh-cn/docs/custom-notetypes/index.md",
+      "sha256": "f34dd1c38da4a42edbdceff9116ea9da2b09fb734a65a41fb317cd656741d682"
+    },
+    {
+      "route": "/zh-cn/docs/development/index.md",
+      "sha256": "956050812e0c79f55142ea8365b5950c92200361fc213083eb4e8deadbf7f07a"
+    },
+    {
+      "route": "/zh-cn/docs/genanki-migration/index.md",
+      "sha256": "91dd3c944180673b82f7fcd52b7bb4f24426e859398de6c6b98ca9c83bfbca10"
+    },
+    {
+      "route": "/zh-cn/docs/image-occlusion/index.md",
+      "sha256": "7407cd60a7d6c49493d4ce485bacc9246bd7531861893dfe170b074b8bfcab59"
+    },
+    {
+      "route": "/zh-cn/docs/index.md",
+      "sha256": "30ee017d9f493d9ac91cb82a4c61c05001d36c96fb57819394134b9151636a98"
+    },
+    {
+      "route": "/zh-cn/docs/installation/index.md",
+      "sha256": "c92a6acb0d2d7763e39d59b1d6e6cb9b75b9f0ba2342c94ca417a9737b69fb98"
+    },
+    {
+      "route": "/zh-cn/docs/json-to-anki/index.md",
+      "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91"
+    },
+    {
+      "route": "/zh-cn/docs/languages/index.md",
+      "sha256": "bd745fd45a07f2e3cbc7a3c326ce0f4af98466ba7dd96384e298d75e206ce504"
+    },
+    {
+      "route": "/zh-cn/docs/media/index.md",
+      "sha256": "b49e8c8ea0235919419ac37762c78be9568752d6571ecb85fe5dc1b8df0d9aca"
+    },
+    {
+      "route": "/zh-cn/docs/node-api/index.md",
+      "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9"
+    },
+    {
+      "route": "/zh-cn/docs/node-quickstart/index.md",
+      "sha256": "7f8a17ec96355f9cb1b8649771a9ebab55f72d3538795ecc9c4a78e850a337e7"
+    },
+    {
+      "route": "/zh-cn/docs/python-api/index.md",
+      "sha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0"
+    },
+    {
+      "route": "/zh-cn/docs/python-diagnostics/index.md",
+      "sha256": "f2cf9f19e3820a65520b68f835f24ee2c7216f191393eb7496e2b25ba49a43ee"
+    },
+    {
+      "route": "/zh-cn/docs/python-migration/index.md",
+      "sha256": "b974fffe335a99894d210100f0171c21e7299ae013265eec61cd085b4344a890"
+    },
+    {
+      "route": "/zh-cn/docs/python-quickstart/index.md",
+      "sha256": "bcaaac50964bf4c95240d745ac55f324fbfbd57d56d486aefb56fb054c325451"
+    },
+    {
+      "route": "/zh-cn/docs/quickstart/index.md",
+      "sha256": "72fadf3c8591a8a65cae3f84696c1ffb864db8e77558970354a81c38f9b66acd"
+    },
+    {
+      "route": "/zh-cn/docs/rust-api/index.md",
+      "sha256": "5f7cb36f50163e1ab80da13727d6808a8acc92f7b309155883a61d264eeec572"
+    },
+    {
+      "route": "/zh-cn/docs/rust-guide/index.md",
+      "sha256": "f1ecb13c0ba1c9c8468daccbc20caf7a19e6eed9e0a6ac91dc04bd52bfc994f7"
+    },
+    {
+      "route": "/zh-cn/docs/templates/index.md",
+      "sha256": "0b94f590ebca9f0e61a20ecb2b08ad158ca4a1f8e10b064e9ef28a99975f4902"
+    },
+    {
+      "route": "/zh-cn/docs/troubleshooting/index.md",
+      "sha256": "c161530b7a94a4f5cc66f8e4a7077a0e8301d5fbe904951ac7ed395e3161fabf"
+    },
+    {
+      "route": "/zh-cn/docs/updates/index.md",
+      "sha256": "b6b3de6b612f28716cc10d16812c7698cc4ae7f53540227dbf1cee1aa11ae762"
+    },
+    {
+      "route": "/zh-cn/llms.txt",
+      "sha256": "e52bc51ed934cc4a13bc62930fa5e1400fef51518909815812088fb5cd9e4be7"
+    }
+  ],
+  "scope": {
+    "method": "Independent AI first read actual localized llms over HTTP, selected localized Markdown links, read the full returned task documents, then authored and assessed each answer. The reviewer actually reads English, Chinese and Spanish independently; translated-language answers do not use English fallback.",
+    "boundMachineResources": 96,
+    "actualHttpResourcesRead": 15,
+    "bindingMeaning": "Full Markdown/llms inventory binding identifies the artifact scope; it does not claim the reviewer read every machine document. Actual reading is limited to recorded readUrls and archived HTTP observations.",
+    "limitations": [
+      "This proves local immutable-artifact machine reading and answerability; it is not production availability, natural GEO discovery, new SDK program execution, external release rerun, or Anki GUI validation.",
+      "Runtime/package claims retain the dates and limitations stated by the read compatibility guide."
+    ]
+  },
+  "entries": {
+    "en": {
+      "openIssues": [],
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "question": "From the three-locale release's English machine index, recover the public Python installation and persistent first deck.",
+          "answer": "[The freshly read English index](https://ankiforge.dev/llms.txt) links to [Python quickstart Markdown](https://ankiforge.dev/docs/python-quickstart/index.md). Create a venv, activate with `. .venv/bin/activate` (Windows `.venv\\Scripts\\Activate.ps1`), then install `python -m pip install ankiforge==0.3.1`. Use ordinary CPython 3.11+ with a matching wheel; recorded checks cover 3.11–3.14. The complete main.py imports Project, Note and BuildOptions, creates namespace spanish/default deck Spanish, adds es:hola as hola→hello and builds to spanish.apkg. Run `python main.py`. The file is persistent, namespace/key must remain stable, and export needs no Anki. This task read the actual release bytes; it did not execute installation or the program.",
+          "conclusions": [
+            "Complete minimum code, runtime, Windows activation and persistence/identity conditions remain directly answerable.",
+            "The actual index now exposes Chinese and Spanish alternatives while the task remains wholly in English.",
+            "Final-root revalidation: I independently fetched this locale index and reread this complete target Markdown over HTTP from the a9b3fa0 immutable artifact. The task body remains unchanged, so the factual answer above remains valid; this result is bound to the new input/manifest and new HTTP records, not the old receipt."
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/llms.txt",
+            "http://127.0.0.1:57271/docs/python-quickstart/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/llms.txt",
+            "https://ankiforge.dev/docs/python-quickstart/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/llms.txt",
+              "sha256": "b986049e88198d880b3f86e4f2403cb93221a8614713251d90ea23f9e76b0cfc",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit python-quickstart Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/001-llms.txt.body",
+              "sha256": "b986049e88198d880b3f86e4f2403cb93221a8614713251d90ea23f9e76b0cfc",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/001-llms.txt.http.json",
+              "sha256": "e28250be49890899255a4559827a0c7f902a97973d68b5a78bb7d5621378516b",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/llms.txt"
+            },
+            {
+              "route": "/docs/python-quickstart/index.md",
+              "sha256": "82edf1d256c00cc749ac44c1f9856496e4198d1b839e8b80346ca5e8e52d774b",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/008-docs_python-quickstart_index.md.body",
+              "sha256": "82edf1d256c00cc749ac44c1f9856496e4198d1b839e8b80346ca5e8e52d774b",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/docs/python-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/008-docs_python-quickstart_index.md.http.json",
+              "sha256": "2deb344e0d6bf86f87f587a53a61813eefd7cde233dd75bdc00b0b7aabff3833",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/docs/python-quickstart/index.md"
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "question": "Can the new English machine path recover Node authoring, async operations, reports and ownership limitations?",
+          "answer": "The new [English index](https://ankiforge.dev/llms.txt) leads directly to [Node API Markdown](https://ankiforge.dev/docs/node-api/index.md). Project(namespace), defaultDeck, add, Note.basic/cloze and immutable custom models are documented. Await build with BuildOptions.to(path) for BuildOutput owning an artifact; await compare against a baseline for completed ComparisonReport, including blocked policy. BuildReport is observations rather than outcome or file ownership; JSON snapshots use snake_case. Async operations capture project snapshots. Retain owners while consuming artifact paths; last temporary-owner cleanup deletes the file, persistent outputs survive. preparePublication allows review before a single consuming publish attempt, including rejection. This answer uses the full newly read table/code/lifecycle text, not new Node execution.",
+          "conclusions": [
+            "API tables, complete examples, nullable comparisons and publication caveats survive in this actual artifact.",
+            "Public prepared-publication availability is stated without erasing owner-lifetime restrictions.",
+            "Final-root revalidation: I independently fetched this locale index and reread this complete target Markdown over HTTP from the a9b3fa0 immutable artifact. The task body remains unchanged, so the factual answer above remains valid; this result is bound to the new input/manifest and new HTTP records, not the old receipt."
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/llms.txt",
+            "http://127.0.0.1:57271/docs/node-api/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/llms.txt",
+            "https://ankiforge.dev/docs/node-api/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/llms.txt",
+              "sha256": "b986049e88198d880b3f86e4f2403cb93221a8614713251d90ea23f9e76b0cfc",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit node-api Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/001-llms.txt.body",
+              "sha256": "b986049e88198d880b3f86e4f2403cb93221a8614713251d90ea23f9e76b0cfc",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/001-llms.txt.http.json",
+              "sha256": "e28250be49890899255a4559827a0c7f902a97973d68b5a78bb7d5621378516b",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/llms.txt"
+            },
+            {
+              "route": "/docs/node-api/index.md",
+              "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/009-docs_node-api_index.md.body",
+              "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/docs/node-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/009-docs_node-api_index.md.http.json",
+              "sha256": "bec0c44b08b034bed06c7a5e0e8a821db3864fecdf6e701d9fc315b2de1cde51",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/docs/node-api/index.md"
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "question": "Recover the English JSON/media update workflow, expected outputs and valid original baseline.",
+          "answer": "[The new task index](https://ankiforge.dev/llms.txt) links to [JSON guide Markdown](https://ankiforge.dev/docs/json-to-anki/index.md). Download v1.json, v2.json, cell.png and tone.wav into recipe/ and choose the complete Rust/Python/Node program for public 0.3.1. The application parses JSON. Each version expects 3 notes, 3 cards and 2 media files. Generate original v1, compare the answer-only next project, save comparison.json, prepare v2 against the same v1, save review.json, check policy again and publish. Expected evidence is RISK.NOTE_CHANGED, no additions/removals and allowed policy. Keep biology-json, stable note IDs and original v1.apkg. Anki re-exports are invalid baselines; omitted notes are not deleted, and client/local-edit conditions remain. Those are read expectations, not newly executed SDK results.",
+          "conclusions": [
+            "All three SDK sections, shared attachment links, complete programs and expected results were actually read.",
+            "Original-distribution, policy-review and Anki-client limits remain adjacent to the update outcome.",
+            "Final-root revalidation: I independently fetched this locale index and reread this complete target Markdown over HTTP from the a9b3fa0 immutable artifact. The task body remains unchanged, so the factual answer above remains valid; this result is bound to the new input/manifest and new HTTP records, not the old receipt."
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/llms.txt",
+            "http://127.0.0.1:57271/docs/json-to-anki/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/llms.txt",
+            "https://ankiforge.dev/docs/json-to-anki/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/llms.txt",
+              "sha256": "b986049e88198d880b3f86e4f2403cb93221a8614713251d90ea23f9e76b0cfc",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit json-to-anki Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/001-llms.txt.body",
+              "sha256": "b986049e88198d880b3f86e4f2403cb93221a8614713251d90ea23f9e76b0cfc",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/001-llms.txt.http.json",
+              "sha256": "e28250be49890899255a4559827a0c7f902a97973d68b5a78bb7d5621378516b",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/llms.txt"
+            },
+            {
+              "route": "/docs/json-to-anki/index.md",
+              "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/010-docs_json-to-anki_index.md.body",
+              "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/docs/json-to-anki/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/010-docs_json-to-anki_index.md.http.json",
+              "sha256": "098dd986bfba7e66037eaa98b0453cabf839424138d3e3b5948e9a599e51a2b1",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/docs/json-to-anki/index.md"
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "question": "Recover the documented English runtime/platform scope and Anki-client/update restrictions.",
+          "answer": "[Compatibility Markdown](https://ankiforge.dev/docs/compatibility/index.md), selected from [the actual index](https://ankiforge.dev/llms.txt), dates public 0.3.1 checks to 2026-10-13. It records Rust1.92/current stable, Node22.13/current22/24/26 and ordinary CPython3.11–3.14; native packages cover macOS arm64/x64, Linux x64 GNU/glibc and Windows x64. Availability is not proof on every host. Browser/Electron/Bun/Alpine-musl/ARM64 Linux-Windows are outside recorded Node scope; other Python implementations/free-threaded/subinterpreter modes require validation. Export needs no Anki, but import/render/playback depend on version/codecs/settings; 40 cited benchmark checks do not cover every GUI/audio behavior. Updates require original APKG identity evidence, not re-exports, and omissions do not delete learner notes. External release runs and GUI checks were not rerun here.",
+          "conclusions": [
+            "Fresh English reading preserves the dated table, explicit exclusions and client-dependent guarantees.",
+            "The index summary agrees with the detailed original-baseline and export limitations.",
+            "Final-root revalidation: I independently fetched this locale index and reread this complete target Markdown over HTTP from the a9b3fa0 immutable artifact. The task body remains unchanged, so the factual answer above remains valid; this result is bound to the new input/manifest and new HTTP records, not the old receipt."
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/llms.txt",
+            "http://127.0.0.1:57271/docs/compatibility/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/llms.txt",
+            "https://ankiforge.dev/docs/compatibility/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/llms.txt",
+              "sha256": "b986049e88198d880b3f86e4f2403cb93221a8614713251d90ea23f9e76b0cfc",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit compatibility Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/001-llms.txt.body",
+              "sha256": "b986049e88198d880b3f86e4f2403cb93221a8614713251d90ea23f9e76b0cfc",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/001-llms.txt.http.json",
+              "sha256": "e28250be49890899255a4559827a0c7f902a97973d68b5a78bb7d5621378516b",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/llms.txt"
+            },
+            {
+              "route": "/docs/compatibility/index.md",
+              "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/011-docs_compatibility_index.md.body",
+              "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/011-docs_compatibility_index.md.http.json",
+              "sha256": "206fdd1270dab76a8a34bed3c76d1a9118e85758fd1624b04e9f135d281c98ea",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/docs/compatibility/index.md"
+            }
+          ],
+          "openIssues": []
+        }
+      ]
+    },
+    "zh-CN": {
+      "openIssues": [],
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "question": "从本次三语产物的中文机器索引，恢复Python公开包安装和首次持久导出。",
+          "answer": "新取回的[中文索引](https://ankiforge.dev/zh-cn/llms.txt)直接链接[中文Python入门](https://ankiforge.dev/zh-cn/docs/python-quickstart/index.md)。创建venv，Unix用`. .venv/bin/activate`、Windows用`.venv\\Scripts\\Activate.ps1`激活，再安装`python -m pip install ankiforge==0.3.1`。要求普通CPython3.11+和匹配wheel，记录检查覆盖3.11–3.14。完整main.py以spanish命名空间/Spanish牌组添加es:hola键的hola→hello笔记，用BuildOptions.to('spanish.apkg')构建，再运行python main.py。文件持久保存，后续保持命名空间和笔记键，导出无需Anki。本次实际读取中文HTTP正文，未新执行安装或SDK。",
+          "conclusions": [
+            "完整安装块、程序、持久输出与稳定身份条件可直接回答。",
+            "三语索引的新增西语入口不影响中文任务，也未发生英文fallback。",
+            "最终root复验：已从a9b3fa0不可变产物重新经HTTP读取本语索引及本任务完整Markdown。任务正文未变，以上事实回答仍成立；本结果绑定新的输入、manifest和本次HTTP记录，不复用旧receipt。"
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/zh-cn/llms.txt",
+            "http://127.0.0.1:57271/zh-cn/docs/python-quickstart/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/zh-cn/llms.txt",
+            "https://ankiforge.dev/zh-cn/docs/python-quickstart/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/zh-cn/llms.txt",
+              "sha256": "e52bc51ed934cc4a13bc62930fa5e1400fef51518909815812088fb5cd9e4be7",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit python-quickstart Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/002-zh-cn_llms.txt.body",
+              "sha256": "e52bc51ed934cc4a13bc62930fa5e1400fef51518909815812088fb5cd9e4be7",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/002-zh-cn_llms.txt.http.json",
+              "sha256": "1cb2fefee1be4a941eb527e3684d2547c2ea34d27afbe5ad5881a25793c37460",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/zh-cn/llms.txt"
+            },
+            {
+              "route": "/zh-cn/docs/python-quickstart/index.md",
+              "sha256": "bcaaac50964bf4c95240d745ac55f324fbfbd57d56d486aefb56fb054c325451",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/012-zh-cn_docs_python-quickstart_index.md.body",
+              "sha256": "bcaaac50964bf4c95240d745ac55f324fbfbd57d56d486aefb56fb054c325451",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/zh-cn/docs/python-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/012-zh-cn_docs_python-quickstart_index.md.http.json",
+              "sha256": "ae0e03b0e237207fd3acdfc8b6408707df31939b9b8a111c4d3b83c8f0447b88",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/zh-cn/docs/python-quickstart/index.md"
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "question": "本次中文机器输出能否独立说明Node编写、异步、报告及所有权？",
+          "answer": "[中文索引API参考](https://ankiforge.dev/zh-cn/llms.txt)进入[中文Node Markdown](https://ankiforge.dev/zh-cn/docs/node-api/index.md)。表格列Project(namespace)、defaultDeck、add、Note.basic/cloze和不可变模型。await build返回持有产物的BuildOutput；await compare返回完成的ComparisonReport，策略拒绝也可正常返回。BuildReport只含观察结果，不持有文件/结果；JSON快照字段保持snake_case。异步工作使用调用时捕获的项目快照。读取path时保留所有者，最后临时所有者关闭会删文件，持久文件仍保留。预备发布支持先审阅，publish每次尝试都消耗所有者，包括拒绝；开始后的关闭不取消发布。本次完整读取了表格、代码和限制，未执行Node。",
+          "conclusions": [
+            "报告null条件、错误、完整预备发布程序和生命周期限制在中文输出中保留。",
+            "没有读取英文或源代码来补足中文答案。",
+            "最终root复验：已从a9b3fa0不可变产物重新经HTTP读取本语索引及本任务完整Markdown。任务正文未变，以上事实回答仍成立；本结果绑定新的输入、manifest和本次HTTP记录，不复用旧receipt。"
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/zh-cn/llms.txt",
+            "http://127.0.0.1:57271/zh-cn/docs/node-api/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/zh-cn/llms.txt",
+            "https://ankiforge.dev/zh-cn/docs/node-api/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/zh-cn/llms.txt",
+              "sha256": "e52bc51ed934cc4a13bc62930fa5e1400fef51518909815812088fb5cd9e4be7",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit node-api Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/002-zh-cn_llms.txt.body",
+              "sha256": "e52bc51ed934cc4a13bc62930fa5e1400fef51518909815812088fb5cd9e4be7",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/002-zh-cn_llms.txt.http.json",
+              "sha256": "1cb2fefee1be4a941eb527e3684d2547c2ea34d27afbe5ad5881a25793c37460",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/zh-cn/llms.txt"
+            },
+            {
+              "route": "/zh-cn/docs/node-api/index.md",
+              "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/013-zh-cn_docs_node-api_index.md.body",
+              "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/zh-cn/docs/node-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/013-zh-cn_docs_node-api_index.md.http.json",
+              "sha256": "3f636180b8f9588249cf84222efc55efc7416fe0d58ca96906aba7bc8a9c39f7",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/zh-cn/docs/node-api/index.md"
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "question": "从新中文llms恢复JSON媒体更新路径、预期结果与原始基线条件。",
+          "answer": "从[本次中文索引](https://ankiforge.dev/zh-cn/llms.txt)进入[JSON中文Markdown](https://ankiforge.dev/zh-cn/docs/json-to-anki/index.md)。共享v1.json、v2.json、cell.png、tone.wav放recipe/，任选完整Rust/Python/Node程序并使用公开0.3.1。应用解析JSON，每版预期3条笔记、3张卡片、2个媒体文件。生成原始v1，比较只改答案的下一版并保存comparison.json，再基于同一v1预备v2、保存review.json，再检查策略后发布。预期RISK.NOTE_CHANGED，无新增或移除笔记且允许发布。保持biology-json及稳定业务ID，基线须为原始分发APKG，不能用Anki重导出。后版省略笔记不删除集合笔记，客户端设置/本地编辑/调度仍需验证。这里是实际阅读得到的预期，未新执行SDK。",
+          "conclusions": [
+            "三SDK完整代码、命令、附件和两次策略检查在本次新HTTP正文中可读。",
+            "原始分发基线与Anki端限制没有丢失。",
+            "最终root复验：已从a9b3fa0不可变产物重新经HTTP读取本语索引及本任务完整Markdown。任务正文未变，以上事实回答仍成立；本结果绑定新的输入、manifest和本次HTTP记录，不复用旧receipt。"
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/zh-cn/llms.txt",
+            "http://127.0.0.1:57271/zh-cn/docs/json-to-anki/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/zh-cn/llms.txt",
+            "https://ankiforge.dev/zh-cn/docs/json-to-anki/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/zh-cn/llms.txt",
+              "sha256": "e52bc51ed934cc4a13bc62930fa5e1400fef51518909815812088fb5cd9e4be7",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit json-to-anki Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/002-zh-cn_llms.txt.body",
+              "sha256": "e52bc51ed934cc4a13bc62930fa5e1400fef51518909815812088fb5cd9e4be7",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/002-zh-cn_llms.txt.http.json",
+              "sha256": "1cb2fefee1be4a941eb527e3684d2547c2ea34d27afbe5ad5881a25793c37460",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/zh-cn/llms.txt"
+            },
+            {
+              "route": "/zh-cn/docs/json-to-anki/index.md",
+              "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/014-zh-cn_docs_json-to-anki_index.md.body",
+              "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/zh-cn/docs/json-to-anki/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/014-zh-cn_docs_json-to-anki_index.md.http.json",
+              "sha256": "08d608e54813f2a47802c1980b4e01790a52a8a25db93b3d7b5a408a1561a4d9",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/zh-cn/docs/json-to-anki/index.md"
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "question": "本次中文机器路径怎样限定运行环境、平台与Anki行为保证？",
+          "answer": "[新中文索引](https://ankiforge.dev/zh-cn/llms.txt)链接[兼容性Markdown](https://ankiforge.dev/zh-cn/docs/compatibility/index.md)。它注明2026-10-13公开0.3.1，记录Rust1.92/当前稳定版、Node22.13及当前22/24/26、普通CPython3.11–3.14。原生平台为macOS arm64/x64、Linux x64 GNU/glibc、Windows x64；有包不等于每台主机已运行通过。浏览器/Electron/Bun/Alpine-musl/ARM64 Linux-Windows不在现有Node记录范围，其他Python实现、自由线程和子解释器需另验。导出不需要Anki，导入/渲染/播放取决于客户端、编解码器、设置；40项基准检查不覆盖全部GUI音频。更新要原始分发APKG，重导出不保留身份证据；省略笔记不删除集合笔记，字段/本地编辑/复习历史需客户端测试。本任务未重跑外部发布或GUI检查。",
+          "conclusions": [
+            "本次中文正文的日期、表格、未覆盖范围和客户端条件均清楚。",
+            "索引摘要与详细限制一致，未把本地读取当成全环境验证。",
+            "最终root复验：已从a9b3fa0不可变产物重新经HTTP读取本语索引及本任务完整Markdown。任务正文未变，以上事实回答仍成立；本结果绑定新的输入、manifest和本次HTTP记录，不复用旧receipt。"
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/zh-cn/llms.txt",
+            "http://127.0.0.1:57271/zh-cn/docs/compatibility/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/zh-cn/llms.txt",
+            "https://ankiforge.dev/zh-cn/docs/compatibility/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/zh-cn/llms.txt",
+              "sha256": "e52bc51ed934cc4a13bc62930fa5e1400fef51518909815812088fb5cd9e4be7",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit compatibility Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/002-zh-cn_llms.txt.body",
+              "sha256": "e52bc51ed934cc4a13bc62930fa5e1400fef51518909815812088fb5cd9e4be7",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/zh-cn/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/002-zh-cn_llms.txt.http.json",
+              "sha256": "1cb2fefee1be4a941eb527e3684d2547c2ea34d27afbe5ad5881a25793c37460",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/zh-cn/llms.txt"
+            },
+            {
+              "route": "/zh-cn/docs/compatibility/index.md",
+              "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/015-zh-cn_docs_compatibility_index.md.body",
+              "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/zh-cn/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/015-zh-cn_docs_compatibility_index.md.http.json",
+              "sha256": "8e9e8f1c18fcfd2b179718e745fe1ab12cdcd18431716320640642688e5e793c",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/zh-cn/docs/compatibility/index.md"
+            }
+          ],
+          "openIssues": []
+        }
+      ]
+    },
+    "es": {
+      "openIssues": [],
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "question": "Desde el índice para IA en español de este artefacto, ¿cómo instalo el paquete de Python y genero mi primer APKG persistente?",
+          "answer": "El [índice español leído por HTTP](https://ankiforge.dev/es/llms.txt) enlaza directamente a [los primeros pasos con Python](https://ankiforge.dev/es/docs/python-quickstart/index.md). Crea el entorno con `python -m venv .venv`, actívalo con `. .venv/bin/activate` y ejecuta `python -m pip install ankiforge==0.3.1`; en Windows se activa con `.venv\\Scripts\\Activate.ps1`. Usa CPython estándar 3.11 o posterior y un wheel de tu plataforma; las comprobaciones registradas cubren 3.11–3.14. Guarda el programa completo como main.py: importa Project, Note y BuildOptions, crea el espacio de nombres spanish y mazo Spanish, añade es:hola con Note.basic('hola', 'hello') y genera BuildOptions.to('spanish.apkg'). Ejecuta `python main.py`. El archivo es persistente; conserva el espacio de nombres y la clave al editar. No necesitas Anki para exportar. Esta respuesta procede de la lectura real en español, sin ejecutar la instalación ni el programa.",
+          "conclusions": [
+            "El índice y el Markdown permiten recuperar instalación, código completo, requisitos y persistencia sin acudir al inglés.",
+            "El encabezado Language: es, la página canónica y los enlaces de continuación permanecen en /es/.",
+            "Revalidación del root final: volví a obtener por HTTP el índice de este idioma y a leer el Markdown completo de esta tarea en el artefacto inmutable a9b3fa0. El cuerpo de la tarea no ha cambiado y la respuesta anterior sigue siendo válida; este resultado queda vinculado a las nuevas entradas, al nuevo manifest y a las nuevas observaciones HTTP, no al recibo anterior."
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/es/llms.txt",
+            "http://127.0.0.1:57271/es/docs/python-quickstart/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/es/llms.txt",
+            "https://ankiforge.dev/es/docs/python-quickstart/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/es/llms.txt",
+              "sha256": "b9d882584541738adac55a3bbb8efcdf2689012a148cb52b5931aea8f4da7079",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit python-quickstart Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/003-es_llms.txt.body",
+              "sha256": "b9d882584541738adac55a3bbb8efcdf2689012a148cb52b5931aea8f4da7079",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/003-es_llms.txt.http.json",
+              "sha256": "2aa68d6174c50e4790c73f6a0e36f1603958ab0afbacaa0fe7f5235d6b98b0a5",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/es/llms.txt"
+            },
+            {
+              "route": "/es/docs/python-quickstart/index.md",
+              "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/004-es_docs_python-quickstart_index.md.body",
+              "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/es/docs/python-quickstart/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/004-es_docs_python-quickstart_index.md.http.json",
+              "sha256": "310a9836ab0e8bbc31a476dda83d0ada0665af2d9576f842289b8cd411e6d7a2",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/es/docs/python-quickstart/index.md"
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "question": "¿Dónde encuentro las API de Node y cómo distingo creación, comparación asíncrona, informes y vida útil de archivos?",
+          "answer": "La sección Referencias de las API del [índice español](https://ankiforge.dev/es/llms.txt) conduce a [API de Node y TypeScript](https://ankiforge.dev/es/docs/node-api/index.md). La tabla documenta Project(namespace), defaultDeck, add, Note.basic/cloze y modelos inmutables. `await project.build(BuildOptions.to(path))` devuelve BuildOutput que mantiene la propiedad de un archivo; `await project.compare(CompareOptions.against(path))` devuelve ComparisonReport completado, incluso si la política bloquea publicar. BuildReport contiene observaciones, no éxito/fallo ni archivos vivos; los campos JSON conservan snake_case. Las operaciones asíncronas capturan una instantánea del proyecto. Mantén vivo un propietario al usar path; el último propietario temporal elimina su archivo, mientras que uno persistente sobrevive a la limpieza. preparePublication permite revisar antes; cada intento de publish consume el propietario, incluidos los rechazos, y cerrarlo tras empezar no cancela la publicación. Leí el documento completo en español; no ejecuté Node ni necesité las referencias al código fuente para responder.",
+          "conclusions": [
+            "Tablas, ejemplos completos, errores, comparación nullable y límites de propiedad siguen legibles en español.",
+            "La disponibilidad de publicación preparada en 0.3.1 no se confunde con una garantía ilimitada de publicación o durabilidad.",
+            "Revalidación del root final: volví a obtener por HTTP el índice de este idioma y a leer el Markdown completo de esta tarea en el artefacto inmutable a9b3fa0. El cuerpo de la tarea no ha cambiado y la respuesta anterior sigue siendo válida; este resultado queda vinculado a las nuevas entradas, al nuevo manifest y a las nuevas observaciones HTTP, no al recibo anterior."
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/es/llms.txt",
+            "http://127.0.0.1:57271/es/docs/node-api/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/es/llms.txt",
+            "https://ankiforge.dev/es/docs/node-api/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/es/llms.txt",
+              "sha256": "b9d882584541738adac55a3bbb8efcdf2689012a148cb52b5931aea8f4da7079",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit node-api Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/003-es_llms.txt.body",
+              "sha256": "b9d882584541738adac55a3bbb8efcdf2689012a148cb52b5931aea8f4da7079",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/003-es_llms.txt.http.json",
+              "sha256": "2aa68d6174c50e4790c73f6a0e36f1603958ab0afbacaa0fe7f5235d6b98b0a5",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/es/llms.txt"
+            },
+            {
+              "route": "/es/docs/node-api/index.md",
+              "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/005-es_docs_node-api_index.md.body",
+              "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/es/docs/node-api/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/005-es_docs_node-api_index.md.http.json",
+              "sha256": "7755b16809b705e056b56fd547328fe81baff7654eed604a7a4deecc61a0040b",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/es/docs/node-api/index.md"
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "question": "¿Cómo genero un mazo con JSON y multimedia, reviso un cambio de respuesta y elijo la base correcta de actualización?",
+          "answer": "En Guías por tarea del [índice español](https://ankiforge.dev/es/llms.txt), abre [JSON a Anki](https://ankiforge.dev/es/docs/json-to-anki/index.md). Descarga v1.json, v2.json, cell.png y tone.wav y colócalos en recipe/. Elige el programa completo de Rust, Python o Node para el paquete 0.3.1; tu aplicación analiza JSON. Cada versión espera 3 notas, 3 tarjetas y 2 archivos multimedia. Genera v1.apkg original, compara el proyecto siguiente, guarda comparison.json, prepara v2 contra el mismo v1, guarda review.json y comprueba la política otra vez antes de publicar. Para el cambio de respuesta se esperan RISK.NOTE_CHANGED, ninguna nota añadida/eliminada y política que permite publicar. Conserva biology-json y las claves de nota. La base debe ser el APKG original de distribución, nunca uno reexportado desde Anki. Omitir notas no las elimina de la colección; las ediciones locales, opciones y programación de repasos dependen del cliente. Son expectativas documentadas que recuperé al leer, no resultados de una nueva ejecución.",
+          "conclusions": [
+            "Los tres SDK, comandos, programas completos, descargas y resultados esperados están presentes en el Markdown español real.",
+            "El requisito de APKG original y las limitaciones del cliente aparecen junto al resultado de actualización; no hizo falta contenido inglés.",
+            "Revalidación del root final: volví a obtener por HTTP el índice de este idioma y a leer el Markdown completo de esta tarea en el artefacto inmutable a9b3fa0. El cuerpo de la tarea no ha cambiado y la respuesta anterior sigue siendo válida; este resultado queda vinculado a las nuevas entradas, al nuevo manifest y a las nuevas observaciones HTTP, no al recibo anterior."
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/es/llms.txt",
+            "http://127.0.0.1:57271/es/docs/json-to-anki/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/es/llms.txt",
+            "https://ankiforge.dev/es/docs/json-to-anki/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/es/llms.txt",
+              "sha256": "b9d882584541738adac55a3bbb8efcdf2689012a148cb52b5931aea8f4da7079",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit json-to-anki Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/003-es_llms.txt.body",
+              "sha256": "b9d882584541738adac55a3bbb8efcdf2689012a148cb52b5931aea8f4da7079",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/003-es_llms.txt.http.json",
+              "sha256": "2aa68d6174c50e4790c73f6a0e36f1603958ab0afbacaa0fe7f5235d6b98b0a5",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/es/llms.txt"
+            },
+            {
+              "route": "/es/docs/json-to-anki/index.md",
+              "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/006-es_docs_json-to-anki_index.md.body",
+              "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/es/docs/json-to-anki/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/006-es_docs_json-to-anki_index.md.http.json",
+              "sha256": "6e644cfade89511df2f4fc56a06ba60978ac879e611042c0883c186047b2a1ed",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/es/docs/json-to-anki/index.md"
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "question": "¿Qué entornos están documentados y qué no garantiza una exportación correcta sobre Anki o las actualizaciones?",
+          "answer": "Desde Empieza aquí del [índice español](https://ankiforge.dev/es/llms.txt) llegué a [Compatibilidad y entornos verificados](https://ankiforge.dev/es/docs/compatibility/index.md). La comprobación fechada 2026-10-13 identifica paquetes públicos 0.3.1: Rust1.92/estable actual, Node22.13 y ramas22/24/26, CPython convencional3.11–3.14. Los paquetes nativos cubren macOS arm64/x64, Linux x64 GNU/glibc y Windows x64, pero disponibilidad no significa ejecución probada en todos los equipos. Navegadores, Electron, Bun, Alpine/musl y Linux/Windows ARM64 quedan fuera de la verificación Node registrada; otras implementaciones Python, intérpretes sin GIL y subintérpretes necesitan validación separada. Exportar no requiere Anki; importar, representar y reproducir multimedia dependen de versión, códecs y opciones del cliente. Las 40 comprobaciones citadas no cubren toda interfaz/audio. Conserva el APKG original para actualizar: reexportar pierde pruebas de identidad y omitir notas no las borra. No repetí las ejecuciones externas ni pruebas de Anki.",
+          "conclusions": [
+            "La tabla fechada, exclusiones y restricciones del cliente se entienden directamente en español.",
+            "El resumen del índice coincide con la guía detallada sobre exportación sin Anki y base original de actualización.",
+            "Revalidación del root final: volví a obtener por HTTP el índice de este idioma y a leer el Markdown completo de esta tarea en el artefacto inmutable a9b3fa0. El cuerpo de la tarea no ha cambiado y la respuesta anterior sigue siendo válida; este resultado queda vinculado a las nuevas entradas, al nuevo manifest y a las nuevas observaciones HTTP, no al recibo anterior."
+          ],
+          "readUrls": [
+            "http://127.0.0.1:57271/es/llms.txt",
+            "http://127.0.0.1:57271/es/docs/compatibility/index.md"
+          ],
+          "citedUrls": [
+            "https://ankiforge.dev/es/llms.txt",
+            "https://ankiforge.dev/es/docs/compatibility/index.md"
+          ],
+          "evidence": [
+            {
+              "route": "/es/llms.txt",
+              "sha256": "b9d882584541738adac55a3bbb8efcdf2689012a148cb52b5931aea8f4da7079",
+              "observation": "Read this locale's actual HTTP llms index first and selected its explicit compatibility Markdown link; current public installation and boundary summary remained visible."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/003-es_llms.txt.body",
+              "sha256": "b9d882584541738adac55a3bbb8efcdf2689012a148cb52b5931aea8f4da7079",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/es/llms.txt"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/003-es_llms.txt.http.json",
+              "sha256": "2aa68d6174c50e4790c73f6a0e36f1603958ab0afbacaa0fe7f5235d6b98b0a5",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/es/llms.txt"
+            },
+            {
+              "route": "/es/docs/compatibility/index.md",
+              "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+              "observation": "Read the complete actual localized Markdown response and independently composed the task answer and conclusions above. Canonical page, Language and Description headers remained readable; code and tables required for this task were present."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/007-es_docs_compatibility_index.md.body",
+              "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+              "description": "Exact UTF-8 HTTP response bytes actually read at http://127.0.0.1:57271/es/docs/compatibility/index.md"
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-es-2026-10-28/machine-http-root-final/007-es_docs_compatibility_index.md.http.json",
+              "sha256": "b70bc6fb34056bae625d09aa2e796346643d072c24b73765bb2d8e24baa36bd4",
+              "description": "Actual direct HTTP status, response headers, URL, timestamp and response digest for http://127.0.0.1:57271/es/docs/compatibility/index.md"
+            }
+          ],
+          "openIssues": []
+        }
+      ]
+    }
+  },
+  "openIssues": []
+}

@@ -1,0 +1,1314 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "independent AI machine-read reviewer (/root/spanish_spec)",
+  "readOrigin": "http://127.0.0.1:65349",
+  "configuration": {
+    "site": "https://morehardy.github.io",
+    "base": "/anki-forge",
+    "customDomain": ""
+  },
+  "environment": {
+    "SITE_URL": "https://morehardy.github.io",
+    "SITE_BASE": "/anki-forge",
+    "SITE_CUSTOM_DOMAIN": ""
+  },
+  "artifact": "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/target/spanish-integration/prefix-artifact",
+  "artifactVerification": {
+    "manifestRecordsChecked": 380,
+    "mismatches": 0
+  },
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/prefix-origin-manifest.json",
+    "sha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
+    "commit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
+    "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es"
+    ]
+  },
+  "artifactEmbeddedManifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
+  "server": {
+    "module": "website/scripts/serve-built-site.mjs",
+    "moduleSha256": "8255e4a118f4558d32557811ecbf57902c2f6b41ff0a8122ee10c453b36f0565",
+    "wrapper": "serve.mjs",
+    "wrapperSha256": "4ca10f1f327b154e2ee63d4ebd05f8eaa83cb7bf426e910cbba73b4feb0dbb2a",
+    "node": "v24.19.0",
+    "pid": 70887
+  },
+  "startedAt": "2026-11-01T03:58:20.025Z",
+  "fetches": [
+    {
+      "purpose": "Begin all four independent task readings at each locale llms entry point",
+      "argv": [
+        "docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "Begin all four independent task readings at each locale llms entry point",
+        "/anki-forge/llms.txt",
+        "/anki-forge/zh-cn/llms.txt",
+        "/anki-forge/es/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:58:32.926Z",
+      "results": [
+        {
+          "route": "/anki-forge/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e",
+          "bytes": 6250,
+          "bodyFile": "001-anki-forge_llms.txt.body",
+          "metadataFile": "001-anki-forge_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/zh-cn/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4",
+          "bytes": 6161,
+          "bodyFile": "002-anki-forge_zh-cn_llms.txt.body",
+          "metadataFile": "002-anki-forge_zh-cn_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/es/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/es/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2",
+          "bytes": 7427,
+          "bodyFile": "003-anki-forge_es_llms.txt.body",
+          "metadataFile": "003-anki-forge_es_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:58:32.971Z"
+    },
+    {
+      "purpose": "en python-install: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "en python-install: start with locale llms index",
+        "/anki-forge/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:07.145Z",
+      "results": [
+        {
+          "route": "/anki-forge/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e",
+          "bytes": 6250,
+          "bodyFile": "004-anki-forge_llms.txt.body",
+          "metadataFile": "004-anki-forge_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:07.181Z"
+    },
+    {
+      "purpose": "en python-install: follow llms links Generate Anki flashcards with Python | Compatibility and releases | Python API",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "en python-install: follow llms links Generate Anki flashcards with Python | Compatibility and releases | Python API",
+        "/anki-forge/docs/python-quickstart/index.md",
+        "/anki-forge/docs/compatibility/index.md",
+        "/anki-forge/docs/python-api/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:07.229Z",
+      "results": [
+        {
+          "route": "/anki-forge/docs/python-quickstart/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/docs/python-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf",
+          "bytes": 2542,
+          "bodyFile": "005-anki-forge_docs_python-quickstart_index.md.body",
+          "metadataFile": "005-anki-forge_docs_python-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+          "bytes": 3374,
+          "bodyFile": "006-anki-forge_docs_compatibility_index.md.body",
+          "metadataFile": "006-anki-forge_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/docs/python-api/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/docs/python-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "ce891dfa12abf6e099c563ce509a95f1cab9164bebaff3552e4a0940c56ef886",
+          "bytes": 9320,
+          "bodyFile": "007-anki-forge_docs_python-api_index.md.body",
+          "metadataFile": "007-anki-forge_docs_python-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "ce891dfa12abf6e099c563ce509a95f1cab9164bebaff3552e4a0940c56ef886",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:07.272Z"
+    },
+    {
+      "purpose": "en node-api: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "en node-api: start with locale llms index",
+        "/anki-forge/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:07.349Z",
+      "results": [
+        {
+          "route": "/anki-forge/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e",
+          "bytes": 6250,
+          "bodyFile": "008-anki-forge_llms.txt.body",
+          "metadataFile": "008-anki-forge_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:07.387Z"
+    },
+    {
+      "purpose": "en node-api: follow llms links Node and TypeScript API | Generate Anki flashcards with Node.js",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "en node-api: follow llms links Node and TypeScript API | Generate Anki flashcards with Node.js",
+        "/anki-forge/docs/node-api/index.md",
+        "/anki-forge/docs/node-quickstart/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:07.435Z",
+      "results": [
+        {
+          "route": "/anki-forge/docs/node-api/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/docs/node-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+          "bytes": 13196,
+          "bodyFile": "009-anki-forge_docs_node-api_index.md.body",
+          "metadataFile": "009-anki-forge_docs_node-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/docs/node-quickstart/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/docs/node-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a",
+          "bytes": 2472,
+          "bodyFile": "010-anki-forge_docs_node-quickstart_index.md.body",
+          "metadataFile": "010-anki-forge_docs_node-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:07.475Z"
+    },
+    {
+      "purpose": "en json-update: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "en json-update: start with locale llms index",
+        "/anki-forge/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:07.558Z",
+      "results": [
+        {
+          "route": "/anki-forge/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e",
+          "bytes": 6250,
+          "bodyFile": "011-anki-forge_llms.txt.body",
+          "metadataFile": "011-anki-forge_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:07.596Z"
+    },
+    {
+      "purpose": "en json-update: follow llms links Generate and update Anki decks from JSON | Update Anki decks with stable note IDs | Add images and audio to Anki cards",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "en json-update: follow llms links Generate and update Anki decks from JSON | Update Anki decks with stable note IDs | Add images and audio to Anki cards",
+        "/anki-forge/docs/json-to-anki/index.md",
+        "/anki-forge/docs/updates/index.md",
+        "/anki-forge/docs/media/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:07.644Z",
+      "results": [
+        {
+          "route": "/anki-forge/docs/json-to-anki/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/docs/json-to-anki/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+          "bytes": 11313,
+          "bodyFile": "012-anki-forge_docs_json-to-anki_index.md.body",
+          "metadataFile": "012-anki-forge_docs_json-to-anki_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/docs/updates/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/docs/updates/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54",
+          "bytes": 8172,
+          "bodyFile": "013-anki-forge_docs_updates_index.md.body",
+          "metadataFile": "013-anki-forge_docs_updates_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/docs/media/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/docs/media/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817",
+          "bytes": 8188,
+          "bodyFile": "014-anki-forge_docs_media_index.md.body",
+          "metadataFile": "014-anki-forge_docs_media_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:07.689Z"
+    },
+    {
+      "purpose": "en compatibility-constraints: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "en compatibility-constraints: start with locale llms index",
+        "/anki-forge/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:07.766Z",
+      "results": [
+        {
+          "route": "/anki-forge/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e",
+          "bytes": 6250,
+          "bodyFile": "015-anki-forge_llms.txt.body",
+          "metadataFile": "015-anki-forge_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:07.803Z"
+    },
+    {
+      "purpose": "en compatibility-constraints: follow llms links Compatibility and releases | Build and output guarantees",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "en compatibility-constraints: follow llms links Compatibility and releases | Build and output guarantees",
+        "/anki-forge/docs/compatibility/index.md",
+        "/anki-forge/docs/build-guarantees/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:07.856Z",
+      "results": [
+        {
+          "route": "/anki-forge/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+          "bytes": 3374,
+          "bodyFile": "016-anki-forge_docs_compatibility_index.md.body",
+          "metadataFile": "016-anki-forge_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/docs/build-guarantees/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/docs/build-guarantees/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f",
+          "bytes": 5608,
+          "bodyFile": "017-anki-forge_docs_build-guarantees_index.md.body",
+          "metadataFile": "017-anki-forge_docs_build-guarantees_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:07.896Z"
+    },
+    {
+      "purpose": "zh-CN python-install: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "zh-CN python-install: start with locale llms index",
+        "/anki-forge/zh-cn/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:07.976Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4",
+          "bytes": 6161,
+          "bodyFile": "018-anki-forge_zh-cn_llms.txt.body",
+          "metadataFile": "018-anki-forge_zh-cn_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:08.012Z"
+    },
+    {
+      "purpose": "zh-CN python-install: follow llms links 用 Python 生成 Anki 卡片 | 兼容性与发布 | Python API",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "zh-CN python-install: follow llms links 用 Python 生成 Anki 卡片 | 兼容性与发布 | Python API",
+        "/anki-forge/zh-cn/docs/python-quickstart/index.md",
+        "/anki-forge/zh-cn/docs/compatibility/index.md",
+        "/anki-forge/zh-cn/docs/python-api/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:08.061Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/docs/python-quickstart/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/docs/python-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74",
+          "bytes": 2557,
+          "bodyFile": "019-anki-forge_zh-cn_docs_python-quickstart_index.md.body",
+          "metadataFile": "019-anki-forge_zh-cn_docs_python-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/zh-cn/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+          "bytes": 3250,
+          "bodyFile": "020-anki-forge_zh-cn_docs_compatibility_index.md.body",
+          "metadataFile": "020-anki-forge_zh-cn_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/zh-cn/docs/python-api/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/docs/python-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "d58028202432d624b0963444ca00ab1e237133b68fdac85dbe973db2b4066b31",
+          "bytes": 8618,
+          "bodyFile": "021-anki-forge_zh-cn_docs_python-api_index.md.body",
+          "metadataFile": "021-anki-forge_zh-cn_docs_python-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "d58028202432d624b0963444ca00ab1e237133b68fdac85dbe973db2b4066b31",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:08.106Z"
+    },
+    {
+      "purpose": "zh-CN node-api: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "zh-CN node-api: start with locale llms index",
+        "/anki-forge/zh-cn/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:08.181Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4",
+          "bytes": 6161,
+          "bodyFile": "022-anki-forge_zh-cn_llms.txt.body",
+          "metadataFile": "022-anki-forge_zh-cn_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:08.218Z"
+    },
+    {
+      "purpose": "zh-CN node-api: follow llms links Node 与 TypeScript API | 用 Node.js 生成 Anki 卡片",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "zh-CN node-api: follow llms links Node 与 TypeScript API | 用 Node.js 生成 Anki 卡片",
+        "/anki-forge/zh-cn/docs/node-api/index.md",
+        "/anki-forge/zh-cn/docs/node-quickstart/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:08.265Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/docs/node-api/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/docs/node-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90",
+          "bytes": 12218,
+          "bodyFile": "023-anki-forge_zh-cn_docs_node-api_index.md.body",
+          "metadataFile": "023-anki-forge_zh-cn_docs_node-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/zh-cn/docs/node-quickstart/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/docs/node-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154",
+          "bytes": 2481,
+          "bodyFile": "024-anki-forge_zh-cn_docs_node-quickstart_index.md.body",
+          "metadataFile": "024-anki-forge_zh-cn_docs_node-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:08.309Z"
+    },
+    {
+      "purpose": "zh-CN json-update: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "zh-CN json-update: start with locale llms index",
+        "/anki-forge/zh-cn/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:08.389Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4",
+          "bytes": 6161,
+          "bodyFile": "025-anki-forge_zh-cn_llms.txt.body",
+          "metadataFile": "025-anki-forge_zh-cn_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:08.424Z"
+    },
+    {
+      "purpose": "zh-CN json-update: follow llms links 用 JSON 数据生成并更新 Anki 牌组 | 用稳定笔记 ID 更新 Anki 牌组 | 为 Anki 卡片添加图片与音频",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "zh-CN json-update: follow llms links 用 JSON 数据生成并更新 Anki 牌组 | 用稳定笔记 ID 更新 Anki 牌组 | 为 Anki 卡片添加图片与音频",
+        "/anki-forge/zh-cn/docs/json-to-anki/index.md",
+        "/anki-forge/zh-cn/docs/updates/index.md",
+        "/anki-forge/zh-cn/docs/media/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:08.471Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/docs/json-to-anki/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/docs/json-to-anki/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+          "bytes": 11165,
+          "bodyFile": "026-anki-forge_zh-cn_docs_json-to-anki_index.md.body",
+          "metadataFile": "026-anki-forge_zh-cn_docs_json-to-anki_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/zh-cn/docs/updates/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/docs/updates/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "202f116788465686ef6e979e5629a3439ca603ecb7966f5356792fc0d370fe98",
+          "bytes": 7608,
+          "bodyFile": "027-anki-forge_zh-cn_docs_updates_index.md.body",
+          "metadataFile": "027-anki-forge_zh-cn_docs_updates_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "202f116788465686ef6e979e5629a3439ca603ecb7966f5356792fc0d370fe98",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/zh-cn/docs/media/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/docs/media/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "a3a1d049675679579fa5da49d0846a3fc4e74db2f7d1a1f9730174e72a90e9f1",
+          "bytes": 7887,
+          "bodyFile": "028-anki-forge_zh-cn_docs_media_index.md.body",
+          "metadataFile": "028-anki-forge_zh-cn_docs_media_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "a3a1d049675679579fa5da49d0846a3fc4e74db2f7d1a1f9730174e72a90e9f1",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:08.514Z"
+    },
+    {
+      "purpose": "zh-CN compatibility-constraints: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "zh-CN compatibility-constraints: start with locale llms index",
+        "/anki-forge/zh-cn/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:08.593Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4",
+          "bytes": 6161,
+          "bodyFile": "029-anki-forge_zh-cn_llms.txt.body",
+          "metadataFile": "029-anki-forge_zh-cn_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:08.630Z"
+    },
+    {
+      "purpose": "zh-CN compatibility-constraints: follow llms links 兼容性与发布 | 构建与输出保证",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "zh-CN compatibility-constraints: follow llms links 兼容性与发布 | 构建与输出保证",
+        "/anki-forge/zh-cn/docs/compatibility/index.md",
+        "/anki-forge/zh-cn/docs/build-guarantees/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:08.676Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+          "bytes": 3250,
+          "bodyFile": "030-anki-forge_zh-cn_docs_compatibility_index.md.body",
+          "metadataFile": "030-anki-forge_zh-cn_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/zh-cn/docs/build-guarantees/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/zh-cn/docs/build-guarantees/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051",
+          "bytes": 4902,
+          "bodyFile": "031-anki-forge_zh-cn_docs_build-guarantees_index.md.body",
+          "metadataFile": "031-anki-forge_zh-cn_docs_build-guarantees_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:08.717Z"
+    },
+    {
+      "purpose": "es python-install: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "es python-install: start with locale llms index",
+        "/anki-forge/es/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:08.796Z",
+      "results": [
+        {
+          "route": "/anki-forge/es/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/es/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2",
+          "bytes": 7427,
+          "bodyFile": "032-anki-forge_es_llms.txt.body",
+          "metadataFile": "032-anki-forge_es_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:08.835Z"
+    },
+    {
+      "purpose": "es python-install: follow llms links Genera un APKG de Anki con Python | Compatibilidad de Anki Forge y entornos verificados | API de Python",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "es python-install: follow llms links Genera un APKG de Anki con Python | Compatibilidad de Anki Forge y entornos verificados | API de Python",
+        "/anki-forge/es/docs/python-quickstart/index.md",
+        "/anki-forge/es/docs/compatibility/index.md",
+        "/anki-forge/es/docs/python-api/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:08.886Z",
+      "results": [
+        {
+          "route": "/anki-forge/es/docs/python-quickstart/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/es/docs/python-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a",
+          "bytes": 2856,
+          "bodyFile": "033-anki-forge_es_docs_python-quickstart_index.md.body",
+          "metadataFile": "033-anki-forge_es_docs_python-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/es/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/es/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+          "bytes": 4176,
+          "bodyFile": "034-anki-forge_es_docs_compatibility_index.md.body",
+          "metadataFile": "034-anki-forge_es_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/es/docs/python-api/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/es/docs/python-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69",
+          "bytes": 11307,
+          "bodyFile": "035-anki-forge_es_docs_python-api_index.md.body",
+          "metadataFile": "035-anki-forge_es_docs_python-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:08.929Z"
+    },
+    {
+      "purpose": "es node-api: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "es node-api: start with locale llms index",
+        "/anki-forge/es/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:09.004Z",
+      "results": [
+        {
+          "route": "/anki-forge/es/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/es/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2",
+          "bytes": 7427,
+          "bodyFile": "036-anki-forge_es_llms.txt.body",
+          "metadataFile": "036-anki-forge_es_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:09.041Z"
+    },
+    {
+      "purpose": "es node-api: follow llms links API de Node y TypeScript | Genera un APKG de Anki con Node.js",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "es node-api: follow llms links API de Node y TypeScript | Genera un APKG de Anki con Node.js",
+        "/anki-forge/es/docs/node-api/index.md",
+        "/anki-forge/es/docs/node-quickstart/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:09.091Z",
+      "results": [
+        {
+          "route": "/anki-forge/es/docs/node-api/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/es/docs/node-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84",
+          "bytes": 15876,
+          "bodyFile": "037-anki-forge_es_docs_node-api_index.md.body",
+          "metadataFile": "037-anki-forge_es_docs_node-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/es/docs/node-quickstart/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/es/docs/node-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3",
+          "bytes": 2795,
+          "bodyFile": "038-anki-forge_es_docs_node-quickstart_index.md.body",
+          "metadataFile": "038-anki-forge_es_docs_node-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:09.130Z"
+    },
+    {
+      "purpose": "es json-update: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "es json-update: start with locale llms index",
+        "/anki-forge/es/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:09.212Z",
+      "results": [
+        {
+          "route": "/anki-forge/es/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/es/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2",
+          "bytes": 7427,
+          "bodyFile": "039-anki-forge_es_llms.txt.body",
+          "metadataFile": "039-anki-forge_es_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:09.248Z"
+    },
+    {
+      "purpose": "es json-update: follow llms links Genera y actualiza mazos de Anki desde JSON | Actualiza mazos de Anki con ID de nota estables | Añade imágenes y audio a tus tarjetas Anki",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "es json-update: follow llms links Genera y actualiza mazos de Anki desde JSON | Actualiza mazos de Anki con ID de nota estables | Añade imágenes y audio a tus tarjetas Anki",
+        "/anki-forge/es/docs/json-to-anki/index.md",
+        "/anki-forge/es/docs/updates/index.md",
+        "/anki-forge/es/docs/media/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:09.296Z",
+      "results": [
+        {
+          "route": "/anki-forge/es/docs/json-to-anki/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/es/docs/json-to-anki/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c",
+          "bytes": 12064,
+          "bodyFile": "040-anki-forge_es_docs_json-to-anki_index.md.body",
+          "metadataFile": "040-anki-forge_es_docs_json-to-anki_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/es/docs/updates/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/es/docs/updates/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "09df198c4cfd581ffd8d14cfa4a7b645a698bb553aae251234efff8b108d4bf8",
+          "bytes": 9425,
+          "bodyFile": "041-anki-forge_es_docs_updates_index.md.body",
+          "metadataFile": "041-anki-forge_es_docs_updates_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "09df198c4cfd581ffd8d14cfa4a7b645a698bb553aae251234efff8b108d4bf8",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/es/docs/media/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/es/docs/media/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929",
+          "bytes": 9848,
+          "bodyFile": "042-anki-forge_es_docs_media_index.md.body",
+          "metadataFile": "042-anki-forge_es_docs_media_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:09.340Z"
+    },
+    {
+      "purpose": "es compatibility-constraints: start with locale llms index",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "es compatibility-constraints: start with locale llms index",
+        "/anki-forge/es/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:09.420Z",
+      "results": [
+        {
+          "route": "/anki-forge/es/llms.txt",
+          "url": "http://127.0.0.1:65349/anki-forge/es/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2",
+          "bytes": 7427,
+          "bodyFile": "043-anki-forge_es_llms.txt.body",
+          "metadataFile": "043-anki-forge_es_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:09.456Z"
+    },
+    {
+      "purpose": "es compatibility-constraints: follow llms links Compatibilidad de Anki Forge y entornos verificados | Garantías de generación y de los archivos APKG",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/.worktrees/spanish-integration/docs/plans/evidence/multilingual-es-integration-2026-10-31/machine-http-prefix",
+        "es compatibility-constraints: follow llms links Compatibilidad de Anki Forge y entornos verificados | Garantías de generación y de los archivos APKG",
+        "/anki-forge/es/docs/compatibility/index.md",
+        "/anki-forge/es/docs/build-guarantees/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "5e82eeff5776b04ff58e8c37abfbe6d0071205f39c58bd9d637d9e725fc8a530",
+      "startedAt": "2026-11-01T03:59:09.510Z",
+      "results": [
+        {
+          "route": "/anki-forge/es/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/es/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+          "bytes": 4176,
+          "bodyFile": "044-anki-forge_es_docs_compatibility_index.md.body",
+          "metadataFile": "044-anki-forge_es_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/es/docs/build-guarantees/index.md",
+          "url": "http://127.0.0.1:65349/anki-forge/es/docs/build-guarantees/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c",
+          "bytes": 7157,
+          "bodyFile": "045-anki-forge_es_docs_build-guarantees_index.md.body",
+          "metadataFile": "045-anki-forge_es_docs_build-guarantees_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-11-01T03:59:09.548Z"
+    }
+  ],
+  "stoppedAt": "2026-11-01T04:03:19.490Z"
+}

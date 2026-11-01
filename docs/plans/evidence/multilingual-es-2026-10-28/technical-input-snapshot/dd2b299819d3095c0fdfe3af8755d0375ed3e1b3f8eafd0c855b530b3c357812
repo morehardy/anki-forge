@@ -1,0 +1,30 @@
+---
+import Icon from './Icon.astro';
+import { createTranslator } from '../i18n/messages.mjs';
+import { localeFromPath } from '../../site-model.mjs';
+const t = createTranslator(localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL));
+interface Props {
+  label: string;
+  text: string;
+  buttonLabel?: string;
+  success?: string;
+  fallback?: string;
+  aiPrompt?: boolean;
+}
+const {
+  label, text, buttonLabel = t('copy.code'), success = t('copy.success'),
+  fallback = t('copy.fallback'), aiPrompt = false,
+} = Astro.props;
+---
+<div class="install-command" data-copy-block data-copy-success={success} data-copy-fallback={fallback}>
+  <div class="source-label">
+    <span>{label}</span>
+    <button type="button" class="text-button copy-button" data-copy disabled>
+      <span data-copy-icon><Icon name="copy" /></span>
+      <span data-copy-check hidden><Icon name="check" /></span>
+      <span data-copy-label>{buttonLabel}</span>
+    </button>
+  </div>
+  <pre tabindex="0"><code data-copy-content data-ai-prompt={aiPrompt || undefined}>{text}</code></pre>
+  <div class="install-command-footer"><p data-copy-status role="status" aria-live="polite"></p></div>
+</div>

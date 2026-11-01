@@ -39,5 +39,6 @@ test('explicit locale keeps links local without inferring locale from the source
   assert.equal(rewriteTarget('template-bundles.md#fields', 'docs/rust-guide.md', '/', 'zh-CN'), '/zh-cn/docs/templates/#fields');
   assert.equal(rewriteTarget('/docs/cards/?view=all#card', 'docs/cards.md', '/project', 'zh-CN'), '/project/zh-cn/docs/cards/?view=all#card');
   assert.equal(rewriteTarget('/zh-cn/docs/cards/', 'docs/cards.md', '/', 'en'), '/docs/cards/');
-  assert.throws(() => rewriteTarget('/docs/cards/', 'docs/cards.md', '/', 'es'), /Unreleased/);
+  assert.equal(rewriteTarget('/docs/cards/', 'docs/cards.md', '/project', 'es'), '/project/es/docs/cards/');
+  assert.throws(() => rewriteTarget('/docs/cards/', 'docs/cards.md', '/', 'fr'), /Unreleased/);
 });

@@ -1,0 +1,52 @@
+---
+locale: es
+translationKey: your-first-anki-deck
+title: Crea tu primer mazo de Anki con Rust
+description: De un pequeño programa en Rust a una tarjeta de vocabulario en español que puedes abrir en Anki.
+date: 2026-09-22
+category: Tutorial
+---
+
+import CodeBlock from '../../../components/CodeBlock.astro';
+import { quickstartSource } from '../../../lib/examples';
+import { sitePath, repository } from '../../../lib/site';
+
+Si tus notas ya están en un script, un conjunto de datos o una colección de archivos, generar un mazo de Anki puede facilitar que repitas el proceso de creación. El código fuente sigue siendo revisable en Git y cada exportación se convierte en un paso que puedes volver a ejecutar.
+
+Empieza con una palabra: **hola**. Queremos una tarjeta con el saludo en español en el anverso y su significado en inglés en el reverso.
+
+{/* section: a-complete-program */}
+## Un programa completo
+
+Este es el ejemplo mínimo en Rust del repositorio:
+
+<CodeBlock code={quickstartSource} />
+
+`Project::new("spanish")` crea el espacio de nombres. `Note::basic("hola", "hello")` crea una nota Basic, `project.add("es:hola", note)` asigna su clave estable y `build(BuildOptions::to(...))` escribe el paquete.
+
+`build` solo devuelve `BuildOutput` cuando termina correctamente. El operador `?` propaga un fallo tipado para que los scripts puedan terminar con un error.
+
+{/* section: install-and-run */}
+## Instalar y ejecutar
+
+Sigue la <a href={sitePath('/es/docs/quickstart/')}>guía de inicio actual</a> para instalar el paquete público y consultar el comando de ejecución. Para utilizar el mismo programa en tu proyecto, sigue <a href={sitePath('/es/docs/installation/')}>Integrarlo en tu aplicación</a>.
+
+Después de exportar, importa `spanish.apkg` en Anki y muestra la respuesta de tu primera tarjeta.
+
+El <a href={sitePath('/es/examples/#basic')}>ejemplo Basic de este sitio</a> también incluye un paquete descargable si prefieres examinar primero el resultado.
+
+{/* section: give-the-note-an-identity */}
+## Dar una identidad a la nota
+
+La cadena `es:hola` es una clave de nota estable y explícita dentro del espacio de nombres `spanish`. Identifica de qué nota se trata, independientemente de cómo redactes la respuesta. Más adelante podrías ampliar «hello» a «hello; hi» y conservar el mismo ID.
+
+Utiliza un ID distinto para cada nota lógica. Si tus datos de origen ya tienen una clave duradera, como el ID de una entrada de vocabulario, es un buen punto de partida. Evita derivar la identidad únicamente de un texto que prevés editar.
+
+Actualizar un mazo distribuido también requiere el historial de publicaciones. Conserva el paquete anterior original y sigue el <a href={sitePath('/es/docs/updates/')}>flujo de actualización documentado</a>.
+
+{/* section: grow-from-one-note */}
+## Ampliar el ejemplo
+
+Para añadir otro saludo, crea otra nota Basic y añádela con una clave nueva. Para ocultar una palabra dentro de una frase, utiliza una <a href={sitePath('/es/examples/#cloze')}>nota Cloze</a>. Si necesitas tarjetas más completas, define tus campos y plantillas con la API del proyecto y empaqueta imágenes o audio junto con las notas.
+
+La <a href={sitePath('/es/docs/rust-guide/')}>guía de desarrollo con Rust</a> continúa con los diagnósticos, los recursos multimedia y las generaciones repetibles. Los <a href={`${repository}/tree/main/anki_forge/examples`}>ejemplos del repositorio</a> ofrecen programas ejecutables que puedes ampliar.

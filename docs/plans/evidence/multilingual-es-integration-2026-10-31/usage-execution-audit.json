@@ -1,0 +1,1608 @@
+{
+  "reviewerRun": "/root/spanish_standards/independent-usage-2026-10-31",
+  "scope": "Coordinator freshly installed and executed the public 0.3.1 SDKs in this batch. This independent reviewer read their logs, inspected the runner and independent verifier sources, verified exact current source/dependency hashes and preserved basic copies, and independently decoded all 10 output APKGs through Python ZIP/Zstandard/SQLite. This is a fresh output inspection, not a claim of independently rerunning SDK installs or Anki GUI import.",
+  "inputSnapshots": [
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/execution-inputs.json",
+      "sha256": "c41ea1830d29645248b639aed12006453a87c030a01e22d6a395e25f4b44cd16"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-recipe-inputs.json",
+      "sha256": "681443446f4e40f40c3fc7be8290fa2bf5c9beeccaf59894cf269bee8d8f14e5"
+    }
+  ],
+  "currentSourceDependencyBindings": [
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/inspection.rs",
+      "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+      "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "sha256": "53f6f0b9b1471fde4083f772594674f588bb690da20b7d87d8fb1967b6b23678"
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+    },
+    {
+      "path": "docs/zh-cn/troubleshooting.md",
+      "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+    },
+    {
+      "path": "bindings/python/pyproject.toml",
+      "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+    },
+    {
+      "path": "bindings/node/package.json",
+      "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v1.json",
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v2.json",
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/cell.png",
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/tone.wav",
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+      "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+    },
+    {
+      "path": "website/scripts/verify-public-recipe.mjs",
+      "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+    },
+    {
+      "path": "website/package.json",
+      "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+    },
+    {
+      "path": "website/package-lock.json",
+      "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+    }
+  ],
+  "basicExecutedProgramCopies": [
+    {
+      "sdk": "rust",
+      "currentSource": {
+        "path": "anki_forge/examples/target_api_basic.rs",
+        "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+      },
+      "executedCopy": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/src/main.rs",
+        "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+      }
+    },
+    {
+      "sdk": "python",
+      "currentSource": {
+        "path": "bindings/python/examples/quickstart.py",
+        "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+      },
+      "executedCopy": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/main.py",
+        "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+      }
+    },
+    {
+      "sdk": "node",
+      "currentSource": {
+        "path": "bindings/node/examples/quickstart.mjs",
+        "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+      },
+      "executedCopy": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/main.mjs",
+        "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+      }
+    }
+  ],
+  "outputObservations": [
+    {
+      "package": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/spanish.apkg",
+        "sha256": "1db741938adb9c1681ff7f77662e34ccd14007829e0ea0f3ef67b29773eb038d"
+      },
+      "sqliteIntegrity": "ok",
+      "notes": [
+        [
+          "aaf05442c6721ba14cf48d7802f35de0",
+          "hola\u001fhello"
+        ]
+      ],
+      "cardOrdinals": [
+        0
+      ],
+      "decks": [
+        "Default",
+        "Spanish"
+      ],
+      "mediaSha256": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "30f11dac9f33a9f76ee102e78bdc497b4cf67aa98804c896517e2d5325bd14f8",
+        "identity_blake3": "470239a63dcbf6b4428639613e0cfee9d82ca4aeaaa3802ab18f62f909cc9490",
+        "media": {},
+        "identity": {
+          "namespace": "spanish",
+          "models": {
+            "basic": {
+              "id": 4446440072942514,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505184,
+              "content_hash": "de52262149b1d0084ee5eb0f549ec1e3d6d4464114634605a6d88e03fee6f961",
+              "fields": {
+                "back": {
+                  "id": 2086052983137506,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 1446251127562207,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 2049222423285953,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "es:hola": {
+              "guid": "aaf05442c6721ba14cf48d7802f35de0",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505184,
+              "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {}
+        }
+      },
+      "task": "rust-basic"
+    },
+    {
+      "package": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/spanish.apkg",
+        "sha256": "144ccaf1c0885cc0d22bec401de1bf8eb4f5994901a54624a121c076e3f4962f"
+      },
+      "sqliteIntegrity": "ok",
+      "notes": [
+        [
+          "aaf05442c6721ba14cf48d7802f35de0",
+          "hola\u001fhello"
+        ]
+      ],
+      "cardOrdinals": [
+        0
+      ],
+      "decks": [
+        "Default",
+        "Spanish"
+      ],
+      "mediaSha256": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "5cadf1968e33fcc3372cd80d8afe8a5279ace5c9f30cb5b212001f3dbc7d32a4",
+        "identity_blake3": "609ad21335e1b82720fd5cfaf7f7f997add587fdcda17dc0298bc448e382a398",
+        "media": {},
+        "identity": {
+          "namespace": "spanish",
+          "models": {
+            "basic": {
+              "id": 4446440072942514,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "de52262149b1d0084ee5eb0f549ec1e3d6d4464114634605a6d88e03fee6f961",
+              "fields": {
+                "back": {
+                  "id": 2086052983137506,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 1446251127562207,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 2049222423285953,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "es:hola": {
+              "guid": "aaf05442c6721ba14cf48d7802f35de0",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {}
+        }
+      },
+      "task": "python-basic"
+    },
+    {
+      "package": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/spanish.apkg",
+        "sha256": "8e3266decbe71ef5a1ed69fdc0c4297f9fcb85d3c7b6fd8f94eebb06345ae9d2"
+      },
+      "sqliteIntegrity": "ok",
+      "notes": [
+        [
+          "aaf05442c6721ba14cf48d7802f35de0",
+          "hola\u001fhello"
+        ]
+      ],
+      "cardOrdinals": [
+        0
+      ],
+      "decks": [
+        "Default",
+        "Spanish"
+      ],
+      "mediaSha256": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "429cd5494221055c770d77ff6509f6b20eb66fd5f00452749ce2cb460372b181",
+        "identity_blake3": "e1be0d6b2141547e51e14b4fdaeb0b59620dfd60b1a7cb30ef588d20c3b5d465",
+        "media": {},
+        "identity": {
+          "namespace": "spanish",
+          "models": {
+            "basic": {
+              "id": 4446440072942514,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505195,
+              "content_hash": "de52262149b1d0084ee5eb0f549ec1e3d6d4464114634605a6d88e03fee6f961",
+              "fields": {
+                "back": {
+                  "id": 2086052983137506,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 1446251127562207,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 2049222423285953,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "es:hola": {
+              "guid": "aaf05442c6721ba14cf48d7802f35de0",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505195,
+              "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {}
+        }
+      },
+      "task": "node-basic"
+    },
+    {
+      "package": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/v1.apkg",
+        "sha256": "a80084bf0ea3413b7cb7e5bef811580e6e20c694767dda079df26d1f948e3297"
+      },
+      "sqliteIntegrity": "ok",
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fA unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "decks": [
+        "Biology",
+        "Default"
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "de5251dfc33bd95dcf7450b8daa9ab892e14e9607146d95155a71fcbf14ee81a",
+        "identity_blake3": "ab9e345e404c5d61b266519e79a7deac483a66df15c288986068b8c1eeeef466",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "task": "rust-json-v1"
+    },
+    {
+      "package": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/v2.apkg",
+        "sha256": "575e56dd32abea1fed021b74314716c5abb5f0c75fe48a9818977020fc6eb337"
+      },
+      "sqliteIntegrity": "ok",
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe basic structural and functional unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "decks": [
+        "Biology",
+        "Default"
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "ee3822e7ef7680e36020afdc5ce4d0e940b0dfef7d5658bf55b05beb8cd6e4d1",
+        "identity_blake3": "5daadd68633096d5cb0f6279283ac22cd9634d82cab137aff2cb663b76b66102",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505187,
+              "content_hash": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "task": "rust-json-v2"
+    },
+    {
+      "package": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/v1.apkg",
+        "sha256": "0872e011ce6646d0ae18883487616939a8efd67587f12741de37fd603e6ba4dd"
+      },
+      "sqliteIntegrity": "ok",
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fA unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "decks": [
+        "Biology",
+        "Default"
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "d30622ae328258cc0529ce479acaa7a8cd67662adf736929c6ed184b577f6951",
+        "identity_blake3": "9a1277e71928f06d726e9314adecc0791de1c4de8c6b81a6c7ff041d737ccf88",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "task": "python-json-v1"
+    },
+    {
+      "package": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/v2.apkg",
+        "sha256": "c7a1cf1409a9962d709804e8c1dd3aee9071b539bd5323e4e860970c770de424"
+      },
+      "sqliteIntegrity": "ok",
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe basic structural and functional unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "decks": [
+        "Biology",
+        "Default"
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "e766c889115cee4ec2dc5b2d5823f57611e81839713fd77339259b7d8df5501d",
+        "identity_blake3": "d42415fa7977629c9dc9a56a889f2b7a130f801f772ed1ef468cef217798aff2",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505192,
+              "content_hash": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "task": "python-json-v2"
+    },
+    {
+      "package": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/v1.apkg",
+        "sha256": "4b59e26cd2aa4f8ab3e83fd4ee763f0e68ac288fb8650d6ca1293308e9a5d630"
+      },
+      "sqliteIntegrity": "ok",
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fA unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "decks": [
+        "Biology",
+        "Default"
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "eed9a56ce5dd39950f1f02ee95f9791b136f322002108579f0e5e0944315d997",
+        "identity_blake3": "acc55f18a1867f936d2372f5b4783c8ab5be277fc083ed55c7553a84ec0569c5",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "task": "node-json-v1"
+    },
+    {
+      "package": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/v2.apkg",
+        "sha256": "5db7aa990fbfaccaa2a76630e7439c596356ee28aa9c4f8751459c5cb53f4a2d"
+      },
+      "sqliteIntegrity": "ok",
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe basic structural and functional unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "decks": [
+        "Biology",
+        "Default"
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "a19604d38bf404c8d9ec36b636b1a6924c9386220411b79b626254d5b0ab38ce",
+        "identity_blake3": "b041aeb5282ba8dc6871c62a6b34323f74cd21d51ea6a70148d60d20e80715e8",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505198,
+              "content_hash": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "task": "node-json-v2"
+    },
+    {
+      "package": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/recovered.apkg",
+        "sha256": "38408fdc693813a2285434ddf967fdb98fea6b5b1ff359ace2ac315964c74d23"
+      },
+      "sqliteIntegrity": "ok",
+      "notes": [
+        [
+          "0f8f9139b04ecc21e3276eaa8e80c28b",
+          "two\u001fsecond"
+        ],
+        [
+          "8e363c025de858cc34527c3f94565e5a",
+          "one\u001ffirst"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0
+      ],
+      "decks": [
+        "Default",
+        "Recovery"
+      ],
+      "mediaSha256": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "6267d0fd44483e8971668e4f51e76d8549de2cab5e906cfbdbd5fa93adcde03c",
+        "identity_blake3": "8ec78dd7aa632f94c2aec0342dffb0802528e9a0acbb900c5ff4a26eb03d50d0",
+        "media": {},
+        "identity": {
+          "namespace": "controlled-duplicate",
+          "models": {
+            "basic": {
+              "id": 1093654850400892,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "9188fa54145696d981e1fb702d1a8ca8a367398e94bfac381de5db59d8ff6d74",
+              "fields": {
+                "back": {
+                  "id": 3780656541465536,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 1388142190283835,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 1870128588540125,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "source:1": {
+              "guid": "8e363c025de858cc34527c3f94565e5a",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "f19564ba73bb897ccd3a88aaa87abc5affe2e247d0a33833b14f21383e41fb95",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "source:2": {
+              "guid": "0f8f9139b04ecc21e3276eaa8e80c28b",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "de11172b57fd8946b877a12405e61afe7b749725d9fc3cec73e8e7af8304f5ab",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {}
+        }
+      },
+      "task": "troubleshooting-recovery"
+    }
+  ],
+  "comparisonReports": [
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/comparison.json",
+      "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278",
+      "sdk": "rust",
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/review.json",
+      "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278",
+      "sdk": "rust",
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/comparison.json",
+      "sha256": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f",
+      "sdk": "python",
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/review.json",
+      "sha256": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f",
+      "sdk": "python",
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/comparison.json",
+      "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278",
+      "sdk": "node",
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/review.json",
+      "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278",
+      "sdk": "node",
+      "highestRisk": "low",
+      "policyAllowsPublication": true,
+      "findings": [
+        "RISK.NOTE_CHANGED"
+      ]
+    }
+  ],
+  "publicInstallations": [
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/Cargo.lock",
+      "sha256": "a96882ee6cd24d0bd24296aba9de0d377dc1fc878c2071839dfdf4c8283026fc",
+      "registry": "crates.io",
+      "version": "0.3.1"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/Cargo.lock",
+      "sha256": "d336102b4ef3a08f5b8c745d34c51eb28091ba96fcc0b97908bcd447274f9533",
+      "registry": "crates.io",
+      "version": "0.3.1"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/pip-report.json",
+      "sha256": "288bd16bd60ad6806c558b71d7c9d492e0fe2f28f460d33db8d8d8abc0b2c50a",
+      "registry": "PyPI",
+      "version": "0.3.1",
+      "wheel": {
+        "url": "https://files.pythonhosted.org/packages/27/4e/b507bd4f13c3e1ae2e7e843a8274fa3a143fd023b71e0c8b75188ff688c6/ankiforge-0.3.1-cp311-abi3-macosx_11_0_arm64.whl",
+        "archive_info": {
+          "hashes": {
+            "sha256": "632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1"
+          },
+          "hash": "sha256=632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1"
+        }
+      }
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/package-lock.json",
+      "sha256": "eeae72f76f5128348b47857a892268152608517087613c91c791b6e0865e01fb",
+      "registry": "npm",
+      "version": "0.3.1",
+      "integrity": "sha512-kOqS5BGp4rc0JOeWQjtWI5SQ+EodyGa0eR13HE8+s9CNIxzytlTBqToLBQODzJnw0gVyaXU2Bw3bX4b0n+mOWA=="
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/installation.json",
+      "sha256": "a090c1aa7d91383a4f38da91288f227bfa88b5773125e287f4393c4655e3a33c",
+      "sdk": "rust",
+      "installation": {
+        "checkedAt": "2026-11-01T03:53:07.359Z",
+        "platform": "darwin",
+        "arch": "arm64",
+        "node": "v24.19.0",
+        "language": "rust",
+        "source": {
+          "registry": "crates.io",
+          "package": "ankiforge",
+          "version": "0.3.1",
+          "resolution": "name = \"ankiforge\"\nversion = \"0.3.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"53e28963050169fe9f3661c02546fd9a0a9c645e33e0dcae09fa80ae73e9c609\"\ndependencies = [\n \"anyhow\",\n \"base64\",\n \"blake3\",\n \"crc32fast\",\n \"flate2\",\n \"hex\",\n \"html-escape\",\n \"image\",\n \"imagesize\",\n \"jsonschema\",\n \"mime\",\n \"prost\",\n \"rand\",\n \"rusqlite\",\n \"rustix\",\n \"same-file\",\n \"serde\",\n \"serde_json\",\n \"serde_yaml\",\n \"sha1\",\n \"tar\",\n \"tempfile\",\n \"unicase\",\n \"unicode-normalization\",\n \"url\",\n \"zip\",\n \"zstd\",\n]"
+        },
+        "contract": "3 notes / 3 cards / 2 exact media; stable identity; one answer changed; compare + review policy allowed; v1 preserved"
+      }
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/installation.json",
+      "sha256": "dd61c83e53df689a79da792b39435c3571465704ea7b7d86abd94ebc4ce5b005",
+      "sdk": "python",
+      "installation": {
+        "checkedAt": "2026-11-01T03:53:12.019Z",
+        "platform": "darwin",
+        "arch": "arm64",
+        "node": "v24.19.0",
+        "language": "python",
+        "source": {
+          "download_info": {
+            "url": "https://files.pythonhosted.org/packages/27/4e/b507bd4f13c3e1ae2e7e843a8274fa3a143fd023b71e0c8b75188ff688c6/ankiforge-0.3.1-cp311-abi3-macosx_11_0_arm64.whl",
+            "archive_info": {
+              "hashes": {
+                "sha256": "632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1"
+              },
+              "hash": "sha256=632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1"
+            }
+          },
+          "is_direct": false,
+          "is_yanked": false,
+          "requested": true,
+          "metadata": {
+            "metadata_version": "2.4",
+            "name": "ankiforge",
+            "version": "0.3.1",
+            "summary": "Python Product API for Anki Forge",
+            "description": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/morehardy/anki-forge/main/docs/assets/brand/ankiforge-dark.svg\">\n    <img src=\"https://raw.githubusercontent.com/morehardy/anki-forge/main/docs/assets/brand/ankiforge.svg\" alt=\"Anki Forge logo: stacked cards with a folded corner and card loop\" width=\"96\" height=\"96\">\n  </picture>\n</p>\n\n<h1 align=\"center\">anki-forge</h1>\n\n<p align=\"center\">\n  <a href=\"https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/morehardy/anki-forge/contract-ci.yml?branch=main&label=tests%20passing\" alt=\"Tests passing\"></a>\n  <a href=\"https://pypi.org/project/ankiforge/\"><img src=\"https://img.shields.io/pypi/v/ankiforge?logo=pypi\" alt=\"PyPI version\"></a>\n  <a href=\"https://ankiforge.dev/docs/\"><img src=\"https://img.shields.io/badge/docs-ankiforge.dev-blue\" alt=\"Documentation\"></a>\n  <a href=\"https://github.com/morehardy/anki-forge/blob/main/LICENSE\"><img src=\"https://img.shields.io/badge/License-MIT-blue.svg\" alt=\"License: MIT\"></a>\n</p>\n\n<p align=\"center\">Python SDK</p>\n\nBuild Basic, Cloze, Image Occlusion and custom cards, package media, and check updates before distributing a new deck.\n\n## Install\n\nUse an ordinary CPython interpreter with a matching platform wheel; CPython 3.11/3.12 are verified in the recorded package checks. See [verified environments](https://ankiforge.dev/docs/compatibility/).\nThe public package is [`ankiforge` 0.3.1](https://pypi.org/project/ankiforge/).\n\n```sh\npython -m venv .venv\n. .venv/bin/activate\npython -m pip install ankiforge==0.3.1\n```\n\nOn Windows, activate the environment with `.venv\\Scripts\\Activate.ps1`.\n\n## Your first deck\n\nSave this as `main.py`:\n\n<!-- source: bindings/python/examples/quickstart.py -->\n```python\nfrom ankiforge import Project, Note, BuildOptions\n\nproject = Project('spanish', default_deck='Spanish')\nproject.add('es:hola', Note.basic('hola', 'hello'))\noutput = project.build(BuildOptions.to('spanish.apkg'))\nprint(output.artifact.path)\n```\n<!-- /source -->\n\n```sh\npython main.py\n```\n\nOpen the persistent `spanish.apkg` in Anki. It contains one Basic card in **Spanish**, with **hola → hello**. Keep `spanish` and `es:hola` stable when editing this publication.\n\n## Continue\n\n- [Complete quickstart](https://ankiforge.dev/docs/python-quickstart/)\n- [Images and audio](https://ankiforge.dev/docs/media/)\n- [Custom note types](https://ankiforge.dev/docs/custom-notetypes/) and [template bundles](https://ankiforge.dev/docs/templates/)\n- [Image Occlusion](https://ankiforge.dev/docs/image-occlusion/)\n- [Compare and update](https://ankiforge.dev/docs/updates/)\n- [Python API](https://ankiforge.dev/docs/python-api/)\n- [Build SDKs from source](https://ankiforge.dev/docs/development/)\n\n",
+            "description_content_type": "text/markdown; charset=UTF-8; variant=GFM",
+            "license_expression": "MIT",
+            "license_file": [
+              "LICENSE",
+              "THIRD_PARTY_NOTICES.md"
+            ],
+            "requires_python": ">=3.11",
+            "project_url": [
+              "Documentation, https://ankiforge.dev/docs/python-quickstart/",
+              "Homepage, https://ankiforge.dev/",
+              "Issues, https://github.com/morehardy/anki-forge/issues",
+              "Repository, https://github.com/morehardy/anki-forge"
+            ]
+          }
+        },
+        "contract": "3 notes / 3 cards / 2 exact media; stable identity; one answer changed; compare + review policy allowed; v1 preserved"
+      }
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/installation.json",
+      "sha256": "9c54a378d71978b60d59ce36cb07fc11cada841c5a32ef2fdf6d6f5010621cd0",
+      "sdk": "node",
+      "installation": {
+        "checkedAt": "2026-11-01T03:53:17.857Z",
+        "platform": "darwin",
+        "arch": "arm64",
+        "node": "v24.19.0",
+        "language": "node",
+        "source": {
+          "version": "0.3.1",
+          "resolved": "https://registry.npmjs.org/ankiforge/-/ankiforge-0.3.1.tgz",
+          "integrity": "sha512-kOqS5BGp4rc0JOeWQjtWI5SQ+EodyGa0eR13HE8+s9CNIxzytlTBqToLBQODzJnw0gVyaXU2Bw3bX4b0n+mOWA==",
+          "license": "MIT",
+          "engines": {
+            "node": ">=22.13.0"
+          },
+          "optionalDependencies": {
+            "ankiforge-darwin-arm64": "0.3.1",
+            "ankiforge-darwin-x64": "0.3.1",
+            "ankiforge-linux-x64-gnu": "0.3.1",
+            "ankiforge-win32-x64-msvc": "0.3.1"
+          },
+          "native": [
+            [
+              "node_modules/ankiforge-darwin-arm64",
+              {
+                "version": "0.3.1",
+                "resolved": "https://registry.npmjs.org/ankiforge-darwin-arm64/-/ankiforge-darwin-arm64-0.3.1.tgz",
+                "integrity": "sha512-Hu8MIKtw4qZA0Z/4xLJInLUiYlEa/Q/rtE9UPkvuUklGowrU18kGRwtachCwWOBj7ZzvCDAYkvWbpU+DSl0bIg==",
+                "cpu": [
+                  "arm64"
+                ],
+                "license": "MIT",
+                "optional": true,
+                "os": [
+                  "darwin"
+                ],
+                "engines": {
+                  "node": ">=22.13.0"
+                }
+              }
+            ]
+          ]
+        },
+        "contract": "3 notes / 3 cards / 2 exact media; stable identity; one answer changed; compare + review policy allowed; v1 preserved"
+      }
+    }
+  ],
+  "browserTaskTextPairs": [
+    {
+      "locale": "en",
+      "id": "rust-basic",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "3b3a14cc9e601de83783c6f5b0628c9d9df9130f01afbbfd1167317181fa6963"
+    },
+    {
+      "locale": "en",
+      "id": "python-basic",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "adb5779caf1504bd78b9cce7065d688e250d997ea87d094b9635b9ad50176bdd"
+    },
+    {
+      "locale": "en",
+      "id": "node-basic",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "db947080d45a3a405064e250b843c72a269caa8c4347a1d8f508e46f02038d86"
+    },
+    {
+      "locale": "en",
+      "id": "json-media",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "adfa752b3eb456ce2d8fa463eecfa0a93f5d4c60a1b77a6e9923ac2049da2c45"
+    },
+    {
+      "locale": "en",
+      "id": "original-baseline-update",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "e801f56f596e94001e6f24569149d43969a080799064d6e953f8e27d03d19c38"
+    },
+    {
+      "locale": "en",
+      "id": "troubleshooting",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "70f27c2cfd209a6436afc57e46127974266997d731a144f3430d59b088c97c12"
+    },
+    {
+      "locale": "zh-CN",
+      "id": "rust-basic",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "c08ba6c67d6b1a1d26f10d3c1e891cfe516812c99b5030c2238a0b5d34d5fc48"
+    },
+    {
+      "locale": "zh-CN",
+      "id": "python-basic",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "80f937e54c925c7451785c87ca9373a67c4836649cb71c779cb31cb4ade0f74a"
+    },
+    {
+      "locale": "zh-CN",
+      "id": "node-basic",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "83d73ff2261d04502322fe903d924e5d37aacb566b71ab0b1af1b1547f5c7da5"
+    },
+    {
+      "locale": "zh-CN",
+      "id": "json-media",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "125df62d278039e284e2de5438d95568fc1735cb41cc008d087badeab670d063"
+    },
+    {
+      "locale": "zh-CN",
+      "id": "original-baseline-update",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "a1f10196b9bd975354348dcfcc3e726fef2d4c4c91529b2d814bed539e2cc651"
+    },
+    {
+      "locale": "zh-CN",
+      "id": "troubleshooting",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "25db822cfbe3696a9f04d062ea835d18959e93a8889c25696d61845f00d858d8"
+    },
+    {
+      "locale": "es",
+      "id": "rust-basic",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "de4898db4354f00d48de524e11396c035e14ee1bceb3fd40cc478552b5f3c512"
+    },
+    {
+      "locale": "es",
+      "id": "python-basic",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "34b9a2626713e99794e489306ed68053d43e576d8a2e636568762cf35f73c286"
+    },
+    {
+      "locale": "es",
+      "id": "node-basic",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "517a786934356db6ddba77e657fa5f6da1ebed9f2e5a11e3a8e6ccc8dd62c367"
+    },
+    {
+      "locale": "es",
+      "id": "json-media",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "65f785769e490464b3bd0adc422e86ec1dcf1dcb344ce5dd422a14b32ac0201b"
+    },
+    {
+      "locale": "es",
+      "id": "original-baseline-update",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "f7d5cfecb41323e45656a026f9f69975c1f9c5e618931cf5643b5e9953a6dad0"
+    },
+    {
+      "locale": "es",
+      "id": "troubleshooting",
+      "renderedBodyEqualAcrossActualTours": true,
+      "codeBlocksEqual": true,
+      "bodySha256": "4379aacbd73ab0929c0fa8b805297131de6fbbcb8f288d85ba86665694512015"
+    }
+  ],
+  "limitations": [
+    "JSON runner copies the source into its temporary consumer and deletes that temporary directory; its source snapshot and reviewed runner/logs provide provenance. Retained exact executed basic copies provide direct byte equality for the three basic tasks.",
+    "Repository Cargo/package bindings document current project inputs; actual public consumer locks, PyPI wheel hashes and npm integrity records identify the packages that ran.",
+    "No Anki GUI import, live CDN/header verification, or universal operating-system/runtime claim."
+  ]
+}

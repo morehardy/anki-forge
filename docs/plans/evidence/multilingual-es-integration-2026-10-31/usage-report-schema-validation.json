@@ -1,0 +1,34 @@
+{
+  "scope": "Exact existing usage report validator invoked in memory; module paths/default root adapted only; no source mutation or machine-review verdict",
+  "validator": {
+    "path": "website/scripts/post-build-reviews.mjs",
+    "sha256": "108d5987f9c44e7cec854ff7d6417c4c6735bdcaa5db5bcf1e97e8da46b7405f"
+  },
+  "status": "passed",
+  "results": [
+    {
+      "kind": "usage-tasks",
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-prefix.json",
+      "sha256": "72d48d79214fd6c085864b6e1fed977397dd764eef5d99a8527daab6bf6a68c4",
+      "bytes": 219395,
+      "reviewerRun": "/root/spanish_standards/independent-usage-2026-10-31/prefix",
+      "originManifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
+      "originCommit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
+      "currentManifestSha256": "1406bd21565fb416fcb13a85c399ac7680bd3ee745621a65b01537d3578ff463",
+      "reused": false,
+      "resourceScopeSha256": "6140bf5c9bc98ede97c94bc29bd6aa360d7372592bc6c2757d437db21705be90"
+    },
+    {
+      "kind": "usage-tasks",
+      "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-root.json",
+      "sha256": "24ea4c7f630afe30f25e8e74db08344b33df127ccc552777a69d940599f8d155",
+      "bytes": 216500,
+      "reviewerRun": "/root/spanish_standards/independent-usage-2026-10-31/root",
+      "originManifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+      "originCommit": "c828b2d895c8d6cda143862bcd2daaff3a8a279a",
+      "currentManifestSha256": "7b3094f912ad02809d90dcd9d39857ea2aba77e74379f885f4e491b4df73cd27",
+      "reused": false,
+      "resourceScopeSha256": "4c58aa359bf429bd6b0400e1ab5d9030197dafecb0f0403c596d46d03aefad81"
+    }
+  ]
+}

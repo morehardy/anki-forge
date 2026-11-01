@@ -28,6 +28,6 @@ test('a third-language descriptor shares the canonical and keeps all alternate m
 });
 
 test('incomplete or inactive page descriptors fail before rendering', () => {
-  assert.throws(() => createPageMetadata(page, 'es', config, { title: 'Título', description: 'Descripción' }), /Unregistered/);
+  assert.throws(() => createPageMetadata(page, 'fr', config, { title: 'Titre', description: 'Description' }), /Unregistered/);
   assert.throws(() => createPageMetadata(page, 'en', config, { title: '', description: 'Description' }), /Missing page metadata/);
 });

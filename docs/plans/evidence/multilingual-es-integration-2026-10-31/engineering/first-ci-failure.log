@@ -1,0 +1,31 @@
+2026-11-01T04:14:09.3540526Z     triggerUncaughtException(
+2026-11-01T04:14:09.3541490Z     ^
+2026-11-01T04:14:09.3541844Z 
+2026-11-01T04:14:09.3543104Z AssertionError [ERR_ASSERTION]: docs/plans/evidence/multilingual-es-integration-2026-10-31/usage-tasks-prefix.json: reviewed resource changed: /anki-forge/docs/
+2026-11-01T04:14:09.3544192Z + actual - expected
+2026-11-01T04:14:09.3544412Z 
+2026-11-01T04:14:09.3544883Z + 'e8953478324195288d534668a07eb32dc365788a2a79b7fbba118a8ce347b37e'
+2026-11-01T04:14:09.3545457Z - '67648e8bf3d04856fd76b7bbaaafe4127a0ab6de12cf5b96e16d5096ea76236b'
+2026-11-01T04:14:09.3545759Z 
+2026-11-01T04:14:09.3546160Z     at validateReport (file:///home/runner/work/anki-forge/anki-forge/website/scripts/post-build-reviews.mjs:114:12)
+2026-11-01T04:14:09.3546695Z     at async Promise.all (index 0)
+2026-11-01T04:14:09.3547306Z     at async verifyPostBuildReviews (file:///home/runner/work/anki-forge/anki-forge/website/scripts/post-build-reviews.mjs:191:19)
+2026-11-01T04:14:09.3548151Z     at async runReleaseEvidence (file:///home/runner/work/anki-forge/anki-forge/website/scripts/release-evidence.mjs:207:53)
+2026-11-01T04:14:09.3549247Z     at async file:///home/runner/work/anki-forge/anki-forge/website/scripts/release-evidence.mjs:302:23 {
+2026-11-01T04:14:09.3549726Z   generatedMessage: false,
+2026-11-01T04:14:09.3549994Z   code: 'ERR_ASSERTION',
+2026-11-01T04:14:09.3550398Z   actual: 'e8953478324195288d534668a07eb32dc365788a2a79b7fbba118a8ce347b37e',
+2026-11-01T04:14:09.3550964Z   expected: '67648e8bf3d04856fd76b7bbaaafe4127a0ab6de12cf5b96e16d5096ea76236b',
+2026-11-01T04:14:09.3551403Z   operator: 'strictEqual',
+2026-11-01T04:14:09.3551952Z   diff: 'simple'
+2026-11-01T04:14:09.3552169Z }
+2026-11-01T04:14:09.3552283Z 
+2026-11-01T04:14:09.3552383Z Node.js v24.22.1
+2026-11-01T04:14:09.3692068Z ##[error]Process completed with exit code 1.
+2026-11-01T04:14:09.3762424Z ##[group]Run actions/upload-artifact@v4
+2026-11-01T04:14:09.3762733Z with:
+2026-11-01T04:14:09.3762951Z   name: website-browser-evidence
+2026-11-01T04:14:09.3763219Z   path: target/website-i18n-62/
+2026-11-01T04:14:09.3763489Z   if-no-files-found: warn
+2026-11-01T04:14:09.3763736Z   compression-level: 6
+

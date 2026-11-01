@@ -1,0 +1,248 @@
+# Changelog
+
+All notable changes to the Rust Distribution are documented here. The crate
+follows Semantic Versioning; before 1.0, breaking public API changes require a
+new minor release.
+
+## [0.3.1] - 2026-10-13
+
+### Documentation and distribution
+
+- Add language-specific AI Skill references and a website prompt builder for
+  complete runnable programs, persistent APKG output, stable identity and
+  verification.
+- Synchronize public setup guidance and publish matching Rust, Node and Python
+  patch packages. Public authoring APIs and embedded contract bundle 2.1.0 are
+  unchanged from 0.3.0.
+- Refresh Python native dependency notices from the locked dependency graph.
+- Record the newly issued informational unsafe-libyaml maintenance advisory as
+  a version-pinned exception owned by release-maintainers, expiring 2026-11-12.
+  Release evidence includes the exception; policy checks reject expiry or drift.
+
+## [0.3.0] - 2026-10-09
+
+### Performance
+
+- Validate the embedded contract bundle and generate typed writer defaults at
+  compile time, reducing first-build initialization without a separate resource
+  generation command or runtime dependency on the source checkout.
+- Reuse BLAKE3 digests of private immutable memory snapshots during media
+  preparation. File snapshots and shared spill segments are still rehashed;
+  SHA-1, size checks, encoding and package inspection remain unchanged.
+
+- Add ordered `Media::files` / `files_with_limits` imports with up to four
+  workers and matching Node/Python `Media.files` methods. Failed batches join
+  their workers and release partial snapshots before returning the first error.
+- Raise the shared live-snapshot budget from 4 to 64 MiB and the lazy encoded
+  media pool from 4.5 to 16 MiB. Assets over 1 MiB still stream to disk; these
+  budgets do not bound total process RSS.
+- Consume temporary native authoring content without building unused legacy
+  mirrors, and reuse bound card plans for note fingerprints and report counts.
+- Omit the unused whole-package SHA-1 in native builds while retaining complete
+  package inspection, media verification, identity evidence and publication
+  durability. Low-level writer results still include their package fingerprint.
+
+- Add `Project::prepare_publication` and consuming `PreparedPublication::publish`
+  with full comparison evidence, bound paths/policy, private candidate ownership,
+  delayed baseline-alias checks and truthful publication failures. Node and Python
+  expose matching closeable owners; native protocols are Node 6 and Python 1.
+- Node task submission and clones share immutable Project versions. The first
+  mutation while a snapshot remains live may copy the project.
+- Native builds omit unused staging manifest serialization/SHA-1/writes while
+  preserving validation and full Internal Tools Interface staging artifacts.
+- Large bytes imports reuse live storage before redundant temporary writes, after
+  per-call MIME/limit validation. Weak caching, fork and cleanup rules remain.
+- Bundle 2.1.0 registers the additive prepared-owner error and semantic contracts;
+  APKG identity and existing report/comparison schemas are unchanged. Redundant
+  manifest/cache-hit-only I/O failure points no longer occur in native paths.
+
+## [0.2.0] - 2026-09-28
+
+### Clean-slate authoring
+
+- Replace Deck/prelude and mutable registries with root `Project`, `Note`,
+  immutable `NoteType`, structured `Content` and owned `Media` snapshots.
+- Separate stable keys from display names; compile templates by field key;
+  support both Image Occlusion modes with persistent mask assignments.
+- Return guaranteed artifacts in `BuildOutput`, observation-only reports and
+  typed errors with real causes and publication facts.
+- Compare and update from verified original packages carrying complete identity
+  evidence. Remove identity recipes, lockfiles and the old native product input.
+- Remove Project titles across Rust, Node, Python and JSON recipes. Migrate recipes
+  to `ankiforge-project-v2` and remove top-level `name` (including null).
+- Reject incompatible image/sound MIME categories atomically at note addition;
+  sound references accept audio and video. Constructors remain infallible.
+- Expose structured addition context, original content paths and UTF-8 ranges,
+  model/media conflicts and media usage details in Rust and both SDKs.
+- Require Node native protocol 5 and Python embedded contract 2.0.0 to reject
+  mixed installations; identity and report formats remain unchanged.
+- Embed contract bundle `2.0.0`, with v2 template bundles and native build,
+  comparison, project-input and identity-evidence schemas. Bundle and crate
+  versions are independent.
+- Migrate Node/Python, repository tools and documentation to the same public API.
+- Reject invalid template target deck names when completing a model or loading a
+  template bundle, using the same rules as project and note deck names.
+- Compile the exact post-publication verification example in PR checks and use
+  the current temporary-output constructor.
+
+The earlier development entries below record superseded implementations. This
+clean-slate change removes their retired interfaces; no compatibility adapter is
+provided. Current behavior is documented in the crate README.
+
+### Changed
+
+- Rename the Rust package and library to `ankiforge`. Use `ankiforge` in
+  Cargo dependencies and root imports such as `use ankiforge::Project` in Rust code. The source
+  directory and Python import name remain `anki_forge`.
+
+### Fixed
+
+- Scan literal Cloze prefixes without splitting UTF-8 characters, preserving
+  card generation and structured build/compare errors for Unicode input.
+- Compare filtered observation trees directly and merge sorted selector indexes,
+  preserving numeric JSON representations, duplicate handling and diff evidence.
+- Borrow SQLite note text during inspection and move parsed identity metadata,
+  preserving column validation and full observation semantics.
+- Build small collection sources in memory, limiting source database pages to
+  64 MiB and falling back to a private file on capacity exhaustion. Compaction,
+  final package bytes, inspection and durable publication remain unchanged.
+- Consume decoded inspection facts when assembling observations, transferring
+  note fields, tags and identity evidence to reduce comparison peak memory.
+- Use 8 KiB pages for generated modern collection databases to reduce SQLite
+  population and compaction work while preserving logical schema and rows.
+  Bundle 0.6.3 refreshes only the three affected physical APKG golden hashes.
+- Reuse a build-local zstd workspace across retained media entries, preserving
+  independent frame bytes, per-file integrity checks and durable publication.
+- Bound repeated HTML lookahead on malformed tags and raw-text elements while
+  preserving existing sort-field, checksum, entity and media-filename semantics.
+- Copy validated Deck/Package exports to writers with a fixed buffer instead of
+  an additional whole-package allocation; preserve partial-write and error behavior.
+- Borrow comparison observations and stream their canonical fingerprint without
+  duplicating JSON trees or dropping comparison evidence.
+- Overlap persistent CAS/staging I/O on at most four scoped workers. Keep per-file
+  sync and integrity checks, ordered staging publication and failure cleanup.
+
+- Keep media optimization behind the existing registration/export interfaces.
+  Read Deck file media in larger blocks and reuse image header bytes for dimensions,
+  with a streaming fallback for long headers. Preserve immediate registration
+  errors, content fingerprints and build-time source-change checks.
+- Stream temporary media builds through bounded encoding queues into a private
+  ZIP candidate; combine build-time source validation, hashing and encoding.
+  Preserve explicit CAS/staging storage and final APKG inspection. Reuse the
+  inspection decoder workspace while resetting each frame and enforcing limits.
+- Compute the default package fingerprint while writing, reuse the fixed legacy
+  upgrade-message database, and sync/rename owned candidates on publication.
+  Use RustCrypto SHA-1 0.11 with runtime hardware detection and portable fallback.
+
+- Clean up only build-owned file-media input copies after normalization,
+  including failed preparation, so repeated and incremental exports can reuse
+  an artifact directory without deleting caller-owned sources or aliases.
+- Let internal-tools Package callers select finite inspection budgets with
+  `build_with_limits`; result inspection retains the selected budgets. Default
+  exports continue to enforce resource limits before publication.
+- Import Decks into a single editable Project state, preserving raw HTML,
+  identity evidence, source locations, stock declaration order, and media.
+  Project additions no longer fail late or silently lose media after import.
+- Share versioned-document and Project builds through private pipeline stages
+  and one report finalizer. Late failures preserve completed counts and evidence;
+  candidates remain private until inspection and policy acceptance.
+- Own temporary APKG output with shared artifact handles instead of leaking
+  the entire staging workspace. Late errors retain published artifact ownership.
+- Batch collection schema creation and compact into a private temporary database
+  before packaging, retaining compaction and atomic output publication. Avoid
+  repeated canonical-JSON sorting, source-map cloning, and media parsing for
+  text that cannot contain a supported reference.
+- Populate APKG note/card data in one transaction with reusable SQL statements,
+  and index actual cards and explicit Project stable IDs instead of repeatedly
+  scanning all prior entries. Failed writes still preserve published artifacts.
+- Reuse typed staging data internally while retaining staging files and the
+  owned `StagingPackage` interface. Builds without a comparison baseline inspect
+  actual APKG contents without constructing unused observation JSON/fingerprints;
+  standalone inspection and baseline comparison retain their full reports.
+- Avoid rendering custom fields twice and use field keys for source-name lookups.
+- Register every built-in diagnostic and risk code and check production source
+  coverage. Discover semantics from the manifest and require exact baseline
+  change evidence with version bumps in repository/release contract gates.
+- Bound APKG inspection, including ZIP/ZIP64 indexing, nested zstd windows,
+  per-entry and cumulative expansion. Stream media hashes and temporary
+  collections; expose `InspectLimits` overrides and terminal resource diagnostics.
+  Include the documented security acceptance limits in contract bundle `0.5.0`.
+- Reject output, report, or writable lockfile aliases of the comparison baseline
+  before writes, including symlinks, hard links, and the implicit artifact package.
+- Check actual staging-manifest aliases and recheck newly created destinations
+  before lockfile/report writes to preserve files on case-insensitive filesystems.
+- Keep outputs, retained packages, baselines, and identity lockfiles outside
+  writable staging/media directories so policy rejection preserves their bytes.
+- Avoid an extra temporary APKG copy when only an explicit output is retained.
+- Create private candidates on the artifact workspace's filesystem and reserve
+  lockfile temporary files exclusively to avoid truncating aliased inputs/outputs.
+- Reuse one baseline inspection for identity reconciliation and diff; publish
+  APKG outputs and identity lockfiles only after comparison and risk gates pass.
+  Blocked reports retain diff/risk evidence without an unpublished artifact path.
+- Write hierarchical deck names with Anki's native `U+001F` separator and
+  include all parent decks in generated APKG collections.
+- Deduplicate deck aliases with Anki's Unicode case-insensitive comparison and
+  use the same canonical human deck names in staging and APKG observations.
+- Preserve numeric Anki notetype IDs across reordering, insertion, and baselined
+  updates; carry model assignments through staging, APKG inspection, and lockfiles.
+- Detect field additions and removals with lockfile-only update safety, and compare
+  all nine inspect observation domains without overstating partial comparisons.
+- Advance modification times for changed notes using full-content baseline
+  revisions, while preserving unchanged times and reproducible builds. This fixes
+  answer/tag changes being skipped by Anki because every export used time `1`.
+- Preserve existing lockfiles when report-only builds lack verified baseline
+  identity/revision evidence; rejected lockfiles remain high risk for policy gates.
+- Version the expanded inspection evidence as `phase3-inspect-v2`; cross-version
+  saved-report comparisons are partial and supported by Node/Python bindings.
+- Preserve single empty fields during APKG inspection so unchanged notes retain
+  their full-content revision and modification time.
+- Coalesce diagnostic and diff evidence for the same removed field, retaining the
+  higher risk level without duplicating the finding.
+- Keep identity-rejected APKG baselines high risk even when raw comparison is
+  complete; `fail_on(High)` blocks publication and preserves existing files.
+- Canonicalize empty browser overrides and zero font sizes in staging inspection
+  so APKG roundtrips do not report false browser-template changes.
+
+### Compatibility
+
+- Default temporary media packages now place media entries before collection
+  entries. APKG hashes change while decoded entries and Anki identities remain
+  equal. Explicit persistent builds retain their existing ZIP order.
+
+- Breaking Rust interface change: replace `artifact.path` with `artifact.path()`.
+  Keep the report/artifact handle alive or call `artifact.persist_to(path)`;
+  copying a temporary path no longer retains its file. Automatic `report_json`
+  now requires `output` or `artifacts_dir`. These changes require a new minor
+  crate release, not a patch release in the published 0.1 line.
+- Internal-tools callers build versioned inputs with `ProductDocument::build`
+  (or the runtime adapter), not `Project::from_product_document`. Documents are
+  not editable Projects, and Product v2/v3 interpretation remains unchanged.
+- Contract bundle `0.6.2` updates only the three writer fixture package hashes:
+  batched SQLite transactions and compaction change header counters and APKG bytes, but
+  logical rows, media, staging fingerprints and full inspection semantics remain
+  unchanged. Existing package hashes must always be computed from actual bytes.
+- Embedded contract bundle advances to `0.6.0`, adding registry coverage and
+  executable contract governance to the 0.5.0 update-safety changes. To update
+  previously distributed decks, provide `compare_to(previous.apkg)` or a lockfile
+  with numeric model IDs.
+  A legacy lockfile with null model IDs needs the previous APKG in strict mode;
+  rewrite the lockfile after migration. Note GUID derivation is unchanged.
+- Strict updates also require note revision evidence. Legacy lockfiles recover it
+  from the previous APKG. Use the latest distributed baseline, and persist revised
+  lockfiles for future releases; baseline-free exports remain first-release builds.
+
+## [0.1.0] - 2026-08-26
+
+### Added
+
+- Initial production Rust Distribution with typed `Deck` and `Project` APIs.
+- Self-contained contract bundle `0.3.0` and default writer runtime.
+- Update-safety, media, custom note type, and structured diagnostic capabilities
+  through the supported `prelude` facade.
+- An explicitly unsupported `internal-tools` feature for the repository's
+  unpublished contract tooling and deep conformance tests.
+
+[Unreleased]: https://github.com/morehardy/anki-forge/compare/anki-forge-v0.3.0...HEAD
+[0.3.0]: https://github.com/morehardy/anki-forge/compare/anki-forge-v0.2.0...anki-forge-v0.3.0
+[0.2.0]: https://github.com/morehardy/anki-forge/compare/anki-forge-v0.1.0...anki-forge-v0.2.0
+[0.1.0]: https://github.com/morehardy/anki-forge/releases/tag/anki-forge-v0.1.0

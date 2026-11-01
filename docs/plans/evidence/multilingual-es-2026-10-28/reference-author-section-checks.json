@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "scope": "author-section-code-frontmatter-and-link-checks",
+  "independentReview": false,
+  "status": "passed",
+  "checks": [
+    {
+      "id": "rust-guide",
+      "file": "docs/es/rust-guide.md",
+      "source": "docs/rust-guide.md",
+      "sha256": "29bdbf87afc5c3366ea306ea2bfb3a97a3f9509d48f126daaac374831806ff8f",
+      "headings": 6,
+      "mapping": {
+        "proyectos-y-diagnósticos": "projects-and-diagnostics",
+        "modelos-y-recursos": "models-and-assets",
+        "propiedad-del-archivo-de-salida": "output-ownership",
+        "identidad-estable-de-las-notas": "stable-note-identity",
+        "actualizar-mazos-distribuidos": "updating-distributed-decks",
+        "errores-al-añadir-notas-y-categorías-multimedia": "addition-errors-and-media-categories"
+      },
+      "codeBlocks": 2,
+      "passed": true
+    },
+    {
+      "id": "api",
+      "file": "docs/es/api.md",
+      "source": "docs/api-overview.md",
+      "sha256": "b5a1917ba788bc8ce4f3abfca1366a75fb232ffffcf26582223affbb4993f595",
+      "headings": 2,
+      "mapping": {
+        "identidad-estable-de-las-notas": "stable-note-identity",
+        "empieza-por-una-tarea": "start-with-a-task"
+      },
+      "codeBlocks": 0,
+      "passed": true
+    },
+    {
+      "id": "rust-api",
+      "file": "docs/es/rust-api.md",
+      "source": "docs/rust-api.md",
+      "sha256": "b4ecb8204b1d85c594863d976e7603283d3e935db197d5c5283e6d3ff4b08507",
+      "headings": 7,
+      "mapping": {
+        "crear-contenido": "authoring",
+        "contenido-y-recursos-multimedia": "content-and-media",
+        "opciones-de-generación": "build-options",
+        "generación-comparación-y-salida": "build-compare-and-output",
+        "informes-y-errores": "reports-and-errors",
+        "contexto-al-añadir-notas": "addition-context",
+        "revisa-una-vez-y-publica-una-vez": "review-once-publish-once"
+      },
+      "codeBlocks": 1,
+      "passed": true
+    },
+    {
+      "id": "node-api",
+      "file": "docs/es/node-api.md",
+      "source": "docs/node/api.md",
+      "sha256": "d9c8e1e5141ab411cead74a2167694b7d94d13405c13c55f4ab8cfb674ed5d13",
+      "headings": 10,
+      "mapping": {
+        "proyecto-y-notas": "project-and-notes",
+        "modelos-inmutables": "immutable-models",
+        "recursos-multimedia-y-oclusión-de-imágenes": "media-and-image-occlusion",
+        "generación-comparación-y-salida": "build-compare-and-output",
+        "vida-útil-del-archivo-de-salida-y-concurrencia": "artifact-lifetime-and-concurrency",
+        "errores": "errors",
+        "contexto-al-añadir-notas": "addition-context",
+        "recursos-multimedia-por-lotes-y-publicación-preparada": "batch-media-and-prepared-publication",
+        "preparar-revisar-y-publicar": "prepare-review-and-publish",
+        "typescript": "typescript"
+      },
+      "codeBlocks": 4,
+      "passed": true
+    },
+    {
+      "id": "python-api",
+      "file": "docs/es/python-api.md",
+      "source": "docs/python/api.md",
+      "sha256": "dea5b3e9b4ca29c44047fb3193aefd038c94ac69afedd8313881f9b0c3c792db",
+      "headings": 8,
+      "mapping": {
+        "valores-de-proyecto-y-nota": "project-and-note-values",
+        "modelos-y-plantillas": "models-and-templates",
+        "recursos-multimedia-y-oclusión": "media-and-occlusion",
+        "operaciones-y-resultados": "operations-and-results",
+        "errores-y-concurrencia": "errors-and-concurrency",
+        "contexto-al-añadir-notas": "addition-context",
+        "detalles-de-la-api-del-código-fuente": "source-api-details",
+        "preparar-revisar-y-publicar": "prepare-review-and-publish"
+      },
+      "codeBlocks": 1,
+      "passed": true
+    },
+    {
+      "id": "python-diagnostics",
+      "file": "docs/es/python-diagnostics.md",
+      "source": "docs/python/diagnostics.md",
+      "sha256": "8f1456b53eed097da5869b1c45bd9c02e2d9857b9a1581d2aaf261d97ff3b879",
+      "headings": 2,
+      "mapping": {
+        "comparar-antes-de-publicar": "compare-before-publication",
+        "límites-y-propiedad-del-archivo-de-salida": "budgets-and-artifact-ownership"
+      },
+      "codeBlocks": 4,
+      "passed": true
+    },
+    {
+      "id": "python-migration",
+      "file": "docs/es/python-migration.md",
+      "source": "bindings/python/MIGRATION.md",
+      "sha256": "638eef94d9c8ea3bf26baad4172603ebe1f5b7ef45df7534f2c821815a429283",
+      "headings": 0,
+      "mapping": {},
+      "codeBlocks": 0,
+      "passed": true
+    },
+    {
+      "id": "genanki-migration",
+      "file": "docs/es/genanki-migration.md",
+      "source": "docs/python/genanki-migration.md",
+      "sha256": "bc8f20e0bd240af5251c5216b63e3e522c350366d1e4c8d1b16a4840152d7271",
+      "headings": 0,
+      "mapping": {},
+      "codeBlocks": 1,
+      "passed": true
+    },
+    {
+      "id": "blog:your-first-anki-deck",
+      "file": "website/src/content/blog/es/your-first-anki-deck.mdx",
+      "source": "website/src/content/blog/your-first-anki-deck.mdx",
+      "sha256": "bc5e76bc4534a13bb2fd5a47f0f1a20d5831d8bcd2477a2b09549bb4830dbc33",
+      "headings": 4,
+      "mapping": {
+        "un-programa-completo": "a-complete-program",
+        "instalar-y-ejecutar": "install-and-run",
+        "dar-una-identidad-a-la-nota": "give-the-note-an-identity",
+        "ampliar-el-ejemplo": "grow-from-one-note"
+      },
+      "codeBlocks": 0,
+      "passed": true
+    },
+    {
+      "id": "blog:stable-ids-and-deck-updates",
+      "file": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+      "source": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+      "sha256": "745db57301802b7c827ed0396dbee84f210a8ed2048b3772bfdd45ff3af7cd7e",
+      "headings": 4,
+      "mapping": {
+        "separar-la-identidad-del-contenido": "separate-identity-from-content",
+        "dar-un-paquete-de-referencia-a-la-siguiente-generación": "give-the-next-build-a-baseline",
+        "conservar-el-paquete-original-distribuido": "keep-the-original-distributed-package",
+        "revisar-la-generación-y-la-importación": "inspect-the-build-and-the-import"
+      },
+      "codeBlocks": 0,
+      "passed": true
+    }
+  ]
+}
