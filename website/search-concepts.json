@@ -1793,6 +1793,559 @@
         ],
         "intent": true
       }
+    },
+    "pt-BR": {
+      "__language": {
+        "stopWords": [
+          "a",
+          "o",
+          "as",
+          "os",
+          "um",
+          "uma",
+          "uns",
+          "umas",
+          "e",
+          "ou",
+          "de",
+          "do",
+          "da",
+          "dos",
+          "das",
+          "para",
+          "em",
+          "no",
+          "na",
+          "nos",
+          "nas",
+          "com",
+          "por",
+          "pelo",
+          "pela",
+          "ao",
+          "à",
+          "aos",
+          "às",
+          "é",
+          "são",
+          "como",
+          "qual",
+          "quais",
+          "posso",
+          "eu",
+          "meu",
+          "minha",
+          "meus",
+          "minhas",
+          "me",
+          "favor",
+          "quero",
+          "preciso",
+          "usando",
+          "usar",
+          "use",
+          "sdk",
+          "entre",
+          "sobre",
+          "ser",
+          "isso",
+          "isto",
+          "esse",
+          "essa",
+          "este",
+          "esta",
+          "esses",
+          "essas",
+          "estes",
+          "estas",
+          "devo",
+          "vou",
+          "também",
+          "cada"
+        ]
+      },
+      "python": {
+        "terms": [
+          "Python",
+          "CPython",
+          "pip"
+        ],
+        "sdk": "python"
+      },
+      "node": {
+        "terms": [
+          "Node.js",
+          "Node",
+          "JavaScript",
+          "TypeScript",
+          "npm"
+        ],
+        "sdk": "node"
+      },
+      "rust": {
+        "terms": [
+          "Rust",
+          "Cargo",
+          "crate"
+        ],
+        "sdk": "rust"
+      },
+      "quickstart": {
+        "terms": [
+          "início rápido",
+          "primeiros passos",
+          "começar",
+          "iniciante",
+          "iniciantes",
+          "tutorial",
+          "primeiro baralho",
+          "primeiro baralho do Anki",
+          "primeiro cartão"
+        ],
+        "roles": [
+          "quickstart"
+        ],
+        "intent": true
+      },
+      "reference": {
+        "terms": [
+          "API",
+          "referência",
+          "anotações de tipos",
+          "declarações",
+          "métodos",
+          "funções"
+        ],
+        "roles": [
+          "api"
+        ],
+        "intent": true
+      },
+      "installation": {
+        "terms": [
+          "instalação",
+          "instalar",
+          "configuração inicial",
+          "dependência",
+          "dependências"
+        ],
+        "roles": [
+          "installation",
+          "quickstart"
+        ],
+        "intent": true
+      },
+      "development": {
+        "terms": [
+          "compilação do código-fonte",
+          "compilar a partir do código-fonte",
+          "cópia do repositório",
+          "addon local",
+          "recompilar wrapper"
+        ],
+        "roles": [
+          "development"
+        ],
+        "intent": true
+      },
+      "comparison": {
+        "terms": [
+          "versus",
+          "vs",
+          "alternativa",
+          "alternativas",
+          "vantagens e desvantagens",
+          "comparação de bibliotecas",
+          "escolher biblioteca",
+          "qual biblioteca"
+        ],
+        "roles": [
+          "comparison"
+        ],
+        "intent": true
+      },
+      "migration": {
+        "terms": [
+          "migração",
+          "migrar",
+          "migrando",
+          "mudar de",
+          "trocar de",
+          "substituir genanki",
+          "portar de"
+        ],
+        "roles": [
+          "migration"
+        ],
+        "intent": true
+      },
+      "updates": {
+        "terms": [
+          "atualizar",
+          "atualização",
+          "atualizações",
+          "baralho distribuído",
+          "notas existentes",
+          "alterar uma resposta",
+          "histórico de revisão",
+          "agendamento",
+          "publicar novamente"
+        ],
+        "roles": [
+          "updates"
+        ],
+        "intent": true,
+        "requiresAny": [
+          "atualizar",
+          "atualização",
+          "atualizações",
+          "publicar",
+          "publicação",
+          "distribuído",
+          "distribuição",
+          "base de atualização",
+          "versão",
+          "notas existentes",
+          "alterar uma resposta"
+        ]
+      },
+      "baseline": {
+        "terms": [
+          "base de atualização",
+          "APKG original distribuído",
+          "distribuição original",
+          "APKG original",
+          "reexportação do Anki",
+          "reexportar",
+          "pacote anterior",
+          "evidências de identidade"
+        ],
+        "roles": [
+          "updates"
+        ],
+        "intent": true
+      },
+      "identity": {
+        "terms": [
+          "ID estável",
+          "IDs estáveis",
+          "chave estável",
+          "chaves estáveis",
+          "GUID",
+          "namespace",
+          "chave de negócio",
+          "identidade da nota"
+        ]
+      },
+      "diagnostics": {
+        "terms": [
+          "solução de problemas",
+          "diagnóstico",
+          "diagnósticos",
+          "erro",
+          "erros",
+          "falha",
+          "falhou",
+          "não funciona",
+          "ausente",
+          "desapareceu",
+          "não carrega",
+          "não consegue carregar"
+        ],
+        "roles": [
+          "diagnostics"
+        ],
+        "intent": true
+      },
+      "media": {
+        "terms": [
+          "mídia",
+          "arquivos de mídia",
+          "recursos",
+          "anexos"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "images": {
+        "terms": [
+          "imagem",
+          "imagens",
+          "figura",
+          "figuras",
+          "foto",
+          "fotos",
+          "ilustração"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "audio": {
+        "terms": [
+          "áudio",
+          "som",
+          "sons",
+          "voz",
+          "pronúncia",
+          "mp3",
+          "wav"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "occlusion": {
+        "terms": [
+          "oclusão de imagem",
+          "oclusão",
+          "máscaras em imagens",
+          "ocultar rótulos",
+          "máscaras retangulares",
+          "mascaramento",
+          "regiões de diagramas"
+        ],
+        "roles": [
+          "occlusion"
+        ]
+      },
+      "cloze": {
+        "terms": [
+          "Cloze",
+          "preencher lacunas",
+          "preenchimento de lacunas",
+          "número da omissão",
+          "omissão Cloze",
+          "cartões com lacunas"
+        ],
+        "roles": [
+          "cards"
+        ]
+      },
+      "templates": {
+        "terms": [
+          "modelo de cartão",
+          "modelos de cartão",
+          "template",
+          "templates",
+          "pacote de modelos",
+          "CSS",
+          "fonte",
+          "fontes"
+        ],
+        "roles": [
+          "templates"
+        ]
+      },
+      "note-types": {
+        "terms": [
+          "tipo de nota",
+          "tipos de nota",
+          "modelo personalizado",
+          "modelos personalizados",
+          "campos personalizados",
+          "geração condicional de cartões"
+        ],
+        "roles": [
+          "note-types"
+        ]
+      },
+      "compatibility": {
+        "terms": [
+          "compatibilidade",
+          "plataformas compatíveis",
+          "ambientes compatíveis",
+          "versão mínima",
+          "sistema operacional",
+          "Alpine",
+          "musl",
+          "Electron",
+          "Bun"
+        ],
+        "roles": [
+          "compatibility"
+        ]
+      },
+      "csv": {
+        "terms": [
+          "CSV",
+          "planilha",
+          "planilhas",
+          "Excel",
+          "tabela de vocabulário"
+        ]
+      },
+      "json": {
+        "terms": [
+          "JSON",
+          "dados estruturados",
+          "criação de notas em lote"
+        ]
+      },
+      "ai": {
+        "terms": [
+          "IA",
+          "inteligência artificial",
+          "assistente de programação",
+          "apoio de IA",
+          "gerado por IA",
+          "anotações para Anki"
+        ]
+      },
+      "text": {
+        "terms": [
+          "texto simples",
+          "HTML",
+          "escape",
+          "texto escapado"
+        ]
+      },
+      "fundamentals": {
+        "terms": [
+          "definição",
+          "definições",
+          "conceito",
+          "conceitos",
+          "o que é",
+          "o que são",
+          "significado",
+          "relação",
+          "relações",
+          "agrupamento",
+          "agrupados",
+          "diferença entre",
+          "distinção"
+        ],
+        "requiresAny": [
+          "nota",
+          "notas",
+          "cartão",
+          "cartões",
+          "baralho",
+          "baralhos",
+          "projeto",
+          "APKG",
+          "namespace",
+          "campo",
+          "campos",
+          "modelo de cartão",
+          "modelos de cartão",
+          "modelo"
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "package-structure": {
+        "terms": [
+          "conteúdo",
+          "contém",
+          "contêm",
+          "dentro",
+          "estrutura",
+          "componentes",
+          "composto por"
+        ],
+        "requiresAny": [
+          "APKG",
+          "pacote",
+          "pacotes",
+          "exportação",
+          "exportado"
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "learning": {
+        "terms": [
+          "revisar",
+          "estudar",
+          "estudando",
+          "praticar",
+          "aprendizado",
+          "perguntas",
+          "questionário"
+        ],
+        "weight": 0.25
+      },
+      "customization": {
+        "terms": [
+          "personalizar",
+          "personalização",
+          "adaptar",
+          "design",
+          "projetar"
+        ],
+        "requiresAny": [
+          "campo",
+          "campos",
+          "frente",
+          "verso",
+          "modelo de cartão",
+          "modelos de cartão",
+          "modelo",
+          "tipo de nota"
+        ],
+        "roles": [
+          "note-types"
+        ],
+        "intent": true
+      },
+      "cardinality": {
+        "terms": [
+          "vários",
+          "muitos",
+          "quantos",
+          "uma para muitos",
+          "número de",
+          "quantidade de",
+          "cardinalidade"
+        ],
+        "requiresAll": [
+          [
+            "nota",
+            "notas"
+          ],
+          [
+            "cartão",
+            "cartões"
+          ]
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "occlusion-action": {
+        "terms": [
+          "ocultar",
+          "cobrir",
+          "esconder",
+          "mascarar"
+        ],
+        "requiresAny": [
+          "imagem",
+          "imagens",
+          "figura",
+          "figuras",
+          "diagrama",
+          "diagramas",
+          "ilustração",
+          "foto",
+          "fotos"
+        ],
+        "roles": [
+          "occlusion"
+        ],
+        "consumeContext": true
+      }
     }
   }
 }

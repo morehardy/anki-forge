@@ -100,5 +100,40 @@
       "Prometer que la política de publicación controla las opciones de importación o los cambios locales de Anki"
     ],
     "ownership": "Describe quién conserva los bytes y el ciclo de vida de los recursos multimedia. La propiedad en Rust no significa derechos de autor ni permisos del usuario de Anki."
+  },
+  "pt-BR": {
+    "audience": "Desenvolvedores que integram os pacotes públicos de Rust, Node.js ou Python para gerar e atualizar baralhos APKG do Anki, com documentação em português do Brasil.",
+    "register": "Português brasileiro técnico, direto e natural. Use imperativos como crie, instale e confira; evite traduzir literalmente expressões idiomáticas. Explique pré-requisitos junto à etapa e limitações junto à afirmação afetada. Distinga linguagem de programação de idioma do conteúdo. Não traduza identificadores da API nem prometa resultados de busca não medidos.",
+    "terms": {
+      "note": "nota",
+      "card": "cartão",
+      "deck": "baralho",
+      "noteType": "tipo de nota",
+      "namespace": "namespace",
+      "stableKey": "chave estável da nota",
+      "originalApkg": "APKG original distribuído",
+      "imageOcclusion": "oclusão de imagem"
+    },
+    "protected": [
+      "Anki Forge",
+      "ankiforge",
+      "genanki",
+      "APKG",
+      "API",
+      "JSON",
+      "Rust",
+      "Node.js",
+      "Python",
+      "Basic",
+      "Cloze"
+    ],
+    "avoid": [
+      "Usar nota e cartão como sinônimos",
+      "Apresentar uma reexportação do Anki como base original válida para atualização",
+      "Atribuir ao pacote publicado recursos disponíveis apenas no código-fonte",
+      "Prometer que IDs estáveis preservam todo o histórico ou substituem edições locais independentemente das opções de importação",
+      "Traduzir o trocadilho Notes on making notes de forma literal"
+    ],
+    "ownership": "Explique quem mantém os bytes e controla a vida útil dos valores e arquivos. Propriedade em Rust não significa direitos autorais nem permissões do usuário do Anki."
   }
 }

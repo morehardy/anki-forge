@@ -1,0 +1,482 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/pt_br_technical/independent-source-review-2026-11-01",
+  "candidatePath": "docs/plans/evidence/multilingual-pt-br-2026-11-01/source-candidate.json",
+  "candidateSha256": "8b4162bcce742b39f0ee653d9cd5aa304cc24547e8dd967a400627a653b5f7a5",
+  "priorReport": {
+    "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/technical-source-review.json",
+    "sha256": "18162e70ed1bac7ba4c8d505faddf9b4239f45c11a85f83ee6632ddc1bf44f3f",
+    "baselineCommit": "76f17ee0c964334c9fd11b426a0a7c73c9487eea",
+    "verifiedPriorEntryHashes": 102
+  },
+  "scope": {
+    "freshPortugueseSourcePages": 34,
+    "longformPages": 31,
+    "incrementalPriorLocaleEntries": 102,
+    "notClaimed": [
+      "new linguistic scores",
+      "full new reads of unchanged Chinese and Spanish prose",
+      "built artifact or browser acceptance",
+      "execution of SDK examples"
+    ]
+  },
+  "changedPriorInputFiles": [
+    "docs/ai-quickstart.json",
+    "website/language-briefs.json",
+    "website/release-locales.json",
+    "website/search-concepts.json",
+    "website/search-terms.json",
+    "website/site-model.mjs"
+  ],
+  "unchangedPriorInputFiles": [
+    "anki_forge/examples/docs_workflow.rs",
+    "anki_forge/examples/json_to_anki.rs",
+    "anki_forge/examples/website_showcase.rs",
+    "bindings/node/examples/json_to_anki.mts",
+    "bindings/python/examples/json_to_anki.py",
+    "docs/benchmark-presentation.json",
+    "docs/performance/20261008/comparison.csv",
+    "website/legacy-sections.json",
+    "website/locale-model.mjs",
+    "website/scripts/benchmark-presentation.mjs",
+    "website/section-contracts.json",
+    "website/src/components/AiQuickstart.astro",
+    "website/src/components/BrandMark.astro",
+    "website/src/components/CardPreview.astro",
+    "website/src/components/CodeBlock.astro",
+    "website/src/components/CopyBlock.astro",
+    "website/src/components/ExampleWorkbench.astro",
+    "website/src/components/Footer.astro",
+    "website/src/components/Header.astro",
+    "website/src/components/HomePage.astro",
+    "website/src/components/HomeShowcase.astro",
+    "website/src/components/Icon.astro",
+    "website/src/components/InstallCommand.astro",
+    "website/src/components/LanguageSwitcher.astro",
+    "website/src/components/PerformanceEvidence.astro",
+    "website/src/components/ThemeControl.astro",
+    "website/src/components/UpdateDemo.astro",
+    "website/src/i18n/client-messages.mjs",
+    "website/src/i18n/en.json",
+    "website/src/i18n/format-message.mjs",
+    "website/src/i18n/messages.mjs",
+    "website/src/layouts/SiteLayout.astro",
+    "website/src/lib/ai-quickstart.mjs",
+    "website/src/lib/examples.ts",
+    "website/src/lib/search-terms.mjs",
+    "website/src/scripts/site.ts",
+    "website/src/i18n/zh-CN.json",
+    "website/src/i18n/es.json",
+    "website/src/components/ExamplesPage.astro",
+    "website/src/components/BlogPage.astro",
+    "website/src/components/PostCard.astro",
+    "website/scripts/search-documents.mjs",
+    "website/search.config.mjs",
+    "website/src/components/DocsFooter.astro",
+    "website/src/components/DocsHeader.astro",
+    "website/src/components/DocsSearch.astro",
+    "website/src/content/docs/docs/index.mdx",
+    "website/src/content/i18n/en.json",
+    "website/src/lib/search.mjs",
+    "website/src/route-middleware.ts",
+    "website/src/scripts/docs-search.ts",
+    "docs/zh-cn/index.md",
+    "website/src/content/i18n/zh-CN.json",
+    "docs/es/index.md",
+    "website/src/content/i18n/es.json",
+    "website/src/content/docs/docs/languages.mdx",
+    "docs/zh-cn/languages.md",
+    "docs/es/languages.md",
+    "anki_forge/examples/target_api_basic.rs",
+    "website/src/content/docs/docs/quickstart.mdx",
+    "docs/zh-cn/quickstart.md",
+    "docs/es/quickstart.md",
+    "docs/json-to-anki.md",
+    "docs/zh-cn/json-to-anki.md",
+    "docs/es/json-to-anki.md",
+    "bindings/python/examples/csv_to_anki.py",
+    "docs/csv-to-anki.md",
+    "docs/recipes/csv-to-anki/cards.csv",
+    "docs/zh-cn/csv-to-anki.md",
+    "docs/es/csv-to-anki.md",
+    "docs/ai-anki-cards.md",
+    "docs/zh-cn/ai-anki-cards.md",
+    "docs/es/ai-anki-cards.md",
+    "docs/anki-forge-vs-genanki.md",
+    "docs/zh-cn/anki-forge-vs-genanki.md",
+    "docs/es/anki-forge-vs-genanki.md",
+    "docs/source-builds.md",
+    "docs/zh-cn/development.md",
+    "docs/es/development.md",
+    "docs/rust-guide.md",
+    "docs/zh-cn/rust-guide.md",
+    "docs/es/rust-guide.md",
+    "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+    "docs/template-bundles.md",
+    "docs/zh-cn/templates.md",
+    "docs/es/templates.md",
+    "docs/api-overview.md",
+    "docs/zh-cn/api.md",
+    "docs/es/api.md",
+    "docs/installation.md",
+    "docs/zh-cn/installation.md",
+    "docs/es/installation.md",
+    "docs/concepts.md",
+    "docs/zh-cn/concepts.md",
+    "docs/es/concepts.md",
+    "docs/cards.md",
+    "docs/zh-cn/cards.md",
+    "docs/es/cards.md",
+    "anki_forge/examples/target_api_custom_notetype.rs",
+    "docs/custom-notetypes.md",
+    "docs/zh-cn/custom-notetypes.md",
+    "docs/es/custom-notetypes.md",
+    "docs/media.md",
+    "docs/zh-cn/media.md",
+    "docs/es/media.md",
+    "docs/image-occlusion.md",
+    "docs/zh-cn/image-occlusion.md",
+    "docs/es/image-occlusion.md",
+    "anki_forge/examples/docs_publication.rs",
+    "docs/updates.md",
+    "docs/zh-cn/updates.md",
+    "docs/es/updates.md",
+    "docs/build-guarantees.md",
+    "docs/zh-cn/build-guarantees.md",
+    "docs/es/build-guarantees.md",
+    "docs/troubleshooting.md",
+    "docs/zh-cn/troubleshooting.md",
+    "docs/es/troubleshooting.md",
+    "docs/compatibility.md",
+    "docs/zh-cn/compatibility.md",
+    "docs/es/compatibility.md",
+    "docs/rust-api.md",
+    "docs/zh-cn/rust-api.md",
+    "docs/es/rust-api.md",
+    "bindings/node/examples/quickstart.mjs",
+    "docs/node/quick-start.md",
+    "docs/zh-cn/node-quickstart.md",
+    "docs/es/node-quickstart.md",
+    "docs/node/api.md",
+    "docs/zh-cn/node-api.md",
+    "docs/es/node-api.md",
+    "bindings/python/examples/quickstart.py",
+    "docs/python/quick-start.md",
+    "docs/zh-cn/python-quickstart.md",
+    "docs/es/python-quickstart.md",
+    "docs/python/api.md",
+    "docs/zh-cn/python-api.md",
+    "docs/es/python-api.md",
+    "docs/python/diagnostics.md",
+    "docs/zh-cn/python-diagnostics.md",
+    "docs/es/python-diagnostics.md",
+    "bindings/python/MIGRATION.md",
+    "docs/zh-cn/python-migration.md",
+    "docs/es/python-migration.md",
+    "docs/python/genanki-migration.md",
+    "docs/zh-cn/genanki-migration.md",
+    "docs/es/genanki-migration.md",
+    "website/src/components/ArticlePage.astro",
+    "website/src/content/blog/your-first-anki-deck.mdx",
+    "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+    "website/src/content/blog/es/your-first-anki-deck.mdx",
+    "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+    "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+    "website/src/content/blog/es/stable-ids-and-deck-updates.mdx"
+  ],
+  "totalPriorInputFiles": 160,
+  "sourceChecks": {
+    "docs": {
+      "source": "website/src/content/docs/docs/index.mdx",
+      "target": "docs/pt-br/index.md",
+      "protectedFences": 0,
+      "sourceReferences": []
+    },
+    "languages": {
+      "source": "website/src/content/docs/docs/languages.mdx",
+      "target": "docs/pt-br/languages.md",
+      "protectedFences": 0,
+      "sourceReferences": []
+    },
+    "quickstart": {
+      "source": "website/src/content/docs/docs/quickstart.mdx",
+      "target": "docs/pt-br/quickstart.md",
+      "protectedFences": 3,
+      "sourceReferences": [
+        "anki_forge/examples/target_api_basic.rs"
+      ]
+    },
+    "json-to-anki": {
+      "source": "docs/json-to-anki.md",
+      "target": "docs/pt-br/json-to-anki.md",
+      "protectedFences": 10,
+      "sourceReferences": [
+        "anki_forge/examples/json_to_anki.rs",
+        "bindings/python/examples/json_to_anki.py",
+        "bindings/node/examples/json_to_anki.mts"
+      ]
+    },
+    "csv-to-anki": {
+      "source": "docs/csv-to-anki.md",
+      "target": "docs/pt-br/csv-to-anki.md",
+      "protectedFences": 5,
+      "sourceReferences": [
+        "docs/recipes/csv-to-anki/cards.csv",
+        "bindings/python/examples/csv_to_anki.py"
+      ]
+    },
+    "ai-anki-cards": {
+      "source": "docs/ai-anki-cards.md",
+      "target": "docs/pt-br/ai-anki-cards.md",
+      "protectedFences": 2,
+      "sourceReferences": []
+    },
+    "anki-forge-vs-genanki": {
+      "source": "docs/anki-forge-vs-genanki.md",
+      "target": "docs/pt-br/anki-forge-vs-genanki.md",
+      "protectedFences": 0,
+      "sourceReferences": []
+    },
+    "development": {
+      "source": "docs/source-builds.md",
+      "target": "docs/pt-br/development.md",
+      "protectedFences": 3,
+      "sourceReferences": []
+    },
+    "rust-guide": {
+      "source": "docs/rust-guide.md",
+      "target": "docs/pt-br/rust-guide.md",
+      "protectedFences": 2,
+      "sourceReferences": []
+    },
+    "templates": {
+      "source": "docs/template-bundles.md",
+      "target": "docs/pt-br/templates.md",
+      "protectedFences": 5,
+      "sourceReferences": [
+        "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+        "anki_forge/examples/docs_workflow.rs#bundle"
+      ]
+    },
+    "api": {
+      "source": "docs/api-overview.md",
+      "target": "docs/pt-br/api.md",
+      "protectedFences": 0,
+      "sourceReferences": []
+    },
+    "installation": {
+      "source": "docs/installation.md",
+      "target": "docs/pt-br/installation.md",
+      "protectedFences": 2,
+      "sourceReferences": []
+    },
+    "concepts": {
+      "source": "docs/concepts.md",
+      "target": "docs/pt-br/concepts.md",
+      "protectedFences": 0,
+      "sourceReferences": []
+    },
+    "cards": {
+      "source": "docs/cards.md",
+      "target": "docs/pt-br/cards.md",
+      "protectedFences": 2,
+      "sourceReferences": [
+        "anki_forge/examples/docs_workflow.rs#cards"
+      ]
+    },
+    "custom-notetypes": {
+      "source": "docs/custom-notetypes.md",
+      "target": "docs/pt-br/custom-notetypes.md",
+      "protectedFences": 1,
+      "sourceReferences": [
+        "anki_forge/examples/target_api_custom_notetype.rs"
+      ]
+    },
+    "media": {
+      "source": "docs/media.md",
+      "target": "docs/pt-br/media.md",
+      "protectedFences": 4,
+      "sourceReferences": [
+        "anki_forge/examples/docs_workflow.rs#media"
+      ]
+    },
+    "image-occlusion": {
+      "source": "docs/image-occlusion.md",
+      "target": "docs/pt-br/image-occlusion.md",
+      "protectedFences": 3,
+      "sourceReferences": [
+        "anki_forge/examples/docs_workflow.rs#occlusion"
+      ]
+    },
+    "updates": {
+      "source": "docs/updates.md",
+      "target": "docs/pt-br/updates.md",
+      "protectedFences": 5,
+      "sourceReferences": [
+        "anki_forge/examples/docs_workflow.rs#updates",
+        "anki_forge/examples/docs_publication.rs"
+      ]
+    },
+    "build-guarantees": {
+      "source": "docs/build-guarantees.md",
+      "target": "docs/pt-br/build-guarantees.md",
+      "protectedFences": 0,
+      "sourceReferences": []
+    },
+    "troubleshooting": {
+      "source": "docs/troubleshooting.md",
+      "target": "docs/pt-br/troubleshooting.md",
+      "protectedFences": 0,
+      "sourceReferences": []
+    },
+    "compatibility": {
+      "source": "docs/compatibility.md",
+      "target": "docs/pt-br/compatibility.md",
+      "protectedFences": 0,
+      "sourceReferences": []
+    },
+    "rust-api": {
+      "source": "docs/rust-api.md",
+      "target": "docs/pt-br/rust-api.md",
+      "protectedFences": 1,
+      "sourceReferences": []
+    },
+    "node-quickstart": {
+      "source": "docs/node/quick-start.md",
+      "target": "docs/pt-br/node-quickstart.md",
+      "protectedFences": 3,
+      "sourceReferences": [
+        "bindings/node/examples/quickstart.mjs"
+      ]
+    },
+    "node-api": {
+      "source": "docs/node/api.md",
+      "target": "docs/pt-br/node-api.md",
+      "protectedFences": 4,
+      "sourceReferences": []
+    },
+    "python-quickstart": {
+      "source": "docs/python/quick-start.md",
+      "target": "docs/pt-br/python-quickstart.md",
+      "protectedFences": 3,
+      "sourceReferences": [
+        "bindings/python/examples/quickstart.py"
+      ]
+    },
+    "python-api": {
+      "source": "docs/python/api.md",
+      "target": "docs/pt-br/python-api.md",
+      "protectedFences": 1,
+      "sourceReferences": []
+    },
+    "python-diagnostics": {
+      "source": "docs/python/diagnostics.md",
+      "target": "docs/pt-br/python-diagnostics.md",
+      "protectedFences": 4,
+      "sourceReferences": []
+    },
+    "python-migration": {
+      "source": "bindings/python/MIGRATION.md",
+      "target": "docs/pt-br/python-migration.md",
+      "protectedFences": 0,
+      "sourceReferences": []
+    },
+    "genanki-migration": {
+      "source": "docs/python/genanki-migration.md",
+      "target": "docs/pt-br/genanki-migration.md",
+      "protectedFences": 1,
+      "sourceReferences": []
+    },
+    "blog:your-first-anki-deck": {
+      "source": "website/src/content/blog/your-first-anki-deck.mdx",
+      "target": "website/src/content/blog/pt-br/your-first-anki-deck.mdx",
+      "protectedFences": 0,
+      "sourceReferences": []
+    },
+    "blog:stable-ids-and-deck-updates": {
+      "source": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+      "target": "website/src/content/blog/pt-br/stable-ids-and-deck-updates.mdx",
+      "protectedFences": 0,
+      "sourceReferences": []
+    }
+  },
+  "totalProtectedFences": 64,
+  "exactSourceExcerpts": 16,
+  "promptChecks": [
+    {
+      "locale": "en",
+      "sdk": "rust",
+      "quickstart": "https://ankiforge.dev/docs/quickstart/"
+    },
+    {
+      "locale": "en",
+      "sdk": "node",
+      "quickstart": "https://ankiforge.dev/docs/node-quickstart/"
+    },
+    {
+      "locale": "en",
+      "sdk": "python",
+      "quickstart": "https://ankiforge.dev/docs/python-quickstart/"
+    },
+    {
+      "locale": "zh-CN",
+      "sdk": "rust",
+      "quickstart": "https://ankiforge.dev/zh-cn/docs/quickstart/"
+    },
+    {
+      "locale": "zh-CN",
+      "sdk": "node",
+      "quickstart": "https://ankiforge.dev/zh-cn/docs/node-quickstart/"
+    },
+    {
+      "locale": "zh-CN",
+      "sdk": "python",
+      "quickstart": "https://ankiforge.dev/zh-cn/docs/python-quickstart/"
+    },
+    {
+      "locale": "es",
+      "sdk": "rust",
+      "quickstart": "https://ankiforge.dev/es/docs/quickstart/"
+    },
+    {
+      "locale": "es",
+      "sdk": "node",
+      "quickstart": "https://ankiforge.dev/es/docs/node-quickstart/"
+    },
+    {
+      "locale": "es",
+      "sdk": "python",
+      "quickstart": "https://ankiforge.dev/es/docs/python-quickstart/"
+    },
+    {
+      "locale": "pt-BR",
+      "sdk": "rust",
+      "quickstart": "https://ankiforge.dev/pt-br/docs/quickstart/"
+    },
+    {
+      "locale": "pt-BR",
+      "sdk": "node",
+      "quickstart": "https://ankiforge.dev/pt-br/docs/node-quickstart/"
+    },
+    {
+      "locale": "pt-BR",
+      "sdk": "python",
+      "quickstart": "https://ankiforge.dev/pt-br/docs/python-quickstart/"
+    }
+  ],
+  "queryCount": 30,
+  "querySha256": "50d76cc7529666045345971a82d1371528ea9511e9b4ed9b11affae492ba42c4",
+  "resolvedFindings": [
+    {
+      "file": "website/search-queries.json",
+      "entry": "pt-BR-negative-02",
+      "finding": "Tool recipe schema requirement was incorrectly attributed to every public SDK invocation.",
+      "resolution": "Boundary now says tool recipes require v2; query and expected pages remain frozen."
+    },
+    {
+      "file": "docs/pt-br/rust-api.md",
+      "finding": "Inline Rust trait bound had an extra trailing apostrophe after the 'static lifetime.",
+      "resolution": "Matches authoritative English: std::error::Error + Send + Sync + 'static."
+    }
+  ]
+}

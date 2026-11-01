@@ -1,0 +1,60 @@
+---
+locale: pt-BR
+translationKey: your-first-anki-deck
+title: Crie seu primeiro baralho Anki com Rust
+description: De um pequeno programa em Rust a um cartão de vocabulário em espanhol que você pode abrir no Anki.
+date: 2026-09-22
+category: Tutorial
+---
+
+import CodeBlock from '../../../components/CodeBlock.astro';
+import { quickstartSource } from '../../../lib/examples';
+import { sitePath, repository } from '../../../lib/site';
+
+Quando suas notas já estão em um script, um conjunto de dados ou uma coleção de arquivos, gerar um baralho Anki pode facilitar a repetição do processo de criação. O código-fonte continua disponível para revisão no Git, e cada exportação se torna uma etapa que você pode executar novamente.
+
+Comece com uma palavra: **hola**. Queremos um cartão com a saudação em espanhol na frente e seu significado em inglês no verso.
+
+<span id="a-complete-program" data-section-alias="a-complete-program"></span>
+
+{/* section: a-complete-program */}
+## Um programa completo
+
+Este é o exemplo mínimo em Rust do repositório:
+
+<CodeBlock code={quickstartSource} />
+
+`Project::new("spanish")` cria o namespace. `Note::basic("hola", "hello")` cria uma nota Basic, `project.add("es:hola", note)` atribui sua chave estável, e `build(BuildOptions::to(...))` grava o pacote.
+
+`build` retorna `BuildOutput` somente após o sucesso. O operador `?` propaga uma falha tipada para que scripts possam encerrar com erro.
+
+<span id="install-and-run" data-section-alias="install-and-run"></span>
+
+{/* section: install-and-run */}
+## Instale e execute
+
+Siga o <a href={sitePath('/pt-br/docs/quickstart/')}>guia de início rápido atual</a> para instalar o pacote público e consultar o comando de execução. Para usar o mesmo programa no seu projeto, siga <a href={sitePath('/pt-br/docs/installation/')}>Integre à sua aplicação</a>.
+
+Após a exportação, importe `spanish.apkg` no Anki e revele a resposta do seu primeiro cartão.
+
+O <a href={sitePath('/pt-br/examples/#basic')}>exemplo Basic deste site</a> também oferece um pacote para baixar, caso você queira examinar o resultado primeiro.
+
+<span id="give-the-note-an-identity" data-section-alias="give-the-note-an-identity"></span>
+
+{/* section: give-the-note-an-identity */}
+## Dê uma identidade à nota
+
+A string `es:hola` é uma chave estável e explícita da nota dentro do namespace `spanish`. Ela identifica qual nota é essa, independentemente de como a resposta é escrita. Você pode, por exemplo, expandir “hello” para “hello; hi” mais tarde e manter o mesmo ID.
+
+Use um ID diferente para cada nota lógica. Se a origem já tiver uma chave durável, como o ID de uma entrada de vocabulário, esse é um bom ponto de partida. Evite derivar a identidade somente de um texto que você pretende editar.
+
+Atualizar um baralho distribuído também exige um histórico de versões. Mantenha o pacote original anterior e siga o <a href={sitePath('/pt-br/docs/updates/')}>fluxo de atualização documentado</a>.
+
+<span id="grow-from-one-note" data-section-alias="grow-from-one-note"></span>
+
+{/* section: grow-from-one-note */}
+## Vá além da primeira nota
+
+Para outra saudação, crie outra nota Basic e adicione-a com uma chave nova. Para ocultar uma palavra em uma frase, use uma <a href={sitePath('/pt-br/examples/#cloze')}>nota Cloze</a>. Para cartões mais completos, defina campos e templates com a API do projeto e inclua imagens ou áudio junto com as notas.
+
+O <a href={sitePath('/pt-br/docs/rust-guide/')}>guia de criação com Rust</a> avança para diagnósticos, mídia e gerações repetíveis. Os <a href={`${repository}/tree/main/anki_forge/examples`}>exemplos do repositório</a> oferecem programas executáveis que você pode ampliar.
