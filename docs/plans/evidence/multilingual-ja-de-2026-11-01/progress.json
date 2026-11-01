@@ -21,5 +21,13 @@
     "de": "/root/de_full_author: excluded evidence staging until Japanese acceptance complete"
   },
   "queries": "queries/authorship.json, independently written and frozen before production search vocabulary or ranking output was inspected",
-  "publicationBoundary": "Keep the verified three-language production baseline unchanged. P0 then Portuguese publication and production-baseline advancement remain prior deployment steps; candidate snapshots must not impersonate published historical surfaces."
+  "publicationBoundary": "Keep the verified three-language production baseline unchanged. P0 then Portuguese publication and production-baseline advancement remain prior deployment steps; candidate snapshots must not impersonate published historical surfaces.",
+  "japanese": {
+    "status": "local-acceptance-complete",
+    "sourceCommit": "5a50666dbc15e9aa7342de1d3d6587d1a9f147bd",
+    "inputSha256": "85f5276a59a50143053000a91fe702d76521e13fb9232db86a2498016a029d1f",
+    "independentPostBuildTasks": 100,
+    "unitTests": 149,
+    "acceptance": "ja/acceptance.md"
+  }
 }

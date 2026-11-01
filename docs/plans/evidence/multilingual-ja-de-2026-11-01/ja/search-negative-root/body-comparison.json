@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "previousCapture": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/http-observations.json",
+    "sha256": "db6e94f26f00ebad8bb96acd3eb8e8709d67fade021f93f4371703dbd83766c9"
+  },
+  "currentCapture": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/http-observations.json",
+    "sha256": "346fef2b8112503f6a170d0b3f234ca2cc771f0f7ce209ee46e3ed21031284b3"
+  },
+  "scope": "Fresh root requests retain the same five queries and twelve actual result rows. All paragraphs are exactly equal to the independently read prefix HTML. All mainText is also equal except one homepage noscript href, whose exact /anki-forge/ja/examples/ -> /ja/examples/ change was inspected and is correct for root deployment. No technical statement, capability boundary, code or result identity changed. This actual delta review retains the manually authored prefix semantic conclusions.",
+  "rows": [
+    {
+      "case": "ja-negative-02",
+      "pageId": "home",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/",
+      "previousSha256": "bf145f6cefc2e445d50bdb1d6bfd3016c02a6506743d1c613e1a3331a43a8f07",
+      "currentUrl": "http://127.0.0.1:56048/ja/",
+      "currentSha256": "3fed8784540b3dc69449757c6084457c370257ca7c2038e91b98e2fffe535e55",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "One noscript examples href changes from /anki-forge/ja/examples/ to /ja/examples/; inspected and correct."
+    },
+    {
+      "case": "ja-negative-02",
+      "pageId": "rust-guide",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/rust-guide/",
+      "previousSha256": "773810626fbb4079c48f8f3faa4d11539831c725885f56cf005ab18e00588536",
+      "currentUrl": "http://127.0.0.1:56048/ja/docs/rust-guide/",
+      "currentSha256": "82231416e0a7018861393ba8cef6cd2c150b5b2064864cd36cb245a33cfa2af9",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    },
+    {
+      "case": "ja-negative-02",
+      "pageId": "api",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/api/",
+      "previousSha256": "f47603daf80cd90508c87ae3f7d2681f1a5061a9be089b8badd1b5aae5462466",
+      "currentUrl": "http://127.0.0.1:56048/ja/docs/api/",
+      "currentSha256": "70ca2057882547f40d7b688e39f8839145896cee70cc3a08ac0d5770007f00fc",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    },
+    {
+      "case": "ja-negative-03",
+      "pageId": "updates",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/updates/",
+      "previousSha256": "6909513affa7bbd796b16d5e4d0f67bc7b9c080c5b9adbd3b7eb1e35a2bdd33f",
+      "currentUrl": "http://127.0.0.1:56048/ja/docs/updates/",
+      "currentSha256": "0521e819ff96b4e4c8642696690b12e60863ac1286de2261a8f03d66f5d8d6a4",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    },
+    {
+      "case": "ja-negative-03",
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/blog/stable-ids-and-deck-updates/",
+      "previousSha256": "ea929070e03969850fa2aa3d1204c0ae079615d6306c8e04efd9b1d545a59631",
+      "currentUrl": "http://127.0.0.1:56048/ja/blog/stable-ids-and-deck-updates/",
+      "currentSha256": "2651bc04f823edee3a61fb1c38ad9fa36685ec085931acadea3ec5275a01e008",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    },
+    {
+      "case": "ja-negative-03",
+      "pageId": "json-to-anki",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/json-to-anki/",
+      "previousSha256": "82fbbada5afd32cc166d7d72eca547671d192175813e6884877459970a19af1b",
+      "currentUrl": "http://127.0.0.1:56048/ja/docs/json-to-anki/",
+      "currentSha256": "e6e47412d66496133b6d95dba05b91d1e84bf8abf165f48c9f2a9d9829b8bb1a",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    },
+    {
+      "case": "ja-negative-04",
+      "pageId": "media",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/media/",
+      "previousSha256": "48a67483869f156525ad9eb0c74a61c33a2ccbc9941f46a9e01170bc947c1a98",
+      "currentUrl": "http://127.0.0.1:56048/ja/docs/media/",
+      "currentSha256": "e952d716159216e3471cc9d95f631ca1e4b6987a4fcd39d8f57d1a0ce8ee3ace",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    },
+    {
+      "case": "ja-negative-04",
+      "pageId": "rust-guide",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/rust-guide/",
+      "previousSha256": "773810626fbb4079c48f8f3faa4d11539831c725885f56cf005ab18e00588536",
+      "currentUrl": "http://127.0.0.1:56048/ja/docs/rust-guide/",
+      "currentSha256": "82231416e0a7018861393ba8cef6cd2c150b5b2064864cd36cb245a33cfa2af9",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    },
+    {
+      "case": "ja-negative-04",
+      "pageId": "json-to-anki",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/json-to-anki/",
+      "previousSha256": "82fbbada5afd32cc166d7d72eca547671d192175813e6884877459970a19af1b",
+      "currentUrl": "http://127.0.0.1:56048/ja/docs/json-to-anki/",
+      "currentSha256": "e6e47412d66496133b6d95dba05b91d1e84bf8abf165f48c9f2a9d9829b8bb1a",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    },
+    {
+      "case": "ja-negative-05",
+      "pageId": "updates",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/updates/",
+      "previousSha256": "6909513affa7bbd796b16d5e4d0f67bc7b9c080c5b9adbd3b7eb1e35a2bdd33f",
+      "currentUrl": "http://127.0.0.1:56048/ja/docs/updates/",
+      "currentSha256": "0521e819ff96b4e4c8642696690b12e60863ac1286de2261a8f03d66f5d8d6a4",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    },
+    {
+      "case": "ja-negative-05",
+      "pageId": "compatibility",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/compatibility/",
+      "previousSha256": "b8bbe4fc3c5ad9b5b15260b103e79ee6814818325daad46131d1967b096a46c2",
+      "currentUrl": "http://127.0.0.1:56048/ja/docs/compatibility/",
+      "currentSha256": "6fcb53e7f154f80ccee3357c3ea0a515f64c1a97c3ef398bac7c759c16689dcd",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    },
+    {
+      "case": "ja-negative-05",
+      "pageId": "ai-anki-cards",
+      "previousUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/ai-anki-cards/",
+      "previousSha256": "f06084e02c069edc87a52e7b9b99a66026b7cc79f816479cbec94b1d19599348",
+      "currentUrl": "http://127.0.0.1:56048/ja/docs/ai-anki-cards/",
+      "currentSha256": "65bd18aad8158f850a5e338c0936cacfbd6927bb5bf1d4610931565ecce12ecf",
+      "allParagraphsExactlyEqual": true,
+      "mainTextDelta": "None."
+    }
+  ]
+}
