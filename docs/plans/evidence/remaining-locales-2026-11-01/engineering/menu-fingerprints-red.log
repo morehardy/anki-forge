@@ -1,0 +1,261 @@
+✔ current release: language menus fingerprint active data without reading planned translations (2093.348208ms)
+✖ Brazilian Portuguese released: language menus fingerprint active data without reading planned translations (1876.7995ms)
+✖ all configured languages released: language menus fingerprint active data without reading planned translations (1885.032333ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6107.518625
+
+✖ failing tests:
+
+test at website/scripts/content-contract.test.mjs:235:212
+✖ Brazilian Portuguese released: language menus fingerprint active data without reading planned translations (1876.7995ms)
+  AssertionError [ERR_ASSERTION]: inactive locale records do not change selected-language review inputs
+  + actual - expected
+  
+    {
+      'blog/en': {
+  +     sourceHash: '4fa76732b2896f7b56ac13f909338877e1d8449244327f60338935c9c0823cbc',
+  +     targetHash: 'c41909d47b0fcac1de521089c245ca461b54b325897a6e2a3b4d6692d5efa766',
+  -     sourceHash: 'df4de8a2f9baab872b81c5abc45d89ef39db9497f92596708f87e9d4cc2930a5',
+  -     targetHash: '2fcc8eba44bc40690f66b130d4a2eb71a3fc68603e416c4896dfbd896897dda4',
+        technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d'
+      },
+      'blog/es': {
+  +     sourceHash: '4fa76732b2896f7b56ac13f909338877e1d8449244327f60338935c9c0823cbc',
+  +     targetHash: '81e803fa13c590a48ca257fcfb3a38063a00990efeffa85b3837a7776b8f13a8',
+  -     sourceHash: 'df4de8a2f9baab872b81c5abc45d89ef39db9497f92596708f87e9d4cc2930a5',
+  -     targetHash: 'c0328b0b02aac3c96764cfbb6a7e8f1aa7b5791fb7d7439b2cac20542c9bef2f',
+        technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a'
+      },
+      'blog/zh-CN': {
+  +     sourceHash: '4fa76732b2896f7b56ac13f909338877e1d8449244327f60338935c9c0823cbc',
+  +     targetHash: '28143323719fa756a1d67ecf1e15901430a78c5af5c43290590310b9ad2b8dd7',
+  -     sourceHash: 'df4de8a2f9baab872b81c5abc45d89ef39db9497f92596708f87e9d4cc2930a5',
+  -     targetHash: 'eba33e77cd926975f9444692edb52a217b33c52c41e2c6a5d5eab14519fd5d61',
+        technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3'
+      },
+      'blog:your-first-anki-deck/en': {
+  +     sourceHash: 'f761592383302f6e0eda236129072bcb3e57905bff9d93deb5dc9823dc354338',
+  +     targetHash: '261f4c89881df0991bcdf5dd279d09d447b6aec8d8d03e9d8116d0d8dfec9994',
+  -     sourceHash: '185f5b36686a2df4af9f21e8308720d4bcad97972a198199330718aa437702a8',
+  -     targetHash: 'a36a97cf6ffaafa78f4e12c79dcff2e7baa9db0abb604299f2d42b5915ae6985',
+        technicalDependencyHash: 'f204e5536f5cc1dc3b28aa8e5549476c463a2b0a00b307e6c929dcd5a59f2e22'
+      },
+      'blog:your-first-anki-deck/es': {
+  +     sourceHash: 'f761592383302f6e0eda236129072bcb3e57905bff9d93deb5dc9823dc354338',
+  +     targetHash: 'd0102861326566aeadb1ede56dbdf24d2e9b12e3b40b7ebd990a90e1cb732bdb',
+  -     sourceHash: '185f5b36686a2df4af9f21e8308720d4bcad97972a198199330718aa437702a8',
+  -     targetHash: 'f58c4618990ac32b5caf1679366ad1e625ebdef44719aaf955a4843f4485a065',
+        technicalDependencyHash: '720f894803b72cdca44bbe416218c103b0b439ce95b8706d5ff723e44c0fd831'
+      },
+      'blog:your-first-anki-deck/zh-CN': {
+  +     sourceHash: 'f761592383302f6e0eda236129072bcb3e57905bff9d93deb5dc9823dc354338',
+  +     targetHash: '6a4b389d822fb8ca1f10e6170d49fe253e0651c4d5a3bb8dbb45603844ad0bc8',
+  -     sourceHash: '185f5b36686a2df4af9f21e8308720d4bcad97972a198199330718aa437702a8',
+  -     targetHash: 'c4687702c6359302ac711f16e83d5ae7f649e165ae24ea70e5f56702e38a00ed',
+        technicalDependencyHash: 'f69d7a0c52ed6f2b82e4584a60632c7b9eff53f343825eebcb040fc8a98b3084'
+      },
+      'concepts/en': {
+  +     sourceHash: '78d4e91021af4da16555556148871ad433a11b7594ed5d15aeeda46d04b4fae2',
+  +     targetHash: '6b0c971efaf49e36b32d96b61fec006276413bab62dc11a01ad6dc2245212c90',
+  -     sourceHash: '113e52dc328401c62457155519e63ffedfd1eaa71953a5bfcab35aae4abdfa92',
+  -     targetHash: '98fae81f3c7144ba8def5164273c9b1c5997718eb9154e9940c5718ff40865d9',
+        technicalDependencyHash: 'dbe1319d3ac54e6260abc65c8c83cedc4ec5cb4a4efbd45dd6274e82d56ebe18'
+      },
+      'concepts/es': {
+  +     sourceHash: '78d4e91021af4da16555556148871ad433a11b7594ed5d15aeeda46d04b4fae2',
+  +     targetHash: '6fadfbc853889d68027a1cd1dcb35ff2cf82a23b993e0175af8b1f7babe06718',
+  -     sourceHash: '113e52dc328401c62457155519e63ffedfd1eaa71953a5bfcab35aae4abdfa92',
+  -     targetHash: '8ab9b5c2725ff7c4dbcf3b3ddebf729784a6ff019215dc4803c72fcc743ec3ca',
+        technicalDependencyHash: '40a8c0731c21e63444ce845d8544c964980be77a48fa198b341a743869bb6ca2'
+      },
+      'concepts/zh-CN': {
+  +     sourceHash: '78d4e91021af4da16555556148871ad433a11b7594ed5d15aeeda46d04b4fae2',
+  +     targetHash: '6504c9b4ee942b7c26d57ac18125e833f7f59a0889a0bc23dfe9b48eb475c976',
+  -     sourceHash: '113e52dc328401c62457155519e63ffedfd1eaa71953a5bfcab35aae4abdfa92',
+  -     targetHash: '83aff6e2972fae8c2116bcf89b027ca58bcd12463c5aa38b70b3e9a04e49f0b9',
+        technicalDependencyHash: 'a83763538d883a649f8a96a75c8d65089e780fe6d158dec2e76e3600aa8e3371'
+      },
+      'examples/en': {
+  +     sourceHash: '527fee8d55784728036dc7c18f38b0377fcfb59d3ae1bac944d4a0630bf17491',
+  +     targetHash: '0db790f22cad1d59f97ed2e1a75d06cee691f4211b31b457d2487e37399ad810',
+  -     sourceHash: '93942fe3e85816ee9f3306c7ce30c32f7e7f57ba26e577e4d72e4c521f277cb5',
+  -     targetHash: '3be924792a1f4b996dce9889521b991e77471aabb43bc432041b563966dbe5b5',
+        technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d'
+      },
+      'examples/es': {
+  +     sourceHash: '527fee8d55784728036dc7c18f38b0377fcfb59d3ae1bac944d4a0630bf17491',
+  +     targetHash: 'aa16193f0c9a9b3d93712010582ad1fdd5ad27e87ddf7204ffe6ece5713705bf',
+  -     sourceHash: '93942fe3e85816ee9f3306c7ce30c32f7e7f57ba26e577e4d72e4c521f277cb5',
+  -     targetHash: '91da4b2a2a39d4eb79b883fe4c47f5433d4322e38fd7092a1f8dbee1b91a3dfb',
+        technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a'
+      },
+      'examples/zh-CN': {
+  +     sourceHash: '527fee8d55784728036dc7c18f38b0377fcfb59d3ae1bac944d4a0630bf17491',
+  +     targetHash: '4b274e1d304d645f46c4989eebea02d123f3ba466cc9d4c4c9a71390575fa252',
+  -     sourceHash: '93942fe3e85816ee9f3306c7ce30c32f7e7f57ba26e577e4d72e4c521f277cb5',
+  -     targetHash: '67b0f2faf19e11c8a1b7fc29bd9971571e6185fa14bab66bfa0b388c0b84a921',
+        technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3'
+      },
+      'home/en': {
+  +     sourceHash: '22ae5ca3cd2a9df1a4cedc44c417b8ef9b29c0489bb94c02c26f00924db1c89f',
+  +     targetHash: 'e73b246776b79e770d140f585108c03961cf97c75f10a07cb78ab13b72820ab3',
+  -     sourceHash: '4f6adc47ede4415460697101f8ecebac0f8c8fde7dcef5cb3c8e6403eba0c221',
+  -     targetHash: '84deebf05edc3da3a14d4edff22460745f6e60303730f185005e08c5c4e3a378',
+        technicalDependencyHash: 'a08744063484520e81212d17d097b280da598808773121e48e07668b5a079efd'
+      },
+      'home/es': {
+  +     sourceHash: '22ae5ca3cd2a9df1a4cedc44c417b8ef9b29c0489bb94c02c26f00924db1c89f',
+  +     targetHash: 'c6b2c1d39dbde47c981ac068388657e483cc6b3346a2817380f3154856cf3a2a',
+  -     sourceHash: '4f6adc47ede4415460697101f8ecebac0f8c8fde7dcef5cb3c8e6403eba0c221',
+  -     targetHash: '4831a143bfc2afe713944d73627e9b7242b24d5a60dbed294033a5129df1b4a9',
+        technicalDependencyHash: '054e204c025fd05caba909b4cd0e876e29b709f1e1d90d3d10601cacb2d54585'
+      },
+      'home/zh-CN': {
+  +     sourceHash: '22ae5ca3cd2a9df1a4cedc44c417b8ef9b29c0489bb94c02c26f00924db1c89f',
+  +     targetHash: 'f8ed20808ed54311000e502eee8484a0710bb13814b29cb067dfd3e34c26694d',
+  -     sourceHash: '4f6adc47ede4415460697101f8ecebac0f8c8fde7dcef5cb3c8e6403eba0c221',
+  -     targetHash: 'dacd64b9e4a7faafa3a2704648d64076e8afea8136e656e2fa5962539394fdb6',
+        technicalDependencyHash: 'ad9cdc1bcc896291848f59193316d44ae3f8154f7b317e55666fa4593824ee02'
+      }
+    }
+  
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/content-contract.test.mjs:248:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { 'home/en': { sourceHash: '22ae5ca3cd2a9df1a4cedc44c417b8ef9b29c0489bb94c02c26f00924db1c89f', targetHash: 'e73b246776b79e770d140f585108c03961cf97c75f10a07cb78ab13b72820ab3', technicalDependencyHash: 'a08744063484520e81212d17d097b280da598808773121e48e07668b5a079efd' }, 'home/zh-CN': { sourceHash: '22ae5ca3cd2a9df1a4cedc44c417b8ef9b29c0489bb94c02c26f00924db1c89f', targetHash: 'f8ed20808ed54311000e502eee8484a0710bb13814b29cb067dfd3e34c26694d', technicalDependencyHash: 'ad9cdc1bcc896291848f59193316d44ae3f8154f7b317e55666fa4593824ee02' }, 'home/es': { sourceHash: '22ae5ca3cd2a9df1a4cedc44c417b8ef9b29c0489bb94c02c26f00924db1c89f', targetHash: 'c6b2c1d39dbde47c981ac068388657e483cc6b3346a2817380f3154856cf3a2a', technicalDependencyHash: '054e204c025fd05caba909b4cd0e876e29b709f1e1d90d3d10601cacb2d54585' }, 'examples/en': { sourceHash: '527fee8d55784728036dc7c18f38b0377fcfb59d3ae1bac944d4a0630bf17491', targetHash: '0db790f22cad1d59f97ed2e1a75d06cee691f4211b31b457d2487e37399ad810', technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d' }, 'examples/zh-CN': { sourceHash: '527fee8d55784728036dc7c18f38b0377fcfb59d3ae1bac944d4a0630bf17491', targetHash: '4b274e1d304d645f46c4989eebea02d123f3ba466cc9d4c4c9a71390575fa252', technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3' }, 'examples/es': { sourceHash: '527fee8d55784728036dc7c18f38b0377fcfb59d3ae1bac944d4a0630bf17491', targetHash: 'aa16193f0c9a9b3d93712010582ad1fdd5ad27e87ddf7204ffe6ece5713705bf', technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a' }, 'blog/en': { sourceHash: '4fa76732b2896f7b56ac13f909338877e1d8449244327f60338935c9c0823cbc', targetHash: 'c41909d47b0fcac1de521089c245ca461b54b325897a6e2a3b4d6692d5efa766', technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d' }, 'blog/zh-CN': { sourceHash: '4fa76732b2896f7b56ac13f909338877e1d8449244327f60338935c9c0823cbc', targetHash: '28143323719fa756a1d67ecf1e15901430a78c5af5c43290590310b9ad2b8dd7', technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3' }, 'blog/es': { sourceHash: '4fa76732b2896f7b56ac13f909338877e1d8449244327f60338935c9c0823cbc', targetHash: '81e803fa13c590a48ca257fcfb3a38063a00990efeffa85b3837a7776b8f13a8', technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a' }, 'concepts/en': { sourceHash: '78d4e91021af4da16555556148871ad433a11b7594ed5d15aeeda46d04b4fae2', targetHash: '6b0c971efaf49e36b32d96b61fec006276413bab62dc11a01ad6dc2245212c90', technicalDependencyHash: 'dbe1319d3ac54e6260abc65c8c83cedc4ec5cb4a4efbd45dd6274e82d56ebe18' }, 'concepts/zh-CN': { sourceHash: '78d4e91021af4da16555556148871ad433a11b7594ed5d15aeeda46d04b4fae2', targetHash: '6504c9b4ee942b7c26d57ac18125e833f7f59a0889a0bc23dfe9b48eb475c976', technicalDependencyHash: 'a83763538d883a649f8a96a75c8d65089e780fe6d158dec2e76e3600aa8e3371' }, 'concepts/es': { sourceHash: '78d4e91021af4da16555556148871ad433a11b7594ed5d15aeeda46d04b4fae2', targetHash: '6fadfbc853889d68027a1cd1dcb35ff2cf82a23b993e0175af8b1f7babe06718', technicalDependencyHash: '40a8c0731c21e63444ce845d8544c964980be77a48fa198b341a743869bb6ca2' }, 'blog:your-first-anki-deck/en': { sourceHash: 'f761592383302f6e0eda236129072bcb3e57905bff9d93deb5dc9823dc354338', targetHash: '261f4c89881df0991bcdf5dd279d09d447b6aec8d8d03e9d8116d0d8dfec9994', technicalDependencyHash: 'f204e5536f5cc1dc3b28aa8e5549476c463a2b0a00b307e6c929dcd5a59f2e22' }, 'blog:your-first-anki-deck/zh-CN': { sourceHash: 'f761592383302f6e0eda236129072bcb3e57905bff9d93deb5dc9823dc354338', targetHash: '6a4b389d822fb8ca1f10e6170d49fe253e0651c4d5a3bb8dbb45603844ad0bc8', technicalDependencyHash: 'f69d7a0c52ed6f2b82e4584a60632c7b9eff53f343825eebcb040fc8a98b3084' }, 'blog:your-first-anki-deck/es': { sourceHash: 'f761592383302f6e0eda236129072bcb3e57905bff9d93deb5dc9823dc354338', targetHash: 'd0102861326566aeadb1ede56dbdf24d2e9b12e3b40b7ebd990a90e1cb732bdb', technicalDependencyHash: '720f894803b72cdca44bbe416218c103b0b439ce95b8706d5ff723e44c0fd831' } },
+    expected: { 'home/en': { sourceHash: '4f6adc47ede4415460697101f8ecebac0f8c8fde7dcef5cb3c8e6403eba0c221', targetHash: '84deebf05edc3da3a14d4edff22460745f6e60303730f185005e08c5c4e3a378', technicalDependencyHash: 'a08744063484520e81212d17d097b280da598808773121e48e07668b5a079efd' }, 'home/zh-CN': { sourceHash: '4f6adc47ede4415460697101f8ecebac0f8c8fde7dcef5cb3c8e6403eba0c221', targetHash: 'dacd64b9e4a7faafa3a2704648d64076e8afea8136e656e2fa5962539394fdb6', technicalDependencyHash: 'ad9cdc1bcc896291848f59193316d44ae3f8154f7b317e55666fa4593824ee02' }, 'home/es': { sourceHash: '4f6adc47ede4415460697101f8ecebac0f8c8fde7dcef5cb3c8e6403eba0c221', targetHash: '4831a143bfc2afe713944d73627e9b7242b24d5a60dbed294033a5129df1b4a9', technicalDependencyHash: '054e204c025fd05caba909b4cd0e876e29b709f1e1d90d3d10601cacb2d54585' }, 'examples/en': { sourceHash: '93942fe3e85816ee9f3306c7ce30c32f7e7f57ba26e577e4d72e4c521f277cb5', targetHash: '3be924792a1f4b996dce9889521b991e77471aabb43bc432041b563966dbe5b5', technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d' }, 'examples/zh-CN': { sourceHash: '93942fe3e85816ee9f3306c7ce30c32f7e7f57ba26e577e4d72e4c521f277cb5', targetHash: '67b0f2faf19e11c8a1b7fc29bd9971571e6185fa14bab66bfa0b388c0b84a921', technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3' }, 'examples/es': { sourceHash: '93942fe3e85816ee9f3306c7ce30c32f7e7f57ba26e577e4d72e4c521f277cb5', targetHash: '91da4b2a2a39d4eb79b883fe4c47f5433d4322e38fd7092a1f8dbee1b91a3dfb', technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a' }, 'blog/en': { sourceHash: 'df4de8a2f9baab872b81c5abc45d89ef39db9497f92596708f87e9d4cc2930a5', targetHash: '2fcc8eba44bc40690f66b130d4a2eb71a3fc68603e416c4896dfbd896897dda4', technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d' }, 'blog/zh-CN': { sourceHash: 'df4de8a2f9baab872b81c5abc45d89ef39db9497f92596708f87e9d4cc2930a5', targetHash: 'eba33e77cd926975f9444692edb52a217b33c52c41e2c6a5d5eab14519fd5d61', technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3' }, 'blog/es': { sourceHash: 'df4de8a2f9baab872b81c5abc45d89ef39db9497f92596708f87e9d4cc2930a5', targetHash: 'c0328b0b02aac3c96764cfbb6a7e8f1aa7b5791fb7d7439b2cac20542c9bef2f', technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a' }, 'concepts/en': { sourceHash: '113e52dc328401c62457155519e63ffedfd1eaa71953a5bfcab35aae4abdfa92', targetHash: '98fae81f3c7144ba8def5164273c9b1c5997718eb9154e9940c5718ff40865d9', technicalDependencyHash: 'dbe1319d3ac54e6260abc65c8c83cedc4ec5cb4a4efbd45dd6274e82d56ebe18' }, 'concepts/zh-CN': { sourceHash: '113e52dc328401c62457155519e63ffedfd1eaa71953a5bfcab35aae4abdfa92', targetHash: '83aff6e2972fae8c2116bcf89b027ca58bcd12463c5aa38b70b3e9a04e49f0b9', technicalDependencyHash: 'a83763538d883a649f8a96a75c8d65089e780fe6d158dec2e76e3600aa8e3371' }, 'concepts/es': { sourceHash: '113e52dc328401c62457155519e63ffedfd1eaa71953a5bfcab35aae4abdfa92', targetHash: '8ab9b5c2725ff7c4dbcf3b3ddebf729784a6ff019215dc4803c72fcc743ec3ca', technicalDependencyHash: '40a8c0731c21e63444ce845d8544c964980be77a48fa198b341a743869bb6ca2' }, 'blog:your-first-anki-deck/en': { sourceHash: '185f5b36686a2df4af9f21e8308720d4bcad97972a198199330718aa437702a8', targetHash: 'a36a97cf6ffaafa78f4e12c79dcff2e7baa9db0abb604299f2d42b5915ae6985', technicalDependencyHash: 'f204e5536f5cc1dc3b28aa8e5549476c463a2b0a00b307e6c929dcd5a59f2e22' }, 'blog:your-first-anki-deck/zh-CN': { sourceHash: '185f5b36686a2df4af9f21e8308720d4bcad97972a198199330718aa437702a8', targetHash: 'c4687702c6359302ac711f16e83d5ae7f649e165ae24ea70e5f56702e38a00ed', technicalDependencyHash: 'f69d7a0c52ed6f2b82e4584a60632c7b9eff53f343825eebcb040fc8a98b3084' }, 'blog:your-first-anki-deck/es': { sourceHash: '185f5b36686a2df4af9f21e8308720d4bcad97972a198199330718aa437702a8', targetHash: 'f58c4618990ac32b5caf1679366ad1e625ebdef44719aaf955a4843f4485a065', technicalDependencyHash: '720f894803b72cdca44bbe416218c103b0b439ce95b8706d5ff723e44c0fd831' } },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at website/scripts/content-contract.test.mjs:235:212
+✖ all configured languages released: language menus fingerprint active data without reading planned translations (1885.032333ms)
+  AssertionError [ERR_ASSERTION]: inactive locale records do not change selected-language review inputs
+  + actual - expected
+  
+    {
+      'blog/en': {
+  +     sourceHash: 'd223b8a5fece33701ad94463c7ee8a4eed2f28d477514d37621665833d2de670',
+  +     targetHash: '39d0b5e70bf3b373f92107182206ff1db5758aefd443dad87ed62a7a3cff0ec0',
+  -     sourceHash: 'ce5ba334c07f20edc7ac5d45d612f33df538a1f632188d1c28246e9d59fbdef7',
+  -     targetHash: 'e4a17a53ee38150d43031fd6acb979204221b2bb30606f0cdc7a39ddaafdf8a6',
+        technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d'
+      },
+      'blog/es': {
+  +     sourceHash: 'd223b8a5fece33701ad94463c7ee8a4eed2f28d477514d37621665833d2de670',
+  +     targetHash: 'd83dc9d5a8c46f4100b61e0792294a43e9a5659c11d315b79bbfdd446acb6591',
+  -     sourceHash: 'ce5ba334c07f20edc7ac5d45d612f33df538a1f632188d1c28246e9d59fbdef7',
+  -     targetHash: '8cf61e4d13fa098e290f748673a1da7d02dcfc32ff705cdecf910f6de14d219b',
+        technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a'
+      },
+      'blog/zh-CN': {
+  +     sourceHash: 'd223b8a5fece33701ad94463c7ee8a4eed2f28d477514d37621665833d2de670',
+  +     targetHash: '63306d021122056f11ad836fe53e7d7f57a4f471a31c1c8f32980875b35b3102',
+  -     sourceHash: 'ce5ba334c07f20edc7ac5d45d612f33df538a1f632188d1c28246e9d59fbdef7',
+  -     targetHash: '648c6ba030723b31ce14dfb63c0783d9b425cdcd086d9b058de0b93ab2d333ef',
+        technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3'
+      },
+      'blog:your-first-anki-deck/en': {
+  +     sourceHash: 'c480a1ff6228f99a786d9760d63a6c4ef3d7adf0c7ffaea07b34eeea3f15cf4b',
+  +     targetHash: '561091cb2fd5fa74b502a34de929212b697d7be82b7cb5ec477a609fb7354c00',
+  -     sourceHash: 'aea9e1cddba3ae06005bb89197056aced85d4b761e27e4202b7922b23df23535',
+  -     targetHash: '49bf82d6b203a377de770d8e72d0d26eee3e1443737224010d4f0afb93ee283f',
+        technicalDependencyHash: 'f204e5536f5cc1dc3b28aa8e5549476c463a2b0a00b307e6c929dcd5a59f2e22'
+      },
+      'blog:your-first-anki-deck/es': {
+  +     sourceHash: 'c480a1ff6228f99a786d9760d63a6c4ef3d7adf0c7ffaea07b34eeea3f15cf4b',
+  +     targetHash: 'c58dede090632cdd97e9df47405235eb705f10adba59f03e86720bdb122c257f',
+  -     sourceHash: 'aea9e1cddba3ae06005bb89197056aced85d4b761e27e4202b7922b23df23535',
+  -     targetHash: '7d4955c8a1709f05f436d845956810ab4950c57b04e030429772e5949ceb4a37',
+        technicalDependencyHash: '720f894803b72cdca44bbe416218c103b0b439ce95b8706d5ff723e44c0fd831'
+      },
+      'blog:your-first-anki-deck/zh-CN': {
+  +     sourceHash: 'c480a1ff6228f99a786d9760d63a6c4ef3d7adf0c7ffaea07b34eeea3f15cf4b',
+  +     targetHash: '9c5a0adf696dc518c10a9b62bdef256fab7e3df50cb9e6d5f4cd2a410bf92ed5',
+  -     sourceHash: 'aea9e1cddba3ae06005bb89197056aced85d4b761e27e4202b7922b23df23535',
+  -     targetHash: 'fc8a3a7613918f5b6ff34020bdeddead81737f87c8afce2128c363a0ce437a85',
+        technicalDependencyHash: 'f69d7a0c52ed6f2b82e4584a60632c7b9eff53f343825eebcb040fc8a98b3084'
+      },
+      'concepts/en': {
+  +     sourceHash: '28a6505f5c5ef1cdf5fd2e62285a708e5cd4f86e495b84a13024e6b952623ac9',
+  +     targetHash: 'd33bca436d238b0cec06189a2c6b0404fe8a8d39d80b557855a8e31b73050739',
+  -     sourceHash: 'c1c4cc5495f52ccb907b72a25616593734274de0abf0bde6601fc7a2316905d3',
+  -     targetHash: 'dbadec0ff693eca41eeae286f4b8394312078dbbd30860d5b8d16489a228b965',
+        technicalDependencyHash: 'dbe1319d3ac54e6260abc65c8c83cedc4ec5cb4a4efbd45dd6274e82d56ebe18'
+      },
+      'concepts/es': {
+  +     sourceHash: '28a6505f5c5ef1cdf5fd2e62285a708e5cd4f86e495b84a13024e6b952623ac9',
+  +     targetHash: 'fe149d3656d99ff46a0253f95adb9fd6590e07a87a635e916053e8ba35e5a8d1',
+  -     sourceHash: 'c1c4cc5495f52ccb907b72a25616593734274de0abf0bde6601fc7a2316905d3',
+  -     targetHash: 'ffd883fc9298bf095ceab57447feb2af065f62dea5c380c8cb81e3f0c9b9f7e6',
+        technicalDependencyHash: '40a8c0731c21e63444ce845d8544c964980be77a48fa198b341a743869bb6ca2'
+      },
+      'concepts/zh-CN': {
+  +     sourceHash: '28a6505f5c5ef1cdf5fd2e62285a708e5cd4f86e495b84a13024e6b952623ac9',
+  +     targetHash: 'b09d541859af41cd0abcf19331fdd23460681f520190c6812a10cecf30b31101',
+  -     sourceHash: 'c1c4cc5495f52ccb907b72a25616593734274de0abf0bde6601fc7a2316905d3',
+  -     targetHash: 'd2360c01f9aff3ca2c19a64f29cdd3a394f67fee4b55131ee2596566bd9c56ae',
+        technicalDependencyHash: 'a83763538d883a649f8a96a75c8d65089e780fe6d158dec2e76e3600aa8e3371'
+      },
+      'examples/en': {
+  +     sourceHash: '67587f22fc44bcd0b6fe1a9f4c91c362e7c97db2246b50d8b2ad6e347343ff1d',
+  +     targetHash: '72e566bd00665a396115fad1158404d4db8e745034f33f0329d05ddfa14aa10b',
+  -     sourceHash: '152f127dcf290889e136a69c23374b2a47d2065c95416378bda5fad52f7d259e',
+  -     targetHash: 'c0f96a89ffdb20bb21eaf646b604a912811841022a777d733df73c98539defee',
+        technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d'
+      },
+      'examples/es': {
+  +     sourceHash: '67587f22fc44bcd0b6fe1a9f4c91c362e7c97db2246b50d8b2ad6e347343ff1d',
+  +     targetHash: '2ac54a5a2c3993540bbef3574df2a11d6221e3fc195e3373c81f7c7f7c26661d',
+  -     sourceHash: '152f127dcf290889e136a69c23374b2a47d2065c95416378bda5fad52f7d259e',
+  -     targetHash: 'e5b811237a9231ecf036aa607047addeac75ad3bd7a0e15180223e3fe82467d6',
+        technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a'
+      },
+      'examples/zh-CN': {
+  +     sourceHash: '67587f22fc44bcd0b6fe1a9f4c91c362e7c97db2246b50d8b2ad6e347343ff1d',
+  +     targetHash: '7079c9ac4ff2206eb5f0adcb240cec584672fc00aeb5658f923ce0008774fc26',
+  -     sourceHash: '152f127dcf290889e136a69c23374b2a47d2065c95416378bda5fad52f7d259e',
+  -     targetHash: '4930cd1a365053ffef2a7dfb319ed94c9f5a0098c5ba466fadcfd260cb790993',
+        technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3'
+      },
+      'home/en': {
+  +     sourceHash: 'eb5ec147558aa344e30935f10c1c98765cc2ed094e47c01dbe0a4c32dbb70714',
+  +     targetHash: 'd97cc2ed5201b6265c4896f3dede03c5bab5178dd161d88715d09f3de7984534',
+  -     sourceHash: '2d5f94ed57cfdf091b7a509f768244e330228051e857a30bb9e95d868e8110ab',
+  -     targetHash: '8faabd19bb2daf612a67fa7a003115956afec429a8519fd20b275b4e5efd1011',
+        technicalDependencyHash: 'a08744063484520e81212d17d097b280da598808773121e48e07668b5a079efd'
+      },
+      'home/es': {
+  +     sourceHash: 'eb5ec147558aa344e30935f10c1c98765cc2ed094e47c01dbe0a4c32dbb70714',
+  +     targetHash: '4882b64f33477c7c1c3c20b265f217ecbe4c0b07f9b265d256b0352e85a43059',
+  -     sourceHash: '2d5f94ed57cfdf091b7a509f768244e330228051e857a30bb9e95d868e8110ab',
+  -     targetHash: 'e5df1518bda82d5f1614c26bad04eac320de35a23230c0a6f1ebda393e5635e9',
+        technicalDependencyHash: '054e204c025fd05caba909b4cd0e876e29b709f1e1d90d3d10601cacb2d54585'
+      },
+      'home/zh-CN': {
+  +     sourceHash: 'eb5ec147558aa344e30935f10c1c98765cc2ed094e47c01dbe0a4c32dbb70714',
+  +     targetHash: '5b6819a23a3fedc9b27f2c95833b7ad671dd749f58278f3c5b2ac8f6d9d2b37f',
+  -     sourceHash: '2d5f94ed57cfdf091b7a509f768244e330228051e857a30bb9e95d868e8110ab',
+  -     targetHash: 'bfc078f24baeb3581cb22d1fbca1812abfa1dc7b73dc97c09a4839a936525ae8',
+        technicalDependencyHash: 'ad9cdc1bcc896291848f59193316d44ae3f8154f7b317e55666fa4593824ee02'
+      }
+    }
+  
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/content-contract.test.mjs:248:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { 'home/en': { sourceHash: 'eb5ec147558aa344e30935f10c1c98765cc2ed094e47c01dbe0a4c32dbb70714', targetHash: 'd97cc2ed5201b6265c4896f3dede03c5bab5178dd161d88715d09f3de7984534', technicalDependencyHash: 'a08744063484520e81212d17d097b280da598808773121e48e07668b5a079efd' }, 'home/zh-CN': { sourceHash: 'eb5ec147558aa344e30935f10c1c98765cc2ed094e47c01dbe0a4c32dbb70714', targetHash: '5b6819a23a3fedc9b27f2c95833b7ad671dd749f58278f3c5b2ac8f6d9d2b37f', technicalDependencyHash: 'ad9cdc1bcc896291848f59193316d44ae3f8154f7b317e55666fa4593824ee02' }, 'home/es': { sourceHash: 'eb5ec147558aa344e30935f10c1c98765cc2ed094e47c01dbe0a4c32dbb70714', targetHash: '4882b64f33477c7c1c3c20b265f217ecbe4c0b07f9b265d256b0352e85a43059', technicalDependencyHash: '054e204c025fd05caba909b4cd0e876e29b709f1e1d90d3d10601cacb2d54585' }, 'examples/en': { sourceHash: '67587f22fc44bcd0b6fe1a9f4c91c362e7c97db2246b50d8b2ad6e347343ff1d', targetHash: '72e566bd00665a396115fad1158404d4db8e745034f33f0329d05ddfa14aa10b', technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d' }, 'examples/zh-CN': { sourceHash: '67587f22fc44bcd0b6fe1a9f4c91c362e7c97db2246b50d8b2ad6e347343ff1d', targetHash: '7079c9ac4ff2206eb5f0adcb240cec584672fc00aeb5658f923ce0008774fc26', technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3' }, 'examples/es': { sourceHash: '67587f22fc44bcd0b6fe1a9f4c91c362e7c97db2246b50d8b2ad6e347343ff1d', targetHash: '2ac54a5a2c3993540bbef3574df2a11d6221e3fc195e3373c81f7c7f7c26661d', technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a' }, 'blog/en': { sourceHash: 'd223b8a5fece33701ad94463c7ee8a4eed2f28d477514d37621665833d2de670', targetHash: '39d0b5e70bf3b373f92107182206ff1db5758aefd443dad87ed62a7a3cff0ec0', technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d' }, 'blog/zh-CN': { sourceHash: 'd223b8a5fece33701ad94463c7ee8a4eed2f28d477514d37621665833d2de670', targetHash: '63306d021122056f11ad836fe53e7d7f57a4f471a31c1c8f32980875b35b3102', technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3' }, 'blog/es': { sourceHash: 'd223b8a5fece33701ad94463c7ee8a4eed2f28d477514d37621665833d2de670', targetHash: 'd83dc9d5a8c46f4100b61e0792294a43e9a5659c11d315b79bbfdd446acb6591', technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a' }, 'concepts/en': { sourceHash: '28a6505f5c5ef1cdf5fd2e62285a708e5cd4f86e495b84a13024e6b952623ac9', targetHash: 'd33bca436d238b0cec06189a2c6b0404fe8a8d39d80b557855a8e31b73050739', technicalDependencyHash: 'dbe1319d3ac54e6260abc65c8c83cedc4ec5cb4a4efbd45dd6274e82d56ebe18' }, 'concepts/zh-CN': { sourceHash: '28a6505f5c5ef1cdf5fd2e62285a708e5cd4f86e495b84a13024e6b952623ac9', targetHash: 'b09d541859af41cd0abcf19331fdd23460681f520190c6812a10cecf30b31101', technicalDependencyHash: 'a83763538d883a649f8a96a75c8d65089e780fe6d158dec2e76e3600aa8e3371' }, 'concepts/es': { sourceHash: '28a6505f5c5ef1cdf5fd2e62285a708e5cd4f86e495b84a13024e6b952623ac9', targetHash: 'fe149d3656d99ff46a0253f95adb9fd6590e07a87a635e916053e8ba35e5a8d1', technicalDependencyHash: '40a8c0731c21e63444ce845d8544c964980be77a48fa198b341a743869bb6ca2' }, 'blog:your-first-anki-deck/en': { sourceHash: 'c480a1ff6228f99a786d9760d63a6c4ef3d7adf0c7ffaea07b34eeea3f15cf4b', targetHash: '561091cb2fd5fa74b502a34de929212b697d7be82b7cb5ec477a609fb7354c00', technicalDependencyHash: 'f204e5536f5cc1dc3b28aa8e5549476c463a2b0a00b307e6c929dcd5a59f2e22' }, 'blog:your-first-anki-deck/zh-CN': { sourceHash: 'c480a1ff6228f99a786d9760d63a6c4ef3d7adf0c7ffaea07b34eeea3f15cf4b', targetHash: '9c5a0adf696dc518c10a9b62bdef256fab7e3df50cb9e6d5f4cd2a410bf92ed5', technicalDependencyHash: 'f69d7a0c52ed6f2b82e4584a60632c7b9eff53f343825eebcb040fc8a98b3084' }, 'blog:your-first-anki-deck/es': { sourceHash: 'c480a1ff6228f99a786d9760d63a6c4ef3d7adf0c7ffaea07b34eeea3f15cf4b', targetHash: 'c58dede090632cdd97e9df47405235eb705f10adba59f03e86720bdb122c257f', technicalDependencyHash: '720f894803b72cdca44bbe416218c103b0b439ce95b8706d5ff723e44c0fd831' } },
+    expected: { 'home/en': { sourceHash: '2d5f94ed57cfdf091b7a509f768244e330228051e857a30bb9e95d868e8110ab', targetHash: '8faabd19bb2daf612a67fa7a003115956afec429a8519fd20b275b4e5efd1011', technicalDependencyHash: 'a08744063484520e81212d17d097b280da598808773121e48e07668b5a079efd' }, 'home/zh-CN': { sourceHash: '2d5f94ed57cfdf091b7a509f768244e330228051e857a30bb9e95d868e8110ab', targetHash: 'bfc078f24baeb3581cb22d1fbca1812abfa1dc7b73dc97c09a4839a936525ae8', technicalDependencyHash: 'ad9cdc1bcc896291848f59193316d44ae3f8154f7b317e55666fa4593824ee02' }, 'home/es': { sourceHash: '2d5f94ed57cfdf091b7a509f768244e330228051e857a30bb9e95d868e8110ab', targetHash: 'e5df1518bda82d5f1614c26bad04eac320de35a23230c0a6f1ebda393e5635e9', technicalDependencyHash: '054e204c025fd05caba909b4cd0e876e29b709f1e1d90d3d10601cacb2d54585' }, 'examples/en': { sourceHash: '152f127dcf290889e136a69c23374b2a47d2065c95416378bda5fad52f7d259e', targetHash: 'c0f96a89ffdb20bb21eaf646b604a912811841022a777d733df73c98539defee', technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d' }, 'examples/zh-CN': { sourceHash: '152f127dcf290889e136a69c23374b2a47d2065c95416378bda5fad52f7d259e', targetHash: '4930cd1a365053ffef2a7dfb319ed94c9f5a0098c5ba466fadcfd260cb790993', technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3' }, 'examples/es': { sourceHash: '152f127dcf290889e136a69c23374b2a47d2065c95416378bda5fad52f7d259e', targetHash: 'e5b811237a9231ecf036aa607047addeac75ad3bd7a0e15180223e3fe82467d6', technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a' }, 'blog/en': { sourceHash: 'ce5ba334c07f20edc7ac5d45d612f33df538a1f632188d1c28246e9d59fbdef7', targetHash: 'e4a17a53ee38150d43031fd6acb979204221b2bb30606f0cdc7a39ddaafdf8a6', technicalDependencyHash: 'fcf5e4540a20c6a9dacfc45e61df863da08ec9d2fdaa462617ffa7cfc98ffc5d' }, 'blog/zh-CN': { sourceHash: 'ce5ba334c07f20edc7ac5d45d612f33df538a1f632188d1c28246e9d59fbdef7', targetHash: '648c6ba030723b31ce14dfb63c0783d9b425cdcd086d9b058de0b93ab2d333ef', technicalDependencyHash: 'fad7ac3be315b788178eaad069decfd25fa96d2d8cbd9d590a9570372212d2c3' }, 'blog/es': { sourceHash: 'ce5ba334c07f20edc7ac5d45d612f33df538a1f632188d1c28246e9d59fbdef7', targetHash: '8cf61e4d13fa098e290f748673a1da7d02dcfc32ff705cdecf910f6de14d219b', technicalDependencyHash: 'cc4d1ac48e6187718845043950533dd6d3dc1e19f7ffa2bfce51ca03ddbcff7a' }, 'concepts/en': { sourceHash: 'c1c4cc5495f52ccb907b72a25616593734274de0abf0bde6601fc7a2316905d3', targetHash: 'dbadec0ff693eca41eeae286f4b8394312078dbbd30860d5b8d16489a228b965', technicalDependencyHash: 'dbe1319d3ac54e6260abc65c8c83cedc4ec5cb4a4efbd45dd6274e82d56ebe18' }, 'concepts/zh-CN': { sourceHash: 'c1c4cc5495f52ccb907b72a25616593734274de0abf0bde6601fc7a2316905d3', targetHash: 'd2360c01f9aff3ca2c19a64f29cdd3a394f67fee4b55131ee2596566bd9c56ae', technicalDependencyHash: 'a83763538d883a649f8a96a75c8d65089e780fe6d158dec2e76e3600aa8e3371' }, 'concepts/es': { sourceHash: 'c1c4cc5495f52ccb907b72a25616593734274de0abf0bde6601fc7a2316905d3', targetHash: 'ffd883fc9298bf095ceab57447feb2af065f62dea5c380c8cb81e3f0c9b9f7e6', technicalDependencyHash: '40a8c0731c21e63444ce845d8544c964980be77a48fa198b341a743869bb6ca2' }, 'blog:your-first-anki-deck/en': { sourceHash: 'aea9e1cddba3ae06005bb89197056aced85d4b761e27e4202b7922b23df23535', targetHash: '49bf82d6b203a377de770d8e72d0d26eee3e1443737224010d4f0afb93ee283f', technicalDependencyHash: 'f204e5536f5cc1dc3b28aa8e5549476c463a2b0a00b307e6c929dcd5a59f2e22' }, 'blog:your-first-anki-deck/zh-CN': { sourceHash: 'aea9e1cddba3ae06005bb89197056aced85d4b761e27e4202b7922b23df23535', targetHash: 'fc8a3a7613918f5b6ff34020bdeddead81737f87c8afce2128c363a0ce437a85', technicalDependencyHash: 'f69d7a0c52ed6f2b82e4584a60632c7b9eff53f343825eebcb040fc8a98b3084' }, 'blog:your-first-anki-deck/es': { sourceHash: 'aea9e1cddba3ae06005bb89197056aced85d4b761e27e4202b7922b23df23535', targetHash: '7d4955c8a1709f05f436d845956810ab4950c57b04e030429772e5949ceb4a37', technicalDependencyHash: '720f894803b72cdca44bbe416218c103b0b439ce95b8706d5ff723e44c0fd831' } },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

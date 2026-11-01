@@ -1,0 +1,28 @@
+✔ the content gate accepts reviewed genuine translations (2804.500417ms)
+✔ the content gate rejects missing translations and unregistered sources (1785.540958ms)
+✔ unregistered drafts are not treated as public topics (2678.846583ms)
+✔ the content gate rejects incomplete messages and mismatched interpolation (1665.145667ms)
+✔ technical edits require a paired translation review and fallback is rejected (2869.47925ms)
+✔ source-ready review records cannot substitute for their actual evidence (1527.237208ms)
+✔ a source review cannot be refreshed by changing only the top-level hash (2160.23675ms)
+✔ framework translations and dynamic quickstart sources invalidate only their affected inputs (1334.625334ms)
+✔ homepage review follows benchmark config, current CSV and converter without invalidating API pages (1280.900958ms)
+✔ explicit source directives and nested Astro templates belong to the review closure (1229.651542ms)
+✔ header and footer model data invalidate reviews across page types and destinations (2087.829042ms)
+✔ current-page metadata uses the supplied root without invalidating unrelated page descriptions (1617.043208ms)
+✔ sidebar and next-task model changes invalidate only the page types that render them (2019.989583ms)
+✔ current release: language menus fingerprint active data without reading planned translations (2074.799541ms)
+✔ Brazilian Portuguese released: language menus fingerprint active data without reading planned translations (2046.690708ms)
+✔ all configured languages released: language menus fingerprint active data without reading planned translations (2011.793292ms)
+✔ a third release locale is fingerprinted from its own model data (1302.041375ms)
+✔ review model rejects untracked transformations and top-level data mutations (1300.925ms)
+✔ current release: a further locale needs only catalogs, model data and prompt data (71.210208ms)
+✔ all configured languages released: a further locale needs only catalogs, model data and prompt data (65.84425ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34047.091875

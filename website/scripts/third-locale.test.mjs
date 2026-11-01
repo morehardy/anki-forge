@@ -8,24 +8,36 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { configuredLocales, releaseLocales } from '../locale-model.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const extraLocale = Object.keys(configuredLocales).find(locale => !releaseLocales.includes(locale));
-assert.ok(extraLocale, 'Keep a configured, unreleased locale for the data-only release fixture');
+const extraLocale = 'qaa';
+const fixtureLocale = { prefix: '/fixture', lang: 'qaa', og: 'en_US', label: 'Fixture language', format: 'en-US', starlightKey: 'fixture', dir: 'ltr' };
 // Add a new locale key to model data without changing module code or existing translations.
-const addLocale = (source, label) => source.replace(/(["'])zh-CN\1: (["'])(?:(?!\2)[^\\]|\\.)*\2/g, match => `${match}, ${JSON.stringify(extraLocale)}: ${JSON.stringify(label)}`);
+const addLocale = (source, label, locale = extraLocale) => source.replace(/(["'])zh-CN\1: (["'])(?:(?!\2)[^\\]|\\.)*\2/g, match => `${match}, ${JSON.stringify(locale)}: ${JSON.stringify(label)}`);
 
 // Synthetic translations belong only to this disposable fixture.
-async function additionalRelease(t) {
+async function additionalRelease(t, selected) {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-third-locale-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   for (const file of ['website/site-model.mjs', 'website/locale-model.mjs', 'website/src/i18n', 'website/src/lib/ai-quickstart.mjs', 'docs/ai-quickstart.json']) {
     await cp(path.join(root, file), path.join(directory, file), { recursive: true });
   }
   const website = path.join(directory, 'website');
-  await writeFile(path.join(website, 'release-locales.json'), JSON.stringify({ schemaVersion: 1, locales: [...releaseLocales, extraLocale] }));
-  await cp(path.join(website, 'src/i18n/en.json'), path.join(website, `src/i18n/${extraLocale}.json`));
+  const registry = path.join(website, 'locale-model.mjs');
+  await writeFile(registry, (await readFile(registry, 'utf8')).replace('export const configuredLocales = {', `export const configuredLocales = {\n  ${extraLocale}: ${JSON.stringify(fixtureLocale)},`));
+  const added = [...selected.filter(locale => !releaseLocales.includes(locale)), extraLocale];
+  await writeFile(path.join(website, 'release-locales.json'), JSON.stringify({ schemaVersion: 1, locales: [...selected, extraLocale] }));
   const model = path.join(website, 'site-model.mjs');
-  await writeFile(model, addLocale(await readFile(model, 'utf8'), 'Fixture label'));
+  let source = await readFile(model, 'utf8');
+  for (const locale of added) {
+    await cp(path.join(website, 'src/i18n/en.json'), path.join(website, `src/i18n/${locale}.json`));
+    source = addLocale(source, 'Fixture label', locale);
+  }
+  await writeFile(model, source);
   const data = JSON.parse(await readFile(path.join(directory, 'docs/ai-quickstart.json'), 'utf8'));
+  for (const locale of selected.filter(locale => !releaseLocales.includes(locale))) {
+    data.prompts[locale] = data.prompts.en;
+    data.requestPlaceholders[locale] = '<fixture task>';
+    data.promptContracts[locale] = data.promptContracts.en;
+  }
   data.prompts[extraLocale] = data.prompts.en;
   data.requestPlaceholders[extraLocale] = '<fixture task>';
   data.promptContracts[extraLocale] = data.promptContracts.en;
@@ -53,9 +65,9 @@ function probe(directory) {
   return JSON.parse(execFileSync(process.execPath, ['--input-type=module', '-e', script], { cwd: directory, encoding: 'utf8' }));
 }
 
-test('a further release locale is added through catalogs, model data and prompt data only', async t => {
-  const result = probe(await additionalRelease(t));
-  assert.deepEqual(result.catalogs, [...releaseLocales, extraLocale]);
+for (const [label, selected] of [['current release', releaseLocales], ['all configured languages released', Object.keys(configuredLocales)]]) test(`${label}: a further locale needs only catalogs, model data and prompt data`, async t => {
+  const result = probe(await additionalRelease(t, selected));
+  assert.deepEqual(result.catalogs, [...selected, extraLocale]);
   for (const page of result.pages) {
     if (page.type === 'docs') assert.deepEqual([page.title, page.description], ['Fixture label', 'Fixture label'], page.id);
     else assert.ok(page.title?.trim() && page.description?.trim(), `${page.id}: additional catalog metadata`);
@@ -65,5 +77,5 @@ test('a further release locale is added through catalogs, model data and prompt 
   assert.ok(result.groups.length && result.groups.every(label => label === 'Fixture label'));
   assert.ok(result.navigation.length && result.navigation.every(label => label === 'Fixture label'));
   assert.ok(result.prompt.includes('<fixture task>'), 'the empty request uses the additional locale placeholder');
-  assert.ok(result.prompt.includes(`https://ankiforge.dev${configuredLocales[extraLocale].prefix}/docs/quickstart/`));
+  assert.ok(result.prompt.includes('https://ankiforge.dev/fixture/docs/quickstart/'));
 });

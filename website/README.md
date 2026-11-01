@@ -36,19 +36,19 @@ Astro runs the preview server in the background. Use `npm run preview:stop` when
 
 ## Machine-readable content
 
-Each production build creates `llms.txt` and `zh-cn/llms.txt`, plus an
+Each production build creates an `llms.txt` under every released locale's prefix, plus an
 `index.md` next to every published documentation page and blog article. These
 files are generated from the actual rendered HTML after Astro and Pagefind finish;
 they are not source documents and should never be added under `public/docs/`,
-`public/blog/`, their `zh-cn` equivalents, or as hand-maintained `llms.txt`
+`public/blog/`, their localized equivalents, or as hand-maintained `llms.txt`
 files. The generator rejects conflicts and cleans stale exports from these
-reserved namespaces. Drafts must have the same draft status in both languages.
+reserved namespaces. Drafts must have the same draft status in every released language.
 
 Curated topic IDs and group order live in `machine-content.config.mjs`; titles,
 descriptions and URLs come from the registered pages and rendered content. Edit
 localized labels and summaries in the message catalogs. Public versions,
 installation commands and runtimes come from `../docs/ai-quickstart.json`. The
-two indexes have a 24 KiB limit: shorten descriptions or reduce the curated
+indexes each have a 24 KiB limit: shorten descriptions or reduce the curated
 links if a build exceeds it. Source-build and historical-article links have
 different purposes from the current published package documentation.
 
@@ -84,7 +84,7 @@ type has one component; route wrappers only choose the language and content.
 All documentation uses native Starlight locales and Pagefind. Missing translations
 are build errors; English fallback cannot satisfy the translation contract.
 
-The model currently contains 34 topics in English, Simplified Chinese and Spanish. This is an inventory,
+The model currently contains 34 topics per language selected by `release-locales.json`. This is an inventory,
 not a permanent count: source and artifact checks independently discover new,
 missing or unregistered content. Translated documentation is authored in
 `../docs/{zh-cn,es}/`; `prepare:site` generates ignored Starlight files. Edit links point
@@ -236,7 +236,7 @@ production has been updated.
 
 GitHub Pages serves one static `404.html` for all unknown paths. With JavaScript,
 that document selects the requested language and recovery links. Without
-JavaScript it deliberately displays both languages. This is not server-side
+JavaScript it displays recovery links in every released language. This is not server-side
 localized error routing; Pages cannot provide that per-path capability here.
 
 The configuration keeps page links, assets, canonical URLs, RSS, the sitemap, and the social image under the same base. `check:site` walks the built HTML to catch missing local targets, broken anchors, duplicate IDs, incorrect metadata, and mismatched deck downloads.
