@@ -1,0 +1,353 @@
+{
+  "schemaVersion": 1,
+  "scope": "New actual browser navigation/clipboard/download and HTTP tasks were rerun after trusted-surface test fixture backport; semantic text is exactly unchanged, without normalization. Retain prior independent semantic conclusions with fresh actual origins and new manifest/input binding. This does not relabel an old passing report or claim an SDK rerun.",
+  "sourceChange": "Only trusted-surface bootstrap test and immutable fixture files added by1a448e9",
+  "currentManifest": {
+    "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/prefix-origin-manifest.json",
+    "sha256": "02ad75fc0af832034eeb33549e79a486d0218eb8898389fefbb3ca964b3a4d20",
+    "inputSha256": "3e2061dc5be3e1df804a54a1ba3818abcbf903d9a51e73259424f5c3c62e9ec6",
+    "commit": "1a448e963ee7d28125d0c637e22e398409e0fae8"
+  },
+  "priorManifest": {
+    "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/prefix-origin-manifest.json",
+    "sha256": "d8f7a8a924940199f76e992fabefe5a0d195eb422c3d6ac313be6c0f599eed76",
+    "inputSha256": "560ffd17e00312fb4462c96a14e9e04dbd212a6b82075c3c9950f743f7822031"
+  },
+  "allHtmlMarkdownLlmsBytesEqual": true,
+  "changedGeneratedResources": [
+    "/anki-forge/generated/cell-anatomy.apkg",
+    "/anki-forge/generated/ear-training.apkg",
+    "/anki-forge/generated/showcase.apkg",
+    "/anki-forge/generated/showcase.json",
+    "/anki-forge/generated/sound.apkg",
+    "/anki-forge/generated/spanish-v1.apkg",
+    "/anki-forge/generated/spanish-v2.apkg",
+    "/anki-forge/generated/spanish.apkg",
+    "/anki-forge/pagefind/pagefind-entry.json"
+  ],
+  "generatedResourceInspection": {
+    "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/generated-resource-inspection-prefix.json",
+    "sha256": "896c4c2dc4d8768bc1f1d97ee4408467abd5baf5e3d8b153ae69333bd160ffb1"
+  },
+  "boundRecords": 380,
+  "observations": [
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "rust-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/",
+        "http://127.0.0.1:55765/anki-forge/docs/quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "python-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/docs/",
+        "http://127.0.0.1:55765/anki-forge/docs/python-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "node-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/docs/python-quickstart/",
+        "http://127.0.0.1:55765/anki-forge/docs/node-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "json-media",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/docs/node-quickstart/",
+        "http://127.0.0.1:55765/anki-forge/docs/json-to-anki/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "original-baseline-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/docs/json-to-anki/",
+        "http://127.0.0.1:55765/anki-forge/docs/updates/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "troubleshooting",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/docs/updates/",
+        "http://127.0.0.1:55765/anki-forge/docs/troubleshooting/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "rust-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/zh-cn/",
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "python-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/",
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/python-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "node-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/python-quickstart/",
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/node-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "json-media",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/node-quickstart/",
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/json-to-anki/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "original-baseline-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/json-to-anki/",
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/updates/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "troubleshooting",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/updates/",
+        "http://127.0.0.1:55765/anki-forge/zh-cn/docs/troubleshooting/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "rust-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/es/",
+        "http://127.0.0.1:55765/anki-forge/es/docs/quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "python-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/es/docs/",
+        "http://127.0.0.1:55765/anki-forge/es/docs/python-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "node-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/es/docs/python-quickstart/",
+        "http://127.0.0.1:55765/anki-forge/es/docs/node-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "json-media",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/es/docs/node-quickstart/",
+        "http://127.0.0.1:55765/anki-forge/es/docs/json-to-anki/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "original-baseline-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/es/docs/json-to-anki/",
+        "http://127.0.0.1:55765/anki-forge/es/docs/updates/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "troubleshooting",
+      "actualReadUrls": [
+        "http://127.0.0.1:55765/anki-forge/es/docs/updates/",
+        "http://127.0.0.1:55765/anki-forge/es/docs/troubleshooting/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "en",
+      "id": "python-install",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/docs/python-quickstart/index.md",
+        "http://127.0.0.1:55863/anki-forge/docs/python-api/index.md",
+        "http://127.0.0.1:55863/anki-forge/docs/compatibility/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "en",
+      "id": "node-api",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/docs/node-api/index.md",
+        "http://127.0.0.1:55863/anki-forge/docs/node-quickstart/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "en",
+      "id": "json-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/docs/json-to-anki/index.md",
+        "http://127.0.0.1:55863/anki-forge/docs/updates/index.md",
+        "http://127.0.0.1:55863/anki-forge/docs/media/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "en",
+      "id": "compatibility-constraints",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/docs/compatibility/index.md",
+        "http://127.0.0.1:55863/anki-forge/docs/build-guarantees/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "zh-CN",
+      "id": "python-install",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/zh-cn/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/zh-cn/docs/python-quickstart/index.md",
+        "http://127.0.0.1:55863/anki-forge/zh-cn/docs/python-api/index.md",
+        "http://127.0.0.1:55863/anki-forge/zh-cn/docs/compatibility/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "zh-CN",
+      "id": "node-api",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/zh-cn/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/zh-cn/docs/node-api/index.md",
+        "http://127.0.0.1:55863/anki-forge/zh-cn/docs/node-quickstart/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "zh-CN",
+      "id": "json-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/zh-cn/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/zh-cn/docs/json-to-anki/index.md",
+        "http://127.0.0.1:55863/anki-forge/zh-cn/docs/updates/index.md",
+        "http://127.0.0.1:55863/anki-forge/zh-cn/docs/media/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "zh-CN",
+      "id": "compatibility-constraints",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/zh-cn/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/zh-cn/docs/compatibility/index.md",
+        "http://127.0.0.1:55863/anki-forge/zh-cn/docs/build-guarantees/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "es",
+      "id": "python-install",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/es/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/es/docs/python-quickstart/index.md",
+        "http://127.0.0.1:55863/anki-forge/es/docs/python-api/index.md",
+        "http://127.0.0.1:55863/anki-forge/es/docs/compatibility/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "es",
+      "id": "node-api",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/es/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/es/docs/node-api/index.md",
+        "http://127.0.0.1:55863/anki-forge/es/docs/node-quickstart/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "es",
+      "id": "json-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/es/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/es/docs/json-to-anki/index.md",
+        "http://127.0.0.1:55863/anki-forge/es/docs/updates/index.md",
+        "http://127.0.0.1:55863/anki-forge/es/docs/media/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "es",
+      "id": "compatibility-constraints",
+      "actualReadUrls": [
+        "http://127.0.0.1:55863/anki-forge/es/llms.txt",
+        "http://127.0.0.1:55863/anki-forge/es/docs/compatibility/index.md",
+        "http://127.0.0.1:55863/anki-forge/es/docs/build-guarantees/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    }
+  ]
+}

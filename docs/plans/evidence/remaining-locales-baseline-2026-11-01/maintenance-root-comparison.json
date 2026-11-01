@@ -1,0 +1,353 @@
+{
+  "schemaVersion": 1,
+  "scope": "New actual browser navigation/clipboard/download and HTTP tasks were rerun after trusted-surface test fixture backport; semantic text is exactly unchanged, without normalization. Retain prior independent semantic conclusions with fresh actual origins and new manifest/input binding. This does not relabel an old passing report or claim an SDK rerun.",
+  "sourceChange": "Only trusted-surface bootstrap test and immutable fixture files added by1a448e9",
+  "currentManifest": {
+    "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/root-origin-manifest.json",
+    "sha256": "f8a47ac8708def70173b1ef8a82daf6d39bceab999ab5fdfbce960e38705935a",
+    "inputSha256": "3e2061dc5be3e1df804a54a1ba3818abcbf903d9a51e73259424f5c3c62e9ec6",
+    "commit": "1a448e963ee7d28125d0c637e22e398409e0fae8"
+  },
+  "priorManifest": {
+    "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/root-origin-manifest.json",
+    "sha256": "c6973e2a178003ad701b444c4dc5d67188d9748ec1966f0e7a28e61289a206cb",
+    "inputSha256": "560ffd17e00312fb4462c96a14e9e04dbd212a6b82075c3c9950f743f7822031"
+  },
+  "allHtmlMarkdownLlmsBytesEqual": true,
+  "changedGeneratedResources": [
+    "/generated/cell-anatomy.apkg",
+    "/generated/ear-training.apkg",
+    "/generated/showcase.apkg",
+    "/generated/showcase.json",
+    "/generated/sound.apkg",
+    "/generated/spanish-v1.apkg",
+    "/generated/spanish-v2.apkg",
+    "/generated/spanish.apkg",
+    "/pagefind/pagefind-entry.json"
+  ],
+  "generatedResourceInspection": {
+    "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/generated-resource-inspection-root.json",
+    "sha256": "d680d7e22e8a484de74e3b85d341da0fea5d656fe777e324d51fd6cae3b3ed64"
+  },
+  "boundRecords": 380,
+  "observations": [
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "rust-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/",
+        "http://127.0.0.1:57176/docs/quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "python-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/docs/",
+        "http://127.0.0.1:57176/docs/python-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "node-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/docs/python-quickstart/",
+        "http://127.0.0.1:57176/docs/node-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "json-media",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/docs/node-quickstart/",
+        "http://127.0.0.1:57176/docs/json-to-anki/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "original-baseline-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/docs/json-to-anki/",
+        "http://127.0.0.1:57176/docs/updates/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "en",
+      "id": "troubleshooting",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/docs/updates/",
+        "http://127.0.0.1:57176/docs/troubleshooting/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "rust-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/zh-cn/",
+        "http://127.0.0.1:57176/zh-cn/docs/quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "python-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/zh-cn/docs/",
+        "http://127.0.0.1:57176/zh-cn/docs/python-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "node-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/zh-cn/docs/python-quickstart/",
+        "http://127.0.0.1:57176/zh-cn/docs/node-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "json-media",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/zh-cn/docs/node-quickstart/",
+        "http://127.0.0.1:57176/zh-cn/docs/json-to-anki/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "original-baseline-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/zh-cn/docs/json-to-anki/",
+        "http://127.0.0.1:57176/zh-cn/docs/updates/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "zh-CN",
+      "id": "troubleshooting",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/zh-cn/docs/updates/",
+        "http://127.0.0.1:57176/zh-cn/docs/troubleshooting/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "rust-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/es/",
+        "http://127.0.0.1:57176/es/docs/quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "python-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/es/docs/",
+        "http://127.0.0.1:57176/es/docs/python-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "node-basic",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/es/docs/python-quickstart/",
+        "http://127.0.0.1:57176/es/docs/node-quickstart/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "json-media",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/es/docs/node-quickstart/",
+        "http://127.0.0.1:57176/es/docs/json-to-anki/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "original-baseline-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/es/docs/json-to-anki/",
+        "http://127.0.0.1:57176/es/docs/updates/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "browser",
+      "locale": "es",
+      "id": "troubleshooting",
+      "actualReadUrls": [
+        "http://127.0.0.1:57176/es/docs/updates/",
+        "http://127.0.0.1:57176/es/docs/troubleshooting/"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "en",
+      "id": "python-install",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/llms.txt",
+        "http://127.0.0.1:57281/docs/python-quickstart/index.md",
+        "http://127.0.0.1:57281/docs/python-api/index.md",
+        "http://127.0.0.1:57281/docs/compatibility/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "en",
+      "id": "node-api",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/llms.txt",
+        "http://127.0.0.1:57281/docs/node-api/index.md",
+        "http://127.0.0.1:57281/docs/node-quickstart/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "en",
+      "id": "json-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/llms.txt",
+        "http://127.0.0.1:57281/docs/json-to-anki/index.md",
+        "http://127.0.0.1:57281/docs/updates/index.md",
+        "http://127.0.0.1:57281/docs/media/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "en",
+      "id": "compatibility-constraints",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/llms.txt",
+        "http://127.0.0.1:57281/docs/compatibility/index.md",
+        "http://127.0.0.1:57281/docs/build-guarantees/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "zh-CN",
+      "id": "python-install",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/zh-cn/llms.txt",
+        "http://127.0.0.1:57281/zh-cn/docs/python-quickstart/index.md",
+        "http://127.0.0.1:57281/zh-cn/docs/python-api/index.md",
+        "http://127.0.0.1:57281/zh-cn/docs/compatibility/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "zh-CN",
+      "id": "node-api",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/zh-cn/llms.txt",
+        "http://127.0.0.1:57281/zh-cn/docs/node-api/index.md",
+        "http://127.0.0.1:57281/zh-cn/docs/node-quickstart/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "zh-CN",
+      "id": "json-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/zh-cn/llms.txt",
+        "http://127.0.0.1:57281/zh-cn/docs/json-to-anki/index.md",
+        "http://127.0.0.1:57281/zh-cn/docs/updates/index.md",
+        "http://127.0.0.1:57281/zh-cn/docs/media/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "zh-CN",
+      "id": "compatibility-constraints",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/zh-cn/llms.txt",
+        "http://127.0.0.1:57281/zh-cn/docs/compatibility/index.md",
+        "http://127.0.0.1:57281/zh-cn/docs/build-guarantees/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "es",
+      "id": "python-install",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/es/llms.txt",
+        "http://127.0.0.1:57281/es/docs/python-quickstart/index.md",
+        "http://127.0.0.1:57281/es/docs/python-api/index.md",
+        "http://127.0.0.1:57281/es/docs/compatibility/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "es",
+      "id": "node-api",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/es/llms.txt",
+        "http://127.0.0.1:57281/es/docs/node-api/index.md",
+        "http://127.0.0.1:57281/es/docs/node-quickstart/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "es",
+      "id": "json-update",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/es/llms.txt",
+        "http://127.0.0.1:57281/es/docs/json-to-anki/index.md",
+        "http://127.0.0.1:57281/es/docs/updates/index.md",
+        "http://127.0.0.1:57281/es/docs/media/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    },
+    {
+      "axis": "machine",
+      "locale": "es",
+      "id": "compatibility-constraints",
+      "actualReadUrls": [
+        "http://127.0.0.1:57281/es/llms.txt",
+        "http://127.0.0.1:57281/es/docs/compatibility/index.md",
+        "http://127.0.0.1:57281/es/docs/build-guarantees/index.md"
+      ],
+      "completeBodyAndCodeEqualToPriorReview": true
+    }
+  ]
+}

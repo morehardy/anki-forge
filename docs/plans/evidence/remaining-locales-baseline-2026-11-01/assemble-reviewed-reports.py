@@ -7,14 +7,20 @@ fileproof=lambda f,d:{'path':str(f),'sha256':hashfile(f),'description':d}
 manifest=load(p/f'{env}-origin-manifest.json');u=load(p/f'usage-{env}/browser-tour.json');m=load(p/f'machine-{env}/http-observations.json');c=load(p/'review-conclusions.json');a=load(p/'execution-reuse-audit.json')
 assert u['manifestSha256']==m['manifestSha256']==hashfile(p/f'{env}-origin-manifest.json')
 records={r['route']:r for r in manifest['pages']+manifest['resources']}
-bindings=[{'route':r,'sha256':v['sha256']} for r,v in records.items()]
+scope={r['route'] for r in manifest['resources'] if r['route'].endswith(('/index.md','/llms.txt'))}
+for observations in [u,m]:
+ for tasks in observations['entries'].values():
+  for task in tasks:
+   scope.update(urllib.parse.urlparse(url).path for url in task['readUrls'])
+   scope.update(urllib.parse.urlparse(download['url']).path for download in task.get('downloadedResources',[]))
+bindings=[{'route':route,'sha256':records[route]['sha256']} for route in sorted(scope)]
 deps={'Cargo.toml','Cargo.lock','bindings/python/pyproject.toml','bindings/node/package.json','docs/ai-quickstart.json','website/package.json','website/package-lock.json'}
 src=[b for b in a['currentBindings'] if b['path'] not in deps];dependency=[b for b in a['currentBindings'] if b['path'] in deps]
 for b in a['currentBindings']:assert hashfile(pathlib.Path(b['path']))==b['sha256']
 old=pathlib.Path('docs/plans/evidence/multilingual-es-integration-2026-10-31/executions')
 def execution(f,description):return dict(fileproof(f,description),sourceBindings=src,dependencyBindings=dependency)
 def common(kind,obs):
- return {'schemaVersion':1,'kind':kind,'status':'passed','mode':'release-candidate','reviewerType':'ai','reviewerRun':f'/root/baseline_acceptance/{kind}-{env}-2026-11-01','inputSha256':manifest['inputSha256'],'configuration':manifest['configuration'],'releaseLocales':manifest['releaseLocales'],'readOrigin':obs['readOrigin'],'originManifest':{'path':str(p/f'{env}-origin-manifest.json'),'sha256':hashfile(p/f'{env}-origin-manifest.json'),'commit':manifest['commit']},'resourceBindings':bindings,'entries':{},'openIssues':[],'independence':c['authorship'],'scope':'All artifact routes are hash-bound for freshness; binding is not a claim of manual reading of every page. Actual readUrls, raw observations, task answers and evidence below define the review scope.'}
+ return {'schemaVersion':1,'kind':kind,'status':'passed','mode':'release-candidate','reviewerType':'ai','reviewerRun':f'/root/baseline_acceptance/{kind}-{env}-maintenance-rerun-2026-11-01','inputSha256':manifest['inputSha256'],'configuration':manifest['configuration'],'releaseLocales':manifest['releaseLocales'],'readOrigin':obs['readOrigin'],'originManifest':{'path':str(p/f'{env}-origin-manifest.json'),'sha256':hashfile(p/f'{env}-origin-manifest.json'),'commit':manifest['commit']},'resourceBindings':bindings,'entries':{},'openIssues':[],'independence':c['authorship'],'scope':'All required Markdown/llms routes plus actual task HTML and recipe downloads are hash-bound. Complete artifact integrity, including regenerated showcase files, is separately verified by engineering acceptance. Binding the required machine scope is not a claim of manual reading of every page; actual readUrls and observations define reading scope.'}
 usage=common('usage-tasks',u)
 usage['executionReuse']='No SDK consumer was rerun for this baseline maintenance. Current source/dependency equality, exact clipboard programs, previous actual installation/execution logs and independent ZIP/Zstandard/SQLite inspection of ten retained APKGs justify explicitly bound reuse. New browser navigation, clipboard and recipe downloads occurred for every locale/configuration.'
 usage['visualInspection']='Reviewer inspected prefix screenshots en/rust-basic, zh-CN/python-basic and es/node-basic at 1440x1000. Other screenshots record browser state; no claim that every screenshot was manually inspected.' if env=='prefix' else 'Root screenshot review and root/prefix semantic comparison are documented in root-review-comparison.json.'
@@ -30,7 +36,7 @@ for loc,tasks in u['entries'].items():
    for sdk in ['rust','python','node']:
     proofs += [fileproof(old/f'public-json/{sdk}/comparison.json','Actual recipe comparison retains stable identity and permits this one-answer change.'),fileproof(old/f'public-json/{sdk}/review.json','Actual prepared candidate policy report, independently inspected.')]
   else:ex=[execution(old/'basic/python/troubleshooting.log','Retained actual duplicate-key AddError and recovery execution, newly inspected against unchanged current troubleshooting/source inputs.')]
-  out.append({'id':tid,'status':'passed','openIssues':[],'readUrls':task['readUrls'],'steps':task['steps']+['Independently read the captured localized instructions and checked the retained execution using the fresh source/dependency and APKG audit.',c['usage'][tid]],'executionEvidence':ex,'evidence':proofs})
+  out.append({'id':tid,'status':'passed','openIssues':[],'readUrls':task['readUrls']+[download['url'] for download in task.get('downloadedResources',[])],'steps':task['steps']+['Independently read the captured localized instructions and checked the retained execution using the fresh source/dependency and APKG audit.',c['usage'][tid]],'executionEvidence':ex,'evidence':proofs})
  usage['entries'][loc]={'taskResults':out,'openIssues':[]}
 machine=common('machine-read',m)
 machine['method']='Each task made a new actual HTTP GET to this locale llms.txt, followed its real same-locale Markdown links and verified status, UTF-8 content type, no download disposition, manifest bytes and SHA-256. Independent answers were written from the captured responses, with source citations below; no English fallback or old passing answer was used.'
@@ -47,6 +53,13 @@ if env=='root':
   key='taskResults' if doc['kind']=='usage-tasks' else 'aiMachineReadReview'
   for entry in doc['entries'].values():
    for task in entry[key]:task['evidence'].append(fileproof(p/'root-review-comparison.json','Actual root text/code and HTTP body comparison, deployment-URL-only normalization, plus direct root screenshot review.'))
+for doc in [usage,machine]:
+ doc['maintenanceReview']='After backport1a448e9, all browser and HTTP tasks ran again on current artifact. Complete new captured text/code and HTML/machine bytes equal the archived original review exactly; changed regenerated showcase APKGs/provenance and Pagefind JSON ordering are separately inspected; maintenance comparison evidence retains both original and new input hashes. The unchanged semantic conclusions and audited SDK execution are explicitly reused, while navigation/clipboard/downloads/HTTP observations are new.'
+ key='taskResults' if doc['kind']=='usage-tasks' else 'aiMachineReadReview'
+ for entry in doc['entries'].values():
+  for task in entry[key]:
+   task['evidence'].append(fileproof(p/f'maintenance-{env}-comparison.json','Fresh maintenance task observations compared with byte-preserved prior independent review; distinct original/current input and manifest identities retained.'))
+   task['evidence'].append(fileproof(p/'execution-reuse-recheck.json','Current23 SDK execution inputs rechecked after test fixture backport; existing real execution and APKG audit retained explicitly.'))
 for name,doc in [('usage-tasks',usage),('machine-read',machine)]:
  (root/p/f'{name}-{env}.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2)+'\n')
 print(f'Assembled {env}: 18 usage judgments and 12 machine answers from manual conclusions and fresh observations.')

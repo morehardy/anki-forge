@@ -1,0 +1,1 @@
+Original P0 acceptance at commit76f17ee, before trusted-surface test fixture backport. Original files are byte-preserved, including their original proof paths and hashes. Those paths refer to the historical candidate; this archive is not relabeled as the new candidate. Historical canonical evidence is also retained in commitbec6922.

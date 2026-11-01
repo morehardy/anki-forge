@@ -1,16 +1,26 @@
 {
   "schemaVersion": 1,
-  "scope": "Evidence handoff inventory; no build input change",
+  "scope": "Current maintenance evidence plus byte-preserved76f17ee history; no build input change.",
   "files": [
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/acceptance.md",
-      "bytes": 7025,
-      "sha256": "165fdc253341f87fb5d49fc69ea6b479bc22f04c3fad9bc10306ac182229622c"
+      "bytes": 7804,
+      "sha256": "b0e9efbe298c5cda1ba98faf8fa8e2651c048f6d27db86568a30fc93c0ab89ad"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/assemble-reviewed-reports.py",
-      "bytes": 7327,
-      "sha256": "d3680fbaf91eb391b325243855653bebd9d477998a50fd58ff8077aaaf8e230d"
+      "bytes": 9107,
+      "sha256": "777d4a919777c00b08a69ca199d5a12d87bde4be809c3fc930e743b180c36cd9"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/compare-maintenance-observations.py",
+      "bytes": 3394,
+      "sha256": "2f92f66f27222217c2a4fd8e902b5797ca6af8964b3b75d9e140e21d75a21f55"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/maintenance-full-test.log",
+      "bytes": 14703,
+      "sha256": "bdb5f5e11aba67bb78da5769fc0dc8cbbb264b09a2a1757e0f7e895348657211"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix/01-check-content.log",
@@ -39,13 +49,13 @@
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix/06-check-gates.log",
-      "bytes": 1509,
-      "sha256": "49a6a924d5447b118f915a20778129a7fc474da3cebc709cbc55ed0f938bb26a"
+      "bytes": 1504,
+      "sha256": "bf3cc75f7fa6ce42500b3716a8718313d97158c536e7c953dadd4a5756cb9a85"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix/07-test-browser.log",
-      "bytes": 2290,
-      "sha256": "6443db607ae110579aa1e4f651e442dce01335f20837df631a99a522eef1b3b6"
+      "bytes": 2284,
+      "sha256": "0f7fbf2969994678ba9c5d19e67eb2af1ffa5a69e2f82734ef462892d37e25a8"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix/08-check-search.log",
@@ -55,40 +65,35 @@
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix/rebuild-results.json",
       "bytes": 70686,
-      "sha256": "9254d015a7672c028a3afdb7058d007304bc9f555d825a2dfad2a8ac4e3902cd"
+      "sha256": "362923e57978c50a9b79933e586b5e63afc50f2c976f5bd21d063f4c14f43d22"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix/release-evidence.json",
-      "bytes": 6336,
-      "sha256": "f34d1404b5c8ab57aad0564bf9102bfc66ccd3fbdcfda15bd8bf8c4e6f135651"
+      "bytes": 6372,
+      "sha256": "48dc663ed88f843a2b905dc3399918b22f020c45cdf2165be1b45c44a99e3ea3"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix/search-results.json",
       "bytes": 151773,
-      "sha256": "3d12e9df4a8120c35b3a1dc0e51338d143b35e8bda71a0c00d53f2b6c613668d"
+      "sha256": "06f81a08ba36e59aeb36f9fadd72da6c67f0696568eaa98104e96ecc28eeac58"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix-build.log",
-      "bytes": 20091,
-      "sha256": "edce7bacac3cf80160f3c37e2e4c12904a31945bf45f2a49576462ba9e189d7d"
-    },
-    {
-      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix-engineering-sandbox-interrupted.log",
-      "bytes": 287,
-      "sha256": "025e69f83c624ad705fa7f369a2bcc6be60e548d315498a80f415f894a33b8e4"
+      "bytes": 20173,
+      "sha256": "ee4feaeb6becfc0ca8c68f643611cc58140c1fe56e374a1c99706b323857bb14"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix-engineering.log",
       "bytes": 471,
-      "sha256": "a59d63423b01831f7b2e059d90c180832b9d5605cba422c498e9614554b08c27"
+      "sha256": "2278f97fb98f64d4507d637ae96419c7347073df83b1c6957af4d62f43d2a860"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix-finish.log",
       "bytes": 147,
-      "sha256": "4ae2eea1949a9a9d8fcb7043351feb30a6d8b8106bb6d45f57db9d0898b4ab4c"
+      "sha256": "b2c2eae5392df3ceb037e14c1b975bcb5205f333eed45320a78b6bc80a716515"
     },
     {
-      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix-machine-read.log",
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix-machine-observations.log",
       "bytes": 822,
       "sha256": "a7711ec4ed4111878f016e87dfd7b2080e09c5615bb4317417a3a8019ba2bba2"
     },
@@ -99,18 +104,18 @@
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix-rebuild.log",
-      "bytes": 20657,
-      "sha256": "a17c1c4fec3d481b4cc64303c04abb35fe625bec5aad6f8d090a3cf7951aaf3f"
+      "bytes": 20656,
+      "sha256": "377ce770459197571fccf4e5a6217432e02df88451bd4522670543d7948297b9"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix-release-check.log",
       "bytes": 140,
-      "sha256": "d89e4f6abfe54cf3751df018315bde2027732776956bfdf0912972e68fd751b6"
+      "sha256": "a79d9135eeee8d455302b102f20fae5b4a413d8df0eb6d88f468234856cd43cf"
     },
     {
-      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix-usage.log",
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/prefix-usage-observations.log",
       "bytes": 59,
-      "sha256": "84dcdb7807d0409f56f6103f4d674129d43c1b28ba31dc8ba18736ea7444d57b"
+      "sha256": "31d0aff09237ba5b22bc22543e7af46ea51587bb8ec4e139c683a37e8ab3abef"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root/01-check-content.log",
@@ -139,13 +144,13 @@
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root/06-check-gates.log",
-      "bytes": 1509,
-      "sha256": "900f2a124ff34a06ba58e1a46e47d1643e5e000a8be2edd8589c3d85a96ca5c8"
+      "bytes": 1507,
+      "sha256": "6dbde8d964271aa90d34c94f40f55b094159ed183a7e235103b4d9a88fcfe2b0"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root/07-test-browser.log",
-      "bytes": 2280,
-      "sha256": "77da5c5b5ad1ea49f51f446a09adccf2c42a3f838072884ae75912739c04502b"
+      "bytes": 2282,
+      "sha256": "18a731e61b3cd088cb36d568d3e059c799f534fdb8859ea0f50759957d62e86c"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root/08-check-search.log",
@@ -155,32 +160,32 @@
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root/rebuild-results.json",
       "bytes": 70676,
-      "sha256": "9675eb1d541cab404a3b8883273aad581deb19e9b97bc45d6acfdd5f9005cf5d"
+      "sha256": "f143f5df2f2d38c230e91c91713244b82469d9ca46c99bd013a80943833fe12a"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root/release-evidence.json",
-      "bytes": 6320,
-      "sha256": "c7358eb01628edb8440810025225b4c06593685de125c582950c77da4f2e5b2b"
+      "bytes": 6356,
+      "sha256": "f67cf5b4dd855fc0bbba091c0b4925f11b2145c5ba7c3c401df1d258d592a56c"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root/search-results.json",
       "bytes": 149042,
-      "sha256": "d171e5de8b7fa5fc237762f07e8b1e534ca9e3ca49cb7651c76653069b507d80"
+      "sha256": "fe08bbe89f278c5cd87b21878b14041211b40cd406aef2a9d45bc459c95f0e69"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root-build.log",
-      "bytes": 20172,
-      "sha256": "739bfd494127efb84c86cddc0659e146529b99498fbc98bab31c1dd0fccbe4a4"
+      "bytes": 20173,
+      "sha256": "543e1959f949731dc3f1c887f27b190a9cb8bb6d74967a5fe54049c21001aaca"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root-engineering.log",
       "bytes": 471,
-      "sha256": "80d4a0a67b9f36199236f2384a2dd309fa9fcedf5e932b6decdc2af7498197ef"
+      "sha256": "946019587cfa65cb8b0163caf770f9fcf560e72c98272ca65334d0209c6bd7af"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root-finish.log",
       "bytes": 147,
-      "sha256": "390506280bcbb1d1a8b6805e10291d48445aa2ace19fd3258a2b4eb2a8a8fb5d"
+      "sha256": "e0ae1dcc439d190b2539f5e0a78ff7d75d531e811f8506837d8cd14d98753fd4"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root-machine-observations.log",
@@ -193,29 +198,1079 @@
       "sha256": "1fa473bc7ae9df137726b153073f5f69665e97e8286cedce98f2d22ca7c861e8"
     },
     {
-      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root-prebuild-expected-mismatch.log",
-      "bytes": 1129,
-      "sha256": "ba7911f45af9d8f26bdf17779bd4b48d6a5cdfdb02290034d56cd3213b42cf07"
-    },
-    {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root-rebuild.log",
       "bytes": 20656,
-      "sha256": "fe26522f45de1e69bd083bdc5d4d55ab3f7a579e4a7d5ba43589b1ea3451a631"
+      "sha256": "9470f2a9addb7fb14b07b0128158d31b74421ed97c486c6e684d5e7e49db7ca4"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root-release-check.log",
-      "bytes": 370,
-      "sha256": "58aa7399ebed3b2118bdac8914ce087c071b65bd6f6efb943faa4a6811cc3a63"
+      "bytes": 140,
+      "sha256": "7110e4820dcb07ac4fdb33c95bced17cb5f7d7bb43c036418e7b761eabc06f20"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/engineering/root-usage-observations.log",
       "bytes": 59,
-      "sha256": "dd1c72a727bdb7889c641ec5e432e9c78092cb1c38e3521c480ec525c9b9e178"
+      "sha256": "70c206641f1a55e790119f85773c5f3f1b61543459d4798f59a4e3d0eead6037"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/execution-reuse-audit.json",
       "bytes": 45777,
       "sha256": "7c91d164b90039b6a0a5144528fd12b904b1424a425d517ea188c3d8ada4376a"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/execution-reuse-recheck.json",
+      "bytes": 4355,
+      "sha256": "0c4f912b68b3b7ffa263602cb70d5e2a7dc898b531cad3f469f82fabf5fe49b6"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/generated-resource-inspection-prefix.json",
+      "bytes": 29721,
+      "sha256": "896c4c2dc4d8768bc1f1d97ee4408467abd5baf5e3d8b153ae69333bd160ffb1"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/generated-resource-inspection-root.json",
+      "bytes": 29622,
+      "sha256": "d680d7e22e8a484de74e3b85d341da0fea5d656fe777e324d51fd6cae3b3ed64"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/ARCHIVE.md",
+      "bytes": 335,
+      "sha256": "98b17f0a77b0a0809ee9b138c9321e7a21f2476fef8a3661dd359d3d17ab5d93"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/acceptance.md",
+      "bytes": 7025,
+      "sha256": "165fdc253341f87fb5d49fc69ea6b479bc22f04c3fad9bc10306ac182229622c"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/assemble-reviewed-reports.py",
+      "bytes": 7327,
+      "sha256": "d3680fbaf91eb391b325243855653bebd9d477998a50fd58ff8077aaaf8e230d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/01-check-content.log",
+      "bytes": 327,
+      "sha256": "a1389801725ed2ad44fc0ec79d1d44e234e28bcf301c29f2188742fc483de3a3"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/02-check-site.log",
+      "bytes": 340,
+      "sha256": "eddb3c8c646a7d2d1a310d1bf443fc8a577a537c5f3ea2358e4b52f0bcb42ebe"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/03-check-surface.log",
+      "bytes": 483,
+      "sha256": "b3db5872f218e05cf35a87cd0b58b7242cb3a117fc7d3ba2e9502132055844c4"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/04-check-machine.log",
+      "bytes": 296,
+      "sha256": "a66dcc4b7e69f3232f7118d9bc0382ca254f5bb73e3fd28a226d238f45b6110d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/05-check-schema.log",
+      "bytes": 283,
+      "sha256": "d7cd528dbae04b3ca3a4f5746ee0536cf74ec0499e848de227e8101979025b23"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/06-check-gates.log",
+      "bytes": 1509,
+      "sha256": "49a6a924d5447b118f915a20778129a7fc474da3cebc709cbc55ed0f938bb26a"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/07-test-browser.log",
+      "bytes": 2290,
+      "sha256": "6443db607ae110579aa1e4f651e442dce01335f20837df631a99a522eef1b3b6"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/08-check-search.log",
+      "bytes": 456,
+      "sha256": "7e2f3458af858528e53c2790cc1a00995de148699cd062c3e915777282a41e4c"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/rebuild-results.json",
+      "bytes": 70686,
+      "sha256": "9254d015a7672c028a3afdb7058d007304bc9f555d825a2dfad2a8ac4e3902cd"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/release-evidence.json",
+      "bytes": 6336,
+      "sha256": "f34d1404b5c8ab57aad0564bf9102bfc66ccd3fbdcfda15bd8bf8c4e6f135651"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix/search-results.json",
+      "bytes": 151773,
+      "sha256": "3d12e9df4a8120c35b3a1dc0e51338d143b35e8bda71a0c00d53f2b6c613668d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix-build.log",
+      "bytes": 20091,
+      "sha256": "edce7bacac3cf80160f3c37e2e4c12904a31945bf45f2a49576462ba9e189d7d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix-engineering-sandbox-interrupted.log",
+      "bytes": 287,
+      "sha256": "025e69f83c624ad705fa7f369a2bcc6be60e548d315498a80f415f894a33b8e4"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix-engineering.log",
+      "bytes": 471,
+      "sha256": "a59d63423b01831f7b2e059d90c180832b9d5605cba422c498e9614554b08c27"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix-finish.log",
+      "bytes": 147,
+      "sha256": "4ae2eea1949a9a9d8fcb7043351feb30a6d8b8106bb6d45f57db9d0898b4ab4c"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix-machine-read.log",
+      "bytes": 822,
+      "sha256": "a7711ec4ed4111878f016e87dfd7b2080e09c5615bb4317417a3a8019ba2bba2"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix-new-surface.log",
+      "bytes": 257,
+      "sha256": "1fa473bc7ae9df137726b153073f5f69665e97e8286cedce98f2d22ca7c861e8"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix-rebuild.log",
+      "bytes": 20657,
+      "sha256": "a17c1c4fec3d481b4cc64303c04abb35fe625bec5aad6f8d090a3cf7951aaf3f"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix-release-check.log",
+      "bytes": 140,
+      "sha256": "d89e4f6abfe54cf3751df018315bde2027732776956bfdf0912972e68fd751b6"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/prefix-usage.log",
+      "bytes": 59,
+      "sha256": "84dcdb7807d0409f56f6103f4d674129d43c1b28ba31dc8ba18736ea7444d57b"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/01-check-content.log",
+      "bytes": 327,
+      "sha256": "a1389801725ed2ad44fc0ec79d1d44e234e28bcf301c29f2188742fc483de3a3"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/02-check-site.log",
+      "bytes": 330,
+      "sha256": "13fab88ad16c813c1f01d958145e122e60e4af63602f610f8ebf0f08b17a6ead"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/03-check-surface.log",
+      "bytes": 483,
+      "sha256": "b3db5872f218e05cf35a87cd0b58b7242cb3a117fc7d3ba2e9502132055844c4"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/04-check-machine.log",
+      "bytes": 296,
+      "sha256": "a66dcc4b7e69f3232f7118d9bc0382ca254f5bb73e3fd28a226d238f45b6110d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/05-check-schema.log",
+      "bytes": 283,
+      "sha256": "d7cd528dbae04b3ca3a4f5746ee0536cf74ec0499e848de227e8101979025b23"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/06-check-gates.log",
+      "bytes": 1509,
+      "sha256": "900f2a124ff34a06ba58e1a46e47d1643e5e000a8be2edd8589c3d85a96ca5c8"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/07-test-browser.log",
+      "bytes": 2280,
+      "sha256": "77da5c5b5ad1ea49f51f446a09adccf2c42a3f838072884ae75912739c04502b"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/08-check-search.log",
+      "bytes": 456,
+      "sha256": "7e2f3458af858528e53c2790cc1a00995de148699cd062c3e915777282a41e4c"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/rebuild-results.json",
+      "bytes": 70676,
+      "sha256": "9675eb1d541cab404a3b8883273aad581deb19e9b97bc45d6acfdd5f9005cf5d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/release-evidence.json",
+      "bytes": 6320,
+      "sha256": "c7358eb01628edb8440810025225b4c06593685de125c582950c77da4f2e5b2b"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root/search-results.json",
+      "bytes": 149042,
+      "sha256": "d171e5de8b7fa5fc237762f07e8b1e534ca9e3ca49cb7651c76653069b507d80"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root-build.log",
+      "bytes": 20172,
+      "sha256": "739bfd494127efb84c86cddc0659e146529b99498fbc98bab31c1dd0fccbe4a4"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root-engineering.log",
+      "bytes": 471,
+      "sha256": "80d4a0a67b9f36199236f2384a2dd309fa9fcedf5e932b6decdc2af7498197ef"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root-finish.log",
+      "bytes": 147,
+      "sha256": "390506280bcbb1d1a8b6805e10291d48445aa2ace19fd3258a2b4eb2a8a8fb5d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root-machine-observations.log",
+      "bytes": 822,
+      "sha256": "a7711ec4ed4111878f016e87dfd7b2080e09c5615bb4317417a3a8019ba2bba2"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root-new-surface.log",
+      "bytes": 257,
+      "sha256": "1fa473bc7ae9df137726b153073f5f69665e97e8286cedce98f2d22ca7c861e8"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root-prebuild-expected-mismatch.log",
+      "bytes": 1129,
+      "sha256": "ba7911f45af9d8f26bdf17779bd4b48d6a5cdfdb02290034d56cd3213b42cf07"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root-rebuild.log",
+      "bytes": 20656,
+      "sha256": "fe26522f45de1e69bd083bdc5d4d55ab3f7a579e4a7d5ba43589b1ea3451a631"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root-release-check.log",
+      "bytes": 370,
+      "sha256": "58aa7399ebed3b2118bdac8914ce087c071b65bd6f6efb943faa4a6811cc3a63"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/engineering/root-usage-observations.log",
+      "bytes": 59,
+      "sha256": "dd1c72a727bdb7889c641ec5e432e9c78092cb1c38e3521c480ec525c9b9e178"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/evidence-files.json",
+      "bytes": 48165,
+      "sha256": "39c0e3f9ff1bc0f71cc5a1b3faebd4e4ac778330c2b63f9c241ad89aa6c3d1bb"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/execution-reuse-audit.json",
+      "bytes": 45777,
+      "sha256": "7c91d164b90039b6a0a5144528fd12b904b1424a425d517ea188c3d8ada4376a"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/001-anki-forge_llms.txt.body",
+      "bytes": 6250,
+      "sha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/002-anki-forge_docs_python-quickstart_index.md.body",
+      "bytes": 2542,
+      "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/003-anki-forge_docs_python-api_index.md.body",
+      "bytes": 9320,
+      "sha256": "ce891dfa12abf6e099c563ce509a95f1cab9164bebaff3552e4a0940c56ef886"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/004-anki-forge_docs_compatibility_index.md.body",
+      "bytes": 3374,
+      "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/005-anki-forge_llms.txt.body",
+      "bytes": 6250,
+      "sha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/006-anki-forge_docs_node-api_index.md.body",
+      "bytes": 13196,
+      "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/007-anki-forge_docs_node-quickstart_index.md.body",
+      "bytes": 2472,
+      "sha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/008-anki-forge_llms.txt.body",
+      "bytes": 6250,
+      "sha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/009-anki-forge_docs_json-to-anki_index.md.body",
+      "bytes": 11313,
+      "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/010-anki-forge_docs_updates_index.md.body",
+      "bytes": 8172,
+      "sha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/011-anki-forge_docs_media_index.md.body",
+      "bytes": 8188,
+      "sha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/012-anki-forge_llms.txt.body",
+      "bytes": 6250,
+      "sha256": "0cea4793fc521181334d9d057a74bcbb8aae69c5084e3d2c3bb5f8b06653664e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/013-anki-forge_docs_compatibility_index.md.body",
+      "bytes": 3374,
+      "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/014-anki-forge_docs_build-guarantees_index.md.body",
+      "bytes": 5608,
+      "sha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/015-anki-forge_zh-cn_llms.txt.body",
+      "bytes": 6161,
+      "sha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/016-anki-forge_zh-cn_docs_python-quickstart_index.md.body",
+      "bytes": 2557,
+      "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/017-anki-forge_zh-cn_docs_python-api_index.md.body",
+      "bytes": 8618,
+      "sha256": "d58028202432d624b0963444ca00ab1e237133b68fdac85dbe973db2b4066b31"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/018-anki-forge_zh-cn_docs_compatibility_index.md.body",
+      "bytes": 3250,
+      "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/019-anki-forge_zh-cn_llms.txt.body",
+      "bytes": 6161,
+      "sha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/020-anki-forge_zh-cn_docs_node-api_index.md.body",
+      "bytes": 12218,
+      "sha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/021-anki-forge_zh-cn_docs_node-quickstart_index.md.body",
+      "bytes": 2481,
+      "sha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/022-anki-forge_zh-cn_llms.txt.body",
+      "bytes": 6161,
+      "sha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/023-anki-forge_zh-cn_docs_json-to-anki_index.md.body",
+      "bytes": 11165,
+      "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/024-anki-forge_zh-cn_docs_updates_index.md.body",
+      "bytes": 7608,
+      "sha256": "202f116788465686ef6e979e5629a3439ca603ecb7966f5356792fc0d370fe98"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/025-anki-forge_zh-cn_docs_media_index.md.body",
+      "bytes": 7887,
+      "sha256": "a3a1d049675679579fa5da49d0846a3fc4e74db2f7d1a1f9730174e72a90e9f1"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/026-anki-forge_zh-cn_llms.txt.body",
+      "bytes": 6161,
+      "sha256": "d444a801ccd825a348e60f386480720cdfa14d98d7037110d75580e15acd73d4"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/027-anki-forge_zh-cn_docs_compatibility_index.md.body",
+      "bytes": 3250,
+      "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/028-anki-forge_zh-cn_docs_build-guarantees_index.md.body",
+      "bytes": 4902,
+      "sha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/029-anki-forge_es_llms.txt.body",
+      "bytes": 7427,
+      "sha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/030-anki-forge_es_docs_python-quickstart_index.md.body",
+      "bytes": 2856,
+      "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/031-anki-forge_es_docs_python-api_index.md.body",
+      "bytes": 11307,
+      "sha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/032-anki-forge_es_docs_compatibility_index.md.body",
+      "bytes": 4176,
+      "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/033-anki-forge_es_llms.txt.body",
+      "bytes": 7427,
+      "sha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/034-anki-forge_es_docs_node-api_index.md.body",
+      "bytes": 15876,
+      "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/035-anki-forge_es_docs_node-quickstart_index.md.body",
+      "bytes": 2795,
+      "sha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/036-anki-forge_es_llms.txt.body",
+      "bytes": 7427,
+      "sha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/037-anki-forge_es_docs_json-to-anki_index.md.body",
+      "bytes": 12064,
+      "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/038-anki-forge_es_docs_updates_index.md.body",
+      "bytes": 9425,
+      "sha256": "09df198c4cfd581ffd8d14cfa4a7b645a698bb553aae251234efff8b108d4bf8"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/039-anki-forge_es_docs_media_index.md.body",
+      "bytes": 9848,
+      "sha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/040-anki-forge_es_llms.txt.body",
+      "bytes": 7427,
+      "sha256": "54876dc96bff1bc4ae245354e9a3e14149558943523709784e36ab5a593b9ad2"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/041-anki-forge_es_docs_compatibility_index.md.body",
+      "bytes": 4176,
+      "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/042-anki-forge_es_docs_build-guarantees_index.md.body",
+      "bytes": 7157,
+      "sha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/artifact-integrity.json",
+      "bytes": 64622,
+      "sha256": "8ecdd73c425d67bd3ded2ec22693db03b8723f8d45223033fba69aa9a983b6eb"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-prefix/http-observations.json",
+      "bytes": 334003,
+      "sha256": "a7158a507534d32190aa364914a13f5890b37508edb103352ec9b905dbe75ba9"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-read-prefix.json",
+      "bytes": 99332,
+      "sha256": "bc142bce297da292dc63ebc4c1f035b354cc4002c52f90c2c97588a2bb1e626e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-read-root.json",
+      "bytes": 98306,
+      "sha256": "67cbdc828e2fb4aecfeafed71e40c9b1e37278663d5a69ff0c7876f0071a609c"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/001-llms.txt.body",
+      "bytes": 5791,
+      "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/002-docs_python-quickstart_index.md.body",
+      "bytes": 2287,
+      "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/003-docs_python-api_index.md.body",
+      "bytes": 9269,
+      "sha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/004-docs_compatibility_index.md.body",
+      "bytes": 3238,
+      "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/005-llms.txt.body",
+      "bytes": 5791,
+      "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/006-docs_node-api_index.md.body",
+      "bytes": 13145,
+      "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/007-docs_node-quickstart_index.md.body",
+      "bytes": 2251,
+      "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/008-llms.txt.body",
+      "bytes": 5791,
+      "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/009-docs_json-to-anki_index.md.body",
+      "bytes": 11160,
+      "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/010-docs_updates_index.md.body",
+      "bytes": 8070,
+      "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/011-docs_media_index.md.body",
+      "bytes": 8154,
+      "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/012-llms.txt.body",
+      "bytes": 5791,
+      "sha256": "e8c3105bd8847bebb595b3bbd0bd60f5f31d2300fdce4c50a6b0357f089a0a5f"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/013-docs_compatibility_index.md.body",
+      "bytes": 3238,
+      "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/014-docs_build-guarantees_index.md.body",
+      "bytes": 5557,
+      "sha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/015-zh-cn_llms.txt.body",
+      "bytes": 5702,
+      "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/016-zh-cn_docs_python-quickstart_index.md.body",
+      "bytes": 2302,
+      "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/017-zh-cn_docs_python-api_index.md.body",
+      "bytes": 8567,
+      "sha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/018-zh-cn_docs_compatibility_index.md.body",
+      "bytes": 3114,
+      "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/019-zh-cn_llms.txt.body",
+      "bytes": 5702,
+      "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/020-zh-cn_docs_node-api_index.md.body",
+      "bytes": 12167,
+      "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/021-zh-cn_docs_node-quickstart_index.md.body",
+      "bytes": 2260,
+      "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/022-zh-cn_llms.txt.body",
+      "bytes": 5702,
+      "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/023-zh-cn_docs_json-to-anki_index.md.body",
+      "bytes": 11012,
+      "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/024-zh-cn_docs_updates_index.md.body",
+      "bytes": 7506,
+      "sha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/025-zh-cn_docs_media_index.md.body",
+      "bytes": 7853,
+      "sha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/026-zh-cn_llms.txt.body",
+      "bytes": 5702,
+      "sha256": "de7af1d9a81150a022a482a477625cec3c76576a8508c6a8768704c7b7d5a77e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/027-zh-cn_docs_compatibility_index.md.body",
+      "bytes": 3114,
+      "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/028-zh-cn_docs_build-guarantees_index.md.body",
+      "bytes": 4851,
+      "sha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/029-es_llms.txt.body",
+      "bytes": 6968,
+      "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/030-es_docs_python-quickstart_index.md.body",
+      "bytes": 2601,
+      "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/031-es_docs_python-api_index.md.body",
+      "bytes": 11256,
+      "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/032-es_docs_compatibility_index.md.body",
+      "bytes": 4040,
+      "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/033-es_llms.txt.body",
+      "bytes": 6968,
+      "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/034-es_docs_node-api_index.md.body",
+      "bytes": 15825,
+      "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/035-es_docs_node-quickstart_index.md.body",
+      "bytes": 2574,
+      "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/036-es_llms.txt.body",
+      "bytes": 6968,
+      "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/037-es_docs_json-to-anki_index.md.body",
+      "bytes": 11911,
+      "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/038-es_docs_updates_index.md.body",
+      "bytes": 9323,
+      "sha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/039-es_docs_media_index.md.body",
+      "bytes": 9814,
+      "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/040-es_llms.txt.body",
+      "bytes": 6968,
+      "sha256": "135a09940fa9b94dd9afb3e6d7e6c2228c90db2a2685f8a8db3de7133ded24e8"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/041-es_docs_compatibility_index.md.body",
+      "bytes": 4040,
+      "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/042-es_docs_build-guarantees_index.md.body",
+      "bytes": 7106,
+      "sha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/artifact-integrity.json",
+      "bytes": 64755,
+      "sha256": "5119c92ea2902ea749e40707a53378e0d79be2ee3786b83423bc3f2ecbfd8e9f"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/machine-root/http-observations.json",
+      "bytes": 322990,
+      "sha256": "58f823eb299e5986b564fa0c5589b51d1f3fb04a7a6f1f475857c47e33568940"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/prefix-origin-manifest.json",
+      "bytes": 92788,
+      "sha256": "d8f7a8a924940199f76e992fabefe5a0d195eb422c3d6ac313be6c0f599eed76"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/read-machine-tasks.mjs",
+      "bytes": 4290,
+      "sha256": "c63243039ced1b591e29dcc845932850de08fe092a70ad0de591343c3b60644a"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/review-conclusions.json",
+      "bytes": 11725,
+      "sha256": "8d808961e9b9b177cafc6c39038f2e0a04d82151e1e907e2acf0bc4925af61bc"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/root-origin-manifest.json",
+      "bytes": 88603,
+      "sha256": "c6973e2a178003ad701b444c4dc5d67188d9748ec1966f0e7a28e61289a206cb"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/root-review-comparison.json",
+      "bytes": 21191,
+      "sha256": "7e330aef4327922178be6aa0f0402caea401c06e0406daf3aaab0fa730650840"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-observations.mjs",
+      "bytes": 10617,
+      "sha256": "7854ed053c66025c5be3252b556c9ad340df3a187f0f4fbdbfcdc21cef100fd0"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/artifact-integrity.json",
+      "bytes": 64622,
+      "sha256": "8ecdd73c425d67bd3ded2ec22693db03b8723f8d45223033fba69aa9a983b6eb"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/browser-tour.json",
+      "bytes": 178160,
+      "sha256": "22f94f6d3af8772c0df105f1576b862ac0a09e0f82a8476c0a081320e63945ff"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/en/cell.png",
+      "bytes": 178597,
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/en/tone.wav",
+      "bytes": 16044,
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/en/v1.json",
+      "bytes": 409,
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/en/v2.json",
+      "bytes": 443,
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/es/cell.png",
+      "bytes": 178597,
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/es/tone.wav",
+      "bytes": 16044,
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/es/v1.json",
+      "bytes": 409,
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/es/v2.json",
+      "bytes": 443,
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/zh-CN/cell.png",
+      "bytes": 178597,
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/zh-CN/tone.wav",
+      "bytes": 16044,
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/zh-CN/v1.json",
+      "bytes": 409,
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/downloads/zh-CN/v2.json",
+      "bytes": 443,
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/en-json-media.png",
+      "bytes": 241441,
+      "sha256": "43218aae8150bf6ebfb6d856f6bde74ecfe4407efdc24c4d24e722b0b0de01ad"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/en-node-basic.png",
+      "bytes": 222722,
+      "sha256": "f102e843641fa152a37cc628ae045fea3747bef4e02b26021753ec8e3a2caa52"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/en-original-baseline-update.png",
+      "bytes": 280563,
+      "sha256": "a6a498b8239c0d072c22ec7abfcf4e0cdd7ed937d1c2b02c1f27c64ea8a4159d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/en-python-basic.png",
+      "bytes": 224433,
+      "sha256": "3edf0504498aebe88566765379fa5f39dd55e07347e75740ff390a1576ee17c2"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/en-rust-basic.png",
+      "bytes": 187751,
+      "sha256": "22203eae398522e3ffa7b56fd450856cac56a007d4a4797207a804da7d5b8221"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/en-troubleshooting.png",
+      "bytes": 230574,
+      "sha256": "4c9bc2b4fb31081fe52a8b61988311086d5c7d95b3fdfca59258b202e1a70a7d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/es-json-media.png",
+      "bytes": 263239,
+      "sha256": "01bcbfa6cac34b45acbefbec58e00b4658a450bf4a106d37f94c9e318b5b68ed"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/es-node-basic.png",
+      "bytes": 240937,
+      "sha256": "797cbe9eb175fbeb8b0c2aa067ab53abf68165132a662a9a3d0cea4fd7a5d62b"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/es-original-baseline-update.png",
+      "bytes": 288966,
+      "sha256": "09581d00cb31437a83855bc86e93e0c2ed49a33639845b094d4c9e913b0e21c1"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/es-python-basic.png",
+      "bytes": 229722,
+      "sha256": "bd7c4052b3db11faacb8dbbef493b933262f0f078b6b77e4edc06d9bb33e2a48"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/es-rust-basic.png",
+      "bytes": 226355,
+      "sha256": "62079a62bb2453a0f1ad52f320ebee44acf9cb2dc1b3c54a2162c9fb7f18600b"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/es-troubleshooting.png",
+      "bytes": 260311,
+      "sha256": "6c960fe10901376ac7e759a3c1b44e6e2e0d2c831e8bdba4ab15926791174f21"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/zh-CN-json-media.png",
+      "bytes": 253116,
+      "sha256": "de084e58f5885b86440c2eaf8bd3addc9c90070460987605e16c364931491686"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/zh-CN-node-basic.png",
+      "bytes": 247136,
+      "sha256": "07dc6206bcbd2e05536e7428905f6564c4030247ccdd907eda7db177e200b6c9"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/zh-CN-original-baseline-update.png",
+      "bytes": 295943,
+      "sha256": "999c38218197294c6acaa06c14be79ff06c030b30613ef3fe59e1f363ea980d4"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/zh-CN-python-basic.png",
+      "bytes": 238922,
+      "sha256": "f478ff9dfce39abe46bfc11af599a2211e00b750f8b1747951a0b0e0b0089a68"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/zh-CN-rust-basic.png",
+      "bytes": 218392,
+      "sha256": "9ff313ad03b82c6b034c20979024f79dd05ec5b5fb7cb4dc0cbac6312ec30651"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-prefix/zh-CN-troubleshooting.png",
+      "bytes": 253594,
+      "sha256": "4f9d01e074ce9ee1e6f1dddabedcd04f6f0c0e5b2d247e8a65b19d5b52ca0929"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/artifact-integrity.json",
+      "bytes": 64755,
+      "sha256": "5119c92ea2902ea749e40707a53378e0d79be2ee3786b83423bc3f2ecbfd8e9f"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/browser-tour.json",
+      "bytes": 177371,
+      "sha256": "484bb23c7bc0932df263f80a41bd2fe1efaca6360c8b9e8137f8473cd0f77bfc"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/en/cell.png",
+      "bytes": 178597,
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/en/tone.wav",
+      "bytes": 16044,
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/en/v1.json",
+      "bytes": 409,
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/en/v2.json",
+      "bytes": 443,
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/es/cell.png",
+      "bytes": 178597,
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/es/tone.wav",
+      "bytes": 16044,
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/es/v1.json",
+      "bytes": 409,
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/es/v2.json",
+      "bytes": 443,
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/zh-CN/cell.png",
+      "bytes": 178597,
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/zh-CN/tone.wav",
+      "bytes": 16044,
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/zh-CN/v1.json",
+      "bytes": 409,
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/downloads/zh-CN/v2.json",
+      "bytes": 443,
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/en-json-media.png",
+      "bytes": 241441,
+      "sha256": "43218aae8150bf6ebfb6d856f6bde74ecfe4407efdc24c4d24e722b0b0de01ad"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/en-node-basic.png",
+      "bytes": 222722,
+      "sha256": "f102e843641fa152a37cc628ae045fea3747bef4e02b26021753ec8e3a2caa52"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/en-original-baseline-update.png",
+      "bytes": 280563,
+      "sha256": "a6a498b8239c0d072c22ec7abfcf4e0cdd7ed937d1c2b02c1f27c64ea8a4159d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/en-python-basic.png",
+      "bytes": 224433,
+      "sha256": "3edf0504498aebe88566765379fa5f39dd55e07347e75740ff390a1576ee17c2"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/en-rust-basic.png",
+      "bytes": 187751,
+      "sha256": "22203eae398522e3ffa7b56fd450856cac56a007d4a4797207a804da7d5b8221"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/en-troubleshooting.png",
+      "bytes": 230574,
+      "sha256": "4c9bc2b4fb31081fe52a8b61988311086d5c7d95b3fdfca59258b202e1a70a7d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/es-json-media.png",
+      "bytes": 263239,
+      "sha256": "01bcbfa6cac34b45acbefbec58e00b4658a450bf4a106d37f94c9e318b5b68ed"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/es-node-basic.png",
+      "bytes": 240937,
+      "sha256": "797cbe9eb175fbeb8b0c2aa067ab53abf68165132a662a9a3d0cea4fd7a5d62b"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/es-original-baseline-update.png",
+      "bytes": 288966,
+      "sha256": "09581d00cb31437a83855bc86e93e0c2ed49a33639845b094d4c9e913b0e21c1"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/es-python-basic.png",
+      "bytes": 229722,
+      "sha256": "bd7c4052b3db11faacb8dbbef493b933262f0f078b6b77e4edc06d9bb33e2a48"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/es-rust-basic.png",
+      "bytes": 226355,
+      "sha256": "62079a62bb2453a0f1ad52f320ebee44acf9cb2dc1b3c54a2162c9fb7f18600b"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/es-troubleshooting.png",
+      "bytes": 260311,
+      "sha256": "6c960fe10901376ac7e759a3c1b44e6e2e0d2c831e8bdba4ab15926791174f21"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/zh-CN-json-media.png",
+      "bytes": 253116,
+      "sha256": "de084e58f5885b86440c2eaf8bd3addc9c90070460987605e16c364931491686"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/zh-CN-node-basic.png",
+      "bytes": 247136,
+      "sha256": "07dc6206bcbd2e05536e7428905f6564c4030247ccdd907eda7db177e200b6c9"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/zh-CN-original-baseline-update.png",
+      "bytes": 295943,
+      "sha256": "999c38218197294c6acaa06c14be79ff06c030b30613ef3fe59e1f363ea980d4"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/zh-CN-python-basic.png",
+      "bytes": 238922,
+      "sha256": "f478ff9dfce39abe46bfc11af599a2211e00b750f8b1747951a0b0e0b0089a68"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/zh-CN-rust-basic.png",
+      "bytes": 218392,
+      "sha256": "9ff313ad03b82c6b034c20979024f79dd05ec5b5fb7cb4dc0cbac6312ec30651"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-root/zh-CN-troubleshooting.png",
+      "bytes": 253594,
+      "sha256": "4f9d01e074ce9ee1e6f1dddabedcd04f6f0c0e5b2d247e8a65b19d5b52ca0929"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-tasks-prefix.json",
+      "bytes": 262730,
+      "sha256": "1d448448a2dd1a1bac1866db9100d72a4c36c88d0e5259fe1a05682f8913d5a0"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/history/76f17ee/usage-tasks-root.json",
+      "bytes": 265061,
+      "sha256": "afe36fc49b92abfe096a2cc55e7064e8c59809de2fa0271939e322954bc363e5"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/inspect-maintenance-resources.py",
+      "bytes": 3730,
+      "sha256": "3acd83c4ceba7006ada101b8fa9d43d366423506a63644df8b9992c09d54a7be"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/machine-prefix/001-anki-forge_llms.txt.body",
@@ -430,22 +1485,22 @@
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/machine-prefix/artifact-integrity.json",
       "bytes": 64622,
-      "sha256": "8ecdd73c425d67bd3ded2ec22693db03b8723f8d45223033fba69aa9a983b6eb"
+      "sha256": "4a17ecc96b5be3ddb829271548260b906bfaa2d6350f0ad0cf9d63d99098da53"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/machine-prefix/http-observations.json",
       "bytes": 334003,
-      "sha256": "a7158a507534d32190aa364914a13f5890b37508edb103352ec9b905dbe75ba9"
+      "sha256": "816f5cc16f349de4cb020cc7c514c8ae875f6f9b8ba8ca6a5462fdb4b23fdbde"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/machine-read-prefix.json",
-      "bytes": 99332,
-      "sha256": "bc142bce297da292dc63ebc4c1f035b354cc4002c52f90c2c97588a2bb1e626e"
+      "bytes": 69246,
+      "sha256": "eb09e4bfa625e50e734dc14fbca655e08c38e6e838faf903abb1dd6a2c6446ed"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/machine-read-root.json",
-      "bytes": 98306,
-      "sha256": "67cbdc828e2fb4aecfeafed71e40c9b1e37278663d5a69ff0c7876f0071a609c"
+      "bytes": 71012,
+      "sha256": "0aa6cc5ab7e914d0cad3b0618f66e26b82da87af467c1931ad6ec363dee83d29"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/machine-root/001-llms.txt.body",
@@ -660,17 +1715,27 @@
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/machine-root/artifact-integrity.json",
       "bytes": 64755,
-      "sha256": "5119c92ea2902ea749e40707a53378e0d79be2ee3786b83423bc3f2ecbfd8e9f"
+      "sha256": "64173095ae38b2667107221010a297f958a19ec40b1d6ec5d50f72fa3104fb19"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/machine-root/http-observations.json",
       "bytes": 322990,
-      "sha256": "58f823eb299e5986b564fa0c5589b51d1f3fb04a7a6f1f475857c47e33568940"
+      "sha256": "9c23192388567300d8f2c6cac3915e434110cd45bdc4f6018b1f3cb144aaaaaf"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/maintenance-prefix-comparison.json",
+      "bytes": 12486,
+      "sha256": "c87bf1041f631e9ed994648362ceeb00288e57d847c6bd8890bbb9c00f0ac724"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/maintenance-root-comparison.json",
+      "bytes": 11523,
+      "sha256": "656691ff7c4c9861e7164cecb1731f2892615787ae67ad2dc83426efac5f6b19"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/prefix-origin-manifest.json",
       "bytes": 92788,
-      "sha256": "d8f7a8a924940199f76e992fabefe5a0d195eb422c3d6ac313be6c0f599eed76"
+      "sha256": "02ad75fc0af832034eeb33549e79a486d0218eb8898389fefbb3ca964b3a4d20"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/read-machine-tasks.mjs",
@@ -685,12 +1750,12 @@
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/root-origin-manifest.json",
       "bytes": 88603,
-      "sha256": "c6973e2a178003ad701b444c4dc5d67188d9748ec1966f0e7a28e61289a206cb"
+      "sha256": "f8a47ac8708def70173b1ef8a82daf6d39bceab999ab5fdfbce960e38705935a"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/root-review-comparison.json",
-      "bytes": 21191,
-      "sha256": "7e330aef4327922178be6aa0f0402caea401c06e0406daf3aaab0fa730650840"
+      "bytes": 16989,
+      "sha256": "fafeb4eb959779d47da4f6636800e3875fa4e325078f2ad7f174bbd7ad2270f6"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/usage-observations.mjs",
@@ -700,12 +1765,12 @@
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/usage-prefix/artifact-integrity.json",
       "bytes": 64622,
-      "sha256": "8ecdd73c425d67bd3ded2ec22693db03b8723f8d45223033fba69aa9a983b6eb"
+      "sha256": "4a17ecc96b5be3ddb829271548260b906bfaa2d6350f0ad0cf9d63d99098da53"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/usage-prefix/browser-tour.json",
       "bytes": 178160,
-      "sha256": "22f94f6d3af8772c0df105f1576b862ac0a09e0f82a8476c0a081320e63945ff"
+      "sha256": "218ccf628efee826fd06227f3aa907260282e8c3ba97e7110d0028a61a65cd66"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/usage-prefix/downloads/en/cell.png",
@@ -860,12 +1925,12 @@
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/usage-root/artifact-integrity.json",
       "bytes": 64755,
-      "sha256": "5119c92ea2902ea749e40707a53378e0d79be2ee3786b83423bc3f2ecbfd8e9f"
+      "sha256": "64173095ae38b2667107221010a297f958a19ec40b1d6ec5d50f72fa3104fb19"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/usage-root/browser-tour.json",
       "bytes": 177371,
-      "sha256": "484bb23c7bc0932df263f80a41bd2fe1efaca6360c8b9e8137f8473cd0f77bfc"
+      "sha256": "093919ebdd450a96da127b50506bc3274a59b7efc363077459da869b0ad89f5a"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/usage-root/downloads/en/cell.png",
@@ -1019,13 +2084,13 @@
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/usage-tasks-prefix.json",
-      "bytes": 262730,
-      "sha256": "1d448448a2dd1a1bac1866db9100d72a4c36c88d0e5259fe1a05682f8913d5a0"
+      "bytes": 238632,
+      "sha256": "653075e9ac36f6c1789f7a63d51a8510d3118667a6e7a2f5f1be6a360eee4bf8"
     },
     {
       "path": "docs/plans/evidence/remaining-locales-baseline-2026-11-01/usage-tasks-root.json",
-      "bytes": 265061,
-      "sha256": "afe36fc49b92abfe096a2cc55e7064e8c59809de2fa0271939e322954bc363e5"
+      "bytes": 243611,
+      "sha256": "f50f5c1c6b5c30065ce9203536cda53f2ef645d49c083966337058464212b131"
     }
   ]
 }
