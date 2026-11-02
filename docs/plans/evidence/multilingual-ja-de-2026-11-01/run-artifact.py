@@ -7,11 +7,14 @@ import subprocess
 import sys
 
 root = Path.cwd()
-locale, config, mode = sys.argv[1:]
+locale, config, mode = sys.argv[1:4]
+revision = sys.argv[4] if len(sys.argv) > 4 else ''
+assert revision in ('', 'final')
+label = f'{revision}-{config}' if revision else config
 assert locale in ('ja', 'de') and config in ('prefix', 'root')
 assert mode in ('preview', 'engineering', 'finish')
 phase = root / 'docs/plans/evidence/multilingual-ja-de-2026-11-01' / locale
-output = phase / ('preview' if mode == 'preview' else 'engineering') / config
+output = phase / ('preview' if mode == 'preview' else 'engineering') / label
 output.mkdir(parents=True, exist_ok=True)
 env = dict(os.environ, PATH='/Users/hp/.nvm/versions/node/v24.19.0/bin:' + os.environ['PATH'],
            CHROME_EXECUTABLE='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
@@ -30,7 +33,7 @@ def run(name, args):
         print((output / f'{name}.log').read_text()[-10000:])
         raise SystemExit(result.returncode)
 
-artifact = root / 'target/remaining-locales' / locale / f'{config}-artifact'
+artifact = root / 'target/remaining-locales' / locale / f'{label}-artifact'
 if mode == 'preview':
     env['CONTENT_REVIEW_MODE'] = 'preview'
     run('prepare', ['npm', 'run', 'prepare:site'])
@@ -44,7 +47,7 @@ elif mode == 'engineering':
     run('engineering', ['node', 'scripts/release-evidence.mjs', 'run', '--engineering-only'])
     assert not artifact.exists(), f'Keep previous frozen artifacts immutable: {artifact}'
     shutil.copytree(root / 'website/dist', artifact)
-    shutil.copyfile(artifact / 'generated/site-manifest.json', phase / f'{config}-origin-manifest.json')
+    shutil.copyfile(artifact / 'generated/site-manifest.json', phase / f'{label}-origin-manifest.json')
 else:
     assert artifact.exists()
     shutil.rmtree(root / 'website/dist')

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-awaiting-actual-captures",
+  "sourceCommit": "8f2c77e331147961dce5c0d929a9f5097270a5f8",
+  "reviewerRun": "/root/ja_full_author/independent-de-rendered-usage-2026-11-01",
+  "assembler": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/assemble-usage-review.py",
+    "sha256": "0bd7f7ac66748a7d976dc091fc012787a6f0d4c209228ed542d2ecdd198d8c4f",
+    "syntaxChecked": true,
+    "executedForAcceptance": false
+  },
+  "expectedPerEnvironment": {
+    "locales": 6,
+    "tasksPerLocale": 6,
+    "tasks": 36,
+    "machineResourcesPerLocale": 32,
+    "machineResources": 192
+  },
+  "separateEnvironmentOutputs": [
+    "usage-task-conclusions-prefix.json",
+    "usage-tasks-prefix.json",
+    "usage-task-conclusions-root.json",
+    "usage-tasks-root.json"
+  ],
+  "priorEvidence": [
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/usage-prefix/browser-tour.json",
+      "sha256": "9e601c7475c89507ea2d0452b97268760bed20fadf0e8114e0af150ae2b87ac6",
+      "immutableMatch": true
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/usage-task-conclusions-prefix.json",
+      "sha256": "23fb275fc0d0e411f04742627813e9b4df24629fc18ebd72692b76fdf5aa7bd5",
+      "immutableMatch": true
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/usage-tasks-prefix.json",
+      "sha256": "0e460dbe3d97e6a495392bf80c79c494974f101d7eca7b64501ec29828a87e3e",
+      "immutableMatch": true
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/linguistic-source-review-final.json",
+      "sha256": "98ec8f2327db813eacad3b47394dbe555cff7e6ac1f316b4f7872f5ac5d98fcb",
+      "immutableMatch": true
+    }
+  ],
+  "independentPriorReviewer": "/root/de_full_author/independent-ja-rendered-usage-2026-11-01",
+  "readAlready": "Read the complete prior five-language six-task conclusions, including the full Japanese judgments and the explicit unchanged-four-language reuse chain. Verified their immutable bytes; this alone does not authorize reuse for new bodies.",
+  "remaining": [
+    "Actually read six German rendered task bodies/actions/copy/download records from the formal capture.",
+    "Compare all thirty old-language actual bodies with the immutable previously independently reviewed prefix tour before inheriting semantics.",
+    "Inspect delivered German screenshots, layout observations and rendered OG image, stating the actual visual scope.",
+    "Bind both environments independently and preserve the sealed prefix result."
+  ],
+  "japaneseIndependenceBoundary": "Original Japanese prose author does not self-approve that prose. Its prior independent usage reviewer and source lineage remain explicit; only byte-equality checks and current artifact observations are new."
+}

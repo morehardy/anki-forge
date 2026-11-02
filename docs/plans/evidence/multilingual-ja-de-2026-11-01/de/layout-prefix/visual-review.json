@@ -1,0 +1,25 @@
+{
+  "reviewer": "/root",
+  "scope": "Manual reading of three actual final-artifact images, plus inspection of all 16 measured home/document layouts. CSS root-text enlargement is recorded explicitly; this is not a claim of operating Chrome browser zoom or Linux CI.",
+  "manifestSha256": "d3d623086c148437e699076b66c529a0db16fe36cb7500f06344215f4a8013e6",
+  "imagesRead": [
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/layout-prefix/de-home-320-200.png",
+      "sha256": "9a602b5860c82489cb35314f4d21c5a4c6bf93e57b5e16783de6d04f62bef080"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/layout-prefix/de-python-quickstart-390-200.png",
+      "sha256": "6ad975d2b3377d5f7bc0e33f848fbc8d926a914c53f54af605e7e82a6ddcbc97"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/layout-prefix/og-de.png",
+      "sha256": "6ff8c08d6a2b0c4783f07511e1344ab530e52aa126688ec1af599ebea2fb0038"
+    }
+  ],
+  "observations": [
+    "German home at 320px/200% and documentation at 390px/200% retain legible wrapping and in-viewport native menus; longer theme/navigation controls wrap onto a second row. The open menu intentionally overlays the body.",
+    "All 16 measurements have no horizontal overflow and no page errors. CDP reports .SF NS for the actual German heading text on this macOS Chrome.",
+    "The actual 1200x630 German OG has no clipped headline, description or footer and no overlap with the right-hand card. Visible text is correctly separated across the graphic lines."
+  ],
+  "openIssues": []
+}
