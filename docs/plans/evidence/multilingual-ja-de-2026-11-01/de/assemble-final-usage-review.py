@@ -39,7 +39,7 @@ manifest = json.loads(manifest_bytes)
 assert (directory / f'usage-{environment}/origin-manifest.json').read_bytes() == manifest_bytes
 assert tour['manifestSha256'] == digest(manifest_bytes)
 assert tour['mode'] == 'release-candidate'
-assert tour['commit'] == '6f5f860117f17859d8cbe1fbe0073590e33564b4'
+assert tour['commit'] == '7b5f539ec2b8c34a0a9ac052531cda9571e97725'
 assert set(manifest['releaseLocales']) == {'en', 'zh-CN', 'es', 'pt-BR', 'ja', 'de'}
 assert not tour['pageErrors'] and not tour['responseReadErrors'] and 'failure' not in tour
 for key in ('inputSha256', 'configuration', 'releaseLocales', 'commit'):
@@ -49,7 +49,8 @@ conclusions_path = directory / f'usage-task-conclusions-{environment}.json'
 conclusions = read(conclusions_path)
 assert tour['commit'] == conclusions['sourceCommit']
 assert {Path(item['path']).name for item in conclusions['sourceReviews']} == {
-    'linguistic-source-review-final.json', 'linguistic-source-review-mime-fixed.json'
+    'linguistic-source-review-final.json', 'linguistic-source-review-mime-fixed.json',
+    'linguistic-source-review-mime-rust.json'
 }
 review = conclusions['observations'][environment]
 assert review['status'] == 'passed'

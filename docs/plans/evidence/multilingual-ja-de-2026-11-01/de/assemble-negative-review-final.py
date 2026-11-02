@@ -22,6 +22,7 @@ manifest_path = AREA / f'final-{ENV}-origin-manifest.json'
 findings_path = AREA / 'negative-boundary-findings.json'
 capture = load(capture_path)
 manifest = load(manifest_path)
+assert manifest['commit'] == '7b5f539ec2b8c34a0a9ac052531cda9571e97725'
 findings = load(findings_path)
 assert capture['manifestSha256'] == proof(manifest_path)['sha256']
 assert capture['configuration'] == manifest['configuration']
@@ -31,12 +32,17 @@ report = {
     'schemaVersion': 1, 'kind': 'independent-negative-search-boundary-review',
     'status': 'passed', 'mode': 'release-candidate', 'reviewerType': 'ai',
     'reviewerRun': f'/root/de_technical_review/de-negative-final-{ENV}-2026-11-01',
-    'scope': 'Five frozen German negative queries. Actual top-three result-body prose and tables were independently read for supported-capability boundaries; complete task-related code was separately read in the actual machine responses. This is not ranking or browser-interaction approval. Source withheld queries were not consulted during source/vocabulary review.',
+    'scope': 'Five frozen German negative queries. All twelve original actual top-three result-body prose/table entries were independently read; complete task-related code was separately read in actual machine responses. Exact final-prefix comparison finds only the corrected Python API MIME paragraph, which was independently read again. Root additionally compares every actual body to final prefix. This is not a claim of repeated full readings, ranking or browser-interaction approval. Withheld queries were not consulted during source/vocabulary authoring review.',
     'inputSha256': manifest['inputSha256'], 'configuration': manifest['configuration'],
     'releaseLocales': manifest['releaseLocales'], 'readOrigin': capture['readOrigin'],
     'originManifest': {**proof(manifest_path), 'commit': manifest['commit']},
     'searchResults': proof(capture['resultPath']), 'querySetSha256': capture['querySetSha256'],
     'rawHttpObservations': proof(capture_path), 'semanticFindings': proof(findings_path),
+    'semanticReadLineage': {
+        'originalFullyReadCapture': proof(AREA / 'search-negative-prefix/http-observations.json'),
+        'exactFinalPrefixDelta': proof(AREA / 'mime-final-prefix-http-delta.json'),
+        'correctedMimeParagraphClosure': proof(AREA / f'artifact-mime-closure-final-{ENV}.json'),
+    },
     'resourceBindings': [], 'cases': [], 'openIssues': [],
 }
 assert len(capture['cases']) == 5
@@ -84,5 +90,6 @@ if ENV == 'root':
         'comparisons': comparisons,
     }
 output = AREA / f'search-negative-boundary-final-{ENV}.json'
+assert not (ROOT / output).exists(), 'Preserve any already assembled final report'
 (ROOT / output).write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
 print(json.dumps({**proof(output), 'cases': len(report['cases']), 'readResults': sum(len(case['actualResultBodies']) for case in report['cases']), 'distinctBodies': len(seen)}, ensure_ascii=False))

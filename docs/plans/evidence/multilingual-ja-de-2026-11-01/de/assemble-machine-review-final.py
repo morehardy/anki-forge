@@ -23,6 +23,7 @@ def proof(filename, description):
 
 capture = load(capture_path)
 manifest = load(manifest_path)
+assert manifest['commit'] == '7b5f539ec2b8c34a0a9ac052531cda9571e97725', 'Require the complete three-API MIME correction artifact'
 conclusions = load(conclusions_path)
 assert capture['manifestSha256'] == sha((root / manifest_path).read_bytes())
 assert capture['inputSha256'] == manifest['inputSha256']
@@ -74,5 +75,6 @@ for locale, tasks in capture['entries'].items():
         })
     report['entries'][locale] = {'aiMachineReadReview': results, 'openIssues': []}
 target = directory / f'machine-read-final-{environment}.json'
+assert not (root / target).exists(), 'Preserve any already assembled final report'
 (root / target).write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
 print(f'{environment}: {sum(len(value["aiMachineReadReview"]) for value in report["entries"].values())} actual HTTP reading answers, {len(bindings)} exact machine-resource bindings; no SDK rerun claimed.')

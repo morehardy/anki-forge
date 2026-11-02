@@ -1,0 +1,504 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-negative-search-boundary-review",
+  "status": "passed",
+  "mode": "release-candidate",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/de_technical_review/de-negative-final-root-2026-11-01",
+  "scope": "Five frozen German negative queries. All twelve original actual top-three result-body prose/table entries were independently read; complete task-related code was separately read in actual machine responses. Exact final-prefix comparison finds only the corrected Python API MIME paragraph, which was independently read again. Root additionally compares every actual body to final prefix. This is not a claim of repeated full readings, ranking or browser-interaction approval. Withheld queries were not consulted during source/vocabulary authoring review.",
+  "inputSha256": "c1c3b90c31ad677b850f62e53bb1634d8a1696034faa7543fc877246ee6c0695",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es",
+    "pt-BR",
+    "ja",
+    "de"
+  ],
+  "readOrigin": "http://127.0.0.1:64003",
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/final-root-origin-manifest.json",
+    "sha256": "a7276d9989d0648de6f0bfcca3e78a6d7a0f4a3db5d92dbc670b1ab20f60d279",
+    "commit": "7b5f539ec2b8c34a0a9ac052531cda9571e97725"
+  },
+  "searchResults": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/engineering/final-root/search-results.json",
+    "sha256": "b864ca36a653dea283293d4f6f1b444ed85c1cabc17de03e2612f369341d7c28"
+  },
+  "querySetSha256": "6dc1ae5ce2d9de470bfc95de7965132b3c77a47c90de98713a7740a288027fc8",
+  "rawHttpObservations": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/http-observations.json",
+    "sha256": "9bf013b509298e758650bc5d42c22e1278e532af32677f9a4aece2841ddd5f70"
+  },
+  "semanticFindings": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/negative-boundary-findings.json",
+    "sha256": "465e7d3be250a13c992798873be5afb1deeee3f2db4752599d8ea2bd8d7b04c6"
+  },
+  "semanticReadLineage": {
+    "originalFullyReadCapture": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-prefix/http-observations.json",
+      "sha256": "b61f93388a70d9d911207679cd8780e7803a00d64ceab1f1aac0fbd5a5c4addc"
+    },
+    "exactFinalPrefixDelta": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-final-prefix-http-delta.json",
+      "sha256": "c906b89a9fe52fcc540121d1d9a5a98b18dc3c354d18189353204cfbd43c16c9"
+    },
+    "correctedMimeParagraphClosure": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/artifact-mime-closure-final-root.json",
+      "sha256": "79e54ecac3aac18e319614ddd441015620e162b1d7f5076c5afa6b99daa4c2b3"
+    }
+  },
+  "resourceBindings": [
+    {
+      "route": "/de/docs/rust-guide/",
+      "sha256": "e0f53064dffd797c8d2a32575cfda3c9e3e98be7686c7d50a3ea842616333717"
+    },
+    {
+      "route": "/de/docs/python-api/",
+      "sha256": "070e1144974db82a76b2b993ae3abdd9746ab07d9555b1f0a593b6ca1fc1bf0a"
+    },
+    {
+      "route": "/de/docs/csv-to-anki/",
+      "sha256": "24017947d7ffa6666d6290b756f610d3f3bf1867311cdf5e2ed10089241eda87"
+    },
+    {
+      "route": "/de/docs/updates/",
+      "sha256": "7642f2da6037372890b6cc374354a4353f0fe5ea5122f100b1ab2f62e262b19d"
+    },
+    {
+      "route": "/de/blog/stable-ids-and-deck-updates/",
+      "sha256": "a2173b425c680b94f9486e9b0d497a0414eb78c2355612ce39c7acacea8e26a7"
+    },
+    {
+      "route": "/de/",
+      "sha256": "c7776ec076091a3c313c63cc5a949cbce8a7de699bdd3e7ca24a654e0220d666"
+    },
+    {
+      "route": "/de/docs/media/",
+      "sha256": "28d4431815cfc3673f4a75001eedd58e67b89774e1e027101cde88d87b41ee68"
+    },
+    {
+      "route": "/de/docs/json-to-anki/",
+      "sha256": "4ca70c7bd137f7436b75b9f091d59a6ac952f0de1c9894aa279fa618e9b7598f"
+    },
+    {
+      "route": "/de/docs/compatibility/",
+      "sha256": "d576fc9e8f9d6ee7f459f8c8994279ef8a8020720e7abb0934bc2e50ed264c6e"
+    },
+    {
+      "route": "/de/docs/genanki-migration/",
+      "sha256": "343b6d6a6525c0a55893451e58f349a00e5f2fbf7c2cea0488f84b99f8a96098"
+    },
+    {
+      "route": "/de/docs/troubleshooting/",
+      "sha256": "6c343a67730a7a8b1626527831e4b6c608f4bfe516ed802f444aa6c99d1d5005"
+    }
+  ],
+  "cases": [
+    {
+      "id": "de-negative-01",
+      "query": "zxqvnj 847261 qqqrzz",
+      "intentId": "negative-gibberish",
+      "expectedBoundary": "Die bedeutungslose Eingabe hat keine unterstützte Aufgabe oder Zielseite. Eine leere Ergebnisliste ist zulässig; Suche und Korrektur der Eingabe müssen bedienbar bleiben.",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "The meaningless input has no results and invents no supported task. Empty output is allowed by the frozen boundary. Search/input-correction usability is assessed separately by the browser review, not inferred from this semantic result.",
+      "actualResultBodies": [],
+      "openIssues": []
+    },
+    {
+      "id": "de-negative-02",
+      "query": "ankiforge-project-v1 unverändert einlesen",
+      "intentId": "negative-old-schema",
+      "expectedBoundary": "Die Tool-Rezepte verlangen ankiforge-project-v2 und lehnen v1 ab. Ein Treffer darf die nötige Konvertierung erläutern, aber unveränderte v1-Daten nicht als zulässig darstellen. Leere Ergebnisse sind erlaubt.",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "The first result explicitly requires ankiforge-project-v2 and rejects v1, while keeping package identity-v1 distinct. Python API and CSV results describe public typed authoring and a caller-side CSV parser; neither promises to accept an unchanged old tool recipe. The CSV output name vocabulary-v1.apkg denotes a release version, not acceptance of schema v1. Secondary results are not themselves migration instructions, but do not contradict the capability boundary.",
+      "actualResultBodies": [
+        {
+          "pageId": "rust-guide",
+          "url": "http://127.0.0.1:64003/de/docs/rust-guide/",
+          "route": "/de/docs/rust-guide/",
+          "sha256": "e0f53064dffd797c8d2a32575cfda3c9e3e98be7686c7d50a3ea842616333717",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/01-rust-guide.html",
+            "sha256": "e0f53064dffd797c8d2a32575cfda3c9e3e98be7686c7d50a3ea842616333717"
+          },
+          "quote": "Tool-Rezepte verlangen jetzt ankiforge-project-v2 ohne name auf oberster Ebene; v1 wird zurückgewiesen.",
+          "observation": "Direct rejection of legacy v1 tool input; adjacent contract bundle 2.1.0 and identity-v1 are explicitly different contracts."
+        },
+        {
+          "pageId": "python-api",
+          "url": "http://127.0.0.1:64003/de/docs/python-api/",
+          "route": "/de/docs/python-api/",
+          "sha256": "070e1144974db82a76b2b993ae3abdd9746ab07d9555b1f0a593b6ca1fc1bf0a",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/02-python-api.html",
+            "sha256": "070e1144974db82a76b2b993ae3abdd9746ab07d9555b1f0a593b6ca1fc1bf0a"
+          },
+          "quote": "Das SDK ruft die reguläre öffentliche Rust-API über eine native Erweiterung auf.",
+          "observation": "The full public authoring/model/media/operation API is described; it does not expose an unchanged legacy tool-recipe loader."
+        },
+        {
+          "pageId": "csv-to-anki",
+          "url": "http://127.0.0.1:64003/de/docs/csv-to-anki/",
+          "route": "/de/docs/csv-to-anki/",
+          "sha256": "24017947d7ffa6666d6290b756f610d3f3bf1867311cdf5e2ed10089241eda87",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/03-csv-to-anki.html",
+            "sha256": "24017947d7ffa6666d6290b756f610d3f3bf1867311cdf5e2ed10089241eda87"
+          },
+          "quote": "Der CSV-Parser aus Pythons Standardbibliothek liest die Tabelle; Anki Forge erstellt das Paket.",
+          "observation": "Explicit caller-side CSV parsing with id/front/back validation. The generated filename's v1 is a package version, not an old JSON schema claim."
+        }
+      ],
+      "openIssues": []
+    },
+    {
+      "id": "de-negative-03",
+      "query": "Einen erneuten Anki-Export als Aktualisierungsbasis verwenden",
+      "intentId": "negative-reexport-baseline",
+      "expectedBoundary": "Aktualisierungen brauchen das zuvor ursprünglich verteilte APKG. Ein erneuter Export aus Anki ist kein gültiger Ersatz für diese Basisversion. Leere Ergebnisse sind erlaubt.",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "Updates directly says an Anki re-export loses required embedded evidence; the identity article explicitly calls it unsupported as a baseline. The homepage tells readers to retain the original distribution and warns about local edits/import settings. None presents a re-exported Anki package as a substitute for the original distribution.",
+      "actualResultBodies": [
+        {
+          "pageId": "updates",
+          "url": "http://127.0.0.1:64003/de/docs/updates/",
+          "route": "/de/docs/updates/",
+          "sha256": "7642f2da6037372890b6cc374354a4353f0fe5ea5122f100b1ab2f62e262b19d",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/04-updates.html",
+            "sha256": "7642f2da6037372890b6cc374354a4353f0fe5ea5122f100b1ab2f62e262b19d"
+          },
+          "quote": "Ein erneuter Export aus Anki erhält diese Nachweise nicht und ist daher keine geeignete Aktualisierungsbasis.",
+          "observation": "The body requires complete embedded identity evidence and refuses silent reconstruction; it explicitly rejects the requested baseline."
+        },
+        {
+          "pageId": "blog:stable-ids-and-deck-updates",
+          "url": "http://127.0.0.1:64003/de/blog/stable-ids-and-deck-updates/",
+          "route": "/de/blog/stable-ids-and-deck-updates/",
+          "sha256": "a2173b425c680b94f9486e9b0d497a0414eb78c2355612ce39c7acacea8e26a7",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/05-blog_stable-ids-and-deck-updates.html",
+            "sha256": "a2173b425c680b94f9486e9b0d497a0414eb78c2355612ce39c7acacea8e26a7"
+          },
+          "quote": "Bewahre das ursprüngliche Paket auf, das du verteilt hast; ein erneuter Export aus Anki ist keine unterstützte Basisversion.",
+          "observation": "The article's package-baseline discussion preserves the original evidence and client-import qualifications."
+        },
+        {
+          "pageId": "home",
+          "url": "http://127.0.0.1:64003/de/",
+          "route": "/de/",
+          "sha256": "c7776ec076091a3c313c63cc5a949cbce8a7de699bdd3e7ca24a654e0220d666",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/06-home.html",
+            "sha256": "c7776ec076091a3c313c63cc5a949cbce8a7de699bdd3e7ca24a654e0220d666"
+          },
+          "quote": "Bewahre das ursprünglich verteilte APKG auf.",
+          "observation": "The update demonstration points to the original distribution and nearby import/local-edit limitations. Regenerating content is not described as obtaining a baseline by Anki re-export."
+        }
+      ],
+      "openIssues": []
+    },
+    {
+      "id": "de-negative-04",
+      "query": "Eine PNG-Datei in wrong.mp3 umbenennen und als Audio verwenden",
+      "intentId": "negative-mime-rename",
+      "expectedBoundary": "Umbenennen konvertiert weder die Bytes noch den gespeicherten MIME-Typ. Eine in wrong.mp3 umbenannte PNG-Datei kann bei Inhalts- oder Endungsprüfungen scheitern. Treffer müssen korrekte Eingaben oder eine echte Konvertierung beschreiben und dürfen Umbenennen nicht als Konvertierung versprechen. Leere Ergebnisse sind erlaubt.",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "Media and Rust authoring explicitly say renaming leaves MIME unchanged and give wrong.mp3 as a possible MIME/extension failure. Typed audio requires the retained audio/video category; changing a PNG filename is no conversion. The JSON guide uses a real PNG and WAV and typed image/sound nodes; it offers no rename-to-convert shortcut.",
+      "actualResultBodies": [
+        {
+          "pageId": "media",
+          "url": "http://127.0.0.1:64003/de/docs/media/",
+          "route": "/de/docs/media/",
+          "sha256": "28d4431815cfc3673f4a75001eedd58e67b89774e1e027101cde88d87b41ee68",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/07-media.html",
+            "sha256": "28d4431815cfc3673f4a75001eedd58e67b89774e1e027101cde88d87b41ee68"
+          },
+          "quote": "Das Umbenennen einer Datei ändert den gespeicherten MIME-Typ niemals.",
+          "observation": "The same paragraph distinguishes retained MIME category validation from independent byte/extension validation and explicitly discusses PNG named wrong.mp3."
+        },
+        {
+          "pageId": "rust-guide",
+          "url": "http://127.0.0.1:64003/de/docs/rust-guide/",
+          "route": "/de/docs/rust-guide/",
+          "sha256": "e0f53064dffd797c8d2a32575cfda3c9e3e98be7686c7d50a3ea842616333717",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/08-rust-guide.html",
+            "sha256": "e0f53064dffd797c8d2a32575cfda3c9e3e98be7686c7d50a3ea842616333717"
+          },
+          "quote": "Das Umbenennen beim Export ändert den MIME-Typ nicht",
+          "observation": "The exact wrong.mp3 example can fail with MEDIA.DECLARED_MIME_MISMATCH; typed audio is not made valid by renaming."
+        },
+        {
+          "pageId": "json-to-anki",
+          "url": "http://127.0.0.1:64003/de/docs/json-to-anki/",
+          "route": "/de/docs/json-to-anki/",
+          "sha256": "4ca70c7bd137f7436b75b9f091d59a6ac952f0de1c9894aa279fa618e9b7598f",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/09-json-to-anki.html",
+            "sha256": "4ca70c7bd137f7436b75b9f091d59a6ac952f0de1c9894aa279fa618e9b7598f"
+          },
+          "quote": "Das Bild zeigt eine Zelle; die Audiodatei enthält einen kurzen erzeugten Ton, keine gesprochene Vokabel.",
+          "observation": "The documented inputs are actual cell.png and tone.wav with distinct typed uses. This valid-input recipe does not promise MIME conversion."
+        }
+      ],
+      "openIssues": []
+    },
+    {
+      "id": "de-negative-05",
+      "query": "Den Anki-Lernverlauf direkt zurücksetzen",
+      "intentId": "negative-edit-study-progress",
+      "expectedBoundary": "Die Bibliothek erzeugt APKGs und bearbeitet keine installierte Anki-Sammlung oder Lernplanung direkt. Treffer dürfen die Paket- und Importgrenze erläutern, aber keine direkten Änderungen am Lernverlauf versprechen. Leere Ergebnisse sind erlaubt.",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "The leading compatibility result places import and review-history behavior in the target client and requires client-specific tests. The migration guide creates a new Project/APKG from stable keys and refuses arbitrary legacy identity recovery; troubleshooting addresses authoring, import-baseline, policy and file-lifetime failures. These bodies contain no direct collection mutation, reset-history method or reset promise. They explain package/import constraints rather than claiming to perform the requested reset. This passes the capability boundary without claiming each secondary result is a dedicated reset guide.",
+      "actualResultBodies": [
+        {
+          "pageId": "compatibility",
+          "url": "http://127.0.0.1:64003/de/docs/compatibility/",
+          "route": "/de/docs/compatibility/",
+          "sha256": "d576fc9e8f9d6ee7f459f8c8994279ef8a8020720e7abb0934bc2e50ed264c6e",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/10-compatibility.html",
+            "sha256": "d576fc9e8f9d6ee7f459f8c8994279ef8a8020720e7abb0934bc2e50ed264c6e"
+          },
+          "quote": "Feld- und Vorlagenänderungen, Sortierfelder, lokale Änderungen und Wiederholungsverlauf erfordern Tests für den jeweiligen Client.",
+          "observation": "Review history is expressly client-specific; normal export does not require an installed Anki client, and omission does not delete learner notes."
+        },
+        {
+          "pageId": "genanki-migration",
+          "url": "http://127.0.0.1:64003/de/docs/genanki-migration/",
+          "route": "/de/docs/genanki-migration/",
+          "sha256": "343b6d6a6525c0a55893451e58f349a00e5f2fbf7c2cea0488f84b99f8a96098",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/11-genanki-migration.html",
+            "sha256": "343b6d6a6525c0a55893451e58f349a00e5f2fbf7c2cea0488f84b99f8a96098"
+          },
+          "quote": "Dieser Ablauf stellt keine Identität aus beliebigen älteren Paketen wieder her",
+          "observation": "Migration is described as authoring a new distribution with explicit keys and original APKG evidence, not editing a learner's live collection or resetting history."
+        },
+        {
+          "pageId": "troubleshooting",
+          "url": "http://127.0.0.1:64003/de/docs/troubleshooting/",
+          "route": "/de/docs/troubleshooting/",
+          "sha256": "6c343a67730a7a8b1626527831e4b6c608f4bfe516ed802f444aa6c99d1d5005",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/12-troubleshooting.html",
+            "sha256": "6c343a67730a7a8b1626527831e4b6c608f4bfe516ed802f444aa6c99d1d5005"
+          },
+          "quote": "Verwende als Basis das ursprünglich verteilte APKG mit vollständigen Identitätsnachweisen.",
+          "observation": "All remedies concern supported authoring/media/build/import-evidence contracts. Nothing offers a collection or scheduling reset; generic relevance is not a promise to perform the unsupported action."
+        }
+      ],
+      "openIssues": []
+    }
+  ],
+  "openIssues": [],
+  "deploymentReview": {
+    "method": "Compared all five frozen inputs/boundaries and every actual root result body to the independently read prefix result. All paragraph text is exactly identical. The homepage mainText additionally contains one raw noscript anchor whose href changes exactly from /anki-forge/de/examples/ to /de/examples/, a route present in the root manifest; no semantic text changes. Root HTTP URLs and complete HTML resource hashes are independently bound.",
+    "prefixCapture": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/http-observations.json",
+      "sha256": "a042187c9148bbb66032ddefb92ff1b68846a2638b185699955594407d9c2bd9"
+    },
+    "prefixReview": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-boundary-final-prefix.json",
+      "sha256": "9566dba34bcdcc9bf7bf61b003dbd30f2a45cb15d8f626235a223e258e83ee71"
+    },
+    "comparisons": [
+      {
+        "case": "de-negative-02",
+        "pageId": "rust-guide",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/01-rust-guide.html",
+          "sha256": "e0f53064dffd797c8d2a32575cfda3c9e3e98be7686c7d50a3ea842616333717"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/01-rust-guide.html",
+          "sha256": "df0d5f3077672d69a68355523a4f406b887f9f3f857915522054dd1aaec75fe7"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      },
+      {
+        "case": "de-negative-02",
+        "pageId": "python-api",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/02-python-api.html",
+          "sha256": "070e1144974db82a76b2b993ae3abdd9746ab07d9555b1f0a593b6ca1fc1bf0a"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/02-python-api.html",
+          "sha256": "7c73244119a8733c271683aa533a1fa241f87dae83f48310f38af1525f0188a5"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      },
+      {
+        "case": "de-negative-02",
+        "pageId": "csv-to-anki",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/03-csv-to-anki.html",
+          "sha256": "24017947d7ffa6666d6290b756f610d3f3bf1867311cdf5e2ed10089241eda87"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/03-csv-to-anki.html",
+          "sha256": "6b3237398753465af503f3fe4bdf9eca6454931bca26187cadb48f347c983676"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      },
+      {
+        "case": "de-negative-03",
+        "pageId": "updates",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/04-updates.html",
+          "sha256": "7642f2da6037372890b6cc374354a4353f0fe5ea5122f100b1ab2f62e262b19d"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/04-updates.html",
+          "sha256": "5b48a4c295dc7eb7afcd1d5da17043201f63292eef74e36c85ea6b3b5f761759"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      },
+      {
+        "case": "de-negative-03",
+        "pageId": "blog:stable-ids-and-deck-updates",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/05-blog_stable-ids-and-deck-updates.html",
+          "sha256": "a2173b425c680b94f9486e9b0d497a0414eb78c2355612ce39c7acacea8e26a7"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/05-blog_stable-ids-and-deck-updates.html",
+          "sha256": "99939ca5d017a59b5efe30ec1d01488da4798f39f2f7200ae4266f70f84ad4a5"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      },
+      {
+        "case": "de-negative-03",
+        "pageId": "home",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/06-home.html",
+          "sha256": "c7776ec076091a3c313c63cc5a949cbce8a7de699bdd3e7ca24a654e0220d666"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/06-home.html",
+          "sha256": "f99ac694fffd58d13f78a1ec81415a614c9b9bf8184e5203f9db51241809d1ff"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": false,
+        "rawNoscriptDeploymentHrefDelta": {
+          "before": "href=\"/anki-forge/de/examples/\"",
+          "after": "href=\"/de/examples/\""
+        }
+      },
+      {
+        "case": "de-negative-04",
+        "pageId": "media",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/07-media.html",
+          "sha256": "28d4431815cfc3673f4a75001eedd58e67b89774e1e027101cde88d87b41ee68"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/07-media.html",
+          "sha256": "3e6d68fc04d48a3267484b4e76ebc630721a8d59395d151e25cd451d08e4a1d5"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      },
+      {
+        "case": "de-negative-04",
+        "pageId": "rust-guide",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/08-rust-guide.html",
+          "sha256": "e0f53064dffd797c8d2a32575cfda3c9e3e98be7686c7d50a3ea842616333717"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/08-rust-guide.html",
+          "sha256": "df0d5f3077672d69a68355523a4f406b887f9f3f857915522054dd1aaec75fe7"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      },
+      {
+        "case": "de-negative-04",
+        "pageId": "json-to-anki",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/09-json-to-anki.html",
+          "sha256": "4ca70c7bd137f7436b75b9f091d59a6ac952f0de1c9894aa279fa618e9b7598f"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/09-json-to-anki.html",
+          "sha256": "64001f42aa13ea7f3261979f8172b40a3d5d446a50508e0910653cfa56e35f09"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      },
+      {
+        "case": "de-negative-05",
+        "pageId": "compatibility",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/10-compatibility.html",
+          "sha256": "d576fc9e8f9d6ee7f459f8c8994279ef8a8020720e7abb0934bc2e50ed264c6e"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/10-compatibility.html",
+          "sha256": "56d3c0a1541feccbad6fddfbcbbe4170a0c70bf2eba5abd7c756f5a46a782b95"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      },
+      {
+        "case": "de-negative-05",
+        "pageId": "genanki-migration",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/11-genanki-migration.html",
+          "sha256": "343b6d6a6525c0a55893451e58f349a00e5f2fbf7c2cea0488f84b99f8a96098"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/11-genanki-migration.html",
+          "sha256": "428c4b2d7d66d340e7ed7fc306103600867dd9a0bd6c72da4a339188fd7ed8d7"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      },
+      {
+        "case": "de-negative-05",
+        "pageId": "troubleshooting",
+        "rootBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-root/12-troubleshooting.html",
+          "sha256": "6c343a67730a7a8b1626527831e4b6c608f4bfe516ed802f444aa6c99d1d5005"
+        },
+        "prefixBody": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/search-negative-final-prefix/12-troubleshooting.html",
+          "sha256": "822fe3ae864ccca60500408e785a238ae3b0e70d8befeccb8fbc17a43cb4ab71"
+        },
+        "actualParagraphsIdentical": true,
+        "actualMainTextIdentical": true,
+        "rawNoscriptDeploymentHrefDelta": null
+      }
+    ]
+  }
+}

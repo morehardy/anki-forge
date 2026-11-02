@@ -19,10 +19,15 @@ sha = lambda data: hashlib.sha256(data).hexdigest()
 proof = lambda filename: {'path': str(filename), 'sha256': sha((ROOT / filename).read_bytes())}
 capture_path = DE / f'machine-final-{ENV}/http-observations.json'
 capture = load(capture_path)
+manifest_path = DE / f'final-{ENV}-origin-manifest.json'
+assert load(manifest_path)['commit'] == '7b5f539ec2b8c34a0a9ac052531cda9571e97725'
+assert capture['manifestSha256'] == proof(manifest_path)['sha256']
 closure_path = DE / f'artifact-mime-closure-final-{ENV}.json'
 closure = load(closure_path)
 assert closure['status'] == 'closed'
 assert closure['reviewedCapture'] == proof(capture_path)
+assert closure['reviewedMimePages'] == ['python-api', 'node-api', 'rust-api', 'media', 'rust-guide']
+assert closure['mimeHttpResponsesRead'] == 10
 comparison_path = DE / f'machine-final-{ENV}/prior-response-comparison.json'
 comparison = load(comparison_path)
 assert comparison['currentCapture'] == proof(capture_path)
@@ -41,6 +46,9 @@ supporting = [
     {'path': str(DE / 'machine-german-answers.json'), 'description': 'Four independently authored German answers after full actual German HTTP body/code reading; no SDK rerun claimed.'},
     {'path': str(DE / 'mime-final-prefix-http-delta.json'), 'description': 'Exact original-to-corrected prefix response differences, preserving the earlier full-reading evidence and limiting changes to the two MIME paragraphs.'},
     {'path': str(closure_path), 'description': 'Independent actual corrected MIME paragraph reading and source/artifact finding closure.'},
+    {'path': str(DE / 'technical-source-review-mime-fixed.json'), 'description': 'Independent Node/Python two-entry MIME source correction preserving the original full 204-entry technical review.'},
+    {'path': str(DE / 'technical-source-review-mime-rust.json'), 'description': 'Independent Rust API single-entry correction and whole German MIME-page scope check, preserving both earlier source-review layers.'},
+    {'path': str(DE / f'mime-green-final-{ENV}.json'), 'description': 'Actual extra HTTP captures of five German MIME pages in HTML and Markdown, including Rust API outside the four standard tasks.'},
 ]
 if ENV == 'prefix':
     method = (
@@ -51,7 +59,10 @@ if ENV == 'prefix':
         'After the narrowly reviewed source correction, every one of the 84 new '
         'prefix responses was compared to that original capture; only two German '
         'API paragraphs change, and both corrected actual paragraphs were read '
-        'again. The twenty prior-five-language answers are retained verbatim after '
+        'again. Separately read ten actual HTTP responses covering all five '
+        'German MIME-bearing pages, including the Rust API correction beyond '
+        'the four task routes; all fifteen literals survive in HTML code and '
+        'Markdown code. The twenty prior-five-language answers are retained verbatim after '
         'reading their original conclusions and proving all fifty followed '
         'Markdown responses unchanged from the accepted Japanese release. Twenty '
         'llms starts only add the exact localized Deutsch index line, which was '
@@ -71,7 +82,9 @@ else:
         'were compared to the independently reviewed corrected prefix capture; '
         'the only body difference is the exact configured deployment URL prefix. '
         'The actual root German API MIME paragraphs were independently inspected '
-        'again and preserve all three literal wildcard code spans. The twenty '
+        'again through ten extra HTML/Markdown HTTP responses for all five '
+        'MIME-bearing pages, including Rust API; all fifteen literal wildcard '
+        'code spans survive. The twenty '
         'older-language answers and four German answers retain the explicit '
         'final-prefix reading lineage; no second full German prose reading or '
         'fresh full old-five-language reading is claimed. Independent same-' 
@@ -86,5 +99,6 @@ report = {
     'openIssues': [],
 }
 output = DE / f'machine-conclusions-final-{ENV}.json'
+assert not (ROOT / output).exists(), 'Preserve any already bound final conclusions'
 (ROOT / output).write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
 print(json.dumps({**proof(output), 'answers': 24}))
