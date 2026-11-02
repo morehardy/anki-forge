@@ -30,6 +30,11 @@ export async function sourceSnippet(reference) {
 export async function checkDocumentation({ sync = false } = {}) {
   const sources = new Set(['README.md', 'README.zh-CN.md', 'bindings/node/README.md', 'bindings/python/README.md', ...[...importedDocs, ...translatedDocs].map(doc => doc.source)]);
   const publicData = JSON.parse(await read('docs/ai-quickstart.json'));
+  // A package README ships inside its own release, so it installs that version.
+  const packageVersions = {
+    'bindings/node/README.md': JSON.parse(await read('bindings/node/package.json')).version,
+    'bindings/python/README.md': (await read('bindings/python/pyproject.toml')).match(/^version = "([^"]+)"$/m)[1],
+  };
   let count = 0;
   for (const filename of sources) {
     let markdown = await read(filename);
@@ -41,7 +46,7 @@ export async function checkDocumentation({ sync = false } = {}) {
       count++;
     }
     for (const [, version] of markdown.matchAll(/ankiforge(?:@|==)(\d+\.\d+\.\d+)/g)) {
-      assert.equal(version, publicData.publicVersion, `${filename}: public installation version drift`);
+      assert.equal(version, packageVersions[filename] ?? publicData.publicVersion, `${filename}: public installation version drift`);
     }
     if (sync) await writeFile(path.join(root, filename), markdown);
     const prose = markdown.replace(/```[\s\S]*?```/g, '');
