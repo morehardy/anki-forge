@@ -1,0 +1,3649 @@
+{
+  "scope": "Read-only independent diagnosis of actual same-HTML Pagefind 1.5.2 outputs; no production source or frozen review evidence changed.",
+  "upstreamSources": [
+    "https://github.com/Pagefind/pagefind/blob/v1.5.2/pagefind/src/lib.rs#L49",
+    "https://github.com/Pagefind/pagefind/blob/v1.5.2/pagefind/src/index/mod.rs",
+    "https://github.com/Pagefind/pagefind/blob/v1.5.2/pagefind/src/output/mod.rs"
+  ],
+  "confirmedCause": "Directory traversal order becomes page numbering. Same 34 pages/fragments per language in native Linux filesystem have different order; word index chunks retain word boundaries but CBOR page-number encoding and filenames differ. Direct Docker bind mounts retained host traversal and initially hid the cause.",
+  "languages": {
+    "de": {
+      "samePageAndFragmentSet": true,
+      "samePageOrder": false,
+      "macPageOrder": [
+        {
+          "hash": "de_f3afefe",
+          "url": "/de/",
+          "words": 1322
+        },
+        {
+          "hash": "de_cc2ba9e",
+          "url": "/de/docs/compatibility/",
+          "words": 319
+        },
+        {
+          "hash": "de_659595f",
+          "url": "/de/docs/python-api/",
+          "words": 1161
+        },
+        {
+          "hash": "de_d3e29f6",
+          "url": "/de/docs/",
+          "words": 315
+        },
+        {
+          "hash": "de_d1e35c4",
+          "url": "/de/docs/build-guarantees/",
+          "words": 725
+        },
+        {
+          "hash": "de_82b13c1",
+          "url": "/de/docs/development/",
+          "words": 229
+        },
+        {
+          "hash": "de_446d55c",
+          "url": "/de/docs/ai-anki-cards/",
+          "words": 588
+        },
+        {
+          "hash": "de_11b3ccf",
+          "url": "/de/docs/genanki-migration/",
+          "words": 364
+        },
+        {
+          "hash": "de_e151f2f",
+          "url": "/de/docs/cards/",
+          "words": 298
+        },
+        {
+          "hash": "de_c42dae7",
+          "url": "/de/docs/node-quickstart/",
+          "words": 186
+        },
+        {
+          "hash": "de_1b441fc",
+          "url": "/de/docs/image-occlusion/",
+          "words": 429
+        },
+        {
+          "hash": "de_1f94752",
+          "url": "/de/docs/custom-notetypes/",
+          "words": 403
+        },
+        {
+          "hash": "de_1efa7fa",
+          "url": "/de/docs/installation/",
+          "words": 210
+        },
+        {
+          "hash": "de_1e50e8f",
+          "url": "/de/docs/troubleshooting/",
+          "words": 589
+        },
+        {
+          "hash": "de_aa714d2",
+          "url": "/de/docs/updates/",
+          "words": 897
+        },
+        {
+          "hash": "de_973bae2",
+          "url": "/de/docs/rust-api/",
+          "words": 1057
+        },
+        {
+          "hash": "de_1b23172",
+          "url": "/de/docs/quickstart/",
+          "words": 171
+        },
+        {
+          "hash": "de_ecc24c7",
+          "url": "/de/docs/languages/",
+          "words": 175
+        },
+        {
+          "hash": "de_32d763b",
+          "url": "/de/docs/python-quickstart/",
+          "words": 188
+        },
+        {
+          "hash": "de_624ef4f",
+          "url": "/de/docs/python-diagnostics/",
+          "words": 589
+        },
+        {
+          "hash": "de_c3641d2",
+          "url": "/de/docs/node-api/",
+          "words": 1509
+        },
+        {
+          "hash": "de_1ede3a6",
+          "url": "/de/docs/concepts/",
+          "words": 476
+        },
+        {
+          "hash": "de_85ed505",
+          "url": "/de/docs/api/",
+          "words": 170
+        },
+        {
+          "hash": "de_a3ce578",
+          "url": "/de/docs/templates/",
+          "words": 616
+        },
+        {
+          "hash": "de_255240b",
+          "url": "/de/docs/python-migration/",
+          "words": 215
+        },
+        {
+          "hash": "de_946d92d",
+          "url": "/de/docs/json-to-anki/",
+          "words": 1188
+        },
+        {
+          "hash": "de_e3f65df",
+          "url": "/de/docs/csv-to-anki/",
+          "words": 644
+        },
+        {
+          "hash": "de_fd5d744",
+          "url": "/de/docs/rust-guide/",
+          "words": 682
+        },
+        {
+          "hash": "de_746552c",
+          "url": "/de/docs/anki-forge-vs-genanki/",
+          "words": 484
+        },
+        {
+          "hash": "de_a0a667c",
+          "url": "/de/docs/media/",
+          "words": 1016
+        },
+        {
+          "hash": "de_9d2ddfe",
+          "url": "/de/blog/",
+          "words": 65
+        },
+        {
+          "hash": "de_725ef31",
+          "url": "/de/blog/your-first-anki-deck/",
+          "words": 407
+        },
+        {
+          "hash": "de_b463143",
+          "url": "/de/blog/stable-ids-and-deck-updates/",
+          "words": 409
+        },
+        {
+          "hash": "de_1860918",
+          "url": "/de/examples/",
+          "words": 474
+        }
+      ],
+      "nativeLinuxPageOrder": [
+        {
+          "hash": "de_1860918",
+          "url": "/de/examples/",
+          "words": 474
+        },
+        {
+          "hash": "de_b463143",
+          "url": "/de/blog/stable-ids-and-deck-updates/",
+          "words": 409
+        },
+        {
+          "hash": "de_725ef31",
+          "url": "/de/blog/your-first-anki-deck/",
+          "words": 407
+        },
+        {
+          "hash": "de_9d2ddfe",
+          "url": "/de/blog/",
+          "words": 65
+        },
+        {
+          "hash": "de_a0a667c",
+          "url": "/de/docs/media/",
+          "words": 1016
+        },
+        {
+          "hash": "de_746552c",
+          "url": "/de/docs/anki-forge-vs-genanki/",
+          "words": 484
+        },
+        {
+          "hash": "de_fd5d744",
+          "url": "/de/docs/rust-guide/",
+          "words": 682
+        },
+        {
+          "hash": "de_e3f65df",
+          "url": "/de/docs/csv-to-anki/",
+          "words": 644
+        },
+        {
+          "hash": "de_946d92d",
+          "url": "/de/docs/json-to-anki/",
+          "words": 1188
+        },
+        {
+          "hash": "de_255240b",
+          "url": "/de/docs/python-migration/",
+          "words": 215
+        },
+        {
+          "hash": "de_a3ce578",
+          "url": "/de/docs/templates/",
+          "words": 616
+        },
+        {
+          "hash": "de_85ed505",
+          "url": "/de/docs/api/",
+          "words": 170
+        },
+        {
+          "hash": "de_1ede3a6",
+          "url": "/de/docs/concepts/",
+          "words": 476
+        },
+        {
+          "hash": "de_c3641d2",
+          "url": "/de/docs/node-api/",
+          "words": 1509
+        },
+        {
+          "hash": "de_624ef4f",
+          "url": "/de/docs/python-diagnostics/",
+          "words": 589
+        },
+        {
+          "hash": "de_32d763b",
+          "url": "/de/docs/python-quickstart/",
+          "words": 188
+        },
+        {
+          "hash": "de_ecc24c7",
+          "url": "/de/docs/languages/",
+          "words": 175
+        },
+        {
+          "hash": "de_1b23172",
+          "url": "/de/docs/quickstart/",
+          "words": 171
+        },
+        {
+          "hash": "de_973bae2",
+          "url": "/de/docs/rust-api/",
+          "words": 1057
+        },
+        {
+          "hash": "de_aa714d2",
+          "url": "/de/docs/updates/",
+          "words": 897
+        },
+        {
+          "hash": "de_1e50e8f",
+          "url": "/de/docs/troubleshooting/",
+          "words": 589
+        },
+        {
+          "hash": "de_1efa7fa",
+          "url": "/de/docs/installation/",
+          "words": 210
+        },
+        {
+          "hash": "de_1f94752",
+          "url": "/de/docs/custom-notetypes/",
+          "words": 403
+        },
+        {
+          "hash": "de_1b441fc",
+          "url": "/de/docs/image-occlusion/",
+          "words": 429
+        },
+        {
+          "hash": "de_c42dae7",
+          "url": "/de/docs/node-quickstart/",
+          "words": 186
+        },
+        {
+          "hash": "de_e151f2f",
+          "url": "/de/docs/cards/",
+          "words": 298
+        },
+        {
+          "hash": "de_11b3ccf",
+          "url": "/de/docs/genanki-migration/",
+          "words": 364
+        },
+        {
+          "hash": "de_446d55c",
+          "url": "/de/docs/ai-anki-cards/",
+          "words": 588
+        },
+        {
+          "hash": "de_82b13c1",
+          "url": "/de/docs/development/",
+          "words": 229
+        },
+        {
+          "hash": "de_d1e35c4",
+          "url": "/de/docs/build-guarantees/",
+          "words": 725
+        },
+        {
+          "hash": "de_d3e29f6",
+          "url": "/de/docs/",
+          "words": 315
+        },
+        {
+          "hash": "de_659595f",
+          "url": "/de/docs/python-api/",
+          "words": 1161
+        },
+        {
+          "hash": "de_cc2ba9e",
+          "url": "/de/docs/compatibility/",
+          "words": 319
+        },
+        {
+          "hash": "de_f3afefe",
+          "url": "/de/",
+          "words": 1322
+        }
+      ],
+      "macChunks": [
+        [
+          "0",
+          "genanki",
+          "de_dbc4a72"
+        ],
+        [
+          "genankia",
+          "ter",
+          "de_55be762"
+        ],
+        [
+          "tes",
+          "食へる",
+          "de_7cfab2c"
+        ]
+      ],
+      "nativeLinuxChunks": [
+        [
+          "0",
+          "genanki",
+          "de_71f2b58"
+        ],
+        [
+          "genankia",
+          "ter",
+          "de_8d307b1"
+        ],
+        [
+          "tes",
+          "食へる",
+          "de_368ef33"
+        ]
+      ]
+    },
+    "en": {
+      "samePageAndFragmentSet": true,
+      "samePageOrder": false,
+      "macPageOrder": [
+        {
+          "hash": "en_1741436",
+          "url": "/",
+          "words": 1380
+        },
+        {
+          "hash": "en_36ab406",
+          "url": "/docs/compatibility/",
+          "words": 288
+        },
+        {
+          "hash": "en_49f5808",
+          "url": "/docs/python-api/",
+          "words": 1005
+        },
+        {
+          "hash": "en_ea288a6",
+          "url": "/docs/",
+          "words": 305
+        },
+        {
+          "hash": "en_9c9cef6",
+          "url": "/docs/build-guarantees/",
+          "words": 698
+        },
+        {
+          "hash": "en_c9c3809",
+          "url": "/docs/development/",
+          "words": 203
+        },
+        {
+          "hash": "en_438ffab",
+          "url": "/docs/ai-anki-cards/",
+          "words": 605
+        },
+        {
+          "hash": "en_73e5423",
+          "url": "/docs/genanki-migration/",
+          "words": 361
+        },
+        {
+          "hash": "en_d5abb53",
+          "url": "/docs/cards/",
+          "words": 304
+        },
+        {
+          "hash": "en_616a299",
+          "url": "/docs/node-quickstart/",
+          "words": 183
+        },
+        {
+          "hash": "en_946bdc7",
+          "url": "/docs/image-occlusion/",
+          "words": 417
+        },
+        {
+          "hash": "en_80c3f2e",
+          "url": "/docs/custom-notetypes/",
+          "words": 362
+        },
+        {
+          "hash": "en_9d1fa6a",
+          "url": "/docs/installation/",
+          "words": 207
+        },
+        {
+          "hash": "en_55f4af4",
+          "url": "/docs/troubleshooting/",
+          "words": 545
+        },
+        {
+          "hash": "en_d1b25dc",
+          "url": "/docs/updates/",
+          "words": 836
+        },
+        {
+          "hash": "en_ec37a7d",
+          "url": "/docs/rust-api/",
+          "words": 1034
+        },
+        {
+          "hash": "en_87c947d",
+          "url": "/docs/quickstart/",
+          "words": 167
+        },
+        {
+          "hash": "en_2773f2b",
+          "url": "/docs/languages/",
+          "words": 162
+        },
+        {
+          "hash": "en_1030742",
+          "url": "/docs/python-quickstart/",
+          "words": 182
+        },
+        {
+          "hash": "en_45833a9",
+          "url": "/docs/python-diagnostics/",
+          "words": 576
+        },
+        {
+          "hash": "en_7afb525",
+          "url": "/docs/node-api/",
+          "words": 1482
+        },
+        {
+          "hash": "en_b7ba201",
+          "url": "/docs/concepts/",
+          "words": 429
+        },
+        {
+          "hash": "en_52391f5",
+          "url": "/docs/api/",
+          "words": 153
+        },
+        {
+          "hash": "en_d9db6ee",
+          "url": "/docs/templates/",
+          "words": 633
+        },
+        {
+          "hash": "en_ac91827",
+          "url": "/docs/python-migration/",
+          "words": 205
+        },
+        {
+          "hash": "en_b51c65f",
+          "url": "/docs/json-to-anki/",
+          "words": 1113
+        },
+        {
+          "hash": "en_a4597cc",
+          "url": "/docs/csv-to-anki/",
+          "words": 644
+        },
+        {
+          "hash": "en_4a51cba",
+          "url": "/docs/rust-guide/",
+          "words": 658
+        },
+        {
+          "hash": "en_5f9ee75",
+          "url": "/docs/anki-forge-vs-genanki/",
+          "words": 486
+        },
+        {
+          "hash": "en_608df5a",
+          "url": "/docs/media/",
+          "words": 983
+        },
+        {
+          "hash": "en_23dcb0e",
+          "url": "/blog/",
+          "words": 70
+        },
+        {
+          "hash": "en_4afd1fa",
+          "url": "/blog/your-first-anki-deck/",
+          "words": 410
+        },
+        {
+          "hash": "en_cb1b52c",
+          "url": "/blog/stable-ids-and-deck-updates/",
+          "words": 418
+        },
+        {
+          "hash": "en_668376b",
+          "url": "/examples/",
+          "words": 496
+        }
+      ],
+      "nativeLinuxPageOrder": [
+        {
+          "hash": "en_668376b",
+          "url": "/examples/",
+          "words": 496
+        },
+        {
+          "hash": "en_cb1b52c",
+          "url": "/blog/stable-ids-and-deck-updates/",
+          "words": 418
+        },
+        {
+          "hash": "en_4afd1fa",
+          "url": "/blog/your-first-anki-deck/",
+          "words": 410
+        },
+        {
+          "hash": "en_23dcb0e",
+          "url": "/blog/",
+          "words": 70
+        },
+        {
+          "hash": "en_608df5a",
+          "url": "/docs/media/",
+          "words": 983
+        },
+        {
+          "hash": "en_5f9ee75",
+          "url": "/docs/anki-forge-vs-genanki/",
+          "words": 486
+        },
+        {
+          "hash": "en_4a51cba",
+          "url": "/docs/rust-guide/",
+          "words": 658
+        },
+        {
+          "hash": "en_a4597cc",
+          "url": "/docs/csv-to-anki/",
+          "words": 644
+        },
+        {
+          "hash": "en_b51c65f",
+          "url": "/docs/json-to-anki/",
+          "words": 1113
+        },
+        {
+          "hash": "en_ac91827",
+          "url": "/docs/python-migration/",
+          "words": 205
+        },
+        {
+          "hash": "en_d9db6ee",
+          "url": "/docs/templates/",
+          "words": 633
+        },
+        {
+          "hash": "en_52391f5",
+          "url": "/docs/api/",
+          "words": 153
+        },
+        {
+          "hash": "en_b7ba201",
+          "url": "/docs/concepts/",
+          "words": 429
+        },
+        {
+          "hash": "en_7afb525",
+          "url": "/docs/node-api/",
+          "words": 1482
+        },
+        {
+          "hash": "en_45833a9",
+          "url": "/docs/python-diagnostics/",
+          "words": 576
+        },
+        {
+          "hash": "en_1030742",
+          "url": "/docs/python-quickstart/",
+          "words": 182
+        },
+        {
+          "hash": "en_2773f2b",
+          "url": "/docs/languages/",
+          "words": 162
+        },
+        {
+          "hash": "en_87c947d",
+          "url": "/docs/quickstart/",
+          "words": 167
+        },
+        {
+          "hash": "en_ec37a7d",
+          "url": "/docs/rust-api/",
+          "words": 1034
+        },
+        {
+          "hash": "en_d1b25dc",
+          "url": "/docs/updates/",
+          "words": 836
+        },
+        {
+          "hash": "en_55f4af4",
+          "url": "/docs/troubleshooting/",
+          "words": 545
+        },
+        {
+          "hash": "en_9d1fa6a",
+          "url": "/docs/installation/",
+          "words": 207
+        },
+        {
+          "hash": "en_80c3f2e",
+          "url": "/docs/custom-notetypes/",
+          "words": 362
+        },
+        {
+          "hash": "en_946bdc7",
+          "url": "/docs/image-occlusion/",
+          "words": 417
+        },
+        {
+          "hash": "en_616a299",
+          "url": "/docs/node-quickstart/",
+          "words": 183
+        },
+        {
+          "hash": "en_d5abb53",
+          "url": "/docs/cards/",
+          "words": 304
+        },
+        {
+          "hash": "en_73e5423",
+          "url": "/docs/genanki-migration/",
+          "words": 361
+        },
+        {
+          "hash": "en_438ffab",
+          "url": "/docs/ai-anki-cards/",
+          "words": 605
+        },
+        {
+          "hash": "en_c9c3809",
+          "url": "/docs/development/",
+          "words": 203
+        },
+        {
+          "hash": "en_9c9cef6",
+          "url": "/docs/build-guarantees/",
+          "words": 698
+        },
+        {
+          "hash": "en_ea288a6",
+          "url": "/docs/",
+          "words": 305
+        },
+        {
+          "hash": "en_49f5808",
+          "url": "/docs/python-api/",
+          "words": 1005
+        },
+        {
+          "hash": "en_36ab406",
+          "url": "/docs/compatibility/",
+          "words": 288
+        },
+        {
+          "hash": "en_1741436",
+          "url": "/",
+          "words": 1380
+        }
+      ],
+      "macChunks": [
+        [
+          "0",
+          "html",
+          "en_d5c7474"
+        ],
+        [
+          "htmlc",
+          "stden",
+          "en_e6de4d6"
+        ],
+        [
+          "stder",
+          "食へる",
+          "en_c9b7fe1"
+        ]
+      ],
+      "nativeLinuxChunks": [
+        [
+          "0",
+          "html",
+          "en_44ad5b8"
+        ],
+        [
+          "htmlc",
+          "stden",
+          "en_f661e7a"
+        ],
+        [
+          "stder",
+          "食へる",
+          "en_6d7ae3c"
+        ]
+      ]
+    },
+    "es": {
+      "samePageAndFragmentSet": true,
+      "samePageOrder": false,
+      "macPageOrder": [
+        {
+          "hash": "es_347efe9",
+          "url": "/es/",
+          "words": 1616
+        },
+        {
+          "hash": "es_a58ad87",
+          "url": "/es/docs/compatibility/",
+          "words": 408
+        },
+        {
+          "hash": "es_a0c26f8",
+          "url": "/es/docs/python-api/",
+          "words": 1342
+        },
+        {
+          "hash": "es_474d7d3",
+          "url": "/es/docs/",
+          "words": 382
+        },
+        {
+          "hash": "es_44202df",
+          "url": "/es/docs/build-guarantees/",
+          "words": 982
+        },
+        {
+          "hash": "es_ca3ba24",
+          "url": "/es/docs/development/",
+          "words": 262
+        },
+        {
+          "hash": "es_b0de1e1",
+          "url": "/es/docs/ai-anki-cards/",
+          "words": 721
+        },
+        {
+          "hash": "es_49eacda",
+          "url": "/es/docs/genanki-migration/",
+          "words": 489
+        },
+        {
+          "hash": "es_63dcd77",
+          "url": "/es/docs/cards/",
+          "words": 357
+        },
+        {
+          "hash": "es_873dbb2",
+          "url": "/es/docs/node-quickstart/",
+          "words": 226
+        },
+        {
+          "hash": "es_8356358",
+          "url": "/es/docs/image-occlusion/",
+          "words": 503
+        },
+        {
+          "hash": "es_6edac4f",
+          "url": "/es/docs/custom-notetypes/",
+          "words": 472
+        },
+        {
+          "hash": "es_cc98367",
+          "url": "/es/docs/installation/",
+          "words": 278
+        },
+        {
+          "hash": "es_b04d428",
+          "url": "/es/docs/troubleshooting/",
+          "words": 740
+        },
+        {
+          "hash": "es_3fad726",
+          "url": "/es/docs/updates/",
+          "words": 1054
+        },
+        {
+          "hash": "es_e96e22b",
+          "url": "/es/docs/rust-api/",
+          "words": 1358
+        },
+        {
+          "hash": "es_a15b6e7",
+          "url": "/es/docs/quickstart/",
+          "words": 186
+        },
+        {
+          "hash": "es_34c0557",
+          "url": "/es/docs/languages/",
+          "words": 201
+        },
+        {
+          "hash": "es_f26653f",
+          "url": "/es/docs/python-quickstart/",
+          "words": 224
+        },
+        {
+          "hash": "es_6ea12a8",
+          "url": "/es/docs/python-diagnostics/",
+          "words": 758
+        },
+        {
+          "hash": "es_ffd34b0",
+          "url": "/es/docs/node-api/",
+          "words": 1917
+        },
+        {
+          "hash": "es_67a1771",
+          "url": "/es/docs/concepts/",
+          "words": 606
+        },
+        {
+          "hash": "es_55be7d2",
+          "url": "/es/docs/api/",
+          "words": 196
+        },
+        {
+          "hash": "es_b5eeef3",
+          "url": "/es/docs/templates/",
+          "words": 800
+        },
+        {
+          "hash": "es_94e51cf",
+          "url": "/es/docs/python-migration/",
+          "words": 287
+        },
+        {
+          "hash": "es_28233ed",
+          "url": "/es/docs/json-to-anki/",
+          "words": 1247
+        },
+        {
+          "hash": "es_1c3a72c",
+          "url": "/es/docs/csv-to-anki/",
+          "words": 742
+        },
+        {
+          "hash": "es_54c217f",
+          "url": "/es/docs/rust-guide/",
+          "words": 862
+        },
+        {
+          "hash": "es_f9edd5e",
+          "url": "/es/docs/anki-forge-vs-genanki/",
+          "words": 646
+        },
+        {
+          "hash": "es_915d9d3",
+          "url": "/es/docs/media/",
+          "words": 1256
+        },
+        {
+          "hash": "es_46ec893",
+          "url": "/es/blog/",
+          "words": 84
+        },
+        {
+          "hash": "es_bfc031f",
+          "url": "/es/blog/your-first-anki-deck/",
+          "words": 455
+        },
+        {
+          "hash": "es_2f7c684",
+          "url": "/es/blog/stable-ids-and-deck-updates/",
+          "words": 498
+        },
+        {
+          "hash": "es_908968b",
+          "url": "/es/examples/",
+          "words": 559
+        }
+      ],
+      "nativeLinuxPageOrder": [
+        {
+          "hash": "es_908968b",
+          "url": "/es/examples/",
+          "words": 559
+        },
+        {
+          "hash": "es_2f7c684",
+          "url": "/es/blog/stable-ids-and-deck-updates/",
+          "words": 498
+        },
+        {
+          "hash": "es_bfc031f",
+          "url": "/es/blog/your-first-anki-deck/",
+          "words": 455
+        },
+        {
+          "hash": "es_46ec893",
+          "url": "/es/blog/",
+          "words": 84
+        },
+        {
+          "hash": "es_915d9d3",
+          "url": "/es/docs/media/",
+          "words": 1256
+        },
+        {
+          "hash": "es_f9edd5e",
+          "url": "/es/docs/anki-forge-vs-genanki/",
+          "words": 646
+        },
+        {
+          "hash": "es_54c217f",
+          "url": "/es/docs/rust-guide/",
+          "words": 862
+        },
+        {
+          "hash": "es_1c3a72c",
+          "url": "/es/docs/csv-to-anki/",
+          "words": 742
+        },
+        {
+          "hash": "es_28233ed",
+          "url": "/es/docs/json-to-anki/",
+          "words": 1247
+        },
+        {
+          "hash": "es_94e51cf",
+          "url": "/es/docs/python-migration/",
+          "words": 287
+        },
+        {
+          "hash": "es_b5eeef3",
+          "url": "/es/docs/templates/",
+          "words": 800
+        },
+        {
+          "hash": "es_55be7d2",
+          "url": "/es/docs/api/",
+          "words": 196
+        },
+        {
+          "hash": "es_67a1771",
+          "url": "/es/docs/concepts/",
+          "words": 606
+        },
+        {
+          "hash": "es_ffd34b0",
+          "url": "/es/docs/node-api/",
+          "words": 1917
+        },
+        {
+          "hash": "es_6ea12a8",
+          "url": "/es/docs/python-diagnostics/",
+          "words": 758
+        },
+        {
+          "hash": "es_f26653f",
+          "url": "/es/docs/python-quickstart/",
+          "words": 224
+        },
+        {
+          "hash": "es_34c0557",
+          "url": "/es/docs/languages/",
+          "words": 201
+        },
+        {
+          "hash": "es_a15b6e7",
+          "url": "/es/docs/quickstart/",
+          "words": 186
+        },
+        {
+          "hash": "es_e96e22b",
+          "url": "/es/docs/rust-api/",
+          "words": 1358
+        },
+        {
+          "hash": "es_3fad726",
+          "url": "/es/docs/updates/",
+          "words": 1054
+        },
+        {
+          "hash": "es_b04d428",
+          "url": "/es/docs/troubleshooting/",
+          "words": 740
+        },
+        {
+          "hash": "es_cc98367",
+          "url": "/es/docs/installation/",
+          "words": 278
+        },
+        {
+          "hash": "es_6edac4f",
+          "url": "/es/docs/custom-notetypes/",
+          "words": 472
+        },
+        {
+          "hash": "es_8356358",
+          "url": "/es/docs/image-occlusion/",
+          "words": 503
+        },
+        {
+          "hash": "es_873dbb2",
+          "url": "/es/docs/node-quickstart/",
+          "words": 226
+        },
+        {
+          "hash": "es_63dcd77",
+          "url": "/es/docs/cards/",
+          "words": 357
+        },
+        {
+          "hash": "es_49eacda",
+          "url": "/es/docs/genanki-migration/",
+          "words": 489
+        },
+        {
+          "hash": "es_b0de1e1",
+          "url": "/es/docs/ai-anki-cards/",
+          "words": 721
+        },
+        {
+          "hash": "es_ca3ba24",
+          "url": "/es/docs/development/",
+          "words": 262
+        },
+        {
+          "hash": "es_44202df",
+          "url": "/es/docs/build-guarantees/",
+          "words": 982
+        },
+        {
+          "hash": "es_474d7d3",
+          "url": "/es/docs/",
+          "words": 382
+        },
+        {
+          "hash": "es_a0c26f8",
+          "url": "/es/docs/python-api/",
+          "words": 1342
+        },
+        {
+          "hash": "es_a58ad87",
+          "url": "/es/docs/compatibility/",
+          "words": 408
+        },
+        {
+          "hash": "es_347efe9",
+          "url": "/es/",
+          "words": 1616
+        }
+      ],
+      "macChunks": [
+        [
+          "0",
+          "forg",
+          "es_a1a3f62"
+        ],
+        [
+          "forge",
+          "rie",
+          "es_9c6fb44"
+        ],
+        [
+          "ris",
+          "食へる",
+          "es_837fa8a"
+        ]
+      ],
+      "nativeLinuxChunks": [
+        [
+          "0",
+          "forg",
+          "es_e161217"
+        ],
+        [
+          "forge",
+          "rie",
+          "es_dfd4b31"
+        ],
+        [
+          "ris",
+          "食へる",
+          "es_6370cc8"
+        ]
+      ]
+    },
+    "ja": {
+      "samePageAndFragmentSet": true,
+      "samePageOrder": false,
+      "macPageOrder": [
+        {
+          "hash": "ja_2a43e9f",
+          "url": "/ja/",
+          "words": 2923
+        },
+        {
+          "hash": "ja_8f5c718",
+          "url": "/ja/docs/compatibility/",
+          "words": 602
+        },
+        {
+          "hash": "ja_b17f2da",
+          "url": "/ja/docs/python-api/",
+          "words": 2559
+        },
+        {
+          "hash": "ja_558bfc3",
+          "url": "/ja/docs/",
+          "words": 539
+        },
+        {
+          "hash": "ja_d59f6b5",
+          "url": "/ja/docs/build-guarantees/",
+          "words": 1466
+        },
+        {
+          "hash": "ja_988d441",
+          "url": "/ja/docs/development/",
+          "words": 455
+        },
+        {
+          "hash": "ja_a7597f3",
+          "url": "/ja/docs/ai-anki-cards/",
+          "words": 942
+        },
+        {
+          "hash": "ja_5af40d5",
+          "url": "/ja/docs/genanki-migration/",
+          "words": 874
+        },
+        {
+          "hash": "ja_dd119f0",
+          "url": "/ja/docs/cards/",
+          "words": 678
+        },
+        {
+          "hash": "ja_d9cc8d1",
+          "url": "/ja/docs/node-quickstart/",
+          "words": 403
+        },
+        {
+          "hash": "ja_d2ae522",
+          "url": "/ja/docs/image-occlusion/",
+          "words": 991
+        },
+        {
+          "hash": "ja_24f5b1a",
+          "url": "/ja/docs/custom-notetypes/",
+          "words": 931
+        },
+        {
+          "hash": "ja_b424768",
+          "url": "/ja/docs/installation/",
+          "words": 371
+        },
+        {
+          "hash": "ja_ea36bba",
+          "url": "/ja/docs/troubleshooting/",
+          "words": 1075
+        },
+        {
+          "hash": "ja_801aa13",
+          "url": "/ja/docs/updates/",
+          "words": 2260
+        },
+        {
+          "hash": "ja_bd6f558",
+          "url": "/ja/docs/rust-api/",
+          "words": 2583
+        },
+        {
+          "hash": "ja_a914e2a",
+          "url": "/ja/docs/quickstart/",
+          "words": 396
+        },
+        {
+          "hash": "ja_2445b26",
+          "url": "/ja/docs/languages/",
+          "words": 333
+        },
+        {
+          "hash": "ja_5b394db",
+          "url": "/ja/docs/python-quickstart/",
+          "words": 403
+        },
+        {
+          "hash": "ja_5788eca",
+          "url": "/ja/docs/python-diagnostics/",
+          "words": 1414
+        },
+        {
+          "hash": "ja_29910d5",
+          "url": "/ja/docs/node-api/",
+          "words": 3383
+        },
+        {
+          "hash": "ja_a39475b",
+          "url": "/ja/docs/concepts/",
+          "words": 878
+        },
+        {
+          "hash": "ja_c343924",
+          "url": "/ja/docs/api/",
+          "words": 267
+        },
+        {
+          "hash": "ja_122e90d",
+          "url": "/ja/docs/templates/",
+          "words": 1485
+        },
+        {
+          "hash": "ja_b45c87b",
+          "url": "/ja/docs/python-migration/",
+          "words": 473
+        },
+        {
+          "hash": "ja_8d6483e",
+          "url": "/ja/docs/json-to-anki/",
+          "words": 3144
+        },
+        {
+          "hash": "ja_bbfaa56",
+          "url": "/ja/docs/csv-to-anki/",
+          "words": 1378
+        },
+        {
+          "hash": "ja_15e37e2",
+          "url": "/ja/docs/rust-guide/",
+          "words": 1540
+        },
+        {
+          "hash": "ja_396ff6a",
+          "url": "/ja/docs/anki-forge-vs-genanki/",
+          "words": 868
+        },
+        {
+          "hash": "ja_5025bd4",
+          "url": "/ja/docs/media/",
+          "words": 2453
+        },
+        {
+          "hash": "ja_9e9f8b9",
+          "url": "/ja/blog/",
+          "words": 117
+        },
+        {
+          "hash": "ja_dffdd78",
+          "url": "/ja/blog/your-first-anki-deck/",
+          "words": 746
+        },
+        {
+          "hash": "ja_2a7b6a8",
+          "url": "/ja/blog/stable-ids-and-deck-updates/",
+          "words": 778
+        },
+        {
+          "hash": "ja_da28ed8",
+          "url": "/ja/examples/",
+          "words": 1239
+        }
+      ],
+      "nativeLinuxPageOrder": [
+        {
+          "hash": "ja_da28ed8",
+          "url": "/ja/examples/",
+          "words": 1239
+        },
+        {
+          "hash": "ja_2a7b6a8",
+          "url": "/ja/blog/stable-ids-and-deck-updates/",
+          "words": 778
+        },
+        {
+          "hash": "ja_dffdd78",
+          "url": "/ja/blog/your-first-anki-deck/",
+          "words": 746
+        },
+        {
+          "hash": "ja_9e9f8b9",
+          "url": "/ja/blog/",
+          "words": 117
+        },
+        {
+          "hash": "ja_5025bd4",
+          "url": "/ja/docs/media/",
+          "words": 2453
+        },
+        {
+          "hash": "ja_396ff6a",
+          "url": "/ja/docs/anki-forge-vs-genanki/",
+          "words": 868
+        },
+        {
+          "hash": "ja_15e37e2",
+          "url": "/ja/docs/rust-guide/",
+          "words": 1540
+        },
+        {
+          "hash": "ja_bbfaa56",
+          "url": "/ja/docs/csv-to-anki/",
+          "words": 1378
+        },
+        {
+          "hash": "ja_8d6483e",
+          "url": "/ja/docs/json-to-anki/",
+          "words": 3144
+        },
+        {
+          "hash": "ja_b45c87b",
+          "url": "/ja/docs/python-migration/",
+          "words": 473
+        },
+        {
+          "hash": "ja_122e90d",
+          "url": "/ja/docs/templates/",
+          "words": 1485
+        },
+        {
+          "hash": "ja_c343924",
+          "url": "/ja/docs/api/",
+          "words": 267
+        },
+        {
+          "hash": "ja_a39475b",
+          "url": "/ja/docs/concepts/",
+          "words": 878
+        },
+        {
+          "hash": "ja_29910d5",
+          "url": "/ja/docs/node-api/",
+          "words": 3383
+        },
+        {
+          "hash": "ja_5788eca",
+          "url": "/ja/docs/python-diagnostics/",
+          "words": 1414
+        },
+        {
+          "hash": "ja_5b394db",
+          "url": "/ja/docs/python-quickstart/",
+          "words": 403
+        },
+        {
+          "hash": "ja_2445b26",
+          "url": "/ja/docs/languages/",
+          "words": 333
+        },
+        {
+          "hash": "ja_a914e2a",
+          "url": "/ja/docs/quickstart/",
+          "words": 396
+        },
+        {
+          "hash": "ja_bd6f558",
+          "url": "/ja/docs/rust-api/",
+          "words": 2583
+        },
+        {
+          "hash": "ja_801aa13",
+          "url": "/ja/docs/updates/",
+          "words": 2260
+        },
+        {
+          "hash": "ja_ea36bba",
+          "url": "/ja/docs/troubleshooting/",
+          "words": 1075
+        },
+        {
+          "hash": "ja_b424768",
+          "url": "/ja/docs/installation/",
+          "words": 371
+        },
+        {
+          "hash": "ja_24f5b1a",
+          "url": "/ja/docs/custom-notetypes/",
+          "words": 931
+        },
+        {
+          "hash": "ja_d2ae522",
+          "url": "/ja/docs/image-occlusion/",
+          "words": 991
+        },
+        {
+          "hash": "ja_d9cc8d1",
+          "url": "/ja/docs/node-quickstart/",
+          "words": 403
+        },
+        {
+          "hash": "ja_dd119f0",
+          "url": "/ja/docs/cards/",
+          "words": 678
+        },
+        {
+          "hash": "ja_5af40d5",
+          "url": "/ja/docs/genanki-migration/",
+          "words": 874
+        },
+        {
+          "hash": "ja_a7597f3",
+          "url": "/ja/docs/ai-anki-cards/",
+          "words": 942
+        },
+        {
+          "hash": "ja_988d441",
+          "url": "/ja/docs/development/",
+          "words": 455
+        },
+        {
+          "hash": "ja_d59f6b5",
+          "url": "/ja/docs/build-guarantees/",
+          "words": 1466
+        },
+        {
+          "hash": "ja_558bfc3",
+          "url": "/ja/docs/",
+          "words": 539
+        },
+        {
+          "hash": "ja_b17f2da",
+          "url": "/ja/docs/python-api/",
+          "words": 2559
+        },
+        {
+          "hash": "ja_8f5c718",
+          "url": "/ja/docs/compatibility/",
+          "words": 602
+        },
+        {
+          "hash": "ja_2a43e9f",
+          "url": "/ja/",
+          "words": 2923
+        }
+      ],
+      "macChunks": [
+        [
+          "0",
+          "た",
+          "ja_5b23224"
+        ],
+        [
+          "たい",
+          "文字",
+          "ja_c4c6fa6"
+        ],
+        [
+          "文書",
+          "高速",
+          "ja_2a639d5"
+        ]
+      ],
+      "nativeLinuxChunks": [
+        [
+          "0",
+          "た",
+          "ja_d556d5e"
+        ],
+        [
+          "たい",
+          "文字",
+          "ja_3d757c4"
+        ],
+        [
+          "文書",
+          "高速",
+          "ja_50c8db8"
+        ]
+      ]
+    },
+    "pt-br": {
+      "samePageAndFragmentSet": true,
+      "samePageOrder": false,
+      "macPageOrder": [
+        {
+          "hash": "pt-br_2c16b44",
+          "url": "/pt-br/",
+          "words": 1558
+        },
+        {
+          "hash": "pt-br_e116378",
+          "url": "/pt-br/docs/compatibility/",
+          "words": 397
+        },
+        {
+          "hash": "pt-br_63685ec",
+          "url": "/pt-br/docs/python-api/",
+          "words": 1197
+        },
+        {
+          "hash": "pt-br_cc3173b",
+          "url": "/pt-br/docs/",
+          "words": 379
+        },
+        {
+          "hash": "pt-br_d76b991",
+          "url": "/pt-br/docs/build-guarantees/",
+          "words": 851
+        },
+        {
+          "hash": "pt-br_a653e61",
+          "url": "/pt-br/docs/development/",
+          "words": 239
+        },
+        {
+          "hash": "pt-br_32a43e8",
+          "url": "/pt-br/docs/ai-anki-cards/",
+          "words": 688
+        },
+        {
+          "hash": "pt-br_35fa236",
+          "url": "/pt-br/docs/genanki-migration/",
+          "words": 463
+        },
+        {
+          "hash": "pt-br_b6c3267",
+          "url": "/pt-br/docs/cards/",
+          "words": 347
+        },
+        {
+          "hash": "pt-br_b45a1ed",
+          "url": "/pt-br/docs/node-quickstart/",
+          "words": 220
+        },
+        {
+          "hash": "pt-br_c0eedc2",
+          "url": "/pt-br/docs/image-occlusion/",
+          "words": 479
+        },
+        {
+          "hash": "pt-br_b81c2cf",
+          "url": "/pt-br/docs/custom-notetypes/",
+          "words": 440
+        },
+        {
+          "hash": "pt-br_60e0afb",
+          "url": "/pt-br/docs/installation/",
+          "words": 256
+        },
+        {
+          "hash": "pt-br_793247c",
+          "url": "/pt-br/docs/troubleshooting/",
+          "words": 715
+        },
+        {
+          "hash": "pt-br_eea6673",
+          "url": "/pt-br/docs/updates/",
+          "words": 1001
+        },
+        {
+          "hash": "pt-br_2f5ef10",
+          "url": "/pt-br/docs/rust-api/",
+          "words": 1240
+        },
+        {
+          "hash": "pt-br_acf756d",
+          "url": "/pt-br/docs/quickstart/",
+          "words": 185
+        },
+        {
+          "hash": "pt-br_1619f08",
+          "url": "/pt-br/docs/languages/",
+          "words": 202
+        },
+        {
+          "hash": "pt-br_2233843",
+          "url": "/pt-br/docs/python-quickstart/",
+          "words": 214
+        },
+        {
+          "hash": "pt-br_8c2d486",
+          "url": "/pt-br/docs/python-diagnostics/",
+          "words": 665
+        },
+        {
+          "hash": "pt-br_98e68c3",
+          "url": "/pt-br/docs/node-api/",
+          "words": 1756
+        },
+        {
+          "hash": "pt-br_74464e7",
+          "url": "/pt-br/docs/concepts/",
+          "words": 546
+        },
+        {
+          "hash": "pt-br_a0e0819",
+          "url": "/pt-br/docs/api/",
+          "words": 188
+        },
+        {
+          "hash": "pt-br_9374af9",
+          "url": "/pt-br/docs/templates/",
+          "words": 748
+        },
+        {
+          "hash": "pt-br_a36958b",
+          "url": "/pt-br/docs/python-migration/",
+          "words": 273
+        },
+        {
+          "hash": "pt-br_2792588",
+          "url": "/pt-br/docs/json-to-anki/",
+          "words": 1243
+        },
+        {
+          "hash": "pt-br_4354d15",
+          "url": "/pt-br/docs/csv-to-anki/",
+          "words": 714
+        },
+        {
+          "hash": "pt-br_cd5d763",
+          "url": "/pt-br/docs/rust-guide/",
+          "words": 790
+        },
+        {
+          "hash": "pt-br_f745c6c",
+          "url": "/pt-br/docs/anki-forge-vs-genanki/",
+          "words": 628
+        },
+        {
+          "hash": "pt-br_86d4f51",
+          "url": "/pt-br/docs/media/",
+          "words": 1175
+        },
+        {
+          "hash": "pt-br_d5b6b14",
+          "url": "/pt-br/blog/",
+          "words": 85
+        },
+        {
+          "hash": "pt-br_80ac265",
+          "url": "/pt-br/blog/your-first-anki-deck/",
+          "words": 445
+        },
+        {
+          "hash": "pt-br_24d5fc8",
+          "url": "/pt-br/blog/stable-ids-and-deck-updates/",
+          "words": 479
+        },
+        {
+          "hash": "pt-br_c2c84a8",
+          "url": "/pt-br/examples/",
+          "words": 554
+        }
+      ],
+      "nativeLinuxPageOrder": [
+        {
+          "hash": "pt-br_c2c84a8",
+          "url": "/pt-br/examples/",
+          "words": 554
+        },
+        {
+          "hash": "pt-br_24d5fc8",
+          "url": "/pt-br/blog/stable-ids-and-deck-updates/",
+          "words": 479
+        },
+        {
+          "hash": "pt-br_80ac265",
+          "url": "/pt-br/blog/your-first-anki-deck/",
+          "words": 445
+        },
+        {
+          "hash": "pt-br_d5b6b14",
+          "url": "/pt-br/blog/",
+          "words": 85
+        },
+        {
+          "hash": "pt-br_86d4f51",
+          "url": "/pt-br/docs/media/",
+          "words": 1175
+        },
+        {
+          "hash": "pt-br_f745c6c",
+          "url": "/pt-br/docs/anki-forge-vs-genanki/",
+          "words": 628
+        },
+        {
+          "hash": "pt-br_cd5d763",
+          "url": "/pt-br/docs/rust-guide/",
+          "words": 790
+        },
+        {
+          "hash": "pt-br_4354d15",
+          "url": "/pt-br/docs/csv-to-anki/",
+          "words": 714
+        },
+        {
+          "hash": "pt-br_2792588",
+          "url": "/pt-br/docs/json-to-anki/",
+          "words": 1243
+        },
+        {
+          "hash": "pt-br_a36958b",
+          "url": "/pt-br/docs/python-migration/",
+          "words": 273
+        },
+        {
+          "hash": "pt-br_9374af9",
+          "url": "/pt-br/docs/templates/",
+          "words": 748
+        },
+        {
+          "hash": "pt-br_a0e0819",
+          "url": "/pt-br/docs/api/",
+          "words": 188
+        },
+        {
+          "hash": "pt-br_74464e7",
+          "url": "/pt-br/docs/concepts/",
+          "words": 546
+        },
+        {
+          "hash": "pt-br_98e68c3",
+          "url": "/pt-br/docs/node-api/",
+          "words": 1756
+        },
+        {
+          "hash": "pt-br_8c2d486",
+          "url": "/pt-br/docs/python-diagnostics/",
+          "words": 665
+        },
+        {
+          "hash": "pt-br_2233843",
+          "url": "/pt-br/docs/python-quickstart/",
+          "words": 214
+        },
+        {
+          "hash": "pt-br_1619f08",
+          "url": "/pt-br/docs/languages/",
+          "words": 202
+        },
+        {
+          "hash": "pt-br_acf756d",
+          "url": "/pt-br/docs/quickstart/",
+          "words": 185
+        },
+        {
+          "hash": "pt-br_2f5ef10",
+          "url": "/pt-br/docs/rust-api/",
+          "words": 1240
+        },
+        {
+          "hash": "pt-br_eea6673",
+          "url": "/pt-br/docs/updates/",
+          "words": 1001
+        },
+        {
+          "hash": "pt-br_793247c",
+          "url": "/pt-br/docs/troubleshooting/",
+          "words": 715
+        },
+        {
+          "hash": "pt-br_60e0afb",
+          "url": "/pt-br/docs/installation/",
+          "words": 256
+        },
+        {
+          "hash": "pt-br_b81c2cf",
+          "url": "/pt-br/docs/custom-notetypes/",
+          "words": 440
+        },
+        {
+          "hash": "pt-br_c0eedc2",
+          "url": "/pt-br/docs/image-occlusion/",
+          "words": 479
+        },
+        {
+          "hash": "pt-br_b45a1ed",
+          "url": "/pt-br/docs/node-quickstart/",
+          "words": 220
+        },
+        {
+          "hash": "pt-br_b6c3267",
+          "url": "/pt-br/docs/cards/",
+          "words": 347
+        },
+        {
+          "hash": "pt-br_35fa236",
+          "url": "/pt-br/docs/genanki-migration/",
+          "words": 463
+        },
+        {
+          "hash": "pt-br_32a43e8",
+          "url": "/pt-br/docs/ai-anki-cards/",
+          "words": 688
+        },
+        {
+          "hash": "pt-br_a653e61",
+          "url": "/pt-br/docs/development/",
+          "words": 239
+        },
+        {
+          "hash": "pt-br_d76b991",
+          "url": "/pt-br/docs/build-guarantees/",
+          "words": 851
+        },
+        {
+          "hash": "pt-br_cc3173b",
+          "url": "/pt-br/docs/",
+          "words": 379
+        },
+        {
+          "hash": "pt-br_63685ec",
+          "url": "/pt-br/docs/python-api/",
+          "words": 1197
+        },
+        {
+          "hash": "pt-br_e116378",
+          "url": "/pt-br/docs/compatibility/",
+          "words": 397
+        },
+        {
+          "hash": "pt-br_2c16b44",
+          "url": "/pt-br/",
+          "words": 1558
+        }
+      ],
+      "macChunks": [
+        [
+          "0",
+          "forg",
+          "pt-br_e742485"
+        ],
+        [
+          "forge",
+          "sis",
+          "pt-br_bb93e34"
+        ],
+        [
+          "sit",
+          "食へる",
+          "pt-br_5645d76"
+        ]
+      ],
+      "nativeLinuxChunks": [
+        [
+          "0",
+          "forg",
+          "pt-br_828ddca"
+        ],
+        [
+          "forge",
+          "sis",
+          "pt-br_66e295b"
+        ],
+        [
+          "sit",
+          "食へる",
+          "pt-br_ea4e4d6"
+        ]
+      ]
+    },
+    "zh-cn": {
+      "samePageAndFragmentSet": true,
+      "samePageOrder": false,
+      "macPageOrder": [
+        {
+          "hash": "zh-cn_ccd9395",
+          "url": "/zh-cn/",
+          "words": 2476
+        },
+        {
+          "hash": "zh-cn_e07c211",
+          "url": "/zh-cn/docs/compatibility/",
+          "words": 456
+        },
+        {
+          "hash": "zh-cn_2072b11",
+          "url": "/zh-cn/docs/python-api/",
+          "words": 1829
+        },
+        {
+          "hash": "zh-cn_4f4d6a9",
+          "url": "/zh-cn/docs/",
+          "words": 374
+        },
+        {
+          "hash": "zh-cn_2c1a306",
+          "url": "/zh-cn/docs/build-guarantees/",
+          "words": 965
+        },
+        {
+          "hash": "zh-cn_6b8c77f",
+          "url": "/zh-cn/docs/development/",
+          "words": 355
+        },
+        {
+          "hash": "zh-cn_de4bee6",
+          "url": "/zh-cn/docs/ai-anki-cards/",
+          "words": 737
+        },
+        {
+          "hash": "zh-cn_e614664",
+          "url": "/zh-cn/docs/genanki-migration/",
+          "words": 711
+        },
+        {
+          "hash": "zh-cn_76d3835",
+          "url": "/zh-cn/docs/cards/",
+          "words": 548
+        },
+        {
+          "hash": "zh-cn_47155ea",
+          "url": "/zh-cn/docs/node-quickstart/",
+          "words": 326
+        },
+        {
+          "hash": "zh-cn_7c62e24",
+          "url": "/zh-cn/docs/image-occlusion/",
+          "words": 826
+        },
+        {
+          "hash": "zh-cn_2f57b16",
+          "url": "/zh-cn/docs/custom-notetypes/",
+          "words": 733
+        },
+        {
+          "hash": "zh-cn_53a5608",
+          "url": "/zh-cn/docs/installation/",
+          "words": 261
+        },
+        {
+          "hash": "zh-cn_8d5a826",
+          "url": "/zh-cn/docs/troubleshooting/",
+          "words": 734
+        },
+        {
+          "hash": "zh-cn_be7694c",
+          "url": "/zh-cn/docs/updates/",
+          "words": 1804
+        },
+        {
+          "hash": "zh-cn_9616795",
+          "url": "/zh-cn/docs/rust-api/",
+          "words": 1996
+        },
+        {
+          "hash": "zh-cn_48eeda5",
+          "url": "/zh-cn/docs/quickstart/",
+          "words": 319
+        },
+        {
+          "hash": "zh-cn_bace2e2",
+          "url": "/zh-cn/docs/languages/",
+          "words": 254
+        },
+        {
+          "hash": "zh-cn_38ab74e",
+          "url": "/zh-cn/docs/python-quickstart/",
+          "words": 310
+        },
+        {
+          "hash": "zh-cn_1d838fc",
+          "url": "/zh-cn/docs/python-diagnostics/",
+          "words": 1031
+        },
+        {
+          "hash": "zh-cn_7a10fb8",
+          "url": "/zh-cn/docs/node-api/",
+          "words": 2555
+        },
+        {
+          "hash": "zh-cn_5d7ec68",
+          "url": "/zh-cn/docs/concepts/",
+          "words": 610
+        },
+        {
+          "hash": "zh-cn_4a5405c",
+          "url": "/zh-cn/docs/api/",
+          "words": 203
+        },
+        {
+          "hash": "zh-cn_e14656e",
+          "url": "/zh-cn/docs/templates/",
+          "words": 1215
+        },
+        {
+          "hash": "zh-cn_1f361f3",
+          "url": "/zh-cn/docs/python-migration/",
+          "words": 365
+        },
+        {
+          "hash": "zh-cn_db7205a",
+          "url": "/zh-cn/docs/json-to-anki/",
+          "words": 2833
+        },
+        {
+          "hash": "zh-cn_19f26e1",
+          "url": "/zh-cn/docs/csv-to-anki/",
+          "words": 1160
+        },
+        {
+          "hash": "zh-cn_a36e5e3",
+          "url": "/zh-cn/docs/rust-guide/",
+          "words": 1127
+        },
+        {
+          "hash": "zh-cn_503683d",
+          "url": "/zh-cn/docs/anki-forge-vs-genanki/",
+          "words": 629
+        },
+        {
+          "hash": "zh-cn_bf68eeb",
+          "url": "/zh-cn/docs/media/",
+          "words": 1900
+        },
+        {
+          "hash": "zh-cn_94e91f3",
+          "url": "/zh-cn/blog/",
+          "words": 95
+        },
+        {
+          "hash": "zh-cn_151e899",
+          "url": "/zh-cn/blog/your-first-anki-deck/",
+          "words": 593
+        },
+        {
+          "hash": "zh-cn_dce548c",
+          "url": "/zh-cn/blog/stable-ids-and-deck-updates/",
+          "words": 542
+        },
+        {
+          "hash": "zh-cn_c24e865",
+          "url": "/zh-cn/examples/",
+          "words": 1088
+        }
+      ],
+      "nativeLinuxPageOrder": [
+        {
+          "hash": "zh-cn_c24e865",
+          "url": "/zh-cn/examples/",
+          "words": 1088
+        },
+        {
+          "hash": "zh-cn_dce548c",
+          "url": "/zh-cn/blog/stable-ids-and-deck-updates/",
+          "words": 542
+        },
+        {
+          "hash": "zh-cn_151e899",
+          "url": "/zh-cn/blog/your-first-anki-deck/",
+          "words": 593
+        },
+        {
+          "hash": "zh-cn_94e91f3",
+          "url": "/zh-cn/blog/",
+          "words": 95
+        },
+        {
+          "hash": "zh-cn_bf68eeb",
+          "url": "/zh-cn/docs/media/",
+          "words": 1900
+        },
+        {
+          "hash": "zh-cn_503683d",
+          "url": "/zh-cn/docs/anki-forge-vs-genanki/",
+          "words": 629
+        },
+        {
+          "hash": "zh-cn_a36e5e3",
+          "url": "/zh-cn/docs/rust-guide/",
+          "words": 1127
+        },
+        {
+          "hash": "zh-cn_19f26e1",
+          "url": "/zh-cn/docs/csv-to-anki/",
+          "words": 1160
+        },
+        {
+          "hash": "zh-cn_db7205a",
+          "url": "/zh-cn/docs/json-to-anki/",
+          "words": 2833
+        },
+        {
+          "hash": "zh-cn_1f361f3",
+          "url": "/zh-cn/docs/python-migration/",
+          "words": 365
+        },
+        {
+          "hash": "zh-cn_e14656e",
+          "url": "/zh-cn/docs/templates/",
+          "words": 1215
+        },
+        {
+          "hash": "zh-cn_4a5405c",
+          "url": "/zh-cn/docs/api/",
+          "words": 203
+        },
+        {
+          "hash": "zh-cn_5d7ec68",
+          "url": "/zh-cn/docs/concepts/",
+          "words": 610
+        },
+        {
+          "hash": "zh-cn_7a10fb8",
+          "url": "/zh-cn/docs/node-api/",
+          "words": 2555
+        },
+        {
+          "hash": "zh-cn_1d838fc",
+          "url": "/zh-cn/docs/python-diagnostics/",
+          "words": 1031
+        },
+        {
+          "hash": "zh-cn_38ab74e",
+          "url": "/zh-cn/docs/python-quickstart/",
+          "words": 310
+        },
+        {
+          "hash": "zh-cn_bace2e2",
+          "url": "/zh-cn/docs/languages/",
+          "words": 254
+        },
+        {
+          "hash": "zh-cn_48eeda5",
+          "url": "/zh-cn/docs/quickstart/",
+          "words": 319
+        },
+        {
+          "hash": "zh-cn_9616795",
+          "url": "/zh-cn/docs/rust-api/",
+          "words": 1996
+        },
+        {
+          "hash": "zh-cn_be7694c",
+          "url": "/zh-cn/docs/updates/",
+          "words": 1804
+        },
+        {
+          "hash": "zh-cn_8d5a826",
+          "url": "/zh-cn/docs/troubleshooting/",
+          "words": 734
+        },
+        {
+          "hash": "zh-cn_53a5608",
+          "url": "/zh-cn/docs/installation/",
+          "words": 261
+        },
+        {
+          "hash": "zh-cn_2f57b16",
+          "url": "/zh-cn/docs/custom-notetypes/",
+          "words": 733
+        },
+        {
+          "hash": "zh-cn_7c62e24",
+          "url": "/zh-cn/docs/image-occlusion/",
+          "words": 826
+        },
+        {
+          "hash": "zh-cn_47155ea",
+          "url": "/zh-cn/docs/node-quickstart/",
+          "words": 326
+        },
+        {
+          "hash": "zh-cn_76d3835",
+          "url": "/zh-cn/docs/cards/",
+          "words": 548
+        },
+        {
+          "hash": "zh-cn_e614664",
+          "url": "/zh-cn/docs/genanki-migration/",
+          "words": 711
+        },
+        {
+          "hash": "zh-cn_de4bee6",
+          "url": "/zh-cn/docs/ai-anki-cards/",
+          "words": 737
+        },
+        {
+          "hash": "zh-cn_6b8c77f",
+          "url": "/zh-cn/docs/development/",
+          "words": 355
+        },
+        {
+          "hash": "zh-cn_2c1a306",
+          "url": "/zh-cn/docs/build-guarantees/",
+          "words": 965
+        },
+        {
+          "hash": "zh-cn_4f4d6a9",
+          "url": "/zh-cn/docs/",
+          "words": 374
+        },
+        {
+          "hash": "zh-cn_2072b11",
+          "url": "/zh-cn/docs/python-api/",
+          "words": 1829
+        },
+        {
+          "hash": "zh-cn_e07c211",
+          "url": "/zh-cn/docs/compatibility/",
+          "words": 456
+        },
+        {
+          "hash": "zh-cn_ccd9395",
+          "url": "/zh-cn/",
+          "words": 2476
+        }
+      ],
+      "macChunks": [
+        [
+          "0",
+          "以",
+          "zh-cn_aa8a529"
+        ],
+        [
+          "件",
+          "经",
+          "zh-cn_3055395"
+        ],
+        [
+          "经过",
+          "默认",
+          "zh-cn_ce93e42"
+        ]
+      ],
+      "nativeLinuxChunks": [
+        [
+          "0",
+          "以",
+          "zh-cn_59ff29a"
+        ],
+        [
+          "件",
+          "经",
+          "zh-cn_95921fd"
+        ],
+        [
+          "经过",
+          "默认",
+          "zh-cn_9a785e7"
+        ]
+      ]
+    }
+  },
+  "wasm": {
+    "de": {
+      "observations": {
+        "mac": {
+          "path": "/private/tmp/pr66-pagefind-output-mac/wasm.de.pagefind",
+          "sha256": "1d384f7bffc399ae80cbc352d09e3c0e22d65a5d24f02ac6d1915eeb91d90ad1",
+          "decodedSha256": "5b292167de7f5e5afd37dbd74ffafd440b119f9f0f12683fa96e92837103969c",
+          "decodedBytes": 146791,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "19fd7c2f877e2d671b7609725a818a780c4b8162b3a8b64b87afc058a2cbda6c"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 424,
+              "sha256": "6da251f46b11887a2b75910bc6d37d31569877fa419025c3b0928cb33b23168f"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "91d370f8c11bd2263dd70f24b5ab7ba9a2ce9e6ccfac161132082dc4a590df33"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "76b8019da982fc128c182e0ba6e6b4fe2d0725fd5cb634cfbd6dbb2e09aaf57b"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 1,
+              "sha256": "72dfcfb0c470ac255cde83fb8fe38de8a128188e03ea5ba5b2a93adbea1062fa"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 129256,
+              "sha256": "d9391d7070ea3ebfdd5d24936ff322f46b50112ccac0bda1f9c8020c40ddc694"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 16129,
+              "sha256": "415df76e9905ea3ee46966cca7e6e5cd1dbc686c88b963d650f6544c8b79bfac"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        },
+        "linux": {
+          "path": "/private/tmp/pr66-pagefind-output-linux/wasm.de.pagefind",
+          "sha256": "2e6b0823f6c205132cfb27f5a2a968ac115ce39b24944d0b768ac21f5e6c78db",
+          "decodedSha256": "7bd0b3d0ffbc514f2b58ef822f3bc57fdd212a7834787adf781b1bb1d33f619a",
+          "decodedBytes": 146791,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "19fd7c2f877e2d671b7609725a818a780c4b8162b3a8b64b87afc058a2cbda6c"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 424,
+              "sha256": "6da251f46b11887a2b75910bc6d37d31569877fa419025c3b0928cb33b23168f"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "91d370f8c11bd2263dd70f24b5ab7ba9a2ce9e6ccfac161132082dc4a590df33"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "76b8019da982fc128c182e0ba6e6b4fe2d0725fd5cb634cfbd6dbb2e09aaf57b"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 1,
+              "sha256": "72dfcfb0c470ac255cde83fb8fe38de8a128188e03ea5ba5b2a93adbea1062fa"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 129256,
+              "sha256": "4f149f192f2ea0a6450f2b023d8726d80e6d332b51678f1f43dc82925828ec72"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 16129,
+              "sha256": "5039cdd2fe06667a9d77dc49d53e1ffedb6c354ba0296ad76d6b60f851bd0e33"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        },
+        "linux-x64": {
+          "path": "/private/tmp/pr66-pagefind-output-linux-x64/wasm.de.pagefind",
+          "sha256": "f1e251bdaf42bd2ded77e7dd41460ebe237cba885ec8f3094f4be995c1ebbc57",
+          "decodedSha256": "7bd0b3d0ffbc514f2b58ef822f3bc57fdd212a7834787adf781b1bb1d33f619a",
+          "decodedBytes": 146791,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "19fd7c2f877e2d671b7609725a818a780c4b8162b3a8b64b87afc058a2cbda6c"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 424,
+              "sha256": "6da251f46b11887a2b75910bc6d37d31569877fa419025c3b0928cb33b23168f"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "91d370f8c11bd2263dd70f24b5ab7ba9a2ce9e6ccfac161132082dc4a590df33"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "76b8019da982fc128c182e0ba6e6b4fe2d0725fd5cb634cfbd6dbb2e09aaf57b"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 1,
+              "sha256": "72dfcfb0c470ac255cde83fb8fe38de8a128188e03ea5ba5b2a93adbea1062fa"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 129256,
+              "sha256": "4f149f192f2ea0a6450f2b023d8726d80e6d332b51678f1f43dc82925828ec72"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 16129,
+              "sha256": "5039cdd2fe06667a9d77dc49d53e1ffedb6c354ba0296ad76d6b60f851bd0e33"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        }
+      },
+      "changedSectionsMacVsLinux": [
+        10,
+        11
+      ],
+      "customSectionsIdentical": true,
+      "linuxArm64AndX64WasmSectionsIdentical": true
+    },
+    "en": {
+      "observations": {
+        "mac": {
+          "path": "/private/tmp/pr66-pagefind-output-mac/wasm.en.pagefind",
+          "sha256": "6c8406154b5d460fc8b6cdbf2c99c008c43c465efdb1f9c15c192f5cf30dcd85",
+          "decodedSha256": "24b8831b0d6c54f112bab9aa283eac515a24423bc4968e6fc7958ea372253bf2",
+          "decodedBytes": 151143,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "71ebd1fb93039bcff78f5e2cf4734ed6e26dbc7160021cfba31ded30ca68c90d"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 427,
+              "sha256": "57450568473c2c21f5c5a86b6bbd24c1049dbb97aa9303aa3e8c4ce66a4a141e"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "17f990dcf71e009036c187f68e802c36960bd956989dfa22a459c0e0624b473b"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "20175e73619f2450235596df52657e28655dd63c43192b38a7c0973f90f34282"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 2,
+              "sha256": "8985eae317f2f7363cc3260b04e3d2b0d27ef909711ee1913339e9a195a09572"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 131646,
+              "sha256": "e31ba27e37a54125c37a739d7b7862513a2932c8a64ed32abafc7f4af32e7c8b"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 18086,
+              "sha256": "289ff2fcc3dcfce02788e963c5427e3eb46a3eed465915bf6fdb1364772fc17b"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        },
+        "linux": {
+          "path": "/private/tmp/pr66-pagefind-output-linux/wasm.en.pagefind",
+          "sha256": "e99e9a04b846b68e99dac617421945740e81b1843807c48bdb17adb521c7230f",
+          "decodedSha256": "7e092add3897f1c134d7f093ebae88a3358e671addd5e1a3d39dcebdee83b12a",
+          "decodedBytes": 151143,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "71ebd1fb93039bcff78f5e2cf4734ed6e26dbc7160021cfba31ded30ca68c90d"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 427,
+              "sha256": "57450568473c2c21f5c5a86b6bbd24c1049dbb97aa9303aa3e8c4ce66a4a141e"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "17f990dcf71e009036c187f68e802c36960bd956989dfa22a459c0e0624b473b"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "20175e73619f2450235596df52657e28655dd63c43192b38a7c0973f90f34282"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 2,
+              "sha256": "8985eae317f2f7363cc3260b04e3d2b0d27ef909711ee1913339e9a195a09572"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 131646,
+              "sha256": "0907988ba9812d617f193676bde2e32d324402a7258a0b3909b6f0470c202c3b"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 18086,
+              "sha256": "7b2010828a5cd853b38fd2c52fc6c89f81bd740cc258e9cb19dfaf375305f4f1"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        },
+        "linux-x64": {
+          "path": "/private/tmp/pr66-pagefind-output-linux-x64/wasm.en.pagefind",
+          "sha256": "bb16c9e6d3d214d4d05cccca51df7b487b86b3657318da767f6ca9e0a2e7259d",
+          "decodedSha256": "7e092add3897f1c134d7f093ebae88a3358e671addd5e1a3d39dcebdee83b12a",
+          "decodedBytes": 151143,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "71ebd1fb93039bcff78f5e2cf4734ed6e26dbc7160021cfba31ded30ca68c90d"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 427,
+              "sha256": "57450568473c2c21f5c5a86b6bbd24c1049dbb97aa9303aa3e8c4ce66a4a141e"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "17f990dcf71e009036c187f68e802c36960bd956989dfa22a459c0e0624b473b"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "20175e73619f2450235596df52657e28655dd63c43192b38a7c0973f90f34282"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 2,
+              "sha256": "8985eae317f2f7363cc3260b04e3d2b0d27ef909711ee1913339e9a195a09572"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 131646,
+              "sha256": "0907988ba9812d617f193676bde2e32d324402a7258a0b3909b6f0470c202c3b"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 18086,
+              "sha256": "7b2010828a5cd853b38fd2c52fc6c89f81bd740cc258e9cb19dfaf375305f4f1"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        }
+      },
+      "changedSectionsMacVsLinux": [
+        10,
+        11
+      ],
+      "customSectionsIdentical": true,
+      "linuxArm64AndX64WasmSectionsIdentical": true
+    },
+    "es": {
+      "observations": {
+        "mac": {
+          "path": "/private/tmp/pr66-pagefind-output-mac/wasm.es.pagefind",
+          "sha256": "d1d08e3f822c8f2e6489ea27eb0880e261b4be19fae230a32251f173ea34d9a1",
+          "decodedSha256": "f7e7e3d1c888824e336176f9bdea487cf1ff1df6f898e68ffae9fe65143f85c9",
+          "decodedBytes": 150887,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "9e64b33d426ac1131f2d3e8075a9119d8865ac75dd048cad8e2c95ab532f4b04"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 422,
+              "sha256": "e1e36835c9fddecd02e1253d68deaea2126b4b5342b39a95dd60c36a7016ee9c"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "daf0ee9bd18ba8782e9ff9a90172bf4de9128bea8b2d00f7cc40b7ad2ba61680"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "68749fd8af101ba5ace3c1ecc6cf8f20e10d273882aa8fa97e627c5e63579211"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 2,
+              "sha256": "5a0ca80f71548ce98c702ee9c8f9d762ddd355e11c85b43372d819ae929e6de9"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 129254,
+              "sha256": "038d0f7438a27c50449e1627e5d681b7aac1bdc0c0f9f19bcda631ae61b83400"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 20227,
+              "sha256": "dd56b6930fd3d5f5ea31e868f1685d56548416c9a69f457772c0550997e3736b"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        },
+        "linux": {
+          "path": "/private/tmp/pr66-pagefind-output-linux/wasm.es.pagefind",
+          "sha256": "32e56827aad0196e9f683387d0ff2b970e8ba48fb40e99e57bbbda60b6efd18c",
+          "decodedSha256": "82ed3130fd97696ca6cee0c8734a718b193b2bf645ac46131282a87851bef7aa",
+          "decodedBytes": 150887,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "9e64b33d426ac1131f2d3e8075a9119d8865ac75dd048cad8e2c95ab532f4b04"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 422,
+              "sha256": "e1e36835c9fddecd02e1253d68deaea2126b4b5342b39a95dd60c36a7016ee9c"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "daf0ee9bd18ba8782e9ff9a90172bf4de9128bea8b2d00f7cc40b7ad2ba61680"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "68749fd8af101ba5ace3c1ecc6cf8f20e10d273882aa8fa97e627c5e63579211"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 2,
+              "sha256": "5a0ca80f71548ce98c702ee9c8f9d762ddd355e11c85b43372d819ae929e6de9"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 129254,
+              "sha256": "0e026d713a802ab4e32ecc657f540a75f366d78e5d15895eb9409aea989f5c69"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 20227,
+              "sha256": "8895de043ff141872a40ec5833d18b3825606e64f6df52ec59db0da4be6625b5"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        },
+        "linux-x64": {
+          "path": "/private/tmp/pr66-pagefind-output-linux-x64/wasm.es.pagefind",
+          "sha256": "c00d45e7242a60fc25bea534ddacea609cff5fd6138fb9f84194f7b68ed3ecfa",
+          "decodedSha256": "82ed3130fd97696ca6cee0c8734a718b193b2bf645ac46131282a87851bef7aa",
+          "decodedBytes": 150887,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "9e64b33d426ac1131f2d3e8075a9119d8865ac75dd048cad8e2c95ab532f4b04"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 422,
+              "sha256": "e1e36835c9fddecd02e1253d68deaea2126b4b5342b39a95dd60c36a7016ee9c"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "daf0ee9bd18ba8782e9ff9a90172bf4de9128bea8b2d00f7cc40b7ad2ba61680"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "68749fd8af101ba5ace3c1ecc6cf8f20e10d273882aa8fa97e627c5e63579211"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 2,
+              "sha256": "5a0ca80f71548ce98c702ee9c8f9d762ddd355e11c85b43372d819ae929e6de9"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 129254,
+              "sha256": "0e026d713a802ab4e32ecc657f540a75f366d78e5d15895eb9409aea989f5c69"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 20227,
+              "sha256": "8895de043ff141872a40ec5833d18b3825606e64f6df52ec59db0da4be6625b5"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        }
+      },
+      "changedSectionsMacVsLinux": [
+        10,
+        11
+      ],
+      "customSectionsIdentical": true,
+      "linuxArm64AndX64WasmSectionsIdentical": true
+    },
+    "pt-br": {
+      "observations": {
+        "mac": {
+          "path": "/private/tmp/pr66-pagefind-output-mac/wasm.pt-br.pagefind",
+          "sha256": "7fc005a23d79d120debb8bf7d2489b3e21fd97ed4927420513b314c7c4e85907",
+          "decodedSha256": "7b0aba6c3fe3b61003be66b8459fe6aa95d8930fe6544a757fb68df9281d3171",
+          "decodedBytes": 150244,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "9e64b33d426ac1131f2d3e8075a9119d8865ac75dd048cad8e2c95ab532f4b04"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 423,
+              "sha256": "e31fa97b534db6ef1b024913fbef490cc250509bb29e813a1ff07bd9a959ccc4"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "60a2c05d994a18b23b9441b393976cdfa276c4f0b9f54def4bd381a482490876"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "ca04a391f080fec3b5d49a29835cd5baca614b5b1038b384c75b51eb10600f39"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 2,
+              "sha256": "6624800ada3f6c82669393c140336974448615cc9183717624cc57b8ac1b003f"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 128911,
+              "sha256": "ed2ec8b07bd6a076ebfe6643144822d10a0681ffbbb08a55c06d9341a4a0a102"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 19926,
+              "sha256": "1035d857ea773fa73e40bcb7005de5625c3624660d413374a6607fec2820fffa"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        },
+        "linux": {
+          "path": "/private/tmp/pr66-pagefind-output-linux/wasm.pt-br.pagefind",
+          "sha256": "b5e3fde81fa96b220f9bde7d0d736255af9a6261492da177c46294cce1806757",
+          "decodedSha256": "fa720cfc9c2b836399315cd6c15af1497c6e5b3df36d591a6584448f0cb88b12",
+          "decodedBytes": 150244,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "9e64b33d426ac1131f2d3e8075a9119d8865ac75dd048cad8e2c95ab532f4b04"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 423,
+              "sha256": "e31fa97b534db6ef1b024913fbef490cc250509bb29e813a1ff07bd9a959ccc4"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "60a2c05d994a18b23b9441b393976cdfa276c4f0b9f54def4bd381a482490876"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "ca04a391f080fec3b5d49a29835cd5baca614b5b1038b384c75b51eb10600f39"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 2,
+              "sha256": "6624800ada3f6c82669393c140336974448615cc9183717624cc57b8ac1b003f"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 128911,
+              "sha256": "caa4a25be2f456f5a186e8fe3e508ec7eb5cdefb84b746ddc7933d31f0d9befd"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 19926,
+              "sha256": "63939341663e55c3895d4843d6ce4fa1812649d85aa1873e784761834f5014f4"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        },
+        "linux-x64": {
+          "path": "/private/tmp/pr66-pagefind-output-linux-x64/wasm.pt-br.pagefind",
+          "sha256": "274994577df8da8d1945043b05eb3708abbaff717a00219a2f87e66f8705e6d5",
+          "decodedSha256": "fa720cfc9c2b836399315cd6c15af1497c6e5b3df36d591a6584448f0cb88b12",
+          "decodedBytes": 150244,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "9e64b33d426ac1131f2d3e8075a9119d8865ac75dd048cad8e2c95ab532f4b04"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 423,
+              "sha256": "e31fa97b534db6ef1b024913fbef490cc250509bb29e813a1ff07bd9a959ccc4"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "1b58c7f4f2afe426b54e48fe872cbb21fddb7978266face5ef8a196bf3f99e87"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "60a2c05d994a18b23b9441b393976cdfa276c4f0b9f54def4bd381a482490876"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 53,
+              "sha256": "ca04a391f080fec3b5d49a29835cd5baca614b5b1038b384c75b51eb10600f39"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 2,
+              "sha256": "6624800ada3f6c82669393c140336974448615cc9183717624cc57b8ac1b003f"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 128911,
+              "sha256": "caa4a25be2f456f5a186e8fe3e508ec7eb5cdefb84b746ddc7933d31f0d9befd"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 19926,
+              "sha256": "63939341663e55c3895d4843d6ce4fa1812649d85aa1873e784761834f5014f4"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        }
+      },
+      "changedSectionsMacVsLinux": [
+        10,
+        11
+      ],
+      "customSectionsIdentical": true,
+      "linuxArm64AndX64WasmSectionsIdentical": true
+    },
+    "unknown": {
+      "observations": {
+        "mac": {
+          "path": "/private/tmp/pr66-pagefind-output-mac/wasm.unknown.pagefind",
+          "sha256": "2533da887ac06de36813d031310af0f737daadacc931775e342aa5a3857a4959",
+          "decodedSha256": "7a8e6dfc7bda3eca8043ea7936e61e0ebdca0e5bc96df5a613761824423dfc2b",
+          "decodedBytes": 140536,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "d1cd50ab66a67933ed591f8faf5fd828f8a85ed168aee39a6ad687d6c5f0a42f"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 411,
+              "sha256": "9c424c8159813e7f0cc7531084e8ed369c200dae86ab88748cbe49e112eac3a4"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "80574a1553a9f7ca5c9d8a9e9dc6fd1a225e03c15c89bff1ec0cd2835955df54"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "f3432d0a145c4a9b5ceb2c7530d81aec4c1cf10d620397b746ebb4b4437d77d1"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 52,
+              "sha256": "aff31cc3ca8b7f05103ae3b951617dfc4ba61b7cb38f066f34bb252af0497d9d"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 1,
+              "sha256": "bbf3f11cb5b43e700273a78d12de55e4a7eab741ed2abf13787a4d2dc832b8ec"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 124088,
+              "sha256": "2b80a13953ab1b3c85b3de63e8c47440efc007b9b210f10bb90f19e062b18d0b"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 15056,
+              "sha256": "17d83a067306911d18c49ff696addeeef595cebccdc592b4cea0dc2570d27bb2"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        },
+        "linux": {
+          "path": "/private/tmp/pr66-pagefind-output-linux/wasm.unknown.pagefind",
+          "sha256": "cf93bf56ed009c839b5df7890ccf7a7fe678be9a20f7dc236f673c6f73796811",
+          "decodedSha256": "77e118a7fd29152134c0285a97d3048a07055172dbadeb4fc6f27c6a0d3f851c",
+          "decodedBytes": 140536,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "d1cd50ab66a67933ed591f8faf5fd828f8a85ed168aee39a6ad687d6c5f0a42f"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 411,
+              "sha256": "9c424c8159813e7f0cc7531084e8ed369c200dae86ab88748cbe49e112eac3a4"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "80574a1553a9f7ca5c9d8a9e9dc6fd1a225e03c15c89bff1ec0cd2835955df54"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "f3432d0a145c4a9b5ceb2c7530d81aec4c1cf10d620397b746ebb4b4437d77d1"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 52,
+              "sha256": "aff31cc3ca8b7f05103ae3b951617dfc4ba61b7cb38f066f34bb252af0497d9d"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 1,
+              "sha256": "bbf3f11cb5b43e700273a78d12de55e4a7eab741ed2abf13787a4d2dc832b8ec"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 124088,
+              "sha256": "fec8c7876be5f05325cb29dedb122fbff80117d796ef9c19e0559b69ad21cff8"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 15056,
+              "sha256": "b27cd4dfef2ee87a0218ac1cb2752d35cab9eeb3db9c83e08c53fbc25e81bfa0"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        },
+        "linux-x64": {
+          "path": "/private/tmp/pr66-pagefind-output-linux-x64/wasm.unknown.pagefind",
+          "sha256": "3a74cefceacd066e8d3bc8c52e7bc1c869544ca3d9031b44a9b7136356d5d7f4",
+          "decodedSha256": "77e118a7fd29152134c0285a97d3048a07055172dbadeb4fc6f27c6a0d3f851c",
+          "decodedBytes": 140536,
+          "sections": [
+            {
+              "id": 1,
+              "name": "",
+              "bytes": 239,
+              "sha256": "d1cd50ab66a67933ed591f8faf5fd828f8a85ed168aee39a6ad687d6c5f0a42f"
+            },
+            {
+              "id": 2,
+              "name": "",
+              "bytes": 56,
+              "sha256": "acabec96f4f49ccaf602a7f4f35bbe1503212b2de43c60d63904814840655b55"
+            },
+            {
+              "id": 3,
+              "name": "",
+              "bytes": 411,
+              "sha256": "9c424c8159813e7f0cc7531084e8ed369c200dae86ab88748cbe49e112eac3a4"
+            },
+            {
+              "id": 4,
+              "name": "",
+              "bytes": 9,
+              "sha256": "80574a1553a9f7ca5c9d8a9e9dc6fd1a225e03c15c89bff1ec0cd2835955df54"
+            },
+            {
+              "id": 5,
+              "name": "",
+              "bytes": 3,
+              "sha256": "f0b84402ff5181a6f998d07e5832d16de5bd3ea4e32e542da814690a734e0950"
+            },
+            {
+              "id": 6,
+              "name": "",
+              "bytes": 9,
+              "sha256": "da3c74f89a28b8e9a570d349d0f0a216ef8e69818c7226007164845feaceaf63"
+            },
+            {
+              "id": 7,
+              "name": "",
+              "bytes": 337,
+              "sha256": "f3432d0a145c4a9b5ceb2c7530d81aec4c1cf10d620397b746ebb4b4437d77d1"
+            },
+            {
+              "id": 9,
+              "name": "",
+              "bytes": 52,
+              "sha256": "aff31cc3ca8b7f05103ae3b951617dfc4ba61b7cb38f066f34bb252af0497d9d"
+            },
+            {
+              "id": 12,
+              "name": "",
+              "bytes": 1,
+              "sha256": "bbf3f11cb5b43e700273a78d12de55e4a7eab741ed2abf13787a4d2dc832b8ec"
+            },
+            {
+              "id": 10,
+              "name": "",
+              "bytes": 124088,
+              "sha256": "fec8c7876be5f05325cb29dedb122fbff80117d796ef9c19e0559b69ad21cff8"
+            },
+            {
+              "id": 11,
+              "name": "",
+              "bytes": 15056,
+              "sha256": "b27cd4dfef2ee87a0218ac1cb2752d35cab9eeb3db9c83e08c53fbc25e81bfa0"
+            },
+            {
+              "id": 0,
+              "name": "producers",
+              "bytes": 116,
+              "sha256": "7816f7b4fcd7ee61851f21d7dfaf059bbd6b4866f1622d93c9403b1cc71b3c6e"
+            },
+            {
+              "id": 0,
+              "name": "target_features",
+              "bytes": 107,
+              "sha256": "9e2ce4482fc954ee09d2ce53614423c249d91e954c7fcd5de98a26cb14a3fa31"
+            }
+          ]
+        }
+      },
+      "changedSectionsMacVsLinux": [
+        10,
+        11
+      ],
+      "customSectionsIdentical": true,
+      "linuxArm64AndX64WasmSectionsIdentical": true
+    }
+  },
+  "recommendations": [
+    "Disable the original unsorted Pagefind integration and index all rendered HTML via sorted relative paths with sequential awaited addHTMLFile calls; retain HTML parser/body/ignore behavior and proper explicit URL mapping. Use a fresh output directory to avoid unused stale shards. Re-run reversed file-creation-order and real Linux-filesystem tests.",
+    "WASM cannot be normalized by stripping custom sections or gzip metadata: real code and data sections differ. Retain strict bindings and choose one immutable byte source for the runtime, or produce/review all release artifacts in one pinned Linux environment. Do not claim semantic equivalence by editing arbitrary code/data bytes."
+  ]
+}

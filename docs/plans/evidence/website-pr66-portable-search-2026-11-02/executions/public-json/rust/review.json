@@ -1,0 +1,36 @@
+{
+  "schema_version": "ankiforge-comparison-v1",
+  "findings": [
+    {
+      "code": "RISK.NOTE_CHANGED",
+      "level": "low",
+      "message": "Content, deck or tags changed. Acceptance still depends on the target Anki import settings and local modification times.",
+      "evidence": [
+        {
+          "selector": "notes[\"bio:cell\"]",
+          "before": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+          "after": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6"
+        }
+      ]
+    }
+  ],
+  "highest_risk": "low",
+  "policy": {
+    "allows_publication": true,
+    "threshold": "high",
+    "allowed_codes": [],
+    "unmatched_allowances": [],
+    "blocking_findings": []
+  },
+  "diagnostics": [],
+  "baseline_counts": {
+    "notes": 3,
+    "cards": 3,
+    "media": 2
+  },
+  "candidate_counts": {
+    "notes": 3,
+    "cards": 3,
+    "media": 2
+  }
+}

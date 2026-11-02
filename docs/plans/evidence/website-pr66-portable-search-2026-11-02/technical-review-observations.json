@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/standards_review/pr66-portable-search-source-delta-2026-11-02",
+  "baseline": "e9fbc7b4a31dbad934455b0ec1b58695be4dc54e",
+  "status": "reviewed",
+  "implementationBindings": [
+    {
+      "path": "website/scripts/content-review-inputs.mjs",
+      "sha256": "09ab3fd355bf6432fb894e685879f53d75f4a54c4678006ee751967a6bd6f9f4"
+    },
+    {
+      "path": "website/astro.config.mjs",
+      "sha256": "cbc4a824d08a3b5578fc7a9377b9e09b3846921d39cabad50bd634cb24e45a0b"
+    },
+    {
+      "path": "website/scripts/search-documents.mjs",
+      "sha256": "ef672fadc16b6eb802c52fdc821789c32c8af2bfad5c0797d16b7a246916c263"
+    },
+    {
+      "path": "website/scripts/search-ranking.test.mjs",
+      "sha256": "230f28d6fffca6583c2c4997ee1d4fe5afba0f9bebc18b28c4cb6d9636d113e6"
+    },
+    {
+      "path": "website/package.json",
+      "sha256": "de4e56874409c0387f9e865834195a62f96e4369101948ea653e972e5ef9b67b"
+    },
+    {
+      "path": "website/package-lock.json",
+      "sha256": "5ef84e59d80182d2660c9e98f4dc741b8420a24306936b552dae19b9d94ae761"
+    },
+    {
+      "path": "website/public-surface-migrations.json",
+      "sha256": "8e25e81fa0ca995fb9effc129509a80e01e4ace5297d615ca7e1751fadcbea08"
+    },
+    {
+      "path": "website/post-build-reviews.config.json",
+      "sha256": "489ca960ac1c0744b02b48cc9af66a938eb60695af0fddc08c1f9ab02d777267"
+    },
+    {
+      "path": "website/vendor/pagefind/1.5.2/wasm.de.pagefind",
+      "sha256": "f1e251bdaf42bd2ded77e7dd41460ebe237cba885ec8f3094f4be995c1ebbc57"
+    },
+    {
+      "path": "website/vendor/pagefind/1.5.2/wasm.en.pagefind",
+      "sha256": "bb16c9e6d3d214d4d05cccca51df7b487b86b3657318da767f6ca9e0a2e7259d"
+    },
+    {
+      "path": "website/vendor/pagefind/1.5.2/wasm.es.pagefind",
+      "sha256": "c00d45e7242a60fc25bea534ddacea609cff5fd6138fb9f84194f7b68ed3ecfa"
+    },
+    {
+      "path": "website/vendor/pagefind/1.5.2/wasm.pt-br.pagefind",
+      "sha256": "274994577df8da8d1945043b05eb3708abbaff717a00219a2f87e66f8705e6d5"
+    },
+    {
+      "path": "website/vendor/pagefind/1.5.2/wasm.unknown.pagefind",
+      "sha256": "3a74cefceacd066e8d3bc8c52e7bc1c869544ca3d9031b44a9b7136356d5d7f4"
+    },
+    {
+      "path": "website/vendor/pagefind/1.5.2/runtime.json",
+      "sha256": "cabca7c71b65e3f0cbad1ca45fa92f2dc0ae7901871bea3626102b3e74b7727f"
+    },
+    {
+      "path": "website/vendor/pagefind/1.5.2/LICENSE",
+      "sha256": "f7499d8f9a345ba2846f39325271de0fdf54c1d2968eadfde7998625cc45add0"
+    },
+    {
+      "path": "website/vendor/pagefind/1.5.2/LICENSE-vscode-ripgrep",
+      "sha256": "ccf06b70760761ae1437395117bcf911501e3dc85385d84c7eba20d5dfab55dd"
+    }
+  ],
+  "standards": [
+    "website/README.md independent source/release contract: current input bindings, real review and reproducible artifacts remain mandatory.",
+    "Multilingual implementation specification sections 174–285 and remaining-locales plan sections 100–177: preserve reviewed source meaning and require fresh artifact evidence for changed build/runtime inputs."
+  ],
+  "documentedViolations": [],
+  "possibleSmells": [],
+  "observations": [
+    "Read all changed implementation hunks and actual callers. generatePagefind enumerates POSIX relative HTML filenames, applies code-unit sort and awaits each addHTMLFile before continuing. It retains upstream default index options, passes base-free URLs, removes stale output before writeFiles, canonicalizes only the languages object key order, checks generated version against the runtime manifest, verifies each required runtime length and SHA256, then copies unchanged official bytes. finally closes Pagefind on success/failure.",
+    "Read installed Starlight integration and Page.astro, DocsHeader, DocsSearch and docs-search.ts. Global pagefind:false disables only the old automatic producer. Page-level data-pagefind-body remains based on non-404 and frontmatter pagefind; the custom header always renders DocsSearch and its independent ranking options/basePath/baseUrl remain intact. npm build invokes generate:search after Astro output and before machine content/manifests.",
+    "Read upstream v1.5.2 service API, Fossicker and SearchState: addHTMLFile uses the same DOM parser as addDirectory and does not set force_inclusion (addCustomRecord does). The actual independent 205-file comparison produced equal complete 204 fragment values with six languages at 34 pages and 404 absent.",
+    "Independently ran the actual new producer over reverse-created copies of all 205 reviewed HTML files. Complete decoded fragment values still equal the old reviewed artifact; stale shard removed; all 243 resulting file hashes match the coordinator actual macOS/native Linux comparison. Independently ran 20 search tests plus five isolated failure cases: version, missing inventory, wrong length, same-length byte tamper and missing file all reject.",
+    "Verified official Linux-x64 tarball SHA512 against package-lock and inventory, exact extracted 58,802,000-byte binary SHA256, and all five vendored WASM files against official binary output byte-for-byte. Both bundled MIT license texts exactly match installed Pagefind license files. No wasm rewriting is performed. package.json/lock add direct pagefind1.5.2 only; all resolved dependency entries are unchanged.",
+    "Expanded docs review closure binds astro.config and runtime.json, whose per-file hashes and lengths are enforced before runtime copying. Reconstructed all 204 old triples using the exact old closure algorithm and all current triples using current inputs. Of 261 current closure files, only astro.config, search-documents and the newly introduced runtime manifest differ. Exactly 174 docs targetHash values change; sourceHash and technicalDependencyHash are unchanged for every entry. No translated prose, API sample, section anchor or catalog bytes changed.",
+    "Verified all 12 public surface migrations; only four current docs targetHash bindings advance and equal the candidate. All title/anchor/section/module/link semantics remain exact. Post-build configuration changes only report paths to the new batch. Previous technical open issues are carried forward without reclassification."
+  ],
+  "producerChecks": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-producer-observations.json",
+    "sha256": "1f57624630719e7b5eb8dc00f3a3f42293b7834eba5df15e4cb1f7df38d36a77",
+    "description": "Independent actual production invocation, complete fragment values, complete output hashes and isolated fail-closed runtime checks."
+  },
+  "vendorChecks": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-vendor-provenance.json",
+    "sha256": "3f91cd4335a02d76d6203c4839c4d352c30383ddd25a20480a0abd2f7c1a80f3",
+    "description": "Independent tarball integrity, binary identity, exact WASM byte and license checks."
+  },
+  "apiEquivalence": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/api-equivalence.json",
+    "sha256": "9c7a0084603d696d052272466fc4d79c086734f4d40cbc62e1cfa22c7abeb087",
+    "description": "Earlier independent addDirectory versus sorted addHTMLFile real HTML comparison, copied unchanged into this batch."
+  },
+  "targetedTests": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-search-tests.log",
+    "sha256": "a14ea4a3edecf7ebead343ca3387a4a863039c868df13f0c9174a2d4cd85c739",
+    "description": "Independent Node24 run: 20 tests passed, zero failed."
+  },
+  "crossPlatform": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/portable-cross-platform-results.json",
+    "sha256": "59028c04b7fb2ad534fb0683e1c65f2e2b9afd6104373fa2ca9ef421f124b374",
+    "description": "Coordinator actual macOS and native Linux tmpfs comparison; independently reproduced all listed hashes on this host."
+  },
+  "sourceInputAudit": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-input-audit.json",
+    "sha256": "cb3fb90d2282847fc8342978740a5d0b5aa120fcc3cedfb736354061fd31bb08",
+    "description": "Full old/current inputs and recomputed triples with explicit inherited report references."
+  },
+  "migrationUpdates": [
+    "build-guarantees/en",
+    "build-guarantees/zh-CN",
+    "python-api/en",
+    "python-api/zh-CN"
+  ],
+  "openIssues": [],
+  "limitations": [
+    "This is a source delta review; unchanged content semantics inherit previously sealed independent evidence and are not claimed as a new complete translation read.",
+    "New root/prefix release artifacts, real browser search and machine-read reports still require separate current-build acceptance. Cross-platform output verification concerns the recorded hosts/locked Pagefind1.5.2, not arbitrary future platform/version changes.",
+    "Unknown-language fallback can differ from older unordered indexes; equivalence is claimed for the six published exact locale keys."
+  ]
+}

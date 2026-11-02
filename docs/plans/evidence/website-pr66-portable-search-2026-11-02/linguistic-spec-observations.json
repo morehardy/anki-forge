@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/spec_review/pr66-portable-search-linguistic-2026-11-02",
+  "status": "reviewed",
+  "scope": "Read-only Spec and linguistic source delta review. Existing content is reused through verified immutable lineage; artifact-level same-score search ordering and Linux WASM behavior require new actual acceptance.",
+  "spec": [
+    {
+      "path": "docs/plans/2026-10-27-multilingual-implementation-spec.md",
+      "line": 268,
+      "quote": "修订后只允许复用输入确实未变化的检查结果；",
+      "application": "All 261 current inputs compared against baseline e9fbc7b; source prose/metadata/UI/program inputs unchanged. Both old and new closure algorithms independently recompute the real triples. Only 174 docs target hashes change; 30 entries remain unchanged."
+    },
+    {
+      "path": "docs/plans/2026-10-27-multilingual-implementation-spec.md",
+      "line": 330,
+      "quote": "共享搜索或交互代码变更时扩展到所有语言的相关完整场景。",
+      "application": "Fresh six-language browser tasks and frozen search acceptance must be run on the new sorted-index/official-runtime artifact. Current source readiness does not reuse the previous Pagefind behavior pass."
+    },
+    {
+      "path": "docs/plans/2026-10-27-multilingual-implementation-spec.md",
+      "line": 57,
+      "quote": "变更按依赖失效；禁止自动更新 hash 伪装审校",
+      "application": "Expanded source closure includes actual astro integration selection and runtime inventory. Runtime filenames are constrained, official WASM lengths and hashes are checked, version mismatch fails closed. Old SDK execution bindings include changed website/package*.json and therefore cannot be reused; coordinator must save new actual execution evidence."
+    }
+  ],
+  "observations": [
+    {
+      "path": "website/scripts/search-documents.mjs",
+      "judgment": "Sorted relative file discovery and one awaited addHTMLFile per input preserve the original official HTML parser while making page IDs deterministic. Existing fragments still describe real headings, content and localized metadata. Explicit URLs preserve index route semantics; stale output is removed. It introduces no new wording or user capability claim. Equal-score result ordering may change and is intentionally left to fresh runtime review."
+    },
+    {
+      "path": "website/astro.config.mjs",
+      "judgment": "Read actual Starlight integration and Page.astro. The global pagefind:false stops old unsorted traversal, while per-entry data-pagefind-body and 404 exclusion remain. Custom DocsHeader/DocsSearch still render; the latter imports shared searchOptions directly, so ranking settings are retained."
+    },
+    {
+      "path": "website/vendor/pagefind/1.5.2/runtime.json",
+      "judgment": "Independently read official tarball and verified SHA512 against existing lock integrity, verified exact archived Linux-x64 binary SHA256, and compared all five vendor WASM files byte-for-byte with actual official generated output. No instructions are rewritten. en/de/es/pt-br have their own official stemmer runtimes; ja/zh use unknown as selected by Pagefind metadata. Pinning changes macOS-produced runtime bytes, so no claim of old/new executable-byte equality is made."
+    },
+    {
+      "path": "website/scripts/content-review-inputs.mjs",
+      "judgment": "The two newly included search inputs are intentionally reviewed: integration selection and exact runtime inventory now invalidate document targetHash. Old triples were recomputed with the actual old calculator in isolation, not with the expanded new closure."
+    },
+    {
+      "path": "website/package.json",
+      "judgment": "Direct pagefind devDependency pins existing 1.5.2. Lock diff adds only that direct declaration; no resolved package version changes. Product installation instructions and public SDK 0.3.1 remain unchanged."
+    }
+  ],
+  "audit": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/linguistic-input-audit.json",
+    "sha256": "b7cd9e4ba2b2b397f83cf3cf3aaee062edf0e833e466ca382d544a884e7b88c0"
+  },
+  "supportingIndependentTechnicalEvidence": [
+    {
+      "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/api-equivalence.json",
+      "sha256": "9c7a0084603d696d052272466fc4d79c086734f4d40cbc62e1cfa22c7abeb087"
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-vendor-provenance.json",
+      "sha256": "3f91cd4335a02d76d6203c4839c4d352c30383ddd25a20480a0abd2f7c1a80f3"
+    }
+  ],
+  "coordinatorCrossPlatformResult": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/portable-cross-platform-results.json",
+    "sha256": "59028c04b7fb2ad534fb0683e1c65f2e2b9afd6104373fa2ca9ef421f124b374"
+  },
+  "limitations": "The API-equivalence and cross-platform artifacts are explicitly attributed to their independent/coordinating runs; this linguistic reviewer independently read source, audited immutable inputs and verified runtime provenance, but did not rerun Linux indexing.",
+  "openIssues": []
+}

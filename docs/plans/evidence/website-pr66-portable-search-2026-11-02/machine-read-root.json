@@ -1,0 +1,1906 @@
+{
+  "schemaVersion": 1,
+  "kind": "machine-read",
+  "status": "passed",
+  "mode": "release-candidate",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/standards_review/pr66-portable-search-independent-machine-root-2026-11-02",
+  "inputSha256": "381b5c782abc460fc0612430a2122334f94e42e0b174cdeb8334517acae500eb",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es",
+    "pt-BR",
+    "ja",
+    "de"
+  ],
+  "readOrigin": "http://127.0.0.1:63839",
+  "originManifest": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/root-site-manifest.json",
+    "sha256": "66eff750ce5db8cf12e3d3844e8dc42b8f598a844eb2e8788b39f2ec9487958a",
+    "commit": "e9fbc7b4a31dbad934455b0ec1b58695be4dc54e",
+    "description": "Actual new frozen candidate manifest whose archive was personally fetched over HTTP and independently compared/read in this run."
+  },
+  "resourceBindings": [
+    {
+      "route": "/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "4e5216863390dda212498929bc8d85a8f3db2b6994aa7cb6a7a14549b00f9e64"
+    },
+    {
+      "route": "/blog/your-first-anki-deck/index.md",
+      "sha256": "43bd3ceb5cf6b4fefb1d504386374b53379a630e0eb6a6ec548d20b1f72d2e5b"
+    },
+    {
+      "route": "/de/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "451f0875e77df329b06884e2c02e56e6ec2b7654353f1631080381743dcb0afd"
+    },
+    {
+      "route": "/de/blog/your-first-anki-deck/index.md",
+      "sha256": "23fb91ddcdedf01f48f9084463e81d0e42f45b839a90217e178bd3cf4ccc94d8"
+    },
+    {
+      "route": "/de/docs/ai-anki-cards/index.md",
+      "sha256": "81fb723b16ed8e246d75ae6d1183583b95a534cf79c991ec93abaaa6c12b6171"
+    },
+    {
+      "route": "/de/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "9907a06838bc03a792ad3c17429e01441d66766c8c71cc09088ac4d126c02c3c"
+    },
+    {
+      "route": "/de/docs/api/index.md",
+      "sha256": "ff7e3cd0a5ceb68012b41beefea4057b60a882cfe705199390bb8d797f7daa63"
+    },
+    {
+      "route": "/de/docs/build-guarantees/index.md",
+      "sha256": "0135842bceb327d0e81c75cbf649b59d15c662ea4d2384a67601bebefca2239e"
+    },
+    {
+      "route": "/de/docs/cards/index.md",
+      "sha256": "394b1a9d0793da5205365269756934fc351f8384bf44f376335865aff36aea04"
+    },
+    {
+      "route": "/de/docs/compatibility/index.md",
+      "sha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3"
+    },
+    {
+      "route": "/de/docs/concepts/index.md",
+      "sha256": "c71b2b650ba5e1ce7468de93d90d8c1bacb99434c89411dfebd68e4bfb188a20"
+    },
+    {
+      "route": "/de/docs/csv-to-anki/index.md",
+      "sha256": "1c2b209668a4332d1a76730e10b10fc4e152a99787a32194be576c48a367369d"
+    },
+    {
+      "route": "/de/docs/custom-notetypes/index.md",
+      "sha256": "3d0b768b4e40fc281047bf3a0388c0579f38b285ea2b4a30cb45b910b81f5381"
+    },
+    {
+      "route": "/de/docs/development/index.md",
+      "sha256": "167f5f2e0c1b12fe0ac7afb10786a28a810d09d86c6968dac4f7a6e3d92b7cd7"
+    },
+    {
+      "route": "/de/docs/genanki-migration/index.md",
+      "sha256": "4ffe3049089579939998e589ef2c4c16a645f4c39108fd2319156ce15b75104a"
+    },
+    {
+      "route": "/de/docs/image-occlusion/index.md",
+      "sha256": "dbd0201b5c5f6520dd4dbdb83e8aaab0888ea6a09368598edbfb9d857ca984a1"
+    },
+    {
+      "route": "/de/docs/index.md",
+      "sha256": "52e9ad5daa45f9dbd27d770a4a160c41c8642362c7318bfd0117ef4e426f1466"
+    },
+    {
+      "route": "/de/docs/installation/index.md",
+      "sha256": "615a319483a1a14973c95d067a2aa6bbf2a15804bd10e4a6b2811f56a3eb0832"
+    },
+    {
+      "route": "/de/docs/json-to-anki/index.md",
+      "sha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd"
+    },
+    {
+      "route": "/de/docs/languages/index.md",
+      "sha256": "1e6522be8679dd7374de8ece25ac1947d1270f40b12a7ec9957f4cc298fd5b92"
+    },
+    {
+      "route": "/de/docs/media/index.md",
+      "sha256": "2814f56952a70007a26829fda320412bea55a8a81cbfbe243c6b398da5beb9a2"
+    },
+    {
+      "route": "/de/docs/node-api/index.md",
+      "sha256": "a362ada18b093cb8ea50489e9ac2ed109a9ff128939cf0b5803fdf06766714a2"
+    },
+    {
+      "route": "/de/docs/node-quickstart/index.md",
+      "sha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee"
+    },
+    {
+      "route": "/de/docs/python-api/index.md",
+      "sha256": "3f56d144fe98f26665574be8e9e26ea626f922b22ca74d7627df31fe9911ce6e"
+    },
+    {
+      "route": "/de/docs/python-diagnostics/index.md",
+      "sha256": "6ed193ee70693d65d4c85af8ab3c2b900d9a1248d5c15d64297fce65a2f87b13"
+    },
+    {
+      "route": "/de/docs/python-migration/index.md",
+      "sha256": "144ef53ef3f4b8a6af2ae225828f85b56b409a6d4c8757f2549feb303aba998b"
+    },
+    {
+      "route": "/de/docs/python-quickstart/index.md",
+      "sha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58"
+    },
+    {
+      "route": "/de/docs/quickstart/index.md",
+      "sha256": "7cdbb8a987b11b2f6c5f0fe2e9a73c122c1fa5f8378557451bb9fb4ea1268d28"
+    },
+    {
+      "route": "/de/docs/rust-api/index.md",
+      "sha256": "be70ea5f8ec862ced603755b1e4d8a8b638e5aaf6721fa24f5a879acb864a890"
+    },
+    {
+      "route": "/de/docs/rust-guide/index.md",
+      "sha256": "73ca45217299a63224bd225580711d777d4d4f93b770924e4d1ac0203f4cfa44"
+    },
+    {
+      "route": "/de/docs/templates/index.md",
+      "sha256": "1069ed8b1486d9027876d3bcd373fb371d4308e3f1d1202210f676690cdb138c"
+    },
+    {
+      "route": "/de/docs/troubleshooting/index.md",
+      "sha256": "b8804830a674f5409f820db1b12ca9c39df9294d21f488bee5974fff51edd9e9"
+    },
+    {
+      "route": "/de/docs/updates/index.md",
+      "sha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e"
+    },
+    {
+      "route": "/de/llms.txt",
+      "sha256": "6a8d6aceb624007413b4a526095efe07f0f125ca13b3ddb8e3b04eb757fe21e2"
+    },
+    {
+      "route": "/docs/ai-anki-cards/index.md",
+      "sha256": "9745b22b1eef834acd7824a662f24b0bd2a83ba2fa41ea1ee606fbee6e21fa3a"
+    },
+    {
+      "route": "/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "d3fa07417f3752acc3f105b95f2dd49fab31a78cb3828ac022688a971d281e4e"
+    },
+    {
+      "route": "/docs/api/index.md",
+      "sha256": "78633f690be8373213053679b29209d7b17bc1ad85585d87eca45e4aec1f5e19"
+    },
+    {
+      "route": "/docs/build-guarantees/index.md",
+      "sha256": "94419d340582f5c025883404e249782cdf254a3dab42a80a6f07b950f8aa6c9b"
+    },
+    {
+      "route": "/docs/cards/index.md",
+      "sha256": "566996cebefbfb5c3381d376164b5a8e2897f0817d33bd22ec114ef3b3b61f28"
+    },
+    {
+      "route": "/docs/compatibility/index.md",
+      "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+    },
+    {
+      "route": "/docs/concepts/index.md",
+      "sha256": "2b07722c9bfbdb2e8fefe578ab6fdc7fe38812d684f3474eb015c17493ba73d6"
+    },
+    {
+      "route": "/docs/csv-to-anki/index.md",
+      "sha256": "0428ebe47ff80585c636b10f362bd6c90ba95e44b7c0c567d7c073a31b97d662"
+    },
+    {
+      "route": "/docs/custom-notetypes/index.md",
+      "sha256": "1ec524ad2e9100e94a376e6e672c79a177bc9b32bc7d3d3bd48a6b66e985f2cf"
+    },
+    {
+      "route": "/docs/development/index.md",
+      "sha256": "38e8514202721f6a59b3e955089238eeb0cd0a2da40f84e687781674930fa07f"
+    },
+    {
+      "route": "/docs/genanki-migration/index.md",
+      "sha256": "fb1788925c8e1ac5141dee8594d55f797bf7949b16d97c592c329eaacdf3e1ba"
+    },
+    {
+      "route": "/docs/image-occlusion/index.md",
+      "sha256": "0bfe48487e90d7ef0701a6fc4a2ac02e36ccb1990adf8009782879aa59c8bd69"
+    },
+    {
+      "route": "/docs/index.md",
+      "sha256": "2589240ac602a461fcd26375953f959f50610b1efc34301771fb5b9a612062ff"
+    },
+    {
+      "route": "/docs/installation/index.md",
+      "sha256": "e5f86c8b981d90f7986c901dda300b376d142e8539e0bbf3e6f7f6c5e1f4522b"
+    },
+    {
+      "route": "/docs/json-to-anki/index.md",
+      "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e"
+    },
+    {
+      "route": "/docs/languages/index.md",
+      "sha256": "20118dbc34eaf14ef16f924a52e471a432b913b4aeca09d9139d271075197d04"
+    },
+    {
+      "route": "/docs/media/index.md",
+      "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1"
+    },
+    {
+      "route": "/docs/node-api/index.md",
+      "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810"
+    },
+    {
+      "route": "/docs/node-quickstart/index.md",
+      "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33"
+    },
+    {
+      "route": "/docs/python-api/index.md",
+      "sha256": "858d8f0d0e84acb8e8510cf36d93a72978a2c802fab2ba338cb84927ecf4ebe5"
+    },
+    {
+      "route": "/docs/python-diagnostics/index.md",
+      "sha256": "7c55655214b864f9bf4de14874b933a99f842399f7a0c632e71ad32d0373bb5b"
+    },
+    {
+      "route": "/docs/python-migration/index.md",
+      "sha256": "e048cc0d961bdded62c1d3184d901e4cf0e0d315fe291c47049a59928117af72"
+    },
+    {
+      "route": "/docs/python-quickstart/index.md",
+      "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3"
+    },
+    {
+      "route": "/docs/quickstart/index.md",
+      "sha256": "e8786297738d765f984fb3f55f853eda49528930303d165a3f4ed036ec6f903c"
+    },
+    {
+      "route": "/docs/rust-api/index.md",
+      "sha256": "98d57a4e45b11113366315510c596444dd94dc264105db2a8a5e9d9f0a747296"
+    },
+    {
+      "route": "/docs/rust-guide/index.md",
+      "sha256": "58d18a4d00adc8aee9778b48db2d54822326b06921b65987a4109ddc840f3194"
+    },
+    {
+      "route": "/docs/templates/index.md",
+      "sha256": "d018874e701c5d033a7ca9863ecbd39378f24f1bb1d096fd244993e6d730dbaa"
+    },
+    {
+      "route": "/docs/troubleshooting/index.md",
+      "sha256": "ed47bd814c901d4a4c69001b91d5e00c89deaef5c5ecfb77ccea8b54cc6d2286"
+    },
+    {
+      "route": "/docs/updates/index.md",
+      "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db"
+    },
+    {
+      "route": "/es/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "c9f9d4175f9c8b4c1f6ba55b2bc5763faba2b5746bb83c165481aa2b29c1bba1"
+    },
+    {
+      "route": "/es/blog/your-first-anki-deck/index.md",
+      "sha256": "811e0eeb6867bd23a928e9087268ed17d24164c05ccd997c3ad8878110bd495c"
+    },
+    {
+      "route": "/es/docs/ai-anki-cards/index.md",
+      "sha256": "99743cb1706d0b12b1ecb2ace07456115532e55fccfe49e98ef701593f967c70"
+    },
+    {
+      "route": "/es/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "685f1b29250d95b56ab233dfb6ce71050f979a6a78b62f711121966cba8b0017"
+    },
+    {
+      "route": "/es/docs/api/index.md",
+      "sha256": "d6a2df886ad2d8d95711a031f995bbd9ed717d50c2333b2f536123fa089989ca"
+    },
+    {
+      "route": "/es/docs/build-guarantees/index.md",
+      "sha256": "7684ab5b8c7297cd31bafd5da3a090a81752562f12e2b9d09652fdc1ccea8f82"
+    },
+    {
+      "route": "/es/docs/cards/index.md",
+      "sha256": "a725e95db861f7275481cbcbe2f4d93a756f9504beaa95efcb9f91b833b50c21"
+    },
+    {
+      "route": "/es/docs/compatibility/index.md",
+      "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+    },
+    {
+      "route": "/es/docs/concepts/index.md",
+      "sha256": "f2d42f3acc058095a096bfcd47263e275e1837c62e29401f42bcc282e8839757"
+    },
+    {
+      "route": "/es/docs/csv-to-anki/index.md",
+      "sha256": "c0636dd2ac60d9b20c62ede43d226f43de4e43bee6982146670fc0ac05623b02"
+    },
+    {
+      "route": "/es/docs/custom-notetypes/index.md",
+      "sha256": "cd79fd039a0bc5444f14fda465ef813231ee14c296184668ff0fbe5d66e0d5cf"
+    },
+    {
+      "route": "/es/docs/development/index.md",
+      "sha256": "4ba123d0ebdd9c92084656cad77d701230ee4b32cda03ebc0bbc34774863ae96"
+    },
+    {
+      "route": "/es/docs/genanki-migration/index.md",
+      "sha256": "725f3857424a3acc6aca08f222685a0548b65293ea7b1e99ccbbd4bbfb6edc56"
+    },
+    {
+      "route": "/es/docs/image-occlusion/index.md",
+      "sha256": "32dc813fb179accd309e7029424cb03587112bea4db10761b359627882f038f6"
+    },
+    {
+      "route": "/es/docs/index.md",
+      "sha256": "cc78c766b4da6e90411988938c404247f4561f076f9b825c334acef94a6bf5c1"
+    },
+    {
+      "route": "/es/docs/installation/index.md",
+      "sha256": "c2684786f4b65987f50ffbad71514f588156472cbcaf6801a35ccc55b3acd70a"
+    },
+    {
+      "route": "/es/docs/json-to-anki/index.md",
+      "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed"
+    },
+    {
+      "route": "/es/docs/languages/index.md",
+      "sha256": "4bc4d5ac42b66a76bb63c300af3b6c373a25bd8c572ece54e2bb27509cab1c63"
+    },
+    {
+      "route": "/es/docs/media/index.md",
+      "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d"
+    },
+    {
+      "route": "/es/docs/node-api/index.md",
+      "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e"
+    },
+    {
+      "route": "/es/docs/node-quickstart/index.md",
+      "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898"
+    },
+    {
+      "route": "/es/docs/python-api/index.md",
+      "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956"
+    },
+    {
+      "route": "/es/docs/python-diagnostics/index.md",
+      "sha256": "71a0a087d4474e98868848e0dcefedd32067b8a01ab7cd49b1774a0ae5532f83"
+    },
+    {
+      "route": "/es/docs/python-migration/index.md",
+      "sha256": "ee0155e3d170643f6e8204354f9ab3152a8b91256dfeeb8b5e32c664afb490e5"
+    },
+    {
+      "route": "/es/docs/python-quickstart/index.md",
+      "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56"
+    },
+    {
+      "route": "/es/docs/quickstart/index.md",
+      "sha256": "42f01fa3284bb45f1f1b2c2d677092554bb6b41083b66964ed23567128ac419e"
+    },
+    {
+      "route": "/es/docs/rust-api/index.md",
+      "sha256": "da277a083aa616be09ba8696c522f8cced4d7b613619d521fd301acedce5a03c"
+    },
+    {
+      "route": "/es/docs/rust-guide/index.md",
+      "sha256": "205b0d8e65cc17f0e56755dc0e178d5e38bcdc52d2520f28795a78c2fdaa76be"
+    },
+    {
+      "route": "/es/docs/templates/index.md",
+      "sha256": "6659e01328ade2f67b2fae0b87eb79b13445647efd5b3a27f80e7f556e39c8be"
+    },
+    {
+      "route": "/es/docs/troubleshooting/index.md",
+      "sha256": "092ff59b379d229faf9f469a549b19db43b3662cfe0590e170262ab70ea44a69"
+    },
+    {
+      "route": "/es/docs/updates/index.md",
+      "sha256": "5cdaee4d0df61bd235a7c3926c2738495fb6dc007c9793da1823edfba550d74d"
+    },
+    {
+      "route": "/es/llms.txt",
+      "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018"
+    },
+    {
+      "route": "/ja/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "07deb43b3afd49c654c07808ad09c1d4303c835f7d82eff2fc9d425c4a98c48d"
+    },
+    {
+      "route": "/ja/blog/your-first-anki-deck/index.md",
+      "sha256": "233ed098db8f49eda8c1de204b3dbe5ecc4482f239e86ceeb3125df1303eceda"
+    },
+    {
+      "route": "/ja/docs/ai-anki-cards/index.md",
+      "sha256": "a332335461cfca2b750f06097a027de647b917bb76884a5dffd39aa77127570e"
+    },
+    {
+      "route": "/ja/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "08138f738270414c83b5f84855b712b05256f7f4978cd068b09bd88f457b02c2"
+    },
+    {
+      "route": "/ja/docs/api/index.md",
+      "sha256": "5a1df645c38d4726f0dd42fc214adfa7466596a82fcea3e48255a483c2413240"
+    },
+    {
+      "route": "/ja/docs/build-guarantees/index.md",
+      "sha256": "2f37e2cd091003ea06f5c6747241fa4d62f98bead59f64e244ced6aac21dee1e"
+    },
+    {
+      "route": "/ja/docs/cards/index.md",
+      "sha256": "9a165ffe136ca4b48efde0ddf0d98e032aacd6de40b87a2671b185e4d344fd98"
+    },
+    {
+      "route": "/ja/docs/compatibility/index.md",
+      "sha256": "2a518df085892fd262eaf2d262ba09b923f7aa9419be6c9b803150d5b5a4e541"
+    },
+    {
+      "route": "/ja/docs/concepts/index.md",
+      "sha256": "138ed421c4c307d615b9a99f2837cb479300e518b5ea916c5a28e1776aee7b74"
+    },
+    {
+      "route": "/ja/docs/csv-to-anki/index.md",
+      "sha256": "ca6f99906e33d492a396ea36a7583ddc989ee17e076d8300953954286a8da965"
+    },
+    {
+      "route": "/ja/docs/custom-notetypes/index.md",
+      "sha256": "951f34f55743ef8c447cd08e34c6962d71e63b2a3bafadc5cb796f58ecee84b2"
+    },
+    {
+      "route": "/ja/docs/development/index.md",
+      "sha256": "ffd9a695ade9532f08df3347351d3cfb33ef068a186f40f02cd38114e10e51ee"
+    },
+    {
+      "route": "/ja/docs/genanki-migration/index.md",
+      "sha256": "da49c391ba6b6d46e1a491e969009f51b9ccbcf51d9f418e5c592ac3937c6665"
+    },
+    {
+      "route": "/ja/docs/image-occlusion/index.md",
+      "sha256": "285bc9c4fb94d4e0cbf3c87fd497be73e3326cd3954c96e401b65dab7c0362a8"
+    },
+    {
+      "route": "/ja/docs/index.md",
+      "sha256": "5e8316d9aeaa36378e4646bb00883b7a1ab9c18d3a3eecf311250f900f0bc087"
+    },
+    {
+      "route": "/ja/docs/installation/index.md",
+      "sha256": "a845d504d14b9f5fa795ccd492fbb1675f77953d166c443b85f5ccc8736e78b7"
+    },
+    {
+      "route": "/ja/docs/json-to-anki/index.md",
+      "sha256": "1ba2d24ca1b9ed277b5676b4d8229eac98b9ed3ff6bfcae8d4b5bd6a312a665d"
+    },
+    {
+      "route": "/ja/docs/languages/index.md",
+      "sha256": "717d18efc700ee52ebe222e275fdc4851cdf09cd5f9fdf21006d15a26adf37f0"
+    },
+    {
+      "route": "/ja/docs/media/index.md",
+      "sha256": "78905d1b18380ef50349d2d7111d7c69838fb0702ae5b29705378d04a2f7fbca"
+    },
+    {
+      "route": "/ja/docs/node-api/index.md",
+      "sha256": "1a2dcc809248fc660ae81f50151815b6dbf85f9bb6ac72e5268304b70510f3ae"
+    },
+    {
+      "route": "/ja/docs/node-quickstart/index.md",
+      "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6"
+    },
+    {
+      "route": "/ja/docs/python-api/index.md",
+      "sha256": "b8233fc2436667a20e66f3106061d3017d19ab09c732db47518a1fda76b72096"
+    },
+    {
+      "route": "/ja/docs/python-diagnostics/index.md",
+      "sha256": "d6df1f9e58a2ca63149e935e4e77447e642860894446a80ccf10914b7bf65038"
+    },
+    {
+      "route": "/ja/docs/python-migration/index.md",
+      "sha256": "3541714fd704afd5a25990680548f43a50a8bba6f0f7df4b9918ffc90b465534"
+    },
+    {
+      "route": "/ja/docs/python-quickstart/index.md",
+      "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862"
+    },
+    {
+      "route": "/ja/docs/quickstart/index.md",
+      "sha256": "947d442d86cfa882c7ded390c683354088176d692f7e0b23f1db1d79927ea6db"
+    },
+    {
+      "route": "/ja/docs/rust-api/index.md",
+      "sha256": "cff005643d66a68633d81d832a0286b39347097da02bac9cae2e5c08443eafad"
+    },
+    {
+      "route": "/ja/docs/rust-guide/index.md",
+      "sha256": "44c4b12aedda29bafc831a0769b3665afcaf1e508d9e69debacd0abc40c013df"
+    },
+    {
+      "route": "/ja/docs/templates/index.md",
+      "sha256": "7f0a1091236256bb74c9896008a38b91ff0f2fa242fcba9cc9d65d45e407b585"
+    },
+    {
+      "route": "/ja/docs/troubleshooting/index.md",
+      "sha256": "b3a4689f138cda1a0761d132f23054b97f3f76d54dc40adc43748cfc6358166c"
+    },
+    {
+      "route": "/ja/docs/updates/index.md",
+      "sha256": "c105253030b4a9570a219cd13b0265fcfff5485bc7f45174664311a867d93f6b"
+    },
+    {
+      "route": "/ja/llms.txt",
+      "sha256": "9eaf1d4a8c6c9b855c9df7ed33bac169659f9d461a099b44c3e7a30aba2ac887"
+    },
+    {
+      "route": "/llms.txt",
+      "sha256": "4600e2649769c6685b9a21f46cf10857f13526763ec33d993f439743ae9a3262"
+    },
+    {
+      "route": "/pt-br/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "ef4552b9ce61d45d075fc7a98702c3ce5fc30fc50ad175dbb504025075842a17"
+    },
+    {
+      "route": "/pt-br/blog/your-first-anki-deck/index.md",
+      "sha256": "539f03df2a9742030bc99fb07ee48880d573668212f14b19f3e0a1356a6e30b0"
+    },
+    {
+      "route": "/pt-br/docs/ai-anki-cards/index.md",
+      "sha256": "befedb5ad91afd444191a8637da2d6fcd68f2c38fe9f66f4cb1f4ecb3c5872f2"
+    },
+    {
+      "route": "/pt-br/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "2ec11a06b544ce3008769c15e36e1d9a9a0046fcc8067bc76a1ee4054732edff"
+    },
+    {
+      "route": "/pt-br/docs/api/index.md",
+      "sha256": "eea15016df138379457402afc4cb5eb552914634d7b00e4ad4874827c1f5d893"
+    },
+    {
+      "route": "/pt-br/docs/build-guarantees/index.md",
+      "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa"
+    },
+    {
+      "route": "/pt-br/docs/cards/index.md",
+      "sha256": "fbec8e6e531a78944a2a248b3e08f89a929d9e57013947f50c9d90654051d055"
+    },
+    {
+      "route": "/pt-br/docs/compatibility/index.md",
+      "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f"
+    },
+    {
+      "route": "/pt-br/docs/concepts/index.md",
+      "sha256": "466336d94d0e35ea6ecc8b1a7f88d54a41908ea15b8d71e9b3990d8c6d809553"
+    },
+    {
+      "route": "/pt-br/docs/csv-to-anki/index.md",
+      "sha256": "99c31d0a161dc92ab8a84506c46ae7186c2dc4e1c1b6487461f531d892588a5a"
+    },
+    {
+      "route": "/pt-br/docs/custom-notetypes/index.md",
+      "sha256": "7f2254228555653ee2c603fc13f71ab58dcd59d7620eb3faa50cdb7fb6cdbedd"
+    },
+    {
+      "route": "/pt-br/docs/development/index.md",
+      "sha256": "256264e9e0723f07ef493842e2dc0570c239dd7a4862aee5b7e6c2e9e7fff1c1"
+    },
+    {
+      "route": "/pt-br/docs/genanki-migration/index.md",
+      "sha256": "cd0ff2962e9953e2b9b3cf7fcc75a5534704f2355f880e39ee64befd9235d425"
+    },
+    {
+      "route": "/pt-br/docs/image-occlusion/index.md",
+      "sha256": "52c32f7ae04e20fbc1ce364d923f88720b3fdd428746e9a572f70f1fd53be07d"
+    },
+    {
+      "route": "/pt-br/docs/index.md",
+      "sha256": "b98f147a23e0454c96cd95894d1a786338c9685cc83363fed802e14c5de391af"
+    },
+    {
+      "route": "/pt-br/docs/installation/index.md",
+      "sha256": "0bb2de60760a99080fac163b2025adcac5664d0a3e3d454260e641f7abe3f028"
+    },
+    {
+      "route": "/pt-br/docs/json-to-anki/index.md",
+      "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c"
+    },
+    {
+      "route": "/pt-br/docs/languages/index.md",
+      "sha256": "5ae18762cb7c406ef648adbc31777a223e129727499d3083c8dae127cadf49f7"
+    },
+    {
+      "route": "/pt-br/docs/media/index.md",
+      "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992"
+    },
+    {
+      "route": "/pt-br/docs/node-api/index.md",
+      "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056"
+    },
+    {
+      "route": "/pt-br/docs/node-quickstart/index.md",
+      "sha256": "cfc3e49900f057f24d02d19bf3949a06550fbf2d37bc7d5b64ccb50337a3060e"
+    },
+    {
+      "route": "/pt-br/docs/python-api/index.md",
+      "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328"
+    },
+    {
+      "route": "/pt-br/docs/python-diagnostics/index.md",
+      "sha256": "6fabf0647bbffeb9be03f960b842e24fd41c9e5f191b62b1c75d54b69e41314f"
+    },
+    {
+      "route": "/pt-br/docs/python-migration/index.md",
+      "sha256": "3dda20b1f9364411df0b92799faa9ad4c2393d3299175388d3d2b5d79176a6b6"
+    },
+    {
+      "route": "/pt-br/docs/python-quickstart/index.md",
+      "sha256": "934645ffd2b7bd299886c13d6c683c75587b58b323e787e0859e1c2e60520721"
+    },
+    {
+      "route": "/pt-br/docs/quickstart/index.md",
+      "sha256": "2218cb33224bfbe1c126b9ff625b717efd67a836dbae439ba46d422ff9ff609c"
+    },
+    {
+      "route": "/pt-br/docs/rust-api/index.md",
+      "sha256": "519e42693a5323ae999fc3404afdc99160b044c5891a8265b2daae2724f6694d"
+    },
+    {
+      "route": "/pt-br/docs/rust-guide/index.md",
+      "sha256": "34ae80ef14e2f28fe44eb369fca33ae4fd6e9e560e17d08ec99a19491fc1cec6"
+    },
+    {
+      "route": "/pt-br/docs/templates/index.md",
+      "sha256": "d20a9a8f6f57d0102f15cd0020009737856a9a135887f211b0cc5031877d82ee"
+    },
+    {
+      "route": "/pt-br/docs/troubleshooting/index.md",
+      "sha256": "69007540d7bfd207cceea4cc219475709ba6e224c6211790a9b231efd9ce7cc9"
+    },
+    {
+      "route": "/pt-br/docs/updates/index.md",
+      "sha256": "c0431d013d92d8e8b94c24001c80c38a5b1a69f3a002e9d4d713ee25fea8826d"
+    },
+    {
+      "route": "/pt-br/llms.txt",
+      "sha256": "83727724cc57580fa3b64695c20ab86fceb764a749f65053b991205916a1c928"
+    },
+    {
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "096b5e73dba07ac3de05e0e0c5c0556eda6733000c91d1955a55ba544915fd39"
+    },
+    {
+      "route": "/zh-cn/blog/your-first-anki-deck/index.md",
+      "sha256": "e82bf53033a3cd2a15d4e2c92dcc936b0be2fb575b83f8e12e78f9e40ef28291"
+    },
+    {
+      "route": "/zh-cn/docs/ai-anki-cards/index.md",
+      "sha256": "d41495f72cf015aaa880eb9d85b41be3002512d9997c148bee6da0b4b3086ac6"
+    },
+    {
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "4dd2864f6a017f4050296f40525f9d0240594f8f4e613c833f063f5217e8351e"
+    },
+    {
+      "route": "/zh-cn/docs/api/index.md",
+      "sha256": "85b910056bff07406aa95622d2d1fa621c6e26d058b4e43f66509ede662d0b27"
+    },
+    {
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "sha256": "7bd8533c81b0deff674e1bb630453308d56f1e2fa11f434c313f4935aa63a410"
+    },
+    {
+      "route": "/zh-cn/docs/cards/index.md",
+      "sha256": "46ceeb701e734b6f104492c2eef7678596fcfa768407346cc53aa00094dac378"
+    },
+    {
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "sha256": "754f2bcf9e5dd030f568068ef4d527e8184ab10265cc39c9bce614d2e191a79d"
+    },
+    {
+      "route": "/zh-cn/docs/concepts/index.md",
+      "sha256": "6ef6c478b4cf71c9f71e4dffb5f17dc7b9fd51200803450a953e0442b7ae53ee"
+    },
+    {
+      "route": "/zh-cn/docs/csv-to-anki/index.md",
+      "sha256": "be2d5b64a5df7d603129517e460cad11fbac5c6a4e7037b94381fd94e0041428"
+    },
+    {
+      "route": "/zh-cn/docs/custom-notetypes/index.md",
+      "sha256": "f34dd1c38da4a42edbdceff9116ea9da2b09fb734a65a41fb317cd656741d682"
+    },
+    {
+      "route": "/zh-cn/docs/development/index.md",
+      "sha256": "956050812e0c79f55142ea8365b5950c92200361fc213083eb4e8deadbf7f07a"
+    },
+    {
+      "route": "/zh-cn/docs/genanki-migration/index.md",
+      "sha256": "5edc72249a4bd8d0426d73495a323909161890811ec107254b4b5184cfaa4e22"
+    },
+    {
+      "route": "/zh-cn/docs/image-occlusion/index.md",
+      "sha256": "9e799305a38afa3142a800041f4305b28234ef92c606f7cf1490e7aade238e88"
+    },
+    {
+      "route": "/zh-cn/docs/index.md",
+      "sha256": "aa51e5ee475f881619fba6741129da7385033b4ffaf200b716797dbc45d8582f"
+    },
+    {
+      "route": "/zh-cn/docs/installation/index.md",
+      "sha256": "765e38ed56cb05e700407fc64521b27c3722ed8fa4a0a5ba96f9fc930b167179"
+    },
+    {
+      "route": "/zh-cn/docs/json-to-anki/index.md",
+      "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91"
+    },
+    {
+      "route": "/zh-cn/docs/languages/index.md",
+      "sha256": "bd745fd45a07f2e3cbc7a3c326ce0f4af98466ba7dd96384e298d75e206ce504"
+    },
+    {
+      "route": "/zh-cn/docs/media/index.md",
+      "sha256": "38ede3dc1c21a7d7f73548b5bc7da8da5a5214e7f283cdfd4b88f2db8c2c00a6"
+    },
+    {
+      "route": "/zh-cn/docs/node-api/index.md",
+      "sha256": "bc69ec3d73a3402dc711c5c2b2d3efb6391d7188999ac5d0018e436c85917707"
+    },
+    {
+      "route": "/zh-cn/docs/node-quickstart/index.md",
+      "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360"
+    },
+    {
+      "route": "/zh-cn/docs/python-api/index.md",
+      "sha256": "2674b401ac8bec3cdfb323e9db7e810217036c8a8c4b70d1e8afacd0db245f71"
+    },
+    {
+      "route": "/zh-cn/docs/python-diagnostics/index.md",
+      "sha256": "46f5f8cbb5940413144a44cdcd7e54707a896b8b5d83f86bddda4ee629a312c0"
+    },
+    {
+      "route": "/zh-cn/docs/python-migration/index.md",
+      "sha256": "dee3ce5ae79e738bc309e44a3bed743f99f7bcc23aa228117e06d55349a0a95a"
+    },
+    {
+      "route": "/zh-cn/docs/python-quickstart/index.md",
+      "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69"
+    },
+    {
+      "route": "/zh-cn/docs/quickstart/index.md",
+      "sha256": "e8771b9e3b9b0e70e7ca09cbebc74fc6a80489d113f8d696521502beb0ceed23"
+    },
+    {
+      "route": "/zh-cn/docs/rust-api/index.md",
+      "sha256": "fe5b4e2084bf2006761490e4d24953947ce1b5ca47d4972acbcbcf7780b61b10"
+    },
+    {
+      "route": "/zh-cn/docs/rust-guide/index.md",
+      "sha256": "9f1d5eb72f0c176a4a4e2641a8b142155b1ec524deb4302a9932295794e8ea7b"
+    },
+    {
+      "route": "/zh-cn/docs/templates/index.md",
+      "sha256": "54c1ed27fd40ab7f3cba77256cb62f552df1061100f6eebff4d0ed5a2c37ca33"
+    },
+    {
+      "route": "/zh-cn/docs/troubleshooting/index.md",
+      "sha256": "98dd59ce04ff08ce201b869477b02181b2acdfb3916dabb9e8595285ed3c094a"
+    },
+    {
+      "route": "/zh-cn/docs/updates/index.md",
+      "sha256": "fc34d69e7cc123937470cc608900659dd9f1619f81f7f69fca9f392d0fc4fe84"
+    },
+    {
+      "route": "/zh-cn/llms.txt",
+      "sha256": "ecc97c9e1ecb1a9ee78b0e2503bf948dbf70c2908eeb8de705580cbf1880d346"
+    }
+  ],
+  "method": "Incremental review after ordered Pagefind HTML production, removal of the Starlight duplicate producer and pinning the exact official browser WASM runtime. Personally fetched both frozen archives via localhost HTTP: six locale llms entries and all four task discovery paths, 60 distinct responses per configuration. Independently read every actual old/current machine resource as bytes: all 192 per configuration exactly match the previously reviewed rebuild artifact. No new prose delta exists. The old 24 detailed semantic answers per configuration are explicitly retained and checked against newly fetched current task entry/result/constraint passages; this is not a claim to newly reread or rewrite every unchanged long-form page.",
+  "rootScope": "Personally fetched the root task resources and separately read all six root llms introductions/runtime commands and all 24 primary task headers/canonical/language metadata. Current prefix task-result/constraint reading applies to root only through exact full paired-body comparison after the sole configured site+base URL substitution. Each root resource also exactly matches its prior independently reviewed root bytes.",
+  "previousReport": {
+    "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+    "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+    "description": "Immutable prior independent full semantic review; reuse is supported by all 192 actual unchanged archive files and fresh current HTTP tasks."
+  },
+  "entries": {
+    "en": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/llms.txt",
+            "http://127.0.0.1:63839/docs/python-quickstart/index.md",
+            "http://127.0.0.1:63839/docs/compatibility/index.md"
+          ],
+          "answer": "Use ordinary CPython 3.11+ with a matching platform wheel; the documented release checks cover 3.11–3.14. Create an environment with `python -m venv .venv`, activate `. .venv/bin/activate` (PowerShell: `.venv\\Scripts\\Activate.ps1`), and install `python -m pip install ankiforge==0.3.1`. Save the quickstart's complete program as `main.py`: it creates Project('spanish', default_deck='Spanish'), adds key 'es:hola' with Note.basic('hola', 'hello'), and builds with BuildOptions.to('spanish.apkg'). Run `python main.py`; expect a persistent APKG containing hola → hello in Spanish. Keep the namespace and key for subsequent versions. Export itself needs no Anki; importing and playback require checking the intended Anki client.\n\nSources: http://127.0.0.1:63839/llms.txt, http://127.0.0.1:63839/docs/python-quickstart/index.md, http://127.0.0.1:63839/docs/compatibility/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "en/python-install",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/docs/python-quickstart/index.md",
+              "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/llms.txt",
+            "http://127.0.0.1:63839/docs/node-api/index.md",
+            "http://127.0.0.1:63839/docs/node-quickstart/index.md"
+          ],
+          "answer": "Start with Node.js 22.13+ and `npm install --include=optional ankiforge@0.3.1`; the matching native dependency is required. The complete main.mjs uses Project, Note and BuildOptions, awaits project.build(BuildOptions.to('spanish.apkg')), reads output.artifact.path, then awaits output.artifact.close(). Run `node main.mjs`. BuildOutput owns the artifact and exposes report/snapshot; BuildReport records observations, not success or file ownership. A persistent file survives close, whereas the final temporary owner deletes its file. Retain an owner while reading a temporary path. Snapshot JSON owns nothing. Prepared publish attempts consume their owner even on policy or I/O rejection, so retry by preparing again and inspect publication facts after errors.\n\nSources: http://127.0.0.1:63839/llms.txt, http://127.0.0.1:63839/docs/node-api/index.md, http://127.0.0.1:63839/docs/node-quickstart/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "en/node-api",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/docs/node-api/index.md",
+              "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/llms.txt",
+            "http://127.0.0.1:63839/docs/json-to-anki/index.md",
+            "http://127.0.0.1:63839/docs/updates/index.md",
+            "http://127.0.0.1:63839/docs/media/index.md"
+          ],
+          "answer": "Follow the local JSON recipe and put v1.json, v2.json, cell.png and tone.wav in recipe/. The caller parses namespace/deck/notes; preserve namespace biology-json and the three business IDs. Choose a complete SDK program: Python runs `python main.py recipe output/python`, Rust runs `cargo run -- recipe output/rust`, or compile main.mts with the documented NodeNext command and run `node dist/main.mjs recipe output/node`. Each release contains 3 notes, 3 cards and 2 media files. Keep the original v1.apkg as baseline and publish v2 separately after checking comparison.json and review.json; this edit changes only the first answer, records RISK.NOTE_CHANGED and allows publication. Publish the reviewed prepared candidate. Anki re-exports are unsuitable baselines; import does not delete omitted notes or guarantee local review history.\n\nSources: http://127.0.0.1:63839/llms.txt, http://127.0.0.1:63839/docs/json-to-anki/index.md, http://127.0.0.1:63839/docs/updates/index.md, http://127.0.0.1:63839/docs/media/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "en/json-update",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/docs/json-to-anki/index.md",
+              "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/llms.txt",
+            "http://127.0.0.1:63839/docs/compatibility/index.md",
+            "http://127.0.0.1:63839/docs/build-guarantees/index.md"
+          ],
+          "answer": "The compatibility page dates its 0.3.1 package record to 2026-10-13. It records Rust 1.92+, Node 22.13 and the 22/24/26 lines, and ordinary CPython 3.11–3.14. Native packages cover macOS arm64/x64, Linux x64 GNU/glibc and Windows x64; package existence is not proof of every host. Browser/Electron/Bun, musl and ARM64 Linux/Windows are outside recorded Node checks; other Python implementations, free-threaded interpreters and subinterpreters need separate validation. Export needs no Anki, but import/rendering/codecs/settings and update effects require client checks. APKG replacement is atomic per file, not a transaction with a separate report or a crash-durability guarantee. A late error may follow publication; inspect stage and durability before retrying. Inspection limits are finite independent counters, not a process sandbox.\n\nSources: http://127.0.0.1:63839/llms.txt, http://127.0.0.1:63839/docs/compatibility/index.md, http://127.0.0.1:63839/docs/build-guarantees/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "en/compatibility-constraints",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/docs/compatibility/index.md",
+              "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "zh-CN": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/zh-cn/llms.txt",
+            "http://127.0.0.1:63839/zh-cn/docs/python-quickstart/index.md",
+            "http://127.0.0.1:63839/zh-cn/docs/compatibility/index.md"
+          ],
+          "answer": "使用有匹配平台 wheel 的普通 CPython 3.11+；文档中的发布检查覆盖 3.11–3.14。运行 `python -m venv .venv`，用 `. .venv/bin/activate` 激活（PowerShell 用 `.venv\\Scripts\\Activate.ps1`），再执行 `python -m pip install ankiforge==0.3.1`。将快速开始的完整程序保存为 main.py：创建 namespace 为 spanish、默认牌组为 Spanish 的 Project，添加键 es:hola 与 Note.basic('hola', 'hello')，使用 BuildOptions.to('spanish.apkg') 构建。执行 `python main.py` 后应得到持久 APKG，其中 Spanish 牌组包含 hola → hello。后续版本保持 namespace 和键不变。导出无需安装 Anki；导入和播放仍需在目标客户端验证。\n\nSources: http://127.0.0.1:63839/zh-cn/llms.txt, http://127.0.0.1:63839/zh-cn/docs/python-quickstart/index.md, http://127.0.0.1:63839/zh-cn/docs/compatibility/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "zh-CN/python-install",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/zh-cn/docs/python-quickstart/index.md",
+              "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/zh-cn/llms.txt",
+            "http://127.0.0.1:63839/zh-cn/docs/node-api/index.md",
+            "http://127.0.0.1:63839/zh-cn/docs/node-quickstart/index.md"
+          ],
+          "answer": "使用 Node.js 22.13+，运行 `npm install --include=optional ankiforge@0.3.1` 安装公开包及匹配的原生依赖。快速开始的 main.mjs 导入 Project、Note、BuildOptions，await project.build(BuildOptions.to('spanish.apkg'))，读取 output.artifact.path，最后 await output.artifact.close()；以 `node main.mjs` 运行。BuildOutput 拥有产物并提供 report/snapshot；BuildReport 只有观察结果，没有操作结果或文件所有权。持久文件关闭后保留，临时文件则在最后一个所有者释放时删除，读取期间必须保留所有者；JSON 快照不会延长寿命。预备发布每次 publish 尝试都会消耗所有者，策略或 I/O 拒绝也如此；重试需重新准备，并检查错误中的实际发布状态。\n\nSources: http://127.0.0.1:63839/zh-cn/llms.txt, http://127.0.0.1:63839/zh-cn/docs/node-api/index.md, http://127.0.0.1:63839/zh-cn/docs/node-quickstart/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "zh-CN/node-api",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/zh-cn/docs/node-api/index.md",
+              "sha256": "bc69ec3d73a3402dc711c5c2b2d3efb6391d7188999ac5d0018e436c85917707",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/zh-cn/llms.txt",
+            "http://127.0.0.1:63839/zh-cn/docs/json-to-anki/index.md",
+            "http://127.0.0.1:63839/zh-cn/docs/updates/index.md",
+            "http://127.0.0.1:63839/zh-cn/docs/media/index.md"
+          ],
+          "answer": "从 JSON 示例下载 v1.json、v2.json、cell.png、tone.wav 放入 recipe/。JSON 由调用方解析，保留 biology-json 命名空间和三条业务 ID。选择完整 SDK 程序：Python 执行 `python main.py recipe output/python`；Rust 执行 `cargo run -- recipe output/rust`；Node 按文档 NodeNext 命令编译 main.mts，再运行 `node dist/main.mjs recipe output/node`。每版应有 3 条笔记、3 张卡片、2 个媒体文件。保留原始分发 v1.apkg 作基线，将 v2 写到另一路径；检查 comparison.json、review.json，本例仅改变首条答案，出现 RISK.NOTE_CHANGED 且策略允许发布。发布的必须是已审阅预备候选包。Anki 重新导出的包不能作基线；省略笔记不会删除客户端笔记，客户端本地修改和复习状态需单独验证。\n\nSources: http://127.0.0.1:63839/zh-cn/llms.txt, http://127.0.0.1:63839/zh-cn/docs/json-to-anki/index.md, http://127.0.0.1:63839/zh-cn/docs/updates/index.md, http://127.0.0.1:63839/zh-cn/docs/media/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "zh-CN/json-update",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/zh-cn/docs/json-to-anki/index.md",
+              "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/zh-cn/llms.txt",
+            "http://127.0.0.1:63839/zh-cn/docs/compatibility/index.md",
+            "http://127.0.0.1:63839/zh-cn/docs/build-guarantees/index.md"
+          ],
+          "answer": "兼容性页将公开包 0.3.1 的检查时间限定为 2026-10-13。记录覆盖 Rust 1.92+、Node 22.13 及 22/24/26 系列、普通 CPython 3.11–3.14。原生包面向 macOS arm64/x64、Linux x64 GNU/glibc、Windows x64，存在包不代表每台主机都测试过。浏览器、Electron、Bun、musl、ARM64 Linux/Windows 不在记录的 Node 范围；其他 Python 实现、自由线程与子解释器需另验。导出无需 Anki，但导入、渲染、编解码器、设置及更新效果依赖客户端。APKG 是单文件原子替换，不与独立报告构成事务，也不自动保证崩溃持久性。晚期错误可能发生在替换后，重试前检查 stage 和 durability。检查预算不是进程级资源沙箱。\n\nSources: http://127.0.0.1:63839/zh-cn/llms.txt, http://127.0.0.1:63839/zh-cn/docs/compatibility/index.md, http://127.0.0.1:63839/zh-cn/docs/build-guarantees/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "zh-CN/compatibility-constraints",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/zh-cn/docs/compatibility/index.md",
+              "sha256": "754f2bcf9e5dd030f568068ef4d527e8184ab10265cc39c9bce614d2e191a79d",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "es": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/es/llms.txt",
+            "http://127.0.0.1:63839/es/docs/python-quickstart/index.md",
+            "http://127.0.0.1:63839/es/docs/compatibility/index.md"
+          ],
+          "answer": "Usa CPython convencional 3.11 o posterior con un wheel compatible; las comprobaciones documentadas cubren 3.11–3.14. Crea el entorno con `python -m venv .venv`, actívalo con `. .venv/bin/activate` (PowerShell: `.venv\\Scripts\\Activate.ps1`) e instala `python -m pip install ankiforge==0.3.1`. Guarda el programa completo del inicio rápido como main.py: Project usa el espacio spanish y el mazo Spanish, añade es:hola mediante Note.basic('hola', 'hello') y genera BuildOptions.to('spanish.apkg'). Ejecuta `python main.py`. El APKG persistente debe contener hola → hello. Conserva el espacio de nombres y la clave en futuras versiones. Exportar no necesita Anki; verifica la importación y reproducción en tu cliente.\n\nSources: http://127.0.0.1:63839/es/llms.txt, http://127.0.0.1:63839/es/docs/python-quickstart/index.md, http://127.0.0.1:63839/es/docs/compatibility/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "es/python-install",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/es/docs/python-quickstart/index.md",
+              "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/es/llms.txt",
+            "http://127.0.0.1:63839/es/docs/node-api/index.md",
+            "http://127.0.0.1:63839/es/docs/node-quickstart/index.md"
+          ],
+          "answer": "Necesitas Node.js 22.13 o posterior y `npm install --include=optional ankiforge@0.3.1`, incluida su dependencia nativa. El main.mjs completo importa Project, Note y BuildOptions, espera project.build(BuildOptions.to('spanish.apkg')), lee output.artifact.path y ejecuta await output.artifact.close(); ejecútalo con `node main.mjs`. BuildOutput conserva el archivo y expone report/snapshot. BuildReport solo contiene observaciones, sin resultado ni propiedad del archivo. Cerrar un artefacto persistente conserva su archivo; liberar el último propietario temporal lo elimina. Mantén un propietario mientras lees la ruta: el JSON no prolonga su vida. Cada intento de publish consume el candidato preparado, incluso ante rechazo por política o E/S; prepara otro para reintentar y comprueba los datos reales de publicación tras un error.\n\nSources: http://127.0.0.1:63839/es/llms.txt, http://127.0.0.1:63839/es/docs/node-api/index.md, http://127.0.0.1:63839/es/docs/node-quickstart/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "es/node-api",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/es/docs/node-api/index.md",
+              "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/es/llms.txt",
+            "http://127.0.0.1:63839/es/docs/json-to-anki/index.md",
+            "http://127.0.0.1:63839/es/docs/updates/index.md",
+            "http://127.0.0.1:63839/es/docs/media/index.md"
+          ],
+          "answer": "Descarga v1.json, v2.json, cell.png y tone.wav en recipe/. La aplicación analiza el JSON; conserva biology-json y los tres ID de negocio. Elige el programa completo de un SDK: `python main.py recipe output/python`, `cargo run -- recipe output/rust`, o compila main.mts con el comando NodeNext indicado y ejecuta `node dist/main.mjs recipe output/node`. Cada versión debe contener 3 notas, 3 tarjetas y 2 archivos multimedia. Guarda el APKG v1 original de distribución y publica v2 en otra ruta después de revisar comparison.json y review.json. El cambio de la primera respuesta registra RISK.NOTE_CHANGED, sin notas añadidas o eliminadas, y permite publicar el candidato preparado revisado. Una reexportación de Anki no sirve de base; importar no elimina notas omitidas ni garantiza el historial local.\n\nSources: http://127.0.0.1:63839/es/llms.txt, http://127.0.0.1:63839/es/docs/json-to-anki/index.md, http://127.0.0.1:63839/es/docs/updates/index.md, http://127.0.0.1:63839/es/docs/media/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "es/json-update",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/es/docs/json-to-anki/index.md",
+              "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/es/llms.txt",
+            "http://127.0.0.1:63839/es/docs/compatibility/index.md",
+            "http://127.0.0.1:63839/es/docs/build-guarantees/index.md"
+          ],
+          "answer": "La página fecha la comprobación de los paquetes 0.3.1 en 2026-10-13. Registra Rust 1.92+, Node 22.13 y las ramas 22/24/26, y CPython convencional 3.11–3.14. Hay paquetes nativos para macOS arm64/x64, Linux x64 GNU/glibc y Windows x64; disponibilidad no significa prueba en todos los equipos. Navegadores, Electron, Bun, musl y Linux/Windows ARM64 quedan fuera de las pruebas de Node; otras implementaciones de Python, intérpretes sin GIL y subintérpretes requieren validación aparte. Exportar no necesita Anki, pero importación, códecs, representación y actualizaciones dependen del cliente. El reemplazo APKG es atómico por archivo, no una transacción junto al informe ni garantía de durabilidad tras un fallo. Antes de reintentar un error tardío, revisa stage y durability. Los límites de inspección no son un aislamiento de recursos del proceso.\n\nSources: http://127.0.0.1:63839/es/llms.txt, http://127.0.0.1:63839/es/docs/compatibility/index.md, http://127.0.0.1:63839/es/docs/build-guarantees/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "es/compatibility-constraints",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/es/docs/compatibility/index.md",
+              "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "pt-BR": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/pt-br/llms.txt",
+            "http://127.0.0.1:63839/pt-br/docs/python-quickstart/index.md",
+            "http://127.0.0.1:63839/pt-br/docs/compatibility/index.md"
+          ],
+          "answer": "Use CPython convencional 3.11 ou posterior com wheel compatível; a verificação registrada cobre 3.11–3.14. Crie o ambiente com `python -m venv .venv`, ative com `. .venv/bin/activate` (PowerShell: `.venv\\Scripts\\Activate.ps1`) e instale `python -m pip install ankiforge==0.3.1`. Salve o programa completo do início rápido como main.py: ele cria Project com namespace spanish e baralho Spanish, adiciona es:hola com Note.basic('hola', 'hello') e gera BuildOptions.to('spanish.apkg'). Rode `python main.py`. O arquivo persistente deve conter hola → hello. Preserve namespace e chave nas edições seguintes. Exportar não exige Anki; a importação e a reprodução precisam ser verificadas no cliente de destino.\n\nSources: http://127.0.0.1:63839/pt-br/llms.txt, http://127.0.0.1:63839/pt-br/docs/python-quickstart/index.md, http://127.0.0.1:63839/pt-br/docs/compatibility/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "pt-BR/python-install",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/pt-br/docs/python-quickstart/index.md",
+              "sha256": "934645ffd2b7bd299886c13d6c683c75587b58b323e787e0859e1c2e60520721",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/pt-br/llms.txt",
+            "http://127.0.0.1:63839/pt-br/docs/node-api/index.md",
+            "http://127.0.0.1:63839/pt-br/docs/node-quickstart/index.md"
+          ],
+          "answer": "Use Node.js 22.13 ou posterior e instale `npm install --include=optional ankiforge@0.3.1` com a dependência nativa correspondente. O main.mjs completo usa Project, Note e BuildOptions, aguarda project.build(BuildOptions.to('spanish.apkg')), lê output.artifact.path e fecha com await output.artifact.close(); execute `node main.mjs`. BuildOutput mantém o artefato e fornece report/snapshot; BuildReport tem observações, sem resultado da operação nem propriedade de arquivo. Um arquivo persistente permanece após close; o temporário desaparece ao liberar seu último proprietário. Mantenha o proprietário durante a leitura, pois JSON não prolonga essa vida. Toda tentativa de publish consome o candidato preparado, inclusive rejeições de política ou E/S. Prepare novamente para tentar outra vez e confira os fatos de publicação em caso de erro.\n\nSources: http://127.0.0.1:63839/pt-br/llms.txt, http://127.0.0.1:63839/pt-br/docs/node-api/index.md, http://127.0.0.1:63839/pt-br/docs/node-quickstart/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "pt-BR/node-api",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/pt-br/docs/node-api/index.md",
+              "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/pt-br/llms.txt",
+            "http://127.0.0.1:63839/pt-br/docs/json-to-anki/index.md",
+            "http://127.0.0.1:63839/pt-br/docs/updates/index.md",
+            "http://127.0.0.1:63839/pt-br/docs/media/index.md"
+          ],
+          "answer": "Coloque v1.json, v2.json, cell.png e tone.wav em recipe/. A aplicação interpreta o JSON; mantenha biology-json e os três IDs de negócio. Escolha um programa completo: `python main.py recipe output/python`, `cargo run -- recipe output/rust`, ou compile main.mts pelo comando NodeNext documentado e rode `node dist/main.mjs recipe output/node`. Cada versão deve ter 3 notas, 3 cartões e 2 arquivos de mídia. Preserve o APKG v1 originalmente distribuído como base e grave v2 em outro caminho. Confira comparison.json e review.json: a mudança só na primeira resposta gera RISK.NOTE_CHANGED, sem notas adicionadas ou removidas, e permite publicar o candidato preparado revisado. Reexportações do Anki não servem como base. Importar não exclui notas omitidas nem garante o histórico local; teste o cliente.\n\nSources: http://127.0.0.1:63839/pt-br/llms.txt, http://127.0.0.1:63839/pt-br/docs/json-to-anki/index.md, http://127.0.0.1:63839/pt-br/docs/updates/index.md, http://127.0.0.1:63839/pt-br/docs/media/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "pt-BR/json-update",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/pt-br/docs/json-to-anki/index.md",
+              "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/pt-br/llms.txt",
+            "http://127.0.0.1:63839/pt-br/docs/compatibility/index.md",
+            "http://127.0.0.1:63839/pt-br/docs/build-guarantees/index.md"
+          ],
+          "answer": "A página registra os pacotes 0.3.1 conforme a verificação de 2026-10-13: Rust 1.92+, Node 22.13 e séries 22/24/26, CPython convencional 3.11–3.14. Os pacotes nativos cobrem macOS arm64/x64, Linux x64 GNU/glibc e Windows x64; isso não prova execução em toda máquina. Navegadores, Electron, Bun, musl e Linux/Windows ARM64 ficam fora das verificações de Node; outras implementações de Python, interpretadores sem GIL e subinterpretadores exigem teste separado. Exportar dispensa Anki, mas importação, codecs, renderização e atualizações dependem do cliente. A substituição atômica vale por APKG, não pelo conjunto com um relatório nem como garantia contra perda após falha. Um erro tardio pode ocorrer depois da publicação: examine stage e durability antes de repetir. Os limites de inspeção não isolam todos os recursos do processo.\n\nSources: http://127.0.0.1:63839/pt-br/llms.txt, http://127.0.0.1:63839/pt-br/docs/compatibility/index.md, http://127.0.0.1:63839/pt-br/docs/build-guarantees/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "pt-BR/compatibility-constraints",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/pt-br/docs/compatibility/index.md",
+              "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "ja": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/ja/llms.txt",
+            "http://127.0.0.1:63839/ja/docs/python-quickstart/index.md",
+            "http://127.0.0.1:63839/ja/docs/compatibility/index.md"
+          ],
+          "answer": "対応する wheel がある通常の CPython 3.11 以降を使います。記録されたリリース検査は 3.11–3.14 です。`python -m venv .venv` の後、`. .venv/bin/activate`（PowerShell は `.venv\\Scripts\\Activate.ps1`）で有効にし、`python -m pip install ankiforge==0.3.1` を実行します。クイックスタートの完全なコードを main.py に保存します。名前空間 spanish、デッキ Spanish の Project に es:hola と Note.basic('hola', 'hello') を追加し、BuildOptions.to('spanish.apkg') で生成します。`python main.py` の出力は hola → hello を含む永続 APKG です。次回も名前空間とキーを維持します。エクスポートに Anki は不要ですが、インポートや再生は対象クライアントで確認します。\n\nSources: http://127.0.0.1:63839/ja/llms.txt, http://127.0.0.1:63839/ja/docs/python-quickstart/index.md, http://127.0.0.1:63839/ja/docs/compatibility/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "ja/python-install",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/ja/docs/python-quickstart/index.md",
+              "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/ja/llms.txt",
+            "http://127.0.0.1:63839/ja/docs/node-api/index.md",
+            "http://127.0.0.1:63839/ja/docs/node-quickstart/index.md"
+          ],
+          "answer": "Node.js 22.13 以降で `npm install --include=optional ankiforge@0.3.1` を実行し、対応するネイティブ依存も入れます。完全な main.mjs は Project、Note、BuildOptions を使い、project.build(BuildOptions.to('spanish.apkg')) を await して output.artifact.path を読み、最後に await output.artifact.close() します。`node main.mjs` で実行できます。BuildOutput は成果物を所有し report/snapshot を公開します。BuildReport は観測結果であり、成功・失敗やファイル所有権ではありません。永続ファイルは close 後も残り、一時ファイルは最後の所有者とともに削除されます。読み取り中は所有者を保持し、JSON に寿命延長を期待しないでください。準備済み候補の publish はポリシーや I/O 拒否も含め毎回消費されるため、再試行には再準備が必要です。エラー後は実際の公開状態を確認します。\n\nSources: http://127.0.0.1:63839/ja/llms.txt, http://127.0.0.1:63839/ja/docs/node-api/index.md, http://127.0.0.1:63839/ja/docs/node-quickstart/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "ja/node-api",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/ja/docs/node-api/index.md",
+              "sha256": "1a2dcc809248fc660ae81f50151815b6dbf85f9bb6ac72e5268304b70510f3ae",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/ja/llms.txt",
+            "http://127.0.0.1:63839/ja/docs/json-to-anki/index.md",
+            "http://127.0.0.1:63839/ja/docs/updates/index.md",
+            "http://127.0.0.1:63839/ja/docs/media/index.md"
+          ],
+          "answer": "v1.json、v2.json、cell.png、tone.wav を recipe/ に置きます。JSON は呼び出し側で解析し、biology-json と3つの業務 ID を維持します。完全な SDK プログラムを1つ選び、Python なら `python main.py recipe output/python`、Rust なら `cargo run -- recipe output/rust` を実行します。Node は文書の NodeNext コマンドで main.mts をコンパイルし、`node dist/main.mjs recipe output/node` を実行します。各版はノート3件、カード3枚、メディア2個です。配布時のオリジナル v1.apkg を保存して基準にし、v2 は別のパスに出します。comparison.json と review.json で最初の回答だけの変更、RISK.NOTE_CHANGED、追加・削除なし、公開許可を確認して同じ準備済み候補を公開します。Anki 再エクスポートは基準にできず、ノートの省略による削除や各学習者の履歴保持も保証されません。\n\nSources: http://127.0.0.1:63839/ja/llms.txt, http://127.0.0.1:63839/ja/docs/json-to-anki/index.md, http://127.0.0.1:63839/ja/docs/updates/index.md, http://127.0.0.1:63839/ja/docs/media/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "ja/json-update",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/ja/docs/json-to-anki/index.md",
+              "sha256": "1ba2d24ca1b9ed277b5676b4d8229eac98b9ed3ff6bfcae8d4b5bd6a312a665d",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/ja/llms.txt",
+            "http://127.0.0.1:63839/ja/docs/compatibility/index.md",
+            "http://127.0.0.1:63839/ja/docs/build-guarantees/index.md"
+          ],
+          "answer": "互換性ページの 0.3.1 は2026-10-13の確認記録です。Rust 1.92 以降、Node 22.13 と22/24/26、通常の CPython 3.11–3.14 を記録しています。ネイティブパッケージは macOS arm64/x64、Linux x64 GNU/glibc、Windows x64 向けですが、全ホストでの成功を意味しません。ブラウザー、Electron、Bun、musl、ARM64 Linux/Windows は Node の記録範囲外です。他の Python 実装、free-threaded、サブインタープリターも別途検証します。出力には Anki 不要でも、インポート、描画、コーデック、設定、更新効果は対象クライアントに依存します。APKG のアトミック置換はファイル単位で、別レポートとの一括トランザクションやクラッシュ後の耐久性を保証しません。公開後の遅いエラーもあるため、再試行前に stage と durability を確認します。検査上限はプロセス全体のサンドボックスではありません。\n\nSources: http://127.0.0.1:63839/ja/llms.txt, http://127.0.0.1:63839/ja/docs/compatibility/index.md, http://127.0.0.1:63839/ja/docs/build-guarantees/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "ja/compatibility-constraints",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/ja/docs/compatibility/index.md",
+              "sha256": "2a518df085892fd262eaf2d262ba09b923f7aa9419be6c9b803150d5b5a4e541",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "de": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/de/llms.txt",
+            "http://127.0.0.1:63839/de/docs/python-quickstart/index.md",
+            "http://127.0.0.1:63839/de/docs/compatibility/index.md"
+          ],
+          "answer": "Verwende reguläres CPython ab 3.11 mit passendem Plattform-Wheel; die dokumentierten Release-Prüfungen decken 3.11–3.14 ab. Erzeuge mit `python -m venv .venv` eine Umgebung, aktiviere sie über `. .venv/bin/activate` (PowerShell: `.venv\\Scripts\\Activate.ps1`) und installiere `python -m pip install ankiforge==0.3.1`. Speichere das vollständige Schnellstartprogramm als main.py: Project verwendet den Namensraum spanish und Stapel Spanish, fügt es:hola mit Note.basic('hola', 'hello') hinzu und baut mit BuildOptions.to('spanish.apkg'). Starte `python main.py`. Das persistente APKG enthält hola → hello. Behalte Namensraum und Schlüssel bei späteren Änderungen bei. Der Export benötigt kein Anki; Import und Wiedergabe sind im Zielclient zu prüfen.\n\nSources: http://127.0.0.1:63839/de/llms.txt, http://127.0.0.1:63839/de/docs/python-quickstart/index.md, http://127.0.0.1:63839/de/docs/compatibility/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "de/python-install",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/de/docs/python-quickstart/index.md",
+              "sha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/de/llms.txt",
+            "http://127.0.0.1:63839/de/docs/node-api/index.md",
+            "http://127.0.0.1:63839/de/docs/node-quickstart/index.md"
+          ],
+          "answer": "Benötigt werden Node.js ab 22.13 und `npm install --include=optional ankiforge@0.3.1` samt passender nativer Abhängigkeit. Das vollständige main.mjs importiert Project, Note und BuildOptions, wartet auf project.build(BuildOptions.to('spanish.apkg')), liest output.artifact.path und ruft await output.artifact.close() auf. Ausführen mit `node main.mjs`. BuildOutput besitzt das Artefakt und bietet report/snapshot; BuildReport enthält Beobachtungen, keinen Operationsausgang oder Dateibesitz. Persistente Dateien bleiben nach close erhalten, temporäre verschwinden mit dem letzten Besitzer. Halte beim Lesen einen Besitzer; JSON verlängert die Lebensdauer nicht. Jeder publish-Versuch verbraucht den vorbereiteten Kandidaten, auch bei Richtlinien- oder E/A-Ablehnung. Bereite ihn für einen neuen Versuch erneut vor und prüfe bei Fehlern die tatsächlichen Veröffentlichungsfakten.\n\nSources: http://127.0.0.1:63839/de/llms.txt, http://127.0.0.1:63839/de/docs/node-api/index.md, http://127.0.0.1:63839/de/docs/node-quickstart/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "de/node-api",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/de/docs/node-api/index.md",
+              "sha256": "a362ada18b093cb8ea50489e9ac2ed109a9ff128939cf0b5803fdf06766714a2",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/de/llms.txt",
+            "http://127.0.0.1:63839/de/docs/json-to-anki/index.md",
+            "http://127.0.0.1:63839/de/docs/updates/index.md",
+            "http://127.0.0.1:63839/de/docs/media/index.md"
+          ],
+          "answer": "Lege v1.json, v2.json, cell.png und tone.wav unter recipe/ ab. Die Anwendung liest das JSON; biology-json und die drei fachlichen IDs bleiben stabil. Wähle ein vollständiges SDK-Programm: `python main.py recipe output/python`, `cargo run -- recipe output/rust` oder kompiliere main.mts mit dem dokumentierten NodeNext-Befehl und starte `node dist/main.mjs recipe output/node`. Jede Version enthält 3 Notizen, 3 Karten und 2 Mediendateien. Bewahre das ursprünglich verteilte v1.apkg als Basis auf und schreibe v2 an einen anderen Pfad. comparison.json und review.json sollen die Änderung nur der ersten Antwort, RISK.NOTE_CHANGED, keine hinzugefügten/entfernten Notizen und die Veröffentlichungsfreigabe zeigen. Veröffentlicht wird derselbe geprüfte Kandidat. Ein Anki-Reexport ist keine geeignete Basis; der Import löscht keine ausgelassenen Notizen und garantiert keinen individuellen Wiederholungsverlauf.\n\nSources: http://127.0.0.1:63839/de/llms.txt, http://127.0.0.1:63839/de/docs/json-to-anki/index.md, http://127.0.0.1:63839/de/docs/updates/index.md, http://127.0.0.1:63839/de/docs/media/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "de/json-update",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/de/docs/json-to-anki/index.md",
+              "sha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:63839/de/llms.txt",
+            "http://127.0.0.1:63839/de/docs/compatibility/index.md",
+            "http://127.0.0.1:63839/de/docs/build-guarantees/index.md"
+          ],
+          "answer": "Die Kompatibilitätsseite datiert den Paketstand 0.3.1 auf die Prüfung vom 2026-10-13. Dokumentiert sind Rust ab 1.92, Node 22.13 sowie 22/24/26 und reguläres CPython 3.11–3.14. Native Pakete decken macOS arm64/x64, Linux x64 GNU/glibc und Windows x64 ab, nicht nachweislich jeden Host. Browser, Electron, Bun, musl und ARM64 Linux/Windows liegen außerhalb der Node-Prüfabdeckung; andere Python-Implementierungen, Interpreter ohne GIL und Subinterpreter benötigen eigene Tests. Exportieren benötigt kein Anki, doch Import, Darstellung, Codecs, Einstellungen und Aktualisierungen hängen vom Client ab. Der atomare APKG-Austausch gilt pro Datei, nicht gemeinsam mit einem Bericht und nicht automatisch als Absturz-Dauerhaftigkeit. Ein später Fehler kann nach der Veröffentlichung auftreten; prüfe stage und durability vor dem Wiederholen. Inspektionslimits sind keine Ressourcen-Sandbox für den Prozess.\n\nSources: http://127.0.0.1:63839/de/llms.txt, http://127.0.0.1:63839/de/docs/compatibility/index.md, http://127.0.0.1:63839/de/docs/build-guarantees/index.md",
+          "answerLineage": {
+            "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+            "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+            "task": "de/compatibility-constraints",
+            "method": "Inherited semantic answer, explicitly revalidated against exact unchanged resource bytes and fresh current task reading. Not represented as newly authored."
+          },
+          "evidence": [
+            {
+              "route": "/de/docs/compatibility/index.md",
+              "sha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3",
+              "observation": "Fresh root HTTP entry and primary header/canonical/language reading completed. Identical root prose retains prior root semantics and current prefix scoped recheck via explicit paired-byte proof."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "a09aebedaf86c6a0791c815a55c1bf2e6fcc71fe9a77eb0eb7f29204a18789b7",
+              "description": "Actual new HTTP/scoped reading, per-task current headers and explicit detailed-answer inheritance; no changed prose exists."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root-input-audit.json",
+              "sha256": "714669ad99f8fd2bfa2b922238796711eb55c617841ee0faba8cd18951829af4",
+              "description": "Independently checked all 192 actual previous/current archive byte identities and new response bytes against both manifests."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+              "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab",
+              "description": "Actual fresh localhost HTTP GETs by this independent reviewer; 60 distinct current responses serving six languages and four tasks."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+              "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425",
+              "description": "Immutable earlier independent report supplies this exact unchanged semantic answer and any prior open issues; current support rechecked in this run."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    }
+  },
+  "openIssues": [],
+  "limitations": [
+    "No deployment or hosting MIME acceptance is claimed. The short-lived localhost server serves the frozen archive.",
+    "SDK execution and Anki GUI/media behavior belong to separate usage/client evidence.",
+    "The 192 bindings cover Markdown/llms resources only; unread showcase metadata and HTML are not added."
+  ]
+}

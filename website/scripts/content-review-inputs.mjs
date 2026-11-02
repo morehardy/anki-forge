@@ -17,7 +17,7 @@ const templates = {
 };
 const technicalFiles = ['docs/ai-quickstart.json', 'anki_forge/examples/website_showcase.rs', 'anki_forge/examples/docs_workflow.rs', 'anki_forge/examples/json_to_anki.rs', 'bindings/python/examples/json_to_anki.py', 'bindings/node/examples/json_to_anki.mts'];
 const renderFiles = ['website/src/i18n/messages.mjs', 'website/src/i18n/format-message.mjs', 'website/src/i18n/client-messages.mjs', 'website/src/lib/ai-quickstart.mjs', 'website/src/lib/examples.ts', 'website/src/lib/search-terms.mjs', 'website/src/scripts/site.ts'];
-const searchFiles = ['website/src/scripts/docs-search.ts', 'website/src/lib/search.mjs', 'website/search.config.mjs', 'website/scripts/search-documents.mjs'];
+const searchFiles = ['website/src/scripts/docs-search.ts', 'website/src/lib/search.mjs', 'website/search.config.mjs', 'website/scripts/search-documents.mjs', 'website/astro.config.mjs', 'website/vendor/pagefind/1.5.2/runtime.json'];
 const repository = fileURLToPath(new URL('../../', import.meta.url));
 
 // Read literal model data from the requested root, without executing its modules

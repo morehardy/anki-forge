@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/standards_review/pr66-portable-search-2026-11-02",
+  "tarball": {
+    "path": "/private/tmp/pagefind-linux-x64-1.5.2.tgz",
+    "integrity": "sha512-V+tFqHKXhQKq/WqPBD67AFy7scn1/aZID00ws4fSDd+1daSi5UHR9VVlRrOUYKxn3VuFQYRD7lYXdZK1WED1YA==",
+    "sha256": "3c8dcfdaa69946113e0257be05bdef57297c7f1a562aa168536ff7c5d4590660",
+    "matchesFrozenLockAndManifest": true
+  },
+  "binary": {
+    "bytes": 58802000,
+    "sha256": "70cb6d23d6508bb18e77fd5403e99d7ede0ae9d2eef1ab9f049411e0c12ec380",
+    "matchesExtractedTarball": true
+  },
+  "files": {
+    "wasm.de.pagefind": {
+      "sha256": "f1e251bdaf42bd2ded77e7dd41460ebe237cba885ec8f3094f4be995c1ebbc57",
+      "bytes": 70562,
+      "officialOutput": "/private/tmp/pr66-pagefind-output-linux-x64/wasm.de.pagefind",
+      "exactByteEqual": true,
+      "decodedSha256": "7bd0b3d0ffbc514f2b58ef822f3bc57fdd212a7834787adf781b1bb1d33f619a"
+    },
+    "wasm.en.pagefind": {
+      "sha256": "bb16c9e6d3d214d4d05cccca51df7b487b86b3657318da767f6ca9e0a2e7259d",
+      "bytes": 72209,
+      "officialOutput": "/private/tmp/pr66-pagefind-output-linux-x64/wasm.en.pagefind",
+      "exactByteEqual": true,
+      "decodedSha256": "7e092add3897f1c134d7f093ebae88a3358e671addd5e1a3d39dcebdee83b12a"
+    },
+    "wasm.es.pagefind": {
+      "sha256": "c00d45e7242a60fc25bea534ddacea609cff5fd6138fb9f84194f7b68ed3ecfa",
+      "bytes": 71934,
+      "officialOutput": "/private/tmp/pr66-pagefind-output-linux-x64/wasm.es.pagefind",
+      "exactByteEqual": true,
+      "decodedSha256": "82ed3130fd97696ca6cee0c8734a718b193b2bf645ac46131282a87851bef7aa"
+    },
+    "wasm.pt-br.pagefind": {
+      "sha256": "274994577df8da8d1945043b05eb3708abbaff717a00219a2f87e66f8705e6d5",
+      "bytes": 71693,
+      "officialOutput": "/private/tmp/pr66-pagefind-output-linux-x64/wasm.pt-br.pagefind",
+      "exactByteEqual": true,
+      "decodedSha256": "fa720cfc9c2b836399315cd6c15af1497c6e5b3df36d591a6584448f0cb88b12"
+    },
+    "wasm.unknown.pagefind": {
+      "sha256": "3a74cefceacd066e8d3bc8c52e7bc1c869544ca3d9031b44a9b7136356d5d7f4",
+      "bytes": 68024,
+      "officialOutput": "/private/tmp/pr66-pagefind-output-linux-x64/wasm.unknown.pagefind",
+      "exactByteEqual": true,
+      "decodedSha256": "77e118a7fd29152134c0285a97d3048a07055172dbadeb4fc6f27c6a0d3f851c"
+    }
+  },
+  "licenses": {
+    "LICENSE": {
+      "source": "website/node_modules/pagefind/LICENSE/LICENSE",
+      "sha256": "f7499d8f9a345ba2846f39325271de0fdf54c1d2968eadfde7998625cc45add0",
+      "exactByteEqual": true
+    },
+    "LICENSE-vscode-ripgrep": {
+      "source": "website/node_modules/pagefind/LICENSE/LICENSE-vscode-ripgrep",
+      "sha256": "ccf06b70760761ae1437395117bcf911501e3dc85385d84c7eba20d5dfab55dd",
+      "exactByteEqual": true
+    }
+  },
+  "scope": "Independent local tarball-integrity verification against frozen package-lock; exact binary from that tarball; exact five WASM bytes against coordinator actual official Linux-x64 output. No modified instructions or custom-section normalization."
+}

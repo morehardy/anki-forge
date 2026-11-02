@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
-import { readFile, mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { readFile, mkdtemp, mkdir, writeFile, rm, readdir } from 'node:fs/promises';
 import test from 'node:test';
 import os from 'node:os';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { rankSearchDocuments, plainSearchText, documentRole } from '../src/lib/search.mjs';
-import { canonicalizePagefindEntry } from './search-documents.mjs';
+import { canonicalizePagefindEntry, generatePagefind } from './search-documents.mjs';
 
 const vocabulary = JSON.parse(await readFile(new URL('../search-concepts.json', import.meta.url), 'utf8')).locales;
 const doc = (id, title, terms = [], description = '') => ({ id, title, terms, description, type: 'docs', url: `/preview/en/docs/${id}/` });
@@ -22,6 +23,34 @@ const documents = [
   doc('image-occlusion', 'Image Occlusion', ['rectangle masks', 'hide labels on images']),
 ];
 const rank = (query, docs = documents, extra = {}) => rankSearchDocuments(query, docs, 'en', { concepts: vocabulary.en, ...extra });
+
+test('Pagefind produces the same complete index and official browser runtime from reordered files', async t => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-pagefind-portable-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const paths = ['z/index.html', 'a/index.html', 'de/z/index.html', 'de/a/index.html'];
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const snapshots = [];
+  for (const [variant, order] of [['forward', paths], ['reverse', [...paths].reverse()]]) {
+    const site = path.join(directory, variant);
+    for (const file of order) {
+      await mkdir(path.dirname(path.join(site, file)), { recursive: true });
+      await writeFile(path.join(site, file), `<html lang="${file.startsWith('de/') ? 'de' : 'en'}"><title>${file}</title><body><main data-pagefind-body>Search ${file}: reusable packages.</main></body></html>`);
+    }
+    await mkdir(path.join(site, 'pagefind'));
+    await writeFile(path.join(site, 'pagefind', 'stale.pf_index'), 'old shard');
+    await generatePagefind(site);
+    const files = (await readdir(path.join(site, 'pagefind'), { recursive: true, withFileTypes: true })).filter(entry => entry.isFile());
+    const snapshot = {};
+    for (const file of files) {
+      const filename = path.join(file.parentPath, file.name);
+      snapshot[path.relative(path.join(site, 'pagefind'), filename)] = hash(await readFile(filename));
+    }
+    assert.equal(snapshot['stale.pf_index'], undefined, 'Never retain unreferenced previous shards');
+    for (const language of ['en', 'de']) assert.equal(snapshot[`wasm.${language}.pagefind`], hash(await readFile(new URL(`../vendor/pagefind/1.5.2/wasm.${language}.pagefind`, import.meta.url))), 'Use identical official runtime bytes on every host');
+    snapshots.push(snapshot);
+  }
+  assert.deepEqual(snapshots[0], snapshots[1], 'All shards, fragments, metadata, JS and WASM must match');
+});
 
 test('Pagefind language-map order cannot change reviewed artifact bytes', async t => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-pagefind-order-'));

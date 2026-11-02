@@ -1,0 +1,58 @@
+# Anki Forge
+
+> Anki Forge erzeugt Anki-APKG-Stapel aus Code mit Rust, Node / TypeScript oder Python.
+
+Aktuelle Version des veröffentlichten Pakets: 0.3.1. Für einen gewöhnlichen Export muss Anki nicht installiert sein. Die APIs veröffentlichter Pakete unterscheiden sich von Builds aus dem Quellcode. Bewahre für Aktualisierungen das ursprünglich verteilte APKG der Vorgängerversion auf; Ankis Importeinstellungen und neuere lokale Änderungen können das Ergebnis beeinflussen.
+
+- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)
+- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)
+- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)
+
+## Hier beginnen
+
+- [Anki-Stapel aus Code erzeugen](https://morehardy.github.io/anki-forge/de/docs/index.md): Wähle eine Programmiersprache, erzeuge deinen ersten Stapel und ergänze Medien, Vorlagen und wiederholbare Aktualisierungen.
+- [Deine Programmiersprache wählen](https://morehardy.github.io/anki-forge/de/docs/languages/index.md): Installiere das veröffentlichte Paket für Rust, Node oder Python und exportiere deinen ersten Anki-Stapel.
+- [Kompatibilität und geprüfte Umgebungen](https://morehardy.github.io/anki-forge/de/docs/compatibility/index.md): Prüfe veröffentlichte Pakete, verifizierte Laufzeitumgebungen und Bedingungen für Import und Wiedergabe in Anki-Clients.
+
+## Schnellstarts
+
+- [Anki-Karten mit Rust erzeugen](https://morehardy.github.io/anki-forge/de/docs/quickstart/index.md): Installiere das veröffentlichte Rust-Paket, erstelle eine spanische Vokabelkarte und exportiere mit einem vollständigen Programm ein dauerhaft gespeichertes APKG.
+- [Anki-Karten mit Node.js erzeugen](https://morehardy.github.io/anki-forge/de/docs/node-quickstart/index.md): Installiere ankiforge über npm, erzeuge Karten mit Node.js oder TypeScript und exportiere einen APKG-Stapel zum Import in Anki.
+- [Anki-Karten mit Python erzeugen](https://morehardy.github.io/anki-forge/de/docs/python-quickstart/index.md): Installiere ankiforge über PyPI, erzeuge Karten mit einem kurzen Python-Skript und exportiere einen APKG-Stapel zum Import in Anki.
+
+## API-Referenzen
+
+- [Überblick über die öffentliche API](https://morehardy.github.io/anki-forge/de/docs/api/index.md): Finde die Rust-, Python- und Node-APIs für Inhaltserstellung, Medien, Diagnostik und Aktualisierungen.
+- [Rust-API-Referenz](https://morehardy.github.io/anki-forge/de/docs/rust-api/index.md): Finde öffentliche Methoden zur Inhaltserstellung, Build-Vorgaben, Berichte und Diagnoseverhalten in Rust.
+- [Node- und TypeScript-API](https://morehardy.github.io/anki-forge/de/docs/node-api/index.md): Öffentliche Methoden, asynchrones Verhalten, Build-Optionen, Ausgabedateien und Berichte des Node-SDK.
+- [Python-API](https://morehardy.github.io/anki-forge/de/docs/python-api/index.md): Project, Medien, Build-Optionen, Berichte und die Kontrolle über die Lebensdauer temporärer Artefakte in Python.
+
+## Anleitungen nach Aufgabe
+
+- [CSV zu Anki: Karten mit Python erzeugen](https://morehardy.github.io/anki-forge/de/docs/csv-to-anki/index.md): Wandle eine UTF-8-Vokabeltabelle mit einem vollständigen Python-Skript in ein Anki-APKG um – mit CSV-Beispiel, stabilen Notiz-IDs und Importprüfungen.
+- [Anki-Stapel aus JSON erzeugen und aktualisieren](https://morehardy.github.io/anki-forge/de/docs/json-to-anki/index.md): Lies JSON mit Rust, Python oder TypeScript ein, bündle Bilder und Audio und prüfe eine APKG-Aktualisierung, die nur eine Antwort ändert.
+- [Anki-Karten mit KI-Unterstützung: von Aufzeichnungen zum APKG](https://morehardy.github.io/anki-forge/de/docs/ai-anki-cards/index.md): Lass einen KI-Assistenten Karten entwerfen, prüfe die Antworten und exportiere mit Anki Forge ein APKG. Nutze CSV oder eine Aufgabenbeschreibung für Programmierassistenten.
+- [Basic- und Cloze-Karten für Anki erzeugen](https://morehardy.github.io/anki-forge/de/docs/cards/index.md): Erzeuge Basic-Karten mit Frage und Antwort sowie Cloze-Lückentextkarten aus Code. Ein geprüftes Rust-Beispiel erstellt zwei Notizen und drei Karten.
+- [Anki-Karten um Bilder und Audio ergänzen](https://morehardy.github.io/anki-forge/de/docs/media/index.md): Importiere mit Rust, Python oder Node.js Dateien, kombiniere Karteninhalte und verwalte Exportnamen, MIME-Typen und Medienbudgets.
+- [Anki-Kartenvorlagen, CSS und Medien wiederverwenden](https://morehardy.github.io/anki-forge/de/docs/templates/index.md): Lade einen wiederverwendbaren Anki-Notiztyp aus einem Paket mit Kartenvorlagen, CSS und Medien – für normale oder Cloze-Karten mit Rust, Python oder Node.js.
+- [Anki-Karten mit Bildverdeckung erzeugen](https://morehardy.github.io/anki-forge/de/docs/image-occlusion/index.md): Erzeuge Bildverdeckungskarten per Code mit Rust, Python oder Node.js: Gib Bild und Rechteckmasken vor und wähle einen der beiden Verdeckungsmodi.
+- [Anki-Stapel mit stabilen Notiz-IDs aktualisieren](https://morehardy.github.io/anki-forge/de/docs/updates/index.md): Veröffentliche eine neue Stapelversion: Behalte stabile Notiz-IDs bei, verwende das ursprüngliche APKG der Vorgängerversion als Basis und prüfe den Vergleich vor der Verteilung.
+
+## Einschränkungen
+
+- [Build- und Ausgabegarantien](https://morehardy.github.io/anki-forge/de/docs/build-guarantees/index.md): Verstehe temporäre Artefakte, Pfadschutz, Inspektionsgrenzen und die Veröffentlichung geprüfter Kandidaten.
+- [Fehlersuche](https://morehardy.github.io/anki-forge/de/docs/troubleshooting/index.md): Behebe Fehler bei Installation, Notizen, Medien, Vorlagen, Identität und der Veröffentlichung von Ausgabedateien.
+
+## Optional
+
+- [Anki Forge oder genanki: passend zu deinem Ablauf wählen](https://morehardy.github.io/anki-forge/de/docs/anki-forge-vs-genanki/index.md): Vergleiche die Erstellung von Anki-APKGs, Laufzeitanforderungen, Aktualisierungsprüfungen und Migrationsaufwand.
+- [Von genanki zu Anki Forge wechseln](https://morehardy.github.io/anki-forge/de/docs/genanki-migration/index.md): Verstehe, wie du Notizen, Modelle, Vorlagen und Medien aus genanki an die stabilen Schlüssel und das Inhaltsmodell von Anki Forge anpasst.
+- [SDKs aus dem Quellcode bauen](https://morehardy.github.io/anki-forge/de/docs/development/index.md): Entwicklungs- und Quellcodeumgebung. Baue SDKs und Beispiele aus dem Repository und unterscheide Quellcodefunktionen von veröffentlichten Paketen.
+- [Deinen ersten Anki-Stapel mit Rust erstellen](https://morehardy.github.io/anki-forge/de/blog/your-first-anki-deck/index.md): Historischer Artikel, veröffentlicht am 2026-09-22. Von einem kurzen Rust-Programm zu einer spanischen Vokabelkarte, die du in Anki öffnen kannst.
+- [Die Identität einer Notiz sollte ihre Formulierung überdauern](https://morehardy.github.io/anki-forge/de/blog/stable-ids-and-deck-updates/index.md): Historischer Artikel, veröffentlicht am 2026-09-22. Wie stabile IDs und eine Build-Basisversion beim Aktualisieren eines erzeugten Anki-Stapels zusammenwirken.
+- [GitHub](https://github.com/morehardy/anki-forge): Quellcode-Repository und Entwicklungsressourcen.
+- [English](https://morehardy.github.io/anki-forge/llms.txt): KI-Dokumentationsindex: English.
+- [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): KI-Dokumentationsindex: 简体中文.
+- [Español](https://morehardy.github.io/anki-forge/es/llms.txt): KI-Dokumentationsindex: Español.
+- [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): KI-Dokumentationsindex: Português do Brasil.
+- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): KI-Dokumentationsindex: 日本語.
