@@ -64,6 +64,16 @@ function pagePath(url) {
   catch { return ''; }
 }
 
+function pagefindMatchedWords(result, locale, stopwords) {
+  if (typeof result.raw_content !== 'string' || !Array.isArray(result.locations)) return [];
+  // Pagefind locations address its original whitespace/ZWS-delimited content.
+  // Numeric and stopword-only fuzzy matches are not retrieval evidence.
+  const words = result.raw_content.includes('\u200b') ? result.raw_content.split('\u200b') : result.raw_content.split(/\s+/u);
+  return [...new Set(result.locations.filter(location => Number.isInteger(location) && location >= 0)
+    .map(location => plainSearchText(words[location])).filter(word => [...tokens(word, locale)]
+      .some(token => !stopwords.has(token) && (!HAN.test(token) || [...token].length > 1))))];
+}
+
 /** Stable content roles, independent of URL layout, language and deployment base. */
 export function documentRole(document) {
   if (document.type === 'home') return 'overview';
@@ -154,7 +164,8 @@ function queryFeatures(query, definitions, stopwords, locale) {
 
 /**
  * Rank only the supplied locale's real documents. Pagefind contributes body evidence
- * and snippets; it cannot introduce URLs, and fuzzy/numeric-only hits are rejected.
+ * and snippets; it cannot introduce URLs or numeric-only hits. Its word-form
+ * matches supplement locally ranked results without reimplementing its stemmers.
  * Score = field evidence × inverse document frequency × matched query coverage,
  * with stable task-role and SDK priors. Unknown words are ignored, never AND gates.
  */
@@ -188,12 +199,11 @@ export function rankSearchDocuments(query, documents, locale, { pagefindResults 
   // Only corpus-supported features enter coverage. A novel adjective cannot hide a
   // good exact match, but novel strings without any useful evidence return nothing.
   const known = features.map((_, index) => index).filter(index => frequencies[index] > 0);
-  if (!known.length) return [];
   const totalWeight = known.reduce((sum, index) => sum + idfs[index], 0);
   const intentFeatures = features.filter(feature => feature.definition?.intent);
   const roles = new Set((intentFeatures.length ? intentFeatures : features).flatMap(feature => feature.definition?.roles ?? []));
   const sdks = new Set(features.map(feature => feature.definition?.sdk).filter(Boolean));
-  return records.flatMap(({ document, body, evidence }) => {
+  const ranked = records.flatMap(({ document, body, evidence }) => {
     const matched = known.filter(index => evidence[index] > 0);
     if (!matched.length) return [];
     let score = matched.reduce((sum, index) => sum + evidence[index] * idfs[index], 0);
@@ -215,4 +225,16 @@ export function rankSearchDocuments(query, documents, locale, { pagefindResults 
     const excerpt = plainSearchText(body?.excerpt || document.description);
     return [{ ...document, score, matchedTerms: matched.map(index => features[index].label), excerpt }];
   }).sort((left, right) => right.score - left.score || left.url.localeCompare(right.url));
+
+  const catalog = new Map(documents.map(document => [pagePath(document.url), document]));
+  const rankedPaths = new Set(ranked.map(document => pagePath(document.url)));
+  // Preserve Pagefind's ordering for body matches our exact-token model misses.
+  // Zero denotes no local ranking score; these results follow the scored group.
+  for (const [key, body] of pagefind) {
+    const document = catalog.get(key);
+    if (!document || rankedPaths.has(key)) continue;
+    const matchedTerms = pagefindMatchedWords(body, locale, stopwords);
+    if (matchedTerms.length) ranked.push({ ...document, score: 0, matchedTerms, excerpt: plainSearchText(body.excerpt || document.description) });
+  }
+  return ranked;
 }

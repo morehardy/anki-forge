@@ -74,7 +74,7 @@ Fehlgeschlagene Hinzufügungen lassen das Projekt unverändert. Der strukturiert
 Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus `image/*`. Tonreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).
 
 <!-- section: source-api-details -->
-## Stapelverarbeitung von Medien und vorbereitete Veröffentlichung
+## Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten
 
 Die Stapelverarbeitung von Medien und die vorbereitete Veröffentlichung sind im veröffentlichten Paket `0.3.1` enthalten.
 

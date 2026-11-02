@@ -32,7 +32,7 @@ Consulte os [ambientes verificados](/docs/compatibility/), a [instalação de No
 Uma falha na adição é atômica. Corrija a nota ou o modelo e tente novamente; não é preciso desfazer um registro parcial de modelos ou mídia. Os construtores de modelos precisam terminar com `.build()` antes de criar notas personalizadas.
 
 <!-- section: media-and-templates -->
-## Mídia e modelos
+## Mídia e templates
 
 | Sintoma | Correção |
 | --- | --- |
@@ -42,7 +42,7 @@ Uma falha na adição é atômica. Corrija a nota ou o modelo e tente novamente;
 | Recurso de HTML, CSS ou script ausente | Declare-o com `asset` no modelo ou `add_asset` no projeto |
 | Importação de mídia excede um limite | Aumente explicitamente `MediaLimits.max_bytes` antes de importar |
 | Inspeção da geração excede um limite | Ajuste o contador correspondente de `InspectLimits` para a operação |
-| Falha ao carregar um pacote de modelos | Use bundle-v2, chaves explícitas, modelos baseados em chaves e caminhos internos ao pacote |
+| Falha ao carregar um pacote de templates | Use bundle-v2, chaves explícitas, templates baseados em chaves e caminhos internos ao pacote |
 | Falha em um retângulo de oclusão | Confira as dimensões de exibição decodificadas, coordenadas finitas e chaves únicas para as máscaras |
 
 Os padrões de tratamento de texto são uniformes em todos os tipos de nota. Nós de mídia coletam suas dependências; escrever um nome de arquivo manualmente não importa seus bytes. Mesmo um pacote válido exige testes de reprodução no cliente para o codec ou a fonte que você pretende usar.

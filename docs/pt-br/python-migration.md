@@ -10,7 +10,7 @@ Não há uma camada de compatibilidade com a API anterior. Substitua as antigas 
 | `add_note(note)` e identidade derivada do conteúdo | `add(stable_key, note)` |
 | NoteType mutável e add_notetype | `NoteType.builder(key)...build()`, seguido de `model.note()` |
 | Referências aos modelos por strings | As notas mantêm a propriedade do modelo validado |
-| Registro de mídia do projeto | Cópias independentes de `Media.file` / `Media.bytes` |
+| Registro de mídia do projeto | Snapshots de `Media.file` / `Media.bytes` que não dependem dos arquivos de origem |
 | Mídia já renderizada e métodos de atribuição específicos para cada campo | `Content.sequence`, `media.image()`, `media.sound()`, `Note.field` |
 | HTML implícito | Strings são Text; use `Content.html` |
 | Máscaras sem identidade estável | `Mask.rect(key, x, y, width, height)` |
@@ -19,4 +19,4 @@ Não há uma camada de compatibilidade com a API anterior. Substitua as antigas 
 | Opções de diff, lockfile e segurança de atualização | `compare(CompareOptions.against(...))`, `BuildOptions.update_from(...)` |
 | Pacote executado em um subprocesso | Binding PyO3 no mesmo processo para a API padrão de Rust |
 
-Somente APKGs originais distribuídos completos, com as evidências de identidade atuais, servem como base de atualização. Pacotes de modelos antigos e evidências de APKGs anteriores não são recuperados automaticamente. Consulte o [README do SDK](https://github.com/morehardy/anki-forge/blob/main/bindings/python/README.md) e seus exemplos executáveis para seguir o novo fluxo.
+Somente APKGs originais distribuídos completos, com as evidências de identidade atuais, servem como base de atualização. Pacotes de templates antigos e evidências de APKGs anteriores não são recuperados automaticamente. Consulte o [README do SDK](https://github.com/morehardy/anki-forge/blob/main/bindings/python/README.md) e seus exemplos executáveis para seguir o novo fluxo.

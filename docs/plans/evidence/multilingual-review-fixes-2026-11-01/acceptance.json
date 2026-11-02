@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "scope": "isolated candidate: baseline 6d4625639fc1477222b41880d29724c162baa3be plus the seven reviewed implementation/test files, imported independent source reviews, and frozen post-build report paths",
+  "inputSha256": "a2618b25656a1b4adfafb3add60ad85b5699b32a3217e01c8e5b125c53a8f833",
+  "baselineCommit": "6d4625639fc1477222b41880d29724c162baa3be",
+  "concurrentWorkspaceChangesIncluded": false,
+  "implementationInputs": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/implementation-inputs.json",
+  "fixes": [
+    "Keep native Pagefind word-form matches within the current-language catalog, filtering numeric and stopword-only matches.",
+    "Use the shared localized CodeBlock and unchanged executable sources for both Japanese articles.",
+    "Format visible benchmark decimals with Intl.NumberFormat for each locale; preserve raw CSS calculations."
+  ],
+  "unitTests": {
+    "passed": 152,
+    "failed": 0,
+    "log": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/unit-tests.log"
+  },
+  "astroCheck": {
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "sourceReviewEntries": 182,
+  "environments": {
+    "prefix": {
+      "status": "passed",
+      "manifestSha256": "1067fdcf3d4c9e43c058628d0ad9557a91055c6c0764a1970623072c94097612",
+      "inputSha256": "a2618b25656a1b4adfafb3add60ad85b5699b32a3217e01c8e5b125c53a8f833",
+      "engineeringChecks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "browserTests": 52,
+      "rebuildFiles": 397,
+      "search": {
+        "en": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        },
+        "zh-CN": {
+          "core": 12,
+          "positive": 24,
+          "negative": 5
+        },
+        "es": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        },
+        "pt-BR": {
+          "core": 12,
+          "positive": 23,
+          "negative": 5
+        },
+        "ja": {
+          "core": 12,
+          "positive": 23,
+          "negative": 5
+        },
+        "de": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        }
+      },
+      "independentUsageTasks": 36,
+      "independentMachineTasks": 24,
+      "releaseEvidence": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/engineering/prefix/release-evidence.json"
+    },
+    "root": {
+      "status": "passed",
+      "manifestSha256": "1e2169d3ba2143da73de90a147821aeaea9b6f1e97730e46a2bb83cbf98770b4",
+      "inputSha256": "a2618b25656a1b4adfafb3add60ad85b5699b32a3217e01c8e5b125c53a8f833",
+      "engineeringChecks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "browserTests": 52,
+      "rebuildFiles": 397,
+      "search": {
+        "en": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        },
+        "zh-CN": {
+          "core": 12,
+          "positive": 24,
+          "negative": 5
+        },
+        "es": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        },
+        "pt-BR": {
+          "core": 12,
+          "positive": 23,
+          "negative": 5
+        },
+        "ja": {
+          "core": 12,
+          "positive": 23,
+          "negative": 5
+        },
+        "de": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        }
+      },
+      "independentUsageTasks": 36,
+      "independentMachineTasks": 24,
+      "releaseEvidence": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/engineering/root/release-evidence.json"
+    }
+  },
+  "limits": [
+    "Five existing non-core frozen search queries remain below the top-three target; each locale still meets its acceptance threshold.",
+    "SDK execution evidence is explicitly reused after source/dependency verification; SDK examples were not rerun in this repair batch.",
+    "No deployment or live-site verification was performed.",
+    "The shared workspace contains concurrent documentation/catalog edits outside this isolated validation scope."
+  ]
+}

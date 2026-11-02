@@ -1,6 +1,6 @@
 # Bilder und Audio
 
-Bündle Bilder und Audio in erzeugten Anki-Karten, etwa Vokabelkarten mit Aussprache oder Diagrammfragen. Anki Forge kopiert die bereitgestellten Dateien in das APKG. Zum Erzeugen von Audio oder Bildern, etwa durch Sprachsynthese, benötigst du ein separates Werkzeug. Die Beispiele verwenden Rust; der unten beschriebene Stapelimport zeigt auch die Python- und Node.js-Aufrufe.
+Bündle Bilder und Audio in erzeugten Anki-Karten, etwa Vokabelkarten mit Aussprache oder Diagrammfragen. Anki Forge kopiert die bereitgestellten Dateien in das APKG. Zum Erzeugen von Audio oder Bildern, etwa durch Sprachsynthese, benötigst du ein separates Werkzeug. Die Beispiele verwenden Rust; der unten beschriebene Import mehrerer Mediendateien zeigt auch die Python- und Node.js-Aufrufe.
 
 Ein `Media`-Wert besitzt einen unveränderlichen Snapshot. Importiere Dateien mit `Media::file` oder native Bytes mit einem ausdrücklichen MIME-Typ über `Media::bytes`. Nach erfolgreichem Import können Änderungen oder das Löschen der Quelldatei die Mediendatei nicht mehr verändern. Klone teilen sich den Speicher und können in mehreren Projekten verwendet werden.
 
@@ -104,7 +104,7 @@ let images = Media::files(["first.png", "second.png"])?;
 Node verwendet `await Media.files(['first.png', 'second.png'])`; Python verwendet `Media.files(['first.png', 'second.png'])`.
 
 <!-- section: batch-behavior-and-budgets -->
-### Verhalten und Budgets des Stapelimports
+### Verhalten und Limits beim Import mehrerer Mediendateien
 
 Verwende `Media::files(paths)` in Rust, `await Media.files(paths)` in Node oder `Media.files(paths)` in Python, um Dateien in Eingabereihenfolge mit höchstens vier Arbeitern pro Aufruf zu importieren. Gruppen mit weniger als 16 Dateien werden seriell verarbeitet. Rust bietet außerdem `files_with_limits`; Node und Python akzeptieren dieselben Limits wie `file`. Das Limit gilt pro Mediendatei. Schlägt ein Import fehl, wartet der Aufruf auf bereits begonnene Arbeit, gibt die Snapshots der Gruppe frei und liefert den ersten Fehler in Eingabereihenfolge. Bestehende Medienbesitzer bleiben gültig. Python gibt während des Imports den GIL frei; Node führt die Arbeit außerhalb der Ereignisschleife aus. Einzeldateiimporte bleiben sofortige Snapshots mit eigenem Datenbesitz; für parallele Importe müssen Aufrufer ausdrücklich die Stapelmethode wählen.
 

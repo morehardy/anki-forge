@@ -7,6 +7,8 @@ date: 2026-09-22
 category: Engineering
 ---
 
+import CodeBlock from '../../../components/CodeBlock.astro';
+import { updateExample } from '../../../lib/examples';
 import { sitePath } from '../../../lib/site';
 
 生成したデッキが、最初のエクスポートで完成することはあまりありません。定義を改善し、例を分かりやすくし、誤りを修正していきます。次のビルドでは、どのノートが内容を改善した同じノートなのかを識別する必要があります。
@@ -37,11 +39,7 @@ import { sitePath } from '../../../lib/site';
 
 前回のパッケージは、以前に何をエクスポートしたかを Anki Forge に伝えます。修正したプロジェクトをビルドするときに使います。
 
-```rust
-let comparison = project.compare(CompareOptions::against(&previous))?;
-ensure!(comparison.policy().allows_publication());
-let built = project.build(BuildOptions::to(&next).update_from(&previous))?;
-```
+<CodeBlock code={updateExample.source} />
 
 この抜粋では、`project` に修正済みのノートが入り、`previous` がバージョン1を指し、`next` はバージョン2の別のパスです。<a href={sitePath('/generated/website_showcase.rs')}>完全な例</a>には両方のプロジェクト定義があり、1件のノートの識別情報が保持されたことを検証します。
 
@@ -52,7 +50,7 @@ let built = project.build(BuildOptions::to(&next).update_from(&previous))?;
 {/* section: keep-the-original-distributed-package */}
 ## 配布時のオリジナルパッケージを保持する
 
-生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、対応する基準パッケージではありません。
+生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、更新の基準パッケージとして使用できません。
 
 <a href={sitePath('/ja/docs/updates/')}>更新ガイド</a>では、厳密な更新、リスクポリシー、クライアントでのインポートの制約を説明します。
 

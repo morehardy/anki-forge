@@ -23,3 +23,6 @@ benchmarks/results/20261008-rss-speed-exploration/tables.md -whitespace
 
 # Captured build and check logs in plan evidence keep the tools' exact output.
 docs/plans/evidence/**/*.log -whitespace
+# Sealed diff snapshots use spaces to mark unchanged blank context lines.
+docs/plans/evidence/**/*.diff -whitespace
+docs/plans/evidence/**/*.patch -whitespace

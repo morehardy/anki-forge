@@ -41,7 +41,7 @@ const note = model.note().field('front', 'cell').field('back', '细胞');
 
 ## 媒体与图片遮挡
 
-`await Media.file(path, limits?)` 和 `await Media.bytes(Uint8Array, mime, limits?)` 返回拥有所有权的快照。await 成功后源文件可改变或消失。`withExportName(name)` 返回重命名值，不改变之前的克隆或内容。通过属性读取 `filename`、`mediaType` 和 `byteLength`。
+`await Media.file(path, limits?)` 和 `await Media.bytes(Uint8Array, mime, limits?)` 返回持有媒体数据快照的 `Media` 对象。导入成功后，修改或删除源文件不会改变已导入的媒体数据。`withExportName(name)` 返回重命名值，不改变之前的克隆或内容。通过属性读取 `filename`、`mediaType` 和 `byteLength`。
 
 `media.image()` 与 `.sound()` 返回自动将资源带入项目的类型化 Content。显式 `project.addAsset` 与模型 `builder.asset` 处理原始 HTML/CSS/脚本引用。媒体限制接受 `{ maxBytes }`，默认为 256 MiB；原生字节没有 64 KiB 内联限制。
 

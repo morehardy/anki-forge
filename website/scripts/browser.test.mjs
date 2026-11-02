@@ -75,6 +75,20 @@ test('all built content URLs and assets are reachable over HTTP', async () => {
   for (const route of localeIds.map(locale => localePath('/missing-topic-62/', locale))) assert.equal((await fetch(server.url(route))).status, 404);
 });
 
+test('localized search retains native word-form matches beyond the frozen query set', async t => {
+  const { page } = await session(t);
+  for (const [locale, query, expected] of [['es', 'reutilización', 'templates'], ['de', 'Nebenläufig', 'python-api'], ['de', 'Zeichenfolge', 'python-api']]) {
+    if (!localeIds.includes(locale) || !hasTopic(expected)) continue;
+    await page.goto(server.url(pagePath('quickstart', locale)));
+    await page.keyboard.press('Control+k');
+    await visible(page.locator('site-search dialog'));
+    await page.locator('.pagefind-ui__search-input').fill(query);
+    await visible(page.locator(`.pagefind-ui__result-link[href="${server.url(pagePath(expected, locale))}"]`));
+    const results = await page.locator('.pagefind-ui__result-link').evaluateAll(links => links.map(link => link.href));
+    assert.ok(results.every(url => resolvePage(new URL(url).pathname, siteConfig.base)?.locale === locale));
+  }
+});
+
 test('machine links and structured data work without JavaScript', async t => {
   const { page } = await session(t, { javaScriptEnabled: false });
   const examples = [publicTopics.find(topic => topic.type === 'docs'), publicTopics.find(topic => topic.type === 'article')].filter(Boolean);

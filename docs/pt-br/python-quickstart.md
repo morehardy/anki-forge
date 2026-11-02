@@ -40,7 +40,7 @@ Para uma planilha de vocabulário, siga [CSV para Anki](/docs/csv-to-anki/). Par
 Para uma tarefa completa com mídia e atualização, siga [JSON para Anki](/docs/json-to-anki/#python).
 
 - [Imagens e áudio](/docs/media/) e [API de mídia do Python](/docs/python-api/#media-and-occlusion)
-- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de modelos](/docs/templates/)
+- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de templates](/docs/templates/)
 - [Oclusão de imagem](/docs/image-occlusion/)
 - [Comparação e atualização](/docs/updates/)
 - [API de Python](/docs/python-api/) e [diagnósticos](/docs/python-diagnostics/)

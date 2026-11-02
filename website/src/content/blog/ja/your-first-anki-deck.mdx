@@ -7,6 +7,8 @@ date: 2026-09-22
 category: Tutorial
 ---
 
+import CodeBlock from '../../../components/CodeBlock.astro';
+import { quickstartSource } from '../../../lib/examples';
 import { sitePath, repository } from '../../../lib/site';
 
 学習内容がスクリプト、データセット、複数のファイルにすでにまとまっているなら、Anki デッキの生成を自動化すると、同じ作業を繰り返しやすくなります。ソースは Git で確認できる形に保ち、エクスポートを再実行可能な1つの手順にできます。
@@ -20,17 +22,7 @@ import { sitePath, repository } from '../../../lib/site';
 
 リポジトリにある最小の Rust サンプルです。
 
-```rust
-use ankiforge::{BuildOptions, Note, Project};
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut project = Project::new("spanish")?.default_deck("Spanish");
-    project.add("es:hola", Note::basic("hola", "hello"))?;
-    let output = project.build(BuildOptions::to("spanish.apkg"))?;
-    println!("{}", output.artifact().path().display());
-    Ok(())
-}
-```
+<CodeBlock code={quickstartSource} />
 
 `Project::new("spanish")` が名前空間を作成します。`Note::basic("hola", "hello")` が Basic ノートを作り、`project.add("es:hola", note)` が安定キーを割り当て、`build(BuildOptions::to(...))` がパッケージを書き出します。
 

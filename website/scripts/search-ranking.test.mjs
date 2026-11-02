@@ -56,6 +56,41 @@ test('Pagefind supplies exact body matches and plain snippets only for catalog U
   assert.equal(plainSearchText('<mark>safe</mark> &#x4e2d;'), 'safe 中');
 });
 
+test('Pagefind word-form matches survive when local tokens cannot recognize their inflection', () => {
+  for (const [locale, query, word] of [['es', 'reutilización', 'Reutiliza'], ['de', 'Nebenläufig', 'Nebenläufigkeit']]) {
+    const docs = [doc('a', 'Reference'), doc('b', 'Guide')];
+    const pagefindResults = [
+      { url: docs[1].url, raw_content: `${word} examples`, locations: [0], excerpt: `<mark>${word}</mark> examples` },
+      { url: docs[0].url, raw_content: `${word} details`, locations: [0], excerpt: `<mark>${word}</mark> details` },
+      { url: '/other-language/foreign/', raw_content: word, locations: [0] },
+    ];
+    const results = rankSearchDocuments(query, docs, locale, { pagefindResults });
+    assert.deepEqual(results.map(result => result.id), ['b', 'a'], 'native matches keep their order and stay within the locale catalog');
+    assert.equal(results[0].excerpt, `${word} examples`);
+  }
+});
+
+test('native word-form matches supplement exact matches without admitting numeric-only hits', () => {
+  const docs = [doc('exact', 'Zeichenfolge'), doc('inflected', 'Python API'), doc('numeric', 'Other')];
+  const pagefindResults = [
+    { url: docs[1].url, raw_content: 'Zeichenfolgen stehen für Text', locations: [0], excerpt: '<mark>Zeichenfolgen</mark> stehen für Text' },
+    { url: docs[0].url, raw_content: 'Zeichenfolge', locations: [0] },
+    { url: docs[2].url, raw_content: 'API 18492', locations: [1], excerpt: 'API <mark>18492</mark>' },
+  ];
+  assert.deepEqual(rankSearchDocuments('Zeichenfolge', docs, 'de', { pagefindResults }).map(result => result.id), ['exact', 'inflected']);
+  for (const query of ['18492', 'qzxqv 18492']) {
+    assert.deepEqual(rankSearchDocuments(query, docs, 'de', { pagefindResults: [pagefindResults[2]] }), []);
+  }
+});
+
+test('native fuzzy matches on stopwords cannot turn unrelated queries into results', () => {
+  const docs = [doc('node-api', 'API de Node')];
+  assert.deepEqual(rankSearchDocuments('desfragmentar fotones cuánticos', docs, 'es', {
+    concepts: vocabulary.es,
+    pagefindResults: [{ url: docs[0].url, raw_content: 'API de Node', locations: [1], excerpt: 'API <mark>de</mark> Node' }],
+  }), []);
+});
+
 test('Chinese compounds and semantic aliases work without whitespace', () => {
   const zh = [
     doc('cards', 'Basic 与 Cloze 卡片', ['填空提示语法', '挖空卡片']),

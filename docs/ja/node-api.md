@@ -1,6 +1,6 @@
 # Node と TypeScript API
 
-`ankiforge` エントリーポイントは、作成用モデルとして Project のみを公開します。型は[公開ソース](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts)、[レポートクラス](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts)、[JSON スナップショットの型宣言](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts)にあります。[クイックスタート](/docs/node-quickstart/)から始めてください。
+`ankiforge` の公開 API では、`Project` を中心にノートやメディアを組み立てます。型は[公開ソース](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts)、[レポートクラス](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts)、[JSON スナップショットの型宣言](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts)にあります。[クイックスタート](/docs/node-quickstart/)から始めてください。
 
 <!-- section: project-and-notes -->
 ## プロジェクトとノート
@@ -108,9 +108,9 @@ JSON スナップショットのパスは、エクスポートされた `PathSna
 <a id="source-api-details"></a>
 
 <!-- section: batch-media-and-prepared-publication -->
-## メディアの一括処理と準備済み公開
+## メディアの一括処理と候補ファイルの事前生成
 
-メディアの一括処理と準備済み公開は、公開 `0.3.1` パッケージに含まれています。
+メディアの一括処理と候補ファイルの事前生成は、公開 `0.3.1` パッケージに含まれています。
 
 <!-- section: prepare-review-and-publish -->
 ### 準備、確認、公開

@@ -11,7 +11,7 @@ const documents = [
     "source": "website/src/content/docs/docs/index.mdx",
     "route": "/docs/",
     "title": {"en": "Build Anki decks from code", "zh-CN": "用代码生成 Anki 牌组", "es": "Crea mazos de Anki con código", "pt-BR": "Crie baralhos do Anki com código", "ja": "コードから Anki デッキを生成する", "de": "Anki-Stapel aus Code erzeugen"},
-    "description": {"en": "Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.", "zh-CN": "选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。", "es": "Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles.", "pt-BR": "Escolha uma linguagem, gere seu primeiro baralho e aprenda a adicionar mídia, modelos e atualizações repetíveis.", "ja": "言語を選んで最初のデッキを作り、メディア、テンプレート、繰り返し実行できる更新を追加します。", "de": "Wähle eine Programmiersprache, erzeuge deinen ersten Stapel und ergänze Medien, Vorlagen und wiederholbare Aktualisierungen."}
+    "description": {"en": "Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.", "zh-CN": "选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。", "es": "Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles.", "pt-BR": "Escolha uma linguagem de programação, gere seu primeiro baralho e aprenda a adicionar mídia e templates e a atualizar o baralho.", "ja": "言語を選んで最初のデッキを作り、メディア、テンプレート、繰り返し実行できる更新を追加します。", "de": "Wähle eine Programmiersprache, erzeuge deinen ersten Stapel und ergänze Medien, Vorlagen und wiederholbare Aktualisierungen."}
   },
   {
     "name": "languages",
@@ -25,7 +25,7 @@ const documents = [
     "source": "website/src/content/docs/docs/quickstart.mdx",
     "route": "/docs/quickstart/",
     "title": {"en": "Generate Anki flashcards with Rust", "zh-CN": "用 Rust 生成 Anki 卡片", "es": "Genera un APKG de Anki con Rust", "pt-BR": "Gere cartões do Anki com Rust", "ja": "Rust で Anki カードを生成する", "de": "Anki-Karten mit Rust erzeugen"},
-    "description": {"en": "Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.", "zh-CN": "安装公开 Rust 包，编写西班牙语卡片并导出持久保存的 APKG。", "es": "Instala el paquete de Rust, crea una tarjeta de vocabulario y exporta un archivo APKG persistente con un programa completo.", "pt-BR": "Instale o pacote público de Rust, crie um cartão de espanhol e exporte um APKG persistente com um programa completo.", "ja": "Rust の公開パッケージをインストールし、スペイン語のカードを作成して、永続 APKG ファイルを書き出します。", "de": "Installiere das veröffentlichte Rust-Paket, erstelle eine spanische Vokabelkarte und exportiere mit einem vollständigen Programm ein dauerhaft gespeichertes APKG."}
+    "description": {"en": "Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.", "zh-CN": "安装公开 Rust 包，编写西班牙语卡片并导出持久保存的 APKG。", "es": "Instala el paquete de Rust, crea una tarjeta de vocabulario y exporta un archivo APKG persistente con un programa completo.", "pt-BR": "Instale o pacote público de Rust, crie um cartão de espanhol e exporte um APKG persistente com um programa completo.", "ja": "Rust の公開パッケージをインストールし、スペイン語のカードを作成して、後から使える APKG ファイルとして保存します。", "de": "Installiere das veröffentlichte Rust-Paket, erstelle eine spanische Vokabelkarte und exportiere mit einem vollständigen Programm ein dauerhaft gespeichertes APKG."}
   },
   {
     "source": "docs/json-to-anki.md",
@@ -73,8 +73,8 @@ const documents = [
     "source": "docs/template-bundles.md",
     "route": "/docs/templates/",
     "name": "templates",
-    "title": {"en": "Reusable Anki card templates, CSS and media", "zh-CN": "复用 Anki 卡片模板、CSS 与媒体", "es": "Reutiliza plantillas de Anki, CSS y recursos multimedia", "pt-BR": "Reutilize modelos de cartão, CSS e mídia no Anki", "ja": "Anki のカードテンプレート、CSS、メディアを再使用する", "de": "Anki-Kartenvorlagen, CSS und Medien wiederverwenden"},
-    "description": {"en": "Load a reusable Anki note type from one bundle of card templates, CSS and media, for normal or Cloze cards, with Rust, Python or Node.js.", "zh-CN": "从一个模板包加载可复用的 Anki 笔记类型，包含卡片模板、CSS 和媒体，支持普通与 Cloze 卡片，可使用 Rust、Python 或 Node.js。", "es": "Carga un tipo de nota de Anki reutilizable desde un paquete de plantillas, CSS y recursos multimedia, para tarjetas normales o Cloze, con Rust, Python o Node.js.", "pt-BR": "Carregue um tipo de nota reutilizável de um pacote com modelos, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.", "ja": "Rust、Python、Node.js でテンプレート、CSS、メディアのバンドルから、通常・Cloze カード用の再使用可能なノートタイプを読み込みます。", "de": "Lade einen wiederverwendbaren Anki-Notiztyp aus einem Paket mit Kartenvorlagen, CSS und Medien – für normale oder Cloze-Karten mit Rust, Python oder Node.js."}
+    "title": {"en": "Reusable Anki card templates, CSS and media", "zh-CN": "复用 Anki 卡片模板、CSS 与媒体", "es": "Reutiliza plantillas de Anki, CSS y recursos multimedia", "pt-BR": "Reutilize templates de cartão, CSS e mídia no Anki", "ja": "Anki のカードテンプレート、CSS、メディアを再使用する", "de": "Anki-Kartenvorlagen, CSS und Medien wiederverwenden"},
+    "description": {"en": "Load a reusable Anki note type from one bundle of card templates, CSS and media, for normal or Cloze cards, with Rust, Python or Node.js.", "zh-CN": "从一个模板包加载可复用的 Anki 笔记类型，包含卡片模板、CSS 和媒体，支持普通与 Cloze 卡片，可使用 Rust、Python 或 Node.js。", "es": "Carga un tipo de nota de Anki reutilizable desde un paquete de plantillas, CSS y recursos multimedia, para tarjetas normales o Cloze, con Rust, Python o Node.js.", "pt-BR": "Carregue um tipo de nota reutilizável de um pacote com templates, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.", "ja": "Rust、Python、Node.js でテンプレート、CSS、メディアのバンドルから、通常・Cloze カード用の再使用可能なノートタイプを読み込みます。", "de": "Lade einen wiederverwendbaren Anki-Notiztyp aus einem Paket mit Kartenvorlagen, CSS und Medien – für normale oder Cloze-Karten mit Rust, Python oder Node.js."}
   },
   {
     "source": "docs/api-overview.md",
@@ -87,7 +87,7 @@ const documents = [
     "source": "docs/installation.md",
     "route": "/docs/installation/",
     "name": "installation",
-    "title": {"en": "Add to your application", "zh-CN": "集成到应用", "es": "Integra Anki Forge en tu aplicación de Rust", "pt-BR": "Integre o Anki Forge à sua aplicação", "ja": "アプリケーションに組み込む", "de": "Anki Forge in deine Anwendung integrieren"},
+    "title": {"en": "Add Anki Forge to a Rust application", "zh-CN": "集成到 Rust 应用", "es": "Integra Anki Forge en tu aplicación de Rust", "pt-BR": "Integre o Anki Forge à sua aplicação Rust", "ja": "Rust アプリケーションに組み込む", "de": "Anki Forge in deine Rust-Anwendung integrieren"},
     "description": {"en": "Integrate the Rust crate, configure Cargo dependencies and choose the next guide.", "zh-CN": "安装公开 Rust 包，配置 Cargo 依赖并选择下一步指南。", "es": "Instala el crate publicado, configura las dependencias de Cargo y elige cómo añadir recursos multimedia y actualizaciones.", "pt-BR": "Instale o crate público de Rust, configure as dependências do Cargo e escolha o próximo guia.", "ja": "公開 Rust crate を組み込み、Cargo の依存関係を設定して、次のガイドを選びます。", "de": "Installiere das veröffentlichte Rust-Crate, konfiguriere Cargo-Abhängigkeiten und wähle die nächste Anleitung."}
   },
   {
@@ -95,7 +95,7 @@ const documents = [
     "route": "/docs/concepts/",
     "name": "concepts",
     "title": {"en": "Core concepts", "zh-CN": "核心概念", "es": "Conceptos fundamentales de Anki Forge", "pt-BR": "Conceitos fundamentais", "ja": "基本概念", "de": "Grundbegriffe"},
-    "description": {"en": "Projects, owned notes and media, stable keys, text and update identity.", "zh-CN": "理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。", "es": "Entiende proyectos, notas, mazos, claves estables, recursos multimedia y la identidad de las actualizaciones.", "pt-BR": "Entenda Project, notas e mídia com propriedade independente, chaves estáveis, texto e identidade nas atualizações.", "ja": "Project、データを所有するノートとメディア、安定キー、テキスト、更新時の識別情報を理解します。", "de": "Verstehe Projekte, Notizen und Medien mit eigenem Datenbesitz, stabile Schlüssel, Text und Identität bei Aktualisierungen."}
+    "description": {"en": "Projects, owned notes and media, stable keys, text and update identity.", "zh-CN": "理解 Project、笔记与媒体的所有权、稳定键，以及更新时如何识别原有笔记。", "es": "Entiende proyectos, notas, mazos, claves estables, recursos multimedia y la identidad de las actualizaciones.", "pt-BR": "Entenda Project, notas e mídia com propriedade independente, chaves estáveis, texto e identidade nas atualizações.", "ja": "Project、データを所有するノートとメディア、安定キー、テキスト、更新時の識別情報を理解します。", "de": "Verstehe Projekte, Notizen und Medien mit eigenem Datenbesitz, stabile Schlüssel, Text und Identität bei Aktualisierungen."}
   },
   {
     "source": "docs/cards.md",
@@ -109,7 +109,7 @@ const documents = [
     "route": "/docs/custom-notetypes/",
     "name": "custom-notetypes",
     "title": {"en": "Custom note types", "zh-CN": "自定义笔记类型", "es": "Crea tipos de nota personalizados para Anki", "pt-BR": "Crie tipos de nota personalizados", "ja": "独自のノートタイプ", "de": "Eigene Notiztypen"},
-    "description": {"en": "Declare fields, card templates and generation rules for your own content.", "zh-CN": "为自己的内容定义字段、卡片模板与生成规则。", "es": "Define campos, plantillas y reglas de generación con claves estables y modelos inmutables reutilizables.", "pt-BR": "Defina campos, modelos de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis.", "ja": "独自コンテンツのフィールド、カードテンプレート、生成ルールを定義します。", "de": "Definiere Felder, Kartenvorlagen und Erzeugungsregeln für deine Inhalte mit stabilen Schlüsseln und wiederverwendbaren unveränderlichen Modellen."}
+    "description": {"en": "Declare fields, card templates and generation rules for your own content.", "zh-CN": "为自己的内容定义字段、卡片模板与生成规则。", "es": "Define campos, plantillas y reglas de generación con claves estables y modelos inmutables reutilizables.", "pt-BR": "Defina campos, templates de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis.", "ja": "独自コンテンツのフィールド、カードテンプレート、生成ルールを定義します。", "de": "Definiere Felder, Kartenvorlagen und Erzeugungsregeln für deine Inhalte mit stabilen Schlüsseln und wiederverwendbaren unveränderlichen Modellen."}
   },
   {
     "source": "docs/media.md",
@@ -144,7 +144,7 @@ const documents = [
     "route": "/docs/troubleshooting/",
     "name": "troubleshooting",
     "title": {"en": "Troubleshooting", "zh-CN": "排查问题", "es": "Soluciona errores de Anki Forge", "pt-BR": "Solução de problemas", "ja": "トラブルシューティング", "de": "Fehlersuche"},
-    "description": {"en": "Resolve installation, media, template, identity and output errors.", "zh-CN": "解决安装、媒体、模板、身份与输出错误。", "es": "Diagnostica errores de instalación, notas, recursos multimedia, plantillas, identidad y publicación de archivos.", "pt-BR": "Resolva erros de instalação, notas, mídia, modelos, identidade e publicação dos arquivos de saída.", "ja": "インストール、メディア、テンプレート、識別情報、出力のエラーを解決します。", "de": "Behebe Fehler bei Installation, Notizen, Medien, Vorlagen, Identität und der Veröffentlichung von Ausgabedateien."}
+    "description": {"en": "Resolve installation, media, template, identity and output errors.", "zh-CN": "解决安装、媒体、模板、身份与输出错误。", "es": "Diagnostica errores de instalación, notas, recursos multimedia, plantillas, identidad y publicación de archivos.", "pt-BR": "Resolva erros de instalação, notas, mídia, templates, identidade e publicação dos arquivos de saída.", "ja": "インストール、メディア、テンプレート、識別情報、出力のエラーを解決します。", "de": "Behebe Fehler bei Installation, Notizen, Medien, Vorlagen, Identität und der Veröffentlichung von Ausgabedateien."}
   },
   {
     "source": "docs/compatibility.md",
@@ -186,7 +186,7 @@ const documents = [
     "route": "/docs/python-api/",
     "name": "python-api",
     "title": {"en": "Python API", "zh-CN": "Python API", "es": "API de Python", "pt-BR": "API de Python", "ja": "Python API リファレンス", "de": "Python-API"},
-    "description": {"en": "Project, media, build options, reports and temporary artifact ownership.", "zh-CN": "Project、媒体、构建选项、报告和临时产物的所有权。", "es": "Project, recursos multimedia, opciones de generación, informes y gestión de la vida útil de los archivos temporales.", "pt-BR": "Project, mídia, opções de geração, relatórios e controle da vida útil dos artefatos temporários em Python.", "ja": "Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、準備済み公開の API を確認できます。", "de": "Project, Medien, Build-Optionen, Berichte und die Kontrolle über die Lebensdauer temporärer Artefakte in Python."}
+    "description": {"en": "Project, media, build options, reports and temporary artifact ownership.", "zh-CN": "Project、媒体、构建选项、报告和临时产物的所有权。", "es": "Project, recursos multimedia, opciones de generación, informes y gestión de la vida útil de los archivos temporales.", "pt-BR": "Project, mídia, opções de geração, relatórios e controle da vida útil dos artefatos temporários em Python.", "ja": "Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、候補の事前生成と保存に使う API を確認できます。", "de": "Project, Medien, Build-Optionen, Berichte und die Kontrolle über die Lebensdauer temporärer Artefakte in Python."}
   },
   {
     "source": "docs/python/diagnostics.md",

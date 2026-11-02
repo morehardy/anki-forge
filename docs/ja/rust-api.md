@@ -76,7 +76,7 @@
 <!-- section: review-once-publish-once -->
 ## 一度確認した候補をそのまま公開する
 
-準備済み公開 API は、公開 `0.3.1` パッケージに含まれています。
+候補の事前生成と保存を行う API は、公開 `0.3.1` パッケージに含まれています。
 
 ```rust,no_run
 use ankiforge::{BuildOptions, Project};

@@ -107,7 +107,7 @@ Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audiorefere
 
 <!-- section: batch-media-and-prepared-publication -->
 <!-- section: source-api-details -->
-## Medienimport im Stapel und vorbereitete Veröffentlichung
+## Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten
 
 Medienimport im Stapel und vorbereitete Veröffentlichung sind im veröffentlichten Paket `0.3.1` enthalten.
 

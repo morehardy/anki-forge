@@ -14,7 +14,7 @@
 | インラインで描画したメディアとフィールド専用 setter | `Content.sequence`、`media.image()`、`media.sound()`、`Note.field` |
 | 暗黙の HTML | 文字列は Text。HTML には `Content.html` を使う |
 | 安定した識別情報のないマスク | `Mask.rect(key, x, y, width, height)` |
-| 任意の成果物と ensure_success | 成果物が保証された `BuildOutput`。失敗時は構造化エラーを送出 |
+| 成果物がない場合もある戻り値と ensure_success | 成果物が保証された `BuildOutput`。失敗時は構造化エラーを送出 |
 | 診断からレポートの成功・失敗を推測 | Output/Error のスナップショットが実際の結果を示す。Report は観測結果のみ |
 | Diff、lockfile、更新安全性の切り替え | `compare(CompareOptions.against(...))`、`BuildOptions.update_from(...)` |
 | 実行時のサブプロセス用パッケージ | デフォルト Rust API へのプロセス内 PyO3 バインディング |

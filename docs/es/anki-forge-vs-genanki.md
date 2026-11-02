@@ -1,6 +1,6 @@
 # Anki Forge frente a genanki
 
-Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas que el proyecto conserve los recursos multimedia, diagnósticos estructurados, comparaciones y una revisión de políticas antes de publicar actualizaciones. Conserva un flujo de genanki ya probado si sus scripts de Python, plantillas y recursos multimedia cubren tus necesidades y migrar supone más coste que beneficio.
+Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas conservar los datos multimedia sin depender de los archivos originales, obtener diagnósticos estructurados y revisar las comparaciones y la política de riesgos antes de publicar actualizaciones. Conserva un flujo de genanki ya probado si sus scripts de Python, plantillas y recursos multimedia cubren tus necesidades y migrar supone más coste que beneficio.
 
 | Criterio | Anki Forge | genanki |
 | --- | --- | --- |

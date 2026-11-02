@@ -1,6 +1,6 @@
 # Build- und Ausgabegarantien
 
-`Project::build` liefert `BuildOutput` nur nach einem erfolgreichen Vorgang mit einem garantierten APKG-Artefakt. Ein fehlgeschlagener Vorgang liefert `BuildError` mit strukturierter Art und Code, Beobachtungen, zugrunde liegenden Ursachen und tatsächlichen Veröffentlichungsfakten.
+`Project::build` liefert `BuildOutput` nur nach einem erfolgreichen Vorgang mit einem garantierten APKG-Artefakt. Ein fehlgeschlagener Vorgang liefert `BuildError` mit strukturierten Angaben zu Fehlerart und Fehlercode, Beobachtungen, zugrunde liegenden Ursachen und tatsächlichen Veröffentlichungsfakten.
 
 <!-- section: temporary-and-persistent-artifacts -->
 ## Temporäre und persistente Artefakte
@@ -36,7 +36,7 @@ Die Snapshot-Serialisierung erhält native Pfade, ohne auf das Dateisystem zuzug
 Endliche Budgets für Archive, Eintragsanzahl, Entpackung, dekodierte Sammlung und Medien sowie zstd-Fenster gelten unabhängig für Basisversion und Kandidat. Beginne mit `InspectLimits::default()` und erhöhe bei Bedarf gezielt das passende Limit. Null bedeutet nicht unbegrenzt. Diese Zähler sind keine prozessweite Speicher- oder CPU-Sandbox; Medienimporte haben ein separates, vorgelagertes Budget pro Datei.
 
 <!-- section: concurrent-work -->
-## Parallele Arbeit
+## Nebenläufige Vorgänge
 
 Rust-Builds leihen unveränderlichen Projektzustand aus. Modelle und Medien mit eigenem Datenbesitz können zwischen Projekten geteilt werden. Das Node-Binding erfasst beim Aufruf von Build oder Vergleich einen Projektsnapshot, sodass später hinzugefügte Inhalte die Anfrage nicht verändern. Halte den Artefaktbesitzer, bis alle Leser fertig sind. Den letzten temporären Besitzer zu schließen, während ein separater Nutzer noch dessen Pfad benötigt, ist ein Fehler der Lebensdauerverwaltung in der Anwendung.
 

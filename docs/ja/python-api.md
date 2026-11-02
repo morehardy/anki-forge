@@ -74,9 +74,9 @@ ApkgArtifact は `.path`、`.persist_to(path)`、`.close()` を公開します�
 型付き画像を追加する場合は image/* MIME が必要です。音声参照には audio/* または video/* を使えます。それ以外のカテゴリでは `NOTE.MEDIA_USAGE_INVALID` が発生します。コンストラクターは引き続き失敗せず、明示的なファイル追加と生の HTML には影響しません。この検査はインポート時に保持した MIME を使うもので、再生できることを保証しません。ビルド時の独立した MIME／拡張子検証も引き続き適用されます。対象と詳細の全項目は[設計文書](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)を参照してください。
 
 <!-- section: source-api-details -->
-## メディアの一括処理と準備済み公開
+## メディアの一括処理と候補ファイルの事前生成
 
-メディアの一括処理と準備済み公開は、公開パッケージ `0.3.1` に含まれています。
+メディアの一括処理と候補ファイルの事前生成は、公開パッケージ `0.3.1` に含まれています。
 
 <!-- section: prepare-review-and-publish -->
 ### 準備、確認、公開

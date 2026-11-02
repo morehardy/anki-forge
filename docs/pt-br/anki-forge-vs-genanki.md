@@ -8,7 +8,7 @@ Considere o Anki Forge ao criar um fluxo repetível de publicação que precise 
 | Recursos básicos em comum | Basic, Cloze, modelos personalizados, mídia e geração de APKG sem conexão | Basic, Cloze, modelos personalizados, mídia e geração de APKG sem conexão |
 | Identidade | Namespace e chaves de nota explícitos; preservação do APKG original para atualizações | GUIDs configuráveis e IDs numéricos de modelos e baralhos; suporte a atualizações por reimportação |
 | Antes da publicação | Resultados de comparação, política de risco e candidato preparado inspecionado | O script e os testes definem a revisão antes da publicação |
-| Propriedade da mídia | Imagens e sons tipados contêm cópias independentes dos dados | O script fornece os arquivos de mídia e suas referências ao pacote |
+| Propriedade da mídia | Os valores tipados de imagem e áudio mantêm snapshots independentes dos arquivos de origem; clones compartilham o armazenamento | O script fornece os arquivos de mídia e suas referências ao pacote |
 | Oclusão de imagem por código | Máscaras retangulares com chaves pela API pública | Avalie um modelo ou extensão adequado ao seu fluxo |
 | Custo de execução | Dependências nativas; exige plataforma e interpretador compatíveis | Pode ser mais econômico manter a implantação Python existente |
 | Custo de migração | Validação explícita da correspondência de identidades anteriores, dos modelos e das importações | Nenhuma migração para um fluxo genanki que já funciona |

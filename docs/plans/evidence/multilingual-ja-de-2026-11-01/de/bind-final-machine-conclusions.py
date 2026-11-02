@@ -87,7 +87,7 @@ else:
         'code spans survive. The twenty '
         'older-language answers and four German answers retain the explicit '
         'final-prefix reading lineage; no second full German prose reading or '
-        'fresh full old-five-language reading is claimed. Independent same-' 
+        'fresh full old-five-language reading is claimed. Independent same-'
         'environment comparison to the prior Japanese release also confirms '
         'that old-five-language Markdown is unchanged and llms adds only Deutsch.'
     )

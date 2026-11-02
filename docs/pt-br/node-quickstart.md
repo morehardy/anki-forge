@@ -41,7 +41,7 @@ O [tutorial de JSON para Anki](/docs/json-to-anki/#node) inclui o fluxo completo
 Use `.mjs` para ESM ou `require('ankiforge')` para CommonJS. O pacote inclui declarações de tipos TypeScript; consulte a [configuração do TypeScript](/docs/node-api/#typescript).
 
 - [Imagens e áudio](/docs/media/) e [API de mídia do Node](/docs/node-api/#media-and-image-occlusion)
-- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de modelos](/docs/templates/)
+- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de templates](/docs/templates/)
 - [Oclusão de imagem](/docs/image-occlusion/)
 - [Comparação e atualização](/docs/updates/)
 - [API de Node](/docs/node-api/) e [solução de problemas](/docs/troubleshooting/)

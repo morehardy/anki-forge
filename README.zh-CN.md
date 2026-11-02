@@ -102,7 +102,7 @@ Anki Forge 是开源的 Anki APKG 生成库，以 Rust 为核心，提供 Rust�
 运行时要求：Rust 1.92+
 
 只使用该版本公开文档中的 `ankiforge` 包和公开 API。不要使用 git/path
-依赖、internal tools、仅源码可用的 API、未发布方法或猜测出来的方法。
+依赖、内部工具、仅源码可用的 API、未发布方法或猜测出来的方法。
 
 我的目标：
 <描述你的需求>

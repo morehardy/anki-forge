@@ -1,4 +1,4 @@
-# Update and distribute a publication
+# Update and distribute a deck
 
 Publish corrections or new cards for an Anki deck you have already distributed.
 Stable note IDs help Anki Forge and Anki recognize existing notes instead of

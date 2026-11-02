@@ -1,4 +1,4 @@
-O Anki Forge transforma notas, modelos e arquivos de mídia em pacotes `.apkg` do Anki. Use a biblioteca quando seu material de estudo estiver em código ou dados estruturados e você precisar gerar e distribuir novas versões dos baralhos.
+O Anki Forge transforma notas, templates e arquivos de mídia em pacotes `.apkg` do Anki. Use a biblioteca quando seu material de estudo estiver em código ou dados estruturados e você precisar gerar e distribuir novas versões dos baralhos.
 
 <!-- section: start-with-your-language -->
 ## Comece pela sua linguagem
@@ -16,7 +16,7 @@ Prefere ver o resultado primeiro? [Explore os exemplos de cartões](/examples/) 
 <!-- section: understand-the-pieces -->
 ## Entenda os componentes
 
-Uma nota armazena campos; um tipo de nota e seus modelos de cartão transformam esses campos em cartões. Os baralhos agrupam os cartões resultantes no Anki. Os [conceitos fundamentais](/docs/concepts/) explicam essas relações, como `Project` mantém a propriedade dos seus valores e como preservar a identidade das notas.
+Uma nota armazena campos; um tipo de nota e seus templates de cartão transformam esses campos em cartões. Os baralhos agrupam os cartões resultantes no Anki. Os [conceitos fundamentais](/docs/concepts/) explicam essas relações, como `Project` mantém a propriedade dos seus valores e como preservar a identidade das notas.
 
 <!-- section: build-your-next-feature -->
 ## Adicione o próximo recurso
@@ -26,7 +26,7 @@ Uma nota armazena campos; um tipo de nota e seus modelos de cartão transformam 
 - [Criação de cartões com IA](/docs/ai-anki-cards/): faça rascunhos a partir das suas anotações, confira as respostas e exporte um APKG.
 - [Basic e Cloze](/docs/cards/): crie cartões de pergunta e resposta ou de preenchimento de lacunas.
 - [Imagens e áudio](/docs/media/): registre arquivos reais e inclua-os nos cartões.
-- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de modelos](/docs/templates/): defina campos, layouts e CSS.
+- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de templates](/docs/templates/): defina campos, layouts e CSS.
 - [Oclusão de imagem](/docs/image-occlusion/): crie perguntas a partir de regiões de uma imagem.
 - [Atualização e distribuição](/docs/updates/): preserve as evidências de identidade e revisão entre versões.
 

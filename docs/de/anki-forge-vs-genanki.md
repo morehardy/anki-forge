@@ -8,7 +8,7 @@ Ziehe Anki Forge in Betracht, wenn du einen wiederholbaren Veröffentlichungsabl
 | Gemeinsame Grundlagen | Basic, Cloze, eigene Vorlagen, Medien und Offline-Erzeugung von APKGs | Basic, Cloze, eigene Vorlagen, Medien und Offline-Erzeugung von APKGs |
 | Identität | Ausdrücklicher Namensraum und Notizschlüssel; ursprüngliches APKG für Aktualisierungen aufbewahren | Konfigurierbare GUIDs und numerische Modell-/Stapel-IDs; Aktualisierungen beim erneuten Import |
 | Vor der Veröffentlichung | Vergleichsbefunde, Risikorichtlinie und geprüfter vorbereiteter Kandidat | Dein Skript und deine Tests legen die Veröffentlichungsprüfung fest |
-| Besitz von Mediendaten | Typisierte Bilder und Audio tragen Snapshots mit eigenem Datenbesitz | Das Skript liefert Mediendateien und Referenzen für das Paket |
+| Besitz von Mediendaten | Typisierte Bild- und Audioobjekte verwalten unveränderliche Snapshots der Mediendaten | Das Skript liefert Mediendateien und Referenzen für das Paket |
 | Bildverdeckung per Code | Rechteckmasken mit Schlüsseln über die öffentliche API | Prüfe ein für deinen Ablauf geeignetes Modell oder eine Erweiterung |
 | Laufzeitaufwand | Native Abhängigkeiten; unterstützte Plattform und Interpreter verwenden | Eine bestehende Python-Bereitstellung beizubehalten kann günstiger sein |
 | Migrationsaufwand | Alte Identitätszuordnung, Vorlagen und Importe ausdrücklich validieren | Kein Migrationsaufwand bei einer bereits funktionierenden genanki-Pipeline |

@@ -1,0 +1,23 @@
+✖ localized search retains native word-form matches beyond the frozen query set (10551.506875ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11197.986541
+
+✖ failing tests:
+
+test at scripts/browser.test.mjs:78:1
+✖ localized search retains native word-form matches beyond the frozen query set (10551.506875ms)
+  locator.waitFor: Timeout 10000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('.pagefind-ui__result-link[href="http://127.0.0.1:57830/es/docs/templates/"]') to be visible[22m
+  
+      at visible (/Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:30:36)
+      at TestContext.<anonymous> (/Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:86:11) {
+    name: 'TimeoutError',
+    log: [ `  - waiting for locator('.pagefind-ui__result-link[href="http://127.0.0.1:57830/es/docs/templates/"]') to be visible` ]
+  }

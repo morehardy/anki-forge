@@ -1,0 +1,1830 @@
+{
+  "schemaVersion": 1,
+  "kind": "machine-read",
+  "status": "passed",
+  "mode": "release-candidate",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/standards_review/independent-machine-prefix-2026-11-01",
+  "inputSha256": "a2618b25656a1b4adfafb3add60ad85b5699b32a3217e01c8e5b125c53a8f833",
+  "configuration": {
+    "site": "https://morehardy.github.io",
+    "base": "/anki-forge",
+    "customDomain": ""
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es",
+    "pt-BR",
+    "ja",
+    "de"
+  ],
+  "readOrigin": "http://127.0.0.1:54909",
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/prefix-site-manifest.json",
+    "sha256": "1067fdcf3d4c9e43c058628d0ad9557a91055c6c0764a1970623072c94097612",
+    "commit": "6d4625639fc1477222b41880d29724c162baa3be",
+    "description": "Actual frozen isolated-candidate manifest whose archive files were served and read in this run."
+  },
+  "resourceBindings": [
+    {
+      "route": "/anki-forge/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "6d8f67b9b7aef15c53417003ae0f9edf810f289dffb0c089b173dab587c9530b"
+    },
+    {
+      "route": "/anki-forge/blog/your-first-anki-deck/index.md",
+      "sha256": "da294c14fd14e0978edb1108330e32c42f25fd23011728f81a1fd092543971d9"
+    },
+    {
+      "route": "/anki-forge/de/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "c04913d1ae3800e1b02511df95e7d0aaf2fb87450c1798c6de36b5393d5ffcaf"
+    },
+    {
+      "route": "/anki-forge/de/blog/your-first-anki-deck/index.md",
+      "sha256": "1278b44326027408b849fcc73eeef10895fec6e03c656501dd47e482c71bf1f8"
+    },
+    {
+      "route": "/anki-forge/de/docs/ai-anki-cards/index.md",
+      "sha256": "f50fcb4ecef97a029366412358792b262e6f5805d32cef4d92320166a5933a73"
+    },
+    {
+      "route": "/anki-forge/de/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "89f9fec7f177d5f9ae78cb48dd94ae45763625aa2ac12452812f0b64af1f5743"
+    },
+    {
+      "route": "/anki-forge/de/docs/api/index.md",
+      "sha256": "49e483040a6c344416830f059d5597228f14b633d4ae26cf05c31b9dce070036"
+    },
+    {
+      "route": "/anki-forge/de/docs/build-guarantees/index.md",
+      "sha256": "9ea30a53e973ca00be3884e7b2a731316b1030c54c58e7285f890f8319e1379f"
+    },
+    {
+      "route": "/anki-forge/de/docs/cards/index.md",
+      "sha256": "cce3f7b9204e56f1b87d37a2ebc540ba8d6bc9db177c5020aecc43ef6ffd5df9"
+    },
+    {
+      "route": "/anki-forge/de/docs/compatibility/index.md",
+      "sha256": "807f090e9d53cd8536b8df037e7f3dbf9e64c3526fca85445509ff9855af67e6"
+    },
+    {
+      "route": "/anki-forge/de/docs/concepts/index.md",
+      "sha256": "bba60d55d5c6e4689d4199cb18cf1da2eacf2dab1eee827aa610d52bce3f7523"
+    },
+    {
+      "route": "/anki-forge/de/docs/csv-to-anki/index.md",
+      "sha256": "ef0f84edcc464546f314f14ac6febed728b213c15f27c8168616196b425f7691"
+    },
+    {
+      "route": "/anki-forge/de/docs/custom-notetypes/index.md",
+      "sha256": "2b546bc045a7b2620b5e0fb5e1467768c55a90a3e4526e584a50b80433c9eb27"
+    },
+    {
+      "route": "/anki-forge/de/docs/development/index.md",
+      "sha256": "bdbb3effa1c69c9c412145e7729573a1eb1e47b2d67a7d4a6665be36fb59dad0"
+    },
+    {
+      "route": "/anki-forge/de/docs/genanki-migration/index.md",
+      "sha256": "3a7b4f4039bb14e7916c5a315cbccca4bd518352c77d19f794c7e1db3745f3ce"
+    },
+    {
+      "route": "/anki-forge/de/docs/image-occlusion/index.md",
+      "sha256": "c6a55829c21033da88cde754f1eeeb227293680fc0f9c7c598ccd9037096b54e"
+    },
+    {
+      "route": "/anki-forge/de/docs/index.md",
+      "sha256": "350473c3db14762eec9e5baad8c5cc8029194069e77057f5d8dbac4d7b2ac9cc"
+    },
+    {
+      "route": "/anki-forge/de/docs/installation/index.md",
+      "sha256": "5b1e007ace21e1eb16d3a66acebe0f6e8c934693f4073870076fd03faa44c74c"
+    },
+    {
+      "route": "/anki-forge/de/docs/json-to-anki/index.md",
+      "sha256": "1a89e59c2fe15eff7da2d3d996398342ead4166e29ed7e325dff064524ca23de"
+    },
+    {
+      "route": "/anki-forge/de/docs/languages/index.md",
+      "sha256": "84cba06100115a4f4ec5f56056926a1f3491d3931f3d33007c6787f7bb516ab2"
+    },
+    {
+      "route": "/anki-forge/de/docs/media/index.md",
+      "sha256": "c22ca07ea208d6b5104d2dfd8fa6deb5afe31e8986c6fed36ad4d6bc51377808"
+    },
+    {
+      "route": "/anki-forge/de/docs/node-api/index.md",
+      "sha256": "dfa8cd51865871b0061784cabb66ece639d7fa9c82c56e19fad417667965d40e"
+    },
+    {
+      "route": "/anki-forge/de/docs/node-quickstart/index.md",
+      "sha256": "01461a686c3bf1095f37417e9508e8d08e3dd4f9efcd2c1b93ab9377b398f37b"
+    },
+    {
+      "route": "/anki-forge/de/docs/python-api/index.md",
+      "sha256": "1b7533d7199027aa63e4522ca5af484f99c509172baeedca3c5e4f645a480d79"
+    },
+    {
+      "route": "/anki-forge/de/docs/python-diagnostics/index.md",
+      "sha256": "d7d130da08be9582f2321fe676362fbc37781d42303ad4ed77e30e861cbbd498"
+    },
+    {
+      "route": "/anki-forge/de/docs/python-migration/index.md",
+      "sha256": "e158ff9a354d794439ae20a0edb307bf90c1ecdaf9b08218e0f2e71667f0af1f"
+    },
+    {
+      "route": "/anki-forge/de/docs/python-quickstart/index.md",
+      "sha256": "e4484200649722bee10f98a4bcddc595eabb2883a71412ddc7e1bcff1f983fe0"
+    },
+    {
+      "route": "/anki-forge/de/docs/quickstart/index.md",
+      "sha256": "7e009b261fccb3a98cd71a4d91b3cc7100ce46bcbe134e9af2654e5052dd74a6"
+    },
+    {
+      "route": "/anki-forge/de/docs/rust-api/index.md",
+      "sha256": "0d82b30dff9b03ad22aa83a7b266e4b59ea006d36c2cf390df9be18f2cef25bd"
+    },
+    {
+      "route": "/anki-forge/de/docs/rust-guide/index.md",
+      "sha256": "163dec7ca20af2545a3f5b030e65b3ea3ba21b8c2c33e36b9d7ffc02addf66d3"
+    },
+    {
+      "route": "/anki-forge/de/docs/templates/index.md",
+      "sha256": "be144f7df48b83942f0fc9a1b08841d519977011b47082e959c4a5471b7461af"
+    },
+    {
+      "route": "/anki-forge/de/docs/troubleshooting/index.md",
+      "sha256": "a0b8c69fdb9fc4d2dc619826fa621fb4e67be8d523975c4131f9b6e9ba481342"
+    },
+    {
+      "route": "/anki-forge/de/docs/updates/index.md",
+      "sha256": "8eeff44204fe9676247ce2a25e58873ea4c120fdcebc83b85e28c48f30df43c8"
+    },
+    {
+      "route": "/anki-forge/de/llms.txt",
+      "sha256": "8c18df6e583f8239c933715fd8193e410b68ff8d32d8e70fc8a7fc4af0ba3210"
+    },
+    {
+      "route": "/anki-forge/docs/ai-anki-cards/index.md",
+      "sha256": "8101e2d8972fcd07b57ce89310a72db50ae33c1cbc9b2ab8989c6119478c612d"
+    },
+    {
+      "route": "/anki-forge/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "8206e190781c310eed6cf352735be5029db0426ead23c590de5b77c8d6217d9b"
+    },
+    {
+      "route": "/anki-forge/docs/api/index.md",
+      "sha256": "c6f03886dc61421de202632f779007fad7c4b36ca528128f230ec785228dcad6"
+    },
+    {
+      "route": "/anki-forge/docs/build-guarantees/index.md",
+      "sha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f"
+    },
+    {
+      "route": "/anki-forge/docs/cards/index.md",
+      "sha256": "efaf643e3347ead616a817c0cec98e2abe5b9b9cd167754bbbad5f564132a8fb"
+    },
+    {
+      "route": "/anki-forge/docs/compatibility/index.md",
+      "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e"
+    },
+    {
+      "route": "/anki-forge/docs/concepts/index.md",
+      "sha256": "d19a7fdaed78bbbcf9f8d81f510a505d7ff3de219a3bfef151216b159906b22c"
+    },
+    {
+      "route": "/anki-forge/docs/csv-to-anki/index.md",
+      "sha256": "4b87db9d89416ba5ff1ee07c559c2e1d24d16013e28dbe1ec5945408fb6f68dc"
+    },
+    {
+      "route": "/anki-forge/docs/custom-notetypes/index.md",
+      "sha256": "139ffbf1d5f353efe77366f9ba308fce46358b8df1005ea7af45377504619dbb"
+    },
+    {
+      "route": "/anki-forge/docs/development/index.md",
+      "sha256": "f3a9d4015939e9ead7a166834eb1a65d3a7b736408cbdb3e5280f3858ab4a99d"
+    },
+    {
+      "route": "/anki-forge/docs/genanki-migration/index.md",
+      "sha256": "005e556007d6ba329468d2e5feb94c0f9e96a322450de13de45328b32309f551"
+    },
+    {
+      "route": "/anki-forge/docs/image-occlusion/index.md",
+      "sha256": "ec272077b737326e8a5ec26ba3801cd11bdcef2d8445667a89f1563dcf61e198"
+    },
+    {
+      "route": "/anki-forge/docs/index.md",
+      "sha256": "7eecdc87b955477c31ac4d4e145a6a602490d8080fa3aa16da0a44d3fa4d253d"
+    },
+    {
+      "route": "/anki-forge/docs/installation/index.md",
+      "sha256": "b3c3981d48f92e6bca07e4b2080545bfe6221278f3cd56ea810f8317b34ec4c5"
+    },
+    {
+      "route": "/anki-forge/docs/json-to-anki/index.md",
+      "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b"
+    },
+    {
+      "route": "/anki-forge/docs/languages/index.md",
+      "sha256": "fef006176fde2d5f83ac5fcc5092eaaf74efd2f527d775d66ef9136f1d91a89c"
+    },
+    {
+      "route": "/anki-forge/docs/media/index.md",
+      "sha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817"
+    },
+    {
+      "route": "/anki-forge/docs/node-api/index.md",
+      "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448"
+    },
+    {
+      "route": "/anki-forge/docs/node-quickstart/index.md",
+      "sha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a"
+    },
+    {
+      "route": "/anki-forge/docs/python-api/index.md",
+      "sha256": "ce891dfa12abf6e099c563ce509a95f1cab9164bebaff3552e4a0940c56ef886"
+    },
+    {
+      "route": "/anki-forge/docs/python-diagnostics/index.md",
+      "sha256": "a10a07013ba9f1f12b9efb2028fe5714db6f1610b6c9f7f6a03a7f063429eac8"
+    },
+    {
+      "route": "/anki-forge/docs/python-migration/index.md",
+      "sha256": "88d11532da9c30cd6891b2f333fb3b5434033c0acf494a77517185230ef792d6"
+    },
+    {
+      "route": "/anki-forge/docs/python-quickstart/index.md",
+      "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf"
+    },
+    {
+      "route": "/anki-forge/docs/quickstart/index.md",
+      "sha256": "a4589b5cfe58886981f88d083ec139619da5534106993ffc644683b9a644ba49"
+    },
+    {
+      "route": "/anki-forge/docs/rust-api/index.md",
+      "sha256": "58c8b1e0a4a213a2f9a03b0854a1fc2bd32beb0d24c1e50a1b0ff3eeaad6acca"
+    },
+    {
+      "route": "/anki-forge/docs/rust-guide/index.md",
+      "sha256": "22fa47e05a0b6317dc2db79efce21ea71b2dde7162e7d024e44e27fc0c1d6a0b"
+    },
+    {
+      "route": "/anki-forge/docs/templates/index.md",
+      "sha256": "394354438402e8adf3e91884f22b070a96c11ad8d3cb67315e60b3578538dafe"
+    },
+    {
+      "route": "/anki-forge/docs/troubleshooting/index.md",
+      "sha256": "1b3fce42ef630b797dbdc7f58f031448d6039c394810980b70daec3cc643e595"
+    },
+    {
+      "route": "/anki-forge/docs/updates/index.md",
+      "sha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54"
+    },
+    {
+      "route": "/anki-forge/es/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "1e75c2eb18271c625fd8174131a72bce8ffd96d2a40f83342c38fb0628d7f2fa"
+    },
+    {
+      "route": "/anki-forge/es/blog/your-first-anki-deck/index.md",
+      "sha256": "d63713c6a08c0a9ded170220dac67977f2facde2cd8ae2e40972e13426b462a2"
+    },
+    {
+      "route": "/anki-forge/es/docs/ai-anki-cards/index.md",
+      "sha256": "6da84ae75592d1e8ab7a16159892f2b9ec4ab6cb309c4790d53d7c44cadae168"
+    },
+    {
+      "route": "/anki-forge/es/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "0006bfe328855c5321ba708cb9f1b8cda040ef6891fcf64a3f14afd7c7512316"
+    },
+    {
+      "route": "/anki-forge/es/docs/api/index.md",
+      "sha256": "c1caf257197c1608b27771e79cf2a6c37d111a261fb48669d6e70b7d1426bf4a"
+    },
+    {
+      "route": "/anki-forge/es/docs/build-guarantees/index.md",
+      "sha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c"
+    },
+    {
+      "route": "/anki-forge/es/docs/cards/index.md",
+      "sha256": "e9e4414e49cb0a24472e64c140dd05ef25fd3671ff3ef62bf0bc3f54744ab4cb"
+    },
+    {
+      "route": "/anki-forge/es/docs/compatibility/index.md",
+      "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561"
+    },
+    {
+      "route": "/anki-forge/es/docs/concepts/index.md",
+      "sha256": "27fe0659feeb4577ce85fd3628479371705cff5cc362ec55c9d01321fc8aaa50"
+    },
+    {
+      "route": "/anki-forge/es/docs/csv-to-anki/index.md",
+      "sha256": "90ca8ad6a8acf7eb8736394ea0cc04129715b65e61c825bcc45fa6fb28356e64"
+    },
+    {
+      "route": "/anki-forge/es/docs/custom-notetypes/index.md",
+      "sha256": "2c22f3c99f4ac0719b15ff5a5cb73ef428f0c9bb4c7bf36de8a826b61caafb0c"
+    },
+    {
+      "route": "/anki-forge/es/docs/development/index.md",
+      "sha256": "b62bc3d0e4bab808e22666e1b7a2009b89e43929e674ed464ba086c9ac823d6e"
+    },
+    {
+      "route": "/anki-forge/es/docs/genanki-migration/index.md",
+      "sha256": "44834bdc82d9309b5a3ecbd87d40b3fcb3805b39acf108b580af17834c062b24"
+    },
+    {
+      "route": "/anki-forge/es/docs/image-occlusion/index.md",
+      "sha256": "27783ea8e03a4f237589e58c2e7dc1fc83e828038867b3fe3d0e27bf7b8e569a"
+    },
+    {
+      "route": "/anki-forge/es/docs/index.md",
+      "sha256": "cb689d0a1caf659fc7c634f0ccb483cea5fd5223133c2d3ef7fc524378bbea78"
+    },
+    {
+      "route": "/anki-forge/es/docs/installation/index.md",
+      "sha256": "f95dd3110b15f05d62f87e171901228ec2c67962906eb2f51b5fe8e0058889bd"
+    },
+    {
+      "route": "/anki-forge/es/docs/json-to-anki/index.md",
+      "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c"
+    },
+    {
+      "route": "/anki-forge/es/docs/languages/index.md",
+      "sha256": "0d484d10b25a387f86fa053fa6e2adf90792be161437af41bdf3c38046c0b6dd"
+    },
+    {
+      "route": "/anki-forge/es/docs/media/index.md",
+      "sha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929"
+    },
+    {
+      "route": "/anki-forge/es/docs/node-api/index.md",
+      "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84"
+    },
+    {
+      "route": "/anki-forge/es/docs/node-quickstart/index.md",
+      "sha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3"
+    },
+    {
+      "route": "/anki-forge/es/docs/python-api/index.md",
+      "sha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69"
+    },
+    {
+      "route": "/anki-forge/es/docs/python-diagnostics/index.md",
+      "sha256": "7bf8512118b5e1083203d72dcf536ae4ec7c5ac39a0cfea8f366fd6dabcdf4db"
+    },
+    {
+      "route": "/anki-forge/es/docs/python-migration/index.md",
+      "sha256": "be79c1233d8ac8c731d5cf8cd62ce253d3e99388f9f443d59018802e11f256f3"
+    },
+    {
+      "route": "/anki-forge/es/docs/python-quickstart/index.md",
+      "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a"
+    },
+    {
+      "route": "/anki-forge/es/docs/quickstart/index.md",
+      "sha256": "5d8ed767c6669c95fb97104543bd4327ee183c41e3844c9c5a291d586f928ad3"
+    },
+    {
+      "route": "/anki-forge/es/docs/rust-api/index.md",
+      "sha256": "5268e0ddb2a9726a23652133de2cad5aa5c8ea6681382440a7ce472c2f3fa958"
+    },
+    {
+      "route": "/anki-forge/es/docs/rust-guide/index.md",
+      "sha256": "eeaff8a038b36bf7151d8ca3655a4c12aa65fdb68281c54559850a4d71c50624"
+    },
+    {
+      "route": "/anki-forge/es/docs/templates/index.md",
+      "sha256": "331364d195d3c82a4c14c41d37ce46fe487221ee3e92794c1dbc93c69af94bb3"
+    },
+    {
+      "route": "/anki-forge/es/docs/troubleshooting/index.md",
+      "sha256": "a2a3a42bcd7a6ab2b511bf9e736667ad8b302dc8781e428008bd200420be5b4f"
+    },
+    {
+      "route": "/anki-forge/es/docs/updates/index.md",
+      "sha256": "09df198c4cfd581ffd8d14cfa4a7b645a698bb553aae251234efff8b108d4bf8"
+    },
+    {
+      "route": "/anki-forge/es/llms.txt",
+      "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d"
+    },
+    {
+      "route": "/anki-forge/ja/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "ee594693e3eb0407d94666c6b5da88bc1fded3a16fef692176bca3dfa6c17b3b"
+    },
+    {
+      "route": "/anki-forge/ja/blog/your-first-anki-deck/index.md",
+      "sha256": "631e800eb152dbb484c781f9fd2e1760e5174be420c59664066ebed744490f87"
+    },
+    {
+      "route": "/anki-forge/ja/docs/ai-anki-cards/index.md",
+      "sha256": "2e5b420c62be33ab6ab6d9a7dbb29369adb25b322c26af15f9af8fa37c7579aa"
+    },
+    {
+      "route": "/anki-forge/ja/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "e39308bb4bf191a1a65acdec3f1c3cec9579fe7922ac1c3accb6e0d3206329c9"
+    },
+    {
+      "route": "/anki-forge/ja/docs/api/index.md",
+      "sha256": "cceb5e5237186743b653895831b5079dc8ecf475180a1a16adae3b63232b5673"
+    },
+    {
+      "route": "/anki-forge/ja/docs/build-guarantees/index.md",
+      "sha256": "f1bffb4ba69bec9584fb4f5d57103b4105b264524752a984182668cd2045e255"
+    },
+    {
+      "route": "/anki-forge/ja/docs/cards/index.md",
+      "sha256": "0d245a2517435ac3215170422ea139e7858e0cf38dc784601fd33d306636accb"
+    },
+    {
+      "route": "/anki-forge/ja/docs/compatibility/index.md",
+      "sha256": "309088006af4caa693e6fb8b92eb6ccb085a6a8ede3279ddffe19e189110beee"
+    },
+    {
+      "route": "/anki-forge/ja/docs/concepts/index.md",
+      "sha256": "4f08d0583b1e8355f8bb83b0d756118c336f20dd93106329f0adf297ba2482c6"
+    },
+    {
+      "route": "/anki-forge/ja/docs/csv-to-anki/index.md",
+      "sha256": "808923aee7e79aca33f63dfd39d77dac70437acf6768cba1c9661a45775b28df"
+    },
+    {
+      "route": "/anki-forge/ja/docs/custom-notetypes/index.md",
+      "sha256": "04b21b38940ea18e554e1ec2fc520fa42bf2625b083f815f55f03e5e31c15094"
+    },
+    {
+      "route": "/anki-forge/ja/docs/development/index.md",
+      "sha256": "2d3023b9a31da475971214d0380dda676f724f6e4939e202d6146b4639ce6ec2"
+    },
+    {
+      "route": "/anki-forge/ja/docs/genanki-migration/index.md",
+      "sha256": "4b281a1e07383523e9dbec98b95672768b7d24e9458f997d1cfaff5088027046"
+    },
+    {
+      "route": "/anki-forge/ja/docs/image-occlusion/index.md",
+      "sha256": "cf55864ad55c5ac7be9bd7352096ffd4a58e50c4351eba2d4907581d605a3fb9"
+    },
+    {
+      "route": "/anki-forge/ja/docs/index.md",
+      "sha256": "881d8b6e811225424d84a030134952732cf734a43847e5aa34a625499d1eac3f"
+    },
+    {
+      "route": "/anki-forge/ja/docs/installation/index.md",
+      "sha256": "ef35ff4ee09a4832f809bfa52818313e0f8b693e92507b6272d409eac2901110"
+    },
+    {
+      "route": "/anki-forge/ja/docs/json-to-anki/index.md",
+      "sha256": "474a8dd1ed55ff3a415dff3e58950c46fa29470f7fdf48d902c935a863d97d74"
+    },
+    {
+      "route": "/anki-forge/ja/docs/languages/index.md",
+      "sha256": "94f170807eeaab2ab74f3750320e6b0bce4af9e407309ea73c4490060c6e4de8"
+    },
+    {
+      "route": "/anki-forge/ja/docs/media/index.md",
+      "sha256": "4e9ec3cd8b26c1b851c4fefe807cf68860d070c4ca847dafd7bfa5878fac1177"
+    },
+    {
+      "route": "/anki-forge/ja/docs/node-api/index.md",
+      "sha256": "f9c259ce5d0a1bf34e736d0d755d290464f2cede2fd6638946fa61d69fd6479b"
+    },
+    {
+      "route": "/anki-forge/ja/docs/node-quickstart/index.md",
+      "sha256": "9fdebe1ec79bd7edc441096c0792e527f16e2a6e189b4cf3fcd9ec377926205c"
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-api/index.md",
+      "sha256": "3b64c671e514a509e8c03315374b2b5b57cda7749aea81d7f19a9561aad5b0b2"
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-diagnostics/index.md",
+      "sha256": "88a1557d90afb2814b4679b20fc1afa9d968a5c092cc0198997c638af2ff21e9"
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-migration/index.md",
+      "sha256": "a203d986d9220b0c55a260179a539c255560e32d0cf9359029c6bef84b699717"
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-quickstart/index.md",
+      "sha256": "46cf182f9dc3ece8c209bfc32bf65a46882105374b055df39b0b587711ece0c4"
+    },
+    {
+      "route": "/anki-forge/ja/docs/quickstart/index.md",
+      "sha256": "ad059136372c44f733df698766d2cd42bbe8f27eaea8e3a733fb5c32c2ab53f8"
+    },
+    {
+      "route": "/anki-forge/ja/docs/rust-api/index.md",
+      "sha256": "340eca06ee46dc6de96b2143202e10cfc43ae5e09f63deb5bc6b46fff2ff2f64"
+    },
+    {
+      "route": "/anki-forge/ja/docs/rust-guide/index.md",
+      "sha256": "a45613b0f7ef560475f5072d729ae9f0c6bd4786c537c1f4239593fba6a7e4c2"
+    },
+    {
+      "route": "/anki-forge/ja/docs/templates/index.md",
+      "sha256": "4c66968bf145daa9b80bd51763e128cbe45f9188f781dfcf085e16d3072adb00"
+    },
+    {
+      "route": "/anki-forge/ja/docs/troubleshooting/index.md",
+      "sha256": "ea6fe0bc78933b3ef5df2e692aa28e81b78220813c8797485e7919e409dc6748"
+    },
+    {
+      "route": "/anki-forge/ja/docs/updates/index.md",
+      "sha256": "0b9d3365dd9e0432c63ac6f5cc3b3153d94fabab373db0ac9963b81cb1d89eec"
+    },
+    {
+      "route": "/anki-forge/ja/llms.txt",
+      "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39"
+    },
+    {
+      "route": "/anki-forge/llms.txt",
+      "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c"
+    },
+    {
+      "route": "/anki-forge/pt-br/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "e1d7a15146849e09c6ecba5080013177766622a3779d2f1782d43691527f9a15"
+    },
+    {
+      "route": "/anki-forge/pt-br/blog/your-first-anki-deck/index.md",
+      "sha256": "8eb7f675ad1e1b48596191a559ccf30bac2eefeead6c74921c580c9daa767bfb"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/ai-anki-cards/index.md",
+      "sha256": "fa6da584c9949a289bee500a838cf64e5e9627d0bd6f3b9029e6788c6882b939"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "61b173ad656a907ff9e0850a1a356f6aac8e4a486339855f0eaafc1b1d17962b"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/api/index.md",
+      "sha256": "c8ca239fc099efb286f5bec1effe8cd34f25ebc3e2ed209961cdb70988d8303f"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/build-guarantees/index.md",
+      "sha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/cards/index.md",
+      "sha256": "dec3990451d9de964ca7f8966900ef8cf63c74f6639817fd7f94975bdea0871d"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/compatibility/index.md",
+      "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/concepts/index.md",
+      "sha256": "0e0d67eb233d1d024b3a51d29d9287f30e4a510fc74eabc3c15379b16b861c02"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/csv-to-anki/index.md",
+      "sha256": "597af138257f6a90fb7b5f005ed20554231e270f67981f75eda8947dc0abb7f5"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/custom-notetypes/index.md",
+      "sha256": "3b85cf74e373f4d6afeeb7624da6b53934239b05f77c45c52cf21adc88594e70"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/development/index.md",
+      "sha256": "144273065ae13e279aa3fdde993350ab6053ebca7df9a44d56029e42794da378"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/genanki-migration/index.md",
+      "sha256": "58cea5878a14cb2ebcad5a9e8b3f40643a3db6165e7c8a13fa6d0c4decbfbd4e"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/image-occlusion/index.md",
+      "sha256": "a11c45b2d3c8edd9ae75287da7dd9aa61c407d757b5141c5f4967578a997c8c7"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/index.md",
+      "sha256": "bf74bbb9a554ed2feff9bdd9e6f8a6c9aa58197b461e58c4f439918d951be83c"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/installation/index.md",
+      "sha256": "4ea85076d76ad43b67a27eae8d7b4e063b7bfac1cae03b1a07c7046512e64bb0"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/json-to-anki/index.md",
+      "sha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/languages/index.md",
+      "sha256": "0e50187553c7e2cb69f4c71400fdc70712fcf11e3eeedab75a911083657e6308"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/media/index.md",
+      "sha256": "1df6e3c05e16aae47653b10aa6196fb87ff57d7d67c5f31f07558dbac2d7d3b4"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/node-api/index.md",
+      "sha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/node-quickstart/index.md",
+      "sha256": "8c2f21a3473fd252ae669f45fd68ef0442fafb54c0e56f51e02ac91b8e06510f"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-api/index.md",
+      "sha256": "8b828d3ea22b4521f7a319782b98e71bd245a22e9407cea0932ce8d8aaabad26"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-diagnostics/index.md",
+      "sha256": "36554be8297e3ee539af8f814c551e6d7609f3ccda5f5ebf7864b3408af160cf"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-migration/index.md",
+      "sha256": "d18a17158288d3876618ce8195f215e8bd63044ff38b8f0d94c6a7f5fa430e4a"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-quickstart/index.md",
+      "sha256": "75d3a00cc4fabc9a1537a65b1d692f9cd06becd28687d45ee456df9cccfba68c"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/quickstart/index.md",
+      "sha256": "4a023c9502f46e4920d347a88805098dca6a62ddee5ae09fcf8c6a91d5698065"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/rust-api/index.md",
+      "sha256": "d593654160c9b3bef85e2e403661969c06c07fee009876c59a71ca141308d8e3"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/rust-guide/index.md",
+      "sha256": "455802a84df3306570d2249c32afb8008f0134a6922861e8cef086c34be63902"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/templates/index.md",
+      "sha256": "1beb0896f9fc0fffb3279db591a836c8e6b6bd806a7e0f425a434c7a3329fa39"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/troubleshooting/index.md",
+      "sha256": "8437693cf9d96cf631b8d56254869f566332066d652396e80f74d7ee3d21440d"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/updates/index.md",
+      "sha256": "aabb6df552b57393d144397e8fca791d7a61ca3aa1e4b9718ba2ebd443f9cac7"
+    },
+    {
+      "route": "/anki-forge/pt-br/llms.txt",
+      "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4"
+    },
+    {
+      "route": "/anki-forge/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "3217388bfa54c918234c83b8a5ca6c007b512094537f3e4e511ddbc8433b58ba"
+    },
+    {
+      "route": "/anki-forge/zh-cn/blog/your-first-anki-deck/index.md",
+      "sha256": "e252130841688a1b0d4f69a236e3b483d2f8396e6058faab943e6f2d71035a23"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/ai-anki-cards/index.md",
+      "sha256": "1cd43e83fceafef9fd1e1522b7e708561b857779817131fc6304c138829d92f1"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "5ba210b2c52e35a2a322747bcf26a03e1d4dfbfc01b6ca1a4c806a90136ea914"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/api/index.md",
+      "sha256": "880fae34a0944068b466078c49069e5df2c3c5000b4b0560ca96339572fd7540"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/build-guarantees/index.md",
+      "sha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/cards/index.md",
+      "sha256": "74e1976beb7ea5055a8c1602c06b3d6bdd133d6f420802506cc289956d31e03f"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/compatibility/index.md",
+      "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/concepts/index.md",
+      "sha256": "451addbf0e79e73f0d6627396b3d7adfc68b15584dbc1126092814f0c9446633"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/csv-to-anki/index.md",
+      "sha256": "f35c352e1898e3a3472182e73d38ea867ef225ec2c34c3e740849bb95b2098f8"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/custom-notetypes/index.md",
+      "sha256": "c7ed665205b3d78511fac92c204326b5812d7fd95eb60cf94afea5374918aaa4"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/development/index.md",
+      "sha256": "01c9084eb7893f4b389c1103e1da747d8580fed287727cdaeab29d1b67cb3c75"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/genanki-migration/index.md",
+      "sha256": "cf2424e077177bb6d365efa09b6f085cc130355f8fd326b02f9edbe9e1377168"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/image-occlusion/index.md",
+      "sha256": "dd3c0aa40c86d1de08993aea2b8fc29cbcda95e9209043129c65d633db51c1a8"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/index.md",
+      "sha256": "4a79f1acd50ff846fb4db7fdd0f3589bc980077deb6c3b92525a5085851606f2"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/installation/index.md",
+      "sha256": "28bd793b373696100ba69a341690bcb008fb08b562446b631f7cd28c87192a35"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/json-to-anki/index.md",
+      "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/languages/index.md",
+      "sha256": "a041ad9e5b93395a69c3d4e65e69ce3e10535518d3199948bc281a0eeba0f1ac"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/media/index.md",
+      "sha256": "a3a1d049675679579fa5da49d0846a3fc4e74db2f7d1a1f9730174e72a90e9f1"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/node-api/index.md",
+      "sha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/node-quickstart/index.md",
+      "sha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-api/index.md",
+      "sha256": "d58028202432d624b0963444ca00ab1e237133b68fdac85dbe973db2b4066b31"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-diagnostics/index.md",
+      "sha256": "d5bc61661406445cf34edf58cbf08cc99e5435a37a57f3727d3609d194ac1d87"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-migration/index.md",
+      "sha256": "ca21f5bc334209e841c6695f286a6c9e21ca97e92860f70eeb828df5f763e95a"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-quickstart/index.md",
+      "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/quickstart/index.md",
+      "sha256": "e58a9ecd751d00c6f4cbc16c2d65ec532164a8df0d9c49c2964b3dee6731a5cd"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/rust-api/index.md",
+      "sha256": "b37f9144eeff8e220a94f7273b54abf824f9a4af9e28fa3c462a19de4caa2061"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/rust-guide/index.md",
+      "sha256": "20f03c68b89b004e838146ad296e86bc196208fcba81695e7aedc2435aeb4e5e"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/templates/index.md",
+      "sha256": "5ac0ef4ce517e1ed0bab4d448e531ffda7636d52b281286c7af5413d9e4a4658"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/troubleshooting/index.md",
+      "sha256": "eded273eb7c8857eba71344ea82e8e8f21ba2f149404eaf1ee6c439e1407ee99"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/updates/index.md",
+      "sha256": "202f116788465686ef6e979e5629a3439ca603ecb7966f5356792fc0d370fe98"
+    },
+    {
+      "route": "/anki-forge/zh-cn/llms.txt",
+      "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2"
+    }
+  ],
+  "entries": {
+    "en": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/docs/python-quickstart/index.md",
+            "http://127.0.0.1:54909/anki-forge/docs/compatibility/index.md"
+          ],
+          "answer": "The documented 0.3.1 quickstart uses ordinary CPython 3.11+ with a matching native wheel; recorded checks cover 3.11–3.14. Create a virtual environment with python -m venv .venv, activate it using . .venv/bin/activate (Windows PowerShell: .venv\\Scripts\\Activate.ps1), then run python -m pip install ankiforge==0.3.1. Save the complete example as main.py and run python main.py. Project namespace spanish and note key es:hola produce persistent spanish.apkg with the Spanish deck and hola → hello Basic card. Keep those identifiers stable for updates. Exporting does not require Anki; importing and inspecting the card is a separate client step. Sources: http://127.0.0.1:54909/anki-forge/docs/python-quickstart/index.md, http://127.0.0.1:54909/anki-forge/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__llms.txt",
+              "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__docs__python-quickstart__index.md",
+              "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/docs/python-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__docs__compatibility__index.md",
+              "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/docs/node-api/index.md",
+            "http://127.0.0.1:54909/anki-forge/docs/node-quickstart/index.md"
+          ],
+          "answer": "Use Node 22.13+ and npm install --include=optional ankiforge@0.3.1 so the matching native dependency is installed. Create Project(namespace), add a note under a stable key, and await project.build(BuildOptions.to(path)). BuildOutput owns the artifact and exposes the report/snapshot; BuildReport contains observations, not ownership or the final operation outcome. Keep an owner alive while reading a temporary path; closing the last temporary owner deletes the file, whereas a persistent output remains. Node build/compare capture project state at invocation. Every prepared-publication attempt consumes its owner, including policy or I/O rejection; retry requires preparing again. TypeScript uses the documented NodeNext configuration before running the emitted .mjs. Sources: http://127.0.0.1:54909/anki-forge/docs/node-api/index.md, http://127.0.0.1:54909/anki-forge/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__llms.txt",
+              "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__docs__node-api__index.md",
+              "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/docs/node-api/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__docs__node-quickstart__index.md",
+              "sha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/docs/node-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/docs/json-to-anki/index.md"
+          ],
+          "answer": "Download v1.json, v2.json, cell.png and tone.wav into recipe/, then use one complete Rust, Python or Node example to parse JSON and build both releases. The namespace biology-json and the three business note IDs remain stable; each release has three notes/cards and two media files, and v2 changes the first answer. Keep the originally distributed v1.apkg as the immutable comparison baseline and publish to a different v2 path; an Anki re-export is unsuitable. Inspect comparison.json/review.json: the expected finding is RISK.NOTE_CHANGED, with no added or removed notes, and policy approval before publishing that same prepared candidate. Missing notes are not deletion synchronization; client update and review-history behavior still need client-specific validation. Sources: http://127.0.0.1:54909/anki-forge/docs/json-to-anki/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__llms.txt",
+              "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__docs__json-to-anki__index.md",
+              "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/docs/json-to-anki/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/docs/compatibility/index.md",
+            "http://127.0.0.1:54909/anki-forge/docs/build-guarantees/index.md"
+          ],
+          "answer": "The compatibility page records package 0.3.1 as checked on 2026-10-13; this is a recorded verification snapshot. It lists Rust 1.92, Node 22.13+ with checks on 22/24/26, and ordinary CPython 3.11–3.14. Native packages target macOS arm64/x64, Linux x64 GNU/glibc and Windows x64; package availability alone does not prove every host was tested. Other Python implementations, free-threaded/subinterpreters, and Node browsers/Electron/Bun/musl/ARM64 Linux or Windows need separate validation. Anki import, rendering and playback depend on client/settings/codecs. Preserve original APKG baselines. Atomic replacement applies per file, not to a separate JSON report; late failures can occur after publication, so inspect publication stage and durability before retrying. Sources: http://127.0.0.1:54909/anki-forge/docs/compatibility/index.md, http://127.0.0.1:54909/anki-forge/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__llms.txt",
+              "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__docs__compatibility__index.md",
+              "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__docs__build-guarantees__index.md",
+              "sha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/docs/build-guarantees/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "zh-CN": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/zh-cn/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/zh-cn/docs/python-quickstart/index.md",
+            "http://127.0.0.1:54909/anki-forge/zh-cn/docs/compatibility/index.md"
+          ],
+          "answer": "文档的 0.3.1 示例要求普通 CPython 3.11+ 和匹配平台的原生 wheel，记录的检查覆盖 3.11–3.14。先执行 python -m venv .venv，以 . .venv/bin/activate 激活；Windows PowerShell 使用 .venv\\Scripts\\Activate.ps1。再执行 python -m pip install ankiforge==0.3.1，把完整示例存成 main.py 并运行 python main.py。namespace 为 spanish、业务键为 es:hola，生成持久化的 spanish.apkg，其中 Spanish 牌组包含 hola → hello 的 Basic 卡片。更新时保持这两个标识稳定。导出不依赖安装 Anki，导入检查属于另一个客户端步骤。 来源: http://127.0.0.1:54909/anki-forge/zh-cn/docs/python-quickstart/index.md, http://127.0.0.1:54909/anki-forge/zh-cn/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__llms.txt",
+              "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__docs__python-quickstart__index.md",
+              "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/docs/python-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__docs__compatibility__index.md",
+              "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/zh-cn/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/zh-cn/docs/node-api/index.md",
+            "http://127.0.0.1:54909/anki-forge/zh-cn/docs/node-quickstart/index.md"
+          ],
+          "answer": "使用 Node 22.13+，通过 npm install --include=optional ankiforge@0.3.1 安装匹配平台的原生依赖。创建 Project(namespace)，以稳定键添加笔记，再 await project.build(BuildOptions.to(path))。BuildOutput 持有产物并提供报告与快照；BuildReport 只记录观察结果，既不持有文件，也不能单靠诊断严重性推断操作成败。读取临时路径时必须保留所有者，关闭最后一个临时所有者会删除文件，持久化文件则保留。Node 的 build/compare 在调用时捕获项目快照。准备好的发布每次尝试都会消费所有者，包括策略或 I/O 拒绝，重试需要重新准备；TypeScript 按文档的 NodeNext 配置编译后运行 .mjs。 来源: http://127.0.0.1:54909/anki-forge/zh-cn/docs/node-api/index.md, http://127.0.0.1:54909/anki-forge/zh-cn/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__llms.txt",
+              "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__docs__node-api__index.md",
+              "sha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/docs/node-api/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__docs__node-quickstart__index.md",
+              "sha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/docs/node-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/zh-cn/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/zh-cn/docs/json-to-anki/index.md"
+          ],
+          "answer": "将 v1.json、v2.json、cell.png、tone.wav 下载到 recipe/，任选文档给出的完整 Rust、Python 或 Node 程序，由调用者解析 JSON 并构建两版。biology-json namespace 和三个业务笔记 ID 保持稳定；每版有三条笔记、三张卡片、两个媒体，v2 修改第一条答案。保留最初分发的 v1.apkg 为不可变基线，v2 使用不同输出路径，不能改用 Anki 重新导出的包。检查 comparison.json/review.json，预期出现 RISK.NOTE_CHANGED，没有新增或删除笔记，并在策略允许后发布同一个已准备候选。省略笔记不会同步删除学习者的数据，也不能据此保证所有客户端的复习历史行为。 来源: http://127.0.0.1:54909/anki-forge/zh-cn/docs/json-to-anki/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__llms.txt",
+              "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__docs__json-to-anki__index.md",
+              "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/docs/json-to-anki/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/zh-cn/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/zh-cn/docs/compatibility/index.md",
+            "http://127.0.0.1:54909/anki-forge/zh-cn/docs/build-guarantees/index.md"
+          ],
+          "answer": "兼容性页记录的是 2026-10-13 核验的 0.3.1：Rust 1.92、Node 22.13+（记录检查 22/24/26）、普通 CPython 3.11–3.14。原生包覆盖 macOS arm64/x64、Linux x64 GNU/glibc、Windows x64；有包不等于每个宿主都实际跑过。其他 Python 实现、free-threaded 与子解释器，以及浏览器、Electron、Bun、musl、ARM64 Linux/Windows 的 Node 环境需要额外验证。Anki 导入、渲染和媒体播放依赖客户端版本、设置及编解码器。更新应保留原始 APKG；原子替换仅按文件成立，不与外部 JSON 报告构成事务。晚期错误可能发生在发布之后，重试前须查看 publication stage 和 durability。 来源: http://127.0.0.1:54909/anki-forge/zh-cn/docs/compatibility/index.md, http://127.0.0.1:54909/anki-forge/zh-cn/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__llms.txt",
+              "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__docs__compatibility__index.md",
+              "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__zh-cn__docs__build-guarantees__index.md",
+              "sha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/zh-cn/docs/build-guarantees/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "es": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/es/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/es/docs/python-quickstart/index.md",
+            "http://127.0.0.1:54909/anki-forge/es/docs/compatibility/index.md"
+          ],
+          "answer": "El inicio rápido documenta 0.3.1 para CPython normal 3.11+ con una wheel nativa compatible; las comprobaciones registradas cubren 3.11–3.14. Ejecute python -m venv .venv, active con . .venv/bin/activate (PowerShell: .venv\\Scripts\\Activate.ps1) e instale con python -m pip install ankiforge==0.3.1. Guarde el ejemplo completo como main.py y ejecute python main.py. El namespace spanish y la clave es:hola generan spanish.apkg persistente, con la tarjeta Basic hola → hello en Spanish. Mantenga estables ambos identificadores al actualizar. Exportar no requiere Anki; la importación debe comprobarse después en el cliente. Fuentes: http://127.0.0.1:54909/anki-forge/es/docs/python-quickstart/index.md, http://127.0.0.1:54909/anki-forge/es/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__llms.txt",
+              "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__docs__python-quickstart__index.md",
+              "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/docs/python-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__docs__compatibility__index.md",
+              "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/es/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/es/docs/node-api/index.md",
+            "http://127.0.0.1:54909/anki-forge/es/docs/node-quickstart/index.md"
+          ],
+          "answer": "Use Node 22.13+ e instale npm install --include=optional ankiforge@0.3.1 para incluir la dependencia nativa correspondiente. Cree Project(namespace), añada notas con claves estables y espere project.build(BuildOptions.to(path)). BuildOutput conserva el artefacto y ofrece informe/snapshot; BuildReport contiene observaciones, no mantiene el archivo ni determina por sí solo el resultado. Conserve un propietario mientras use una ruta temporal: cerrar el último elimina el archivo, pero el persistente permanece. build/compare capturan el proyecto al invocarse. Cada intento de publicación preparada consume el propietario, incluso si falla por política o E/S; prepare de nuevo para reintentar. Compile TypeScript con la configuración NodeNext documentada antes de ejecutar el .mjs. Fuentes: http://127.0.0.1:54909/anki-forge/es/docs/node-api/index.md, http://127.0.0.1:54909/anki-forge/es/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__llms.txt",
+              "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__docs__node-api__index.md",
+              "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/docs/node-api/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__docs__node-quickstart__index.md",
+              "sha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/docs/node-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/es/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/es/docs/json-to-anki/index.md"
+          ],
+          "answer": "Descargue v1.json, v2.json, cell.png y tone.wav en recipe/ y use uno de los programas completos en Rust, Python o Node. El programa analiza JSON y conserva el namespace biology-json y los tres identificadores de negocio. Cada versión contiene tres notas/tarjetas y dos medios; v2 cambia la primera respuesta. Conserve el v1.apkg distribuido originalmente como base inmutable y escriba v2 en otra ruta: una reexportación desde Anki no sirve como sustituto. Revise comparison.json/review.json: se espera RISK.NOTE_CHANGED, sin notas añadidas o eliminadas, y aprobación de la política antes de publicar ese mismo candidato preparado. Omitir notas no elimina datos del alumno; el comportamiento de importación e historial depende del cliente. Fuentes: http://127.0.0.1:54909/anki-forge/es/docs/json-to-anki/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__llms.txt",
+              "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__docs__json-to-anki__index.md",
+              "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/docs/json-to-anki/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/es/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/es/docs/compatibility/index.md",
+            "http://127.0.0.1:54909/anki-forge/es/docs/build-guarantees/index.md"
+          ],
+          "answer": "La tabla registra 0.3.1 comprobado el 2026-10-13: Rust 1.92, Node 22.13+ con comprobaciones en 22/24/26 y CPython normal 3.11–3.14. Hay paquetes nativos para macOS arm64/x64, Linux x64 GNU/glibc y Windows x64; disponer de paquete no demuestra pruebas en todos los hosts. Otras implementaciones de Python, free-threaded/subintérpretes y Node en navegador/Electron/Bun/musl/ARM64 Linux o Windows necesitan validación aparte. La importación, el renderizado y la reproducción dependen de Anki, sus ajustes y los códecs. Conserve la base APKG original. La sustitución atómica es por archivo y no incluye un informe JSON separado; un error tardío puede ocurrir después de publicar, por lo que hay que revisar stage y durability antes de reintentar. Fuentes: http://127.0.0.1:54909/anki-forge/es/docs/compatibility/index.md, http://127.0.0.1:54909/anki-forge/es/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__llms.txt",
+              "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__docs__compatibility__index.md",
+              "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__es__docs__build-guarantees__index.md",
+              "sha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/es/docs/build-guarantees/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "pt-BR": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/pt-br/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/pt-br/docs/python-quickstart/index.md",
+            "http://127.0.0.1:54909/anki-forge/pt-br/docs/compatibility/index.md"
+          ],
+          "answer": "O início rápido documenta 0.3.1 com CPython comum 3.11+ e uma wheel nativa compatível; as verificações registradas cobrem 3.11–3.14. Execute python -m venv .venv, ative com . .venv/bin/activate (no PowerShell: .venv\\Scripts\\Activate.ps1) e instale com python -m pip install ankiforge==0.3.1. Salve o exemplo completo como main.py e execute python main.py. O namespace spanish e a chave es:hola produzem spanish.apkg persistente, com o cartão Basic hola → hello no baralho Spanish. Preserve esses identificadores nas atualizações. Exportar dispensa Anki; a importação deve ser conferida separadamente no cliente. Fontes: http://127.0.0.1:54909/anki-forge/pt-br/docs/python-quickstart/index.md, http://127.0.0.1:54909/anki-forge/pt-br/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__llms.txt",
+              "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__docs__python-quickstart__index.md",
+              "sha256": "75d3a00cc4fabc9a1537a65b1d692f9cd06becd28687d45ee456df9cccfba68c",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/docs/python-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__docs__compatibility__index.md",
+              "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/pt-br/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/pt-br/docs/node-api/index.md",
+            "http://127.0.0.1:54909/anki-forge/pt-br/docs/node-quickstart/index.md"
+          ],
+          "answer": "Use Node 22.13+ e npm install --include=optional ankiforge@0.3.1 para instalar a dependência nativa correta. Crie Project(namespace), adicione notas com chaves estáveis e aguarde project.build(BuildOptions.to(path)). BuildOutput mantém o artefato e fornece relatório/snapshot; BuildReport reúne observações, sem manter o arquivo nem definir sozinho o resultado da operação. Mantenha um proprietário enquanto usa um caminho temporário: fechar o último exclui o arquivo, enquanto o persistente permanece. build/compare capturam o projeto no momento da chamada. Toda tentativa de publicação preparada consome o proprietário, inclusive rejeições por política ou E/S; uma nova tentativa exige nova preparação. Compile TypeScript com o NodeNext documentado e execute o .mjs gerado. Fontes: http://127.0.0.1:54909/anki-forge/pt-br/docs/node-api/index.md, http://127.0.0.1:54909/anki-forge/pt-br/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__llms.txt",
+              "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__docs__node-api__index.md",
+              "sha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/docs/node-api/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__docs__node-quickstart__index.md",
+              "sha256": "8c2f21a3473fd252ae669f45fd68ef0442fafb54c0e56f51e02ac91b8e06510f",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/docs/node-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/pt-br/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/pt-br/docs/json-to-anki/index.md"
+          ],
+          "answer": "Baixe v1.json, v2.json, cell.png e tone.wav para recipe/ e use um dos programas completos em Rust, Python ou Node. O programa interpreta o JSON e mantém o namespace biology-json e os três IDs de negócio. Cada versão tem três notas/cartões e duas mídias; v2 muda a primeira resposta. Guarde o v1.apkg originalmente distribuído como base imutável e publique v2 em outro caminho; um arquivo reexportado pelo Anki não é uma base equivalente. Confira comparison.json/review.json: espera-se RISK.NOTE_CHANGED, sem notas adicionadas ou removidas, e autorização da política antes de publicar o mesmo candidato preparado. Omitir notas não sincroniza exclusões; importação e histórico de revisão ainda exigem validação no cliente. Fontes: http://127.0.0.1:54909/anki-forge/pt-br/docs/json-to-anki/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__llms.txt",
+              "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__docs__json-to-anki__index.md",
+              "sha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/docs/json-to-anki/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/pt-br/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/pt-br/docs/compatibility/index.md",
+            "http://127.0.0.1:54909/anki-forge/pt-br/docs/build-guarantees/index.md"
+          ],
+          "answer": "A página registra 0.3.1 verificado em 2026-10-13: Rust 1.92, Node 22.13+ com verificações em 22/24/26 e CPython comum 3.11–3.14. Os pacotes nativos cobrem macOS arm64/x64, Linux x64 GNU/glibc e Windows x64; disponibilidade não comprova execução em todos os hosts. Outras implementações de Python, free-threaded/subinterpretadores e Node em navegador/Electron/Bun/musl/ARM64 Linux ou Windows precisam de validação própria. Importação, renderização e reprodução dependem do Anki, das configurações e dos codecs. Preserve a base APKG original. A substituição atômica vale por arquivo, sem incluir um relatório JSON separado; falhas tardias podem ocorrer depois da publicação. Confira stage e durability antes de tentar novamente. Fontes: http://127.0.0.1:54909/anki-forge/pt-br/docs/compatibility/index.md, http://127.0.0.1:54909/anki-forge/pt-br/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__llms.txt",
+              "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__docs__compatibility__index.md",
+              "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__pt-br__docs__build-guarantees__index.md",
+              "sha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/pt-br/docs/build-guarantees/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "ja": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/ja/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/ja/docs/python-quickstart/index.md",
+            "http://127.0.0.1:54909/anki-forge/ja/docs/compatibility/index.md"
+          ],
+          "answer": "クイックスタートの対象は 0.3.1、通常の CPython 3.11 以降と対応するネイティブ wheel です。記録された検証は 3.11〜3.14 を対象にしています。python -m venv .venv で環境を作り、. .venv/bin/activate（PowerShell では .venv\\Scripts\\Activate.ps1）で有効化して、python -m pip install ankiforge==0.3.1 を実行します。完全な例を main.py に保存し python main.py で実行すると、namespace spanish とキー es:hola により、Spanish デッキの hola → hello Basic カードを含む永続的な spanish.apkg が生成されます。更新時も識別子を維持してください。エクスポート自体に Anki は不要で、インポート確認は別途必要です。 参照: http://127.0.0.1:54909/anki-forge/ja/docs/python-quickstart/index.md, http://127.0.0.1:54909/anki-forge/ja/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__llms.txt",
+              "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__docs__python-quickstart__index.md",
+              "sha256": "46cf182f9dc3ece8c209bfc32bf65a46882105374b055df39b0b587711ece0c4",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/docs/python-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__docs__compatibility__index.md",
+              "sha256": "309088006af4caa693e6fb8b92eb6ccb085a6a8ede3279ddffe19e189110beee",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/ja/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/ja/docs/node-api/index.md",
+            "http://127.0.0.1:54909/anki-forge/ja/docs/node-quickstart/index.md"
+          ],
+          "answer": "Node 22.13 以降を使い、npm install --include=optional ankiforge@0.3.1 で対応するネイティブ依存関係も導入します。Project(namespace) に安定したキーでノートを追加し、project.build(BuildOptions.to(path)) を await します。BuildOutput は成果物を所有しレポートとスナップショットを提供しますが、BuildReport は観測情報だけで、ファイルを保持せず操作結果そのものでもありません。一時パスの使用中は所有者を保持し、最後の所有者を閉じると一時ファイルは削除されます。永続ファイルは残ります。build/compare は呼び出し時の状態を固定します。準備済み公開はポリシー拒否や I/O 失敗でも試行ごとに所有者を消費するため、再試行には再準備が必要です。TypeScript は文書の NodeNext 設定でコンパイルし、生成した .mjs を実行します。 参照: http://127.0.0.1:54909/anki-forge/ja/docs/node-api/index.md, http://127.0.0.1:54909/anki-forge/ja/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__llms.txt",
+              "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__docs__node-api__index.md",
+              "sha256": "f9c259ce5d0a1bf34e736d0d755d290464f2cede2fd6638946fa61d69fd6479b",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/docs/node-api/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__docs__node-quickstart__index.md",
+              "sha256": "9fdebe1ec79bd7edc441096c0792e527f16e2a6e189b4cf3fcd9ec377926205c",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/docs/node-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/ja/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/ja/docs/json-to-anki/index.md"
+          ],
+          "answer": "v1.json、v2.json、cell.png、tone.wav を recipe/ に置き、Rust・Python・Node のいずれかの完全な例で JSON を読み込みます。namespace biology-json と3個の業務キーを維持し、各版は3ノート・3カード・2メディア、v2 は最初の回答を変更します。最初に配布した v1.apkg を変更しない比較基準として保存し、v2 は別の出力パスへ公開します。Anki からの再エクスポートで代用できません。comparison.json/review.json の想定結果は RISK.NOTE_CHANGED で、追加・削除ノートはなく、ポリシーが許可した同じ準備済み候補を公開します。ノートの省略は利用者のコレクションからの削除ではなく、更新や復習履歴の挙動は対象クライアントでの検証が必要です。 参照: http://127.0.0.1:54909/anki-forge/ja/docs/json-to-anki/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__llms.txt",
+              "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__docs__json-to-anki__index.md",
+              "sha256": "474a8dd1ed55ff3a415dff3e58950c46fa29470f7fdf48d902c935a863d97d74",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/docs/json-to-anki/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/ja/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/ja/docs/compatibility/index.md",
+            "http://127.0.0.1:54909/anki-forge/ja/docs/build-guarantees/index.md"
+          ],
+          "answer": "記載は 2026-10-13 に確認された 0.3.1 の検証記録です。Rust 1.92、Node 22.13 以降（22/24/26 で確認）、通常の CPython 3.11〜3.14 を扱います。ネイティブパッケージは macOS arm64/x64、Linux x64 GNU/glibc、Windows x64 向けですが、存在するだけですべてのホストを検証済みとはいえません。他の Python 実装、free-threaded・サブインタープリター、ブラウザー・Electron・Bun・musl・ARM64 Linux/Windows の Node は別途検証が必要です。Anki のインポート・描画・再生はクライアントや設定・コーデックに依存します。元の APKG を保持してください。原子的な置換はファイル単位で、別の JSON レポートとの一括トランザクションではありません。公開後の遅い失敗もあるため、再試行前に stage と durability を確認します。 参照: http://127.0.0.1:54909/anki-forge/ja/docs/compatibility/index.md, http://127.0.0.1:54909/anki-forge/ja/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__llms.txt",
+              "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__docs__compatibility__index.md",
+              "sha256": "309088006af4caa693e6fb8b92eb6ccb085a6a8ede3279ddffe19e189110beee",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__ja__docs__build-guarantees__index.md",
+              "sha256": "f1bffb4ba69bec9584fb4f5d57103b4105b264524752a984182668cd2045e255",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/ja/docs/build-guarantees/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "de": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/de/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/de/docs/python-quickstart/index.md",
+            "http://127.0.0.1:54909/anki-forge/de/docs/compatibility/index.md"
+          ],
+          "answer": "Der Schnellstart beschreibt 0.3.1 mit regulärem CPython ab 3.11 und passendem nativen Wheel; dokumentierte Prüfungen decken 3.11–3.14 ab. Erstellen Sie die Umgebung mit python -m venv .venv, aktivieren Sie sie mit . .venv/bin/activate (PowerShell: .venv\\Scripts\\Activate.ps1) und installieren Sie python -m pip install ankiforge==0.3.1. Speichern Sie das vollständige Beispiel als main.py und führen Sie python main.py aus. Namespace spanish und Notizschlüssel es:hola erzeugen die persistente spanish.apkg mit einer Basic-Karte hola → hello im Stapel Spanish. Behalten Sie beide Kennungen bei Aktualisierungen bei. Der Export benötigt kein Anki; den Import prüfen Sie separat im Client. Quellen: http://127.0.0.1:54909/anki-forge/de/docs/python-quickstart/index.md, http://127.0.0.1:54909/anki-forge/de/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__llms.txt",
+              "sha256": "8c18df6e583f8239c933715fd8193e410b68ff8d32d8e70fc8a7fc4af0ba3210",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__docs__python-quickstart__index.md",
+              "sha256": "e4484200649722bee10f98a4bcddc595eabb2883a71412ddc7e1bcff1f983fe0",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/docs/python-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__docs__compatibility__index.md",
+              "sha256": "807f090e9d53cd8536b8df037e7f3dbf9e64c3526fca85445509ff9855af67e6",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/de/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/de/docs/node-api/index.md",
+            "http://127.0.0.1:54909/anki-forge/de/docs/node-quickstart/index.md"
+          ],
+          "answer": "Verwenden Sie Node ab 22.13 und npm install --include=optional ankiforge@0.3.1, damit die passende native Abhängigkeit installiert wird. Erzeugen Sie Project(namespace), fügen Sie Notizen mit stabilen Schlüsseln hinzu und warten Sie auf project.build(BuildOptions.to(path)). BuildOutput hält das Artefakt und bietet Bericht/Snapshot; BuildReport enthält Beobachtungen, hält keine Datei und ist allein kein Operationsergebnis. Solange Sie einen temporären Pfad verwenden, muss ein Besitzer bestehen: Das Schließen des letzten löscht die temporäre Datei; persistente Dateien bleiben erhalten. build/compare erfassen den Projektzustand beim Aufruf. Jeder vorbereitete Veröffentlichungsversuch verbraucht den Besitzer, auch bei Richtlinien- oder E/A-Fehlern; ein weiterer Versuch benötigt neue Vorbereitung. TypeScript wird mit der beschriebenen NodeNext-Konfiguration kompiliert, anschließend läuft die erzeugte .mjs. Quellen: http://127.0.0.1:54909/anki-forge/de/docs/node-api/index.md, http://127.0.0.1:54909/anki-forge/de/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__llms.txt",
+              "sha256": "8c18df6e583f8239c933715fd8193e410b68ff8d32d8e70fc8a7fc4af0ba3210",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__docs__node-api__index.md",
+              "sha256": "dfa8cd51865871b0061784cabb66ece639d7fa9c82c56e19fad417667965d40e",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/docs/node-api/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__docs__node-quickstart__index.md",
+              "sha256": "01461a686c3bf1095f37417e9508e8d08e3dd4f9efcd2c1b93ab9377b398f37b",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/docs/node-quickstart/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/de/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/de/docs/json-to-anki/index.md"
+          ],
+          "answer": "Laden Sie v1.json, v2.json, cell.png und tone.wav nach recipe/ und verwenden Sie eines der vollständigen Rust-, Python- oder Node-Programme. Das Programm liest JSON ein und behält Namespace biology-json sowie die drei fachlichen Notiz-IDs bei. Jede Version enthält drei Notizen/Karten und zwei Medien; v2 ändert die erste Antwort. Bewahren Sie die ursprünglich verteilte v1.apkg als unveränderte Vergleichsbasis auf und wählen Sie für v2 einen anderen Pfad. Ein Anki-Reexport ist kein geeigneter Ersatz. Prüfen Sie comparison.json/review.json: Erwartet wird RISK.NOTE_CHANGED ohne hinzugefügte oder entfernte Notizen; erst nach Richtlinienfreigabe wird derselbe vorbereitete Kandidat veröffentlicht. Weggelassene Notizen löschen keine Nutzerdaten; Aktualisierungen und Wiederholungsverlauf müssen im Zielclient geprüft werden. Quellen: http://127.0.0.1:54909/anki-forge/de/docs/json-to-anki/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__llms.txt",
+              "sha256": "8c18df6e583f8239c933715fd8193e410b68ff8d32d8e70fc8a7fc4af0ba3210",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__docs__json-to-anki__index.md",
+              "sha256": "1a89e59c2fe15eff7da2d3d996398342ead4166e29ed7e325dff064524ca23de",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/docs/json-to-anki/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:54909/anki-forge/de/llms.txt",
+            "http://127.0.0.1:54909/anki-forge/de/docs/compatibility/index.md",
+            "http://127.0.0.1:54909/anki-forge/de/docs/build-guarantees/index.md"
+          ],
+          "answer": "Die Seite dokumentiert 0.3.1 zum Prüfstand 2026-10-13: Rust 1.92, Node ab 22.13 mit Prüfungen unter 22/24/26 und reguläres CPython 3.11–3.14. Native Pakete gibt es für macOS arm64/x64, Linux x64 GNU/glibc und Windows x64; Verfügbarkeit belegt nicht die Ausführung auf jedem Host. Andere Python-Implementierungen, free-threaded/Subinterpreter sowie Node in Browsern/Electron/Bun/musl/ARM64 Linux oder Windows erfordern eigene Prüfung. Anki-Import, Darstellung und Wiedergabe hängen von Client, Einstellungen und Codecs ab. Behalten Sie die originale APKG als Basis. Atomarer Austausch gilt je Datei, nicht gemeinsam mit einem separaten JSON-Bericht. Ein später Fehler kann nach der Veröffentlichung auftreten; prüfen Sie stage und durability vor einem erneuten Versuch. Quellen: http://127.0.0.1:54909/anki-forge/de/docs/compatibility/index.md, http://127.0.0.1:54909/anki-forge/de/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/observations.json",
+              "sha256": "c6be8a77d991afdcc2913f53b2e2855a780e95e0933dfa766f5c536547ea6746",
+              "description": "Actual loopback HTTP responses and saved body bytes from this frozen archive; complete 192-resource inventory and exact same-configuration historical-byte comparison. Capture alone does not assert semantic approval."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-task-conclusions.json",
+              "sha256": "79067ba8aa6e8fc4992e52461dcb4dcc760f71ad334df816a6f7d2a7a7f653f4",
+              "description": "Fresh independent task answers, exact passage reading scope, root/prefix semantic-review reuse method and isolated-candidate limitation."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-dual-configuration-comparison.json",
+              "sha256": "4c83e85ebb071493185ea20909d71c3e1bef507848cd2b2423bec4f440f577f2",
+              "description": "All 192 current root/prefix machine resources compared after only exact configured origin/base substitution; no other prose/code/whitespace normalization."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__llms.txt",
+              "sha256": "8c18df6e583f8239c933715fd8193e410b68ff8d32d8e70fc8a7fc4af0ba3210",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/llms.txt; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__docs__compatibility__index.md",
+              "sha256": "807f090e9d53cd8536b8df037e7f3dbf9e64c3526fca85445509ff9855af67e6",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/docs/compatibility/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            },
+            {
+              "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-prefix/bodies/anki-forge__de__docs__build-guarantees__index.md",
+              "sha256": "9ea30a53e973ca00be3884e7b2a731316b1030c54c58e7285f890f8319e1379f",
+              "description": "Actual UTF-8 HTTP 200 response from http://127.0.0.1:54909/anki-forge/de/docs/build-guarantees/index.md; digest equals the current archive manifest. Task passage reading scope is recorded in machine-task-conclusions.json."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    }
+  },
+  "openIssues": [],
+  "scope": "Only the isolated 6d4625639fc1477222b41880d29724c162baa3be plus seven multilingual review-fix implementation inputs and this batch of source/post-build review records. Concurrent edits in the original shared workspace are excluded. This is an undeployed release candidate.",
+  "method": "Fresh answers authored after reading current captured prefix task passages in all six locales. All current root llms task links and primary Markdown headers/canonical URLs/language declarations were separately read; all 192 root/prefix machine bodies were independently compared with only the exact configured origin/base replaced. Root answers reuse this current prefix semantic reading under that proven byte equivalence, not an alleged second complete prose reading. Historical same-configuration machine bytes were also compared, but old answers were not copied. HTTP capture is distinct from semantic review: 60 bodies/configuration were fetched, 192 files/configuration were integrity-checked, and semantic reading is limited to the stated task passages. No SDK commands were executed by this machine-read review, and no production hosting behavior is asserted. Read actual captured same-locale task passages; commands, requirements, outputs and limits independently assessed for the four tasks. The readUrls record URLs actually fetched during the completed local session; that temporary server has been stopped. Local response MIME does not certify deployed hosting MIME. No cross-locale fallback was used."
+}

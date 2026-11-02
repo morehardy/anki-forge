@@ -79,7 +79,8 @@ infallible; explicit assets and raw HTML are unaffected. The check uses retained
 import MIME, and does not certify playback. Build's independent MIME/extension
 validation still applies. See [the design](../plans/2026-09-28-rust-api-validation-and-errors-design.md) for the complete target/detail table.
 
-## Source API details
+<!-- section: source-api-details -->
+## Batch media and prepared publication
 
 Batch media and prepared publication are included in the public `0.3.1` package.
 

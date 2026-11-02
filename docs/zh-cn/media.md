@@ -102,6 +102,6 @@ Node 使用 `await Media.files(['first.png', 'second.png'])`；Python 使用 `Me
 
 ### 批量行为与预算
 
-Rust 使用 `Media::files(paths)`，Node 使用 `await Media.files(paths)`，Python 使用 `Media.files(paths)`，按输入顺序导入文件，每次调用最多四个工作线程。少于 16 个文件时串行运行。Rust 还提供 `files_with_limits`；Node 和 Python 接受与 `file` 相同的限制。限制按每个资源计算。若某项导入失败，调用会等待已启动的工作完成、释放此批次的快照，并返回输入顺序中的第一个错误。已有媒体所有者继续有效。Python 在导入期间释放 GIL；Node 在事件循环之外执行工作。单文件导入仍立即产生拥有所有权的快照；调用方必须选择批量方法才能获得导入并发。
+Rust 使用 `Media::files(paths)`，Node 使用 `await Media.files(paths)`，Python 使用 `Media.files(paths)`，按输入顺序导入文件，每次调用最多四个工作线程。少于 16 个文件时串行运行。Rust 还提供 `files_with_limits`；Node 和 Python 接受与 `file` 相同的限制。限制按每个资源计算。若某项导入失败，调用会等待已启动的工作完成、释放此批次的快照，并返回输入顺序中的第一个错误。已有媒体所有者继续有效。Python 在导入期间释放 GIL；Node 在事件循环之外执行工作。单文件导入仍立即返回持有媒体数据快照的对象；调用方必须选择批量方法才能获得导入并发。
 
 存活快照共享进程级 **64 MiB** 内存预算。单个大于 1 MiB 的资源仍流式写入临时文件。编码媒体在每次预备处理中共享延迟分配的 **16 MiB** 缓冲池，池满后写入临时存储。这些预算不包含其他工作内存，也不是 RSS 上限；并发构建各自可以拥有编码池。

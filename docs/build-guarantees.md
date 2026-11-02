@@ -79,7 +79,8 @@ Package inspection cannot establish every client-side behavior. Test rendering,
 playback and update imports with the intended Anki versions and settings. See
 [updates](updates.md) for scheduling and schema-change limits.
 
-## Prepared publication from source
+<!-- section: prepared-publication-from-source -->
+## Prepare, review and publish
 
 Prepared publication is included in the public `0.3.1` packages.
 

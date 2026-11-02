@@ -1,0 +1,351 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/spec_review/independent-usage-review-fixes-2026-11-01",
+  "scope": "Independent local usage acceptance of isolated commit 6d4625639fc1477222b41880d29724c162baa3be plus the seven files frozen in implementation-inputs.json. Does not cover concurrent edits in the original workspace or deployment.",
+  "taskReadings": {
+    "en": {
+      "rust-basic": {
+        "headingActuallyRead": "Generate Anki flashcards with Rust",
+        "representativeCurrentTextActuallyRead": "Use Rust 1.92 or later. For another language, choose Node / TypeScript or Python.",
+        "conclusion": "The localized instructions give Rust 1.92+, public ankiforge 0.3.1, complete src/main.rs, cargo run and a persistent spanish.apkg containing hola → hello in Spanish. They distinguish exporting without Anki from opening/importing the resulting package. Namespace spanish and logical key es:hola remain stable. The real clipboard matched the current shared Rust program. The earlier public-package execution is reused after independent current-byte verification; it was not rerun.",
+        "bodySha256": "3b3a14cc9e601de83783c6f5b0628c9d9df9130f01afbbfd1167317181fa6963",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "python-basic": {
+        "headingActuallyRead": "Generate Anki flashcards with Python",
+        "representativeCurrentTextActuallyRead": "On Windows, activate with .venv\\Scripts\\Activate.ps1. Use ordinary CPython 3.11 or later and a matching platform wheel; CPython 3.11–3.14 is covered by recorded release checks; see verified environments.",
+        "conclusion": "The localized instructions create/activate a virtual environment, give the Windows activation path, install public ankiforge==0.3.1, and require ordinary CPython 3.11+ with a matching wheel (recorded checks cover 3.11–3.14). main.py generates persistent spanish.apkg with stable namespace/key. Localized search actually reached this page and the real clipboard matched the current Python program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "adb5779caf1504bd78b9cce7065d688e250d997ea87d094b9635b9ad50176bdd",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "node-basic": {
+        "headingActuallyRead": "Generate Anki flashcards with Node.js",
+        "representativeCurrentTextActuallyRead": "Use Node.js 22.13 or later. In a new application directory:",
+        "conclusion": "The localized page requires Node 22.13+, includes optional native dependencies in the public 0.3.1 installation, saves main.mjs, uses ESM with an explicit CommonJS alternative, and explains that closing the persistent artifact leaves its file. It links the complete TypeScript path in the JSON recipe. Actual sidebar navigation and clipboard matched the shared Node program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "db947080d45a3a405064e250b843c72a269caa8c4347a1d8f508e46f02038d86",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "json-media": {
+        "headingActuallyRead": "Generate and update Anki decks from JSON",
+        "representativeCurrentTextActuallyRead": "Download v1.json, v2.json, cell.png and tone.wav. The image is a cell diagram; the audio is a short generated tone, not spoken vocabulary. In each new application directory, put these four files in recipe/:",
+        "conclusion": "The localized recipe identifies all four files under recipe/, 3 notes/3 cards/2 media, a cell image and generated tone rather than spoken vocabulary; it leaves schema validation to the application. It provides complete public-0.3.1 Rust/Python/TypeScript programs and launch commands. Actual HTTP reads downloaded the four source-identical inputs, and all three complete programs were copied correctly. The prose keeps the original v1 APKG, reviews an answer-only v2 with unchanged stable IDs, checks policy before publishing the prepared candidate, avoids overwriting a previous output directory, and describes Anki import/merge limitations and deletion non-synchronization. Prior three-SDK recipe execution is bound and reused; no new SDK execution or native Anki import was performed.",
+        "bodySha256": "adfa752b3eb456ce2d8fa463eecfa0a93f5d4c60a1b77a6e9923ac2049da2c45",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "original-baseline-update": {
+        "headingActuallyRead": "Update Anki decks with stable note IDs",
+        "representativeCurrentTextActuallyRead": "This writes spanish-v1.apkg and spanish-v2.apkg, compares the changed answer, and checks the updated package counts. The executable source is:",
+        "conclusion": "The localized update page distinguishes persistent namespace/note/model/field/template keys from display names, requires the original distributed APKG identity baseline, and rejects Anki re-export as that baseline. Successful comparison is distinct from publication permission; High/Critical deny by default, category allowances preserve diagnostics, and missing/corrupt/namespace-invalid/oversize identity stays an operation error. The candidate reviewed must be the candidate published, the prior baseline is archived separately, and removal is not deletion synchronization. The complete source example is identified as pinned source 1199196 rather than falsely bundled in public 0.3.1. User edits/history are not guaranteed. Prior answer-only JSON update execution is explicitly reused under unchanged bindings.",
+        "bodySha256": "e801f56f596e94001e6f24569149d43969a080799064d6e953f8e27d03d19c38",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "troubleshooting": {
+        "headingActuallyRead": "Troubleshooting",
+        "representativeCurrentTextActuallyRead": "NOTE.KEY_DUPLICATE\tGive each logical source record one unique key",
+        "conclusion": "The localized page distinguishes structured error kind/code/cause from display text and an operation error from a successful but blocked comparison. NOTE.KEY_DUPLICATE directs a unique key per logical source record. It describes atomic add failure and correction/retry, direct media filename/MIME constraints, the original baseline requirement, retained temporary artifact ownership and persistence errors after publication. The prior duplicate-key/correction execution log was read and byte-verified for reuse; no new runtime correction was executed.",
+        "bodySha256": "70f27c2cfd209a6436afc57e46127974266997d731a144f3430d59b088c97c12",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      }
+    },
+    "zh-CN": {
+      "rust-basic": {
+        "headingActuallyRead": "用 Rust 生成 Anki 卡片",
+        "representativeCurrentTextActuallyRead": "使用 Rust 1.92 或更高版本。其他语言可选择 Node / TypeScript 或 Python。",
+        "conclusion": "The localized instructions give Rust 1.92+, public ankiforge 0.3.1, complete src/main.rs, cargo run and a persistent spanish.apkg containing hola → hello in Spanish. They distinguish exporting without Anki from opening/importing the resulting package. Namespace spanish and logical key es:hola remain stable. The real clipboard matched the current shared Rust program. The earlier public-package execution is reused after independent current-byte verification; it was not rerun.",
+        "bodySha256": "c08ba6c67d6b1a1d26f10d3c1e891cfe516812c99b5030c2238a0b5d34d5fc48",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "python-basic": {
+        "headingActuallyRead": "用 Python 生成 Anki 卡片",
+        "representativeCurrentTextActuallyRead": "Windows 使用 .venv\\Scripts\\Activate.ps1 激活。使用普通 CPython 3.11 或更高版本及匹配的平台 wheel；已有发布检查覆盖 CPython 3.11–3.14，参见已验证环境。",
+        "conclusion": "The localized instructions create/activate a virtual environment, give the Windows activation path, install public ankiforge==0.3.1, and require ordinary CPython 3.11+ with a matching wheel (recorded checks cover 3.11–3.14). main.py generates persistent spanish.apkg with stable namespace/key. Localized search actually reached this page and the real clipboard matched the current Python program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "80f937e54c925c7451785c87ca9373a67c4836649cb71c779cb31cb4ade0f74a",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "node-basic": {
+        "headingActuallyRead": "用 Node.js 生成 Anki 卡片",
+        "representativeCurrentTextActuallyRead": "使用 Node.js 22.13 或更高版本。在新的应用目录中运行：",
+        "conclusion": "The localized page requires Node 22.13+, includes optional native dependencies in the public 0.3.1 installation, saves main.mjs, uses ESM with an explicit CommonJS alternative, and explains that closing the persistent artifact leaves its file. It links the complete TypeScript path in the JSON recipe. Actual sidebar navigation and clipboard matched the shared Node program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "83d73ff2261d04502322fe903d924e5d37aacb566b71ab0b1af1b1547f5c7da5",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "json-media": {
+        "headingActuallyRead": "用 JSON 数据生成并更新 Anki 牌组",
+        "representativeCurrentTextActuallyRead": "下载 v1.json、v2.json、cell.png 和 tone.wav。图片是细胞示意图；音频是短合成音，并非词汇朗读。在每个新应用目录中，将这四个文件放入 recipe/：",
+        "conclusion": "The localized recipe identifies all four files under recipe/, 3 notes/3 cards/2 media, a cell image and generated tone rather than spoken vocabulary; it leaves schema validation to the application. It provides complete public-0.3.1 Rust/Python/TypeScript programs and launch commands. Actual HTTP reads downloaded the four source-identical inputs, and all three complete programs were copied correctly. The prose keeps the original v1 APKG, reviews an answer-only v2 with unchanged stable IDs, checks policy before publishing the prepared candidate, avoids overwriting a previous output directory, and describes Anki import/merge limitations and deletion non-synchronization. Prior three-SDK recipe execution is bound and reused; no new SDK execution or native Anki import was performed.",
+        "bodySha256": "125df62d278039e284e2de5438d95568fc1735cb41cc008d087badeab670d063",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "original-baseline-update": {
+        "headingActuallyRead": "用稳定笔记 ID 更新 Anki 牌组",
+        "representativeCurrentTextActuallyRead": "这会写出 spanish-v1.apkg 和 spanish-v2.apkg，比较修改后的答案，并检查更新包的数量。可执行源码如下：",
+        "conclusion": "The localized update page distinguishes persistent namespace/note/model/field/template keys from display names, requires the original distributed APKG identity baseline, and rejects Anki re-export as that baseline. Successful comparison is distinct from publication permission; High/Critical deny by default, category allowances preserve diagnostics, and missing/corrupt/namespace-invalid/oversize identity stays an operation error. The candidate reviewed must be the candidate published, the prior baseline is archived separately, and removal is not deletion synchronization. The complete source example is identified as pinned source 1199196 rather than falsely bundled in public 0.3.1. User edits/history are not guaranteed. Prior answer-only JSON update execution is explicitly reused under unchanged bindings.",
+        "bodySha256": "a1f10196b9bd975354348dcfcc3e726fef2d4c4c91529b2d814bed539e2cc651",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "troubleshooting": {
+        "headingActuallyRead": "排查问题",
+        "representativeCurrentTextActuallyRead": "NOTE.KEY_DUPLICATE\t每条逻辑源记录使用唯一键",
+        "conclusion": "The localized page distinguishes structured error kind/code/cause from display text and an operation error from a successful but blocked comparison. NOTE.KEY_DUPLICATE directs a unique key per logical source record. It describes atomic add failure and correction/retry, direct media filename/MIME constraints, the original baseline requirement, retained temporary artifact ownership and persistence errors after publication. The prior duplicate-key/correction execution log was read and byte-verified for reuse; no new runtime correction was executed.",
+        "bodySha256": "25db822cfbe3696a9f04d062ea835d18959e93a8889c25696d61845f00d858d8",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      }
+    },
+    "es": {
+      "rust-basic": {
+        "headingActuallyRead": "Genera un APKG de Anki con Rust",
+        "representativeCurrentTextActuallyRead": "Usa Rust 1.92 o posterior. Si prefieres otro lenguaje, elige Node / TypeScript o Python.",
+        "conclusion": "The localized instructions give Rust 1.92+, public ankiforge 0.3.1, complete src/main.rs, cargo run and a persistent spanish.apkg containing hola → hello in Spanish. They distinguish exporting without Anki from opening/importing the resulting package. Namespace spanish and logical key es:hola remain stable. The real clipboard matched the current shared Rust program. The earlier public-package execution is reused after independent current-byte verification; it was not rerun.",
+        "bodySha256": "de4898db4354f00d48de524e11396c035e14ee1bceb3fd40cc478552b5f3c512",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "python-basic": {
+        "headingActuallyRead": "Genera un APKG de Anki con Python",
+        "representativeCurrentTextActuallyRead": "En Windows, actívalo con .venv\\Scripts\\Activate.ps1. Usa CPython estándar 3.11 o posterior y un wheel que corresponda a tu plataforma; las comprobaciones de publicación registradas cubren CPython 3.11–3.14. Consulta los entornos verificados.",
+        "conclusion": "The localized instructions create/activate a virtual environment, give the Windows activation path, install public ankiforge==0.3.1, and require ordinary CPython 3.11+ with a matching wheel (recorded checks cover 3.11–3.14). main.py generates persistent spanish.apkg with stable namespace/key. Localized search actually reached this page and the real clipboard matched the current Python program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "34b9a2626713e99794e489306ed68053d43e576d8a2e636568762cf35f73c286",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "node-basic": {
+        "headingActuallyRead": "Genera un APKG de Anki con Node.js",
+        "representativeCurrentTextActuallyRead": "Usa Node.js 22.13 o posterior. En un directorio nuevo de aplicación:",
+        "conclusion": "The localized page requires Node 22.13+, includes optional native dependencies in the public 0.3.1 installation, saves main.mjs, uses ESM with an explicit CommonJS alternative, and explains that closing the persistent artifact leaves its file. It links the complete TypeScript path in the JSON recipe. Actual sidebar navigation and clipboard matched the shared Node program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "517a786934356db6ddba77e657fa5f6da1ebed9f2e5a11e3a8e6ccc8dd62c367",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "json-media": {
+        "headingActuallyRead": "Genera y actualiza mazos de Anki desde JSON",
+        "representativeCurrentTextActuallyRead": "Descarga v1.json, v2.json, cell.png y tone.wav. La imagen es un diagrama de una célula; el audio es un tono breve generado, no una palabra pronunciada. En cada directorio nuevo de aplicación, coloca estos cuatro archivos en recipe/:",
+        "conclusion": "The localized recipe identifies all four files under recipe/, 3 notes/3 cards/2 media, a cell image and generated tone rather than spoken vocabulary; it leaves schema validation to the application. It provides complete public-0.3.1 Rust/Python/TypeScript programs and launch commands. Actual HTTP reads downloaded the four source-identical inputs, and all three complete programs were copied correctly. The prose keeps the original v1 APKG, reviews an answer-only v2 with unchanged stable IDs, checks policy before publishing the prepared candidate, avoids overwriting a previous output directory, and describes Anki import/merge limitations and deletion non-synchronization. Prior three-SDK recipe execution is bound and reused; no new SDK execution or native Anki import was performed.",
+        "bodySha256": "65f785769e490464b3bd0adc422e86ec1dcf1dcb344ce5dd422a14b32ac0201b",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "original-baseline-update": {
+        "headingActuallyRead": "Actualiza mazos de Anki con ID de nota estables",
+        "representativeCurrentTextActuallyRead": "Este comando escribe spanish-v1.apkg y spanish-v2.apkg, compara la respuesta modificada y comprueba los recuentos del paquete actualizado. El código ejecutable es:",
+        "conclusion": "The localized update page distinguishes persistent namespace/note/model/field/template keys from display names, requires the original distributed APKG identity baseline, and rejects Anki re-export as that baseline. Successful comparison is distinct from publication permission; High/Critical deny by default, category allowances preserve diagnostics, and missing/corrupt/namespace-invalid/oversize identity stays an operation error. The candidate reviewed must be the candidate published, the prior baseline is archived separately, and removal is not deletion synchronization. The complete source example is identified as pinned source 1199196 rather than falsely bundled in public 0.3.1. User edits/history are not guaranteed. Prior answer-only JSON update execution is explicitly reused under unchanged bindings.",
+        "bodySha256": "f7d5cfecb41323e45656a026f9f69975c1f9c5e618931cf5643b5e9953a6dad0",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "troubleshooting": {
+        "headingActuallyRead": "Soluciona errores de Anki Forge",
+        "representativeCurrentTextActuallyRead": "NOTE.KEY_DUPLICATE\tAsigna una clave única a cada registro lógico de origen",
+        "conclusion": "The localized page distinguishes structured error kind/code/cause from display text and an operation error from a successful but blocked comparison. NOTE.KEY_DUPLICATE directs a unique key per logical source record. It describes atomic add failure and correction/retry, direct media filename/MIME constraints, the original baseline requirement, retained temporary artifact ownership and persistence errors after publication. The prior duplicate-key/correction execution log was read and byte-verified for reuse; no new runtime correction was executed.",
+        "bodySha256": "4379aacbd73ab0929c0fa8b805297131de6fbbcb8f288d85ba86665694512015",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      }
+    },
+    "pt-BR": {
+      "rust-basic": {
+        "headingActuallyRead": "Gere cartões do Anki com Rust",
+        "representativeCurrentTextActuallyRead": "Use Rust 1.92 ou posterior. Se preferir outra linguagem, escolha Node / TypeScript ou Python.",
+        "conclusion": "The localized instructions give Rust 1.92+, public ankiforge 0.3.1, complete src/main.rs, cargo run and a persistent spanish.apkg containing hola → hello in Spanish. They distinguish exporting without Anki from opening/importing the resulting package. Namespace spanish and logical key es:hola remain stable. The real clipboard matched the current shared Rust program. The earlier public-package execution is reused after independent current-byte verification; it was not rerun.",
+        "bodySha256": "32cbb2e1ad17b550498293324112e83cf2005f6f52ad5d6ddc4e4bb8f2bb3868",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "python-basic": {
+        "headingActuallyRead": "Gere cartões do Anki com Python",
+        "representativeCurrentTextActuallyRead": "No Windows, ative o ambiente com .venv\\Scripts\\Activate.ps1. Use CPython convencional 3.11 ou posterior e um wheel correspondente à plataforma; as verificações registradas de lançamento abrangem CPython 3.11–3.14. Consulte os ambientes verificados.",
+        "conclusion": "The localized instructions create/activate a virtual environment, give the Windows activation path, install public ankiforge==0.3.1, and require ordinary CPython 3.11+ with a matching wheel (recorded checks cover 3.11–3.14). main.py generates persistent spanish.apkg with stable namespace/key. Localized search actually reached this page and the real clipboard matched the current Python program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "954d5194fa799546cd743670388e06cce5c53bc0f96947370c11a27b47006bb1",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "node-basic": {
+        "headingActuallyRead": "Gere cartões do Anki com Node.js",
+        "representativeCurrentTextActuallyRead": "Use Node.js 22.13 ou posterior. Em um novo diretório de aplicação:",
+        "conclusion": "The localized page requires Node 22.13+, includes optional native dependencies in the public 0.3.1 installation, saves main.mjs, uses ESM with an explicit CommonJS alternative, and explains that closing the persistent artifact leaves its file. It links the complete TypeScript path in the JSON recipe. Actual sidebar navigation and clipboard matched the shared Node program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "4139906ab1031435085cd9427b44d5840e79128fa1ce252b5f4e661802865bbd",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "json-media": {
+        "headingActuallyRead": "Gere e atualize baralhos do Anki a partir de JSON",
+        "representativeCurrentTextActuallyRead": "Baixe v1.json, v2.json, cell.png e tone.wav. A imagem é um diagrama de célula; o áudio é um tom curto gerado, não uma gravação de vocabulário falado. Em cada novo diretório de aplicação, coloque os quatro arquivos em recipe/:",
+        "conclusion": "The localized recipe identifies all four files under recipe/, 3 notes/3 cards/2 media, a cell image and generated tone rather than spoken vocabulary; it leaves schema validation to the application. It provides complete public-0.3.1 Rust/Python/TypeScript programs and launch commands. Actual HTTP reads downloaded the four source-identical inputs, and all three complete programs were copied correctly. The prose keeps the original v1 APKG, reviews an answer-only v2 with unchanged stable IDs, checks policy before publishing the prepared candidate, avoids overwriting a previous output directory, and describes Anki import/merge limitations and deletion non-synchronization. Prior three-SDK recipe execution is bound and reused; no new SDK execution or native Anki import was performed.",
+        "bodySha256": "c987fe41bd168bed530a3ef0916407b237f1d24dceb5dc34b11580cbcdaafa97",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "original-baseline-update": {
+        "headingActuallyRead": "Atualize baralhos do Anki com IDs de nota estáveis",
+        "representativeCurrentTextActuallyRead": "O comando grava spanish-v1.apkg e spanish-v2.apkg, compara a resposta alterada e verifica as contagens do pacote atualizado. O código executável é:",
+        "conclusion": "The localized update page distinguishes persistent namespace/note/model/field/template keys from display names, requires the original distributed APKG identity baseline, and rejects Anki re-export as that baseline. Successful comparison is distinct from publication permission; High/Critical deny by default, category allowances preserve diagnostics, and missing/corrupt/namespace-invalid/oversize identity stays an operation error. The candidate reviewed must be the candidate published, the prior baseline is archived separately, and removal is not deletion synchronization. The complete source example is identified as pinned source 1199196 rather than falsely bundled in public 0.3.1. User edits/history are not guaranteed. Prior answer-only JSON update execution is explicitly reused under unchanged bindings.",
+        "bodySha256": "ac3d2aa60d980d8627a3c878b8fb688c44b2f73f1e6fbc9d0b96b0cc226eac47",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "troubleshooting": {
+        "headingActuallyRead": "Solução de problemas",
+        "representativeCurrentTextActuallyRead": "NOTE.KEY_DUPLICATE\tAtribua uma chave única a cada registro lógico de origem",
+        "conclusion": "The localized page distinguishes structured error kind/code/cause from display text and an operation error from a successful but blocked comparison. NOTE.KEY_DUPLICATE directs a unique key per logical source record. It describes atomic add failure and correction/retry, direct media filename/MIME constraints, the original baseline requirement, retained temporary artifact ownership and persistence errors after publication. The prior duplicate-key/correction execution log was read and byte-verified for reuse; no new runtime correction was executed.",
+        "bodySha256": "4f999a6ab1864d0e64903838047ab4bd7dfb61283f470c3b63de8cca6009c5a1",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      }
+    },
+    "ja": {
+      "rust-basic": {
+        "headingActuallyRead": "Rust で Anki カードを生成する",
+        "representativeCurrentTextActuallyRead": "Rust 1.92 以降を使用します。別のプログラミング言語を使う場合は、Node／TypeScript または Pythonを選んでください。",
+        "conclusion": "The localized instructions give Rust 1.92+, public ankiforge 0.3.1, complete src/main.rs, cargo run and a persistent spanish.apkg containing hola → hello in Spanish. They distinguish exporting without Anki from opening/importing the resulting package. Namespace spanish and logical key es:hola remain stable. The real clipboard matched the current shared Rust program. The earlier public-package execution is reused after independent current-byte verification; it was not rerun.",
+        "bodySha256": "5852674d8f1ef383cbb752f4f93bad6790d8ca83663a65bbe6151c59bb4885b2",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "python-basic": {
+        "headingActuallyRead": "Python で Anki カードを生成する",
+        "representativeCurrentTextActuallyRead": "Windows では .venv\\Scripts\\Activate.ps1 で有効にします。通常の CPython 3.11 以降と、プラットフォームに一致する wheel を使用してください。記録済みのリリース検証では CPython 3.11〜3.14 を確認しています。検証済みの環境を参照してください。",
+        "conclusion": "The localized instructions create/activate a virtual environment, give the Windows activation path, install public ankiforge==0.3.1, and require ordinary CPython 3.11+ with a matching wheel (recorded checks cover 3.11–3.14). main.py generates persistent spanish.apkg with stable namespace/key. Localized search actually reached this page and the real clipboard matched the current Python program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "3f20e04668424828fdf8635377a6bf2b7a89f6ea2311e01ee26c0bc76e4cb697",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "node-basic": {
+        "headingActuallyRead": "Node.js で Anki カードを生成する",
+        "representativeCurrentTextActuallyRead": "Node.js 22.13 以降を使います。新しいアプリケーションのディレクトリで実行します。",
+        "conclusion": "The localized page requires Node 22.13+, includes optional native dependencies in the public 0.3.1 installation, saves main.mjs, uses ESM with an explicit CommonJS alternative, and explains that closing the persistent artifact leaves its file. It links the complete TypeScript path in the JSON recipe. Actual sidebar navigation and clipboard matched the shared Node program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "619f32f1f6b0ca6678b599bf4edb56a0398e795fdd50ac7dca6997bde59411a0",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "json-media": {
+        "headingActuallyRead": "JSON から Anki デッキを生成・更新する",
+        "representativeCurrentTextActuallyRead": "v1.json、v2.json、cell.png、tone.wavをダウンロードします。画像は細胞の模式図です。音声は短い合成音で、単語の読み上げではありません。新しく作るアプリケーションのディレクトリごとに、次の4ファイルを recipe/ に置きます。",
+        "conclusion": "The localized recipe identifies all four files under recipe/, 3 notes/3 cards/2 media, a cell image and generated tone rather than spoken vocabulary; it leaves schema validation to the application. It provides complete public-0.3.1 Rust/Python/TypeScript programs and launch commands. Actual HTTP reads downloaded the four source-identical inputs, and all three complete programs were copied correctly. The prose keeps the original v1 APKG, reviews an answer-only v2 with unchanged stable IDs, checks policy before publishing the prepared candidate, avoids overwriting a previous output directory, and describes Anki import/merge limitations and deletion non-synchronization. Prior three-SDK recipe execution is bound and reused; no new SDK execution or native Anki import was performed.",
+        "bodySha256": "336346ee184f9a848e1d278521c031107b6f1147a078b1da3f59d449a2e82f38",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "original-baseline-update": {
+        "headingActuallyRead": "安定したノート ID で Anki デッキを更新する",
+        "representativeCurrentTextActuallyRead": "このコマンドは spanish-v1.apkg と spanish-v2.apkg を書き出し、変更した回答を比較して、更新版のパッケージ内の件数を確認します。実行されるソースコードは次のとおりです。",
+        "conclusion": "The localized update page distinguishes persistent namespace/note/model/field/template keys from display names, requires the original distributed APKG identity baseline, and rejects Anki re-export as that baseline. Successful comparison is distinct from publication permission; High/Critical deny by default, category allowances preserve diagnostics, and missing/corrupt/namespace-invalid/oversize identity stays an operation error. The candidate reviewed must be the candidate published, the prior baseline is archived separately, and removal is not deletion synchronization. The complete source example is identified as pinned source 1199196 rather than falsely bundled in public 0.3.1. User edits/history are not guaranteed. Prior answer-only JSON update execution is explicitly reused under unchanged bindings.",
+        "bodySha256": "38c40374c44d5b94076f22dc129bb186fd88fff981df1ff2116326c84649308f",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "troubleshooting": {
+        "headingActuallyRead": "トラブルシューティング",
+        "representativeCurrentTextActuallyRead": "NOTE.KEY_DUPLICATE\t論理的なソースレコードごとに一意のキーを1つ割り当てます",
+        "conclusion": "The localized page distinguishes structured error kind/code/cause from display text and an operation error from a successful but blocked comparison. NOTE.KEY_DUPLICATE directs a unique key per logical source record. It describes atomic add failure and correction/retry, direct media filename/MIME constraints, the original baseline requirement, retained temporary artifact ownership and persistence errors after publication. The prior duplicate-key/correction execution log was read and byte-verified for reuse; no new runtime correction was executed.",
+        "bodySha256": "ff0051b965985fe929a65ebcf2e07ffba0a247a7af4989aee9ea8a20bbfd1619",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      }
+    },
+    "de": {
+      "rust-basic": {
+        "headingActuallyRead": "Anki-Karten mit Rust erzeugen",
+        "representativeCurrentTextActuallyRead": "Verwende Rust ab Version 1.92. Für eine andere Programmiersprache wähle Node / TypeScript oder Python.",
+        "conclusion": "The localized instructions give Rust 1.92+, public ankiforge 0.3.1, complete src/main.rs, cargo run and a persistent spanish.apkg containing hola → hello in Spanish. They distinguish exporting without Anki from opening/importing the resulting package. Namespace spanish and logical key es:hola remain stable. The real clipboard matched the current shared Rust program. The earlier public-package execution is reused after independent current-byte verification; it was not rerun.",
+        "bodySha256": "923829a0b46c5186a3f0d462dbcccdb99c8809b4e65c19a9f88d9ef2eec4ef27",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "python-basic": {
+        "headingActuallyRead": "Anki-Karten mit Python erzeugen",
+        "representativeCurrentTextActuallyRead": "Unter Windows aktivierst du die Umgebung mit .venv\\Scripts\\Activate.ps1. Verwende gewöhnliches CPython ab Version 3.11 und ein passendes Wheel für deine Plattform. CPython 3.11–3.14 sind durch dokumentierte Release-Prüfungen abgedeckt; siehe geprüfte Umgebungen.",
+        "conclusion": "The localized instructions create/activate a virtual environment, give the Windows activation path, install public ankiforge==0.3.1, and require ordinary CPython 3.11+ with a matching wheel (recorded checks cover 3.11–3.14). main.py generates persistent spanish.apkg with stable namespace/key. Localized search actually reached this page and the real clipboard matched the current Python program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "298bae4bc208db526bf9e18e253ad9c0bb16e85358ca3826197a63c74a178e1b",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "node-basic": {
+        "headingActuallyRead": "Anki-Karten mit Node.js erzeugen",
+        "representativeCurrentTextActuallyRead": "Verwende Node.js ab Version 22.13. Führe in einem neuen Anwendungsverzeichnis Folgendes aus:",
+        "conclusion": "The localized page requires Node 22.13+, includes optional native dependencies in the public 0.3.1 installation, saves main.mjs, uses ESM with an explicit CommonJS alternative, and explains that closing the persistent artifact leaves its file. It links the complete TypeScript path in the JSON recipe. Actual sidebar navigation and clipboard matched the shared Node program. Earlier execution is explicitly reused, not rerun.",
+        "bodySha256": "8097b98d7219e739c6c97df91a2df0fd2a4467f483206b20307759b8035eb6b0",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "json-media": {
+        "headingActuallyRead": "Anki-Stapel aus JSON erzeugen und aktualisieren",
+        "representativeCurrentTextActuallyRead": "Lade v1.json, v2.json, cell.png und tone.wav herunter. Das Bild zeigt eine Zelle; die Audiodatei enthält einen kurzen erzeugten Ton, keine gesprochene Vokabel. Lege diese vier Dateien in jedem neuen Anwendungsverzeichnis unter recipe/ ab:",
+        "conclusion": "The localized recipe identifies all four files under recipe/, 3 notes/3 cards/2 media, a cell image and generated tone rather than spoken vocabulary; it leaves schema validation to the application. It provides complete public-0.3.1 Rust/Python/TypeScript programs and launch commands. Actual HTTP reads downloaded the four source-identical inputs, and all three complete programs were copied correctly. The prose keeps the original v1 APKG, reviews an answer-only v2 with unchanged stable IDs, checks policy before publishing the prepared candidate, avoids overwriting a previous output directory, and describes Anki import/merge limitations and deletion non-synchronization. Prior three-SDK recipe execution is bound and reused; no new SDK execution or native Anki import was performed.",
+        "bodySha256": "8a03002442559d879373fd9e670e45a205a97bff91636049587b743bb9cf12c4",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "original-baseline-update": {
+        "headingActuallyRead": "Anki-Stapel mit stabilen Notiz-IDs aktualisieren",
+        "representativeCurrentTextActuallyRead": "Dies schreibt spanish-v1.apkg und spanish-v2.apkg, vergleicht die geänderte Antwort und prüft die Anzahlen im aktualisierten Paket. Der ausgeführte Quellcode lautet:",
+        "conclusion": "The localized update page distinguishes persistent namespace/note/model/field/template keys from display names, requires the original distributed APKG identity baseline, and rejects Anki re-export as that baseline. Successful comparison is distinct from publication permission; High/Critical deny by default, category allowances preserve diagnostics, and missing/corrupt/namespace-invalid/oversize identity stays an operation error. The candidate reviewed must be the candidate published, the prior baseline is archived separately, and removal is not deletion synchronization. The complete source example is identified as pinned source 1199196 rather than falsely bundled in public 0.3.1. User edits/history are not guaranteed. Prior answer-only JSON update execution is explicitly reused under unchanged bindings.",
+        "bodySha256": "bb2dd1c4c6ae1ca91a9b996b3d727af819cc03ffe8f31449b63348c577e6706e",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      },
+      "troubleshooting": {
+        "headingActuallyRead": "Fehlersuche",
+        "representativeCurrentTextActuallyRead": "NOTE.KEY_DUPLICATE\tGib jedem logischen Quelldatensatz einen eindeutigen Schlüssel",
+        "conclusion": "The localized page distinguishes structured error kind/code/cause from display text and an operation error from a successful but blocked comparison. NOTE.KEY_DUPLICATE directs a unique key per logical source record. It describes atomic add failure and correction/retry, direct media filename/MIME constraints, the original baseline requirement, retained temporary artifact ownership and persistence errors after publication. The prior duplicate-key/correction execution log was read and byte-verified for reuse; no new runtime correction was executed.",
+        "bodySha256": "5b505a8a5be652381420b843fe4a6d87fc12a2e4274928a0581ced002b663bfd",
+        "scope": "All task prose in current prefix HTML read; code/clipboard/downloads examined. Root independently navigated and captured, with entire main text/code equal under the dual-configuration comparison."
+      }
+    }
+  },
+  "visualReview": [
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/en-home-numbers.png",
+      "sha256": "267c974682ec3325ed1fef7fbb914846daed20396878ad0e9c5215a8bf38dd13",
+      "description": "Actually visually inspected the en performance panel: decimal values, description, all five bar rows and labels are legible. The independently captured root screenshot is byte-identical."
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/zh-CN-home-numbers.png",
+      "sha256": "0603b823bdea1e40ee870ef366ba376cb4f41cd4d332551f29e15cd9c519d90c",
+      "description": "Actually visually inspected the zh-CN performance panel: decimal values, description, all five bar rows and labels are legible. The independently captured root screenshot is byte-identical."
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/es-home-numbers.png",
+      "sha256": "e7864a68e0d0b336379dcb49b44fa3a77ff55f393c0acdd6e357a7a8a0c3ac43",
+      "description": "Actually visually inspected the es performance panel: decimal values, description, all five bar rows and labels are legible. The independently captured root screenshot is byte-identical."
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/pt-BR-home-numbers.png",
+      "sha256": "f6f5cf11dd36c332ad7593e2a9b7db8e8762de73789bc08449fcce40260067dd",
+      "description": "Actually visually inspected the pt-BR performance panel: decimal values, description, all five bar rows and labels are legible. The independently captured root screenshot is byte-identical."
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/ja-home-numbers.png",
+      "sha256": "3ee60083ba9f9738c6ef757903e9ed03fc69b8ce8de1110822181f378d0700dc",
+      "description": "Actually visually inspected the ja performance panel: decimal values, description, all five bar rows and labels are legible. The independently captured root screenshot is byte-identical."
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/de-home-numbers.png",
+      "sha256": "8f85e6d98ac4dd23a4407bff114299637cf94019c38eb95d9951685a22d6cdf1",
+      "description": "Actually visually inspected the de performance panel: decimal values, description, all five bar rows and labels are legible. The independently captured root screenshot is byte-identical."
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/ja-your-first-anki-deck-clipboard-denied.png",
+      "sha256": "24abfab235f200ae91c2939a9a4c5c61c71617f55d20dbbb8db0404700c1e803",
+      "description": "Actually visually inspected Japanese action and manual-selection feedback with selected Rust code; selection matches shared source. The root screenshot is byte-identical."
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/ja-stable-ids-and-deck-updates-clipboard-denied.png",
+      "sha256": "5384e73aee5bbff0d4727095d8c4c7566b5f1f08da585df9e72c33115f5c84ca",
+      "description": "Actually visually inspected Japanese action and manual-selection feedback with selected Rust code; selection matches shared source. The root screenshot is byte-identical."
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/es-wordform-templates-reutilizacion.png",
+      "sha256": "4262654e017bf3540480406e96671cde1b227a458814177465d5fefd1dffcbcc",
+      "description": "Actually visually inspected query reutilización: expected result is visible with a relevant inflected excerpt and localized message. The root screenshot is byte-identical."
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/de-wordform-python-api-Nebenlaufig.png",
+      "sha256": "f71785a32b718a62ac4d5d31ee2ff819e0f98856b5c233667b137ea39324111b",
+      "description": "Actually visually inspected query Nebenläufig: expected result is visible with a relevant inflected excerpt and localized message. The root screenshot is byte-identical."
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-prefix/de-wordform-python-api-Zeichenfolge.png",
+      "sha256": "e41c47b7d1aa32e1e4427d2df6587704afc6b2f91961db8a770d38a779b97577",
+      "description": "Actually visually inspected query Zeichenfolge: expected result is visible with a relevant inflected excerpt and localized message. The root screenshot is byte-identical."
+    }
+  ],
+  "repairs": {
+    "numbers": "Actually read all six rendered panels: es/pt-BR/de use 52,7, 45,7–53,9 and comma decimals in all five chart rows; en/zh-CN/ja use periods. Percent reductions, units, workload labels and scope disclaimer agree with the source data. Bar geometry remains plausible and unchanged across both builds.",
+    "japaneseCopy": "Both actual article CodeBlocks expose コードをコピー and rust のコード; success/recovery say コードをコピーしました。; denied clipboard access selects precisely the source and says コードを選択しました。キーボードでコピーしてください。. Explicit browser-context permissions before each article prevent CDP permission state from contaminating the next navigation. Initial harness timeout is retained in usage-prefix-initial and is not a product failure.",
+    "wordForms": "Both builds show 11 results for es reutilización with templates first, 1 for de Nebenläufig with Python-API, and 11 for de Zeichenfolge with Python-API third. All result URLs stay in the query locale. Screenshots show the relevant Reutiliza/Nebenläufigkeit/Zeichenfolgen excerpts. This verifies the reported native Pagefind word-form regression; it is not a new exhaustive query evaluation."
+  },
+  "executionReuseAudit": {
+    "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-execution-reuse-audit.json",
+    "sha256": "bc25060cb10bd0a771fd4e90c4a643f6868a912e8042d98138616495bbf336bd",
+    "description": "Every one of 23 source/dependency files and 8 retained execution artifacts was independently hash-checked again in the isolated root. Five logs were actually read. No SDK rerun or fresh native Anki import claimed."
+  },
+  "crossConfigurationComparison": {
+    "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-dual-configuration-comparison.json",
+    "sha256": "970e335c5a32b52145eb9f8528c8d404ff3c11542b26d1a81fb5eab8f80727a2",
+    "description": "All 36 actual task body/code/clipboard/screenshot sets and downloaded identities match; six home and five repair screenshots also match."
+  },
+  "openIssues": [],
+  "limitations": [
+    "Local candidate only; no deployed-page claim.",
+    "SDK execution and APKG inspection conclusions are inherited under explicit unchanged-source/dependency bindings; the browser actions and downloads are new.",
+    "No new 320px/200% layout run; historical minor/preference observations are retained in the final reports.",
+    "All 703 artifact records are byte-bound, including 192 machine resources. Machine-content semantic reading is a separate independent review."
+  ]
+}

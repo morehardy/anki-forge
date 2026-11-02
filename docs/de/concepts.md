@@ -5,7 +5,7 @@
 
 Ein `Project` steht für eine Veröffentlichung mit einem stabilen Namensraum. Es kann Notizen mehreren Anki-Stapeln zuordnen: `default_deck` legt den Standard fest, `Note::deck` überschreibt ihn. Ein Stapel ist ein Ziel für Karten und kein zusätzlicher Container für das Erstellen von Inhalten, Medien oder Builds.
 
-Eine `Note` enthält ihr Modell und ihre Inhalte. `project.add(key, note)` weist ihr einen erforderlichen stabilen Quellschlüssel zu und sammelt Abhängigkeiten atomar. Doppelte Schlüssel, unbekannte Felder sowie widersprüchliche Modelle oder Medien führen zu einem Fehler, ohne den Zustand teilweise zu verändern. Der Projektnamensraum und die Datensatzschlüssel müssen Änderungen und einer Umordnung der Quelldaten standhalten. Anzeigenamen und Texte sind keine Identitätsschlüssel.
+Eine `Note` enthält ihr Modell und ihre Inhalte. `project.add(key, note)` weist ihr einen erforderlichen stabilen Quellschlüssel zu und sammelt Abhängigkeiten atomar. Doppelte Schlüssel, unbekannte Felder sowie widersprüchliche Modelle oder Medien führen zu einem Fehler, ohne den Zustand teilweise zu verändern. Behalte den Projektnamensraum und die Datensatzschlüssel bei, wenn du Quelldaten bearbeitest oder neu sortierst. Anzeigenamen und Texte sind keine Identitätsschlüssel.
 
 <!-- section: models-fields-and-templates -->
 ## Modelle, Felder und Vorlagen
