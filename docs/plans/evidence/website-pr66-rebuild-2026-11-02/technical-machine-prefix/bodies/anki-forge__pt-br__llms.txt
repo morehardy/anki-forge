@@ -1,0 +1,58 @@
+# Anki Forge
+
+> O Anki Forge gera baralhos APKG do Anki a partir de código em Rust, Node / TypeScript ou Python.
+
+Versão atual dos pacotes públicos: 0.3.1. A exportação normal não exige o Anki. As APIs dos pacotes publicados diferem das compilações do código-fonte. Guarde o APKG original distribuído da versão anterior para atualizações; as opções de importação do Anki e as edições locais mais recentes podem afetar o resultado.
+
+- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)
+- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)
+- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)
+
+## Comece aqui
+
+- [Crie baralhos do Anki com código](https://morehardy.github.io/anki-forge/pt-br/docs/index.md): Escolha uma linguagem de programação, gere seu primeiro baralho e aprenda a adicionar mídia e templates e a atualizar o baralho.
+- [Escolha sua linguagem de programação](https://morehardy.github.io/anki-forge/pt-br/docs/languages/index.md): Instale o pacote público de Rust, Node ou Python e exporte seu primeiro baralho do Anki.
+- [Compatibilidade e ambientes verificados](https://morehardy.github.io/anki-forge/pt-br/docs/compatibility/index.md): Consulte os pacotes públicos, os ambientes testados e as condições de importação e reprodução nos clientes Anki.
+
+## Guias de início rápido
+
+- [Gere cartões do Anki com Rust](https://morehardy.github.io/anki-forge/pt-br/docs/quickstart/index.md): Instale o pacote público de Rust, crie um cartão de espanhol e exporte um APKG persistente com um programa completo.
+- [Gere cartões do Anki com Node.js](https://morehardy.github.io/anki-forge/pt-br/docs/node-quickstart/index.md): Instale ankiforge pelo npm, gere cartões com Node.js ou TypeScript e exporte um baralho APKG para importar no Anki.
+- [Gere cartões do Anki com Python](https://morehardy.github.io/anki-forge/pt-br/docs/python-quickstart/index.md): Instale ankiforge pelo PyPI, crie cartões de pergunta e resposta com um script Python curto e exporte um baralho APKG para importar no Anki.
+
+## Referências das APIs
+
+- [Visão geral das APIs públicas](https://morehardy.github.io/anki-forge/pt-br/docs/api/index.md): Encontre as APIs de Rust, Python e Node para criar notas, incluir mídia, diagnosticar erros e revisar atualizações.
+- [Referência da API de Rust](https://morehardy.github.io/anki-forge/pt-br/docs/rust-api/index.md): Consulte os métodos públicos de criação de conteúdo, os padrões de geração, os relatórios e os diagnósticos de Rust.
+- [API de Node e TypeScript](https://morehardy.github.io/anki-forge/pt-br/docs/node-api/index.md): Métodos públicos, comportamento assíncrono, opções de geração, arquivos de saída e relatórios do SDK de Node.
+- [API de Python](https://morehardy.github.io/anki-forge/pt-br/docs/python-api/index.md): Project, mídia, opções de geração, relatórios e controle da vida útil dos artefatos temporários em Python.
+
+## Guias por tarefa
+
+- [CSV para Anki: gere cartões com Python](https://morehardy.github.io/anki-forge/pt-br/docs/csv-to-anki/index.md): Converta uma planilha de vocabulário CSV UTF-8 em um APKG com um script Python completo, IDs de nota estáveis e verificações de importação.
+- [Gere e atualize baralhos do Anki a partir de JSON](https://morehardy.github.io/anki-forge/pt-br/docs/json-to-anki/index.md): Leia JSON com Rust, Python ou TypeScript, inclua imagens e áudio e revise uma atualização de APKG que altera apenas uma resposta.
+- [Crie cartões do Anki com apoio de IA](https://morehardy.github.io/anki-forge/pt-br/docs/ai-anki-cards/index.md): Crie rascunhos de cartões a partir das suas anotações, confira as respostas e exporte um APKG com Anki Forge usando CSV ou instruções para um assistente de programação.
+- [Gere cartões Basic e Cloze do Anki](https://morehardy.github.io/anki-forge/pt-br/docs/cards/index.md): Gere cartões Basic de pergunta e resposta e cartões Cloze com lacunas usando código. Um exemplo verificado em Rust cria duas notas e três cartões.
+- [Adicione imagens e áudio aos cartões do Anki](https://morehardy.github.io/anki-forge/pt-br/docs/media/index.md): Use Rust, Python ou Node.js para importar arquivos, compor cartões com imagens e áudio e gerenciar nomes de exportação, tipos MIME e limites de mídia.
+- [Reutilize templates de cartão, CSS e mídia no Anki](https://morehardy.github.io/anki-forge/pt-br/docs/templates/index.md): Carregue um tipo de nota reutilizável de um pacote com templates, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.
+- [Gere cartões de oclusão de imagem do Anki](https://morehardy.github.io/anki-forge/pt-br/docs/image-occlusion/index.md): Crie cartões de oclusão de imagem com Rust, Python ou Node.js: forneça a imagem e as máscaras retangulares e escolha um dos dois modos de oclusão.
+- [Atualize baralhos do Anki com IDs de nota estáveis](https://morehardy.github.io/anki-forge/pt-br/docs/updates/index.md): Publique uma nova versão de um baralho gerado: preserve os IDs das notas, use o APKG original anterior como base e revise a comparação antes de distribuir.
+
+## Limitações
+
+- [Garantias de geração e dos arquivos de saída](https://morehardy.github.io/anki-forge/pt-br/docs/build-guarantees/index.md): Entenda os artefatos temporários, a proteção dos caminhos, os limites de inspeção e a publicação de candidatos revisados.
+- [Solução de problemas](https://morehardy.github.io/anki-forge/pt-br/docs/troubleshooting/index.md): Resolva erros de instalação, notas, mídia, templates, identidade e publicação dos arquivos de saída.
+
+## Optional
+
+- [Anki Forge ou genanki: escolha para o seu fluxo](https://morehardy.github.io/anki-forge/pt-br/docs/anki-forge-vs-genanki/index.md): Compare a criação de APKGs do Anki, os requisitos de execução, a revisão de atualizações e os custos de migração.
+- [Migre do genanki para o Anki Forge](https://morehardy.github.io/anki-forge/pt-br/docs/genanki-migration/index.md): Entenda como adaptar notas, modelos e mídia do genanki às chaves estáveis e ao modelo de criação de conteúdo do Anki Forge.
+- [Compile os SDKs a partir do código-fonte](https://morehardy.github.io/anki-forge/pt-br/docs/development/index.md): Ambiente de desenvolvimento e código-fonte. Compile os SDKs e execute exemplos a partir do repositório, distinguindo os recursos do código-fonte dos pacotes publicados.
+- [Crie seu primeiro baralho Anki com Rust](https://morehardy.github.io/anki-forge/pt-br/blog/your-first-anki-deck/index.md): Artigo histórico, publicado em 2026-09-22. De um pequeno programa em Rust a um cartão de vocabulário em espanhol que você pode abrir no Anki.
+- [Atualize o conteúdo da nota sem mudar seu ID](https://morehardy.github.io/anki-forge/pt-br/blog/stable-ids-and-deck-updates/index.md): Artigo histórico, publicado em 2026-09-22. Como IDs estáveis e uma base de geração trabalham juntos na atualização de um baralho Anki gerado.
+- [GitHub](https://github.com/morehardy/anki-forge): Repositório do código-fonte e recursos de desenvolvimento.
+- [English](https://morehardy.github.io/anki-forge/llms.txt): Índice da documentação para IA em English.
+- [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): Índice da documentação para IA em 简体中文.
+- [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Índice da documentação para IA em Español.
+- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice da documentação para IA em 日本語.
+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Índice da documentação para IA em Deutsch.

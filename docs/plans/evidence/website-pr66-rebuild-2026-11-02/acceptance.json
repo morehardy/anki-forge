@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "scope": "PR #66 final input candidate: renewal of full six-language reviews and historic heading compatibility, followed by stable Pagefind serialization. Local root/prefix artifact acceptance; no deployment claim.",
+  "sourceCommit": "0001985be86f39713adb7f7dfb5d29af0df614b7",
+  "inputSha256": "d002c1a1d04b2fad447d233557f235733eeeb4484ad362af03c2d7a4e984098e",
+  "previousFullAcceptance": "docs/plans/evidence/website-pr66-final-2026-11-02/acceptance.json",
+  "fixes": [
+    "Renewed 204 independent source review entries after six-language copy updates.",
+    "Preserved old document/module anchors with 12 source-bound heading migrations and protected links.",
+    "Canonicalized Pagefind language-map key order in the producer to preserve actual-read resource bytes across builds."
+  ],
+  "unitTests": {
+    "passed": 155,
+    "failed": 0,
+    "log": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/unit-tests.log"
+  },
+  "contractVerification": {
+    "command": "make verify-ci",
+    "status": "passed",
+    "log": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/verify-ci.log"
+  },
+  "independentSourceDelta": {
+    "affectedEntries": 174,
+    "unaffectedEntries": 30,
+    "inputFilesCompared": 259,
+    "changedInputFiles": 1,
+    "linguistic": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/linguistic-source-review.json",
+    "technical": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/technical-source-review.json"
+  },
+  "retainedNonblockingLinguisticIssues": 32,
+  "environments": {
+    "prefix": {
+      "status": "passed",
+      "manifestSha256": "63d7c9517883c5c345ff7e75172579bbb2ab51b118e34799e40db5e87fbfc1b0",
+      "engineeringChecks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "browserTests": 52,
+      "rebuildFiles": 397,
+      "pagefindFirstAndRebuildSha256": "afc7ce044d8fedc37858aacce4ac84ad74a45b21d23f797d5a0db03463e997c7",
+      "usageTasks": 36,
+      "usageResourceBindings": 397,
+      "machineTasks": 24,
+      "machineResourceBindings": 192,
+      "actualMachineHttpResponses": 60,
+      "releaseEvidence": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/engineering/prefix/release-evidence.json",
+      "checkReleaseLog": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/engineering/prefix/check-release.log"
+    },
+    "root": {
+      "status": "passed",
+      "manifestSha256": "ad1b22ef1b11aef43a735938e3895ab4951121bcddc9ca2a31fbd498b4bb9418",
+      "engineeringChecks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "browserTests": 52,
+      "rebuildFiles": 397,
+      "pagefindFirstAndRebuildSha256": "b4696e60a97ec774b2fd5900daff5288a9d15c78717c42a25be436522be2ed8a",
+      "usageTasks": 36,
+      "usageResourceBindings": 397,
+      "machineTasks": 24,
+      "machineResourceBindings": 192,
+      "actualMachineHttpResponses": 60,
+      "releaseEvidence": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/engineering/root/release-evidence.json",
+      "checkReleaseLog": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/engineering/root/check-release.log"
+    }
+  },
+  "limitations": [
+    "The Pagefind delta explicitly inherits unchanged prose and machine conclusions after exact source/resource comparison; fresh browser tasks and HTTP requests were performed.",
+    "SDK/APKG execution evidence from the preceding complete review is reused only after checking every original source/dependency and evidence binding.",
+    "The original reviewed manifests remain immutable. Later commits and CI must independently verify equal source input identity and all reviewed resource bytes.",
+    "Pagefind exact locale lookup is unchanged for all six released languages. Unsupported-locale tied fallback becomes deterministic.",
+    "Local browser/HTTP acceptance does not establish production hosting behavior."
+  ]
+}

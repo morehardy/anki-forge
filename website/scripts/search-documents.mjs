@@ -13,6 +13,15 @@ import { searchIndexPath, searchEnginePath, searchTermsFor } from '../src/lib/se
 const website = fileURLToPath(new URL('../', import.meta.url));
 const defaultDist = path.join(website, 'dist');
 
+/** Pagefind serializes its language map in random order; preserve its data with stable bytes. */
+export async function canonicalizePagefindEntry(dist = defaultDist) {
+  const filename = path.join(dist, 'pagefind/pagefind-entry.json');
+  const entry = JSON.parse(await readFile(filename, 'utf8'));
+  assert.ok(entry.languages && typeof entry.languages === 'object' && !Array.isArray(entry.languages), 'Pagefind language map required');
+  entry.languages = Object.fromEntries(Object.keys(entry.languages).sort().map(locale => [locale, entry.languages[locale]]));
+  await writeFile(filename, JSON.stringify(entry) + '\n');
+}
+
 /** A small, current-language metadata directory; Pagefind still owns body indexing. */
 export async function generateSearchDocuments(dist = defaultDist) {
   const concepts = JSON.parse(await readFile(path.join(website, 'search-concepts.json'), 'utf8'));
@@ -44,6 +53,7 @@ export async function generateSearchDocuments(dist = defaultDist) {
   const owned = new Set(Object.keys(configuredLocales).map(locale => path.basename(searchIndexPath(locale))));
   for (const name of await readdir(path.join(dist, 'generated'))) if (owned.has(name) && !outputs.some(output => path.basename(output.filename) === name)) await rm(path.join(dist, 'generated', name));
   for (const output of outputs) await writeFile(output.filename, output.bytes);
+  await canonicalizePagefindEntry(dist);
   console.log(`Generated ${localeIds.length} current-language search directories and the shared search engine from actual HTML.`);
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await generateSearchDocuments(process.argv[2] ? path.resolve(process.argv[2]) : defaultDist);

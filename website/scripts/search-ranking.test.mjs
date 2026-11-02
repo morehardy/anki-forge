@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import test from 'node:test';
+import os from 'node:os';
+import path from 'node:path';
 import { rankSearchDocuments, plainSearchText, documentRole } from '../src/lib/search.mjs';
+import { canonicalizePagefindEntry } from './search-documents.mjs';
 
 const vocabulary = JSON.parse(await readFile(new URL('../search-concepts.json', import.meta.url), 'utf8')).locales;
 const doc = (id, title, terms = [], description = '') => ({ id, title, terms, description, type: 'docs', url: `/preview/en/docs/${id}/` });
@@ -19,6 +22,23 @@ const documents = [
   doc('image-occlusion', 'Image Occlusion', ['rectangle masks', 'hide labels on images']),
 ];
 const rank = (query, docs = documents, extra = {}) => rankSearchDocuments(query, docs, 'en', { concepts: vocabulary.en, ...extra });
+
+test('Pagefind language-map order cannot change reviewed artifact bytes', async t => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-pagefind-order-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(path.join(directory, 'pagefind'));
+  const filename = path.join(directory, 'pagefind/pagefind-entry.json');
+  const entry = { version: '1.5.2', languages: { 'zh-cn': { hash: 'zh-cn_123', wasm: null, page_count: 34 }, en: { hash: 'en_456', wasm: 'en', page_count: 34 }, es: { hash: 'es_789', wasm: 'es', page_count: 34 } }, include_characters: ['_', '‿'], extension: { keep: true } };
+  await writeFile(filename, JSON.stringify(entry));
+  await canonicalizePagefindEntry(directory);
+  const first = await readFile(filename, 'utf8');
+  await writeFile(filename, JSON.stringify({ ...entry, languages: Object.fromEntries(Object.entries(entry.languages).reverse()) }));
+  await canonicalizePagefindEntry(directory);
+  assert.equal(await readFile(filename, 'utf8'), first);
+  assert.deepEqual(JSON.parse(first), entry, 'Preserve every language hash, count, WASM selection and other field');
+  await canonicalizePagefindEntry(directory);
+  assert.equal(await readFile(filename, 'utf8'), first, 'Canonicalization must be idempotent');
+});
 
 test('SDK task roles distinguish a first project, reference and diagnosis', () => {
   assert.equal(rank('Python beginner tutorial')[0].id, 'python-quickstart');
