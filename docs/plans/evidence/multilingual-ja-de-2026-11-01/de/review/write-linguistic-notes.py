@@ -1,0 +1,51 @@
+import json,pathlib,hashlib
+p=pathlib.Path(__file__).parent
+inputs=json.loads((p/'linguistic-reader-inputs.json').read_text())
+base='docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/'
+notes={
+'index':'Clear task-oriented entry page. Notiz/Karte/Stapel relations and guide choices read naturally.',
+'languages':'Installation table and runtime qualifiers are clear; programming language is distinct from content language.',
+'quickstart':'Concise Du instructions, persistent output and stable key explained together. No linguistic regression from the reviewed sample.',
+'node-quickstart':'ESM/CJS distinction and persistent artifact closing are intelligible. Follow-up links have concrete labels.',
+'python-quickstart':'Virtual environment activation, wheel requirement and task links form a usable sequence.',
+'installation':'Published crate and repository-only features remain distinct; Cargo integration terminology is consistent.',
+'development':'Source builds, local tarballs and native-wrapper matching are clearly marked as development work.',
+'concepts':'Notiz/Karte/Stapel and ownership terms remain distinct. Text/HTML and identity paragraphs are understandable without English.',
+'cards':'Singular/plural and two-note/three-card explanation are coherent. Cloze syntax and numbering are integrated into clear instructions.',
+'custom-notetypes':'Stable keys versus display names, validation and generation conditions use consistent terminology.',
+'api':'Task table, original APKG requirement and follow-up labels are concise and clear.',
+'python-migration':'Before/after table reads coherently and clearly rejects a legacy compatibility layer.',
+'genanki-migration':'Concept mapping and independently validated identity boundary are explicit. No promise of automatic GUID preservation.',
+'json-to-anki':'Three-language task flow and final import checks are coherent. Original distribution and client-side limitations remain adjacent to update instructions.',
+'csv-to-anki':'Quoted fields, BOM, stable IDs and output-file refusal are easy to follow. No confusion between spreadsheet import and library parsing.',
+'ai-anki-cards':'Draft/review/export responsibilities are clear; no implication that the local prompt builder calls AI or performs OCR.',
+'anki-forge-vs-genanki':'Balanced comparison with limited historical performance claim. One awkward coordinated verb construction needs a minor rewrite (DE-L-01).',
+'rust-guide':'Consistent technical Du register, clear ownership and update sections. MIME category versus decode/playback remains distinguishable.',
+'templates':'Bundle vocabulary is consistent; file paths, keys and resource-budget constraints have usable explanations.',
+'media':'Media snapshots, export names and MIME retain distinct meanings. Batch import is understandable in context. Byte-count lower-bound wording is coherent.',
+'image-occlusion':'Image and rectangle inputs are explicit. Mask keys, ordinals and no-deletion behavior are stated with clear referents.',
+'updates':'Detailed source-evidence and policy text remains readable. Findings versus policy and client import conditions are not conflated.',
+'build-guarantees':'Ownership and durability explanations are coherent; publication facts and consumed owners are understandable. Relative paths are adequately scoped.',
+'troubleshooting':'Symptom/action tables are direct and actionable. A minor optional lexical observation is recorded separately for Speicherfehlern.',
+'compatibility':'Version/date framing, recorded verification boundaries and client conditions are intelligible. No blanket portability statement.',
+'python-diagnostics':'Exception chains, comparison outcome and publication failure facts are explained in a consistent register.',
+'python-api':'Dense API tables remain readable. Ownership, GIL/fork limits and prepare/publish sequence have clear referents; sample fixes remain present.',
+'rust-api':'Method tables and error domains are coherent. Numeric zero should use the glyph 0 for cross-language API clarity (DE-L-02).',
+'node-api':'Report versus JSON field naming and asynchronous ownership are clear. Numeric zero written null risks confusion with the JS value (DE-L-02).'
+}
+findings=[{
+'id':'DE-L-01','severity':'minor','axis':'syntax','status':'open','files':[{'path':base+'docs/de/anki-forge-vs-genanki.md','line':19}],
+'quote':'erzeugst v1 und vergleichst und bereitest anschließend v2 gegen das ursprüngliche v1-APKG vor. Erst danach veröffentlichst du sie.',
+'issue':'The coordinated verbs vergleichen and vorbereiten have different complements; the sentence attaches gegen/vor ambiguously and makes the reader reconstruct the workflow.',
+'recommendation':'erzeugst v1, vergleichst v2 mit dem ursprünglichen v1-APKG und bereitest v2 auf dieser Grundlage für die Veröffentlichung vor. Erst danach veröffentlichst du v2.',
+'englishSource':'docs/anki-forge-vs-genanki.md','sourceCheckedAfterBlindRead':True
+},{
+'id':'DE-L-02','severity':'minor','axis':'usability','status':'open','files':[{'path':base+'docs/de/node-api.md','line':79},{'path':base+'docs/de/rust-api.md','line':38}],
+'quote':'null ist ein tatsächliches Nullbudget / null bedeutet null, nicht unbegrenzt',
+'issue':'German null is a valid word for zero, but in a Node API paragraph it can be read as the JavaScript null value. The actual value is numeric 0.',
+'recommendation':'Node: `0` ist ein tatsächliches Nullbudget. Rust: `0` bedeutet ein Budget von null, nicht unbegrenzt.',
+'englishSource':['docs/node/api.md','docs/rust-api.md'],'sourceCheckedAfterBlindRead':True
+}]
+result={'schemaVersion':1,'date':'2026-11-01','reviewerType':'ai','reviewerTask':'/root/ja_full_author','reviewerRun':'de-full-independent-linguistic-blind-read-2026-11-01','scope':'29 complete documentation prose bodies, 2 complete article prose bodies, 210 UI messages, 11 framework messages and the complete de-data-patch in isolated staging.','status':'full-read-complete-minor-revisions-requested','releaseReady':False,'finalSourceReport':False,'independence':{'authoredGermanMaterial':False,'authoredOtherLocale':'ja','editedReviewedProse':False,'readIndependentQueries':False},'method':['Read all German prose and interface messages independently, without English comparison during the first pass.','Read all metadata, navigation, brief, prompt and production search vocabulary as German language data.','Excluded protected code fences from linguistic rewriting; API identifiers and inline examples were read in context.','Consulted English only after the full blind read for the two proposed wording clarifications and one optional lexical observation.','Recorded exact staging input hashes before reading; the later final report must bind to finalized production sources and resolved changes.'],'score':{'terminology':4,'syntax':4,'register':4,'usability':4},'scoreRationale':{'terminology':'Stable Notiz/Karte/Stapel distinction, appropriate Namensraum and Bildverdeckung, clear ownership vocabulary.','syntax':'Generally natural complete German sentences; one clumsy coordinated verb construction is the only requested syntax revision.','register':'Consistent technical Du instructions, compact headings, qualified claims and no literal translation of the blog wordplay.','usability':'Runnable-task prose is ordered well; failure/fallback messages and count inflections are clear. Numeric-zero display needs a small clarification.'},'pageNotes':[{'topic':('docs' if k=='index' else k),'path':base+'docs/de/'+k+'.md','note':v} for k,v in notes.items()],'articleNotes':[{'topic':'blog:your-first-anki-deck','path':base+'website/src/content/blog/de/your-first-anki-deck.mdx','note':'Natural tutorial sequence from one word through identity and later changes. Historical date and current-guide direction remain clear.'},{'topic':'blog:stable-ids-and-deck-updates','path':base+'website/src/content/blog/de/stable-ids-and-deck-updates.mdx','note':'Identity/content distinction and original-package basis are explained coherently. Import conditions avoid overstating review-state preservation.'}],'dataNotes':{'businessMessages':'All 210 keys read, including homepage, examples, blog, 404, copy fallbacks, AI form, benchmark qualifiers, machine summaries and one/other count forms. Terminology and tone align with the brief.','frameworkMessages':'All 11 strings read. Search result labels, suggestions and interpolation tokens remain understandable.','metadata':'All 29 title/description pairs, five group labels and three navigation labels read. Task orientation and distinction between languages are clear.','briefAndPrompts':'Entire language brief and prompt/placeholder/contract read. Direct Du register, public API limitations, persistent output and original APKG requirements are explicit.','searchVocabulary':'All 31 production topic term lists and every concept/stopword list read. Terms derive from the described work and include German compounds, ordinary variants and umlaut transliterations; no ranking assessment is claimed.'},'findings':findings,'optionalObservations':[{'severity':'minor','status':'optional-nonblocking','path':base+'docs/de/troubleshooting.md','line':57,'quote':'Prüfe bei Speicherfehlern','note':'Speicherfehler can also suggest a memory fault. The surrounding publication/durability context makes the intended meaning recoverable; Fehlern beim dauerhaften Speichern would be more precise. The same distinction can be used for Build-/Speicherfehler in rust-api.'}],'inputHashes':inputs,'sourceChecksAfterBlindRead':{x:hashlib.sha256(pathlib.Path(x).read_bytes()).hexdigest() for x in ['docs/anki-forge-vs-genanki.md','docs/node/api.md','docs/rust-api.md','docs/troubleshooting.md']},'limitations':['This is an independent linguistic read of staging inputs, not the finalized content-review evidence record.','No technical source approval, code execution, browser, font, layout, Pagefind ranking or deployment acceptance.','Minor findings require a separate reread of changed text before closing.']}
+(p/'linguistic-blind-read.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+print('pages',len(notes),'articles',len(result['articleNotes']),'inputFiles',len(inputs),'findings',len(findings))

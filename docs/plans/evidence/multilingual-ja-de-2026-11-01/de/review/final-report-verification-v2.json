@@ -1,0 +1,1461 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/ja_full_author/independent-de-full-and-five-locale-shared-delta-final-2026-11-01",
+  "report": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/linguistic-source-review-final.json",
+    "sha256": "8ed3c869e135e1978d4fb9251dcb480fcb832a7535a650215d9ad1a75d9a9bec"
+  },
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/source-candidates-final.json",
+    "sha256": "93002e043d0bdebee6d516fd324dbe625094812b67868674281b8ce74efa559e"
+  },
+  "prior": {
+    "commit": "270f26aa5653a0f56297f46fd35e586da444622b",
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/linguistic-source-review-final.json",
+    "sha256": "98ec8f2327db813eacad3b47394dbe555cff7e6ac1f316b4f7872f5ac5d98fcb"
+  },
+  "verificationCorrection": {
+    "previous": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/final-report-verification.json",
+      "sha256": "9a67bd2f0fa17f8ab8b5058bbf7b4f50fb65951d359eb89c3378e062371b17c9"
+    },
+    "cause": "The prior supplemental verifier incorrectly expected reviewInputs() to return inputFiles. The function returns only three signatures; its separate reviewInputFiles() API supplies the file list. All 204 signatures already matched, but the invalid undefined comparison produced false failures. This corrected run uses both actual exports and preserves the failed checker record. No source, candidate or language report changed."
+  },
+  "scope": "Read-only final signature/proof binding and verbatim prior-judgment conservation check; actual language reading is in separately sealed evidence.",
+  "counts": {
+    "entries": 204,
+    "german": 34,
+    "retainedPrior": 170
+  },
+  "checks": [
+    {
+      "topic": "home",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "home",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "home",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "home",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "home",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "home",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "examples",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "examples",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "examples",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "examples",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "examples",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "examples",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "blog",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "docs",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "docs",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "docs",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "docs",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "docs",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "docs",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "languages",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "languages",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "languages",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "languages",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "languages",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "languages",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "quickstart",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "quickstart",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "quickstart",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "quickstart",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "quickstart",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "quickstart",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "development",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "development",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "development",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "development",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "development",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "development",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "templates",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "templates",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "templates",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "templates",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "templates",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "templates",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "api",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "api",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "api",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "api",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "api",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "api",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "installation",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "installation",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "installation",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "installation",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "installation",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "installation",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "concepts",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "concepts",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "concepts",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "concepts",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "concepts",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "concepts",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "cards",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "cards",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "cards",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "cards",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "cards",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "cards",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "media",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "media",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "media",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "media",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "media",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "media",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "updates",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "updates",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "updates",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "updates",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "updates",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "updates",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "compatibility",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "compatibility",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "compatibility",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "compatibility",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "compatibility",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "compatibility",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "rust-api",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "rust-api",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "rust-api",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "rust-api",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "rust-api",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "rust-api",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "node-api",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "node-api",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "node-api",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "node-api",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "node-api",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "node-api",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "python-api",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-api",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-api",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-api",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-api",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-api",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "python-migration",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-migration",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-migration",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-migration",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-migration",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "python-migration",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "en",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "zh-CN",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "es",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "pt-BR",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "ja",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": true
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "de",
+      "signatureMatches": true,
+      "inputFilesMatch": true,
+      "retainedPrior": null
+    }
+  ],
+  "issues": []
+}

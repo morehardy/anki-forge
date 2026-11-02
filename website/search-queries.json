@@ -2177,6 +2177,444 @@
         "observedAt": null,
         "expectedBoundary": "ライブラリはAPKGを生成し、インストール済みAnkiのコレクションや学習進捗を直接編集しない。結果はパッケージ生成とクライアントのインポートの境界を守り、復習履歴の直接編集を約束しない。空の結果でもよい。"
       }
+    ],
+    "de": [
+      {
+        "id": "de-core-01",
+        "kind": "core",
+        "query": "Mit Rust das erste APKG exportieren",
+        "locale": "de",
+        "intentId": "first-apkg-rust",
+        "sdk": "rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-02",
+        "kind": "core",
+        "query": "Mit TypeScript einen Anki-Stapel erstellen",
+        "locale": "de",
+        "intentId": "first-apkg-node",
+        "sdk": "node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-03",
+        "kind": "core",
+        "query": "Fragen und Antworten mit Python als APKG erzeugen",
+        "locale": "de",
+        "intentId": "first-apkg-python",
+        "sdk": "python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-04",
+        "kind": "core",
+        "query": "Aus JSON einen Stapel mit Bildern und Audio erstellen",
+        "locale": "de",
+        "intentId": "json-with-media",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-05",
+        "kind": "core",
+        "query": "Stapelaktualisierung mit dem ursprünglich verteilten APKG",
+        "locale": "de",
+        "intentId": "update-original-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-06",
+        "kind": "core",
+        "query": "Anki Forge und genanki vergleichen",
+        "locale": "de",
+        "intentId": "compare-genanki",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-07",
+        "kind": "core",
+        "query": "Von genanki migrieren und die Notizidentität erhalten",
+        "locale": "de",
+        "intentId": "migrate-genanki",
+        "sdk": "python",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-08",
+        "kind": "core",
+        "query": "Bilder und Aussprache-Audio an Karten anhängen",
+        "locale": "de",
+        "intentId": "attach-image-audio",
+        "sdk": null,
+        "expectedPageIds": [
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-09",
+        "kind": "core",
+        "query": "Mehrere Lücken in einem Satz erzeugen",
+        "locale": "de",
+        "intentId": "create-cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-10",
+        "kind": "core",
+        "query": "Vorder- und Rückseite mit eigenen Feldern gestalten",
+        "locale": "de",
+        "intentId": "custom-card-template",
+        "sdk": null,
+        "expectedPageIds": [
+          "templates",
+          "custom-notetypes"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-11",
+        "kind": "core",
+        "query": "Beschriftungen einer Anatomiegrafik verdecken",
+        "locale": "de",
+        "intentId": "create-image-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-core-12",
+        "kind": "core",
+        "query": "Fehler bei der Stapelerzeugung beheben",
+        "locale": "de",
+        "intentId": "repair-generation-error",
+        "sdk": null,
+        "expectedPageIds": [
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-terminology-01",
+        "kind": "terminology",
+        "query": "Wie hängen Notizen und Stapel zusammen?",
+        "locale": "de",
+        "intentId": "term-deck",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-terminology-02",
+        "kind": "terminology",
+        "query": "Was unterscheidet Notizfelder von Karten?",
+        "locale": "de",
+        "intentId": "term-note",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-terminology-03",
+        "kind": "terminology",
+        "query": "Mehrere Karten aus einer einzigen Notiz",
+        "locale": "de",
+        "intentId": "term-card",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts",
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-terminology-04",
+        "kind": "terminology",
+        "query": "Was steckt in einem APKG-Paket?",
+        "locale": "de",
+        "intentId": "term-apkg",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts",
+          "compatibility"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-terminology-05",
+        "kind": "terminology",
+        "query": "genanki-Kompatibilität und Migrationsgrenzen",
+        "locale": "de",
+        "intentId": "term-genanki",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki",
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-terminology-06",
+        "kind": "terminology",
+        "query": "Image Occlusion mit rechteckigen Masken",
+        "locale": "de",
+        "intentId": "term-image-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-terminology-07",
+        "kind": "terminology",
+        "query": "Namensraum und stabiler Notizschlüssel",
+        "locale": "de",
+        "intentId": "term-namespace-note-key",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates",
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-terminology-08",
+        "kind": "terminology",
+        "query": "Cloze-Lücken mit c1 und c2",
+        "locale": "de",
+        "intentId": "term-cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-variant-01",
+        "kind": "variant",
+        "query": "Aus JSON einen Stapel mit Tondateien erzeugen",
+        "locale": "de",
+        "intentId": "variant-json-audio",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki",
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-variant-02",
+        "kind": "variant",
+        "query": "Nur die Antwort derselben Notiz ändern",
+        "locale": "de",
+        "intentId": "variant-answer-update",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-variant-03",
+        "kind": "variant",
+        "query": "Beschriftungen einer Abbildung verdecken",
+        "locale": "de",
+        "intentId": "variant-cover-diagram",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-variant-04",
+        "kind": "variant",
+        "query": "Von genanki auf ankiforge für Python umsteigen",
+        "locale": "de",
+        "intentId": "variant-switch-genanki",
+        "sdk": "python",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-variant-05",
+        "kind": "variant",
+        "query": "Nach dem Import fehlt das Bild im Stapel",
+        "locale": "de",
+        "intentId": "variant-missing-picture",
+        "sdk": null,
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "de-negative-01",
+        "kind": "negative",
+        "query": "zxqvnj 847261 qqqrzz",
+        "locale": "de",
+        "intentId": "negative-gibberish",
+        "sdk": null,
+        "expectedPageIds": [],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Die bedeutungslose Eingabe hat keine unterstützte Aufgabe oder Zielseite. Eine leere Ergebnisliste ist zulässig; Suche und Korrektur der Eingabe müssen bedienbar bleiben."
+      },
+      {
+        "id": "de-negative-02",
+        "kind": "negative",
+        "query": "ankiforge-project-v1 unverändert einlesen",
+        "locale": "de",
+        "intentId": "negative-old-schema",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki",
+          "troubleshooting",
+          "rust-guide"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Die Tool-Rezepte verlangen ankiforge-project-v2 und lehnen v1 ab. Ein Treffer darf die nötige Konvertierung erläutern, aber unveränderte v1-Daten nicht als zulässig darstellen. Leere Ergebnisse sind erlaubt."
+      },
+      {
+        "id": "de-negative-03",
+        "kind": "negative",
+        "query": "Einen erneuten Anki-Export als Aktualisierungsbasis verwenden",
+        "locale": "de",
+        "intentId": "negative-reexport-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates",
+          "compatibility",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Aktualisierungen brauchen das zuvor ursprünglich verteilte APKG. Ein erneuter Export aus Anki ist kein gültiger Ersatz für diese Basisversion. Leere Ergebnisse sind erlaubt."
+      },
+      {
+        "id": "de-negative-04",
+        "kind": "negative",
+        "query": "Eine PNG-Datei in wrong.mp3 umbenennen und als Audio verwenden",
+        "locale": "de",
+        "intentId": "negative-mime-rename",
+        "sdk": null,
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Umbenennen konvertiert weder die Bytes noch den gespeicherten MIME-Typ. Eine in wrong.mp3 umbenannte PNG-Datei kann bei Inhalts- oder Endungsprüfungen scheitern. Treffer müssen korrekte Eingaben oder eine echte Konvertierung beschreiben und dürfen Umbenennen nicht als Konvertierung versprechen. Leere Ergebnisse sind erlaubt."
+      },
+      {
+        "id": "de-negative-05",
+        "kind": "negative",
+        "query": "Den Anki-Lernverlauf direkt zurücksetzen",
+        "locale": "de",
+        "intentId": "negative-edit-study-progress",
+        "sdk": null,
+        "expectedPageIds": [
+          "compatibility",
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Die Bibliothek erzeugt APKGs und bearbeitet keine installierte Anki-Sammlung oder Lernplanung direkt. Treffer dürfen die Paket- und Importgrenze erläutern, aber keine direkten Änderungen am Lernverlauf versprechen. Leere Ergebnisse sind erlaubt."
+      }
     ]
   }
 }

@@ -1,0 +1,60 @@
+---
+locale: de
+translationKey: your-first-anki-deck
+title: Deinen ersten Anki-Stapel mit Rust erstellen
+description: Von einem kurzen Rust-Programm zu einer spanischen Vokabelkarte, die du in Anki öffnen kannst.
+date: 2026-09-22
+category: Tutorial
+---
+
+import CodeBlock from '../../../components/CodeBlock.astro';
+import { quickstartSource } from '../../../lib/examples';
+import { sitePath, repository } from '../../../lib/site';
+
+Wenn deine Notizen bereits in einem Skript, einem Datensatz oder einer Dateisammlung liegen, kann die automatische Erzeugung eines Anki-Stapels den Erstellungsprozess leichter wiederholbar machen. Deine Quelle bleibt in Git überprüfbar, und jeder Export wird zu einem erneut ausführbaren Schritt.
+
+Beginne mit einem Wort: **hola**. Wir möchten eine Karte, die vorne die spanische Begrüßung und hinten ihre englische Bedeutung zeigt.
+
+<span id="a-complete-program" data-section-alias="a-complete-program"></span>
+
+{/* section: a-complete-program */}
+## Ein vollständiges Programm
+
+Dies ist das minimale Rust-Beispiel des Repositorys:
+
+<CodeBlock code={quickstartSource} />
+
+`Project::new("spanish")` erzeugt den Namensraum. `Note::basic("hola", "hello")` erzeugt eine Basic-Notiz, `project.add("es:hola", note)` weist ihren stabilen Schlüssel zu, und `build(BuildOptions::to(...))` schreibt das Paket.
+
+`build` liefert `BuildOutput` erst nach erfolgreichem Abschluss. Der Operator `?` reicht einen typisierten Fehler weiter, sodass Skripte mit einem Fehler enden können.
+
+<span id="install-and-run" data-section-alias="install-and-run"></span>
+
+{/* section: install-and-run */}
+## Installieren und ausführen
+
+Im <a href={sitePath('/de/docs/quickstart/')}>aktuellen Schnellstart</a> findest du die Installation des veröffentlichten Pakets und den Ausführungsbefehl. Um dasselbe Programm in deinem eigenen Projekt zu verwenden, folge <a href={sitePath('/de/docs/installation/')}>In deine Anwendung integrieren</a>.
+
+Importiere nach dem Export `spanish.apkg` in Anki und decke die Antwort deiner ersten Karte auf.
+
+Das <a href={sitePath('/de/examples/#basic')}>Basic-Beispiel auf dieser Website</a> bietet ebenfalls ein Paket zum Herunterladen, wenn du zuerst das Ergebnis ansehen möchtest.
+
+<span id="give-the-note-an-identity" data-section-alias="give-the-note-an-identity"></span>
+
+{/* section: give-the-note-an-identity */}
+## Der Notiz eine Identität geben
+
+Die Zeichenfolge `es:hola` ist ein ausdrücklicher stabiler Notizschlüssel innerhalb des Namensraums `spanish`. Sie beschreibt, um welche Notiz es sich handelt, unabhängig von der Formulierung der Antwort. Du könntest später „hello“ zu „hello; hi“ erweitern und dieselbe ID behalten.
+
+Verwende für jede logische Notiz eine eigene ID. Wenn deine Quelle bereits einen dauerhaften Schlüssel besitzt, etwa die ID eines Vokabeleintrags, ist das ein guter Ausgangspunkt. Vermeide es, die Identität allein aus Text abzuleiten, den du voraussichtlich bearbeiten wirst.
+
+Für die Aktualisierung eines verteilten Stapels benötigst du auch die Veröffentlichungshistorie. Bewahre das ursprüngliche Paket der Vorgängerversion auf und folge dem <a href={sitePath('/de/docs/updates/')}>dokumentierten Aktualisierungsablauf</a>.
+
+<span id="grow-from-one-note" data-section-alias="grow-from-one-note"></span>
+
+{/* section: grow-from-one-note */}
+## Über die erste Notiz hinausgehen
+
+Erzeuge für eine weitere Begrüßung eine weitere Basic-Notiz und füge sie mit einem neuen Schlüssel hinzu. Verwende für ein fehlendes Wort in einem Satz eine <a href={sitePath('/de/examples/#cloze')}>Cloze-Notiz</a>. Für umfangreichere Karten definierst du Felder und Vorlagen mit der Projekt-API und bündelst Bilder oder Audio mit den Notizen.
+
+Die <a href={sitePath('/de/docs/rust-guide/')}>Rust-Anleitung zur Inhaltserstellung</a> führt weiter zu Diagnostik, Medien und wiederholbaren Builds. Die <a href={`${repository}/tree/main/anki_forge/examples`}>Repository-Beispiele</a> bieten ausführbare Programme, auf denen du aufbauen kannst.

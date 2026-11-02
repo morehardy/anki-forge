@@ -28,6 +28,28 @@
     "inputSha256": "85f5276a59a50143053000a91fe702d76521e13fb9232db86a2498016a029d1f",
     "independentPostBuildTasks": 100,
     "unitTests": 149,
-    "acceptance": "ja/acceptance.md"
+    "acceptance": "ja/acceptance.md",
+    "candidateBranch": "codex/japanese-candidate",
+    "acceptanceCommit": "270f26aa5653a0f56297f46fd35e586da444622b"
+  },
+  "german": {
+    "status": "source-review-finalizing",
+    "locales": 6,
+    "search": {
+      "initial": {
+        "core": 12,
+        "positive": 21,
+        "negative": 4
+      },
+      "corrected": {
+        "core": 12,
+        "positive": 25,
+        "negative": 5
+      }
+    },
+    "queriesAndThresholdsUnchanged": true,
+    "previewTypecheck": "123 files; no errors/warnings/hints",
+    "realDocExecutions": 14,
+    "realApkgChecks": 23
   }
 }

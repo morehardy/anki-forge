@@ -1,0 +1,667 @@
+{
+  "schemaVersion": 1,
+  "locale": "de",
+  "kind": "author-static-checks",
+  "reviewerApproval": false,
+  "generatedAt": "2026-11-01T23:30:42.209Z",
+  "documents": [
+    {
+      "name": "docs",
+      "source": "website/src/content/docs/docs/index.mdx",
+      "target": "staging/docs/de/index.md",
+      "sourceSha256": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c",
+      "targetSha256": "dc985f5b231888a3806870ee2b72852718c22e50693159d67e913da9e7d39be4",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "mit-deiner-programmiersprache-beginnen": "start-with-your-language",
+        "die-bestandteile-verstehen": "understand-the-pieces",
+        "die-nächste-funktion-umsetzen": "build-your-next-feature",
+        "antworten-finden-und-mitarbeiten": "find-answers-and-contribute"
+      },
+      "dynamicRepositoryLinks": [
+        {
+          "expression": "${repository}/blob/main/LICENSE",
+          "resolved": "https://github.com/morehardy/anki-forge/blob/main/LICENSE"
+        },
+        {
+          "expression": "${repository}/issues",
+          "resolved": "https://github.com/morehardy/anki-forge/issues"
+        },
+        {
+          "expression": "${repository}/blob/main/docs/development.md",
+          "resolved": "https://github.com/morehardy/anki-forge/blob/main/docs/development.md"
+        }
+      ],
+      "missingInlineCode": [],
+      "sourceProseBytes": 3269,
+      "targetProseBytes": 3291
+    },
+    {
+      "name": "languages",
+      "source": "website/src/content/docs/docs/languages.mdx",
+      "target": "staging/docs/de/languages.md",
+      "sourceSha256": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24",
+      "targetSha256": "9f4bc430ca275986e082e4bf7df3c02d1c25e09a11db9e338cf165bf9b5abaa3",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "nächste-aufgaben": "next-tasks"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 2059,
+      "targetProseBytes": 1931
+    },
+    {
+      "name": "quickstart",
+      "source": "website/src/content/docs/docs/quickstart.mdx",
+      "target": "staging/docs/de/quickstart.md",
+      "sourceSha256": "274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9",
+      "targetSha256": "aedcddd82f1da4432f75f46aafc29926b5b3a3035c1fbd73965abe4f41c80e9d",
+      "codeBlocks": 3,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "installieren": "install",
+        "deinen-ersten-stapel-exportieren": "export-your-first-deck",
+        "nächste-schritte": "continue"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 1509,
+      "targetProseBytes": 1399
+    },
+    {
+      "name": "json-to-anki",
+      "source": "docs/json-to-anki.md",
+      "target": "staging/docs/de/json-to-anki.md",
+      "sourceSha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "targetSha256": "c9d69a877371fc780181db29480f59c1681b201970ecbe737ddb2cc1d319de44",
+      "codeBlocks": 10,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "gemeinsame-eingabedateien": "shared-inputs",
+        "rust": "rust",
+        "python": "python",
+        "node": "node",
+        "ergebnis-prüfen-und-importieren": "check-and-import-the-result"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 3363,
+      "targetProseBytes": 4541
+    },
+    {
+      "name": "csv-to-anki",
+      "source": "docs/csv-to-anki.md",
+      "target": "staging/docs/de/csv-to-anki.md",
+      "sourceSha256": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486",
+      "targetSha256": "ed8138ad29306fb0c8cee62b66dc9c06cb8e665240650adccfe7bd76967e3853",
+      "codeBlocks": 5,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "die-csv-datei-vorbereiten": "prepare-csv",
+        "anki-forge-installieren": "install",
+        "das-apkg-erzeugen": "convert",
+        "importieren-prüfen-und-erweitern": "verify-and-extend"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 3421,
+      "targetProseBytes": 4036
+    },
+    {
+      "name": "ai-anki-cards",
+      "source": "docs/ai-anki-cards.md",
+      "target": "staging/docs/de/ai-anki-cards.md",
+      "sourceSha256": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5",
+      "targetSha256": "74b4c461be6950511147ff0f1e97d08626d0267b418906f010e9874406169ad2",
+      "codeBlocks": 2,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "mit-überprüfbarem-ausgangsmaterial-beginnen": "choose-input",
+        "karten-im-csv-format-anfordern": "draft-cards",
+        "geprüfte-karten-in-ein-apkg-umwandeln": "export-apkg",
+        "die-karten-vor-dem-lernen-prüfen": "check-result"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 3400,
+      "targetProseBytes": 4112
+    },
+    {
+      "name": "anki-forge-vs-genanki",
+      "source": "docs/anki-forge-vs-genanki.md",
+      "target": "staging/docs/de/anki-forge-vs-genanki.md",
+      "sourceSha256": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+      "targetSha256": "0d4c1421c1c93320ae07e57f84a5ec691b0fef70c88117e3a4c8853b55044229",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "dieselbe-kleine-aufgabe": "the-same-small-task",
+        "vorhandene-genanki-stapel": "existing-genanki-decks",
+        "historische-leistungsmessung": "historical-performance-evidence"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 3689,
+      "targetProseBytes": 4556
+    },
+    {
+      "name": "development",
+      "source": "docs/source-builds.md",
+      "target": "staging/docs/de/development.md",
+      "sourceSha256": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac",
+      "targetSha256": "53ff98772b29690bd60a2935fb32f022236bf2f6fc42d63324ab5b40ffdc6aa7",
+      "codeBlocks": 3,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "aus-dem-quellcode-bauen": "source-builds"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 1347,
+      "targetProseBytes": 1710
+    },
+    {
+      "name": "rust-guide",
+      "source": "docs/rust-guide.md",
+      "target": "staging/docs/de/rust-guide.md",
+      "sourceSha256": "5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf",
+      "targetSha256": "6bc9bb87dc13447e16e3e8b9fb6668c316c354de06ed8c44bad2ea956e9481bb",
+      "codeBlocks": 2,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "projekte-und-diagnostik": "projects-and-diagnostics",
+        "modelle-und-medien": "models-and-assets",
+        "besitz-der-ausgabedateien": "output-ownership",
+        "stabile-notizidentität": "stable-note-identity",
+        "bereits-verteilte-stapel-aktualisieren": "updating-distributed-decks",
+        "fehler-beim-hinzufügen-und-medienkategorien": "addition-errors-and-media-categories"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 4526,
+      "targetProseBytes": 5869
+    },
+    {
+      "name": "templates",
+      "source": "docs/template-bundles.md",
+      "target": "staging/docs/de/templates.md",
+      "sourceSha256": "8695e7f6f40d19911dd072a16bd5d07f43e2a250618eb6c0aefc06a39451f53f",
+      "targetSha256": "7d9971a3563001a7df954a51a0d56ddefdd0ff103de10b8f41a9a6122f60d5f7",
+      "codeBlocks": 5,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "das-paketbeispiel-ausführen": "run-the-bundled-example",
+        "manifest-und-vorlagenreferenzen": "manifest-and-template-references",
+        "ein-modell-laden-und-wiederverwenden": "load-and-reuse-a-model",
+        "mediendateien-und-budgets": "assets-and-budgets"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 3754,
+      "targetProseBytes": 4657
+    },
+    {
+      "name": "api",
+      "source": "docs/api-overview.md",
+      "target": "staging/docs/de/api.md",
+      "sourceSha256": "a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b",
+      "targetSha256": "581d8eb78991bb1c522ff5b2525eb35223cb3e0c17ce66a88c3f41617f801e6c",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "stabile-notizidentität": "stable-note-identity",
+        "mit-einer-aufgabe-beginnen": "start-with-a-task"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 1452,
+      "targetProseBytes": 1969
+    },
+    {
+      "name": "installation",
+      "source": "docs/installation.md",
+      "target": "staging/docs/de/installation.md",
+      "sourceSha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "targetSha256": "a01cc3816070dc01c5aea450fc1b9ed1a3c6dc27172f6a216e17c1d8319d5292",
+      "codeBlocks": 2,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "cargo-abhängigkeiten": "cargo-dependencies",
+        "die-nächste-anleitung-wählen": "choose-the-next-guide"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 1466,
+      "targetProseBytes": 1914
+    },
+    {
+      "name": "concepts",
+      "source": "docs/concepts.md",
+      "target": "staging/docs/de/concepts.md",
+      "sourceSha256": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279",
+      "targetSha256": "ca7c65832736756c6e00332a886a0e83ccada81916d1a7bb458b3b69b3908a56",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "project-und-notiz": "project-and-note",
+        "modelle-felder-und-vorlagen": "models-fields-and-templates",
+        "text-und-html": "text-and-html",
+        "besitz-von-mediendaten": "media-ownership",
+        "erzeugen-und-aktualisieren": "build-and-update"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 3028,
+      "targetProseBytes": 4084
+    },
+    {
+      "name": "cards",
+      "source": "docs/cards.md",
+      "target": "staging/docs/de/cards.md",
+      "sourceSha256": "8de0e93bf4a3b94d18d8214687d78b70a32b53e16b2369692da7c624f028d5f8",
+      "targetSha256": "e49009a745155a906eaf8954affded89d2f627de26f8260197243b9a6d5cff5c",
+      "codeBlocks": 2,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "notizen-erstellen": "author-the-notes",
+        "text-felder-und-kartenidentität": "text-fields-and-card-identity"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 1917,
+      "targetProseBytes": 2459
+    },
+    {
+      "name": "custom-notetypes",
+      "source": "docs/custom-notetypes.md",
+      "target": "staging/docs/de/custom-notetypes.md",
+      "sourceSha256": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1",
+      "targetSha256": "b0085ac7a56d88809e1c5f1237d76e997dc5c5f4beaf10d6a960413a455b22a9",
+      "codeBlocks": 1,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "ausführbares-beispiel": "executable-example",
+        "schlüssel-und-namen": "keys-and-names",
+        "validierung-und-kartenerzeugung": "validation-and-generation"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 2239,
+      "targetProseBytes": 3139
+    },
+    {
+      "name": "media",
+      "source": "docs/media.md",
+      "target": "staging/docs/de/media.md",
+      "sourceSha256": "c2d0a5d292d6b320d47892926767ef782355935e8f9cefade9b930e2f6b62c02",
+      "targetSha256": "e7ecd52e03bcd729ad2112fb4ba516cb065679c71f16509418cc7c1fedb00c27",
+      "codeBlocks": 4,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "den-medienablauf-ausführen": "execute-the-media-workflow",
+        "inhalte-kombinieren-und-medien-ausdrücklich-einbinden": "compose-content-and-explicit-assets",
+        "namen-mime-typen-und-budgets": "names-mime-and-budgets",
+        "typisierte-bilder-und-audioreferenzen-verwenden": "typed-image-and-sound-usage",
+        "mehrere-mediendateien-importieren": "batch-media-import",
+        "verhalten-und-budgets-des-stapelimports": "batch-behavior-and-budgets"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 6024,
+      "targetProseBytes": 7608
+    },
+    {
+      "name": "image-occlusion",
+      "source": "docs/image-occlusion.md",
+      "target": "staging/docs/de/image-occlusion.md",
+      "sourceSha256": "3e54b44010c3420fff223ce8a4bf0a1bb095dd27a6fd3d4b1517d6a05a7f85a5",
+      "targetSha256": "bddaa38be40223ebaad0f0aa093759b70a8ad8e19fc9b6f56c48007b38bb1494",
+      "codeBlocks": 3,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "das-beispiel-ausführen": "run-the-example",
+        "mehrere-masken-und-modi": "multiple-masks-and-modes"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 2269,
+      "targetProseBytes": 2839
+    },
+    {
+      "name": "updates",
+      "source": "docs/updates.md",
+      "target": "staging/docs/de/updates.md",
+      "sourceSha256": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+      "targetSha256": "78ba118cee9fd765ab0c1b7b6d519be3ec34aa0afdc976621cae996c5d196d01",
+      "codeBlocks": 5,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "zwei-versionen-erzeugen-und-vergleichen": "run-two-versions-and-compare",
+        "richtlinie-und-prüfgrenzen": "policy-and-inspection-limits",
+        "nachweise-und-identität": "evidence-and-identity",
+        "client-import-und-prüfung-vor-der-veröffentlichung": "client-import-behavior-and-release-review",
+        "einmal-bauen-prüfen-und-dann-veröffentlichen": "build-once-review-then-publish"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 5091,
+      "targetProseBytes": 6711
+    },
+    {
+      "name": "build-guarantees",
+      "source": "docs/build-guarantees.md",
+      "target": "staging/docs/de/build-guarantees.md",
+      "sourceSha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+      "targetSha256": "966f32043bbf829a52ef54321ea87767a5af589948cf228747662da7bf612f1e",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "temporäre-und-persistente-artefakte": "temporary-and-persistent-artifacts",
+        "basisversionen-und-veröffentlichung": "baselines-and-publication",
+        "inspektionslimits": "inspection-limits",
+        "parallele-arbeit": "concurrent-work",
+        "vorbereitete-veröffentlichung": "prepared-publication-from-source"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 5340,
+      "targetProseBytes": 6665
+    },
+    {
+      "name": "troubleshooting",
+      "source": "docs/troubleshooting.md",
+      "target": "staging/docs/de/troubleshooting.md",
+      "sourceSha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699",
+      "targetSha256": "7b5267b8989cfa6e298bb2f7f55235849c2f3ce32fdb706079a20d2dc3a58430",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "installation": "installation",
+        "modelle-und-notizen": "models-and-notes",
+        "medien-und-vorlagen": "media-and-templates",
+        "aktualisierungen-und-ausgaben": "updates-and-outputs"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 4101,
+      "targetProseBytes": 5346
+    },
+    {
+      "name": "compatibility",
+      "source": "docs/compatibility.md",
+      "target": "staging/docs/de/compatibility.md",
+      "sourceSha256": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c",
+      "targetSha256": "a1092208ce0c5631a45a5c0d98fa811ea858ade4bec4f3f9840acbc25d32ee3b",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "pakete-und-geprüfte-umgebungen": "packages-and-verified-environments",
+        "anki-import-und-wiedergabe": "anki-import-and-playback"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 2742,
+      "targetProseBytes": 3566
+    },
+    {
+      "name": "rust-api",
+      "source": "docs/rust-api.md",
+      "target": "staging/docs/de/rust-api.md",
+      "sourceSha256": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a",
+      "targetSha256": "1f54770c85ae5a811188e70047c7d57f65d3ba4e8f65c33fd54e0e652b9db613",
+      "codeBlocks": 1,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "inhalte-erstellen": "authoring",
+        "inhalte-und-medien": "content-and-media",
+        "build-optionen": "build-options",
+        "erzeugen-vergleichen-und-ausgeben": "build-compare-and-output",
+        "berichte-und-fehler": "reports-and-errors",
+        "kontext-beim-hinzufügen": "addition-context",
+        "einmal-prüfen-einmal-veröffentlichen": "review-once-publish-once"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 8204,
+      "targetProseBytes": 9965
+    },
+    {
+      "name": "node-quickstart",
+      "source": "docs/node/quick-start.md",
+      "target": "staging/docs/de/node-quickstart.md",
+      "sourceSha256": "084c9c550e430907e7c77de653458fdc11a393136b8c4a24f1e64e8c03e2113e",
+      "targetSha256": "01ed82b8aaf02ca0c933f64ddcaab876a64b3ffd3807e5aff714854ca08eb919",
+      "codeBlocks": 3,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "einen-stapel-exportieren": "export-a-deck",
+        "typescript-und-nächste-aufgaben": "typescript-and-next-tasks"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 1390,
+      "targetProseBytes": 1755
+    },
+    {
+      "name": "node-api",
+      "source": "docs/node/api.md",
+      "target": "staging/docs/de/node-api.md",
+      "sourceSha256": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726",
+      "targetSha256": "a3b69419393f190030f3529c523a5c8c306a6e09533b6246c73bd202b9df924f",
+      "codeBlocks": 4,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "project-und-notizen": "project-and-notes",
+        "unveränderliche-modelle": "immutable-models",
+        "medien-und-bildverdeckung": "media-and-image-occlusion",
+        "erzeugen-vergleichen-und-ausgeben": "build-compare-and-output",
+        "artefaktlebensdauer-und-parallelität": "artifact-lifetime-and-concurrency",
+        "fehler": "errors",
+        "kontext-beim-hinzufügen": "addition-context",
+        "medienimport-im-stapel-und-vorbereitete-veröffentlichung": "batch-media-and-prepared-publication",
+        "source-api-details": "batch-media-and-prepared-publication",
+        "vorbereiten-prüfen-und-veröffentlichen": "prepare-review-and-publish",
+        "typescript": "typescript"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 10840,
+      "targetProseBytes": 13466
+    },
+    {
+      "name": "python-quickstart",
+      "source": "docs/python/quick-start.md",
+      "target": "staging/docs/de/python-quickstart.md",
+      "sourceSha256": "394405423e6036cf8a11725eae7fb25adf1ba927df4fe68f690baee409258b42",
+      "targetSha256": "1201cbd37bf1a97bed0a6f9939964df21657474bcc5d85669e6b7c5275a68748",
+      "codeBlocks": 3,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "einen-stapel-exportieren": "export-a-deck",
+        "nächste-schritte": "continue"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 1428,
+      "targetProseBytes": 1789
+    },
+    {
+      "name": "python-api",
+      "source": "docs/python/api.md",
+      "target": "staging/docs/de/python-api.md",
+      "sourceSha256": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+      "targetSha256": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771",
+      "codeBlocks": 1,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "projekt--und-notizwerte": "project-and-note-values",
+        "modelle-und-vorlagen": "models-and-templates",
+        "medien-und-bildverdeckung": "media-and-occlusion",
+        "operationen-und-ergebnisse": "operations-and-results",
+        "fehler-und-nebenläufigkeit": "errors-and-concurrency",
+        "kontext-beim-hinzufügen": "addition-context",
+        "stapelverarbeitung-von-medien-und-vorbereitete-veröffentlichung": "source-api-details",
+        "vorbereiten-prüfen-und-veröffentlichen": "prepare-review-and-publish"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 8205,
+      "targetProseBytes": 10719
+    },
+    {
+      "name": "python-diagnostics",
+      "source": "docs/python/diagnostics.md",
+      "target": "staging/docs/de/python-diagnostics.md",
+      "sourceSha256": "b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28",
+      "targetSha256": "4a3a01708e859d432091a737ea29fdb113a042f3ed4defb741800457ee8ef1c3",
+      "codeBlocks": 4,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {
+        "vor-der-veröffentlichung-vergleichen": "compare-before-publication",
+        "budgets-und-artefaktbesitz": "budgets-and-artifact-ownership"
+      },
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 4081,
+      "targetProseBytes": 4988
+    },
+    {
+      "name": "python-migration",
+      "source": "bindings/python/MIGRATION.md",
+      "target": "staging/docs/de/python-migration.md",
+      "sourceSha256": "ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2",
+      "targetSha256": "34f8ff3453c341b961044bf632b1e68c1717c562598e2bc8672200701faab8da",
+      "codeBlocks": 0,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {},
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 1813,
+      "targetProseBytes": 2161
+    },
+    {
+      "name": "genanki-migration",
+      "source": "docs/python/genanki-migration.md",
+      "target": "staging/docs/de/genanki-migration.md",
+      "sourceSha256": "3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f",
+      "targetSha256": "6035390753fef09d1b00801f9bba7887e0ba0b36571e73b7b635d1bde214eef9",
+      "codeBlocks": 1,
+      "codeBytesUnchanged": true,
+      "sectionMapping": {},
+      "dynamicRepositoryLinks": [],
+      "missingInlineCode": [],
+      "sourceProseBytes": 2649,
+      "targetProseBytes": 3290
+    }
+  ],
+  "blogs": [
+    {
+      "name": "your-first-anki-deck",
+      "sourceSha256": "957379c92c61b6d5f3569da4b41be4d6f593aa0374f0fc97576d3630b4a2e7a0",
+      "targetSha256": "57f4ae6bf9745a1ec58c358f4eba2eebea72813f9b49de15beed7bbabade39f5",
+      "dynamicCodeSame": true,
+      "componentSource": "anki_forge/examples/target_api_basic.rs",
+      "componentSourceSha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "sectionMapping": {
+        "ein-vollständiges-programm": "a-complete-program",
+        "installieren-und-ausführen": "install-and-run",
+        "der-notiz-eine-identität-geben": "give-the-note-an-identity",
+        "über-die-erste-notiz-hinausgehen": "grow-from-one-note"
+      }
+    },
+    {
+      "name": "stable-ids-and-deck-updates",
+      "sourceSha256": "77e2a04feaec5959d73f2aa008412203cc598bcdbfbffb6823ced93c03cfb0c7",
+      "targetSha256": "400f51cae1cab8f6e2519d113151dfa4ceb7a7b656e52ef4ef11a597b1b6d9a6",
+      "dynamicCodeSame": true,
+      "componentSource": "anki_forge/examples/website_showcase.rs",
+      "componentSourceSha256": "458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3",
+      "sectionMapping": {
+        "identität-und-inhalt-trennen": "separate-identity-from-content",
+        "dem-nächsten-build-eine-basisversion-geben": "give-the-next-build-a-baseline",
+        "das-ursprünglich-verteilte-paket-aufbewahren": "keep-the-original-distributed-package",
+        "build-und-import-prüfen": "inspect-the-build-and-the-import"
+      }
+    }
+  ],
+  "dictionaries": [
+    {
+      "path": "staging/website/src/i18n/de.json",
+      "keys": 210,
+      "sameKeys": true,
+      "interpolationErrors": [],
+      "plurals": [
+        {
+          "key": "count.notes",
+          "forms": [
+            "one",
+            "other"
+          ],
+          "samples": {
+            "0": "other",
+            "1": "one",
+            "2": "other",
+            "1.5": "other"
+          }
+        },
+        {
+          "key": "count.cards",
+          "forms": [
+            "one",
+            "other"
+          ],
+          "samples": {
+            "0": "other",
+            "1": "one",
+            "2": "other",
+            "1.5": "other"
+          }
+        },
+        {
+          "key": "count.media",
+          "forms": [
+            "one",
+            "other"
+          ],
+          "samples": {
+            "0": "other",
+            "1": "one",
+            "2": "other",
+            "1.5": "other"
+          }
+        }
+      ]
+    },
+    {
+      "path": "staging/website/src/content/i18n/de.json",
+      "keys": 11,
+      "sameKeys": true,
+      "interpolationErrors": [],
+      "plurals": []
+    }
+  ],
+  "dataPatch": {
+    "documents": 29,
+    "docGroups": 5,
+    "navigation": 3,
+    "searchTerms": 31,
+    "searchConcepts": 32,
+    "promptWords": 159,
+    "independentSearchQueriesRead": false
+  },
+  "limitations": [
+    "No independent linguistic or technical approval.",
+    "No site build, Pagefind ranking, browser layout or package execution performed.",
+    "Paragraph and byte statistics are authoring evidence, not proof of semantic equivalence."
+  ],
+  "counts": {
+    "documents": 29,
+    "blogs": 2,
+    "stagingFiles": 33
+  },
+  "failures": [],
+  "status": "passed"
+}

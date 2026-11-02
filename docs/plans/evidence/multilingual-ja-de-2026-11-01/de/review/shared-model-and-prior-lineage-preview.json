@@ -1,0 +1,264 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-01",
+  "status": "pre-final-shared-model-and-lineage-check",
+  "finalSourceReport": false,
+  "releaseReady": false,
+  "baselineCommit": "270f26aa5653a0f56297f46fd35e586da444622b",
+  "siteModel": {
+    "baselineSha256": "25e3a85e4991a4306cd3473722cccf5fcc3cea46c1c035aed1c2b5f788314131",
+    "currentSha256": "e5a4eea3c3e7277a9f7865b62103566c7822f586a67a5f9548ecefb7a9d6b3d4",
+    "wholeAstEqualAfterRemovingGermanProperties": true,
+    "interpretation": "When true, all existing metadata, sidebar/navigation labels, route definitions and implementation statements remain identical; only literal de data properties were added."
+  },
+  "germanMetadata": [
+    {
+      "topic": "docs",
+      "title": "Anki-Stapel aus Code erzeugen",
+      "description": "Wähle eine Programmiersprache, erzeuge deinen ersten Stapel und ergänze Medien, Vorlagen und wiederholbare Aktualisierungen.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "languages",
+      "title": "Deine Programmiersprache wählen",
+      "description": "Installiere das veröffentlichte Paket für Rust, Node oder Python und exportiere deinen ersten Anki-Stapel.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "quickstart",
+      "title": "Anki-Karten mit Rust erzeugen",
+      "description": "Installiere das veröffentlichte Rust-Paket, erstelle eine spanische Vokabelkarte und exportiere mit einem vollständigen Programm ein dauerhaft gespeichertes APKG.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "json-to-anki",
+      "title": "Anki-Stapel aus JSON erzeugen und aktualisieren",
+      "description": "Lies JSON mit Rust, Python oder TypeScript ein, bündle Bilder und Audio und prüfe eine APKG-Aktualisierung, die nur eine Antwort ändert.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "csv-to-anki",
+      "title": "CSV zu Anki: Karten mit Python erzeugen",
+      "description": "Wandle eine UTF-8-Vokabeltabelle mit einem vollständigen Python-Skript in ein Anki-APKG um – mit CSV-Beispiel, stabilen Notiz-IDs und Importprüfungen.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "ai-anki-cards",
+      "title": "Anki-Karten mit KI-Unterstützung: von Aufzeichnungen zum APKG",
+      "description": "Lass einen KI-Assistenten Karten entwerfen, prüfe die Antworten und exportiere mit Anki Forge ein APKG. Nutze CSV oder eine Aufgabenbeschreibung für Programmierassistenten.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "title": "Anki Forge oder genanki: passend zu deinem Ablauf wählen",
+      "description": "Vergleiche die Erstellung von Anki-APKGs, Laufzeitanforderungen, Aktualisierungsprüfungen und Migrationsaufwand.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "development",
+      "title": "SDKs aus dem Quellcode bauen",
+      "description": "Baue SDKs und Beispiele aus dem Repository und unterscheide Quellcodefunktionen von veröffentlichten Paketen.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "rust-guide",
+      "title": "Inhalte mit Rust erstellen",
+      "description": "Erstelle Projekte, validiere Notizen und verwalte Medien und Aktualisierungen über die unterstützte Rust-API.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "templates",
+      "title": "Anki-Kartenvorlagen, CSS und Medien wiederverwenden",
+      "description": "Lade einen wiederverwendbaren Anki-Notiztyp aus einem Paket mit Kartenvorlagen, CSS und Medien – für normale oder Cloze-Karten mit Rust, Python oder Node.js.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "api",
+      "title": "Überblick über die öffentliche API",
+      "description": "Finde die Rust-, Python- und Node-APIs für Inhaltserstellung, Medien, Diagnostik und Aktualisierungen.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "installation",
+      "title": "Anki Forge in deine Anwendung integrieren",
+      "description": "Installiere das veröffentlichte Rust-Crate, konfiguriere Cargo-Abhängigkeiten und wähle die nächste Anleitung.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "concepts",
+      "title": "Grundbegriffe",
+      "description": "Verstehe Projekte, Notizen und Medien mit eigenem Datenbesitz, stabile Schlüssel, Text und Identität bei Aktualisierungen.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "cards",
+      "title": "Basic- und Cloze-Karten für Anki erzeugen",
+      "description": "Erzeuge Basic-Karten mit Frage und Antwort sowie Cloze-Lückentextkarten aus Code. Ein geprüftes Rust-Beispiel erstellt zwei Notizen und drei Karten.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "custom-notetypes",
+      "title": "Eigene Notiztypen",
+      "description": "Definiere Felder, Kartenvorlagen und Erzeugungsregeln für deine Inhalte mit stabilen Schlüsseln und wiederverwendbaren unveränderlichen Modellen.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "media",
+      "title": "Anki-Karten um Bilder und Audio ergänzen",
+      "description": "Importiere mit Rust, Python oder Node.js Dateien, kombiniere Karteninhalte und verwalte Exportnamen, MIME-Typen und Medienbudgets.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "image-occlusion",
+      "title": "Anki-Karten mit Bildverdeckung erzeugen",
+      "description": "Erzeuge Bildverdeckungskarten per Code mit Rust, Python oder Node.js: Gib Bild und Rechteckmasken vor und wähle einen der beiden Verdeckungsmodi.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "updates",
+      "title": "Anki-Stapel mit stabilen Notiz-IDs aktualisieren",
+      "description": "Veröffentliche eine neue Stapelversion: Behalte stabile Notiz-IDs bei, verwende das ursprüngliche APKG der Vorgängerversion als Basis und prüfe den Vergleich vor der Verteilung.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "build-guarantees",
+      "title": "Build- und Ausgabegarantien",
+      "description": "Verstehe temporäre Artefakte, Pfadschutz, Inspektionsgrenzen und die Veröffentlichung geprüfter Kandidaten.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "troubleshooting",
+      "title": "Fehlersuche",
+      "description": "Behebe Fehler bei Installation, Notizen, Medien, Vorlagen, Identität und der Veröffentlichung von Ausgabedateien.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "compatibility",
+      "title": "Kompatibilität und geprüfte Umgebungen",
+      "description": "Prüfe veröffentlichte Pakete, verifizierte Laufzeitumgebungen und Bedingungen für Import und Wiedergabe in Anki-Clients.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "rust-api",
+      "title": "Rust-API-Referenz",
+      "description": "Finde öffentliche Methoden zur Inhaltserstellung, Build-Vorgaben, Berichte und Diagnoseverhalten in Rust.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "node-quickstart",
+      "title": "Anki-Karten mit Node.js erzeugen",
+      "description": "Installiere ankiforge über npm, erzeuge Karten mit Node.js oder TypeScript und exportiere einen APKG-Stapel zum Import in Anki.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "node-api",
+      "title": "Node- und TypeScript-API",
+      "description": "Öffentliche Methoden, asynchrones Verhalten, Build-Optionen, Ausgabedateien und Berichte des Node-SDK.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "python-quickstart",
+      "title": "Anki-Karten mit Python erzeugen",
+      "description": "Installiere ankiforge über PyPI, erzeuge Karten mit einem kurzen Python-Skript und exportiere einen APKG-Stapel zum Import in Anki.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "python-api",
+      "title": "Python-API",
+      "description": "Project, Medien, Build-Optionen, Berichte und die Kontrolle über die Lebensdauer temporärer Artefakte in Python.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "python-diagnostics",
+      "title": "Python-Diagnostik",
+      "description": "Verstehe native Fehler bei der Inhaltserstellung, Build-Berichte, Aktualisierungsnachweise und Risikorichtlinien in Python.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "python-migration",
+      "title": "Umstieg auf die neue Python-API",
+      "description": "Passe deinen Code an das aktuelle Python-SDK mit eigenem Datenbesitz an und verstehe den Bruch mit der früheren API.",
+      "matchesReadPatch": true
+    },
+    {
+      "topic": "genanki-migration",
+      "title": "Von genanki zu Anki Forge wechseln",
+      "description": "Verstehe, wie du Notizen, Modelle, Vorlagen und Medien aus genanki an die stabilen Schlüssel und das Inhaltsmodell von Anki Forge anpasst.",
+      "matchesReadPatch": true
+    }
+  ],
+  "germanSidebar": {
+    "labels": [
+      "Hier beginnen",
+      "Anleitungen",
+      "Anleitungen nach Programmiersprache",
+      "Referenz",
+      "Hilfe"
+    ],
+    "matchesReadPatch": true
+  },
+  "germanNavigation": {
+    "labels": {
+      "docs": "Anleitung",
+      "examples": "Beispiele",
+      "blog": "Blog"
+    },
+    "matchesReadPatch": true
+  },
+  "priorReportReferenceChecks": [
+    {
+      "file": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/source-candidates-final-v2.json",
+      "expectedSha256": "5b65ccf7f4e45506e3076612e2106accf09707439dc6f9464c0f9f6729388af9",
+      "immutableSha256": "5b65ccf7f4e45506e3076612e2106accf09707439dc6f9464c0f9f6729388af9",
+      "matches": true
+    },
+    {
+      "file": "docs/plans/evidence/multilingual-pt-br-2026-11-01/linguistic-source-review-final.json",
+      "expectedSha256": "aa6e46d347911593938109a4e96fbcd4884b8e37c1124e91a62d343ee82bf909",
+      "immutableSha256": "aa6e46d347911593938109a4e96fbcd4884b8e37c1124e91a62d343ee82bf909",
+      "matches": true
+    },
+    {
+      "file": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/linguistic-source-review.json",
+      "expectedSha256": "442a9ba0698b625bc7b33868aa1fd97bb84f0dab5bca3a012fefef026214087e",
+      "immutableSha256": "442a9ba0698b625bc7b33868aa1fd97bb84f0dab5bca3a012fefef026214087e",
+      "matches": true
+    },
+    {
+      "file": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/source-candidates-final.json",
+      "expectedSha256": "979294f7d72db4b7fc9a4d90cb3db2cd31ddfbcaefb4b10acfad3a8781f55d7f",
+      "immutableSha256": "979294f7d72db4b7fc9a4d90cb3db2cd31ddfbcaefb4b10acfad3a8781f55d7f",
+      "matches": true
+    },
+    {
+      "file": "docs/plans/evidence/multilingual-es-integration-2026-10-31/linguistic-source-review.json",
+      "expectedSha256": "3c36fae4f9f21164734953dcbffe075cbe41ef3726b23f3ff033f2b0d6ebb42e",
+      "immutableSha256": "3c36fae4f9f21164734953dcbffe075cbe41ef3726b23f3ff033f2b0d6ebb42e",
+      "matches": true
+    },
+    {
+      "file": "docs/plans/evidence/multilingual-pt-br-2026-11-01/linguistic-source-review.json",
+      "expectedSha256": "af63aec465c9663898e5d0d466e78c12cf95aadf9bf6e1b2458ddcb23419d167",
+      "immutableSha256": "af63aec465c9663898e5d0d466e78c12cf95aadf9bf6e1b2458ddcb23419d167",
+      "matches": true
+    },
+    {
+      "file": "anki_forge/src/lib.rs",
+      "expectedSha256": "46b719c1d75dea7c5c792a4fa4bd607a1ed1339940345207f944a36dea1cdc5f",
+      "immutableSha256": "46b719c1d75dea7c5c792a4fa4bd607a1ed1339940345207f944a36dea1cdc5f",
+      "matches": true
+    }
+  ],
+  "menuReading": {
+    "file": "website/src/components/LanguageSwitcher.astro",
+    "label": "Deutsch",
+    "registry": {
+      "prefix": "/de",
+      "lang": "de",
+      "og": "de_DE",
+      "dir": "ltr"
+    },
+    "judgment": "Read the actual unchanged component: it takes labels and locale routes from the selected release set, renders the Deutsch autonym with matching lang/hreflang, and builds the same-topic destination. Existing five labels remain intact. This is a source-language delta assessment, not a browser/layout result."
+  },
+  "issues": []
+}

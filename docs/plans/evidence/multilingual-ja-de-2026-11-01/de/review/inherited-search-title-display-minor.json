@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "DE-USAGE-DISPLAY-INHERITED-01",
+  "severity": "minor",
+  "status": "open-nonblocking",
+  "classification": "Inherited shared search title extraction/display issue, not a German translation defect.",
+  "observation": {
+    "source": "Root integration agent reported actual DE search home-hit title Erzeuge Anki-Kartenaus deinen Daten.; actual browser/Pagefind observation belongs to root.",
+    "independentReview": "Read exact HomePage h1 construction and search-documents title extraction. Independently reproduced the same text extraction using the production Cheerio package and synthetic fragments built from actual locale messages. No dist or browser capture is claimed."
+  },
+  "cause": "HomePage intentionally separates the two valid hero messages with br. Cheerio h1.text().trim() concatenates text nodes without adding a word boundary for br. Both rendering/extraction files are unchanged from the five-locale baseline.",
+  "inputs": {
+    "website/scripts/search-documents.mjs": {
+      "sha256": "7f712d7d3d22d5c0886572d33b731787cc9ffc8f4e154dd2c98f36a491afe696",
+      "baselineSha256": "7f712d7d3d22d5c0886572d33b731787cc9ffc8f4e154dd2c98f36a491afe696",
+      "unchanged": true
+    },
+    "website/src/components/HomePage.astro": {
+      "sha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439",
+      "baselineSha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439",
+      "unchanged": true
+    }
+  },
+  "reproductions": [
+    {
+      "locale": "de",
+      "catalog": {
+        "file": "website/src/i18n/de.json",
+        "sha256": "a5eca8cec3584cc6ee73bbdcde9688fee6d3ca61c23927da745ce91e6580d915"
+      },
+      "first": "Erzeuge Anki-Karten",
+      "second": "aus deinen Daten.",
+      "extractedTitle": "Erzeuge Anki-Kartenaus deinen Daten."
+    },
+    {
+      "locale": "en",
+      "catalog": {
+        "file": "website/src/i18n/en.json",
+        "sha256": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848"
+      },
+      "first": "Generate Anki flashcards",
+      "second": "from your data.",
+      "extractedTitle": "Generate Anki flashcardsfrom your data."
+    },
+    {
+      "locale": "es",
+      "catalog": {
+        "file": "website/src/i18n/es.json",
+        "sha256": "df2db211fa90c9314f64a32948106a3b1085ed01a74ffe82d679a945e126fab8"
+      },
+      "first": "Genera tarjetas Anki",
+      "second": "a partir de tus datos.",
+      "extractedTitle": "Genera tarjetas Ankia partir de tus datos."
+    },
+    {
+      "locale": "pt-BR",
+      "catalog": {
+        "file": "website/src/i18n/pt-BR.json",
+        "sha256": "37c3be1e043210e79980d23b879ed3f7353c508ea071491a01dc8aa9bdac9f5f"
+      },
+      "first": "Gere cartões do Anki",
+      "second": "a partir dos seus dados.",
+      "extractedTitle": "Gere cartões do Ankia partir dos seus dados."
+    }
+  ],
+  "impact": "The search hit remains recognizable and navigable, but its home title joins adjacent words. Page hero has an intentional visual line break. This note does not independently verify search-ranking acceptance or task success.",
+  "disposition": "Keep as an explicit inherited presentation minor for the actual usage review. Preserve the sealed linguistic source report; do not alter source translations, dictionaries or shared extraction during this locale release."
+}

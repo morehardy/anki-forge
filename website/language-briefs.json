@@ -182,5 +182,51 @@
       "句読点や括弧の行頭禁則、狭い画面の折り返し、SNS共有用画像の日本語フォントを確認する。"
     ],
     "status": "draft/full-candidate"
+  },
+  "de": {
+    "audience": "Entwicklerinnen und Entwickler, die die veröffentlichten Rust-, Python- oder Node.js-Pakete zur Erzeugung und Aktualisierung von Anki-APKGs integrieren.",
+    "register": "Direkte technische Anleitungen mit einheitlicher Du-Ansprache. Voraussetzungen stehen unmittelbar vor dem betroffenen Schritt, Einschränkungen bei der Aussage, die sie begrenzen. Überschriften benennen konkrete Aufgaben; unnötige englische Substantivketten vermeiden.",
+    "terms": {
+      "note": "Notiz",
+      "card": "Karte",
+      "deck": "Stapel",
+      "noteType": "Notiztyp",
+      "namespace": "Namensraum",
+      "stableKey": "stabiler Notizschlüssel",
+      "originalApkg": "ursprünglich verteiltes APKG",
+      "imageOcclusion": "Bildverdeckung",
+      "baseline": "Basisversion",
+      "template": "Vorlage",
+      "preparedPublication": "vorbereitete Veröffentlichung",
+      "snapshot": "Snapshot"
+    },
+    "protected": [
+      "Anki Forge",
+      "ankiforge",
+      "genanki",
+      "APKG",
+      "API",
+      "JSON",
+      "Rust",
+      "Node.js",
+      "Python",
+      "Basic",
+      "Cloze"
+    ],
+    "avoid": [
+      "Notiz und Karte nicht synonym verwenden.",
+      "Einen erneuten Anki-Export nicht als gültige Aktualisierungsbasis empfehlen.",
+      "Besitz von Daten oder temporären Dateien nicht mit Urheberrecht oder Benutzerrechten verwechseln.",
+      "Codezeichenfolgen, API-Namen, Paketnamen und stabile Schlüssel nicht übersetzen.",
+      "Nur im Quellcode verfügbare Funktionen nicht als Funktionen des veröffentlichten Pakets darstellen.",
+      "Keine uneingeschränkten Zusagen über Lernplanung oder Importergebnisse machen."
+    ],
+    "ownership": "Besitz beschreibt die Zuständigkeit für die Lebensdauer von Daten oder Dateien. Bei Bedarf erklären, welcher Wert den Snapshot hält und wann der letzte Besitzer eine temporäre Datei freigibt. Gemeinsamer Besitz ist keine Kopie der Dateiinhalte.",
+    "languageChecks": [
+      "Singular und Plural nach Intl.PluralRules unterscheiden; Zählwerte nicht mit einem starren Substantiv verbinden.",
+      "Zusammengesetzte Suchwörter und getrennte Formulierungen prüfen, ohne englisches Stemming vorauszusetzen.",
+      "Umlaute, ß und Schreibvarianten in natürlichen Aufgabenfragen prüfen.",
+      "Lange Schaltflächen, Navigationseinträge, Sprachbezeichnungen und Tabellenüberschriften dürfen bei 200 Prozent Textvergrößerung nicht abgeschnitten werden."
+    ]
   }
 }

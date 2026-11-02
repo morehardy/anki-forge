@@ -1,0 +1,33 @@
+{
+  "locale": "de",
+  "status": "complete-author-candidate-awaiting-independent-review",
+  "authorTask": "/root/de_full_author",
+  "baseCommit": "231bcd5",
+  "allowedRoot": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de",
+  "stagingFiles": 33,
+  "stagingBytes": 180960,
+  "documentCodeBlocks": 64,
+  "documentSourceProseBytes": 104616,
+  "documentTargetProseBytes": 130535,
+  "dataPatchSha256": "692e5ecc12c5fc11d342e1a012a2298012ef7d586efc2fef91ab65d5c8128992",
+  "authorCheck": "authoring/authoring-checks.json",
+  "manifest": "authoring/staging-sha256.json",
+  "independentReview": false,
+  "independentSearchQueriesRead": false,
+  "sharedFilesChanged": false,
+  "distBuilt": false,
+  "committed": false,
+  "uncertainties": [
+    "Search ranking, long German labels, 200% text zoom and mobile layout need integrated build/browser verification.",
+    "Full-locale independent technical and linguistic reviews remain required."
+  ],
+  "notes": [
+    "All 29 authoritative English paths taken from site-model.mjs; source registry copied to authoring/sources.json.",
+    "Four independently reviewed German samples reused after source and code hashes matched.",
+    "All 29 document fenced blocks compared byte-for-byte; quickstart MDX component expanded from target_api_basic.rs.",
+    "The two blog MDX CodeBlock references preserve their original dynamic source references, imports adjusted for de directory; historical date/category/translationKey retained.",
+    "Three repository template links on the index were deliberately expanded to their exact concrete HTTPS targets; check.mjs verifies destinations.",
+    "Node API has canonical batch-media-and-prepared-publication marker and source-api-details alias at the same heading.",
+    "No independent 30-query set was read or used; search vocabulary authored from translated prose and language brief."
+  ]
+}

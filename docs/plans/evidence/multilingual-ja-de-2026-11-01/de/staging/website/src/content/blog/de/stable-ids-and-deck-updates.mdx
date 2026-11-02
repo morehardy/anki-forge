@@ -1,0 +1,66 @@
+---
+locale: de
+translationKey: stable-ids-and-deck-updates
+title: Die Identität einer Notiz sollte ihre Formulierung überdauern
+description: Wie stabile IDs und eine Build-Basisversion beim Aktualisieren eines erzeugten Anki-Stapels zusammenwirken.
+date: 2026-09-22
+category: Engineering
+---
+
+import CodeBlock from '../../../components/CodeBlock.astro';
+import { updateExample } from '../../../lib/examples';
+import { sitePath } from '../../../lib/site';
+
+Ein erzeugter Stapel ist nach seinem ersten Export selten fertig. Definitionen werden besser, Beispiele klarer und Fehler korrigiert. Der nächste Build muss wissen, welche Notizen dieselben Notizen mit verbessertem Inhalt sind.
+
+Betrachte diese kleine Änderung:
+
+| Feld | Erste Version | Nächste Version |
+| --- | --- | --- |
+| Vorderseite | hola | hola |
+| Rückseite | hello | hello; hi |
+| Stabile ID | es:hola | es:hola |
+
+Die Bedeutung wurde erweitert. Die logische Notiz bleibt dieselbe.
+
+<span id="separate-identity-from-content" data-section-alias="separate-identity-from-content"></span>
+
+{/* section: separate-identity-from-content */}
+## Identität und Inhalt trennen
+
+Eine ausdrückliche stabile ID gibt einer Notiz einen dauerhaften Schlüssel. Behalte diese ID, wenn du die Notiz bearbeitest, und wähle eine neue ID, wenn du eine andere logische Notiz erstellst.
+
+Identität hat auch einen Projektkontext. Behalte den Namensraum des Projekts über die Veröffentlichungen desselben Stapels hinweg bei. Eine Notiz-ID allein ist nur ein Teil eines wiederholbaren Aktualisierungsablaufs.
+
+<span id="give-the-next-build-a-baseline" data-section-alias="give-the-next-build-a-baseline"></span>
+
+{/* section: give-the-next-build-a-baseline */}
+## Dem nächsten Build eine Basisversion geben
+
+Ein vorheriges Paket zeigt Anki Forge, was zuvor exportiert wurde. Verwende es beim Erzeugen des überarbeiteten Projekts:
+
+<CodeBlock code={updateExample.source} />
+
+In diesem Ausschnitt enthält `project` die überarbeitete Notiz, `previous` verweist auf Version 1 und `next` ist ein separater Pfad für Version 2. Das <a href={sitePath('/generated/website_showcase.rs')}>vollständige Beispiel</a> enthält beide Projektdefinitionen und prüft, dass die Identität einer Notiz erhalten bleibt.
+
+Speichere Eingabe- und Ausgabepaket unter unterschiedlichen Pfaden. Wenn du die Basisversion überschreibst, entfernst du Nachweise, die du zum Verstehen und Prüfen der Veröffentlichung benötigst.
+
+<span id="keep-the-original-distributed-package" data-section-alias="keep-the-original-distributed-package"></span>
+
+{/* section: keep-the-original-distributed-package */}
+## Das ursprünglich verteilte Paket aufbewahren
+
+Jedes erzeugte Paket enthält vollständige Identitäts- und Revisionsnachweise. Der nächste Build validiert diese Nachweise anhand der tatsächlichen Datenbank und Medien, bevor er Identitäten wiederverwendet. Bewahre das ursprüngliche Paket auf, das du verteilt hast; ein erneuter Export aus Anki ist keine unterstützte Basisversion.
+
+Die <a href={sitePath('/de/docs/updates/')}>Anleitung zur Inhaltserstellung</a> beschreibt strenge Aktualisierungen, Risikorichtlinien und Grenzen des Clientimports.
+
+<span id="inspect-the-build-and-the-import" data-section-alias="inspect-the-build-and-the-import"></span>
+
+{/* section: inspect-the-build-and-the-import */}
+## Build und Import prüfen
+
+Prüfe den Build-Bericht und seine Diagnosen zur Aktualisierungssicherheit, bevor du ein Paket verteilst. Wenn der Build die Identität einer Notiz nicht zuordnen kann, untersuche Quelle und Basisversion, statt eine Ausgabedatei als Beweis für eine korrekte Aktualisierung zu betrachten.
+
+Anki wendet anschließend sein eigenes Importverhalten an. Importeinstellungen, bestehende Notizinhalte, lokale Änderungen und die Anki-Version können das Ergebnis beeinflussen. Stabile Identität hilft bei der Zuordnung der Notiz; sie überschreibt diese Entscheidungen nicht und verspricht nicht, dass jeder Import jeden Aspekt des lokalen Zustands erhält.
+
+Das <a href={sitePath('/de/examples/#updates')}>Beispiel mit zwei Versionen</a> bietet beide Pakete, damit du eine kleine, nachvollziehbare Aktualisierung ausprobieren kannst, bevor du deinen eigenen Veröffentlichungsprozess entwirfst.
