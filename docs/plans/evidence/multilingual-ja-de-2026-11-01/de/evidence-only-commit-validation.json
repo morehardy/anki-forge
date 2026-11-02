@@ -1,0 +1,116 @@
+{
+  "scope": "Current build inputs equal the sealed source inputs; independent reports still validate against the original two artifact manifests. CI at a new HEAD must rebuild engineering receipts.",
+  "current": {
+    "commit": "8a74534717a47fc923c182b83ada8618ebce62ee",
+    "inputSha256": "c1c3b90c31ad677b850f62e53bb1634d8a1696034faa7543fc877246ee6c0695",
+    "configuration": {
+      "site": "https://morehardy.github.io",
+      "base": "/anki-forge",
+      "customDomain": ""
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es",
+      "pt-BR",
+      "ja",
+      "de"
+    ]
+  },
+  "reports": {
+    "prefix": {
+      "schemaVersion": 1,
+      "status": "passed",
+      "environment": "prefix",
+      "inputSha256": "c1c3b90c31ad677b850f62e53bb1634d8a1696034faa7543fc877246ee6c0695",
+      "configuration": {
+        "site": "https://morehardy.github.io",
+        "base": "/anki-forge",
+        "customDomain": ""
+      },
+      "releaseLocales": [
+        "en",
+        "zh-CN",
+        "es",
+        "pt-BR",
+        "ja",
+        "de"
+      ],
+      "currentManifestSha256": "62f9efd1c1417f9392407093209128887498c0a33295a4806ebfd4423f2250c6",
+      "configSha256": "15a918d969c0e38195dfa98de4345de21dc79e01767b0b70cc9040a71c3270fc",
+      "reports": [
+        {
+          "kind": "usage-tasks",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/usage-tasks-final-prefix.json",
+          "sha256": "fc10d25cf98e069f47e7125cf3293f1b187b1e393f83925983f8354d39cb72f5",
+          "bytes": 566758,
+          "reviewerRun": "/root/ja_full_author/independent-final-de-rendered-usage-2026-11-01/final-prefix",
+          "originManifestSha256": "62f9efd1c1417f9392407093209128887498c0a33295a4806ebfd4423f2250c6",
+          "originCommit": "7b5f539ec2b8c34a0a9ac052531cda9571e97725",
+          "currentManifestSha256": "62f9efd1c1417f9392407093209128887498c0a33295a4806ebfd4423f2250c6",
+          "reused": false,
+          "resourceScopeSha256": "6d4a1d559b548fc119a809e3300df6240a62c48c2ffb1def999f1750e5ecf3a4"
+        },
+        {
+          "kind": "machine-read",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-read-final-prefix.json",
+          "sha256": "f13ba99d877c22ee158e82613cd05b0118a462849dd986f5d1a9572972274df2",
+          "bytes": 206248,
+          "reviewerRun": "/root/de_technical_review/de-machine-final-prefix-2026-11-01",
+          "originManifestSha256": "62f9efd1c1417f9392407093209128887498c0a33295a4806ebfd4423f2250c6",
+          "originCommit": "7b5f539ec2b8c34a0a9ac052531cda9571e97725",
+          "currentManifestSha256": "62f9efd1c1417f9392407093209128887498c0a33295a4806ebfd4423f2250c6",
+          "reused": false,
+          "resourceScopeSha256": "958353ebc04cbee100115c9a9a60d7aada2d76549ccc890cfa186c79ec993d29"
+        }
+      ]
+    },
+    "root": {
+      "schemaVersion": 1,
+      "status": "passed",
+      "environment": "root",
+      "inputSha256": "c1c3b90c31ad677b850f62e53bb1634d8a1696034faa7543fc877246ee6c0695",
+      "configuration": {
+        "site": "https://ankiforge.dev",
+        "base": "/",
+        "customDomain": "ankiforge.dev"
+      },
+      "releaseLocales": [
+        "en",
+        "zh-CN",
+        "es",
+        "pt-BR",
+        "ja",
+        "de"
+      ],
+      "currentManifestSha256": "a7276d9989d0648de6f0bfcca3e78a6d7a0f4a3db5d92dbc670b1ab20f60d279",
+      "configSha256": "15a918d969c0e38195dfa98de4345de21dc79e01767b0b70cc9040a71c3270fc",
+      "reports": [
+        {
+          "kind": "usage-tasks",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/usage-tasks-final-root.json",
+          "sha256": "8188e25e07cbbac776974723c9ad41c27035d9cfd7f0bd44d188819f4bd674d0",
+          "bytes": 612354,
+          "reviewerRun": "/root/ja_full_author/independent-final-de-rendered-usage-2026-11-01/final-root",
+          "originManifestSha256": "a7276d9989d0648de6f0bfcca3e78a6d7a0f4a3db5d92dbc670b1ab20f60d279",
+          "originCommit": "7b5f539ec2b8c34a0a9ac052531cda9571e97725",
+          "currentManifestSha256": "a7276d9989d0648de6f0bfcca3e78a6d7a0f4a3db5d92dbc670b1ab20f60d279",
+          "reused": false,
+          "resourceScopeSha256": "7c99b5b19b173d99bc6bda02a306c43a064a06bec67968c318b674f2e7cf5370"
+        },
+        {
+          "kind": "machine-read",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-read-final-root.json",
+          "sha256": "5e1623c578977814764b16a1d47c68f07d806dd80b9ed7ca5762cf636c5b91c3",
+          "bytes": 208714,
+          "reviewerRun": "/root/de_technical_review/de-machine-final-root-2026-11-01",
+          "originManifestSha256": "a7276d9989d0648de6f0bfcca3e78a6d7a0f4a3db5d92dbc670b1ab20f60d279",
+          "originCommit": "7b5f539ec2b8c34a0a9ac052531cda9571e97725",
+          "currentManifestSha256": "a7276d9989d0648de6f0bfcca3e78a6d7a0f4a3db5d92dbc670b1ab20f60d279",
+          "reused": false,
+          "resourceScopeSha256": "bb62a2cdd6ec7359ad5c3b2fc4795224ac357664160c261b05e3276c7e22de49"
+        }
+      ]
+    }
+  }
+}

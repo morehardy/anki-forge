@@ -15,4 +15,4 @@
 
 日语的完整独立候选保存在 `codex/japanese-candidate@270f26a`；当前 `codex/multilingual-common` 包含两语。生产公开面基线保持已验证的三语状态，实际发布仍应先处理P0维护、巴葡发布，再逐语推进verified基线。未推送、合并或部署。
 
-最终代码审查以本轮起点 `231bcd56b71765f71b6700141e7237d8561f20bc` 为比较基线，分别记录于 [Standards](standards-review.md) 与 [Spec](spec-review.md)。证据提交不改变构建输入；`validate-final-evidence.mjs` 重新核验当前输入和原始产物报告绑定，新HEAD的CI须重新生成工程收据。
+最终代码审查以本轮起点 `231bcd56b71765f71b6700141e7237d8561f20bc` 为比较基线，受审提交为 `8a74534717a47fc923c182b83ada8618ebce62ee`。两轴独立审查均为0项发现、无最高严重度，分别记录于 [Standards](standards-review.md) 与 [Spec](spec-review.md)。证据提交不改变构建输入；`validate-final-evidence.mjs` 重新核验当前输入和原始产物报告绑定，新HEAD的CI须重新生成工程收据。

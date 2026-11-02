@@ -1,5 +1,5 @@
 {
-  "status": "local-acceptance-complete-final-code-review-pending",
+  "status": "complete-local-candidates",
   "scope": "Complete Japanese then German full local candidates, continuing the approved implement workflow; no push/deployment authorization inferred.",
   "baselineCommit": "231bcd56b71765f71b6700141e7237d8561f20bc",
   "branch": "codex/multilingual-common",
@@ -63,6 +63,21 @@
     "rootFinalAcceptance": "passed",
     "independentPostBuildTasks": 120,
     "acceptance": "de/acceptance.md",
-    "mimeIssue": "closed-in-both-final-environments"
+    "mimeIssue": "closed-in-both-final-environments",
+    "acceptanceCommit": "8a74534717a47fc923c182b83ada8618ebce62ee"
+  },
+  "finalReview": {
+    "baselineCommit": "231bcd56b71765f71b6700141e7237d8561f20bc",
+    "reviewedCommit": "8a74534717a47fc923c182b83ada8618ebce62ee",
+    "standards": {
+      "findings": 0,
+      "highestSeverity": null,
+      "report": "standards-review.md"
+    },
+    "spec": {
+      "findings": 0,
+      "highestSeverity": null,
+      "report": "spec-review.md"
+    }
   }
 }
