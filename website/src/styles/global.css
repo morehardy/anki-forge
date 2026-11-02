@@ -230,11 +230,13 @@ code { font-size: 0.86em; }
 
 /* Keep all shared tools operable at 320px and at increased text sizes. */
 .site-header { flex-wrap: wrap; min-height: 76px; height: auto; padding-block: 12px; }
-.header-tools { margin-left: auto; flex-shrink: 0; }
-.mobile-menu summary, .mobile-menu nav a { white-space: nowrap; }
+.header-tools { position: relative; margin-left: auto; flex-shrink: 0; min-width: 0; max-width: 100%; flex-wrap: wrap; justify-content: flex-end; }
+.mobile-menu summary { white-space: nowrap; }
+.mobile-menu nav a { white-space: normal; overflow-wrap: anywhere; }
 @media (max-width: 767px) {
   .site-header { column-gap: 10px; row-gap: 8px; }
   .header-tools { gap: 8px; }
+  .mobile-menu nav { top: 100%; right: 0; max-width: 100%; }
 }
 @media (max-width: 420px) {
   .site-header .wordmark > span:last-child { display: none; }

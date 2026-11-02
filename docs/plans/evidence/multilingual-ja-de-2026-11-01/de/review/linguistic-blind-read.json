@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-01",
+  "reviewerType": "ai",
+  "reviewerTask": "/root/ja_full_author",
+  "reviewerRun": "de-full-independent-linguistic-blind-read-2026-11-01",
+  "scope": "29 complete documentation prose bodies, 2 complete article prose bodies, 210 UI messages, 11 framework messages and the complete de-data-patch in isolated staging.",
+  "status": "staging-linguistic-read-complete",
+  "releaseReady": false,
+  "finalSourceReport": false,
+  "independence": {
+    "authoredGermanMaterial": false,
+    "authoredOtherLocale": "ja",
+    "editedReviewedProse": false,
+    "readIndependentQueries": false
+  },
+  "method": [
+    "Read all German prose and interface messages independently, without English comparison during the first pass.",
+    "Read all metadata, navigation, brief, prompt and production search vocabulary as German language data.",
+    "Excluded protected code fences from linguistic rewriting; API identifiers and inline examples were read in context.",
+    "Consulted English only after the full blind read for the two proposed wording clarifications and one optional lexical observation.",
+    "Recorded exact staging input hashes before reading; the later final report must bind to finalized production sources and resolved changes."
+  ],
+  "score": {
+    "terminology": 4,
+    "syntax": 4,
+    "register": 4,
+    "usability": 4
+  },
+  "scoreRationale": {
+    "terminology": "Stable Notiz/Karte/Stapel distinction, appropriate Namensraum and Bildverdeckung, clear ownership vocabulary.",
+    "syntax": "Generally natural complete German sentences; one clumsy coordinated verb construction is the only requested syntax revision.",
+    "register": "Consistent technical Du instructions, compact headings, qualified claims and no literal translation of the blog wordplay.",
+    "usability": "Runnable-task prose is ordered well; failure/fallback messages and count inflections are clear. Numeric-zero display needs a small clarification."
+  },
+  "pageNotes": [
+    {
+      "topic": "docs",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/index.md",
+      "note": "Clear task-oriented entry page. Notiz/Karte/Stapel relations and guide choices read naturally."
+    },
+    {
+      "topic": "languages",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/languages.md",
+      "note": "Installation table and runtime qualifiers are clear; programming language is distinct from content language."
+    },
+    {
+      "topic": "quickstart",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/quickstart.md",
+      "note": "Concise Du instructions, persistent output and stable key explained together. No linguistic regression from the reviewed sample."
+    },
+    {
+      "topic": "node-quickstart",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/node-quickstart.md",
+      "note": "ESM/CJS distinction and persistent artifact closing are intelligible. Follow-up links have concrete labels."
+    },
+    {
+      "topic": "python-quickstart",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-quickstart.md",
+      "note": "Virtual environment activation, wheel requirement and task links form a usable sequence."
+    },
+    {
+      "topic": "installation",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/installation.md",
+      "note": "Published crate and repository-only features remain distinct; Cargo integration terminology is consistent."
+    },
+    {
+      "topic": "development",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/development.md",
+      "note": "Source builds, local tarballs and native-wrapper matching are clearly marked as development work."
+    },
+    {
+      "topic": "concepts",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/concepts.md",
+      "note": "Notiz/Karte/Stapel and ownership terms remain distinct. Text/HTML and identity paragraphs are understandable without English."
+    },
+    {
+      "topic": "cards",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/cards.md",
+      "note": "Singular/plural and two-note/three-card explanation are coherent. Cloze syntax and numbering are integrated into clear instructions."
+    },
+    {
+      "topic": "custom-notetypes",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/custom-notetypes.md",
+      "note": "Stable keys versus display names, validation and generation conditions use consistent terminology."
+    },
+    {
+      "topic": "api",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/api.md",
+      "note": "Task table, original APKG requirement and follow-up labels are concise and clear."
+    },
+    {
+      "topic": "python-migration",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-migration.md",
+      "note": "Before/after table reads coherently and clearly rejects a legacy compatibility layer."
+    },
+    {
+      "topic": "genanki-migration",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/genanki-migration.md",
+      "note": "Concept mapping and independently validated identity boundary are explicit. No promise of automatic GUID preservation."
+    },
+    {
+      "topic": "json-to-anki",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/json-to-anki.md",
+      "note": "Three-language task flow and final import checks are coherent. Original distribution and client-side limitations remain adjacent to update instructions."
+    },
+    {
+      "topic": "csv-to-anki",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/csv-to-anki.md",
+      "note": "Quoted fields, BOM, stable IDs and output-file refusal are easy to follow. No confusion between spreadsheet import and library parsing."
+    },
+    {
+      "topic": "ai-anki-cards",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/ai-anki-cards.md",
+      "note": "Draft/review/export responsibilities are clear; no implication that the local prompt builder calls AI or performs OCR."
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/anki-forge-vs-genanki.md",
+      "note": "Balanced comparison with limited historical performance claim. One awkward coordinated verb construction needs a minor rewrite (DE-L-01)."
+    },
+    {
+      "topic": "rust-guide",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/rust-guide.md",
+      "note": "Consistent technical Du register, clear ownership and update sections. MIME category versus decode/playback remains distinguishable."
+    },
+    {
+      "topic": "templates",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/templates.md",
+      "note": "Bundle vocabulary is consistent; file paths, keys and resource-budget constraints have usable explanations."
+    },
+    {
+      "topic": "media",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/media.md",
+      "note": "Media snapshots, export names and MIME retain distinct meanings. Batch import is understandable in context. Byte-count lower-bound wording is coherent."
+    },
+    {
+      "topic": "image-occlusion",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/image-occlusion.md",
+      "note": "Image and rectangle inputs are explicit. Mask keys, ordinals and no-deletion behavior are stated with clear referents."
+    },
+    {
+      "topic": "updates",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/updates.md",
+      "note": "Detailed source-evidence and policy text remains readable. Findings versus policy and client import conditions are not conflated."
+    },
+    {
+      "topic": "build-guarantees",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/build-guarantees.md",
+      "note": "Ownership and durability explanations are coherent; publication facts and consumed owners are understandable. Relative paths are adequately scoped."
+    },
+    {
+      "topic": "troubleshooting",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/troubleshooting.md",
+      "note": "Symptom/action tables are direct and actionable. A minor optional lexical observation is recorded separately for Speicherfehlern."
+    },
+    {
+      "topic": "compatibility",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/compatibility.md",
+      "note": "Version/date framing, recorded verification boundaries and client conditions are intelligible. No blanket portability statement."
+    },
+    {
+      "topic": "python-diagnostics",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-diagnostics.md",
+      "note": "Exception chains, comparison outcome and publication failure facts are explained in a consistent register."
+    },
+    {
+      "topic": "python-api",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-api.md",
+      "note": "Dense API tables remain readable. Ownership, GIL/fork limits and prepare/publish sequence have clear referents; sample fixes remain present."
+    },
+    {
+      "topic": "rust-api",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/rust-api.md",
+      "note": "Method tables and error domains are coherent. Numeric zero should use the glyph 0 for cross-language API clarity (DE-L-02)."
+    },
+    {
+      "topic": "node-api",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/node-api.md",
+      "note": "Report versus JSON field naming and asynchronous ownership are clear. Numeric zero written null risks confusion with the JS value (DE-L-02)."
+    }
+  ],
+  "articleNotes": [
+    {
+      "topic": "blog:your-first-anki-deck",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/website/src/content/blog/de/your-first-anki-deck.mdx",
+      "note": "Natural tutorial sequence from one word through identity and later changes. Historical date and current-guide direction remain clear."
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/website/src/content/blog/de/stable-ids-and-deck-updates.mdx",
+      "note": "Identity/content distinction and original-package basis are explained coherently. Import conditions avoid overstating review-state preservation."
+    }
+  ],
+  "dataNotes": {
+    "businessMessages": "All 210 keys read, including homepage, examples, blog, 404, copy fallbacks, AI form, benchmark qualifiers, machine summaries and one/other count forms. Terminology and tone align with the brief.",
+    "frameworkMessages": "All 11 strings read. Search result labels, suggestions and interpolation tokens remain understandable.",
+    "metadata": "All 29 title/description pairs, five group labels and three navigation labels read. Task orientation and distinction between languages are clear.",
+    "briefAndPrompts": "Entire language brief and prompt/placeholder/contract read. Direct Du register, public API limitations, persistent output and original APKG requirements are explicit.",
+    "searchVocabulary": "All 31 production topic term lists and every concept/stopword list read. Terms derive from the described work and include German compounds, ordinary variants and umlaut transliterations; no ranking assessment is claimed."
+  },
+  "findings": [
+    {
+      "id": "DE-L-01",
+      "severity": "minor",
+      "axis": "syntax",
+      "status": "resolved",
+      "files": [
+        {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/anki-forge-vs-genanki.md",
+          "line": 19
+        }
+      ],
+      "quote": "erzeugst v1 und vergleichst und bereitest anschließend v2 gegen das ursprüngliche v1-APKG vor. Erst danach veröffentlichst du sie.",
+      "issue": "The coordinated verbs vergleichen and vorbereiten have different complements; the sentence attaches gegen/vor ambiguously and makes the reader reconstruct the workflow.",
+      "recommendation": "erzeugst v1, vergleichst v2 mit dem ursprünglichen v1-APKG und bereitest v2 auf dieser Grundlage für die Veröffentlichung vor. Erst danach veröffentlichst du v2.",
+      "englishSource": "docs/anki-forge-vs-genanki.md",
+      "sourceCheckedAfterBlindRead": true,
+      "resolution": {
+        "editor": "root integrator",
+        "independentlyReread": true,
+        "scope": "Reread the complete affected German paragraph after the integrator correction.",
+        "files": {
+          "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/anki-forge-vs-genanki.md": "451e1d2e6d0ab45ad152c1f88bb06e51acc21372cc11e808de5cc3493583dd2b"
+        }
+      }
+    },
+    {
+      "id": "DE-L-02",
+      "severity": "minor",
+      "axis": "usability",
+      "status": "resolved",
+      "files": [
+        {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/node-api.md",
+          "line": 79
+        },
+        {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/rust-api.md",
+          "line": 38
+        }
+      ],
+      "quote": "null ist ein tatsächliches Nullbudget / null bedeutet null, nicht unbegrenzt",
+      "issue": "German null is a valid word for zero, but in a Node API paragraph it can be read as the JavaScript null value. The actual value is numeric 0.",
+      "recommendation": "Node: `0` ist ein tatsächliches Nullbudget. Rust: `0` bedeutet ein Budget von null, nicht unbegrenzt.",
+      "englishSource": [
+        "docs/node/api.md",
+        "docs/rust-api.md"
+      ],
+      "sourceCheckedAfterBlindRead": true,
+      "resolution": {
+        "editor": "root integrator",
+        "independentlyReread": true,
+        "scope": "Reread the complete affected German paragraph after the integrator correction.",
+        "files": {
+          "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/node-api.md": "4ec0367f34a6249bea09de1e5657ed681cd1f8a6fac607e9c00631cee95ae0c6",
+          "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/rust-api.md": "efca7596145a1e4034e988254b9b23e3701eada9b25aa255a2b5927f3f850a62"
+        }
+      }
+    }
+  ],
+  "optionalObservations": [
+    {
+      "severity": "minor",
+      "status": "optional-nonblocking",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/troubleshooting.md",
+      "line": 57,
+      "quote": "Prüfe bei Speicherfehlern",
+      "note": "Speicherfehler can also suggest a memory fault. The surrounding publication/durability context makes the intended meaning recoverable; Fehlern beim dauerhaften Speichern would be more precise. The same distinction can be used for Build-/Speicherfehler in rust-api."
+    }
+  ],
+  "inputHashes": {
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/ai-anki-cards.md": "74b4c461be6950511147ff0f1e97d08626d0267b418906f010e9874406169ad2",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/anki-forge-vs-genanki.md": "0d4c1421c1c93320ae07e57f84a5ec691b0fef70c88117e3a4c8853b55044229",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/api.md": "581d8eb78991bb1c522ff5b2525eb35223cb3e0c17ce66a88c3f41617f801e6c",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/build-guarantees.md": "966f32043bbf829a52ef54321ea87767a5af589948cf228747662da7bf612f1e",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/cards.md": "e49009a745155a906eaf8954affded89d2f627de26f8260197243b9a6d5cff5c",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/compatibility.md": "a1092208ce0c5631a45a5c0d98fa811ea858ade4bec4f3f9840acbc25d32ee3b",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/concepts.md": "ca7c65832736756c6e00332a886a0e83ccada81916d1a7bb458b3b69b3908a56",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/csv-to-anki.md": "ed8138ad29306fb0c8cee62b66dc9c06cb8e665240650adccfe7bd76967e3853",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/custom-notetypes.md": "b0085ac7a56d88809e1c5f1237d76e997dc5c5f4beaf10d6a960413a455b22a9",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/development.md": "53ff98772b29690bd60a2935fb32f022236bf2f6fc42d63324ab5b40ffdc6aa7",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/genanki-migration.md": "6035390753fef09d1b00801f9bba7887e0ba0b36571e73b7b635d1bde214eef9",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/image-occlusion.md": "bddaa38be40223ebaad0f0aa093759b70a8ad8e19fc9b6f56c48007b38bb1494",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/index.md": "dc985f5b231888a3806870ee2b72852718c22e50693159d67e913da9e7d39be4",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/installation.md": "a01cc3816070dc01c5aea450fc1b9ed1a3c6dc27172f6a216e17c1d8319d5292",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/json-to-anki.md": "c9d69a877371fc780181db29480f59c1681b201970ecbe737ddb2cc1d319de44",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/languages.md": "9f4bc430ca275986e082e4bf7df3c02d1c25e09a11db9e338cf165bf9b5abaa3",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/media.md": "e7ecd52e03bcd729ad2112fb4ba516cb065679c71f16509418cc7c1fedb00c27",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/node-api.md": "a3b69419393f190030f3529c523a5c8c306a6e09533b6246c73bd202b9df924f",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/node-quickstart.md": "01ed82b8aaf02ca0c933f64ddcaab876a64b3ffd3807e5aff714854ca08eb919",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-api.md": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-diagnostics.md": "4a3a01708e859d432091a737ea29fdb113a042f3ed4defb741800457ee8ef1c3",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-migration.md": "34f8ff3453c341b961044bf632b1e68c1717c562598e2bc8672200701faab8da",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-quickstart.md": "1201cbd37bf1a97bed0a6f9939964df21657474bcc5d85669e6b7c5275a68748",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/quickstart.md": "aedcddd82f1da4432f75f46aafc29926b5b3a3035c1fbd73965abe4f41c80e9d",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/rust-api.md": "1f54770c85ae5a811188e70047c7d57f65d3ba4e8f65c33fd54e0e652b9db613",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/rust-guide.md": "6bc9bb87dc13447e16e3e8b9fb6668c316c354de06ed8c44bad2ea956e9481bb",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/templates.md": "7d9971a3563001a7df954a51a0d56ddefdd0ff103de10b8f41a9a6122f60d5f7",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/troubleshooting.md": "7b5267b8989cfa6e298bb2f7f55235849c2f3ce32fdb706079a20d2dc3a58430",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/updates.md": "78ba118cee9fd765ab0c1b7b6d519be3ec34aa0afdc976621cae996c5d196d01",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/website/src/content/blog/de/stable-ids-and-deck-updates.mdx": "400f51cae1cab8f6e2519d113151dfa4ceb7a7b656e52ef4ef11a597b1b6d9a6",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/website/src/content/blog/de/your-first-anki-deck.mdx": "57f4ae6bf9745a1ec58c358f4eba2eebea72813f9b49de15beed7bbabade39f5",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/website/src/content/i18n/de.json": "b371f3eeb53c8e6ae305d44f552282ea44c55bfe5b751d87a13b089dd22b1918",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/website/src/i18n/de.json": "a5eca8cec3584cc6ee73bbdcde9688fee6d3ca61c23927da745ce91e6580d915",
+    "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/authoring/de-data-patch.json": "692e5ecc12c5fc11d342e1a012a2298012ef7d586efc2fef91ab65d5c8128992"
+  },
+  "sourceChecksAfterBlindRead": {
+    "docs/anki-forge-vs-genanki.md": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+    "docs/node/api.md": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726",
+    "docs/rust-api.md": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a",
+    "docs/troubleshooting.md": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+  },
+  "limitations": [
+    "This is an independent linguistic read of staging inputs, not the finalized content-review evidence record.",
+    "No technical source approval, code execution, browser, font, layout, Pagefind ranking or deployment acceptance."
+  ],
+  "subsequentClarification": {
+    "file": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/custom-notetypes.md",
+    "author": "de author, requested by root after technical source verification",
+    "independentlyReread": true,
+    "currentSha256": "9dbd706e48dfe60d445eef3ffd303271e2d7df0b7aa4e2a57d1dda973e4cdf3a",
+    "quote": "Leere Schlüssel, Schlüssel, die nur aus Leerraum bestehen, Schlüssel mit führendem oder nachgestelltem Leerraum sowie widersprüchliche oder reservierte Schlüssel",
+    "linguisticAssessment": "Natural and unambiguous German; distinguishes whitespace-only and leading/trailing whitespace from internal whitespace. Actual schema behavior is covered by the separate technical review."
+  },
+  "openRequiredFindings": [],
+  "rereview": {
+    "status": "complete",
+    "closedFindings": [
+      "DE-L-01",
+      "DE-L-02"
+    ],
+    "method": "Read the changed complete paragraphs in the three files from staging, without editing them. Also reread the subsequent custom-notetypes key-validation clarification.",
+    "finalSourceBindingPending": true,
+    "judgment": "All four rubric dimensions remain 4/5. No open major, critical or required minor findings in the staging prose."
+  }
+}

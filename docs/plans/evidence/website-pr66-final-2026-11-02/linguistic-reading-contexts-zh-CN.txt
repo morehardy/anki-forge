@@ -1,0 +1,581 @@
+
+FILE docs/zh-cn/anki-forge-vs-genanki.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Anki Forge 与 genanki
+2:
+3: 如果正在设计可重复的发布流程，需要拥有所有权的媒体、结构化诊断，以及发布更新前的比较与策略检查，可以考虑 Anki Forge。如果已有 genanki 的 Python 脚本、模板和媒体满足需求，迁移成本高于收益，则应保留经过验证的流程。
+4:
+5: | 决策点 | Anki Forge | genanki |
+6: | --- | --- | --- |
+7: | 编写语言 | Rust 核心；Rust、Python 和 Node / TypeScript 接口 | Python |
+8: | 共同基础能力 | Basic、Cloze、自定义模板、媒体与离线 APKG 生成 | Basic、Cloze、自定义模板、媒体与离线 APKG 生成 |
+9: | 身份 | 显式命名空间和笔记键；更新需保留原始 APKG | 可配置 GUID 和数字模型/牌组 ID；支持重新导入更新 |
+10: | 发布前 | 比较发现项、风险策略和已检查的预备候选包 | 由自己的脚本和测试定义发布检查 |
+11: | 媒体所有权 | 图片和音频对象持有不可变数据快照，克隆共享存储 | 脚本提供包媒体文件和引用 |
+12: | 编程式图片遮挡 | 通过公开 API 使用带键矩形遮罩 | 按流程评估合适模型或扩展 |
+13: | 运行成本 | 需要原生依赖；使用受支持平台和解释器 | 保留现有 Python 部署可能成本更低 |
+14: | 迁移成本 | 显式验证旧身份映射、模板和导入 | 已正常工作的 genanki 流程无需迁移成本 |
+15:
+16: ## 同一个小任务
+17:
+18: 将三个 JSON 问题生成带图片和声音的牌组时，两种库都由 Python 解析 JSON 并编写笔记。genanki 需要选择模型和牌组 ID、设置字段值与 GUID 规则、将媒体文件加入包，再写出 APKG。Anki Forge 需要选择命名空间和持久业务键，将拥有所有权的媒体组合进笔记，构建 v1，再基于原始 v1 APKG 比较和预备 v2，最后发布。[完整 JSON 示例](../json-to-anki.md)提供 Rust、Python 和 TypeScript 实现及运行命令。
+19:
+20: ## 已有 genanki 牌组
+21:
+22: [genanki 支持自定义 GUID](https://github.com/kerrickstaley/genanki#note-guids)、媒体和重新导入更新。不能将稳定身份视为 Anki Forge 独有能力。默认 GUID 规则可能依赖字段；字段会变化时，应有意选择 GUID 规则。
+23:
+24: Anki Forge 不会自动恢复任意 genanki 数字 ID 或 GUID。没有单独验证的映射时，应将首次 Anki Forge 分发视为身份边界。此比较及成功 APKG 构建均不承诺无损迁移或保留全部复习历史。迁移已有牌组前阅读[迁移指南](../python/genanki-migration.md)。
+25:
+26: ## 历史性能证据
+27:
+28: 2026-10-08 的比较在 Apple M1 Pro 上测量 Rust Project API 与 genanki 0.13.1。每组 1,000 条 Basic 笔记时，五个实测 Rust 工作负载的导出耗时低 45.7–53.9%；部分媒体场景的峰值内存更高。[方法、原始结果与限制](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md)。该实验未测量当前 Python 或 Node 宿主性能，也不保证这些 SDK 或其他工作负载获得相同加速。
+29:
+30: Anki Forge 维护者 · 2026-10-25 根据公开 Anki Forge 0.3.1 API、[genanki 文档](https://github.com/kerrickstaley/genanki)和归档测量复核。开始新任务前，查看[运行环境兼容性](../compatibility.md)并[选择开发语言](https://ankiforge.dev/docs/languages/)。
+
+FILE docs/zh-cn/api.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 公开 API 总览
+2:
+3: Anki Forge 是开源 Anki APKG 生成库，以 Rust 为核心，提供 Rust、Python 和 Node.js 接口。使用公开的 `ankiforge` 包编写笔记、打包媒体，并在分发新版牌组前检查更新。采用 MIT 许可证。
+4:
+5: | 任务 | Rust | Python | Node / TypeScript |
+6: | --- | --- | --- | --- |
+12: ## 稳定笔记身份
+13:
+14: 为每条逻辑笔记保留稳定的项目命名空间和笔记键。更新已有版本还需要原始分发 APKG。Anki 重新导出的文件不能替代原包内的完整标识映射与修订信息。
+15:
+16: ## 从一个任务开始
+
+FILE docs/zh-cn/build-guarantees.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 构建与输出保证
+2:
+3: `Project::build` 只在操作成功后返回 `BuildOutput`，并保证其中有 APKG 产物。失败时返回 `BuildError`，包含结构化 kind/code、观察结果、底层原因和实际发布事实。
+4:
+5: ## 临时与持久产物
+6:
+21: ## 基线与发布
+31: ## 检查限制
+35: ## 并发工作
+36:
+37: Rust 构建借用不可变项目状态。拥有所有权的模型和媒体可跨项目共享。Node 绑定在调用 build 或 compare 时捕获项目快照，之后的添加不会改变该请求。保持产物所有者存活，直到全部读取者结束；另一个消费者仍需路径时关闭最后一个临时所有者，是应用的生命周期错误。
+38:
+39: 包检查不能证明所有客户端行为。请使用目标 Anki 版本和设置测试渲染、播放与更新导入。调度与 schema 更改限制见[更新](../updates.md)。
+40:
+41: <!-- section: prepared-publication-from-source -->
+42: ## 准备候选包并在审阅后写入目标文件
+43:
+44: 预备发布已包含在公开 `0.3.1` 包中。
+45:
+46: `prepare_publication` 构建、检查并比较一个私有候选包；`publish` 使用同一文件。选项和相对目标在预备阶段绑定。项目编辑不会改变候选包。仅预备不会替换目标；释放或关闭未发布的所有者会移除候选包。
+47:
+48: 每次发布尝试都会消耗所有者，包括策略或 I/O 失败。重试或改变策略、目标需要重新预备。报告仍可读取，但不拥有文件。Node/Python 提供幂等 `close()`，以及原因是 `closed` 或 `consumed` 的不可用错误；发布开始后关闭不会取消它。耗时不包含等待审阅的时间。成功替换后仍可能发生晚期持久性失败，因此要检查实际发布事实。
+49:
+50: 完整操作见[示例](../updates.md#build-once-review-then-publish-from-source)，类型化错误和工作线程行为见各语言 API 参考。
+
+FILE docs/zh-cn/compatibility.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 兼容性
+2:
+3: ## 公开包与已验证环境
+4:
+5: 截至 2026-10-13，公开 Rust、npm 和 PyPI 包均为 `0.3.1`。从 [Rust](../installation.md)、[Node / TypeScript](../node/quick-start.md) 或 [Python](../python/quick-start.md) 开始。
+6:
+17: ## Anki 导入与播放
+18:
+19: 普通导出不需要安装 Anki。导入、渲染和播放媒体仍取决于目标客户端版本、编解码器和导入设置。2026-10-08 的基准测试通过了 40 项 Anki 导入、内容和代表性渲染检查（每个实现 20 项），并未覆盖所有客户端或 GUI/音频行为。
+20:
+21: 更新时保留之前的原始分发 APKG。Anki 重新导出的文件不保留所需标识映射与修订信息。包中不再包含某条笔记，并不会将其从学习者的集合中删除。字段或模板变化、排序字段、本地编辑和复习历史需要针对客户端测试。
+22:
+23: 使用[手动客户端场景](../manual-validation/anki-desktop-v1/TEMPLATE.md)及各 oracle 记录的具体 Anki 版本和设置评估自己的分发。客户端条件与单文件发布行为见[更新](../updates.md)和[构建保证](../build-guarantees.md)。
+
+FILE docs/zh-cn/concepts.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 核心概念
+2:
+3: ## Project 与笔记
+4:
+5: 一个 `Project` 表示一次具有稳定命名空间的发布。它可以把笔记放入多个 Anki 牌组：`default_deck` 提供默认目标，`Note::deck` 覆盖该目标。牌组是输出的去处，并非另一层内容编写、媒体或构建容器。
+6:
+9: ## 模型、字段与模板
+15: ## 文本与 HTML
+21: ## 媒体所有权
+22:
+23: `Media` 持有媒体数据的不可变快照，并管理其生命周期；导出文件名由内容确定。只有在预算范围内完成读取与校验后，导入才会成功；之后源文件可以改变或消失。克隆共享存储，可用于多个项目。`with_export_name` 选择固定且可移植的文件名，不会改变已有克隆或内容节点。
+24:
+25: 类型化引用自动收集媒体。模型或项目上显式声明的资源，即使静态分析无法识别用途，也会被包含。库不会从任意 HTML 或脚本中自动发现文件内容。
+26:
+27: ## 构建与更新
+
+FILE docs/zh-cn/genanki-migration.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 从 genanki 的概念迁移
+2:
+3: 还在选库？阅读 [Anki Forge 与 genanki](../anki-forge-vs-genanki.md)。
+4:
+5: AnkiForge 使用稳定数据键、已校验的不可变模型、拥有所有权的媒体快照以及显式构建和更新操作。这是一套新的内容编写模型，不模拟 genanki 对象，也不模拟已移除的 AnkiForge Deck/lockfile 接口。
+6:
+7: | genanki 概念 | AnkiForge 对应方式 |
+8: | --- | --- |
+9: | 带数字 ID 的 Model | `NoteType.builder(stable_key)...build()` |
+10: | 字段名用作标识符 | 稳定 Field 键与独立显示名称 |
+11: | 携带字段字符串的 Note | 持有模型的 `model.note().field(key, content)` |
+12: | Deck 作为笔记容器 | 带默认牌组的 Project；可选笔记级 `.deck(name)` |
+13: | Package 的媒体文件路径 | 拥有所有权的 `Media.file(path)` 值，经类型化内容自动收集 |
+14: | 写入 Package | `project.build(BuildOptions.to(path))` |
+15: | 从字段派生的默认 GUID，或自定义 GUID 规则 | 显式稳定命名空间和笔记键 |
+16:
+29:
+30: 从持久业务标识符选择键。重命名显示名称或更改定义文本，不应改变这些键。除非导入器明确要求按内容寻址身份，否则不要散列当前字段内容。没有键的源数据，应在 SDK 外分配并持久保存键。
+31:
+32: 模板表达式使用 Field 键。显示名称可以独立翻译，库将键引用编译为 Anki 字段名。模型完成时就会拒绝缺失或冲突声明，之后才可添加笔记。添加笔记自动收集模型依赖，并拒绝同一模型键下的冲突定义。
+33:
+34: 字符串是纯文本；有意加入 HTML 时使用 `Content.html(...)`。通过 `media.image()`、`media.sound()` 和 `Content.sequence(...)` 组合内容。原路径被移除或编辑后，文件快照仍有效。原始 HTML、CSS 或脚本引用的依赖，必须在模型构建器上用 `.asset(media)` 或通过 `project.add_asset(media)` 显式声明。
+35:
+36: 后续发布创建具有相同命名空间和数据键的新 Project，并调用 `BuildOptions.to(next_path).update_from(previous_original_apkg)`。原始 APKG 提供完整标识映射与修订信息。此流程不会从任意旧包恢复身份，也不承诺自动转换已有 genanki 数字 ID/GUID。除非经过单独验证的数据迁移建立了对应关系，否则应把新模型的首次分发视为明确的身份边界。
+37:
+38: 参见[入门](../python/quick-start.md)、[API 参考](../python/api.md)和[更新策略](../python/diagnostics.md)。
+
+FILE docs/zh-cn/index.md (all headings; entire changed prose sections; unchanged code omitted)
+1: Anki Forge 根据笔记、模板和媒体文件生成 Anki `.apkg` 文件。当学习内容保存在代码或结构化数据中，需要反复构建并分发牌组时，可以使用它。
+2:
+3: ## 从你的开发语言开始
+4:
+5: 安装公开包，导出第一个牌组；[选择入门方式](/docs/languages/)。
+6:
+7: | 开发语言 | 第一个结果 | 继续学习 |
+8: | --- | --- | --- |
+9: | Rust | [运行首个牌组示例](/docs/quickstart/) | [集成到应用](/docs/installation/) |
+10: | Node / TypeScript | [安装并构建第一个牌组](/docs/node-quickstart/) | [API 与异步行为](/docs/node-api/) |
+11: | Python | [安装并导出牌组](/docs/python-quickstart/) | [API 与输出所有权](/docs/python-api/) |
+12:
+13: 想先看结果？[探索卡片示例](/examples/)，并下载生成的包。
+14:
+15: ## 理解各个部分
+16:
+17: 笔记保存字段；笔记类型及其模板把字段转换成卡片。牌组在 Anki 中组织生成的卡片。[核心概念](/docs/concepts/)说明这些关系、Project 的值所有权和稳定身份。
+18:
+19: ## 构建下一项功能
+20:
+21: - [CSV 转 Anki](/docs/csv-to-anki/)：用 Python 将词汇表批量生成 APKG。
+22: - [JSON 转 Anki](/docs/json-to-anki/)：用三种开发语言生成带媒体的卡片，并检查更新。
+23: - [AI 辅助制卡](/docs/ai-anki-cards/)：根据笔记起草卡片，核对答案后导出 APKG。
+24: - [Basic 与 Cloze](/docs/cards/)：创建问答和填空卡片。
+25: - [图片与音频](/docs/media/)：注册真实资源并附加到卡片。
+26: - [自定义笔记类型](/docs/custom-notetypes/)与[模板包](/docs/templates/)：定义字段、布局与 CSS。
+27: - [图片遮挡](/docs/image-occlusion/)：根据图像区域创建问题。
+28: - [更新与分发](/docs/updates/)：在版本之间传递身份和修订证据。
+29:
+30: 卡片类型指南使用可运行的 Rust 示例，CSV 教程使用 Python，JSON 教程覆盖三种开发语言。
+31: Node 和 Python API 页面说明相应接口及其差异。
+32:
+33: ## 查找答案与参与贡献
+34:
+35: 操作失败时参考[排查问题](/docs/troubleshooting/)，运行环境支持和客户端导入条件见[已验证环境](/docs/compatibility/)。
+36:
+37: Anki Forge 采用 [MIT](https://github.com/morehardy/anki-forge/blob/main/LICENSE) 许可证。可在 [GitHub](https://github.com/morehardy/anki-forge/issues) 提交可复现的问题，或阅读[贡献者指南](https://github.com/morehardy/anki-forge/blob/main/docs/development.md)。
+
+FILE docs/zh-cn/media.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 图片与音频
+2:
+3: 把图片和音频打包进生成的 Anki 卡片，例如带发音音频的单词卡或示意图题目。Anki Forge 将你提供的文件复制进 APKG；生成音频或图片（例如语音合成）需要使用其他工具。示例使用 Rust；下文的批量导入也给出了 Python 和 Node.js 调用。
+4:
+5: `Media` 值拥有不可变快照。使用 `Media::file` 导入文件，或通过带显式 MIME 类型的 `Media::bytes` 导入原生字节。成功导入后，修改或删除源文件都不会改变该资源。克隆共享存储，可跨项目使用。
+6:
+7: ## 运行媒体流程
+35: ## 组合内容与显式资源
+70: ## 名称、MIME 与预算
+84: ### 类型化图片与声音的使用
+90: ## 批量媒体导入
+103: ### 批量行为与预算
+104:
+105: Rust 使用 `Media::files(paths)`，Node 使用 `await Media.files(paths)`，Python 使用 `Media.files(paths)`，按输入顺序导入文件，每次调用最多四个工作线程。少于 16 个文件时串行运行。Rust 还提供 `files_with_limits`；Node 和 Python 接受与 `file` 相同的限制。限制按每个资源计算。若某项导入失败，调用会等待已启动的工作完成、释放此批次的快照，并返回输入顺序中的第一个错误。已有媒体所有者继续有效。Python 在导入期间释放 GIL；Node 在事件循环之外执行工作。单文件导入仍立即返回持有媒体数据快照的对象；调用方必须选择批量方法才能获得导入并发。
+106:
+107: 存活快照共享进程级 **64 MiB** 内存预算。单个大于 1 MiB 的资源仍流式写入临时文件。编码媒体在每次预备处理中共享延迟分配的 **16 MiB** 缓冲池，池满后写入临时存储。这些预算不包含其他工作内存，也不是 RSS 上限；并发构建各自可以拥有编码池。
+
+FILE docs/zh-cn/node-api.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Node 与 TypeScript API
+2:
+3: `ankiforge` 入口提供唯一的 Project 内容编写模型。类型定义位于[公开源码](../../bindings/node/src/index.ts)、[报告类](../../bindings/node/src/report.ts)及 [JSON 快照声明](../../bindings/node/src/snapshots.ts)。从[入门](../node/quick-start.md)开始。
+4:
+5: ## Project 与笔记
+6:
+21: ## 不可变模型
+42: ## 媒体与图片遮挡
+43:
+44: `await Media.file(path, limits?)` 和 `await Media.bytes(Uint8Array, mime, limits?)` 返回持有媒体数据快照的 `Media` 对象。导入成功后，修改或删除源文件不会改变已导入的媒体数据。`withExportName(name)` 返回重命名值，不改变之前的克隆或内容。通过属性读取 `filename`、`mediaType` 和 `byteLength`。
+45:
+46: `media.image()` 与 `.sound()` 返回自动将资源带入项目的类型化 Content。显式 `project.addAsset` 与模型 `builder.asset` 处理原始 HTML/CSS/脚本引用。媒体限制接受 `{ maxBytes }`，默认为 256 MiB；原生字节没有 64 KiB 内联限制。
+47:
+57:
+58: 默认模式为 `hide_all_guess_one`；两种模式都为带键遮罩生成独立卡片。`.build()` 校验解码尺寸、有限矩形和唯一键。`image` 与 `occlusion` 是保留的生成字段。解码与更新限制见[图片遮挡](../image-occlusion.md)。
+59:
+60: ## 构建、比较与输出
+77: ## 产物寿命与并发
+89: ## 错误
+95: ## 添加上下文
+103: ## 批量媒体与预备发布
+107: ### 预备、审阅与发布
+137: ## TypeScript
+
+FILE docs/zh-cn/python-api.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Python API
+2:
+3: SDK 通过原生扩展调用默认 Rust 公开 API，包含 `py.typed` 和经过检查的公开签名。从[入门](../python/quick-start.md)开始。
+4:
+5: ## Project 与笔记值
+6:
+21: ## 模型与模板
+27: ## 媒体与遮挡
+28:
+29: | 入口 | 行为 |
+30: | --- | --- |
+31: | `Media.file(path, *, limits=MediaLimits())` | 读取媒体数据并返回持有快照的 `Media` 对象 |
+32: | `Media.bytes(data, media_type, *, limits=MediaLimits())` | 拥有带显式 MIME 类型的字节 |
+33: | `media.with_export_name(name)` | 返回共享快照的新文件名值；之前的引用保留原名 |
+34: | `media.filename`, `media.media_type`, `len(media)` | 只读快照元数据 |
+35: | `media.image()` / `.sound()` | 保留快照的类型化内容 |
+36:
+37: `MediaLimits(max_bytes=256 << 20)` 在创建快照前控制每次导入。大媒体可写入拥有所有权的临时存储。名称冲突在全部显式与自动收集资源间校验。
+38:
+39: `Note.image_occlusion(media)` 返回 ImageOcclusionBuilder。链式调用 `.mask(Mask.rect(key, x, y, width, height))`、可选 `.mode(OcclusionMode.HIDE_ONE_GUESS_ONE)`，再调用 `.build()`。默认模式为 `HIDE_ALL_GUESS_ONE`。完成时解码图像，并校验稳定遮罩键和有限、位于图内的像素坐标。在返回的 Note 上可正常设置 `header`、`back_extra` 或 `comments`。生成的 `image` 与 `occlusion` 字段不能手动赋值。
+40:
+41: ## 操作与结果
+58: ## 错误与并发
+64: ## 添加上下文
+65:
+66: 添加失败不会改变项目。结构化上下文记录原始笔记或模型键和目标，并可附带冲突或媒体用法详情。Rust 通过 `AddError::context()` / `detail()` 提供 `note::{AddContext, AddTarget, AddDetail}`；SDK 通过 `AddError.details` 提供类型化 context/detail。Node 字段使用 camelCase 且深度冻结；Python 使用 snake_case TypedDict。标签保留插入下标；字段位置保留原始序列下标（null/None 指字段，[] 指其根）以及可选 UTF-8 字节范围。构建产生的默认牌组错误不带笔记或模型键，仍可从来源链读取。
+67:
+68: 添加时，类型化图片要求 image/* MIME，声音引用接受 audio/* 或 video/*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](../plans/2026-09-28-rust-api-validation-and-errors-design.md)。
+69:
+70: <!-- section: source-api-details -->
+71: ## 批量媒体处理与预备发布
+72:
+73: 批量媒体与预备发布已包含在公开 `0.3.1` 包中。
+74:
+75: ### 预备、审阅与发布
+76:
+96:
+97: 一次发布尝试消耗所有者，包括策略或 I/O 失败。之后调用抛出 `PreparedPublicationStateError`，码为 `BUILD.PREPARED_UNAVAILABLE`，原因是 `closed` 或 `consumed`；close 不取消已经运行的发布。相对路径在预备调用时绑定，Project 更改不能修改已审阅 APKG。报告关闭后仍可读，但不保留文件。改变选项或重试需重新预备。耗时不含审阅等待。晚期错误可能表示替换成功但持久性未确认；决定下一步前检查发布事实。要求原生绑定协议 1 和契约包 2.1.0；更旧的同版本二进制会被拒绝。
+
+FILE docs/zh-cn/python-diagnostics.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Python 诊断与更新策略
+2:
+3: 成功构建返回保证包含产物的 BuildOutput。失败构建抛出 BuildError，其中含观察结果和发布事实。不能仅凭诊断判定成功。
+4:
+24: ## 发布前比较
+25:
+33:
+34: 完成的比较即使发现 High 风险也正常返回。通过 `comparison.allows_publication` 查看策略决定。无法读取的基线、缺失完整标识映射与修订信息、无效候选包或预算超限会抛出 CompareError；`.report` 包含失败前完成的观察结果。
+35:
+36: 默认策略阻止 High 和 Critical 发现项。审阅特定风险类别后，可显式接受：
+37:
+44:
+45: 接受范围是指定类别中的全部发现项。发现项保留原风险与证据。未匹配的放行产生警告；警告不会把成功发布变为失败。未知码、缺失证据和其他硬错误不能被接受。不要自动接受比较返回的每个类别。
+46:
+47: `update_from` 要求上一次原始分发包及其完整内嵌证据。Anki 重新导出不保留该证据。APKG 中省略笔记或卡片，不会自动从学习者的集合中删除它们。请结合目标 Anki 导入设置检查结构变化。
+48:
+49: ## 预算与产物所有权
+
+FILE docs/zh-cn/python-migration.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 全新的 Python API
+2:
+3: 使用 `python -m pip install ankiforge` 和 `from ankiforge import ...`。旧 `anki-forge` 发行名和 `anki_forge` 导入名不是兼容别名。源码目录在修改名称后需用 Maturin 重建原生扩展。参见[安装指南](../../bindings/python/README.md)。
+4:
+5: 不保留旧兼容层。将旧 Deck、注册表和 runtime API 替换为拥有值所有权的公开模型：
+6:
+7: | 旧流程 | 当前流程 |
+8: | --- | --- |
+9: | 可选稳定 ID 的 Deck 或 Project | `Project(namespace, default_deck=...)` |
+10: | `add_note(note)` 与基于内容的身份 | `add(stable_key, note)` |
+11: | 可变 NoteType 与 add_notetype | `NoteType.builder(key)...build()`，再调用 `model.note()` |
+12: | 字符串模型引用 | 笔记持有已校验模型 |
+13: | 项目媒体注册表 | 独立 `Media.file` / `Media.bytes` 快照 |
+14: | 内联渲染媒体和字段专用 setter | `Content.sequence`、`media.image()`、`media.sound()`、`Note.field` |
+15: | 隐式 HTML | 字符串是 Text；使用 `Content.html` |
+16: | 没有稳定身份的遮罩 | `Mask.rect(key, x, y, width, height)` |
+17: | 可选产物与 ensure_success | `BuildOutput` 保证包含产物；失败抛结构化错误 |
+18: | 根据诊断猜测报告结果 | Output/Error 快照提供实际结果；Report 只有观察结果 |
+19: | Diff、lockfile 与更新安全开关 | `compare(CompareOptions.against(...))`、`BuildOptions.update_from(...)` |
+20: | Runtime 子进程包 | 进程内 PyO3 绑定，调用默认 Rust API |
+21:
+22: 只有携带当前标识映射与修订信息的完整原始分发 APKG 才能作为更新基线。不会自动恢复旧模板包和旧 APKG 证据。新流程见 README 与可执行示例。
+
+FILE docs/zh-cn/rust-api.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Rust API
+2:
+3: crate 根提供常用值：`Project`、`Note`、`NoteType`、`Field`、`Template`、`Content`、`Media`、`BuildOptions` 和 `BuildOutput`。公开领域模块为 `note`、`schema`、`media`、`build`、`update` 与 `diagnostics`。仓库工具是独立且由 feature 控制的接口；使用本库的应用不需要这些工具。
+4:
+5: ## 内容编写
+6:
+7: | 入口 | 职责 |
+8: | --- | --- |
+9: | `Project::new(namespace)` | 校验稳定发布命名空间 |
+10: | `project.default_deck(name)` | 设置默认目标牌组 |
+11: | `project.add(key, note)` | 原子收集笔记、模型和媒体 |
+12: | `project.add_asset(media)` | 包含显式原始 HTML/CSS/脚本资源 |
+13: | `Note::basic(front, back)` / `Note::cloze(text)` | 创建持有内置模型的笔记 |
+14: | `model.note().field(key, content)` | 创建持有不可变模型的自定义笔记 |
+15: | `note.deck(name).tag(tag)` / `.tags(iterable)` | 添加前配置笔记 |
+16: | `NoteType::builder(key)...build()` | 校验并完成不可变模型 |
+17: | `NoteType::from_bundle(path)` | 从 bundle-v2 加载模型及其拥有所有权的资源 |
+18:
+19: `Field::new(key).name(display)` 和 `Template::new(key).name(display)` 分离身份与展示。模板绑定字段键，包括过滤器、条件区块和浏览器模板。`Field::required()` 检查非空内容；`Field::sort()` 选择排序字段。`schema::GenerationRule::all` 和 `any` 接收字段键。`builder.cloze_field(key)` 声明 Cloze 模型。
+20:
+21: `schema::FieldKey` 和 `TemplateKey` 是不同类型。可组合字符串字面量、拥有所有权或借用的字符串、`Cow<str>` 以及拥有所有权或借用的键。转换保留原值；schema 完成时校验键。模板键不会被隐式接受为字段键。
+22:
+23: ## 内容与媒体
+24:
+25: 普通字符串均转换为 `Content::text`。HTML 要求 `Content::html`。`Content::sequence` 组合语义值，直到构建时才渲染。`Media::file(path)` 与 `Media::bytes(bytes, mime)` 拥有快照；对应 `with_limits` 变体在读取前应用 `media::MediaLimits { max_bytes }` 预算，默认为每个资源 256 MiB。`with_export_name(name)` 返回共享同一快照的重命名值；已有克隆保留自己的名称。
+26:
+27: `media.image()` 和 `media.sound()` 保留资源依赖。固定文件名必须可移植且无冲突。显式资源即使没有静态可见引用也会被包含。参见[媒体](../media.md)。
+28:
+29: `Note::image_occlusion(media)` 返回 `note::ImageOcclusionBuilder`。`.mask(Mask::rect(key, x, y, width, height)).mode(mode).build()` 校验解码图像尺寸、矩形和唯一稳定键。支持 `HideAllGuessOne` 与 `HideOneGuessOne`，参见[图片遮挡](../image-occlusion.md)。
+30:
+31: ## 构建选项
+32:
+33: `project.build(BuildOptions::to(path))` 发布持久 APKG。`BuildOptions::temporary()` 返回拥有所有权的临时输出。两者均接受 `.update_from(previous_apkg)`、`.inspect_limits(limits)` 和 `.update_policy(policy)`。没有基线却设置策略属于配置错误；setter 顺序不影响此规则。
+34:
+35: `build::InspectLimits::default()` 提供有限预算，可修改其公开字段。值均为 `u64`；零就是零，并非无限制。
+36:
+37: | 字段 | 默认值 |
+38: | --- | --- |
+39: | `max_archive_bytes` | 2 GiB |
+40: | `max_entries` | 100,000 |
+41: | `max_central_directory_bytes` | 16 MiB |
+42: | `max_zip_entry_bytes` / `max_zip_total_bytes` | 1 GiB / 4 GiB |
+43: | `max_meta_bytes` / `max_media_map_bytes` | 64 KiB / 16 MiB |
+44: | `max_identity_bytes` | 64 MiB |
+45: | `max_collection_bytes` / `max_media_bytes` | 512 MiB / 256 MiB |
+46: | `max_decoded_total_bytes` / `max_zstd_window_bytes` | 4 GiB / 64 MiB |
+47:
+48: 限制独立应用于基线和候选包检查。失败检查报告资源、限制、观察量以及可用的相关条目。提高限制是调用方的显式操作；媒体导入有自己的更早预算。
+49:
+50: ## 构建、比较与输出
+51:
+52: `BuildOutput::artifact()` 返回拥有所有权的 `build::ApkgArtifact` 引用。`BuildOutput::report()` 返回观察结果。产物克隆共享临时文件寿命；`persist_to` 返回持久所有者，或返回带发布事实与底层 I/O 来源的 `build::PersistError`。
+53:
+54: `project.compare(update::CompareOptions::against(path))` 返回完成的 `ComparisonReport`，即使高风险发现项阻止其策略。它提供 `findings()`、`highest_risk()`、`policy()`、`diagnostics()` 和 `snapshot()`。`UpdatePolicy::default()` 阻止 High/Critical；`.fail_on(level)` 改变阈值，`.allow(RiskCode)` 接受整个已注册风险类别。它不能接受标识映射与修订信息缺失或损坏等硬错误。
+55:
+56: ## 报告与错误
+57:
+58: `BuildReport::snapshot()` 返回 `build::json::ReportSnapshot`，只有观察结果，没有成功/失败或文件所有权。`BuildOutput::snapshot()` 与 `BuildError::snapshot()` 返回 `build::json::BuildSnapshot`，包含实际结果和报告。`update::json::ComparisonSnapshot` 将原始发现项与策略评估分开。所有快照 DTO 实现 `serde::Serialize`，且不拥有文件。不需要扩展 trait。
+59:
+60: Rust 中的快照路径字段保留原生 `PathBuf` 值。JSON 对有效 Unicode 使用字符串，否则使用无损原生编码：非 UTF-8 Unix 名称为 `{"encoding":"unix_bytes","bytes":[...]}`，含未配对 UTF-16 代理项的 Windows 名称为 `{"encoding":"windows_wide","units":[...]}`。成功产物路径和失败发布路径均适用。在原平台恢复 JSON 路径时，反序列化为 `build::json::PathSnapshot`，再调用 `into_path_buf()`；来自不同平台的编码路径会被拒绝。自行序列化错误中的原生路径时，`PathSnapshot::new(path)` 提供相同表示。
+61:
+62: 错误与所属操作放在一起：schema 和模板包错误在 `schema`，添加/IO 错误在 `note`，媒体错误在 `media`，构建/持久化错误在 `build`，比较/策略错误在 `update`。它们均提供 `kind()` 和 `code()`，实现 `std::error::Error + Send + Sync + 'static`，并保留真实来源错误。
+63:
+64: ## 添加上下文
+65:
+66: 添加失败不会改变项目。结构化上下文记录原始笔记或模型键和目标，并可附带冲突或媒体用法详情。Rust 通过 `AddError::context()` / `detail()` 提供 `note::{AddContext, AddTarget, AddDetail}`；SDK 通过 `AddError.details` 提供类型化 context/detail。Node 字段使用 camelCase 且深度冻结；Python 使用 snake_case TypedDict。标签保留插入下标；字段位置保留原始序列下标（null/None 指字段，[] 指其根）以及可选 UTF-8 字节范围。构建产生的默认牌组错误不带笔记或模型键，仍可从来源链读取。
+67:
+68: 添加时，类型化图片要求 image/* MIME，声音引用接受 audio/* 或 video/*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](../plans/2026-09-28-rust-api-validation-and-errors-design.md)。
+69:
+70: ## 审阅一次，发布一次
+71:
+72: 预备发布 API 已包含在公开 `0.3.1` 包中。
+73:
+74:
+97:
+98: 预备阶段执行完整的受限检查与比较。直到 `publish` 才发布目标；它使用同一私有候选包并复查基线别名。相对路径在预备调用时绑定。项目编辑不能改变候选包。报告耗时不含审阅等待。释放未发布所有者会清理它；已发布临时输出遵循通常的最后产物所有者清理规则。不能从 JSON 恢复所有者，也不能对已消耗所有者重试。原生构建省略未使用的暂存 manifest，但仍内嵌标识映射与修订信息，并保留媒体验证。内部暂存工具仍接收完整 manifest 和指纹。
+
+FILE docs/zh-cn/rust-guide.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Rust 编写指南
+2:
+3: 一个 `Project` 描述一次发布。用稳定命名空间创建项目，以稳定键添加笔记，再构建 APKG。常用类型直接从 `ankiforge` 导入；高级选项位于公开的领域模块。
+4:
+5: ## 项目与诊断
+6:
+27: ## 模型与资源
+28:
+29: 完成的 `NoteType` 不可变且可共享。调用 `model.note()`，按稳定键赋值，再把结果加入项目。笔记持有模型；添加时自动收集模型和媒体。声明与模板规则见[自定义笔记类型](../custom-notetypes.md)。
+30:
+31: `Media::file` 与 `Media::bytes` 返回持有媒体数据快照的 `Media` 对象。导入成功后不再需要保留源文件。`image.image()` 和 `audio.sound()` 生成结构化内容；`Content::sequence` 将它们与文本或 HTML 组合。原始 HTML、CSS 或脚本资源必须通过 `builder.asset` 或 `project.add_asset` 显式包含。参见[媒体](../media.md)和[模板包](../template-bundles.md)。
+32:
+33: ## 输出所有权
+37: ## 稳定笔记身份
+41: ## 更新已分发的牌组
+54: ### 添加错误与媒体类别
+55:
+56: `Project` 使用稳定命名空间和可选默认牌组，没有显示标题。`NoteType`、`Field` 与 `Template` 仍支持显示名称。`Project::add` 是原子操作。通过 `AddError::context()` 查看笔记或模型键，通过 `note::AddTarget` 查看原始位置；`detail()` 返回 `note::AddDetail`，说明冲突或不兼容媒体用法。匹配这些非穷尽枚举时，对数据变体使用 `..`，并提供兜底分支。字段的 `content_path` 为 `None` 时指字段本身，`Some([])` 指其根，序列下标则指嵌套节点。分隔符字节范围指向原始 UTF-8 Text/Html 叶节点。
+57:
+58: `Media::image()` 和 `sound()` 本身不会返回错误。添加时，图片要求 `image/*`，声音引用要求 `audio/*` 或 `video/*`。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。这检查保留的 MIME，并非解码或播放。原始 HTML 和显式资源保持原有行为。导出重命名不会改变 MIME：PNG 改名为 `wrong.mp3` 后可以通过图片添加，但构建的独立探测或扩展名检查仍可能返回 `MEDIA.DECLARED_MIME_MISMATCH`。
+59:
+60: 工具输入现在要求 `ankiforge-project-v2`，且没有顶层 `name`；v1 被拒绝。契约包为 2.1.0；包身份格式仍为 `ankiforge-identity-v1`。
+
+FILE docs/zh-cn/templates.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 模板包
+2:
+3: 在多个牌组中复用同一套 Anki 卡片设计：把笔记类型的模板、CSS 和媒体放在同一目录中，用于普通卡片或 Cloze 卡片。示例使用 Rust；Python 和 Node.js 分别通过 `NoteType.from_bundle` 和 `NoteType.fromBundle` 加载模板包，参见 [Python API](../python/api.md#models-and-templates) 和 [Node API](../node/api.md#immutable-models)。
+4:
+5: 模板包包含可复用的笔记类型定义、模板文本、CSS，以及显式声明的全部媒体依赖。`NoteType::from_bundle(directory)` 校验完整模板包并保存模板包及媒体数据的快照，再返回与内联编写相同的不可变 `NoteType`。它不会部分修改项目。
+6:
+7: ## 运行模板包示例
+8:
+12:
+13: 该流程加载[自定义 Cloze 测试模板](../../contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml)，写出 `target/docs-examples/template.apkg`。模板目标为 **Languages::Cloze**，一条笔记生成两张卡片。
+14:
+15: ## Manifest 与模板引用
+16:
+17: Manifest 文件名为 `anki-template.yaml`。只接受新版格式：
+18:
+19: <!-- source: contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml -->
+42: <!-- /source -->
+43:
+44: `note_type.key`、字段键和模板键是必填稳定标识符。`name` 可选，默认为对应键。`cloze_field` 选择 Cloze 模型，不需要单独声明 kind。未设置 `required: true` 的字段可以省略。未知 manifest 属性会被拒绝。
+45:
+46: 所有模板都使用**字段键**，包括正面、背面和浏览器变体：`{{cloze:text}}`、`{{extra}}` 以及 `{{#extra}}` 等条件区块。Sentence 和 Extra 等显示名称在绑定完成后为 Anki 生成。加载器在错误中保留原始文件路径和模板字节范围。
+47:
+48: ## 加载与复用模型
+49:
+50: <!-- source: anki_forge/examples/docs_workflow.rs#bundle -->
+67: <!-- /source -->
+68:
+69: 在独立应用中，以下完整示例要求把同一模板包复制到 `fixtures/template-bundle`：
+70:
+85:
+86: 返回的模型不依赖源目录。可以与另一项目共享，也可在源目录删除后继续使用。加载失败不会返回部分模型，并会清理未共享的快照。
+87:
+88: ## 资源与预算
+89:
+90: 显式声明所有原始模板、CSS 和脚本资源。每个 `assets` 条目使用相对于模板包的路径和固定导出名称：
+91:
+99:
+100: 然后模板可使用 `<img src="badge.png">`，CSS 可使用 `url('labels.woff')`。`css_file` 指定 CSS 源文件；资源不会从任意 HTML、CSS 或 JavaScript 中自动推断。声明的资源即使没有检测到静态引用也保留在 APKG 中。导出名称遵守与[媒体](../media.md)相同的可移植名称及 Unicode/大小写冲突规则。包括扩展名在内的完整导出名称最多为 255 个 UTF-8 字节。JSON Schema 检查语法和字符数；`NoteType::from_bundle` 还会在返回已校验模型前执行字节预算、文件内容与引用检查。仅通过 schema 检查并不能保证加载成功。
+101:
+102: 绝对路径、目录穿越和指向模板包外部的符号链接会被拒绝。Manifest 上限为 256 KiB；每个模板或 CSS 文本文件上限为 2 MiB，且必须为 UTF-8。资源快照使用默认媒体预算，也可由调用方通过 `NoteType::from_bundle_with_limits` 提供 `MediaLimits`。预检长度和实际读取字节数都会检查。
+103:
+104: 模板包错误保留 kind/code、源路径、适用时的字节偏移，以及底层 schema、I/O、YAML、UTF-8 或媒体错误。模型完成时校验 schema；添加笔记时另外检查项目级冲突。参见[自定义笔记类型](../custom-notetypes.md)和[排查问题](../troubleshooting.md)。
+
+FILE docs/zh-cn/troubleshooting.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 排查问题
+2:
+3: 使用失败操作的结构化 `kind` 和 `code`，结合来源链与观察结果进行排查。显示文本面向人类，可能变化。操作失败与比较已完成但策略阻止发布，是不同的结果。
+4:
+5: ## 安装
+6:
+17: ## 模型与笔记
+32: ## 媒体与模板
+47: ## 更新与输出
+48:
+49: 基线应为含完整标识映射与修订信息的原始分发 APKG。Anki 重新导出的包不保留该证据。更新策略不能放行命名空间不匹配或证据损坏。
+50:
+51: 完成的比较可以有 `allows_publication == false`。选择显式风险类别放行前，检查原始发现项和证据。不要全部放行。若希望得到相同决策，必须向实际更新构建传入相同策略。在仅新建请求上设置策略会报错。
+52:
+53: 临时路径消失时，应将输出或产物所有者保留到全部读取者结束。报告和 JSON 快照不是所有者。持久化失败时，检查错误的发布阶段和持久性：目标已发布后也可能返回错误。参见[输出保证](../build-guarantees.md)。
+
+FILE docs/zh-cn/updates.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 更新与分发
+2:
+3: 为已经分发的 Anki 牌组发布修正或新增卡片。稳定笔记 ID 帮助 Anki Forge 和 Anki 识别已有笔记，而不是把它们当成新笔记；Anki 导入设置与较新的本地编辑仍会影响最终变化。
+4:
+5: 保持项目命名空间和笔记、模型、字段、模板键稳定。每个新版本都以上一版分发时的**原始 APKG** 为基准构建。包内包含完整的标识映射和修订信息，且这些信息采用带版本号的格式。请将原始包与对应的源码版本一起保存。
+6:
+7: ## 运行两个版本并比较
+8:
+12:
+13: 这会写出 `spanish-v1.apkg` 和 `spanish-v2.apkg`，比较修改后的答案，并检查更新包的数量。可执行源码如下：
+14:
+15: <!-- source: anki_forge/examples/docs_workflow.rs#updates -->
+36: <!-- /source -->
+37:
+38: 即使发现项会阻止发布，`compare` 也可以成功完成。请分别读取 `comparison.policy().allows_publication()`、原始风险级别和证据。`build(...update_from(...))` 执行相同分析；若策略阻止候选包，则在发布前返回 `BuildError`。
+39:
+40: ## 策略与检查限制
+41:
+42: 这份完整程序选择更严格的阈值，并对比较和更新使用相同配置：
+43:
+66:
+67: 默认策略阻止 High 和 Critical 发现项。审阅特定类别后，调用方可有意选择 `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`。它放行**该类别中的所有发现项**，同时保留原级别和证据；并不表示逐条批准指定笔记。没有匹配发现项的放行会产生警告；未知风险码被拒绝。不要自动放行比较返回的每一个码。
+68:
+69: 缺失或损坏的证据、命名空间不匹配、无效候选数据和检查限制都是硬错误，不是可放行的风险类别。分析无法完成时，比较返回错误及已完成的观察结果。对没有 `update_from` 的新建请求显式设置策略属于配置错误，与 setter 调用顺序无关。
+70:
+71: ## 证据与身份
+72:
+73: 包内包含 `ankiforge-identity.json`，格式为 `ankiforge-identity-v1`。它将模型或配置 ID、笔记 GUID、历史字段或模板槽位、卡片或遮罩序号、修订和媒体绑定到实际集合与载荷。Anki 重新导出不保留该证据，不能作为更新基线。缺失证据绝不会被静默重建。
+74:
+75: 显示名称和内容编辑保留身份键。内容未变时保留基线修订；内容改变时推进修订。字段或模板重排保留历史映射。退役身份继续保留，恢复相同键时可复用。笔记键不能移到另一模型，模型键也不能在普通与 Cloze 类型间改变。
+76:
+77: ## 客户端导入行为与发布检查
+78:
+79: APKG 是分发包，不是删除同步。省略笔记、字段、模板或遮罩，不会删除学习者已有数据。字段或模板 schema 和排序字段变化属于高风险，因为 Anki 合并与导入设置会影响行为。Schema 变化可能复制模型，或在笔记内容比较前更新目标笔记的时间戳。
+80:
+81: 在支持的客户端测试首次导入以及导入已有集合的更新。使用目标合并与笔记更新设置，检查字段、GUID、卡片集合、本地编辑和已有调度。仅稳定身份不保证较新本地编辑被覆盖，也不保证已删除的历史被恢复。
+82:
+83: 将候选包写到与归档基线不同的路径。审阅后分发被接受的包，并将它保留为下一次发布的证据。所有权和发布事实见[构建保证](../build-guarantees.md)。
+84:
+85: <a id="build-once-review-then-publish-from-source"></a>
+86:
+87: ## 构建一次，审阅后发布
+88:
+89: 此 API 已包含在公开 `0.3.1` 包中。
+90:
+91: 构建一次，检查报告，然后发布同一个候选文件。审阅后再运行一次普通构建会创建另一个候选包；预备发布使实际 APKG 始终与已审阅报告对应。
+92:
+93: <!-- source: anki_forge/examples/docs_publication.rs -->
+119: <!-- /source -->
+120:
+121: 在固定修订的源码目录中，把上面的完整程序保存为 `anki_forge/examples/docs_publication.rs`（本指南新增该示例；`1199196` 中未包含它），然后运行：
+122:
+126:
+127: 示例在仓库根目录写出 `spanish-original.apkg`，并在策略允许发布时写出 `spanish-reviewed.apkg`。预备阶段不发布到目标。批准分发前，应审阅发现项并测试客户端导入；此示例只在策略允许时自动发布这次简单内容编辑。基准测试未测量该流程。
+128:
+129: 参见[构建生命周期](../build-guarantees.md#prepared-publication-from-source)、[Rust API](../rust-api.md#review-once-publish-once)、[Node API](../node/api.md#prepare-review-and-publish)和 [Python API](../python/api.md#prepare-review-and-publish)。
+
+FILE website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx (all headings; entire changed prose sections; unchanged code omitted)
+1: ---
+2: locale: zh-CN
+3: translationKey: stable-ids-and-deck-updates
+4: title: 修改笔记内容时，保持 ID 不变
+5: description: 更新生成的 Anki 牌组时，稳定 ID 与构建基线如何共同发挥作用。
+6: date: 2026-09-22
+7: category: Engineering
+8: ---
+9:
+10: import CodeBlock from '../../../components/CodeBlock.astro';
+11: import { updateExample } from '../../../lib/examples';
+12: import { sitePath } from '../../../lib/site';
+13:
+14: 生成的牌组很少在首次导出后就不再改变。定义会完善，例子会更清楚，错误会被修正。下一次构建需要知道哪些笔记仍是原来的笔记，只是内容有所改善。
+15:
+16: 考虑这个小改动：
+17:
+18: | 字段 | 第一版 | 下一版 |
+19: | --- | --- | --- |
+20: | 正面 | hola | hola |
+21: | 背面 | hello | hello; hi |
+22: | 稳定 ID | es:hola | es:hola |
+23:
+24: 含义扩展了，逻辑笔记仍是同一条。
+25:
+26: <span id="separate-identity-from-content" data-section-alias="separate-identity-from-content"></span>
+27:
+28: ## 将身份与内容分开
+29:
+30: 显式稳定 ID 为笔记提供持久键。编辑笔记时保留该 ID，创建另一条逻辑笔记时选择新 ID。
+31:
+32: 身份还具有项目上下文。同一牌组的各次发布应保持项目命名空间一致。仅笔记 ID 本身只是可重复更新流程的一部分。
+33:
+34: <span id="give-the-next-build-a-baseline" data-section-alias="give-the-next-build-a-baseline"></span>
+35:
+36: ## 为下一次构建提供基线
+37:
+38: 之前的包告诉 Anki Forge 上次导出了什么。构建修订后的项目时使用它：
+39:
+40: <CodeBlock code={updateExample.source} />
+41:
+42: 此片段中，`project` 包含修订后的笔记，`previous` 指向版本 1，`next` 是版本 2 的独立路径。<a href={sitePath('/generated/website_showcase.rs')}>完整示例</a>包含两个项目的定义，并验证保留了一条笔记的身份。
+43:
+44: 输入包与输出包应使用不同路径。覆盖基线会丢失理解和验证发布所需的证据。
+45:
+46: <span id="keep-the-original-distributed-package" data-section-alias="keep-the-original-distributed-package"></span>
+47:
+48: ## 保留原始分发包
+49:
+50: 每个生成包都携带完整的身份和修订证据。下一次构建会将证据与实际数据库和媒体核对后，才复用身份。保留实际分发的原始包；Anki 重新导出的包不是受支持的基线。
+51:
+52: <a href={sitePath('/zh-cn/docs/updates/')}>编写指南</a>说明严格更新、风险策略和客户端导入限制。
+53:
+54: <span id="inspect-the-build-and-the-import" data-section-alias="inspect-the-build-and-the-import"></span>
+55:
+56: ## 检查构建与导入
+57:
+58: 分发前检查构建报告及其更新安全诊断。如果构建时无法确认某条笔记与旧版本的对应关系，请检查源数据和基准包；不能仅凭输出文件存在就认定更新正确。
+59:
+60: 之后 Anki 会应用自己的导入行为。导入设置、已有笔记内容、本地编辑和 Anki 版本都可能影响结果。稳定身份帮助匹配笔记，但不会覆盖这些选择，也不承诺每次导入都保留本地状态的每一个方面。
+61:
+62: <a href={sitePath('/zh-cn/examples/#updates')}>双版本示例</a>提供两个包，可以先尝试一次小而可检查的更新，再设计自己的发布流程。

@@ -1,0 +1,66 @@
+---
+locale: pt-BR
+translationKey: stable-ids-and-deck-updates
+title: Atualize o conteúdo da nota sem mudar seu ID
+description: Como IDs estáveis e uma base de geração trabalham juntos na atualização de um baralho Anki gerado.
+date: 2026-09-22
+category: Engineering
+---
+
+import CodeBlock from '../../../components/CodeBlock.astro';
+import { updateExample } from '../../../lib/examples';
+import { sitePath } from '../../../lib/site';
+
+Um baralho gerado raramente está pronto após a primeira exportação. Definições melhoram, exemplos ficam mais claros e erros são corrigidos. A próxima geração precisa saber quais notas continuam sendo as mesmas, agora com conteúdo melhor.
+
+Considere esta pequena edição:
+
+| Campo | Primeira versão | Próxima versão |
+| --- | --- | --- |
+| Frente | hola | hola |
+| Verso | hello | hello; hi |
+| ID estável | es:hola | es:hola |
+
+O significado foi ampliado. A nota lógica continua sendo a mesma.
+
+<span id="separate-identity-from-content" data-section-alias="separate-identity-from-content"></span>
+
+{/* section: separate-identity-from-content */}
+## Separe a identidade do conteúdo
+
+Um ID estável explícito dá à nota uma chave durável. Mantenha esse ID ao editar a nota e escolha um novo ID ao criar outra nota lógica.
+
+A identidade também tem um contexto de projeto. Mantenha o namespace do projeto consistente entre as versões do mesmo baralho. Um ID de nota, sozinho, é apenas uma parte de um fluxo de atualização repetível.
+
+<span id="give-the-next-build-a-baseline" data-section-alias="give-the-next-build-a-baseline"></span>
+
+{/* section: give-the-next-build-a-baseline */}
+## Forneça uma base para a próxima geração
+
+Um pacote anterior informa ao Anki Forge o que já foi exportado. Use-o ao gerar o projeto revisado:
+
+<CodeBlock code={updateExample.source} />
+
+Neste trecho, `project` contém a nota revisada, `previous` aponta para a versão 1 e `next` é um caminho separado para a versão 2. O <a href={sitePath('/generated/website_showcase.rs')}>exemplo completo</a> inclui as duas definições do projeto e verifica que a identidade de uma nota foi preservada.
+
+Mantenha o pacote de entrada e o de saída em caminhos diferentes. Sobrescrever a base remove as evidências necessárias para entender e verificar a versão.
+
+<span id="keep-the-original-distributed-package" data-section-alias="keep-the-original-distributed-package"></span>
+
+{/* section: keep-the-original-distributed-package */}
+## Guarde o pacote original distribuído
+
+Todo pacote gerado contém evidências completas de identidade e revisão. Antes de reutilizar as identidades, a próxima geração valida essas evidências contra o banco de dados e a mídia reais. Preserve o pacote original que você distribuiu; uma reexportação do Anki não é uma base aceita.
+
+O <a href={sitePath('/pt-br/docs/updates/')}>guia de atualização</a> descreve as atualizações estritas, as políticas de risco e as limitações de importação do cliente.
+
+<span id="inspect-the-build-and-the-import" data-section-alias="inspect-the-build-and-the-import"></span>
+
+{/* section: inspect-the-build-and-the-import */}
+## Examine a geração e a importação
+
+Verifique o relatório de geração e seus diagnósticos de segurança de atualização antes de distribuir um pacote. Se a geração não conseguir reconciliar a identidade de uma nota, investigue a origem e a base, em vez de tratar um arquivo de saída como prova de que a atualização está correta.
+
+O Anki aplica então seu próprio comportamento de importação. As configurações de importação, o conteúdo das notas existentes, as edições locais e a versão do Anki podem influenciar o resultado. A identidade estável ajuda a encontrar a nota correspondente; não substitui essas escolhas nem promete que toda importação preserve todos os aspectos do estado local.
+
+O <a href={sitePath('/pt-br/examples/#updates')}>exemplo com duas versões</a> fornece os dois pacotes para você experimentar uma atualização pequena e fácil de inspecionar antes de definir seu próprio processo de publicação.

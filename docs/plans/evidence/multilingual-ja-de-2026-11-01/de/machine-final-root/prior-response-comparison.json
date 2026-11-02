@@ -1,0 +1,2335 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/de_technical_review/de-machine-final-root-2026-11-01",
+  "currentCapture": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/http-observations.json",
+    "sha256": "4853f9d6c7790d8dc004e88fc0ac169e15426f6f89c95df885b8e75d01478f97"
+  },
+  "priorCapture": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/http-observations.json",
+    "sha256": "3b407073acb9ea332fb2f7f43d67394aaef676b4ff6023d8cdf5a672d26a3761"
+  },
+  "priorConclusions": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-conclusions-root.json",
+    "sha256": "657671653e2d32eba0f9e117a1f5415d75e6fac190897e77e2d0c8f5c571d3f7"
+  },
+  "priorReport": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-read-root.json",
+    "sha256": "b32fc406bcf3e9feceb5d7286488c4bd602a9b287547c6fab3267bad03672db8"
+  },
+  "scope": "Exact actual old-five-language HTTP response comparison: 50 followed Markdown responses and 20 llms starts. This records byte deltas; it does not author answers or assert a semantic pass.",
+  "comparisons": [
+    {
+      "locale": "en",
+      "task": "python-install",
+      "route": "/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/001-llms.txt.body",
+        "sha256": "86bf5ec22c73ac98c2f908f0a10553556624781216cca7d9b1a58bc94341201a"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/001-llms.txt.body",
+        "sha256": "d28a11bc8b89bde941d1789e129c1e00c858867ce51ac574ecb80a33d702e452"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Español AI documentation index.",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasil AI documentation index.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): 日本語 AI documentation index.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutsch AI documentation index."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "en",
+      "task": "python-install",
+      "route": "/docs/python-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/002-docs_python-quickstart_index.md.body",
+        "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/002-docs_python-quickstart_index.md.body",
+        "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "python-install",
+      "route": "/docs/python-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/003-docs_python-api_index.md.body",
+        "sha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/003-docs_python-api_index.md.body",
+        "sha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "python-install",
+      "route": "/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/004-docs_compatibility_index.md.body",
+        "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/004-docs_compatibility_index.md.body",
+        "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "node-api",
+      "route": "/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/005-llms.txt.body",
+        "sha256": "86bf5ec22c73ac98c2f908f0a10553556624781216cca7d9b1a58bc94341201a"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/005-llms.txt.body",
+        "sha256": "d28a11bc8b89bde941d1789e129c1e00c858867ce51ac574ecb80a33d702e452"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Español AI documentation index.",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasil AI documentation index.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): 日本語 AI documentation index.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutsch AI documentation index."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "en",
+      "task": "node-api",
+      "route": "/docs/node-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/006-docs_node-api_index.md.body",
+        "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/006-docs_node-api_index.md.body",
+        "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "node-api",
+      "route": "/docs/node-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/007-docs_node-quickstart_index.md.body",
+        "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/007-docs_node-quickstart_index.md.body",
+        "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "route": "/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/008-llms.txt.body",
+        "sha256": "86bf5ec22c73ac98c2f908f0a10553556624781216cca7d9b1a58bc94341201a"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/008-llms.txt.body",
+        "sha256": "d28a11bc8b89bde941d1789e129c1e00c858867ce51ac574ecb80a33d702e452"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Español AI documentation index.",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasil AI documentation index.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): 日本語 AI documentation index.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutsch AI documentation index."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "route": "/docs/json-to-anki/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/009-docs_json-to-anki_index.md.body",
+        "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/009-docs_json-to-anki_index.md.body",
+        "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "route": "/docs/updates/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/010-docs_updates_index.md.body",
+        "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/010-docs_updates_index.md.body",
+        "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "route": "/docs/media/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/011-docs_media_index.md.body",
+        "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/011-docs_media_index.md.body",
+        "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "compatibility-constraints",
+      "route": "/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/012-llms.txt.body",
+        "sha256": "86bf5ec22c73ac98c2f908f0a10553556624781216cca7d9b1a58bc94341201a"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/012-llms.txt.body",
+        "sha256": "d28a11bc8b89bde941d1789e129c1e00c858867ce51ac574ecb80a33d702e452"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Español AI documentation index.",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasil AI documentation index.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): 日本語 AI documentation index.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutsch AI documentation index."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "en",
+      "task": "compatibility-constraints",
+      "route": "/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/013-docs_compatibility_index.md.body",
+        "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/013-docs_compatibility_index.md.body",
+        "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "compatibility-constraints",
+      "route": "/docs/build-guarantees/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/014-docs_build-guarantees_index.md.body",
+        "sha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/014-docs_build-guarantees_index.md.body",
+        "sha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "route": "/zh-cn/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/015-zh-cn_llms.txt.body",
+        "sha256": "5c607b18eaf6ba236c2f3f1db26008befea37f87f73c2f7fe1e7a219ade5ff73"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/015-zh-cn_llms.txt.body",
+        "sha256": "e8e73326e686238dd3adbfbf311362762bfd5aa0a54a6b3f936b13aaa576dbf1"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Español AI 文档索引。",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasil AI 文档索引。",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): 日本語 AI 文档索引。",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutsch AI 文档索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "route": "/zh-cn/docs/python-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/016-zh-cn_docs_python-quickstart_index.md.body",
+        "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/016-zh-cn_docs_python-quickstart_index.md.body",
+        "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "route": "/zh-cn/docs/python-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/017-zh-cn_docs_python-api_index.md.body",
+        "sha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/017-zh-cn_docs_python-api_index.md.body",
+        "sha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/018-zh-cn_docs_compatibility_index.md.body",
+        "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/018-zh-cn_docs_compatibility_index.md.body",
+        "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "node-api",
+      "route": "/zh-cn/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/019-zh-cn_llms.txt.body",
+        "sha256": "5c607b18eaf6ba236c2f3f1db26008befea37f87f73c2f7fe1e7a219ade5ff73"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/019-zh-cn_llms.txt.body",
+        "sha256": "e8e73326e686238dd3adbfbf311362762bfd5aa0a54a6b3f936b13aaa576dbf1"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Español AI 文档索引。",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasil AI 文档索引。",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): 日本語 AI 文档索引。",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutsch AI 文档索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "node-api",
+      "route": "/zh-cn/docs/node-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/020-zh-cn_docs_node-api_index.md.body",
+        "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/020-zh-cn_docs_node-api_index.md.body",
+        "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "node-api",
+      "route": "/zh-cn/docs/node-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/021-zh-cn_docs_node-quickstart_index.md.body",
+        "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/021-zh-cn_docs_node-quickstart_index.md.body",
+        "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "route": "/zh-cn/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/022-zh-cn_llms.txt.body",
+        "sha256": "5c607b18eaf6ba236c2f3f1db26008befea37f87f73c2f7fe1e7a219ade5ff73"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/022-zh-cn_llms.txt.body",
+        "sha256": "e8e73326e686238dd3adbfbf311362762bfd5aa0a54a6b3f936b13aaa576dbf1"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Español AI 文档索引。",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasil AI 文档索引。",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): 日本語 AI 文档索引。",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutsch AI 文档索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "route": "/zh-cn/docs/json-to-anki/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/023-zh-cn_docs_json-to-anki_index.md.body",
+        "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/023-zh-cn_docs_json-to-anki_index.md.body",
+        "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "route": "/zh-cn/docs/updates/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/024-zh-cn_docs_updates_index.md.body",
+        "sha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/024-zh-cn_docs_updates_index.md.body",
+        "sha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "route": "/zh-cn/docs/media/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/025-zh-cn_docs_media_index.md.body",
+        "sha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/025-zh-cn_docs_media_index.md.body",
+        "sha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "compatibility-constraints",
+      "route": "/zh-cn/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/026-zh-cn_llms.txt.body",
+        "sha256": "5c607b18eaf6ba236c2f3f1db26008befea37f87f73c2f7fe1e7a219ade5ff73"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/026-zh-cn_llms.txt.body",
+        "sha256": "e8e73326e686238dd3adbfbf311362762bfd5aa0a54a6b3f936b13aaa576dbf1"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Español AI 文档索引。",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasil AI 文档索引。",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): 日本語 AI 文档索引。",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutsch AI 文档索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "compatibility-constraints",
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/027-zh-cn_docs_compatibility_index.md.body",
+        "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/027-zh-cn_docs_compatibility_index.md.body",
+        "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "compatibility-constraints",
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/028-zh-cn_docs_build-guarantees_index.md.body",
+        "sha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/028-zh-cn_docs_build-guarantees_index.md.body",
+        "sha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "route": "/es/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/029-es_llms.txt.body",
+        "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/029-es_llms.txt.body",
+        "sha256": "5a76a5183d124c7b8337dfd8f366d3cf8dee49d13034e928ac9e65df930b9c5c"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): Índice de documentación para IA en 简体中文.",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Índice de documentación para IA en Português do Brasil.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): Índice de documentación para IA en 日本語.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Índice de documentación para IA en Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "route": "/es/docs/python-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/030-es_docs_python-quickstart_index.md.body",
+        "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/030-es_docs_python-quickstart_index.md.body",
+        "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "route": "/es/docs/python-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/031-es_docs_python-api_index.md.body",
+        "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/031-es_docs_python-api_index.md.body",
+        "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "route": "/es/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/032-es_docs_compatibility_index.md.body",
+        "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/032-es_docs_compatibility_index.md.body",
+        "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "node-api",
+      "route": "/es/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/033-es_llms.txt.body",
+        "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/033-es_llms.txt.body",
+        "sha256": "5a76a5183d124c7b8337dfd8f366d3cf8dee49d13034e928ac9e65df930b9c5c"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): Índice de documentación para IA en 简体中文.",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Índice de documentación para IA en Português do Brasil.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): Índice de documentación para IA en 日本語.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Índice de documentación para IA en Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "es",
+      "task": "node-api",
+      "route": "/es/docs/node-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/034-es_docs_node-api_index.md.body",
+        "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/034-es_docs_node-api_index.md.body",
+        "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "node-api",
+      "route": "/es/docs/node-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/035-es_docs_node-quickstart_index.md.body",
+        "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/035-es_docs_node-quickstart_index.md.body",
+        "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "route": "/es/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/036-es_llms.txt.body",
+        "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/036-es_llms.txt.body",
+        "sha256": "5a76a5183d124c7b8337dfd8f366d3cf8dee49d13034e928ac9e65df930b9c5c"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): Índice de documentación para IA en 简体中文.",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Índice de documentación para IA en Português do Brasil.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): Índice de documentación para IA en 日本語.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Índice de documentación para IA en Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "route": "/es/docs/json-to-anki/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/037-es_docs_json-to-anki_index.md.body",
+        "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/037-es_docs_json-to-anki_index.md.body",
+        "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "route": "/es/docs/updates/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/038-es_docs_updates_index.md.body",
+        "sha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/038-es_docs_updates_index.md.body",
+        "sha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "route": "/es/docs/media/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/039-es_docs_media_index.md.body",
+        "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/039-es_docs_media_index.md.body",
+        "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "compatibility-constraints",
+      "route": "/es/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/040-es_llms.txt.body",
+        "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/040-es_llms.txt.body",
+        "sha256": "5a76a5183d124c7b8337dfd8f366d3cf8dee49d13034e928ac9e65df930b9c5c"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): Índice de documentación para IA en 简体中文.",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Índice de documentación para IA en Português do Brasil.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): Índice de documentación para IA en 日本語.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Índice de documentación para IA en Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "es",
+      "task": "compatibility-constraints",
+      "route": "/es/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/041-es_docs_compatibility_index.md.body",
+        "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/041-es_docs_compatibility_index.md.body",
+        "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "compatibility-constraints",
+      "route": "/es/docs/build-guarantees/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/042-es_docs_build-guarantees_index.md.body",
+        "sha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/042-es_docs_build-guarantees_index.md.body",
+        "sha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "route": "/pt-br/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/043-pt-br_llms.txt.body",
+        "sha256": "d23c055a04657fba00c21cf67e32ee53fbaa73223334821704eab944406325dc"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/043-pt-br_llms.txt.body",
+        "sha256": "36bdca3990654a6b9825501c8189efcd9cf14f5f84552e7445e753d8a6813c52"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): Índice da documentação para IA em 简体中文.",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Índice da documentação para IA em Español.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): Índice da documentação para IA em 日本語.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Índice da documentação para IA em Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "route": "/pt-br/docs/python-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/044-pt-br_docs_python-quickstart_index.md.body",
+        "sha256": "1af1aa375d9b8921627b6bf6244e4af65f2f9e91b07ab7ad47a1b6a528df9a48"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/044-pt-br_docs_python-quickstart_index.md.body",
+        "sha256": "1af1aa375d9b8921627b6bf6244e4af65f2f9e91b07ab7ad47a1b6a528df9a48"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "route": "/pt-br/docs/python-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/045-pt-br_docs_python-api_index.md.body",
+        "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/045-pt-br_docs_python-api_index.md.body",
+        "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "route": "/pt-br/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/046-pt-br_docs_compatibility_index.md.body",
+        "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/046-pt-br_docs_compatibility_index.md.body",
+        "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "node-api",
+      "route": "/pt-br/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/047-pt-br_llms.txt.body",
+        "sha256": "d23c055a04657fba00c21cf67e32ee53fbaa73223334821704eab944406325dc"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/047-pt-br_llms.txt.body",
+        "sha256": "36bdca3990654a6b9825501c8189efcd9cf14f5f84552e7445e753d8a6813c52"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): Índice da documentação para IA em 简体中文.",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Índice da documentação para IA em Español.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): Índice da documentação para IA em 日本語.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Índice da documentação para IA em Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "node-api",
+      "route": "/pt-br/docs/node-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/048-pt-br_docs_node-api_index.md.body",
+        "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/048-pt-br_docs_node-api_index.md.body",
+        "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "node-api",
+      "route": "/pt-br/docs/node-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/049-pt-br_docs_node-quickstart_index.md.body",
+        "sha256": "39be759ea766c72ed9cefaa0de126ac6143a9c4f166031516a15cce7ef7f11b8"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/049-pt-br_docs_node-quickstart_index.md.body",
+        "sha256": "39be759ea766c72ed9cefaa0de126ac6143a9c4f166031516a15cce7ef7f11b8"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "route": "/pt-br/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/050-pt-br_llms.txt.body",
+        "sha256": "d23c055a04657fba00c21cf67e32ee53fbaa73223334821704eab944406325dc"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/050-pt-br_llms.txt.body",
+        "sha256": "36bdca3990654a6b9825501c8189efcd9cf14f5f84552e7445e753d8a6813c52"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): Índice da documentação para IA em 简体中文.",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Índice da documentação para IA em Español.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): Índice da documentação para IA em 日本語.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Índice da documentação para IA em Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "route": "/pt-br/docs/json-to-anki/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/051-pt-br_docs_json-to-anki_index.md.body",
+        "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/051-pt-br_docs_json-to-anki_index.md.body",
+        "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "route": "/pt-br/docs/updates/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/052-pt-br_docs_updates_index.md.body",
+        "sha256": "9dcb9de8b4c7af06f7faf76293c7d7bdbd9de98c7f7ceb3d2decbaedfca30fc7"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/052-pt-br_docs_updates_index.md.body",
+        "sha256": "9dcb9de8b4c7af06f7faf76293c7d7bdbd9de98c7f7ceb3d2decbaedfca30fc7"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "route": "/pt-br/docs/media/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/053-pt-br_docs_media_index.md.body",
+        "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/053-pt-br_docs_media_index.md.body",
+        "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "compatibility-constraints",
+      "route": "/pt-br/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/054-pt-br_llms.txt.body",
+        "sha256": "d23c055a04657fba00c21cf67e32ee53fbaa73223334821704eab944406325dc"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/054-pt-br_llms.txt.body",
+        "sha256": "36bdca3990654a6b9825501c8189efcd9cf14f5f84552e7445e753d8a6813c52"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): Índice da documentação para IA em 简体中文.",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Índice da documentação para IA em Español.",
+        " - [日本語](https://ankiforge.dev/ja/llms.txt): Índice da documentação para IA em 日本語.",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Índice da documentação para IA em Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "compatibility-constraints",
+      "route": "/pt-br/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/055-pt-br_docs_compatibility_index.md.body",
+        "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/055-pt-br_docs_compatibility_index.md.body",
+        "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "compatibility-constraints",
+      "route": "/pt-br/docs/build-guarantees/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/056-pt-br_docs_build-guarantees_index.md.body",
+        "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/056-pt-br_docs_build-guarantees_index.md.body",
+        "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "python-install",
+      "route": "/ja/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/057-ja_llms.txt.body",
+        "sha256": "ae4d3f3686cf14f64b9dfd0971dc7fb47b477a1145dfac5866a58431a20675ae"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/057-ja_llms.txt.body",
+        "sha256": "0e517914e43187494cf6780d8afaabef54e4a5ee46db8e39d125f1a453f55cff"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): 简体中文の AI 向けドキュメント索引。",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Españolの AI 向けドキュメント索引。",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasilの AI 向けドキュメント索引。",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutschの AI 向けドキュメント索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "ja",
+      "task": "python-install",
+      "route": "/ja/docs/python-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/058-ja_docs_python-quickstart_index.md.body",
+        "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/058-ja_docs_python-quickstart_index.md.body",
+        "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "python-install",
+      "route": "/ja/docs/python-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/059-ja_docs_python-api_index.md.body",
+        "sha256": "79ac029749ef1f2f0489447a85f1b61d969a76e619c760df478c2ea60772ab0d"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/059-ja_docs_python-api_index.md.body",
+        "sha256": "79ac029749ef1f2f0489447a85f1b61d969a76e619c760df478c2ea60772ab0d"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "python-install",
+      "route": "/ja/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/060-ja_docs_compatibility_index.md.body",
+        "sha256": "f0b20be5b8fa0d92d3bddc9e5ac4151c26c3aef76e29ec6fe31e2b0f3797753a"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/060-ja_docs_compatibility_index.md.body",
+        "sha256": "f0b20be5b8fa0d92d3bddc9e5ac4151c26c3aef76e29ec6fe31e2b0f3797753a"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "node-api",
+      "route": "/ja/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/061-ja_llms.txt.body",
+        "sha256": "ae4d3f3686cf14f64b9dfd0971dc7fb47b477a1145dfac5866a58431a20675ae"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/061-ja_llms.txt.body",
+        "sha256": "0e517914e43187494cf6780d8afaabef54e4a5ee46db8e39d125f1a453f55cff"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): 简体中文の AI 向けドキュメント索引。",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Españolの AI 向けドキュメント索引。",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasilの AI 向けドキュメント索引。",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutschの AI 向けドキュメント索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "ja",
+      "task": "node-api",
+      "route": "/ja/docs/node-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/062-ja_docs_node-api_index.md.body",
+        "sha256": "eee60e6c3f13dd1fd655017cdd58bd54d9159fd78c561558dcda452dc6c0a546"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/062-ja_docs_node-api_index.md.body",
+        "sha256": "eee60e6c3f13dd1fd655017cdd58bd54d9159fd78c561558dcda452dc6c0a546"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "node-api",
+      "route": "/ja/docs/node-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/063-ja_docs_node-quickstart_index.md.body",
+        "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/063-ja_docs_node-quickstart_index.md.body",
+        "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "json-update",
+      "route": "/ja/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/064-ja_llms.txt.body",
+        "sha256": "ae4d3f3686cf14f64b9dfd0971dc7fb47b477a1145dfac5866a58431a20675ae"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/064-ja_llms.txt.body",
+        "sha256": "0e517914e43187494cf6780d8afaabef54e4a5ee46db8e39d125f1a453f55cff"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): 简体中文の AI 向けドキュメント索引。",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Españolの AI 向けドキュメント索引。",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasilの AI 向けドキュメント索引。",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutschの AI 向けドキュメント索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "ja",
+      "task": "json-update",
+      "route": "/ja/docs/json-to-anki/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/065-ja_docs_json-to-anki_index.md.body",
+        "sha256": "ee8ff705d6daeb1cd4c33dd876500c8c62803c650d8df0952805597698b13a85"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/065-ja_docs_json-to-anki_index.md.body",
+        "sha256": "ee8ff705d6daeb1cd4c33dd876500c8c62803c650d8df0952805597698b13a85"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "json-update",
+      "route": "/ja/docs/updates/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/066-ja_docs_updates_index.md.body",
+        "sha256": "3b49f7aec157c4441c1a464e85af297756406b11556bd2a23973efd28955e550"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/066-ja_docs_updates_index.md.body",
+        "sha256": "3b49f7aec157c4441c1a464e85af297756406b11556bd2a23973efd28955e550"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "json-update",
+      "route": "/ja/docs/media/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/067-ja_docs_media_index.md.body",
+        "sha256": "a7bd520695674de521f87dddcddbf412041dfab5b702937d89b2c7428968821e"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/067-ja_docs_media_index.md.body",
+        "sha256": "a7bd520695674de521f87dddcddbf412041dfab5b702937d89b2c7428968821e"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "compatibility-constraints",
+      "route": "/ja/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/068-ja_llms.txt.body",
+        "sha256": "ae4d3f3686cf14f64b9dfd0971dc7fb47b477a1145dfac5866a58431a20675ae"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/068-ja_llms.txt.body",
+        "sha256": "0e517914e43187494cf6780d8afaabef54e4a5ee46db8e39d125f1a453f55cff"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://ankiforge.dev/zh-cn/llms.txt): 简体中文の AI 向けドキュメント索引。",
+        " - [Español](https://ankiforge.dev/es/llms.txt): Españolの AI 向けドキュメント索引。",
+        " - [Português do Brasil](https://ankiforge.dev/pt-br/llms.txt): Português do Brasilの AI 向けドキュメント索引。",
+        "+- [Deutsch](https://ankiforge.dev/de/llms.txt): Deutschの AI 向けドキュメント索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "ja",
+      "task": "compatibility-constraints",
+      "route": "/ja/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/069-ja_docs_compatibility_index.md.body",
+        "sha256": "f0b20be5b8fa0d92d3bddc9e5ac4151c26c3aef76e29ec6fe31e2b0f3797753a"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/069-ja_docs_compatibility_index.md.body",
+        "sha256": "f0b20be5b8fa0d92d3bddc9e5ac4151c26c3aef76e29ec6fe31e2b0f3797753a"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "compatibility-constraints",
+      "route": "/ja/docs/build-guarantees/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/070-ja_docs_build-guarantees_index.md.body",
+        "sha256": "1ec193978555d167ed33cf51acabe2c766bbc845eddd60e4a24ac819165239df"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-root/070-ja_docs_build-guarantees_index.md.body",
+        "sha256": "1ec193978555d167ed33cf51acabe2c766bbc845eddd60e4a24ac819165239df"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    }
+  ],
+  "deploymentComparison": {
+    "prefixCapture": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/http-observations.json",
+      "sha256": "cc7f6d89eb3e254e1e9f5e9931b10a1351019be75ba5de8d46373a00dc20a4b7"
+    },
+    "beforeUrlPrefix": "https://morehardy.github.io/anki-forge/",
+    "afterUrlPrefix": "https://ankiforge.dev/",
+    "responses": [
+      {
+        "locale": "en",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/001-llms.txt.body",
+          "sha256": "86bf5ec22c73ac98c2f908f0a10553556624781216cca7d9b1a58bc94341201a"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/001-anki-forge_llms.txt.body",
+          "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/002-docs_python-quickstart_index.md.body",
+          "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/002-anki-forge_docs_python-quickstart_index.md.body",
+          "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/003-docs_python-api_index.md.body",
+          "sha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/003-anki-forge_docs_python-api_index.md.body",
+          "sha256": "ce891dfa12abf6e099c563ce509a95f1cab9164bebaff3552e4a0940c56ef886"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/004-docs_compatibility_index.md.body",
+          "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/004-anki-forge_docs_compatibility_index.md.body",
+          "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/005-llms.txt.body",
+          "sha256": "86bf5ec22c73ac98c2f908f0a10553556624781216cca7d9b1a58bc94341201a"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/005-anki-forge_llms.txt.body",
+          "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/006-docs_node-api_index.md.body",
+          "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/006-anki-forge_docs_node-api_index.md.body",
+          "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/007-docs_node-quickstart_index.md.body",
+          "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/007-anki-forge_docs_node-quickstart_index.md.body",
+          "sha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/008-llms.txt.body",
+          "sha256": "86bf5ec22c73ac98c2f908f0a10553556624781216cca7d9b1a58bc94341201a"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/008-anki-forge_llms.txt.body",
+          "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/009-docs_json-to-anki_index.md.body",
+          "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/009-anki-forge_docs_json-to-anki_index.md.body",
+          "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/010-docs_updates_index.md.body",
+          "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/010-anki-forge_docs_updates_index.md.body",
+          "sha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/011-docs_media_index.md.body",
+          "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/011-anki-forge_docs_media_index.md.body",
+          "sha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/012-llms.txt.body",
+          "sha256": "86bf5ec22c73ac98c2f908f0a10553556624781216cca7d9b1a58bc94341201a"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/012-anki-forge_llms.txt.body",
+          "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/013-docs_compatibility_index.md.body",
+          "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/013-anki-forge_docs_compatibility_index.md.body",
+          "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "en",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/014-docs_build-guarantees_index.md.body",
+          "sha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/014-anki-forge_docs_build-guarantees_index.md.body",
+          "sha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/015-zh-cn_llms.txt.body",
+          "sha256": "5c607b18eaf6ba236c2f3f1db26008befea37f87f73c2f7fe1e7a219ade5ff73"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/015-anki-forge_zh-cn_llms.txt.body",
+          "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/016-zh-cn_docs_python-quickstart_index.md.body",
+          "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/016-anki-forge_zh-cn_docs_python-quickstart_index.md.body",
+          "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/017-zh-cn_docs_python-api_index.md.body",
+          "sha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/017-anki-forge_zh-cn_docs_python-api_index.md.body",
+          "sha256": "d58028202432d624b0963444ca00ab1e237133b68fdac85dbe973db2b4066b31"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/018-zh-cn_docs_compatibility_index.md.body",
+          "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/018-anki-forge_zh-cn_docs_compatibility_index.md.body",
+          "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/019-zh-cn_llms.txt.body",
+          "sha256": "5c607b18eaf6ba236c2f3f1db26008befea37f87f73c2f7fe1e7a219ade5ff73"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/019-anki-forge_zh-cn_llms.txt.body",
+          "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/020-zh-cn_docs_node-api_index.md.body",
+          "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/020-anki-forge_zh-cn_docs_node-api_index.md.body",
+          "sha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/021-zh-cn_docs_node-quickstart_index.md.body",
+          "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/021-anki-forge_zh-cn_docs_node-quickstart_index.md.body",
+          "sha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/022-zh-cn_llms.txt.body",
+          "sha256": "5c607b18eaf6ba236c2f3f1db26008befea37f87f73c2f7fe1e7a219ade5ff73"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/022-anki-forge_zh-cn_llms.txt.body",
+          "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/023-zh-cn_docs_json-to-anki_index.md.body",
+          "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/023-anki-forge_zh-cn_docs_json-to-anki_index.md.body",
+          "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/024-zh-cn_docs_updates_index.md.body",
+          "sha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/024-anki-forge_zh-cn_docs_updates_index.md.body",
+          "sha256": "202f116788465686ef6e979e5629a3439ca603ecb7966f5356792fc0d370fe98"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/025-zh-cn_docs_media_index.md.body",
+          "sha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/025-anki-forge_zh-cn_docs_media_index.md.body",
+          "sha256": "a3a1d049675679579fa5da49d0846a3fc4e74db2f7d1a1f9730174e72a90e9f1"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/026-zh-cn_llms.txt.body",
+          "sha256": "5c607b18eaf6ba236c2f3f1db26008befea37f87f73c2f7fe1e7a219ade5ff73"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/026-anki-forge_zh-cn_llms.txt.body",
+          "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/027-zh-cn_docs_compatibility_index.md.body",
+          "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/027-anki-forge_zh-cn_docs_compatibility_index.md.body",
+          "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "zh-CN",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/028-zh-cn_docs_build-guarantees_index.md.body",
+          "sha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/028-anki-forge_zh-cn_docs_build-guarantees_index.md.body",
+          "sha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/029-es_llms.txt.body",
+          "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/029-anki-forge_es_llms.txt.body",
+          "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/030-es_docs_python-quickstart_index.md.body",
+          "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/030-anki-forge_es_docs_python-quickstart_index.md.body",
+          "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/031-es_docs_python-api_index.md.body",
+          "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/031-anki-forge_es_docs_python-api_index.md.body",
+          "sha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/032-es_docs_compatibility_index.md.body",
+          "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/032-anki-forge_es_docs_compatibility_index.md.body",
+          "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/033-es_llms.txt.body",
+          "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/033-anki-forge_es_llms.txt.body",
+          "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/034-es_docs_node-api_index.md.body",
+          "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/034-anki-forge_es_docs_node-api_index.md.body",
+          "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/035-es_docs_node-quickstart_index.md.body",
+          "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/035-anki-forge_es_docs_node-quickstart_index.md.body",
+          "sha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/036-es_llms.txt.body",
+          "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/036-anki-forge_es_llms.txt.body",
+          "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/037-es_docs_json-to-anki_index.md.body",
+          "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/037-anki-forge_es_docs_json-to-anki_index.md.body",
+          "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/038-es_docs_updates_index.md.body",
+          "sha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/038-anki-forge_es_docs_updates_index.md.body",
+          "sha256": "09df198c4cfd581ffd8d14cfa4a7b645a698bb553aae251234efff8b108d4bf8"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/039-es_docs_media_index.md.body",
+          "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/039-anki-forge_es_docs_media_index.md.body",
+          "sha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/040-es_llms.txt.body",
+          "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/040-anki-forge_es_llms.txt.body",
+          "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/041-es_docs_compatibility_index.md.body",
+          "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/041-anki-forge_es_docs_compatibility_index.md.body",
+          "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "es",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/042-es_docs_build-guarantees_index.md.body",
+          "sha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/042-anki-forge_es_docs_build-guarantees_index.md.body",
+          "sha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/043-pt-br_llms.txt.body",
+          "sha256": "d23c055a04657fba00c21cf67e32ee53fbaa73223334821704eab944406325dc"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/043-anki-forge_pt-br_llms.txt.body",
+          "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/044-pt-br_docs_python-quickstart_index.md.body",
+          "sha256": "1af1aa375d9b8921627b6bf6244e4af65f2f9e91b07ab7ad47a1b6a528df9a48"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/044-anki-forge_pt-br_docs_python-quickstart_index.md.body",
+          "sha256": "75d3a00cc4fabc9a1537a65b1d692f9cd06becd28687d45ee456df9cccfba68c"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/045-pt-br_docs_python-api_index.md.body",
+          "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/045-anki-forge_pt-br_docs_python-api_index.md.body",
+          "sha256": "8b828d3ea22b4521f7a319782b98e71bd245a22e9407cea0932ce8d8aaabad26"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/046-pt-br_docs_compatibility_index.md.body",
+          "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/046-anki-forge_pt-br_docs_compatibility_index.md.body",
+          "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/047-pt-br_llms.txt.body",
+          "sha256": "d23c055a04657fba00c21cf67e32ee53fbaa73223334821704eab944406325dc"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/047-anki-forge_pt-br_llms.txt.body",
+          "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/048-pt-br_docs_node-api_index.md.body",
+          "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/048-anki-forge_pt-br_docs_node-api_index.md.body",
+          "sha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/049-pt-br_docs_node-quickstart_index.md.body",
+          "sha256": "39be759ea766c72ed9cefaa0de126ac6143a9c4f166031516a15cce7ef7f11b8"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/049-anki-forge_pt-br_docs_node-quickstart_index.md.body",
+          "sha256": "8c2f21a3473fd252ae669f45fd68ef0442fafb54c0e56f51e02ac91b8e06510f"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/050-pt-br_llms.txt.body",
+          "sha256": "d23c055a04657fba00c21cf67e32ee53fbaa73223334821704eab944406325dc"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/050-anki-forge_pt-br_llms.txt.body",
+          "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/051-pt-br_docs_json-to-anki_index.md.body",
+          "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/051-anki-forge_pt-br_docs_json-to-anki_index.md.body",
+          "sha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/052-pt-br_docs_updates_index.md.body",
+          "sha256": "9dcb9de8b4c7af06f7faf76293c7d7bdbd9de98c7f7ceb3d2decbaedfca30fc7"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/052-anki-forge_pt-br_docs_updates_index.md.body",
+          "sha256": "aabb6df552b57393d144397e8fca791d7a61ca3aa1e4b9718ba2ebd443f9cac7"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/053-pt-br_docs_media_index.md.body",
+          "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/053-anki-forge_pt-br_docs_media_index.md.body",
+          "sha256": "1df6e3c05e16aae47653b10aa6196fb87ff57d7d67c5f31f07558dbac2d7d3b4"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/054-pt-br_llms.txt.body",
+          "sha256": "d23c055a04657fba00c21cf67e32ee53fbaa73223334821704eab944406325dc"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/054-anki-forge_pt-br_llms.txt.body",
+          "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/055-pt-br_docs_compatibility_index.md.body",
+          "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/055-anki-forge_pt-br_docs_compatibility_index.md.body",
+          "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "pt-BR",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/056-pt-br_docs_build-guarantees_index.md.body",
+          "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/056-anki-forge_pt-br_docs_build-guarantees_index.md.body",
+          "sha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/057-ja_llms.txt.body",
+          "sha256": "ae4d3f3686cf14f64b9dfd0971dc7fb47b477a1145dfac5866a58431a20675ae"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/057-anki-forge_ja_llms.txt.body",
+          "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/058-ja_docs_python-quickstart_index.md.body",
+          "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/058-anki-forge_ja_docs_python-quickstart_index.md.body",
+          "sha256": "46cf182f9dc3ece8c209bfc32bf65a46882105374b055df39b0b587711ece0c4"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/059-ja_docs_python-api_index.md.body",
+          "sha256": "79ac029749ef1f2f0489447a85f1b61d969a76e619c760df478c2ea60772ab0d"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/059-anki-forge_ja_docs_python-api_index.md.body",
+          "sha256": "3b64c671e514a509e8c03315374b2b5b57cda7749aea81d7f19a9561aad5b0b2"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/060-ja_docs_compatibility_index.md.body",
+          "sha256": "f0b20be5b8fa0d92d3bddc9e5ac4151c26c3aef76e29ec6fe31e2b0f3797753a"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/060-anki-forge_ja_docs_compatibility_index.md.body",
+          "sha256": "309088006af4caa693e6fb8b92eb6ccb085a6a8ede3279ddffe19e189110beee"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/061-ja_llms.txt.body",
+          "sha256": "ae4d3f3686cf14f64b9dfd0971dc7fb47b477a1145dfac5866a58431a20675ae"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/061-anki-forge_ja_llms.txt.body",
+          "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/062-ja_docs_node-api_index.md.body",
+          "sha256": "eee60e6c3f13dd1fd655017cdd58bd54d9159fd78c561558dcda452dc6c0a546"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/062-anki-forge_ja_docs_node-api_index.md.body",
+          "sha256": "f9c259ce5d0a1bf34e736d0d755d290464f2cede2fd6638946fa61d69fd6479b"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/063-ja_docs_node-quickstart_index.md.body",
+          "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/063-anki-forge_ja_docs_node-quickstart_index.md.body",
+          "sha256": "9fdebe1ec79bd7edc441096c0792e527f16e2a6e189b4cf3fcd9ec377926205c"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/064-ja_llms.txt.body",
+          "sha256": "ae4d3f3686cf14f64b9dfd0971dc7fb47b477a1145dfac5866a58431a20675ae"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/064-anki-forge_ja_llms.txt.body",
+          "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/065-ja_docs_json-to-anki_index.md.body",
+          "sha256": "ee8ff705d6daeb1cd4c33dd876500c8c62803c650d8df0952805597698b13a85"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/065-anki-forge_ja_docs_json-to-anki_index.md.body",
+          "sha256": "474a8dd1ed55ff3a415dff3e58950c46fa29470f7fdf48d902c935a863d97d74"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/066-ja_docs_updates_index.md.body",
+          "sha256": "3b49f7aec157c4441c1a464e85af297756406b11556bd2a23973efd28955e550"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/066-anki-forge_ja_docs_updates_index.md.body",
+          "sha256": "0b9d3365dd9e0432c63ac6f5cc3b3153d94fabab373db0ac9963b81cb1d89eec"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/067-ja_docs_media_index.md.body",
+          "sha256": "a7bd520695674de521f87dddcddbf412041dfab5b702937d89b2c7428968821e"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/067-anki-forge_ja_docs_media_index.md.body",
+          "sha256": "4e9ec3cd8b26c1b851c4fefe807cf68860d070c4ca847dafd7bfa5878fac1177"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/068-ja_llms.txt.body",
+          "sha256": "ae4d3f3686cf14f64b9dfd0971dc7fb47b477a1145dfac5866a58431a20675ae"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/068-anki-forge_ja_llms.txt.body",
+          "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/069-ja_docs_compatibility_index.md.body",
+          "sha256": "f0b20be5b8fa0d92d3bddc9e5ac4151c26c3aef76e29ec6fe31e2b0f3797753a"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/069-anki-forge_ja_docs_compatibility_index.md.body",
+          "sha256": "309088006af4caa693e6fb8b92eb6ccb085a6a8ede3279ddffe19e189110beee"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "ja",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/070-ja_docs_build-guarantees_index.md.body",
+          "sha256": "1ec193978555d167ed33cf51acabe2c766bbc845eddd60e4a24ac819165239df"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/070-anki-forge_ja_docs_build-guarantees_index.md.body",
+          "sha256": "f1bffb4ba69bec9584fb4f5d57103b4105b264524752a984182668cd2045e255"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/071-de_llms.txt.body",
+          "sha256": "5e9e9ab5b375a2e3318d55a92e5ae218f5063aaeca3e3365620fd23f82d51bc9"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/071-anki-forge_de_llms.txt.body",
+          "sha256": "8c18df6e583f8239c933715fd8193e410b68ff8d32d8e70fc8a7fc4af0ba3210"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/072-de_docs_python-quickstart_index.md.body",
+          "sha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/072-anki-forge_de_docs_python-quickstart_index.md.body",
+          "sha256": "e4484200649722bee10f98a4bcddc595eabb2883a71412ddc7e1bcff1f983fe0"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/073-de_docs_python-api_index.md.body",
+          "sha256": "99c49a03e85513ebc450f563764ebe7cf1264e0aa6c0abb1fb74271d14924f5b"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/073-anki-forge_de_docs_python-api_index.md.body",
+          "sha256": "1b7533d7199027aa63e4522ca5af484f99c509172baeedca3c5e4f645a480d79"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "python-install",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/074-de_docs_compatibility_index.md.body",
+          "sha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/074-anki-forge_de_docs_compatibility_index.md.body",
+          "sha256": "807f090e9d53cd8536b8df037e7f3dbf9e64c3526fca85445509ff9855af67e6"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/075-de_llms.txt.body",
+          "sha256": "5e9e9ab5b375a2e3318d55a92e5ae218f5063aaeca3e3365620fd23f82d51bc9"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/075-anki-forge_de_llms.txt.body",
+          "sha256": "8c18df6e583f8239c933715fd8193e410b68ff8d32d8e70fc8a7fc4af0ba3210"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/076-de_docs_node-api_index.md.body",
+          "sha256": "b3082cdd5a3dac14fb08172780560670588806d94ba4b3c830391b1070ca03ce"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/076-anki-forge_de_docs_node-api_index.md.body",
+          "sha256": "dfa8cd51865871b0061784cabb66ece639d7fa9c82c56e19fad417667965d40e"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "node-api",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/077-de_docs_node-quickstart_index.md.body",
+          "sha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/077-anki-forge_de_docs_node-quickstart_index.md.body",
+          "sha256": "01461a686c3bf1095f37417e9508e8d08e3dd4f9efcd2c1b93ab9377b398f37b"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/078-de_llms.txt.body",
+          "sha256": "5e9e9ab5b375a2e3318d55a92e5ae218f5063aaeca3e3365620fd23f82d51bc9"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/078-anki-forge_de_llms.txt.body",
+          "sha256": "8c18df6e583f8239c933715fd8193e410b68ff8d32d8e70fc8a7fc4af0ba3210"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/079-de_docs_json-to-anki_index.md.body",
+          "sha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/079-anki-forge_de_docs_json-to-anki_index.md.body",
+          "sha256": "1a89e59c2fe15eff7da2d3d996398342ead4166e29ed7e325dff064524ca23de"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/080-de_docs_updates_index.md.body",
+          "sha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/080-anki-forge_de_docs_updates_index.md.body",
+          "sha256": "8eeff44204fe9676247ce2a25e58873ea4c120fdcebc83b85e28c48f30df43c8"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "json-update",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/081-de_docs_media_index.md.body",
+          "sha256": "de9a0a051392b99beab0c68d2d73c1cc84a8131e4bd7d55c470762e805230b35"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/081-anki-forge_de_docs_media_index.md.body",
+          "sha256": "c22ca07ea208d6b5104d2dfd8fa6deb5afe31e8986c6fed36ad4d6bc51377808"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/082-de_llms.txt.body",
+          "sha256": "5e9e9ab5b375a2e3318d55a92e5ae218f5063aaeca3e3365620fd23f82d51bc9"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/082-anki-forge_de_llms.txt.body",
+          "sha256": "8c18df6e583f8239c933715fd8193e410b68ff8d32d8e70fc8a7fc4af0ba3210"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/083-de_docs_compatibility_index.md.body",
+          "sha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/083-anki-forge_de_docs_compatibility_index.md.body",
+          "sha256": "807f090e9d53cd8536b8df037e7f3dbf9e64c3526fca85445509ff9855af67e6"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      },
+      {
+        "locale": "de",
+        "task": "compatibility-constraints",
+        "current": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-root/084-de_docs_build-guarantees_index.md.body",
+          "sha256": "5d1a252e7f9e5f51215808ca9fe546058822d27728369c63dd17124f4b8574dc"
+        },
+        "prefix": {
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/084-anki-forge_de_docs_build-guarantees_index.md.body",
+          "sha256": "9ea30a53e973ca00be3884e7b2a731316b1030c54c58e7285f890f8319e1379f"
+        },
+        "onlyConfiguredUrlPrefixChanged": true
+      }
+    ]
+  }
+}

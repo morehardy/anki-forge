@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-01",
+  "reviewerType": "ai",
+  "reviewerTask": "/root/ja_full_author",
+  "reviewerRun": "de-staging-linguistic-delta-tools-and-persistence-2026-11-01",
+  "status": "staging-delta-read-complete",
+  "finalSourceReport": false,
+  "releaseReady": false,
+  "sealedInitialNotes": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/linguistic-blind-read.json",
+    "sha256": "066c6fa56ce4a98c1c97bcf18832f853e0a548bb53db50e35eafef946efd1443",
+    "modified": false
+  },
+  "independence": {
+    "authoredGermanMaterial": false,
+    "editedSource": false,
+    "readIndependentQueries": false
+  },
+  "entries": [
+    {
+      "topic": "media",
+      "file": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/media.md",
+      "line": 79,
+      "currentSha256": "cba638b0700073d214d98011cfeb0691cbb043cc2d95bb664ac6a57d29ec6971",
+      "rereadScope": "Entire changed paragraph plus adjacent paragraphs in the same section.",
+      "quote": "`tools::load_project` erfordert das Feature `internal-tools` und gehört zu den internen Repository-Werkzeugen, nicht zur unterstützten API für nutzende Anwendungen.",
+      "assessment": "The added sentence has an explicit tools::load_project subject, so its internal-tools restriction unambiguously applies to that function alone. The preceding NoteType::from_bundle option is not inadvertently classified as an unsupported internal API. The register and syntax fit the surrounding technical explanation.",
+      "newFindings": [],
+      "linguisticReread": "complete"
+    },
+    {
+      "topic": "troubleshooting",
+      "file": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/troubleshooting.md",
+      "line": 57,
+      "currentSha256": "63c51366d7d70037aa253cf599c6b97c9f02f33310e00f599b3f1fdf6f9ca7ec",
+      "rereadScope": "Entire changed paragraph plus adjacent paragraphs in the same section.",
+      "quote": "Prüfe bei Fehlern beim dauerhaften Speichern die Veröffentlichungsphase und Dauerhaftigkeit im Fehler",
+      "assessment": "The wording now explicitly identifies persistence failures rather than suggesting memory faults. The surrounding explanation of a destination already published before an error remains coherent and actionable. This resolves the optional Speicherfehlern observation in the sealed initial notes.",
+      "newFindings": [],
+      "linguisticReread": "complete"
+    }
+  ],
+  "scoreImpact": {
+    "terminology": 4,
+    "syntax": 4,
+    "register": 4,
+    "usability": 4,
+    "note": "The two changes preserve the earlier staging-level four-dimension assessment; this is not a finalized source approval."
+  },
+  "closedOptionalObservation": {
+    "file": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/troubleshooting.md",
+    "oldQuote": "Prüfe bei Speicherfehlern",
+    "status": "resolved-after-independent-reread"
+  },
+  "openNewFindings": [],
+  "limitations": [
+    "Only the two requested changed passages and their contexts were reread in this delta.",
+    "Technical correctness of the internal-tools restriction is handled by the independent technical reviewer; this record evaluates the precision and readability of the wording.",
+    "Await the final six-locale candidate to bind formal source-review evidence.",
+    "No source changes, builds, runtime tests or production acceptance performed."
+  ]
+}

@@ -6,6 +6,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { pages, localeIds } from '../site-model.mjs';
+import { configuredLocales } from '../locale-model.mjs';
 import { reviewInputFiles, reviewInputs, rubricVersion, glossaryVersion, digest } from './content-review-inputs.mjs';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const command = fileURLToPath(new URL('./check-content.mjs', import.meta.url));
@@ -231,10 +232,12 @@ test('sidebar and next-task model changes invalidate only the page types that re
   assert.deepEqual(await modelSamples(directory), before, 'unrendered page descriptions and comments are not shared UI dependencies');
 });
 
-test('release language menus fingerprint active locale data without reading planned translations', async t => {
+for (const [label, selected] of [['current release', localeIds], ['Brazilian Portuguese released', [...new Set([...localeIds, 'pt-BR'])]], ['all configured languages released', Object.keys(configuredLocales)]]) test(`${label}: language menus fingerprint active data without reading planned translations`, async t => {
   const directory = await fixture(t);
+  await writeFile(path.join(directory, 'website/release-locales.json'), JSON.stringify({ schemaVersion: 1, locales: selected }));
   const model = path.join(directory, 'website/locale-model.mjs');
-  const original = await readFile(model, 'utf8');
+  const original = (await readFile(model, 'utf8')).replace('export const configuredLocales = {', "export const configuredLocales = {\n  qaa: { prefix: '/fixture', lang: 'qaa', label: 'Fixture language', dir: 'ltr' },");
+  await writeFile(model, original);
   const before = await modelSamples(directory);
   for (const [from, to] of [["label: '简体中文'", "label: '中文（简体）'"], ["prefix: '/zh-cn'", "prefix: '/chinese'"], ["lang: 'zh-CN'", "lang: 'zh-Hans'"]]) {
     assert.ok(original.includes(from));
@@ -242,7 +245,12 @@ test('release language menus fingerprint active locale data without reading plan
     const after = await modelSamples(directory);
     for (const key of Object.keys(before)) assert.notEqual(after[key].targetHash, before[key].targetHash, `${from}: ${key}`);
   }
-  await writeFile(model, original.replace("label: 'Português do Brasil'", "label: 'Português revisado'").replace("  es: {", "  it: { prefix: '/it', lang: 'it', label: 'Italiano', dir: 'ltr' },\n  es: {") + '\n// No planned-language source files exist in this fixture.\n');
+  if (selected.includes('pt-BR')) {
+    await writeFile(model, original.replace("label: 'Português do Brasil'", "label: 'Português revisado'"));
+    const after = await modelSamples(directory);
+    for (const key of Object.keys(before)) assert.notEqual(after[key].targetHash, before[key].targetHash, `active pt-BR menu: ${key}`);
+  }
+  await writeFile(model, original.replace("label: 'Fixture language'", "label: 'Edited fixture language'") + '\n// No planned-language source files exist in this fixture.\n');
   assert.deepEqual(await modelSamples(directory), before, 'inactive locale records do not change selected-language review inputs');
 });
 

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "source": "target/remaining-locales/pt-br/prefix-artifact",
+  "target": "target/remaining-locales/sample-probe-artifact",
+  "method": "Copy frozen prefix artifact; preserve actual compiled header/menu CSS and classes. Replace only fixture menu list and current language; add real ja/de sample main text rendered through micromark. Production source/dist unchanged.",
+  "inputs": [
+    {
+      "path": "target/remaining-locales/pt-br/prefix-artifact/generated/site-manifest.json",
+      "sha256": "e24261d6fd90146c71a8ed51fb5667268b7849d06ba9cca8f1680784acb21729"
+    },
+    {
+      "path": "target/remaining-locales/pt-br/prefix-artifact/docs/quickstart/index.html",
+      "sha256": "f1926ffa7174c16150172ce8544ddf443d5f458a0acc576288d5cc653268f3ac"
+    },
+    {
+      "path": "website/src/components/LanguageSwitcher.astro",
+      "sha256": "9d3c5658fc3c42fe5162f5f1883dde73f6aa23a11a4adcc2ca7955a1a1050c57"
+    },
+    {
+      "path": "website/locale-model.mjs",
+      "sha256": "e357763d9ba16adc611f8f49ce6742fc37e783f2fbbbcada934f5990ab4fa8c7"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/quickstart.md",
+      "sha256": "fe0500fd8dcd4e351a5c69f07924fdf8e8581a0a4cce6398d5038fe471b6df99"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/python-api.md",
+      "sha256": "efdc6cd76a4286f44047418499ed264a5b15e4eac54eb838d6c690309b56d4c7"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/ja/home-ui.json",
+      "sha256": "8664e416718dc141a80f73f29c869cc719baa54a7c4bc3d720a7866232297220"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/quickstart.md",
+      "sha256": "aedcddd82f1da4432f75f46aafc29926b5b3a3035c1fbd73965abe4f41c80e9d"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/python-api.md",
+      "sha256": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771"
+    },
+    {
+      "path": "docs/plans/evidence/remaining-locales-2026-11-01/samples/de/home-ui.json",
+      "sha256": "871d34e1c2d7c58d51381e332801577a806da4ede3ccb10ccd3f21fcf5946a67"
+    }
+  ],
+  "fixtureFiles": [
+    {
+      "path": "target/remaining-locales/sample-probe-artifact/_locale-probe/en/index.html",
+      "sha256": "bc602d2a9c33426d1abaf387afd4967dbb7109ebbd0385f8fdf6cfd86e45c1ca"
+    },
+    {
+      "path": "target/remaining-locales/sample-probe-artifact/_locale-probe/zh-CN/index.html",
+      "sha256": "4e0cda8417b9c75afd1e12c8517afbf1b9f3240389de53d0d392290bcb846a35"
+    },
+    {
+      "path": "target/remaining-locales/sample-probe-artifact/_locale-probe/es/index.html",
+      "sha256": "250e920a62792defed3844368ec06a7f0286cc93dbe63f46ad56f8d8cf653318"
+    },
+    {
+      "path": "target/remaining-locales/sample-probe-artifact/_locale-probe/pt-BR/index.html",
+      "sha256": "62c539878899cc065be00271dbdbb5cac61835603980c3d68a2f6ec02ee492bb"
+    },
+    {
+      "path": "target/remaining-locales/sample-probe-artifact/_locale-probe/ja/index.html",
+      "sha256": "55f29ddf15e83b99f435c8b647c9ca4e4559ea9bcb9673e5d8f16b2d319fa78f"
+    },
+    {
+      "path": "target/remaining-locales/sample-probe-artifact/_locale-probe/de/index.html",
+      "sha256": "2e96ef041b42949a6b2a6b7d1bc2558f2da6441f0964c61d52fadfb83572867f"
+    },
+    {
+      "path": "target/remaining-locales/sample-probe-artifact/_locale-probe/fr/index.html",
+      "sha256": "ea25928fc30cba27206f749e3370c4237ca4f8433f2e8164fdc99e30e3e01ae3"
+    },
+    {
+      "path": "target/remaining-locales/sample-probe-artifact/_locale-probe/ru/index.html",
+      "sha256": "8c3e0ca70edca3217e5d928b7f4a4b77f4a755289c19cb69c9f65a6228ba2a32"
+    }
+  ]
+}

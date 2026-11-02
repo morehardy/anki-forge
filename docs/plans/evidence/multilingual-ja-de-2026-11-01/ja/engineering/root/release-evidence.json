@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-engineering",
+  "status": "passed",
+  "engineeringStatus": "passed",
+  "engineeringOnly": false,
+  "startedAt": "2026-11-01T23:44:19.675Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "checks": [
+    {
+      "name": "check:content",
+      "command": [
+        "npm",
+        "run",
+        "check:content"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 3786,
+      "log": {
+        "file": "01-check-content.log",
+        "sha256": "a1389801725ed2ad44fc0ec79d1d44e234e28bcf301c29f2188742fc483de3a3",
+        "bytes": 327
+      }
+    },
+    {
+      "name": "check:site",
+      "command": [
+        "npm",
+        "run",
+        "check:site"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 3522,
+      "log": {
+        "file": "02-check-site.log",
+        "sha256": "22e864cb7f2fff3bdcbc7d41adca344edfcc42da2d55265bdc2aab2e2939182b",
+        "bytes": 330
+      }
+    },
+    {
+      "name": "check:surface",
+      "command": [
+        "npm",
+        "run",
+        "check:surface"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 1326,
+      "log": {
+        "file": "03-check-surface.log",
+        "sha256": "5b45d3a4ccef89709de75a73194030bcbd0fd2655176de2b34cc69e611ea779c",
+        "bytes": 485
+      }
+    },
+    {
+      "name": "check:machine",
+      "command": [
+        "npm",
+        "run",
+        "check:machine"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 2738,
+      "log": {
+        "file": "04-check-machine.log",
+        "sha256": "07b1311acf54908c44d2fed82e0be094198fe3dd7fb680c43e37777066301b74",
+        "bytes": 297
+      }
+    },
+    {
+      "name": "check:schema",
+      "command": [
+        "npm",
+        "run",
+        "check:schema"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 1127,
+      "log": {
+        "file": "05-check-schema.log",
+        "sha256": "b191ccf3bd446d291547a50f38e9d53786c13de602533be7b5cb9e6b777dfe45",
+        "bytes": 283
+      }
+    },
+    {
+      "name": "check:gates",
+      "command": [
+        "npm",
+        "run",
+        "check:gates"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 33350,
+      "log": {
+        "file": "06-check-gates.log",
+        "sha256": "49eb814012675650c685e0d81957a07cf5bc9b797f3e5b9a2287ce1df484502b",
+        "bytes": 1506
+      }
+    },
+    {
+      "name": "test:browser",
+      "command": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 50267,
+      "log": {
+        "file": "07-test-browser.log",
+        "sha256": "9cef25ebabd4633d80220472f5627c95acea315f916e78679dcf1a0a5a9fb557",
+        "bytes": 3991
+      }
+    },
+    {
+      "name": "check:search",
+      "command": [
+        "npm",
+        "run",
+        "check:search"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 6701,
+      "log": {
+        "file": "08-check-search.log",
+        "sha256": "977df7b059fa8b48d69c18a3aa8278e91ad3de36a33925e99d808867fe4e3035",
+        "bytes": 1027
+      }
+    }
+  ],
+  "identity": {
+    "commit": "5a50666dbc15e9aa7342de1d3d6587d1a9f147bd",
+    "inputSha256": "85f5276a59a50143053000a91fe702d76521e13fb9232db86a2498016a029d1f",
+    "configuration": {
+      "site": "https://ankiforge.dev",
+      "base": "/",
+      "customDomain": "ankiforge.dev"
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es",
+      "pt-BR",
+      "ja"
+    ]
+  },
+  "manifestSha256": "23f7c509d6ddbe5dec65cf0274309926129ef3c910cffcb900913b608efd564c",
+  "artifactSha256": "a13b0d4587caf7982bc0be29dafdcc960f27423551f55eb84043bbed6d6a2f2c",
+  "fileCount": 598,
+  "attachments": [
+    {
+      "file": "search-results.json",
+      "sha256": "a30a6529f330e65c48bcb8b5510905f901f1a54ba79c6bc08e895c649f159f9f",
+      "bytes": 256311
+    }
+  ],
+  "artifactUnchanged": true,
+  "finishedAt": "2026-11-01T23:48:27.944Z",
+  "postBuildReviews": {
+    "schemaVersion": 1,
+    "status": "passed",
+    "environment": "root",
+    "inputSha256": "85f5276a59a50143053000a91fe702d76521e13fb9232db86a2498016a029d1f",
+    "configuration": {
+      "site": "https://ankiforge.dev",
+      "base": "/",
+      "customDomain": "ankiforge.dev"
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es",
+      "pt-BR",
+      "ja"
+    ],
+    "currentManifestSha256": "23f7c509d6ddbe5dec65cf0274309926129ef3c910cffcb900913b608efd564c",
+    "configSha256": "e7539377c7be372b0470eb46281b2df09fb5c3743e9368e0f5c065431f3b66fd",
+    "reports": [
+      {
+        "kind": "usage-tasks",
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/usage-tasks-root.json",
+        "sha256": "4230f0dd2fbcd228b5d6910a8586c7d914e43ffa5694b3d7c4a0cdcc01893503",
+        "bytes": 429093,
+        "reviewerRun": "/root/de_full_author/independent-ja-rendered-usage-2026-11-01/root",
+        "originManifestSha256": "23f7c509d6ddbe5dec65cf0274309926129ef3c910cffcb900913b608efd564c",
+        "originCommit": "5a50666dbc15e9aa7342de1d3d6587d1a9f147bd",
+        "currentManifestSha256": "23f7c509d6ddbe5dec65cf0274309926129ef3c910cffcb900913b608efd564c",
+        "reused": false,
+        "resourceScopeSha256": "965be57b039d039b3e6a51cb3adcb65977fd3d0a5825626ff6baff5edbd02d4e"
+      },
+      {
+        "kind": "machine-read",
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-read-root.json",
+        "sha256": "b32fc406bcf3e9feceb5d7286488c4bd602a9b287547c6fab3267bad03672db8",
+        "bytes": 125435,
+        "reviewerRun": "/root/ja_de_infra_audit/ja-machine-root-2026-11-01",
+        "originManifestSha256": "23f7c509d6ddbe5dec65cf0274309926129ef3c910cffcb900913b608efd564c",
+        "originCommit": "5a50666dbc15e9aa7342de1d3d6587d1a9f147bd",
+        "currentManifestSha256": "23f7c509d6ddbe5dec65cf0274309926129ef3c910cffcb900913b608efd564c",
+        "reused": false,
+        "resourceScopeSha256": "20c2c455a3b5c78c67e9f550c85baaffbe60505f26e56b60cc04c153a35ed911"
+      }
+    ]
+  },
+  "reviewAttachedAt": "2026-11-01T23:48:27.944Z"
+}

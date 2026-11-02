@@ -21,11 +21,16 @@ const common = page && !['docs', 'article'].includes(page.type);
   <ul>{targets.map(target => <li><a class="language-switch" data-language-switch data-section-map={JSON.stringify(target.mapping)} data-section-ids={JSON.stringify(target.targetIds)} data-common-sections={common || undefined} href={target.href} hreflang={target.locale} lang={target.locale}>{target.label}</a></li>)}</ul>
 </details>)}
 <style>
-  .language-switch { white-space: nowrap; font-size: 0.875rem; }
-  .language-menu { position: relative; font-size: 0.875rem; }
-  .language-menu summary { cursor: pointer; white-space: nowrap; }
-  .language-menu ul { position: absolute; top: 100%; right: 0; z-index: 20; min-width: max-content; margin: 8px 0 0; padding: 8px 12px; list-style: none; border: 1px solid var(--af-line); border-radius: 8px; background: var(--af-paper); }
+  .language-switch { white-space: normal; overflow-wrap: anywhere; font-size: 0.875rem; }
+  .language-menu { position: relative; min-width: 0; max-width: 100%; font-size: 0.875rem; }
+  :global(.header-tools) .language-menu { position: static; }
+  .language-menu summary { cursor: pointer; white-space: normal; overflow-wrap: anywhere; }
+  .language-menu ul { position: absolute; top: 100%; right: 0; z-index: 20; min-width: 0; width: max-content; max-width: 100%; max-height: min(20rem, 50dvh); overflow: auto; margin: 8px 0 0; padding: 8px 12px; list-style: none; border: 1px solid var(--af-line); border-radius: 8px; background: var(--af-paper); }
   .language-menu li + li { margin-top: 8px; }
+  .language-menu ul a { display: block; line-height: 1.25; }
+  @media (max-height: 500px) {
+    :global(.header-tools) .language-menu ul { position: fixed; top: auto; bottom: 16px; right: 16px; max-width: calc(100vw - 32px); max-height: 25dvh; }
+  }
 </style>
 <script>
   document.querySelectorAll<HTMLAnchorElement>('[data-language-switch]').forEach(link => {

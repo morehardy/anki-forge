@@ -1,0 +1,25 @@
+{
+  "reviewer": "/root",
+  "scope": "Manual visual inspection of the three named actual final-artifact images, plus inspection of all 16 recorded layout/font measurements; this is not Linux CI font certification.",
+  "manifestSha256": "afb99163be210ec5a8b27226faf0ce0cb91193662c73240d0757259cc8f95feb",
+  "imagesRead": [
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/layout-prefix/ja-home-320-200.png",
+      "sha256": "769315cf1b54a0ba792542b6157eacf91e426e977ae03c127532d4699254f707"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/layout-prefix/ja-python-quickstart-390-200.png",
+      "sha256": "d1035747a888dc10f5bf135af9ab7f4681ca0798369975160fd1b480e2795689"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/layout-prefix/og-ja.png",
+      "sha256": "835a96aa886cea23e0ee4a2fc23369a862019ff2391bf6fdf8c3f5788b050b73"
+    }
+  ],
+  "observations": [
+    "At 320px/200% home and 390px/200% documentation, Japanese headings wrap legibly and the open native language menu stays inside the viewport. The menu intentionally overlays content while open.",
+    "All 16 home/document width/text-scale measurements stay within the viewport, with no page errors. CDP confirms Hiragino Kaku Gothic ProN for Japanese and .SF NS for Latin on this macOS Chrome.",
+    "Actual 1200x630 OG uses legible voiced kana and Japanese glyphs; its two headlines and description do not enter the right card region or clip. The SVG now has locale language attributes and explicit JP-priority font family; Linux typography awaits the real CI environment."
+  ],
+  "openIssues": []
+}

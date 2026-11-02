@@ -1,0 +1,2424 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/de_technical_review/de-mime-rust-source-delta-2026-11-01",
+  "baseline": "6f5f860117f17859d8cbe1fbe0073590e33564b4",
+  "priorCompleteReview": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/technical-source-review-final.json",
+    "sha256": "6c9714b97a551ee28a82415bf361b5427663e6dd26a3d602071ddaa7f817c42b"
+  },
+  "priorPairCorrection": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/technical-source-review-mime-fixed.json",
+    "sha256": "ca41d76335890ec15287aaf404da989e82723b6895491fcd59167122147e4837"
+  },
+  "priorCandidate": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/source-candidates-mime-fixed.json",
+    "sha256": "719ea15495149279836888f3687d262351c0e63ec3560fe6db61b68da25cd4b3"
+  },
+  "sourceCandidate": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/source-candidates-mime-complete.json",
+    "sha256": "0c7b259de9c93ff5ad940c4fa2728b04b193718300792715cb39381ba52c2640"
+  },
+  "paragraphsIndependentlyRead": {
+    "before": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/*; Audioreferenzen akzeptieren audio/* oder video/*. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+    "after": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)."
+  },
+  "sourceInputBindings": [
+    {
+      "path": "anki_forge/examples/docs_publication.rs",
+      "beforeSha256": "65e6404ee7381d73709dca0ada96cdb7923650ddd1cc330447884864d552a85b",
+      "afterSha256": "65e6404ee7381d73709dca0ada96cdb7923650ddd1cc330447884864d552a85b",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/docs_workflow.rs",
+      "beforeSha256": "2ab71f370ca174b256d1ba56e8b8cccc34fda5918a1fe25fe29626b061d25d86",
+      "afterSha256": "2ab71f370ca174b256d1ba56e8b8cccc34fda5918a1fe25fe29626b061d25d86",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "beforeSha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287",
+      "afterSha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "beforeSha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "afterSha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/target_api_custom_notetype.rs",
+      "beforeSha256": "2951c058e9c3376fbe115b199a010830445c5765c923f9f66f6406a724d9cd13",
+      "afterSha256": "2951c058e9c3376fbe115b199a010830445c5765c923f9f66f6406a724d9cd13",
+      "unchanged": true
+    },
+    {
+      "path": "anki_forge/examples/website_showcase.rs",
+      "beforeSha256": "458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3",
+      "afterSha256": "458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "beforeSha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a",
+      "afterSha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "beforeSha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+      "afterSha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/python/MIGRATION.md",
+      "beforeSha256": "ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2",
+      "afterSha256": "ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/python/examples/csv_to_anki.py",
+      "beforeSha256": "5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc",
+      "afterSha256": "5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "beforeSha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962",
+      "afterSha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962",
+      "unchanged": true
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "beforeSha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+      "afterSha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+      "unchanged": true
+    },
+    {
+      "path": "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+      "beforeSha256": "842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34",
+      "afterSha256": "842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai-anki-cards.md",
+      "beforeSha256": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5",
+      "afterSha256": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "beforeSha256": "5cf9be6731b67b024af1becfda537e20ccfb0f76a3384a6cec6be9a14381d348",
+      "afterSha256": "5cf9be6731b67b024af1becfda537e20ccfb0f76a3384a6cec6be9a14381d348",
+      "unchanged": true
+    },
+    {
+      "path": "docs/anki-forge-vs-genanki.md",
+      "beforeSha256": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+      "afterSha256": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+      "unchanged": true
+    },
+    {
+      "path": "docs/api-overview.md",
+      "beforeSha256": "a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b",
+      "afterSha256": "a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b",
+      "unchanged": true
+    },
+    {
+      "path": "docs/benchmark-presentation.json",
+      "beforeSha256": "487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074",
+      "afterSha256": "487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074",
+      "unchanged": true
+    },
+    {
+      "path": "docs/build-guarantees.md",
+      "beforeSha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+      "afterSha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+      "unchanged": true
+    },
+    {
+      "path": "docs/cards.md",
+      "beforeSha256": "8de0e93bf4a3b94d18d8214687d78b70a32b53e16b2369692da7c624f028d5f8",
+      "afterSha256": "8de0e93bf4a3b94d18d8214687d78b70a32b53e16b2369692da7c624f028d5f8",
+      "unchanged": true
+    },
+    {
+      "path": "docs/compatibility.md",
+      "beforeSha256": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c",
+      "afterSha256": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/concepts.md",
+      "beforeSha256": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279",
+      "afterSha256": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279",
+      "unchanged": true
+    },
+    {
+      "path": "docs/csv-to-anki.md",
+      "beforeSha256": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486",
+      "afterSha256": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486",
+      "unchanged": true
+    },
+    {
+      "path": "docs/custom-notetypes.md",
+      "beforeSha256": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1",
+      "afterSha256": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/ai-anki-cards.md",
+      "beforeSha256": "74b4c461be6950511147ff0f1e97d08626d0267b418906f010e9874406169ad2",
+      "afterSha256": "74b4c461be6950511147ff0f1e97d08626d0267b418906f010e9874406169ad2",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/anki-forge-vs-genanki.md",
+      "beforeSha256": "451e1d2e6d0ab45ad152c1f88bb06e51acc21372cc11e808de5cc3493583dd2b",
+      "afterSha256": "451e1d2e6d0ab45ad152c1f88bb06e51acc21372cc11e808de5cc3493583dd2b",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/api.md",
+      "beforeSha256": "581d8eb78991bb1c522ff5b2525eb35223cb3e0c17ce66a88c3f41617f801e6c",
+      "afterSha256": "581d8eb78991bb1c522ff5b2525eb35223cb3e0c17ce66a88c3f41617f801e6c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/build-guarantees.md",
+      "beforeSha256": "966f32043bbf829a52ef54321ea87767a5af589948cf228747662da7bf612f1e",
+      "afterSha256": "966f32043bbf829a52ef54321ea87767a5af589948cf228747662da7bf612f1e",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/cards.md",
+      "beforeSha256": "e49009a745155a906eaf8954affded89d2f627de26f8260197243b9a6d5cff5c",
+      "afterSha256": "e49009a745155a906eaf8954affded89d2f627de26f8260197243b9a6d5cff5c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/compatibility.md",
+      "beforeSha256": "a1092208ce0c5631a45a5c0d98fa811ea858ade4bec4f3f9840acbc25d32ee3b",
+      "afterSha256": "a1092208ce0c5631a45a5c0d98fa811ea858ade4bec4f3f9840acbc25d32ee3b",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/concepts.md",
+      "beforeSha256": "ca7c65832736756c6e00332a886a0e83ccada81916d1a7bb458b3b69b3908a56",
+      "afterSha256": "ca7c65832736756c6e00332a886a0e83ccada81916d1a7bb458b3b69b3908a56",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/csv-to-anki.md",
+      "beforeSha256": "ed8138ad29306fb0c8cee62b66dc9c06cb8e665240650adccfe7bd76967e3853",
+      "afterSha256": "ed8138ad29306fb0c8cee62b66dc9c06cb8e665240650adccfe7bd76967e3853",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/custom-notetypes.md",
+      "beforeSha256": "9dbd706e48dfe60d445eef3ffd303271e2d7df0b7aa4e2a57d1dda973e4cdf3a",
+      "afterSha256": "9dbd706e48dfe60d445eef3ffd303271e2d7df0b7aa4e2a57d1dda973e4cdf3a",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/development.md",
+      "beforeSha256": "53ff98772b29690bd60a2935fb32f022236bf2f6fc42d63324ab5b40ffdc6aa7",
+      "afterSha256": "53ff98772b29690bd60a2935fb32f022236bf2f6fc42d63324ab5b40ffdc6aa7",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/genanki-migration.md",
+      "beforeSha256": "6035390753fef09d1b00801f9bba7887e0ba0b36571e73b7b635d1bde214eef9",
+      "afterSha256": "6035390753fef09d1b00801f9bba7887e0ba0b36571e73b7b635d1bde214eef9",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/image-occlusion.md",
+      "beforeSha256": "bddaa38be40223ebaad0f0aa093759b70a8ad8e19fc9b6f56c48007b38bb1494",
+      "afterSha256": "bddaa38be40223ebaad0f0aa093759b70a8ad8e19fc9b6f56c48007b38bb1494",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/index.md",
+      "beforeSha256": "dc985f5b231888a3806870ee2b72852718c22e50693159d67e913da9e7d39be4",
+      "afterSha256": "dc985f5b231888a3806870ee2b72852718c22e50693159d67e913da9e7d39be4",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/installation.md",
+      "beforeSha256": "a01cc3816070dc01c5aea450fc1b9ed1a3c6dc27172f6a216e17c1d8319d5292",
+      "afterSha256": "a01cc3816070dc01c5aea450fc1b9ed1a3c6dc27172f6a216e17c1d8319d5292",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/json-to-anki.md",
+      "beforeSha256": "c9d69a877371fc780181db29480f59c1681b201970ecbe737ddb2cc1d319de44",
+      "afterSha256": "c9d69a877371fc780181db29480f59c1681b201970ecbe737ddb2cc1d319de44",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/languages.md",
+      "beforeSha256": "9f4bc430ca275986e082e4bf7df3c02d1c25e09a11db9e338cf165bf9b5abaa3",
+      "afterSha256": "9f4bc430ca275986e082e4bf7df3c02d1c25e09a11db9e338cf165bf9b5abaa3",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/media.md",
+      "beforeSha256": "cba638b0700073d214d98011cfeb0691cbb043cc2d95bb664ac6a57d29ec6971",
+      "afterSha256": "cba638b0700073d214d98011cfeb0691cbb043cc2d95bb664ac6a57d29ec6971",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/node-api.md",
+      "beforeSha256": "9eb661fae21ce15f7c9f25010e6642c52338cf2ffd9f925f81f5c6ed2a8d3fae",
+      "afterSha256": "9eb661fae21ce15f7c9f25010e6642c52338cf2ffd9f925f81f5c6ed2a8d3fae",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/node-quickstart.md",
+      "beforeSha256": "01ed82b8aaf02ca0c933f64ddcaab876a64b3ffd3807e5aff714854ca08eb919",
+      "afterSha256": "01ed82b8aaf02ca0c933f64ddcaab876a64b3ffd3807e5aff714854ca08eb919",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/python-api.md",
+      "beforeSha256": "3f9c8ef43cbe56ef2c51530d19d0005f558008590168c4e5025408642f4acfb2",
+      "afterSha256": "3f9c8ef43cbe56ef2c51530d19d0005f558008590168c4e5025408642f4acfb2",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/python-diagnostics.md",
+      "beforeSha256": "4a3a01708e859d432091a737ea29fdb113a042f3ed4defb741800457ee8ef1c3",
+      "afterSha256": "4a3a01708e859d432091a737ea29fdb113a042f3ed4defb741800457ee8ef1c3",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/python-migration.md",
+      "beforeSha256": "34f8ff3453c341b961044bf632b1e68c1717c562598e2bc8672200701faab8da",
+      "afterSha256": "34f8ff3453c341b961044bf632b1e68c1717c562598e2bc8672200701faab8da",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/python-quickstart.md",
+      "beforeSha256": "1201cbd37bf1a97bed0a6f9939964df21657474bcc5d85669e6b7c5275a68748",
+      "afterSha256": "1201cbd37bf1a97bed0a6f9939964df21657474bcc5d85669e6b7c5275a68748",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/quickstart.md",
+      "beforeSha256": "aedcddd82f1da4432f75f46aafc29926b5b3a3035c1fbd73965abe4f41c80e9d",
+      "afterSha256": "aedcddd82f1da4432f75f46aafc29926b5b3a3035c1fbd73965abe4f41c80e9d",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/rust-api.md",
+      "beforeSha256": "efca7596145a1e4034e988254b9b23e3701eada9b25aa255a2b5927f3f850a62",
+      "afterSha256": "ae1f3ddbcc85e27b7cbe55803ec8163eaeb69a13e43e59047a52809ea5405386",
+      "unchanged": false
+    },
+    {
+      "path": "docs/de/rust-guide.md",
+      "beforeSha256": "6bc9bb87dc13447e16e3e8b9fb6668c316c354de06ed8c44bad2ea956e9481bb",
+      "afterSha256": "6bc9bb87dc13447e16e3e8b9fb6668c316c354de06ed8c44bad2ea956e9481bb",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/templates.md",
+      "beforeSha256": "7d9971a3563001a7df954a51a0d56ddefdd0ff103de10b8f41a9a6122f60d5f7",
+      "afterSha256": "7d9971a3563001a7df954a51a0d56ddefdd0ff103de10b8f41a9a6122f60d5f7",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/troubleshooting.md",
+      "beforeSha256": "63c51366d7d70037aa253cf599c6b97c9f02f33310e00f599b3f1fdf6f9ca7ec",
+      "afterSha256": "63c51366d7d70037aa253cf599c6b97c9f02f33310e00f599b3f1fdf6f9ca7ec",
+      "unchanged": true
+    },
+    {
+      "path": "docs/de/updates.md",
+      "beforeSha256": "78ba118cee9fd765ab0c1b7b6d519be3ec34aa0afdc976621cae996c5d196d01",
+      "afterSha256": "78ba118cee9fd765ab0c1b7b6d519be3ec34aa0afdc976621cae996c5d196d01",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/ai-anki-cards.md",
+      "beforeSha256": "8b80fffb4cbd0839fbe2c6d816a4e68d68eb0150d81b8551f8fee47777a2de08",
+      "afterSha256": "8b80fffb4cbd0839fbe2c6d816a4e68d68eb0150d81b8551f8fee47777a2de08",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/anki-forge-vs-genanki.md",
+      "beforeSha256": "04cc37e1506ddd0f5ed2616d9d70ea05ab07363c50d165980d6fdae068f4bf14",
+      "afterSha256": "04cc37e1506ddd0f5ed2616d9d70ea05ab07363c50d165980d6fdae068f4bf14",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/api.md",
+      "beforeSha256": "b5a1917ba788bc8ce4f3abfca1366a75fb232ffffcf26582223affbb4993f595",
+      "afterSha256": "b5a1917ba788bc8ce4f3abfca1366a75fb232ffffcf26582223affbb4993f595",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/build-guarantees.md",
+      "beforeSha256": "a9783373464d0dc6dab67c4fb6b9acb9a12a22dac3c6294ade252055e58e5211",
+      "afterSha256": "a9783373464d0dc6dab67c4fb6b9acb9a12a22dac3c6294ade252055e58e5211",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/cards.md",
+      "beforeSha256": "9e88723fba1f06d142694dcfb3bea0ab654696ab230bbd0ee93d74a9d4424ffa",
+      "afterSha256": "9e88723fba1f06d142694dcfb3bea0ab654696ab230bbd0ee93d74a9d4424ffa",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/compatibility.md",
+      "beforeSha256": "b317fb1db494e0c041d18b2b9e966b0ea265be2c5bed59ae1821a576fc397f5a",
+      "afterSha256": "b317fb1db494e0c041d18b2b9e966b0ea265be2c5bed59ae1821a576fc397f5a",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/concepts.md",
+      "beforeSha256": "be7aeded92b0e32b8953b3356c0e92b3cfdbe5462a071e743bceacf1c74967cf",
+      "afterSha256": "be7aeded92b0e32b8953b3356c0e92b3cfdbe5462a071e743bceacf1c74967cf",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/csv-to-anki.md",
+      "beforeSha256": "b913be7c1051dcd98d8b0f611b7b02745898c57212393ee457b581188aa778c3",
+      "afterSha256": "b913be7c1051dcd98d8b0f611b7b02745898c57212393ee457b581188aa778c3",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/custom-notetypes.md",
+      "beforeSha256": "e06cf470c302ec013c67b5baf77580f1022f11984e2b84c5c567d664e6579ba1",
+      "afterSha256": "e06cf470c302ec013c67b5baf77580f1022f11984e2b84c5c567d664e6579ba1",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/development.md",
+      "beforeSha256": "722d645a9ecac60caddb18c2e097e82b3190f4e7480a615ac5804e111f56a3d2",
+      "afterSha256": "722d645a9ecac60caddb18c2e097e82b3190f4e7480a615ac5804e111f56a3d2",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/genanki-migration.md",
+      "beforeSha256": "6ef6e1e61293f9bfa0553c0d6ee44298324d5ce50231bfc6b7736a3d3314fd3a",
+      "afterSha256": "6ef6e1e61293f9bfa0553c0d6ee44298324d5ce50231bfc6b7736a3d3314fd3a",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/image-occlusion.md",
+      "beforeSha256": "bd4e2015b1dbcce582508b373dcb8f45d52256993b29202b0f144f350e491a32",
+      "afterSha256": "bd4e2015b1dbcce582508b373dcb8f45d52256993b29202b0f144f350e491a32",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/index.md",
+      "beforeSha256": "ac237d7de9b07b2d8517690a35763d341a57f5e331a6c7a5ff7636655f3f13f7",
+      "afterSha256": "ac237d7de9b07b2d8517690a35763d341a57f5e331a6c7a5ff7636655f3f13f7",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/installation.md",
+      "beforeSha256": "dc03cf4b3633c162b880edd08188dee868dbb1919537df6543c5a0d8eb8e3c3f",
+      "afterSha256": "dc03cf4b3633c162b880edd08188dee868dbb1919537df6543c5a0d8eb8e3c3f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/json-to-anki.md",
+      "beforeSha256": "2294cd3ed93fe33b3d176dc92b89f84f97ea87788d923b0580e6947494382a17",
+      "afterSha256": "2294cd3ed93fe33b3d176dc92b89f84f97ea87788d923b0580e6947494382a17",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/languages.md",
+      "beforeSha256": "194b998bd39e93ba3f49c0a663b0c0f7c1b7b1cff2e90c7d01f1e86bfa21e200",
+      "afterSha256": "194b998bd39e93ba3f49c0a663b0c0f7c1b7b1cff2e90c7d01f1e86bfa21e200",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/media.md",
+      "beforeSha256": "d43e58143be9ff485a1d501854a997ffb6e2095aa15da04a23e382a0370302da",
+      "afterSha256": "d43e58143be9ff485a1d501854a997ffb6e2095aa15da04a23e382a0370302da",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/node-api.md",
+      "beforeSha256": "12770ed45358ed5837941fc53122b3d21b4e2b6da8eca31e4754b7b4b9979970",
+      "afterSha256": "12770ed45358ed5837941fc53122b3d21b4e2b6da8eca31e4754b7b4b9979970",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/node-quickstart.md",
+      "beforeSha256": "d3bbb1b778ac54b0a6ad0f29b8ec715c3b183f33562f74aeaf505783877cdf70",
+      "afterSha256": "d3bbb1b778ac54b0a6ad0f29b8ec715c3b183f33562f74aeaf505783877cdf70",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/python-api.md",
+      "beforeSha256": "a8d45ed551b810ebf0d55019ffd9bad8a6345c6d63a93b90bf9039f018b8ee47",
+      "afterSha256": "a8d45ed551b810ebf0d55019ffd9bad8a6345c6d63a93b90bf9039f018b8ee47",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/python-diagnostics.md",
+      "beforeSha256": "8f1456b53eed097da5869b1c45bd9c02e2d9857b9a1581d2aaf261d97ff3b879",
+      "afterSha256": "8f1456b53eed097da5869b1c45bd9c02e2d9857b9a1581d2aaf261d97ff3b879",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/python-migration.md",
+      "beforeSha256": "638eef94d9c8ea3bf26baad4172603ebe1f5b7ef45df7534f2c821815a429283",
+      "afterSha256": "638eef94d9c8ea3bf26baad4172603ebe1f5b7ef45df7534f2c821815a429283",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/python-quickstart.md",
+      "beforeSha256": "e933a64e8b9e6f274dc4b45fb0a9bf5fc010a237fdb274719c6b5a1ff49399d9",
+      "afterSha256": "e933a64e8b9e6f274dc4b45fb0a9bf5fc010a237fdb274719c6b5a1ff49399d9",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/quickstart.md",
+      "beforeSha256": "cbd9b899cfe7dba028def67878e19c53e0a9e6497c29b9fdd2204cd4798f3a20",
+      "afterSha256": "cbd9b899cfe7dba028def67878e19c53e0a9e6497c29b9fdd2204cd4798f3a20",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/rust-api.md",
+      "beforeSha256": "633feb34058663f28393f6d14cbd112e39e95061ee8c795eae73cc2129139491",
+      "afterSha256": "633feb34058663f28393f6d14cbd112e39e95061ee8c795eae73cc2129139491",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/rust-guide.md",
+      "beforeSha256": "b222d50298d64c963810deefae73386a16f8920826d6c34ffa52920070e705b4",
+      "afterSha256": "b222d50298d64c963810deefae73386a16f8920826d6c34ffa52920070e705b4",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/templates.md",
+      "beforeSha256": "e89f1b6b0c5766205ac36fae7bf326afa2a604ce117106ca1ddea272ec753956",
+      "afterSha256": "e89f1b6b0c5766205ac36fae7bf326afa2a604ce117106ca1ddea272ec753956",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/troubleshooting.md",
+      "beforeSha256": "3096c6a6e87d8ac623b26ccba13382e7ddd5087bab79840e7151b44b9cc351a7",
+      "afterSha256": "3096c6a6e87d8ac623b26ccba13382e7ddd5087bab79840e7151b44b9cc351a7",
+      "unchanged": true
+    },
+    {
+      "path": "docs/es/updates.md",
+      "beforeSha256": "19380eb677013ee27ca173e7d4719e6003ca8a7847337349185ce2b5164976d0",
+      "afterSha256": "19380eb677013ee27ca173e7d4719e6003ca8a7847337349185ce2b5164976d0",
+      "unchanged": true
+    },
+    {
+      "path": "docs/image-occlusion.md",
+      "beforeSha256": "3e54b44010c3420fff223ce8a4bf0a1bb095dd27a6fd3d4b1517d6a05a7f85a5",
+      "afterSha256": "3e54b44010c3420fff223ce8a4bf0a1bb095dd27a6fd3d4b1517d6a05a7f85a5",
+      "unchanged": true
+    },
+    {
+      "path": "docs/installation.md",
+      "beforeSha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "afterSha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/ai-anki-cards.md",
+      "beforeSha256": "cf2fb9817a26f3e2938d54cb931edc0ac80f44b51c04bf2d883257e6b9b9c3c7",
+      "afterSha256": "cf2fb9817a26f3e2938d54cb931edc0ac80f44b51c04bf2d883257e6b9b9c3c7",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/anki-forge-vs-genanki.md",
+      "beforeSha256": "36b0579995c71016163cfdc2a1f2f09fc27d030d7272d5766cd06b86d58f4863",
+      "afterSha256": "36b0579995c71016163cfdc2a1f2f09fc27d030d7272d5766cd06b86d58f4863",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/api.md",
+      "beforeSha256": "110853c5ab56a32c577c1364e1d98eab998472dad1f664791e94f5f560a729a8",
+      "afterSha256": "110853c5ab56a32c577c1364e1d98eab998472dad1f664791e94f5f560a729a8",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/build-guarantees.md",
+      "beforeSha256": "9e9c66491f660e69f6bd391339aac8112d50c633722660c3f5602d51120b405c",
+      "afterSha256": "9e9c66491f660e69f6bd391339aac8112d50c633722660c3f5602d51120b405c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/cards.md",
+      "beforeSha256": "5e20838f31c580ca80cfd2407692d4db85dc187633089c0eff0ae11df6859f4c",
+      "afterSha256": "5e20838f31c580ca80cfd2407692d4db85dc187633089c0eff0ae11df6859f4c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/compatibility.md",
+      "beforeSha256": "1dbf64698229e3678678cd0d10a5c2accd87e54b3adcf1dd5154f503acbd4619",
+      "afterSha256": "1dbf64698229e3678678cd0d10a5c2accd87e54b3adcf1dd5154f503acbd4619",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/concepts.md",
+      "beforeSha256": "5f28246535cc794e551e5de54926ef0b03737e0e8ec5eb15c57930d46704696a",
+      "afterSha256": "5f28246535cc794e551e5de54926ef0b03737e0e8ec5eb15c57930d46704696a",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/csv-to-anki.md",
+      "beforeSha256": "34957010bbc729378a0919be713a544655aad690c21b6717499d74fd8257f16e",
+      "afterSha256": "34957010bbc729378a0919be713a544655aad690c21b6717499d74fd8257f16e",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/custom-notetypes.md",
+      "beforeSha256": "de7248b445d1826983e864314bbca42ba817ef9a04428ae89140c0d080efbb6c",
+      "afterSha256": "de7248b445d1826983e864314bbca42ba817ef9a04428ae89140c0d080efbb6c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/development.md",
+      "beforeSha256": "283e4b1abf8f7a107c25f8d98eab4a8e0e9a5e2a41b7b92d0a9abb98af1564d2",
+      "afterSha256": "283e4b1abf8f7a107c25f8d98eab4a8e0e9a5e2a41b7b92d0a9abb98af1564d2",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/genanki-migration.md",
+      "beforeSha256": "da87755746c6aa8aa68c998604d9efed2b228bbacafc67a454353816356e1d39",
+      "afterSha256": "da87755746c6aa8aa68c998604d9efed2b228bbacafc67a454353816356e1d39",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/image-occlusion.md",
+      "beforeSha256": "84fc0d6c6450ad7c372f30fb75ca6c8c305646a48f80d7e0bb8d686fdca46e05",
+      "afterSha256": "84fc0d6c6450ad7c372f30fb75ca6c8c305646a48f80d7e0bb8d686fdca46e05",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/index.md",
+      "beforeSha256": "3308d55caacf1041ee4496513bc6f9050deef341580bbf92bceef3c2a98f0090",
+      "afterSha256": "3308d55caacf1041ee4496513bc6f9050deef341580bbf92bceef3c2a98f0090",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/installation.md",
+      "beforeSha256": "a5cc1a82631b4cd68a3f007b274ee193e5cbe8ad85d545adeba7ee9e5e10c77b",
+      "afterSha256": "a5cc1a82631b4cd68a3f007b274ee193e5cbe8ad85d545adeba7ee9e5e10c77b",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/json-to-anki.md",
+      "beforeSha256": "3854b6f797272977f5926022df6651e48f9dea5538fe5ca1c1caee20661b2f20",
+      "afterSha256": "3854b6f797272977f5926022df6651e48f9dea5538fe5ca1c1caee20661b2f20",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/languages.md",
+      "beforeSha256": "a2fa963048f9fa985c66da2a9d7761ceaf863c81ab945cb45c61ecb6c2cd33f9",
+      "afterSha256": "a2fa963048f9fa985c66da2a9d7761ceaf863c81ab945cb45c61ecb6c2cd33f9",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/media.md",
+      "beforeSha256": "e1e9452b4e70c6537516ffba7312bd68140091817ef22160688fef12f13b9c70",
+      "afterSha256": "e1e9452b4e70c6537516ffba7312bd68140091817ef22160688fef12f13b9c70",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/node-api.md",
+      "beforeSha256": "a7e3b2466f6b1860929ca28d1283b689495cf47a71c5f4d976701e6d244968f7",
+      "afterSha256": "a7e3b2466f6b1860929ca28d1283b689495cf47a71c5f4d976701e6d244968f7",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/node-quickstart.md",
+      "beforeSha256": "b91ae050d54de2806334eb74fab42f4033178e6379e4a07c7f60c18c5740ef69",
+      "afterSha256": "b91ae050d54de2806334eb74fab42f4033178e6379e4a07c7f60c18c5740ef69",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/python-api.md",
+      "beforeSha256": "93da1e958c3e3640e6ab98273e161deebde6ab325e9732869c3422cfeb58f6ff",
+      "afterSha256": "93da1e958c3e3640e6ab98273e161deebde6ab325e9732869c3422cfeb58f6ff",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/python-diagnostics.md",
+      "beforeSha256": "41ebcdb96e0fd67bc83e0addde988b13480264566f27daa82f2c50b012e5b7b3",
+      "afterSha256": "41ebcdb96e0fd67bc83e0addde988b13480264566f27daa82f2c50b012e5b7b3",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/python-migration.md",
+      "beforeSha256": "7de219491d7eeeb77f74c4d0e4742b44ece5726936815e93024c1002cb75d1f3",
+      "afterSha256": "7de219491d7eeeb77f74c4d0e4742b44ece5726936815e93024c1002cb75d1f3",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/python-quickstart.md",
+      "beforeSha256": "f27a1f11499a4e8819a88a3524d26f6f806b0507a36487a573efb89f5331ca80",
+      "afterSha256": "f27a1f11499a4e8819a88a3524d26f6f806b0507a36487a573efb89f5331ca80",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/quickstart.md",
+      "beforeSha256": "fe0500fd8dcd4e351a5c69f07924fdf8e8581a0a4cce6398d5038fe471b6df99",
+      "afterSha256": "fe0500fd8dcd4e351a5c69f07924fdf8e8581a0a4cce6398d5038fe471b6df99",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/rust-api.md",
+      "beforeSha256": "44f86e9fa09a1563256c3e4f1a002adeede89175ea612028a3189bad53b82cb4",
+      "afterSha256": "44f86e9fa09a1563256c3e4f1a002adeede89175ea612028a3189bad53b82cb4",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/rust-guide.md",
+      "beforeSha256": "d76a7053e8112360ffdabcbc26a6f7ac6d7edce63a232cff7eb7bc966c06cea6",
+      "afterSha256": "d76a7053e8112360ffdabcbc26a6f7ac6d7edce63a232cff7eb7bc966c06cea6",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/templates.md",
+      "beforeSha256": "4b5203ebb443b0170ea95e83028f9aec4c3a55b6756d842db3fc06a8656513b3",
+      "afterSha256": "4b5203ebb443b0170ea95e83028f9aec4c3a55b6756d842db3fc06a8656513b3",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/troubleshooting.md",
+      "beforeSha256": "b793e99c00de54c1b73111a2c9a4b7b2f0e1809fad5be389be2b476bf9f9262b",
+      "afterSha256": "b793e99c00de54c1b73111a2c9a4b7b2f0e1809fad5be389be2b476bf9f9262b",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ja/updates.md",
+      "beforeSha256": "3c7c8e628b08c69d253ca6453bdf9ea922068d6d0eae3c71f10a753babfa1bc2",
+      "afterSha256": "3c7c8e628b08c69d253ca6453bdf9ea922068d6d0eae3c71f10a753babfa1bc2",
+      "unchanged": true
+    },
+    {
+      "path": "docs/json-to-anki.md",
+      "beforeSha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "afterSha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "unchanged": true
+    },
+    {
+      "path": "docs/media.md",
+      "beforeSha256": "c2d0a5d292d6b320d47892926767ef782355935e8f9cefade9b930e2f6b62c02",
+      "afterSha256": "c2d0a5d292d6b320d47892926767ef782355935e8f9cefade9b930e2f6b62c02",
+      "unchanged": true
+    },
+    {
+      "path": "docs/node/api.md",
+      "beforeSha256": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726",
+      "afterSha256": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726",
+      "unchanged": true
+    },
+    {
+      "path": "docs/node/quick-start.md",
+      "beforeSha256": "084c9c550e430907e7c77de653458fdc11a393136b8c4a24f1e64e8c03e2113e",
+      "afterSha256": "084c9c550e430907e7c77de653458fdc11a393136b8c4a24f1e64e8c03e2113e",
+      "unchanged": true
+    },
+    {
+      "path": "docs/performance/20261008/comparison.csv",
+      "beforeSha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999",
+      "afterSha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/ai-anki-cards.md",
+      "beforeSha256": "1890b812bf0e5e05e28855c97fe260b635604cc0cb7b46ba6fb0ec5320b8c50c",
+      "afterSha256": "1890b812bf0e5e05e28855c97fe260b635604cc0cb7b46ba6fb0ec5320b8c50c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/anki-forge-vs-genanki.md",
+      "beforeSha256": "b0b7c1a19279dd4bb3ac615d5794fc876aaaf7f554afecf3138f5242d444a35b",
+      "afterSha256": "b0b7c1a19279dd4bb3ac615d5794fc876aaaf7f554afecf3138f5242d444a35b",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/api.md",
+      "beforeSha256": "b5309df36f1215910e24c60e6c53d2cf743f2fc46197c74f2ed4e0fd40409639",
+      "afterSha256": "b5309df36f1215910e24c60e6c53d2cf743f2fc46197c74f2ed4e0fd40409639",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/build-guarantees.md",
+      "beforeSha256": "bd8959257563b62c9e16adfebab530aa43ece9d82bda9d5a7121d32c6ec686bb",
+      "afterSha256": "bd8959257563b62c9e16adfebab530aa43ece9d82bda9d5a7121d32c6ec686bb",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/cards.md",
+      "beforeSha256": "dc7ac8b5036233685867fa55abd170e0646fe6d2305b25cfa96f68dff5b72745",
+      "afterSha256": "dc7ac8b5036233685867fa55abd170e0646fe6d2305b25cfa96f68dff5b72745",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/compatibility.md",
+      "beforeSha256": "e329266e1135eed40762eefa6e57b7b7cb3de8d9cc1c8923a4abf0432f3e315a",
+      "afterSha256": "e329266e1135eed40762eefa6e57b7b7cb3de8d9cc1c8923a4abf0432f3e315a",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/concepts.md",
+      "beforeSha256": "81f9ff03a58077838814b456dc437dfe394c7e9d6e2dea2be63733bc8b101e17",
+      "afterSha256": "81f9ff03a58077838814b456dc437dfe394c7e9d6e2dea2be63733bc8b101e17",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/csv-to-anki.md",
+      "beforeSha256": "8c80b3fe48acfe72d0015e7750a3798402decaf982bc6ced3ae9631961a93592",
+      "afterSha256": "8c80b3fe48acfe72d0015e7750a3798402decaf982bc6ced3ae9631961a93592",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/custom-notetypes.md",
+      "beforeSha256": "45abb79ab1544de43c32d04ecc08a311c525457c700e1fee08f7c46cf917a40b",
+      "afterSha256": "45abb79ab1544de43c32d04ecc08a311c525457c700e1fee08f7c46cf917a40b",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/development.md",
+      "beforeSha256": "9ba4194a8a50fd2bda914972af4e2f10b30b3e26a0bc69e6d230eb52bdaa1dec",
+      "afterSha256": "9ba4194a8a50fd2bda914972af4e2f10b30b3e26a0bc69e6d230eb52bdaa1dec",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/genanki-migration.md",
+      "beforeSha256": "18966d0055cf53620dd9090e5f7dc1abc069c4e705179cb733b6b0574fd87d7f",
+      "afterSha256": "18966d0055cf53620dd9090e5f7dc1abc069c4e705179cb733b6b0574fd87d7f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/image-occlusion.md",
+      "beforeSha256": "e9be54338b6e774101fb6040980d6e3a6af99b91b78b43dbe1a97d32fe690f63",
+      "afterSha256": "e9be54338b6e774101fb6040980d6e3a6af99b91b78b43dbe1a97d32fe690f63",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/index.md",
+      "beforeSha256": "30eaf91f30da308312a443839d37875417f6777daf3b8e5141a1b27bcd32e9b6",
+      "afterSha256": "30eaf91f30da308312a443839d37875417f6777daf3b8e5141a1b27bcd32e9b6",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/installation.md",
+      "beforeSha256": "6d2301bb8842d5c2932454796b41d9569238f671a16e0a1190f2824610c82dfc",
+      "afterSha256": "6d2301bb8842d5c2932454796b41d9569238f671a16e0a1190f2824610c82dfc",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/json-to-anki.md",
+      "beforeSha256": "8efb922325b5c2cf96e0889ea11a3eb6d257ca48325b6ec5254a2189d66c7a3c",
+      "afterSha256": "8efb922325b5c2cf96e0889ea11a3eb6d257ca48325b6ec5254a2189d66c7a3c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/languages.md",
+      "beforeSha256": "13b41bd3bba4df633ed05c10cefa9135ce1cdd4993ca63dbb87caf5ef705ff76",
+      "afterSha256": "13b41bd3bba4df633ed05c10cefa9135ce1cdd4993ca63dbb87caf5ef705ff76",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/media.md",
+      "beforeSha256": "eea95e2672a4a962e6608877b9c972e7025048b3d1b19c2327a346f998fdc3ed",
+      "afterSha256": "eea95e2672a4a962e6608877b9c972e7025048b3d1b19c2327a346f998fdc3ed",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/node-api.md",
+      "beforeSha256": "d56dbf21301fdf736e06ffc559742e6e1137dba221c501f9e369d941a6fc511c",
+      "afterSha256": "d56dbf21301fdf736e06ffc559742e6e1137dba221c501f9e369d941a6fc511c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/node-quickstart.md",
+      "beforeSha256": "9bb7efa79d1f1eece82cc1d364bd108468f331264aa9fff57c5e99ecf6ae595e",
+      "afterSha256": "9bb7efa79d1f1eece82cc1d364bd108468f331264aa9fff57c5e99ecf6ae595e",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/python-api.md",
+      "beforeSha256": "c717250c2b2716c725926d587a03ace9452ce5403af1d03cab74a264b5885e77",
+      "afterSha256": "c717250c2b2716c725926d587a03ace9452ce5403af1d03cab74a264b5885e77",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/python-diagnostics.md",
+      "beforeSha256": "fe268af60eda07f29a8ff2e097a316b26313a304e62841099a66caf4bf8b6d57",
+      "afterSha256": "fe268af60eda07f29a8ff2e097a316b26313a304e62841099a66caf4bf8b6d57",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/python-migration.md",
+      "beforeSha256": "14c7bcb9c296927c2d2ca34e7ae51bd7f23356431ec4cbd5eb4881f051884757",
+      "afterSha256": "14c7bcb9c296927c2d2ca34e7ae51bd7f23356431ec4cbd5eb4881f051884757",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/python-quickstart.md",
+      "beforeSha256": "d42037dbd3bc8e4c36bcba6968a74966adf1bb05cd69f7da353e25d1f0625784",
+      "afterSha256": "d42037dbd3bc8e4c36bcba6968a74966adf1bb05cd69f7da353e25d1f0625784",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/quickstart.md",
+      "beforeSha256": "343e547c78c25fa214cc94423c83ab9744e1a3d2668d515df0ca803c7d0fcc59",
+      "afterSha256": "343e547c78c25fa214cc94423c83ab9744e1a3d2668d515df0ca803c7d0fcc59",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/rust-api.md",
+      "beforeSha256": "626902fb1affdecddef7f0b68841844736d268f28ce6b3b0312d7b15d043a3b7",
+      "afterSha256": "626902fb1affdecddef7f0b68841844736d268f28ce6b3b0312d7b15d043a3b7",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/rust-guide.md",
+      "beforeSha256": "6313f3d0d98e69642d0c5095c598a46d3dd9399000c0109ecd5c587487d0b0c4",
+      "afterSha256": "6313f3d0d98e69642d0c5095c598a46d3dd9399000c0109ecd5c587487d0b0c4",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/templates.md",
+      "beforeSha256": "426d06e015e5d9c48a49bdc49a299b96bc8835aeb8cd045372de9e19054140f0",
+      "afterSha256": "426d06e015e5d9c48a49bdc49a299b96bc8835aeb8cd045372de9e19054140f0",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/troubleshooting.md",
+      "beforeSha256": "5f20692772452a77b49afaa868eae955a151ec960ee8cbd8c22ae216e122262c",
+      "afterSha256": "5f20692772452a77b49afaa868eae955a151ec960ee8cbd8c22ae216e122262c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/pt-br/updates.md",
+      "beforeSha256": "5e91f21e8f184b43143baeb301c9b5a9e6034b42f3ffc67391af12de0d173305",
+      "afterSha256": "5e91f21e8f184b43143baeb301c9b5a9e6034b42f3ffc67391af12de0d173305",
+      "unchanged": true
+    },
+    {
+      "path": "docs/python/api.md",
+      "beforeSha256": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+      "afterSha256": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+      "unchanged": true
+    },
+    {
+      "path": "docs/python/diagnostics.md",
+      "beforeSha256": "b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28",
+      "afterSha256": "b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28",
+      "unchanged": true
+    },
+    {
+      "path": "docs/python/genanki-migration.md",
+      "beforeSha256": "3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f",
+      "afterSha256": "3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/python/quick-start.md",
+      "beforeSha256": "394405423e6036cf8a11725eae7fb25adf1ba927df4fe68f690baee409258b42",
+      "afterSha256": "394405423e6036cf8a11725eae7fb25adf1ba927df4fe68f690baee409258b42",
+      "unchanged": true
+    },
+    {
+      "path": "docs/recipes/csv-to-anki/cards.csv",
+      "beforeSha256": "216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64",
+      "afterSha256": "216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64",
+      "unchanged": true
+    },
+    {
+      "path": "docs/rust-api.md",
+      "beforeSha256": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a",
+      "afterSha256": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a",
+      "unchanged": true
+    },
+    {
+      "path": "docs/rust-guide.md",
+      "beforeSha256": "5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf",
+      "afterSha256": "5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf",
+      "unchanged": true
+    },
+    {
+      "path": "docs/source-builds.md",
+      "beforeSha256": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac",
+      "afterSha256": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac",
+      "unchanged": true
+    },
+    {
+      "path": "docs/template-bundles.md",
+      "beforeSha256": "8695e7f6f40d19911dd072a16bd5d07f43e2a250618eb6c0aefc06a39451f53f",
+      "afterSha256": "8695e7f6f40d19911dd072a16bd5d07f43e2a250618eb6c0aefc06a39451f53f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "beforeSha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699",
+      "afterSha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699",
+      "unchanged": true
+    },
+    {
+      "path": "docs/updates.md",
+      "beforeSha256": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+      "afterSha256": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/ai-anki-cards.md",
+      "beforeSha256": "49a557471ff9ab2a4ae8cc9c4b7d7fe12307a928bb3c66d2c0d2082119e4c1ae",
+      "afterSha256": "49a557471ff9ab2a4ae8cc9c4b7d7fe12307a928bb3c66d2c0d2082119e4c1ae",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/anki-forge-vs-genanki.md",
+      "beforeSha256": "fe79c48acc7247921f08a8403b3a24e3ae29ba0977b220c7eab06e779a6fbbea",
+      "afterSha256": "fe79c48acc7247921f08a8403b3a24e3ae29ba0977b220c7eab06e779a6fbbea",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/api.md",
+      "beforeSha256": "e6cc07f90a030bd3a24ff7d53d8569010772600e9cdff582edd906a851bc925d",
+      "afterSha256": "e6cc07f90a030bd3a24ff7d53d8569010772600e9cdff582edd906a851bc925d",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/build-guarantees.md",
+      "beforeSha256": "5d7f6e975cd181ec7fe980b9a2e3f223bf50f99b0fb65207e8dfbf183eaf17af",
+      "afterSha256": "5d7f6e975cd181ec7fe980b9a2e3f223bf50f99b0fb65207e8dfbf183eaf17af",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/cards.md",
+      "beforeSha256": "cbf569294454cda932ec7b3976a992d81ba4b020fb14105e8360539535c94e14",
+      "afterSha256": "cbf569294454cda932ec7b3976a992d81ba4b020fb14105e8360539535c94e14",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/compatibility.md",
+      "beforeSha256": "617bfe97d87e825467371377e8711d757469b6d007d4ca7fb9962f6ab10ed87c",
+      "afterSha256": "617bfe97d87e825467371377e8711d757469b6d007d4ca7fb9962f6ab10ed87c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/concepts.md",
+      "beforeSha256": "d96916d3e573822c4bc9f918a0b00f86fefad8062a8d42330a5942b18f017823",
+      "afterSha256": "d96916d3e573822c4bc9f918a0b00f86fefad8062a8d42330a5942b18f017823",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/csv-to-anki.md",
+      "beforeSha256": "a42ecf3bc3b7d2bf4dda6a248569f3fa7c35918a21e8436f36893b08cd5ef50f",
+      "afterSha256": "a42ecf3bc3b7d2bf4dda6a248569f3fa7c35918a21e8436f36893b08cd5ef50f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/custom-notetypes.md",
+      "beforeSha256": "ef1fa002f9f75f63ba5d7751e8acc7aa20dbff58c8f431c860d52f39fd130682",
+      "afterSha256": "ef1fa002f9f75f63ba5d7751e8acc7aa20dbff58c8f431c860d52f39fd130682",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/development.md",
+      "beforeSha256": "fd8598bdbc120b1a955a56ef0971407eb63f9146f2fb49a8191abcdf62089968",
+      "afterSha256": "fd8598bdbc120b1a955a56ef0971407eb63f9146f2fb49a8191abcdf62089968",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/genanki-migration.md",
+      "beforeSha256": "d484bf3260f897ad2f7f7e49e7397d2ddf81c65e56017316c0a527c08e7d2e83",
+      "afterSha256": "d484bf3260f897ad2f7f7e49e7397d2ddf81c65e56017316c0a527c08e7d2e83",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/image-occlusion.md",
+      "beforeSha256": "050e752c61b9735d2f97648491d0ee95cb8a30ca2d5d429845c81f1ff4d18957",
+      "afterSha256": "050e752c61b9735d2f97648491d0ee95cb8a30ca2d5d429845c81f1ff4d18957",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/index.md",
+      "beforeSha256": "fa3257852f1c090ccb804ebb6758b469e89a847573486dce4a297a4c85936079",
+      "afterSha256": "fa3257852f1c090ccb804ebb6758b469e89a847573486dce4a297a4c85936079",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/installation.md",
+      "beforeSha256": "aad9da7f5ec2507e69ee4c6d060b9287d0ad193236f2010175e17227dcf6714f",
+      "afterSha256": "aad9da7f5ec2507e69ee4c6d060b9287d0ad193236f2010175e17227dcf6714f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/json-to-anki.md",
+      "beforeSha256": "134964c1647cbdf5856e01914ff1c9b04f9dcc3339fcd90f323462a256ed7f64",
+      "afterSha256": "134964c1647cbdf5856e01914ff1c9b04f9dcc3339fcd90f323462a256ed7f64",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/languages.md",
+      "beforeSha256": "90f4543ae0c33e8ba9ee9732b14ef3ce9d45231d851efa4d157f54789a3bebf9",
+      "afterSha256": "90f4543ae0c33e8ba9ee9732b14ef3ce9d45231d851efa4d157f54789a3bebf9",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/media.md",
+      "beforeSha256": "a2a3ebf687d9a30e1624340839f3c8262eeff6b5defecf958a034db5f55a8b65",
+      "afterSha256": "a2a3ebf687d9a30e1624340839f3c8262eeff6b5defecf958a034db5f55a8b65",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/node-api.md",
+      "beforeSha256": "4ac2fbc3679542af661a2ff5172ad2d9b20daa575d3b5cf2deefcc4b06a0f07f",
+      "afterSha256": "4ac2fbc3679542af661a2ff5172ad2d9b20daa575d3b5cf2deefcc4b06a0f07f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/node-quickstart.md",
+      "beforeSha256": "1c4fff521f3492cc60bfd6f262fa752ab5d2c27057300b3d19cbbe74df3f3207",
+      "afterSha256": "1c4fff521f3492cc60bfd6f262fa752ab5d2c27057300b3d19cbbe74df3f3207",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/python-api.md",
+      "beforeSha256": "29db80f1af39809197c38e33a6af315501da5586a4ecc6a01f77202773ddddfd",
+      "afterSha256": "29db80f1af39809197c38e33a6af315501da5586a4ecc6a01f77202773ddddfd",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/python-diagnostics.md",
+      "beforeSha256": "18fa83415cf6e7e1b1e57d44f2c66ff5240d21663bb1520fbc8a0ae53e01704f",
+      "afterSha256": "18fa83415cf6e7e1b1e57d44f2c66ff5240d21663bb1520fbc8a0ae53e01704f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/python-migration.md",
+      "beforeSha256": "d3ba868ff20b98f54538e366263bea6f2f86799e355748db84e5e021bb235979",
+      "afterSha256": "d3ba868ff20b98f54538e366263bea6f2f86799e355748db84e5e021bb235979",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/python-quickstart.md",
+      "beforeSha256": "929ffb6991e445fd4a97347abda9bc17d380ca64d25511e0869d9a64a9f2bbd6",
+      "afterSha256": "929ffb6991e445fd4a97347abda9bc17d380ca64d25511e0869d9a64a9f2bbd6",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/quickstart.md",
+      "beforeSha256": "e16b86d580ed7f336ebfcf3d46917cd171a3e44ed7536981f09fccd856b8dbbd",
+      "afterSha256": "e16b86d580ed7f336ebfcf3d46917cd171a3e44ed7536981f09fccd856b8dbbd",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/rust-api.md",
+      "beforeSha256": "7d4432c78d62063d5205b9524765456674ad12aad23201a035e433fac7517de9",
+      "afterSha256": "7d4432c78d62063d5205b9524765456674ad12aad23201a035e433fac7517de9",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/rust-guide.md",
+      "beforeSha256": "0766dabbb020a38c80f1edd9fca8f167c77f7a6d4f5abd1e5f5fa2ff078a13de",
+      "afterSha256": "0766dabbb020a38c80f1edd9fca8f167c77f7a6d4f5abd1e5f5fa2ff078a13de",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/templates.md",
+      "beforeSha256": "14e4a855f6dc2486b6e180523477e7919f946f0c44263dee6495f126c615cb76",
+      "afterSha256": "14e4a855f6dc2486b6e180523477e7919f946f0c44263dee6495f126c615cb76",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/troubleshooting.md",
+      "beforeSha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f",
+      "afterSha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f",
+      "unchanged": true
+    },
+    {
+      "path": "docs/zh-cn/updates.md",
+      "beforeSha256": "83b373f4166efb68518dc8d4f9954b2015748e71e8bdb2bd55abcc377854207c",
+      "afterSha256": "83b373f4166efb68518dc8d4f9954b2015748e71e8bdb2bd55abcc377854207c",
+      "unchanged": true
+    },
+    {
+      "path": "website/language-briefs.json",
+      "beforeSha256": "63d4c0ee424aab444a1cdad25ed5a96250c134b1d1a5aca9204fe858192d8c0e",
+      "afterSha256": "63d4c0ee424aab444a1cdad25ed5a96250c134b1d1a5aca9204fe858192d8c0e",
+      "unchanged": true
+    },
+    {
+      "path": "website/legacy-sections.json",
+      "beforeSha256": "33ea3784cb8bdfc2ef9db95b3f6ce901667cf3a6ddf8fa1e377051c2eee59c0a",
+      "afterSha256": "33ea3784cb8bdfc2ef9db95b3f6ce901667cf3a6ddf8fa1e377051c2eee59c0a",
+      "unchanged": true
+    },
+    {
+      "path": "website/locale-model.mjs",
+      "beforeSha256": "a71a251fce790ad8e97aa2c4bded4b0d8c084e44c11f826b00230de8c43f8f7f",
+      "afterSha256": "a71a251fce790ad8e97aa2c4bded4b0d8c084e44c11f826b00230de8c43f8f7f",
+      "unchanged": true
+    },
+    {
+      "path": "website/release-locales.json",
+      "beforeSha256": "527d968cd9dbdaca38fa0fc89019b582a87a7fab200381427ee2740bc46326b1",
+      "afterSha256": "527d968cd9dbdaca38fa0fc89019b582a87a7fab200381427ee2740bc46326b1",
+      "unchanged": true
+    },
+    {
+      "path": "website/scripts/benchmark-presentation.mjs",
+      "beforeSha256": "0b0d7bdd3fbab28b50881b57a74859c508c21380459b37313cedd3c290fb05c1",
+      "afterSha256": "0b0d7bdd3fbab28b50881b57a74859c508c21380459b37313cedd3c290fb05c1",
+      "unchanged": true
+    },
+    {
+      "path": "website/scripts/search-documents.mjs",
+      "beforeSha256": "7f712d7d3d22d5c0886572d33b731787cc9ffc8f4e154dd2c98f36a491afe696",
+      "afterSha256": "7f712d7d3d22d5c0886572d33b731787cc9ffc8f4e154dd2c98f36a491afe696",
+      "unchanged": true
+    },
+    {
+      "path": "website/search-concepts.json",
+      "beforeSha256": "aeca5572ab5382234322f2028c37d56983e98edf0adbaa093a534a4dc189ecf9",
+      "afterSha256": "aeca5572ab5382234322f2028c37d56983e98edf0adbaa093a534a4dc189ecf9",
+      "unchanged": true
+    },
+    {
+      "path": "website/search-terms.json",
+      "beforeSha256": "3e6d22ca81e3e162e5fcda381236b20db1a3202027339274f63e0a7a43f04c4f",
+      "afterSha256": "3e6d22ca81e3e162e5fcda381236b20db1a3202027339274f63e0a7a43f04c4f",
+      "unchanged": true
+    },
+    {
+      "path": "website/search.config.mjs",
+      "beforeSha256": "4381563e2e59fed7aa4780a92f81ecf827714dc1cbd59e89e8673a2c1fe543df",
+      "afterSha256": "4381563e2e59fed7aa4780a92f81ecf827714dc1cbd59e89e8673a2c1fe543df",
+      "unchanged": true
+    },
+    {
+      "path": "website/section-contracts.json",
+      "beforeSha256": "9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b",
+      "afterSha256": "9e31308999c8aeda94dc90d3ee50fa6a89a342a2fbad249994b5846f5e4a377b",
+      "unchanged": true
+    },
+    {
+      "path": "website/site-model.mjs",
+      "beforeSha256": "e5a4eea3c3e7277a9f7865b62103566c7822f586a67a5f9548ecefb7a9d6b3d4",
+      "afterSha256": "e5a4eea3c3e7277a9f7865b62103566c7822f586a67a5f9548ecefb7a9d6b3d4",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/AiQuickstart.astro",
+      "beforeSha256": "755e96c650604d7949125b9967f25992b3f5fd62e9d18debdfd27671ef3a7a84",
+      "afterSha256": "755e96c650604d7949125b9967f25992b3f5fd62e9d18debdfd27671ef3a7a84",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/ArticlePage.astro",
+      "beforeSha256": "813acecf25d6f42d1d6c840c35cad3ee5b1634e7e289c27c422cb09fb94e5ebb",
+      "afterSha256": "813acecf25d6f42d1d6c840c35cad3ee5b1634e7e289c27c422cb09fb94e5ebb",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/BlogPage.astro",
+      "beforeSha256": "a3b1b7f73d75c98b9b7aafb64c4a714b01cba099fd225b0f0316d7fb778269ac",
+      "afterSha256": "a3b1b7f73d75c98b9b7aafb64c4a714b01cba099fd225b0f0316d7fb778269ac",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/BrandMark.astro",
+      "beforeSha256": "6cb4983d7143f2d240868ebffae9bae8bf179f074bf3abb13b092b8f667407c0",
+      "afterSha256": "6cb4983d7143f2d240868ebffae9bae8bf179f074bf3abb13b092b8f667407c0",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/CardPreview.astro",
+      "beforeSha256": "dc851faa961636a75707ac08ba9ebc832a3542283d020ac96df3f2e99b9baaa1",
+      "afterSha256": "dc851faa961636a75707ac08ba9ebc832a3542283d020ac96df3f2e99b9baaa1",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/CodeBlock.astro",
+      "beforeSha256": "9a26a31b6a637d60d56f97d1e8a6eef17446bded2212c4b0551ace29f6c9ddec",
+      "afterSha256": "9a26a31b6a637d60d56f97d1e8a6eef17446bded2212c4b0551ace29f6c9ddec",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/CopyBlock.astro",
+      "beforeSha256": "dd2b299819d3095c0fdfe3af8755d0375ed3e1b3f8eafd0c855b530b3c357812",
+      "afterSha256": "dd2b299819d3095c0fdfe3af8755d0375ed3e1b3f8eafd0c855b530b3c357812",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/DocsFooter.astro",
+      "beforeSha256": "de1fbd0f7d4d71dc9b391c79088f26652dd9201eb5ed7133020d4cc41235f8f2",
+      "afterSha256": "de1fbd0f7d4d71dc9b391c79088f26652dd9201eb5ed7133020d4cc41235f8f2",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/DocsHeader.astro",
+      "beforeSha256": "0668dc4e1f2f8017e1d3faa5aa403a8fd908d002ed30106a69cd136bd906d234",
+      "afterSha256": "0668dc4e1f2f8017e1d3faa5aa403a8fd908d002ed30106a69cd136bd906d234",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/DocsSearch.astro",
+      "beforeSha256": "587a877356eda345e0d66ea9cd4d33f25426230ea2aeb4f435556a954b24d16a",
+      "afterSha256": "587a877356eda345e0d66ea9cd4d33f25426230ea2aeb4f435556a954b24d16a",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/ExampleWorkbench.astro",
+      "beforeSha256": "486b5faf302b0c1d161c947937c518748969e86fb9625651f8db054b82a8b9b8",
+      "afterSha256": "486b5faf302b0c1d161c947937c518748969e86fb9625651f8db054b82a8b9b8",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/ExamplesPage.astro",
+      "beforeSha256": "8b10e1280635172c69029b94cbc8765fa95593f221772af1bd338c0373d95649",
+      "afterSha256": "8b10e1280635172c69029b94cbc8765fa95593f221772af1bd338c0373d95649",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/Footer.astro",
+      "beforeSha256": "320057dbcae7f74003f143530ba4629c5ad0aed324605db3e1c68fb5e8b038b3",
+      "afterSha256": "320057dbcae7f74003f143530ba4629c5ad0aed324605db3e1c68fb5e8b038b3",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/Header.astro",
+      "beforeSha256": "274b6257bbc39d36ec2e4f53e8f60955b93d2aaa141617a0eab2d26613f2ccd6",
+      "afterSha256": "274b6257bbc39d36ec2e4f53e8f60955b93d2aaa141617a0eab2d26613f2ccd6",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/HomePage.astro",
+      "beforeSha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439",
+      "afterSha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/HomeShowcase.astro",
+      "beforeSha256": "4515f6b70dff73e28bf312949577946bf8bb6435d39e7661da6ebe602610784e",
+      "afterSha256": "4515f6b70dff73e28bf312949577946bf8bb6435d39e7661da6ebe602610784e",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/Icon.astro",
+      "beforeSha256": "37eb6e14469523e5d6aa4c588c3e230c8366972caee5b12c1e70d9f0179384ee",
+      "afterSha256": "37eb6e14469523e5d6aa4c588c3e230c8366972caee5b12c1e70d9f0179384ee",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/InstallCommand.astro",
+      "beforeSha256": "28d216c4936193691ef41595109cdf2ce460bf8dcfd2786df232a2d3855d76c1",
+      "afterSha256": "28d216c4936193691ef41595109cdf2ce460bf8dcfd2786df232a2d3855d76c1",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/LanguageSwitcher.astro",
+      "beforeSha256": "48e30be747b319f88ad17a9890e65985eea5d31eaf4d0fe2608765ccab13e0e3",
+      "afterSha256": "48e30be747b319f88ad17a9890e65985eea5d31eaf4d0fe2608765ccab13e0e3",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/PerformanceEvidence.astro",
+      "beforeSha256": "ed9c4b797037499fe36c1553cfcfc94dd489086b883d8d77ff60dc94ac72e2ef",
+      "afterSha256": "ed9c4b797037499fe36c1553cfcfc94dd489086b883d8d77ff60dc94ac72e2ef",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/PostCard.astro",
+      "beforeSha256": "cf73be0f12d07293ae02128cf62fb5ec49064011d7375a831453a9214eef5b47",
+      "afterSha256": "cf73be0f12d07293ae02128cf62fb5ec49064011d7375a831453a9214eef5b47",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/ThemeControl.astro",
+      "beforeSha256": "724d65736240a3271f9e65511437d09e4f01034dc1882853a4556cb0021903cd",
+      "afterSha256": "724d65736240a3271f9e65511437d09e4f01034dc1882853a4556cb0021903cd",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/components/UpdateDemo.astro",
+      "beforeSha256": "79956a12d3aea601c80736115918e4552d7f64cff32e8c6c6734bd8296936c99",
+      "afterSha256": "79956a12d3aea601c80736115918e4552d7f64cff32e8c6c6734bd8296936c99",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/de/stable-ids-and-deck-updates.mdx",
+      "beforeSha256": "400f51cae1cab8f6e2519d113151dfa4ceb7a7b656e52ef4ef11a597b1b6d9a6",
+      "afterSha256": "400f51cae1cab8f6e2519d113151dfa4ceb7a7b656e52ef4ef11a597b1b6d9a6",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/de/your-first-anki-deck.mdx",
+      "beforeSha256": "57f4ae6bf9745a1ec58c358f4eba2eebea72813f9b49de15beed7bbabade39f5",
+      "afterSha256": "57f4ae6bf9745a1ec58c358f4eba2eebea72813f9b49de15beed7bbabade39f5",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+      "beforeSha256": "9d95cdcff3d90abdc8f6b0cf86c65068cdce6a365e6aec122897040ecd807e88",
+      "afterSha256": "9d95cdcff3d90abdc8f6b0cf86c65068cdce6a365e6aec122897040ecd807e88",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/es/your-first-anki-deck.mdx",
+      "beforeSha256": "b86ab97d72d76aebd7e4a07fc4a56124dc839a2ca87219c8acf5052efe4c3dfd",
+      "afterSha256": "b86ab97d72d76aebd7e4a07fc4a56124dc839a2ca87219c8acf5052efe4c3dfd",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/ja/stable-ids-and-deck-updates.mdx",
+      "beforeSha256": "35dadb2e388433d289b909bb4ad06ce6e36771b67dd1d5b85e51fddafc5a339c",
+      "afterSha256": "35dadb2e388433d289b909bb4ad06ce6e36771b67dd1d5b85e51fddafc5a339c",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/ja/your-first-anki-deck.mdx",
+      "beforeSha256": "91598ce216548cfc65dbc293808e9a3a17535fc5b09df40f120863a996f74d55",
+      "afterSha256": "91598ce216548cfc65dbc293808e9a3a17535fc5b09df40f120863a996f74d55",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/pt-br/stable-ids-and-deck-updates.mdx",
+      "beforeSha256": "dbf77fbde63e2c2583a4fc2eb8a38f24bc78cbf954b16abc7995e595d9590ddc",
+      "afterSha256": "dbf77fbde63e2c2583a4fc2eb8a38f24bc78cbf954b16abc7995e595d9590ddc",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/pt-br/your-first-anki-deck.mdx",
+      "beforeSha256": "c713ac27bb92dbc2018aa2aa3bd350995a7ff8a9cffdf58d47b4b8d91df6e1ce",
+      "afterSha256": "c713ac27bb92dbc2018aa2aa3bd350995a7ff8a9cffdf58d47b4b8d91df6e1ce",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+      "beforeSha256": "77e2a04feaec5959d73f2aa008412203cc598bcdbfbffb6823ced93c03cfb0c7",
+      "afterSha256": "77e2a04feaec5959d73f2aa008412203cc598bcdbfbffb6823ced93c03cfb0c7",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/your-first-anki-deck.mdx",
+      "beforeSha256": "957379c92c61b6d5f3569da4b41be4d6f593aa0374f0fc97576d3630b4a2e7a0",
+      "afterSha256": "957379c92c61b6d5f3569da4b41be4d6f593aa0374f0fc97576d3630b4a2e7a0",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+      "beforeSha256": "66922194e8fcbc6bb137a4fbc0b55f47c19fc38d4b4159f4b4a14d2b6a901589",
+      "afterSha256": "66922194e8fcbc6bb137a4fbc0b55f47c19fc38d4b4159f4b4a14d2b6a901589",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+      "beforeSha256": "db5acd23e97e05d1303baa88af2fef9b1a94e9f11398eb11e2cedfced33d5841",
+      "afterSha256": "db5acd23e97e05d1303baa88af2fef9b1a94e9f11398eb11e2cedfced33d5841",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/docs/docs/index.mdx",
+      "beforeSha256": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c",
+      "afterSha256": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/docs/docs/languages.mdx",
+      "beforeSha256": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24",
+      "afterSha256": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/docs/docs/quickstart.mdx",
+      "beforeSha256": "274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9",
+      "afterSha256": "274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/i18n/de.json",
+      "beforeSha256": "b371f3eeb53c8e6ae305d44f552282ea44c55bfe5b751d87a13b089dd22b1918",
+      "afterSha256": "b371f3eeb53c8e6ae305d44f552282ea44c55bfe5b751d87a13b089dd22b1918",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/i18n/en.json",
+      "beforeSha256": "52ac3f26f729435f0682de9b384c1c740cf275c6dd9cd8539eb4fb8c56605187",
+      "afterSha256": "52ac3f26f729435f0682de9b384c1c740cf275c6dd9cd8539eb4fb8c56605187",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/i18n/es.json",
+      "beforeSha256": "5118266f72a1826052442fe0f679b670b031525ea5fdc12cfd2ed60d78fb3117",
+      "afterSha256": "5118266f72a1826052442fe0f679b670b031525ea5fdc12cfd2ed60d78fb3117",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/i18n/ja.json",
+      "beforeSha256": "388c28a848c8a4b1d794a237685bf54911076f29d616f347b1d5d141e8bb2e72",
+      "afterSha256": "388c28a848c8a4b1d794a237685bf54911076f29d616f347b1d5d141e8bb2e72",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/i18n/pt-BR.json",
+      "beforeSha256": "71e5ef5cb022f373df589a77c3b8149b647e0421dcda4b01f11d0b84919c1020",
+      "afterSha256": "71e5ef5cb022f373df589a77c3b8149b647e0421dcda4b01f11d0b84919c1020",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/content/i18n/zh-CN.json",
+      "beforeSha256": "44e533587105bc7fafc6d8eb13d42c4153c67a6c6fa32c24193b7a3d75cec4e8",
+      "afterSha256": "44e533587105bc7fafc6d8eb13d42c4153c67a6c6fa32c24193b7a3d75cec4e8",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/client-messages.mjs",
+      "beforeSha256": "69cbebbb402b9db84912c0514ac209650768079c5e7158c6e9e0da77222a5368",
+      "afterSha256": "69cbebbb402b9db84912c0514ac209650768079c5e7158c6e9e0da77222a5368",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/de.json",
+      "beforeSha256": "a5eca8cec3584cc6ee73bbdcde9688fee6d3ca61c23927da745ce91e6580d915",
+      "afterSha256": "a5eca8cec3584cc6ee73bbdcde9688fee6d3ca61c23927da745ce91e6580d915",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/en.json",
+      "beforeSha256": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848",
+      "afterSha256": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/es.json",
+      "beforeSha256": "df2db211fa90c9314f64a32948106a3b1085ed01a74ffe82d679a945e126fab8",
+      "afterSha256": "df2db211fa90c9314f64a32948106a3b1085ed01a74ffe82d679a945e126fab8",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/format-message.mjs",
+      "beforeSha256": "8d0c482c34a744ccc4add7e6087c68a36e4cce433f97825e82be3bd03b0d3c76",
+      "afterSha256": "8d0c482c34a744ccc4add7e6087c68a36e4cce433f97825e82be3bd03b0d3c76",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/ja.json",
+      "beforeSha256": "9a04b6876a332c71367ba94f7751c436a09f0f65a1f7a272e551722c655c63e8",
+      "afterSha256": "9a04b6876a332c71367ba94f7751c436a09f0f65a1f7a272e551722c655c63e8",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/messages.mjs",
+      "beforeSha256": "b420861d215ef2880416667b604ad90fe25096e71473c1a96fecd501956e8f3f",
+      "afterSha256": "b420861d215ef2880416667b604ad90fe25096e71473c1a96fecd501956e8f3f",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/pt-BR.json",
+      "beforeSha256": "37c3be1e043210e79980d23b879ed3f7353c508ea071491a01dc8aa9bdac9f5f",
+      "afterSha256": "37c3be1e043210e79980d23b879ed3f7353c508ea071491a01dc8aa9bdac9f5f",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/i18n/zh-CN.json",
+      "beforeSha256": "f2cd71a222b1cf4370662a8e46726a1c238977c4bbe57dccc2b900ce7449c093",
+      "afterSha256": "f2cd71a222b1cf4370662a8e46726a1c238977c4bbe57dccc2b900ce7449c093",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/layouts/SiteLayout.astro",
+      "beforeSha256": "04c73e6602a4a5010efd8a4601072daf43f70508a21ebe1da5a73bdf0c0360c3",
+      "afterSha256": "04c73e6602a4a5010efd8a4601072daf43f70508a21ebe1da5a73bdf0c0360c3",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/lib/ai-quickstart.mjs",
+      "beforeSha256": "2dc9cb28633282a7ef93778d9250505e87044bbcbab38387b58b24fcf7dea600",
+      "afterSha256": "2dc9cb28633282a7ef93778d9250505e87044bbcbab38387b58b24fcf7dea600",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/lib/examples.ts",
+      "beforeSha256": "aa92e39a4ba31c22bc9e11dd5c6ec7a5ebfb93081f001da29e465c8ebd11d457",
+      "afterSha256": "aa92e39a4ba31c22bc9e11dd5c6ec7a5ebfb93081f001da29e465c8ebd11d457",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/lib/search-terms.mjs",
+      "beforeSha256": "c6f10080708189333263efcd40971231207fa5686a4bc45803db738633f7e93c",
+      "afterSha256": "c6f10080708189333263efcd40971231207fa5686a4bc45803db738633f7e93c",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/lib/search.mjs",
+      "beforeSha256": "8a563577b68a548799a5b0988d78bff41adc63a7eee4644c7ad8986f34bc0fdf",
+      "afterSha256": "8a563577b68a548799a5b0988d78bff41adc63a7eee4644c7ad8986f34bc0fdf",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/route-middleware.ts",
+      "beforeSha256": "2f27fd73b1381f2ccba6822be4da01be19d38a7b753756f8c4d30e7a642f657d",
+      "afterSha256": "2f27fd73b1381f2ccba6822be4da01be19d38a7b753756f8c4d30e7a642f657d",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/scripts/docs-search.ts",
+      "beforeSha256": "801800476a39fc989a6f9741d0934e1aec2e84410c1bd7cb7094c71317cc3922",
+      "afterSha256": "801800476a39fc989a6f9741d0934e1aec2e84410c1bd7cb7094c71317cc3922",
+      "unchanged": true
+    },
+    {
+      "path": "website/src/scripts/site.ts",
+      "beforeSha256": "76767efa229f1f6286226ae4226cc3902b303fb4c4b148066b02fc6aece57036",
+      "afterSha256": "76767efa229f1f6286226ae4226cc3902b303fb4c4b148066b02fc6aece57036",
+      "unchanged": true
+    }
+  ],
+  "candidateChecks": [
+    {
+      "entry": "home/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "home/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "home/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "home/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "home/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "home/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/de",
+      "changedHashes": [
+        "targetHash"
+      ]
+    },
+    {
+      "entry": "node-quickstart/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/de",
+      "changedHashes": []
+    }
+  ],
+  "allFiveGermanMimePagesInspected": [
+    {
+      "path": "docs/de/node-api.md",
+      "sha256": "9eb661fae21ce15f7c9f25010e6642c52338cf2ffd9f925f81f5c6ed2a8d3fae"
+    },
+    {
+      "path": "docs/de/python-api.md",
+      "sha256": "3f9c8ef43cbe56ef2c51530d19d0005f558008590168c4e5025408642f4acfb2"
+    },
+    {
+      "path": "docs/de/rust-api.md",
+      "sha256": "ae1f3ddbcc85e27b7cbe55803ec8163eaeb69a13e43e59047a52809ea5405386"
+    },
+    {
+      "path": "docs/de/media.md",
+      "sha256": "cba638b0700073d214d98011cfeb0691cbb043cc2d95bb664ac6a57d29ec6971"
+    },
+    {
+      "path": "docs/de/rust-guide.md",
+      "sha256": "6bc9bb87dc13447e16e3e8b9fb6668c316c354de06ed8c44bad2ea956e9481bb"
+    }
+  ],
+  "scope": "One Rust API formatting delta after the two-API correction. All five German MIME-bearing pages independently inspected; actual final artifacts still require confirmation."
+}

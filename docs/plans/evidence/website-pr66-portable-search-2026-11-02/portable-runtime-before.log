@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Unmodified native Pagefind produces different official WASM bytes from Linux
++ actual - expected
+
++ '1d384f7bffc399ae80cbc352d09e3c0e22d65a5d24f02ac6d1915eeb91d90ad1'
+- 'f1e251bdaf42bd2ded77e7dd41460ebe237cba885ec8f3094f4be995c1ebbc57'
+
+    at file:///Users/hp/Desktop/2026/anki-forge/[eval1]:7:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '1d384f7bffc399ae80cbc352d09e3c0e22d65a5d24f02ac6d1915eeb91d90ad1',
+  expected: 'f1e251bdaf42bd2ded77e7dd41460ebe237cba885ec8f3094f4be995c1ebbc57',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

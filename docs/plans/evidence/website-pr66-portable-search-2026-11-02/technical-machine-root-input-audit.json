@@ -1,0 +1,1864 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/standards_review/pr66-portable-search-machine-root-2026-11-02",
+  "status": "bytes-verified-awaiting-scoped-reading",
+  "method": "The reviewer personally performed fresh localhost HTTP GETs for all six locale llms entries and four task paths (60 distinct resources), and independently read all 192 actual old/current archive resource byte arrays. Each previous byte digest matches the immutable prior independent report; every current digest matches the new manifest and every captured response matches current archive bytes. All 192 are exactly unchanged, with no normalization. This audit alone is not a semantic pass.",
+  "manifest": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/root-site-manifest.json",
+    "sha256": "66eff750ce5db8cf12e3d3844e8dc42b8f598a844eb2e8788b39f2ec9487958a"
+  },
+  "capture": {
+    "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/observations.json",
+    "sha256": "f5019882cfa2b698662cf254109d3274ea7e0def358f8f94f806d0a064a011ab"
+  },
+  "previousReport": {
+    "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/machine-read-root.json",
+    "sha256": "269ecedf935c1e91ff9b5e2e5375c4e160ab84e81a0c3557bf8687b2e1953425"
+  },
+  "previousManifest": {
+    "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/root-site-manifest.json",
+    "sha256": "ad1b22ef1b11aef43a735938e3895ab4951121bcddc9ca2a31fbd498b4bb9418",
+    "commit": "0001985be86f39713adb7f7dfb5d29af0df614b7",
+    "description": "Actual new frozen candidate manifest whose archive was personally fetched over HTTP and independently compared/read in this run."
+  },
+  "inputSha256": "381b5c782abc460fc0612430a2122334f94e42e0b174cdeb8334517acae500eb",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es",
+    "pt-BR",
+    "ja",
+    "de"
+  ],
+  "records": [
+    {
+      "route": "/blog/stable-ids-and-deck-updates/index.md",
+      "previousSha256": "4e5216863390dda212498929bc8d85a8f3db2b6994aa7cb6a7a14549b00f9e64",
+      "sha256": "4e5216863390dda212498929bc8d85a8f3db2b6994aa7cb6a7a14549b00f9e64",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/blog/your-first-anki-deck/index.md",
+      "previousSha256": "43bd3ceb5cf6b4fefb1d504386374b53379a630e0eb6a6ec548d20b1f72d2e5b",
+      "sha256": "43bd3ceb5cf6b4fefb1d504386374b53379a630e0eb6a6ec548d20b1f72d2e5b",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/blog/stable-ids-and-deck-updates/index.md",
+      "previousSha256": "451f0875e77df329b06884e2c02e56e6ec2b7654353f1631080381743dcb0afd",
+      "sha256": "451f0875e77df329b06884e2c02e56e6ec2b7654353f1631080381743dcb0afd",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/blog/your-first-anki-deck/index.md",
+      "previousSha256": "23fb91ddcdedf01f48f9084463e81d0e42f45b839a90217e178bd3cf4ccc94d8",
+      "sha256": "23fb91ddcdedf01f48f9084463e81d0e42f45b839a90217e178bd3cf4ccc94d8",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/ai-anki-cards/index.md",
+      "previousSha256": "81fb723b16ed8e246d75ae6d1183583b95a534cf79c991ec93abaaa6c12b6171",
+      "sha256": "81fb723b16ed8e246d75ae6d1183583b95a534cf79c991ec93abaaa6c12b6171",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/anki-forge-vs-genanki/index.md",
+      "previousSha256": "9907a06838bc03a792ad3c17429e01441d66766c8c71cc09088ac4d126c02c3c",
+      "sha256": "9907a06838bc03a792ad3c17429e01441d66766c8c71cc09088ac4d126c02c3c",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/api/index.md",
+      "previousSha256": "ff7e3cd0a5ceb68012b41beefea4057b60a882cfe705199390bb8d797f7daa63",
+      "sha256": "ff7e3cd0a5ceb68012b41beefea4057b60a882cfe705199390bb8d797f7daa63",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/build-guarantees/index.md",
+      "previousSha256": "0135842bceb327d0e81c75cbf649b59d15c662ea4d2384a67601bebefca2239e",
+      "sha256": "0135842bceb327d0e81c75cbf649b59d15c662ea4d2384a67601bebefca2239e",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/de/docs/build-guarantees/index.md",
+        "route": "/de/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "0135842bceb327d0e81c75cbf649b59d15c662ea4d2384a67601bebefca2239e",
+        "bytes": 6728,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/de__docs__build-guarantees__index.md"
+      }
+    },
+    {
+      "route": "/de/docs/cards/index.md",
+      "previousSha256": "394b1a9d0793da5205365269756934fc351f8384bf44f376335865aff36aea04",
+      "sha256": "394b1a9d0793da5205365269756934fc351f8384bf44f376335865aff36aea04",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/compatibility/index.md",
+      "previousSha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3",
+      "sha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/de/docs/compatibility/index.md",
+        "route": "/de/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3",
+        "bytes": 3875,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/de__docs__compatibility__index.md"
+      }
+    },
+    {
+      "route": "/de/docs/concepts/index.md",
+      "previousSha256": "c71b2b650ba5e1ce7468de93d90d8c1bacb99434c89411dfebd68e4bfb188a20",
+      "sha256": "c71b2b650ba5e1ce7468de93d90d8c1bacb99434c89411dfebd68e4bfb188a20",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/csv-to-anki/index.md",
+      "previousSha256": "1c2b209668a4332d1a76730e10b10fc4e152a99787a32194be576c48a367369d",
+      "sha256": "1c2b209668a4332d1a76730e10b10fc4e152a99787a32194be576c48a367369d",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/custom-notetypes/index.md",
+      "previousSha256": "3d0b768b4e40fc281047bf3a0388c0579f38b285ea2b4a30cb45b910b81f5381",
+      "sha256": "3d0b768b4e40fc281047bf3a0388c0579f38b285ea2b4a30cb45b910b81f5381",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/development/index.md",
+      "previousSha256": "167f5f2e0c1b12fe0ac7afb10786a28a810d09d86c6968dac4f7a6e3d92b7cd7",
+      "sha256": "167f5f2e0c1b12fe0ac7afb10786a28a810d09d86c6968dac4f7a6e3d92b7cd7",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/genanki-migration/index.md",
+      "previousSha256": "4ffe3049089579939998e589ef2c4c16a645f4c39108fd2319156ce15b75104a",
+      "sha256": "4ffe3049089579939998e589ef2c4c16a645f4c39108fd2319156ce15b75104a",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/image-occlusion/index.md",
+      "previousSha256": "dbd0201b5c5f6520dd4dbdb83e8aaab0888ea6a09368598edbfb9d857ca984a1",
+      "sha256": "dbd0201b5c5f6520dd4dbdb83e8aaab0888ea6a09368598edbfb9d857ca984a1",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/index.md",
+      "previousSha256": "52e9ad5daa45f9dbd27d770a4a160c41c8642362c7318bfd0117ef4e426f1466",
+      "sha256": "52e9ad5daa45f9dbd27d770a4a160c41c8642362c7318bfd0117ef4e426f1466",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/installation/index.md",
+      "previousSha256": "615a319483a1a14973c95d067a2aa6bbf2a15804bd10e4a6b2811f56a3eb0832",
+      "sha256": "615a319483a1a14973c95d067a2aa6bbf2a15804bd10e4a6b2811f56a3eb0832",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/json-to-anki/index.md",
+      "previousSha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd",
+      "sha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/de/docs/json-to-anki/index.md",
+        "route": "/de/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd",
+        "bytes": 12180,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/de__docs__json-to-anki__index.md"
+      }
+    },
+    {
+      "route": "/de/docs/languages/index.md",
+      "previousSha256": "1e6522be8679dd7374de8ece25ac1947d1270f40b12a7ec9957f4cc298fd5b92",
+      "sha256": "1e6522be8679dd7374de8ece25ac1947d1270f40b12a7ec9957f4cc298fd5b92",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/media/index.md",
+      "previousSha256": "2814f56952a70007a26829fda320412bea55a8a81cbfbe243c6b398da5beb9a2",
+      "sha256": "2814f56952a70007a26829fda320412bea55a8a81cbfbe243c6b398da5beb9a2",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/de/docs/media/index.md",
+        "route": "/de/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "2814f56952a70007a26829fda320412bea55a8a81cbfbe243c6b398da5beb9a2",
+        "bytes": 9685,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/de__docs__media__index.md"
+      }
+    },
+    {
+      "route": "/de/docs/node-api/index.md",
+      "previousSha256": "a362ada18b093cb8ea50489e9ac2ed109a9ff128939cf0b5803fdf06766714a2",
+      "sha256": "a362ada18b093cb8ea50489e9ac2ed109a9ff128939cf0b5803fdf06766714a2",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/de/docs/node-api/index.md",
+        "route": "/de/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "a362ada18b093cb8ea50489e9ac2ed109a9ff128939cf0b5803fdf06766714a2",
+        "bytes": 15241,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/de__docs__node-api__index.md"
+      }
+    },
+    {
+      "route": "/de/docs/node-quickstart/index.md",
+      "previousSha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee",
+      "sha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/de/docs/node-quickstart/index.md",
+        "route": "/de/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee",
+        "bytes": 2550,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/de__docs__node-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/de/docs/python-api/index.md",
+      "previousSha256": "3f56d144fe98f26665574be8e9e26ea626f922b22ca74d7627df31fe9911ce6e",
+      "sha256": "3f56d144fe98f26665574be8e9e26ea626f922b22ca74d7627df31fe9911ce6e",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/de/docs/python-api/index.md",
+        "route": "/de/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "3f56d144fe98f26665574be8e9e26ea626f922b22ca74d7627df31fe9911ce6e",
+        "bytes": 11445,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/de__docs__python-api__index.md"
+      }
+    },
+    {
+      "route": "/de/docs/python-diagnostics/index.md",
+      "previousSha256": "6ed193ee70693d65d4c85af8ab3c2b900d9a1248d5c15d64297fce65a2f87b13",
+      "sha256": "6ed193ee70693d65d4c85af8ab3c2b900d9a1248d5c15d64297fce65a2f87b13",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/python-migration/index.md",
+      "previousSha256": "144ef53ef3f4b8a6af2ae225828f85b56b409a6d4c8757f2549feb303aba998b",
+      "sha256": "144ef53ef3f4b8a6af2ae225828f85b56b409a6d4c8757f2549feb303aba998b",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/python-quickstart/index.md",
+      "previousSha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58",
+      "sha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/de/docs/python-quickstart/index.md",
+        "route": "/de/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58",
+        "bytes": 2597,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/de__docs__python-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/de/docs/quickstart/index.md",
+      "previousSha256": "7cdbb8a987b11b2f6c5f0fe2e9a73c122c1fa5f8378557451bb9fb4ea1268d28",
+      "sha256": "7cdbb8a987b11b2f6c5f0fe2e9a73c122c1fa5f8378557451bb9fb4ea1268d28",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/rust-api/index.md",
+      "previousSha256": "be70ea5f8ec862ced603755b1e4d8a8b638e5aaf6721fa24f5a879acb864a890",
+      "sha256": "be70ea5f8ec862ced603755b1e4d8a8b638e5aaf6721fa24f5a879acb864a890",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/rust-guide/index.md",
+      "previousSha256": "73ca45217299a63224bd225580711d777d4d4f93b770924e4d1ac0203f4cfa44",
+      "sha256": "73ca45217299a63224bd225580711d777d4d4f93b770924e4d1ac0203f4cfa44",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/templates/index.md",
+      "previousSha256": "1069ed8b1486d9027876d3bcd373fb371d4308e3f1d1202210f676690cdb138c",
+      "sha256": "1069ed8b1486d9027876d3bcd373fb371d4308e3f1d1202210f676690cdb138c",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/troubleshooting/index.md",
+      "previousSha256": "b8804830a674f5409f820db1b12ca9c39df9294d21f488bee5974fff51edd9e9",
+      "sha256": "b8804830a674f5409f820db1b12ca9c39df9294d21f488bee5974fff51edd9e9",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/de/docs/updates/index.md",
+      "previousSha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e",
+      "sha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/de/docs/updates/index.md",
+        "route": "/de/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e",
+        "bytes": 9535,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/de__docs__updates__index.md"
+      }
+    },
+    {
+      "route": "/de/llms.txt",
+      "previousSha256": "6a8d6aceb624007413b4a526095efe07f0f125ca13b3ddb8e3b04eb757fe21e2",
+      "sha256": "6a8d6aceb624007413b4a526095efe07f0f125ca13b3ddb8e3b04eb757fe21e2",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/de/llms.txt",
+        "route": "/de/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "6a8d6aceb624007413b4a526095efe07f0f125ca13b3ddb8e3b04eb757fe21e2",
+        "bytes": 7150,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/de__llms.txt"
+      }
+    },
+    {
+      "route": "/docs/ai-anki-cards/index.md",
+      "previousSha256": "9745b22b1eef834acd7824a662f24b0bd2a83ba2fa41ea1ee606fbee6e21fa3a",
+      "sha256": "9745b22b1eef834acd7824a662f24b0bd2a83ba2fa41ea1ee606fbee6e21fa3a",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/anki-forge-vs-genanki/index.md",
+      "previousSha256": "d3fa07417f3752acc3f105b95f2dd49fab31a78cb3828ac022688a971d281e4e",
+      "sha256": "d3fa07417f3752acc3f105b95f2dd49fab31a78cb3828ac022688a971d281e4e",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/api/index.md",
+      "previousSha256": "78633f690be8373213053679b29209d7b17bc1ad85585d87eca45e4aec1f5e19",
+      "sha256": "78633f690be8373213053679b29209d7b17bc1ad85585d87eca45e4aec1f5e19",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/build-guarantees/index.md",
+      "previousSha256": "94419d340582f5c025883404e249782cdf254a3dab42a80a6f07b950f8aa6c9b",
+      "sha256": "94419d340582f5c025883404e249782cdf254a3dab42a80a6f07b950f8aa6c9b",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/docs/build-guarantees/index.md",
+        "route": "/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "94419d340582f5c025883404e249782cdf254a3dab42a80a6f07b950f8aa6c9b",
+        "bytes": 5552,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/docs__build-guarantees__index.md"
+      }
+    },
+    {
+      "route": "/docs/cards/index.md",
+      "previousSha256": "566996cebefbfb5c3381d376164b5a8e2897f0817d33bd22ec114ef3b3b61f28",
+      "sha256": "566996cebefbfb5c3381d376164b5a8e2897f0817d33bd22ec114ef3b3b61f28",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/compatibility/index.md",
+      "previousSha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+      "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/docs/compatibility/index.md",
+        "route": "/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+        "bytes": 3238,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/docs__compatibility__index.md"
+      }
+    },
+    {
+      "route": "/docs/concepts/index.md",
+      "previousSha256": "2b07722c9bfbdb2e8fefe578ab6fdc7fe38812d684f3474eb015c17493ba73d6",
+      "sha256": "2b07722c9bfbdb2e8fefe578ab6fdc7fe38812d684f3474eb015c17493ba73d6",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/csv-to-anki/index.md",
+      "previousSha256": "0428ebe47ff80585c636b10f362bd6c90ba95e44b7c0c567d7c073a31b97d662",
+      "sha256": "0428ebe47ff80585c636b10f362bd6c90ba95e44b7c0c567d7c073a31b97d662",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/custom-notetypes/index.md",
+      "previousSha256": "1ec524ad2e9100e94a376e6e672c79a177bc9b32bc7d3d3bd48a6b66e985f2cf",
+      "sha256": "1ec524ad2e9100e94a376e6e672c79a177bc9b32bc7d3d3bd48a6b66e985f2cf",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/development/index.md",
+      "previousSha256": "38e8514202721f6a59b3e955089238eeb0cd0a2da40f84e687781674930fa07f",
+      "sha256": "38e8514202721f6a59b3e955089238eeb0cd0a2da40f84e687781674930fa07f",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/genanki-migration/index.md",
+      "previousSha256": "fb1788925c8e1ac5141dee8594d55f797bf7949b16d97c592c329eaacdf3e1ba",
+      "sha256": "fb1788925c8e1ac5141dee8594d55f797bf7949b16d97c592c329eaacdf3e1ba",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/image-occlusion/index.md",
+      "previousSha256": "0bfe48487e90d7ef0701a6fc4a2ac02e36ccb1990adf8009782879aa59c8bd69",
+      "sha256": "0bfe48487e90d7ef0701a6fc4a2ac02e36ccb1990adf8009782879aa59c8bd69",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/index.md",
+      "previousSha256": "2589240ac602a461fcd26375953f959f50610b1efc34301771fb5b9a612062ff",
+      "sha256": "2589240ac602a461fcd26375953f959f50610b1efc34301771fb5b9a612062ff",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/installation/index.md",
+      "previousSha256": "e5f86c8b981d90f7986c901dda300b376d142e8539e0bbf3e6f7f6c5e1f4522b",
+      "sha256": "e5f86c8b981d90f7986c901dda300b376d142e8539e0bbf3e6f7f6c5e1f4522b",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/json-to-anki/index.md",
+      "previousSha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+      "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/docs/json-to-anki/index.md",
+        "route": "/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+        "bytes": 11160,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/docs__json-to-anki__index.md"
+      }
+    },
+    {
+      "route": "/docs/languages/index.md",
+      "previousSha256": "20118dbc34eaf14ef16f924a52e471a432b913b4aeca09d9139d271075197d04",
+      "sha256": "20118dbc34eaf14ef16f924a52e471a432b913b4aeca09d9139d271075197d04",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/media/index.md",
+      "previousSha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+      "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/docs/media/index.md",
+        "route": "/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+        "bytes": 8154,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/docs__media__index.md"
+      }
+    },
+    {
+      "route": "/docs/node-api/index.md",
+      "previousSha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+      "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/docs/node-api/index.md",
+        "route": "/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+        "bytes": 13145,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/docs__node-api__index.md"
+      }
+    },
+    {
+      "route": "/docs/node-quickstart/index.md",
+      "previousSha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+      "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/docs/node-quickstart/index.md",
+        "route": "/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+        "bytes": 2251,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/docs__node-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/docs/python-api/index.md",
+      "previousSha256": "858d8f0d0e84acb8e8510cf36d93a72978a2c802fab2ba338cb84927ecf4ebe5",
+      "sha256": "858d8f0d0e84acb8e8510cf36d93a72978a2c802fab2ba338cb84927ecf4ebe5",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/docs/python-api/index.md",
+        "route": "/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "858d8f0d0e84acb8e8510cf36d93a72978a2c802fab2ba338cb84927ecf4ebe5",
+        "bytes": 9287,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/docs__python-api__index.md"
+      }
+    },
+    {
+      "route": "/docs/python-diagnostics/index.md",
+      "previousSha256": "7c55655214b864f9bf4de14874b933a99f842399f7a0c632e71ad32d0373bb5b",
+      "sha256": "7c55655214b864f9bf4de14874b933a99f842399f7a0c632e71ad32d0373bb5b",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/python-migration/index.md",
+      "previousSha256": "e048cc0d961bdded62c1d3184d901e4cf0e0d315fe291c47049a59928117af72",
+      "sha256": "e048cc0d961bdded62c1d3184d901e4cf0e0d315fe291c47049a59928117af72",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/python-quickstart/index.md",
+      "previousSha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+      "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/docs/python-quickstart/index.md",
+        "route": "/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+        "bytes": 2287,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/docs__python-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/docs/quickstart/index.md",
+      "previousSha256": "e8786297738d765f984fb3f55f853eda49528930303d165a3f4ed036ec6f903c",
+      "sha256": "e8786297738d765f984fb3f55f853eda49528930303d165a3f4ed036ec6f903c",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/rust-api/index.md",
+      "previousSha256": "98d57a4e45b11113366315510c596444dd94dc264105db2a8a5e9d9f0a747296",
+      "sha256": "98d57a4e45b11113366315510c596444dd94dc264105db2a8a5e9d9f0a747296",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/rust-guide/index.md",
+      "previousSha256": "58d18a4d00adc8aee9778b48db2d54822326b06921b65987a4109ddc840f3194",
+      "sha256": "58d18a4d00adc8aee9778b48db2d54822326b06921b65987a4109ddc840f3194",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/templates/index.md",
+      "previousSha256": "d018874e701c5d033a7ca9863ecbd39378f24f1bb1d096fd244993e6d730dbaa",
+      "sha256": "d018874e701c5d033a7ca9863ecbd39378f24f1bb1d096fd244993e6d730dbaa",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/troubleshooting/index.md",
+      "previousSha256": "ed47bd814c901d4a4c69001b91d5e00c89deaef5c5ecfb77ccea8b54cc6d2286",
+      "sha256": "ed47bd814c901d4a4c69001b91d5e00c89deaef5c5ecfb77ccea8b54cc6d2286",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/docs/updates/index.md",
+      "previousSha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+      "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/docs/updates/index.md",
+        "route": "/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+        "bytes": 8070,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/docs__updates__index.md"
+      }
+    },
+    {
+      "route": "/es/blog/stable-ids-and-deck-updates/index.md",
+      "previousSha256": "c9f9d4175f9c8b4c1f6ba55b2bc5763faba2b5746bb83c165481aa2b29c1bba1",
+      "sha256": "c9f9d4175f9c8b4c1f6ba55b2bc5763faba2b5746bb83c165481aa2b29c1bba1",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/blog/your-first-anki-deck/index.md",
+      "previousSha256": "811e0eeb6867bd23a928e9087268ed17d24164c05ccd997c3ad8878110bd495c",
+      "sha256": "811e0eeb6867bd23a928e9087268ed17d24164c05ccd997c3ad8878110bd495c",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/ai-anki-cards/index.md",
+      "previousSha256": "99743cb1706d0b12b1ecb2ace07456115532e55fccfe49e98ef701593f967c70",
+      "sha256": "99743cb1706d0b12b1ecb2ace07456115532e55fccfe49e98ef701593f967c70",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/anki-forge-vs-genanki/index.md",
+      "previousSha256": "685f1b29250d95b56ab233dfb6ce71050f979a6a78b62f711121966cba8b0017",
+      "sha256": "685f1b29250d95b56ab233dfb6ce71050f979a6a78b62f711121966cba8b0017",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/api/index.md",
+      "previousSha256": "d6a2df886ad2d8d95711a031f995bbd9ed717d50c2333b2f536123fa089989ca",
+      "sha256": "d6a2df886ad2d8d95711a031f995bbd9ed717d50c2333b2f536123fa089989ca",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/build-guarantees/index.md",
+      "previousSha256": "7684ab5b8c7297cd31bafd5da3a090a81752562f12e2b9d09652fdc1ccea8f82",
+      "sha256": "7684ab5b8c7297cd31bafd5da3a090a81752562f12e2b9d09652fdc1ccea8f82",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/es/docs/build-guarantees/index.md",
+        "route": "/es/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "7684ab5b8c7297cd31bafd5da3a090a81752562f12e2b9d09652fdc1ccea8f82",
+        "bytes": 7110,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/es__docs__build-guarantees__index.md"
+      }
+    },
+    {
+      "route": "/es/docs/cards/index.md",
+      "previousSha256": "a725e95db861f7275481cbcbe2f4d93a756f9504beaa95efcb9f91b833b50c21",
+      "sha256": "a725e95db861f7275481cbcbe2f4d93a756f9504beaa95efcb9f91b833b50c21",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/compatibility/index.md",
+      "previousSha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+      "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/es/docs/compatibility/index.md",
+        "route": "/es/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+        "bytes": 4040,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/es__docs__compatibility__index.md"
+      }
+    },
+    {
+      "route": "/es/docs/concepts/index.md",
+      "previousSha256": "f2d42f3acc058095a096bfcd47263e275e1837c62e29401f42bcc282e8839757",
+      "sha256": "f2d42f3acc058095a096bfcd47263e275e1837c62e29401f42bcc282e8839757",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/csv-to-anki/index.md",
+      "previousSha256": "c0636dd2ac60d9b20c62ede43d226f43de4e43bee6982146670fc0ac05623b02",
+      "sha256": "c0636dd2ac60d9b20c62ede43d226f43de4e43bee6982146670fc0ac05623b02",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/custom-notetypes/index.md",
+      "previousSha256": "cd79fd039a0bc5444f14fda465ef813231ee14c296184668ff0fbe5d66e0d5cf",
+      "sha256": "cd79fd039a0bc5444f14fda465ef813231ee14c296184668ff0fbe5d66e0d5cf",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/development/index.md",
+      "previousSha256": "4ba123d0ebdd9c92084656cad77d701230ee4b32cda03ebc0bbc34774863ae96",
+      "sha256": "4ba123d0ebdd9c92084656cad77d701230ee4b32cda03ebc0bbc34774863ae96",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/genanki-migration/index.md",
+      "previousSha256": "725f3857424a3acc6aca08f222685a0548b65293ea7b1e99ccbbd4bbfb6edc56",
+      "sha256": "725f3857424a3acc6aca08f222685a0548b65293ea7b1e99ccbbd4bbfb6edc56",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/image-occlusion/index.md",
+      "previousSha256": "32dc813fb179accd309e7029424cb03587112bea4db10761b359627882f038f6",
+      "sha256": "32dc813fb179accd309e7029424cb03587112bea4db10761b359627882f038f6",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/index.md",
+      "previousSha256": "cc78c766b4da6e90411988938c404247f4561f076f9b825c334acef94a6bf5c1",
+      "sha256": "cc78c766b4da6e90411988938c404247f4561f076f9b825c334acef94a6bf5c1",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/installation/index.md",
+      "previousSha256": "c2684786f4b65987f50ffbad71514f588156472cbcaf6801a35ccc55b3acd70a",
+      "sha256": "c2684786f4b65987f50ffbad71514f588156472cbcaf6801a35ccc55b3acd70a",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/json-to-anki/index.md",
+      "previousSha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+      "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/es/docs/json-to-anki/index.md",
+        "route": "/es/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+        "bytes": 11911,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/es__docs__json-to-anki__index.md"
+      }
+    },
+    {
+      "route": "/es/docs/languages/index.md",
+      "previousSha256": "4bc4d5ac42b66a76bb63c300af3b6c373a25bd8c572ece54e2bb27509cab1c63",
+      "sha256": "4bc4d5ac42b66a76bb63c300af3b6c373a25bd8c572ece54e2bb27509cab1c63",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/media/index.md",
+      "previousSha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+      "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/es/docs/media/index.md",
+        "route": "/es/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+        "bytes": 9814,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/es__docs__media__index.md"
+      }
+    },
+    {
+      "route": "/es/docs/node-api/index.md",
+      "previousSha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+      "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/es/docs/node-api/index.md",
+        "route": "/es/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+        "bytes": 15825,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/es__docs__node-api__index.md"
+      }
+    },
+    {
+      "route": "/es/docs/node-quickstart/index.md",
+      "previousSha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+      "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/es/docs/node-quickstart/index.md",
+        "route": "/es/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+        "bytes": 2574,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/es__docs__node-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/es/docs/python-api/index.md",
+      "previousSha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+      "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/es/docs/python-api/index.md",
+        "route": "/es/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+        "bytes": 11256,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/es__docs__python-api__index.md"
+      }
+    },
+    {
+      "route": "/es/docs/python-diagnostics/index.md",
+      "previousSha256": "71a0a087d4474e98868848e0dcefedd32067b8a01ab7cd49b1774a0ae5532f83",
+      "sha256": "71a0a087d4474e98868848e0dcefedd32067b8a01ab7cd49b1774a0ae5532f83",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/python-migration/index.md",
+      "previousSha256": "ee0155e3d170643f6e8204354f9ab3152a8b91256dfeeb8b5e32c664afb490e5",
+      "sha256": "ee0155e3d170643f6e8204354f9ab3152a8b91256dfeeb8b5e32c664afb490e5",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/python-quickstart/index.md",
+      "previousSha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+      "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/es/docs/python-quickstart/index.md",
+        "route": "/es/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+        "bytes": 2601,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/es__docs__python-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/es/docs/quickstart/index.md",
+      "previousSha256": "42f01fa3284bb45f1f1b2c2d677092554bb6b41083b66964ed23567128ac419e",
+      "sha256": "42f01fa3284bb45f1f1b2c2d677092554bb6b41083b66964ed23567128ac419e",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/rust-api/index.md",
+      "previousSha256": "da277a083aa616be09ba8696c522f8cced4d7b613619d521fd301acedce5a03c",
+      "sha256": "da277a083aa616be09ba8696c522f8cced4d7b613619d521fd301acedce5a03c",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/rust-guide/index.md",
+      "previousSha256": "205b0d8e65cc17f0e56755dc0e178d5e38bcdc52d2520f28795a78c2fdaa76be",
+      "sha256": "205b0d8e65cc17f0e56755dc0e178d5e38bcdc52d2520f28795a78c2fdaa76be",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/templates/index.md",
+      "previousSha256": "6659e01328ade2f67b2fae0b87eb79b13445647efd5b3a27f80e7f556e39c8be",
+      "sha256": "6659e01328ade2f67b2fae0b87eb79b13445647efd5b3a27f80e7f556e39c8be",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/troubleshooting/index.md",
+      "previousSha256": "092ff59b379d229faf9f469a549b19db43b3662cfe0590e170262ab70ea44a69",
+      "sha256": "092ff59b379d229faf9f469a549b19db43b3662cfe0590e170262ab70ea44a69",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/es/docs/updates/index.md",
+      "previousSha256": "5cdaee4d0df61bd235a7c3926c2738495fb6dc007c9793da1823edfba550d74d",
+      "sha256": "5cdaee4d0df61bd235a7c3926c2738495fb6dc007c9793da1823edfba550d74d",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/es/docs/updates/index.md",
+        "route": "/es/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "5cdaee4d0df61bd235a7c3926c2738495fb6dc007c9793da1823edfba550d74d",
+        "bytes": 9341,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/es__docs__updates__index.md"
+      }
+    },
+    {
+      "route": "/es/llms.txt",
+      "previousSha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018",
+      "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/es/llms.txt",
+        "route": "/es/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018",
+        "bytes": 7283,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/es__llms.txt"
+      }
+    },
+    {
+      "route": "/ja/blog/stable-ids-and-deck-updates/index.md",
+      "previousSha256": "07deb43b3afd49c654c07808ad09c1d4303c835f7d82eff2fc9d425c4a98c48d",
+      "sha256": "07deb43b3afd49c654c07808ad09c1d4303c835f7d82eff2fc9d425c4a98c48d",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/blog/your-first-anki-deck/index.md",
+      "previousSha256": "233ed098db8f49eda8c1de204b3dbe5ecc4482f239e86ceeb3125df1303eceda",
+      "sha256": "233ed098db8f49eda8c1de204b3dbe5ecc4482f239e86ceeb3125df1303eceda",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/ai-anki-cards/index.md",
+      "previousSha256": "a332335461cfca2b750f06097a027de647b917bb76884a5dffd39aa77127570e",
+      "sha256": "a332335461cfca2b750f06097a027de647b917bb76884a5dffd39aa77127570e",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/anki-forge-vs-genanki/index.md",
+      "previousSha256": "08138f738270414c83b5f84855b712b05256f7f4978cd068b09bd88f457b02c2",
+      "sha256": "08138f738270414c83b5f84855b712b05256f7f4978cd068b09bd88f457b02c2",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/api/index.md",
+      "previousSha256": "5a1df645c38d4726f0dd42fc214adfa7466596a82fcea3e48255a483c2413240",
+      "sha256": "5a1df645c38d4726f0dd42fc214adfa7466596a82fcea3e48255a483c2413240",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/build-guarantees/index.md",
+      "previousSha256": "2f37e2cd091003ea06f5c6747241fa4d62f98bead59f64e244ced6aac21dee1e",
+      "sha256": "2f37e2cd091003ea06f5c6747241fa4d62f98bead59f64e244ced6aac21dee1e",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/ja/docs/build-guarantees/index.md",
+        "route": "/ja/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "2f37e2cd091003ea06f5c6747241fa4d62f98bead59f64e244ced6aac21dee1e",
+        "bytes": 7790,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/ja__docs__build-guarantees__index.md"
+      }
+    },
+    {
+      "route": "/ja/docs/cards/index.md",
+      "previousSha256": "9a165ffe136ca4b48efde0ddf0d98e032aacd6de40b87a2671b185e4d344fd98",
+      "sha256": "9a165ffe136ca4b48efde0ddf0d98e032aacd6de40b87a2671b185e4d344fd98",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/compatibility/index.md",
+      "previousSha256": "2a518df085892fd262eaf2d262ba09b923f7aa9419be6c9b803150d5b5a4e541",
+      "sha256": "2a518df085892fd262eaf2d262ba09b923f7aa9419be6c9b803150d5b5a4e541",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/ja/docs/compatibility/index.md",
+        "route": "/ja/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "2a518df085892fd262eaf2d262ba09b923f7aa9419be6c9b803150d5b5a4e541",
+        "bytes": 4223,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/ja__docs__compatibility__index.md"
+      }
+    },
+    {
+      "route": "/ja/docs/concepts/index.md",
+      "previousSha256": "138ed421c4c307d615b9a99f2837cb479300e518b5ea916c5a28e1776aee7b74",
+      "sha256": "138ed421c4c307d615b9a99f2837cb479300e518b5ea916c5a28e1776aee7b74",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/csv-to-anki/index.md",
+      "previousSha256": "ca6f99906e33d492a396ea36a7583ddc989ee17e076d8300953954286a8da965",
+      "sha256": "ca6f99906e33d492a396ea36a7583ddc989ee17e076d8300953954286a8da965",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/custom-notetypes/index.md",
+      "previousSha256": "951f34f55743ef8c447cd08e34c6962d71e63b2a3bafadc5cb796f58ecee84b2",
+      "sha256": "951f34f55743ef8c447cd08e34c6962d71e63b2a3bafadc5cb796f58ecee84b2",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/development/index.md",
+      "previousSha256": "ffd9a695ade9532f08df3347351d3cfb33ef068a186f40f02cd38114e10e51ee",
+      "sha256": "ffd9a695ade9532f08df3347351d3cfb33ef068a186f40f02cd38114e10e51ee",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/genanki-migration/index.md",
+      "previousSha256": "da49c391ba6b6d46e1a491e969009f51b9ccbcf51d9f418e5c592ac3937c6665",
+      "sha256": "da49c391ba6b6d46e1a491e969009f51b9ccbcf51d9f418e5c592ac3937c6665",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/image-occlusion/index.md",
+      "previousSha256": "285bc9c4fb94d4e0cbf3c87fd497be73e3326cd3954c96e401b65dab7c0362a8",
+      "sha256": "285bc9c4fb94d4e0cbf3c87fd497be73e3326cd3954c96e401b65dab7c0362a8",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/index.md",
+      "previousSha256": "5e8316d9aeaa36378e4646bb00883b7a1ab9c18d3a3eecf311250f900f0bc087",
+      "sha256": "5e8316d9aeaa36378e4646bb00883b7a1ab9c18d3a3eecf311250f900f0bc087",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/installation/index.md",
+      "previousSha256": "a845d504d14b9f5fa795ccd492fbb1675f77953d166c443b85f5ccc8736e78b7",
+      "sha256": "a845d504d14b9f5fa795ccd492fbb1675f77953d166c443b85f5ccc8736e78b7",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/json-to-anki/index.md",
+      "previousSha256": "1ba2d24ca1b9ed277b5676b4d8229eac98b9ed3ff6bfcae8d4b5bd6a312a665d",
+      "sha256": "1ba2d24ca1b9ed277b5676b4d8229eac98b9ed3ff6bfcae8d4b5bd6a312a665d",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/ja/docs/json-to-anki/index.md",
+        "route": "/ja/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "1ba2d24ca1b9ed277b5676b4d8229eac98b9ed3ff6bfcae8d4b5bd6a312a665d",
+        "bytes": 12896,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/ja__docs__json-to-anki__index.md"
+      }
+    },
+    {
+      "route": "/ja/docs/languages/index.md",
+      "previousSha256": "717d18efc700ee52ebe222e275fdc4851cdf09cd5f9fdf21006d15a26adf37f0",
+      "sha256": "717d18efc700ee52ebe222e275fdc4851cdf09cd5f9fdf21006d15a26adf37f0",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/media/index.md",
+      "previousSha256": "78905d1b18380ef50349d2d7111d7c69838fb0702ae5b29705378d04a2f7fbca",
+      "sha256": "78905d1b18380ef50349d2d7111d7c69838fb0702ae5b29705378d04a2f7fbca",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/ja/docs/media/index.md",
+        "route": "/ja/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "78905d1b18380ef50349d2d7111d7c69838fb0702ae5b29705378d04a2f7fbca",
+        "bytes": 11313,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/ja__docs__media__index.md"
+      }
+    },
+    {
+      "route": "/ja/docs/node-api/index.md",
+      "previousSha256": "1a2dcc809248fc660ae81f50151815b6dbf85f9bb6ac72e5268304b70510f3ae",
+      "sha256": "1a2dcc809248fc660ae81f50151815b6dbf85f9bb6ac72e5268304b70510f3ae",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/ja/docs/node-api/index.md",
+        "route": "/ja/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "1a2dcc809248fc660ae81f50151815b6dbf85f9bb6ac72e5268304b70510f3ae",
+        "bytes": 17222,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/ja__docs__node-api__index.md"
+      }
+    },
+    {
+      "route": "/ja/docs/node-quickstart/index.md",
+      "previousSha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6",
+      "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/ja/docs/node-quickstart/index.md",
+        "route": "/ja/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6",
+        "bytes": 2860,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/ja__docs__node-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/ja/docs/python-api/index.md",
+      "previousSha256": "b8233fc2436667a20e66f3106061d3017d19ab09c732db47518a1fda76b72096",
+      "sha256": "b8233fc2436667a20e66f3106061d3017d19ab09c732db47518a1fda76b72096",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/ja/docs/python-api/index.md",
+        "route": "/ja/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b8233fc2436667a20e66f3106061d3017d19ab09c732db47518a1fda76b72096",
+        "bytes": 12978,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/ja__docs__python-api__index.md"
+      }
+    },
+    {
+      "route": "/ja/docs/python-diagnostics/index.md",
+      "previousSha256": "d6df1f9e58a2ca63149e935e4e77447e642860894446a80ccf10914b7bf65038",
+      "sha256": "d6df1f9e58a2ca63149e935e4e77447e642860894446a80ccf10914b7bf65038",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/python-migration/index.md",
+      "previousSha256": "3541714fd704afd5a25990680548f43a50a8bba6f0f7df4b9918ffc90b465534",
+      "sha256": "3541714fd704afd5a25990680548f43a50a8bba6f0f7df4b9918ffc90b465534",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/python-quickstart/index.md",
+      "previousSha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+      "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/ja/docs/python-quickstart/index.md",
+        "route": "/ja/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+        "bytes": 2867,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/ja__docs__python-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/ja/docs/quickstart/index.md",
+      "previousSha256": "947d442d86cfa882c7ded390c683354088176d692f7e0b23f1db1d79927ea6db",
+      "sha256": "947d442d86cfa882c7ded390c683354088176d692f7e0b23f1db1d79927ea6db",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/rust-api/index.md",
+      "previousSha256": "cff005643d66a68633d81d832a0286b39347097da02bac9cae2e5c08443eafad",
+      "sha256": "cff005643d66a68633d81d832a0286b39347097da02bac9cae2e5c08443eafad",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/rust-guide/index.md",
+      "previousSha256": "44c4b12aedda29bafc831a0769b3665afcaf1e508d9e69debacd0abc40c013df",
+      "sha256": "44c4b12aedda29bafc831a0769b3665afcaf1e508d9e69debacd0abc40c013df",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/templates/index.md",
+      "previousSha256": "7f0a1091236256bb74c9896008a38b91ff0f2fa242fcba9cc9d65d45e407b585",
+      "sha256": "7f0a1091236256bb74c9896008a38b91ff0f2fa242fcba9cc9d65d45e407b585",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/troubleshooting/index.md",
+      "previousSha256": "b3a4689f138cda1a0761d132f23054b97f3f76d54dc40adc43748cfc6358166c",
+      "sha256": "b3a4689f138cda1a0761d132f23054b97f3f76d54dc40adc43748cfc6358166c",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/ja/docs/updates/index.md",
+      "previousSha256": "c105253030b4a9570a219cd13b0265fcfff5485bc7f45174664311a867d93f6b",
+      "sha256": "c105253030b4a9570a219cd13b0265fcfff5485bc7f45174664311a867d93f6b",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/ja/docs/updates/index.md",
+        "route": "/ja/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c105253030b4a9570a219cd13b0265fcfff5485bc7f45174664311a867d93f6b",
+        "bytes": 10399,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/ja__docs__updates__index.md"
+      }
+    },
+    {
+      "route": "/ja/llms.txt",
+      "previousSha256": "9eaf1d4a8c6c9b855c9df7ed33bac169659f9d461a099b44c3e7a30aba2ac887",
+      "sha256": "9eaf1d4a8c6c9b855c9df7ed33bac169659f9d461a099b44c3e7a30aba2ac887",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/ja/llms.txt",
+        "route": "/ja/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "9eaf1d4a8c6c9b855c9df7ed33bac169659f9d461a099b44c3e7a30aba2ac887",
+        "bytes": 7718,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/ja__llms.txt"
+      }
+    },
+    {
+      "route": "/llms.txt",
+      "previousSha256": "4600e2649769c6685b9a21f46cf10857f13526763ec33d993f439743ae9a3262",
+      "sha256": "4600e2649769c6685b9a21f46cf10857f13526763ec33d993f439743ae9a3262",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/llms.txt",
+        "route": "/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "4600e2649769c6685b9a21f46cf10857f13526763ec33d993f439743ae9a3262",
+        "bytes": 6099,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/llms.txt"
+      }
+    },
+    {
+      "route": "/pt-br/blog/stable-ids-and-deck-updates/index.md",
+      "previousSha256": "ef4552b9ce61d45d075fc7a98702c3ce5fc30fc50ad175dbb504025075842a17",
+      "sha256": "ef4552b9ce61d45d075fc7a98702c3ce5fc30fc50ad175dbb504025075842a17",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/blog/your-first-anki-deck/index.md",
+      "previousSha256": "539f03df2a9742030bc99fb07ee48880d573668212f14b19f3e0a1356a6e30b0",
+      "sha256": "539f03df2a9742030bc99fb07ee48880d573668212f14b19f3e0a1356a6e30b0",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/ai-anki-cards/index.md",
+      "previousSha256": "befedb5ad91afd444191a8637da2d6fcd68f2c38fe9f66f4cb1f4ecb3c5872f2",
+      "sha256": "befedb5ad91afd444191a8637da2d6fcd68f2c38fe9f66f4cb1f4ecb3c5872f2",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/anki-forge-vs-genanki/index.md",
+      "previousSha256": "2ec11a06b544ce3008769c15e36e1d9a9a0046fcc8067bc76a1ee4054732edff",
+      "sha256": "2ec11a06b544ce3008769c15e36e1d9a9a0046fcc8067bc76a1ee4054732edff",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/api/index.md",
+      "previousSha256": "eea15016df138379457402afc4cb5eb552914634d7b00e4ad4874827c1f5d893",
+      "sha256": "eea15016df138379457402afc4cb5eb552914634d7b00e4ad4874827c1f5d893",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/build-guarantees/index.md",
+      "previousSha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa",
+      "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/pt-br/docs/build-guarantees/index.md",
+        "route": "/pt-br/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa",
+        "bytes": 6678,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/pt-br__docs__build-guarantees__index.md"
+      }
+    },
+    {
+      "route": "/pt-br/docs/cards/index.md",
+      "previousSha256": "fbec8e6e531a78944a2a248b3e08f89a929d9e57013947f50c9d90654051d055",
+      "sha256": "fbec8e6e531a78944a2a248b3e08f89a929d9e57013947f50c9d90654051d055",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/compatibility/index.md",
+      "previousSha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+      "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/pt-br/docs/compatibility/index.md",
+        "route": "/pt-br/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+        "bytes": 4003,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/pt-br__docs__compatibility__index.md"
+      }
+    },
+    {
+      "route": "/pt-br/docs/concepts/index.md",
+      "previousSha256": "466336d94d0e35ea6ecc8b1a7f88d54a41908ea15b8d71e9b3990d8c6d809553",
+      "sha256": "466336d94d0e35ea6ecc8b1a7f88d54a41908ea15b8d71e9b3990d8c6d809553",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/csv-to-anki/index.md",
+      "previousSha256": "99c31d0a161dc92ab8a84506c46ae7186c2dc4e1c1b6487461f531d892588a5a",
+      "sha256": "99c31d0a161dc92ab8a84506c46ae7186c2dc4e1c1b6487461f531d892588a5a",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/custom-notetypes/index.md",
+      "previousSha256": "7f2254228555653ee2c603fc13f71ab58dcd59d7620eb3faa50cdb7fb6cdbedd",
+      "sha256": "7f2254228555653ee2c603fc13f71ab58dcd59d7620eb3faa50cdb7fb6cdbedd",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/development/index.md",
+      "previousSha256": "256264e9e0723f07ef493842e2dc0570c239dd7a4862aee5b7e6c2e9e7fff1c1",
+      "sha256": "256264e9e0723f07ef493842e2dc0570c239dd7a4862aee5b7e6c2e9e7fff1c1",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/genanki-migration/index.md",
+      "previousSha256": "cd0ff2962e9953e2b9b3cf7fcc75a5534704f2355f880e39ee64befd9235d425",
+      "sha256": "cd0ff2962e9953e2b9b3cf7fcc75a5534704f2355f880e39ee64befd9235d425",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/image-occlusion/index.md",
+      "previousSha256": "52c32f7ae04e20fbc1ce364d923f88720b3fdd428746e9a572f70f1fd53be07d",
+      "sha256": "52c32f7ae04e20fbc1ce364d923f88720b3fdd428746e9a572f70f1fd53be07d",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/index.md",
+      "previousSha256": "b98f147a23e0454c96cd95894d1a786338c9685cc83363fed802e14c5de391af",
+      "sha256": "b98f147a23e0454c96cd95894d1a786338c9685cc83363fed802e14c5de391af",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/installation/index.md",
+      "previousSha256": "0bb2de60760a99080fac163b2025adcac5664d0a3e3d454260e641f7abe3f028",
+      "sha256": "0bb2de60760a99080fac163b2025adcac5664d0a3e3d454260e641f7abe3f028",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/json-to-anki/index.md",
+      "previousSha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+      "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/pt-br/docs/json-to-anki/index.md",
+        "route": "/pt-br/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+        "bytes": 11905,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/pt-br__docs__json-to-anki__index.md"
+      }
+    },
+    {
+      "route": "/pt-br/docs/languages/index.md",
+      "previousSha256": "5ae18762cb7c406ef648adbc31777a223e129727499d3083c8dae127cadf49f7",
+      "sha256": "5ae18762cb7c406ef648adbc31777a223e129727499d3083c8dae127cadf49f7",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/media/index.md",
+      "previousSha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992",
+      "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/pt-br/docs/media/index.md",
+        "route": "/pt-br/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992",
+        "bytes": 9379,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/pt-br__docs__media__index.md"
+      }
+    },
+    {
+      "route": "/pt-br/docs/node-api/index.md",
+      "previousSha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+      "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/pt-br/docs/node-api/index.md",
+        "route": "/pt-br/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+        "bytes": 14985,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/pt-br__docs__node-api__index.md"
+      }
+    },
+    {
+      "route": "/pt-br/docs/node-quickstart/index.md",
+      "previousSha256": "cfc3e49900f057f24d02d19bf3949a06550fbf2d37bc7d5b64ccb50337a3060e",
+      "sha256": "cfc3e49900f057f24d02d19bf3949a06550fbf2d37bc7d5b64ccb50337a3060e",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/pt-br/docs/node-quickstart/index.md",
+        "route": "/pt-br/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "cfc3e49900f057f24d02d19bf3949a06550fbf2d37bc7d5b64ccb50337a3060e",
+        "bytes": 2543,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/pt-br__docs__node-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/pt-br/docs/python-api/index.md",
+      "previousSha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328",
+      "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/pt-br/docs/python-api/index.md",
+        "route": "/pt-br/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328",
+        "bytes": 10520,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/pt-br__docs__python-api__index.md"
+      }
+    },
+    {
+      "route": "/pt-br/docs/python-diagnostics/index.md",
+      "previousSha256": "6fabf0647bbffeb9be03f960b842e24fd41c9e5f191b62b1c75d54b69e41314f",
+      "sha256": "6fabf0647bbffeb9be03f960b842e24fd41c9e5f191b62b1c75d54b69e41314f",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/python-migration/index.md",
+      "previousSha256": "3dda20b1f9364411df0b92799faa9ad4c2393d3299175388d3d2b5d79176a6b6",
+      "sha256": "3dda20b1f9364411df0b92799faa9ad4c2393d3299175388d3d2b5d79176a6b6",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/python-quickstart/index.md",
+      "previousSha256": "934645ffd2b7bd299886c13d6c683c75587b58b323e787e0859e1c2e60520721",
+      "sha256": "934645ffd2b7bd299886c13d6c683c75587b58b323e787e0859e1c2e60520721",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/pt-br/docs/python-quickstart/index.md",
+        "route": "/pt-br/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "934645ffd2b7bd299886c13d6c683c75587b58b323e787e0859e1c2e60520721",
+        "bytes": 2604,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/pt-br__docs__python-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/pt-br/docs/quickstart/index.md",
+      "previousSha256": "2218cb33224bfbe1c126b9ff625b717efd67a836dbae439ba46d422ff9ff609c",
+      "sha256": "2218cb33224bfbe1c126b9ff625b717efd67a836dbae439ba46d422ff9ff609c",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/rust-api/index.md",
+      "previousSha256": "519e42693a5323ae999fc3404afdc99160b044c5891a8265b2daae2724f6694d",
+      "sha256": "519e42693a5323ae999fc3404afdc99160b044c5891a8265b2daae2724f6694d",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/rust-guide/index.md",
+      "previousSha256": "34ae80ef14e2f28fe44eb369fca33ae4fd6e9e560e17d08ec99a19491fc1cec6",
+      "sha256": "34ae80ef14e2f28fe44eb369fca33ae4fd6e9e560e17d08ec99a19491fc1cec6",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/templates/index.md",
+      "previousSha256": "d20a9a8f6f57d0102f15cd0020009737856a9a135887f211b0cc5031877d82ee",
+      "sha256": "d20a9a8f6f57d0102f15cd0020009737856a9a135887f211b0cc5031877d82ee",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/troubleshooting/index.md",
+      "previousSha256": "69007540d7bfd207cceea4cc219475709ba6e224c6211790a9b231efd9ce7cc9",
+      "sha256": "69007540d7bfd207cceea4cc219475709ba6e224c6211790a9b231efd9ce7cc9",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/pt-br/docs/updates/index.md",
+      "previousSha256": "c0431d013d92d8e8b94c24001c80c38a5b1a69f3a002e9d4d713ee25fea8826d",
+      "sha256": "c0431d013d92d8e8b94c24001c80c38a5b1a69f3a002e9d4d713ee25fea8826d",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/pt-br/docs/updates/index.md",
+        "route": "/pt-br/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c0431d013d92d8e8b94c24001c80c38a5b1a69f3a002e9d4d713ee25fea8826d",
+        "bytes": 9161,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/pt-br__docs__updates__index.md"
+      }
+    },
+    {
+      "route": "/pt-br/llms.txt",
+      "previousSha256": "83727724cc57580fa3b64695c20ab86fceb764a749f65053b991205916a1c928",
+      "sha256": "83727724cc57580fa3b64695c20ab86fceb764a749f65053b991205916a1c928",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/pt-br/llms.txt",
+        "route": "/pt-br/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "83727724cc57580fa3b64695c20ab86fceb764a749f65053b991205916a1c928",
+        "bytes": 7227,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/pt-br__llms.txt"
+      }
+    },
+    {
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "previousSha256": "096b5e73dba07ac3de05e0e0c5c0556eda6733000c91d1955a55ba544915fd39",
+      "sha256": "096b5e73dba07ac3de05e0e0c5c0556eda6733000c91d1955a55ba544915fd39",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/blog/your-first-anki-deck/index.md",
+      "previousSha256": "e82bf53033a3cd2a15d4e2c92dcc936b0be2fb575b83f8e12e78f9e40ef28291",
+      "sha256": "e82bf53033a3cd2a15d4e2c92dcc936b0be2fb575b83f8e12e78f9e40ef28291",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/ai-anki-cards/index.md",
+      "previousSha256": "d41495f72cf015aaa880eb9d85b41be3002512d9997c148bee6da0b4b3086ac6",
+      "sha256": "d41495f72cf015aaa880eb9d85b41be3002512d9997c148bee6da0b4b3086ac6",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "previousSha256": "4dd2864f6a017f4050296f40525f9d0240594f8f4e613c833f063f5217e8351e",
+      "sha256": "4dd2864f6a017f4050296f40525f9d0240594f8f4e613c833f063f5217e8351e",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/api/index.md",
+      "previousSha256": "85b910056bff07406aa95622d2d1fa621c6e26d058b4e43f66509ede662d0b27",
+      "sha256": "85b910056bff07406aa95622d2d1fa621c6e26d058b4e43f66509ede662d0b27",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "previousSha256": "7bd8533c81b0deff674e1bb630453308d56f1e2fa11f434c313f4935aa63a410",
+      "sha256": "7bd8533c81b0deff674e1bb630453308d56f1e2fa11f434c313f4935aa63a410",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/zh-cn/docs/build-guarantees/index.md",
+        "route": "/zh-cn/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "7bd8533c81b0deff674e1bb630453308d56f1e2fa11f434c313f4935aa63a410",
+        "bytes": 4875,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/zh-cn__docs__build-guarantees__index.md"
+      }
+    },
+    {
+      "route": "/zh-cn/docs/cards/index.md",
+      "previousSha256": "46ceeb701e734b6f104492c2eef7678596fcfa768407346cc53aa00094dac378",
+      "sha256": "46ceeb701e734b6f104492c2eef7678596fcfa768407346cc53aa00094dac378",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "previousSha256": "754f2bcf9e5dd030f568068ef4d527e8184ab10265cc39c9bce614d2e191a79d",
+      "sha256": "754f2bcf9e5dd030f568068ef4d527e8184ab10265cc39c9bce614d2e191a79d",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/zh-cn/docs/compatibility/index.md",
+        "route": "/zh-cn/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "754f2bcf9e5dd030f568068ef4d527e8184ab10265cc39c9bce614d2e191a79d",
+        "bytes": 3129,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/zh-cn__docs__compatibility__index.md"
+      }
+    },
+    {
+      "route": "/zh-cn/docs/concepts/index.md",
+      "previousSha256": "6ef6c478b4cf71c9f71e4dffb5f17dc7b9fd51200803450a953e0442b7ae53ee",
+      "sha256": "6ef6c478b4cf71c9f71e4dffb5f17dc7b9fd51200803450a953e0442b7ae53ee",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/csv-to-anki/index.md",
+      "previousSha256": "be2d5b64a5df7d603129517e460cad11fbac5c6a4e7037b94381fd94e0041428",
+      "sha256": "be2d5b64a5df7d603129517e460cad11fbac5c6a4e7037b94381fd94e0041428",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/custom-notetypes/index.md",
+      "previousSha256": "f34dd1c38da4a42edbdceff9116ea9da2b09fb734a65a41fb317cd656741d682",
+      "sha256": "f34dd1c38da4a42edbdceff9116ea9da2b09fb734a65a41fb317cd656741d682",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/development/index.md",
+      "previousSha256": "956050812e0c79f55142ea8365b5950c92200361fc213083eb4e8deadbf7f07a",
+      "sha256": "956050812e0c79f55142ea8365b5950c92200361fc213083eb4e8deadbf7f07a",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/genanki-migration/index.md",
+      "previousSha256": "5edc72249a4bd8d0426d73495a323909161890811ec107254b4b5184cfaa4e22",
+      "sha256": "5edc72249a4bd8d0426d73495a323909161890811ec107254b4b5184cfaa4e22",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/image-occlusion/index.md",
+      "previousSha256": "9e799305a38afa3142a800041f4305b28234ef92c606f7cf1490e7aade238e88",
+      "sha256": "9e799305a38afa3142a800041f4305b28234ef92c606f7cf1490e7aade238e88",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/index.md",
+      "previousSha256": "aa51e5ee475f881619fba6741129da7385033b4ffaf200b716797dbc45d8582f",
+      "sha256": "aa51e5ee475f881619fba6741129da7385033b4ffaf200b716797dbc45d8582f",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/installation/index.md",
+      "previousSha256": "765e38ed56cb05e700407fc64521b27c3722ed8fa4a0a5ba96f9fc930b167179",
+      "sha256": "765e38ed56cb05e700407fc64521b27c3722ed8fa4a0a5ba96f9fc930b167179",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/json-to-anki/index.md",
+      "previousSha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+      "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/zh-cn/docs/json-to-anki/index.md",
+        "route": "/zh-cn/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+        "bytes": 11012,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/zh-cn__docs__json-to-anki__index.md"
+      }
+    },
+    {
+      "route": "/zh-cn/docs/languages/index.md",
+      "previousSha256": "bd745fd45a07f2e3cbc7a3c326ce0f4af98466ba7dd96384e298d75e206ce504",
+      "sha256": "bd745fd45a07f2e3cbc7a3c326ce0f4af98466ba7dd96384e298d75e206ce504",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/media/index.md",
+      "previousSha256": "38ede3dc1c21a7d7f73548b5bc7da8da5a5214e7f283cdfd4b88f2db8c2c00a6",
+      "sha256": "38ede3dc1c21a7d7f73548b5bc7da8da5a5214e7f283cdfd4b88f2db8c2c00a6",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/zh-cn/docs/media/index.md",
+        "route": "/zh-cn/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "38ede3dc1c21a7d7f73548b5bc7da8da5a5214e7f283cdfd4b88f2db8c2c00a6",
+        "bytes": 7862,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/zh-cn__docs__media__index.md"
+      }
+    },
+    {
+      "route": "/zh-cn/docs/node-api/index.md",
+      "previousSha256": "bc69ec3d73a3402dc711c5c2b2d3efb6391d7188999ac5d0018e436c85917707",
+      "sha256": "bc69ec3d73a3402dc711c5c2b2d3efb6391d7188999ac5d0018e436c85917707",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/zh-cn/docs/node-api/index.md",
+        "route": "/zh-cn/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "bc69ec3d73a3402dc711c5c2b2d3efb6391d7188999ac5d0018e436c85917707",
+        "bytes": 12221,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/zh-cn__docs__node-api__index.md"
+      }
+    },
+    {
+      "route": "/zh-cn/docs/node-quickstart/index.md",
+      "previousSha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+      "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/zh-cn/docs/node-quickstart/index.md",
+        "route": "/zh-cn/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+        "bytes": 2260,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/zh-cn__docs__node-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/zh-cn/docs/python-api/index.md",
+      "previousSha256": "2674b401ac8bec3cdfb323e9db7e810217036c8a8c4b70d1e8afacd0db245f71",
+      "sha256": "2674b401ac8bec3cdfb323e9db7e810217036c8a8c4b70d1e8afacd0db245f71",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/zh-cn/docs/python-api/index.md",
+        "route": "/zh-cn/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "2674b401ac8bec3cdfb323e9db7e810217036c8a8c4b70d1e8afacd0db245f71",
+        "bytes": 8604,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/zh-cn__docs__python-api__index.md"
+      }
+    },
+    {
+      "route": "/zh-cn/docs/python-diagnostics/index.md",
+      "previousSha256": "46f5f8cbb5940413144a44cdcd7e54707a896b8b5d83f86bddda4ee629a312c0",
+      "sha256": "46f5f8cbb5940413144a44cdcd7e54707a896b8b5d83f86bddda4ee629a312c0",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/python-migration/index.md",
+      "previousSha256": "dee3ce5ae79e738bc309e44a3bed743f99f7bcc23aa228117e06d55349a0a95a",
+      "sha256": "dee3ce5ae79e738bc309e44a3bed743f99f7bcc23aa228117e06d55349a0a95a",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/python-quickstart/index.md",
+      "previousSha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+      "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/zh-cn/docs/python-quickstart/index.md",
+        "route": "/zh-cn/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+        "bytes": 2302,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/zh-cn__docs__python-quickstart__index.md"
+      }
+    },
+    {
+      "route": "/zh-cn/docs/quickstart/index.md",
+      "previousSha256": "e8771b9e3b9b0e70e7ca09cbebc74fc6a80489d113f8d696521502beb0ceed23",
+      "sha256": "e8771b9e3b9b0e70e7ca09cbebc74fc6a80489d113f8d696521502beb0ceed23",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/rust-api/index.md",
+      "previousSha256": "fe5b4e2084bf2006761490e4d24953947ce1b5ca47d4972acbcbcf7780b61b10",
+      "sha256": "fe5b4e2084bf2006761490e4d24953947ce1b5ca47d4972acbcbcf7780b61b10",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/rust-guide/index.md",
+      "previousSha256": "9f1d5eb72f0c176a4a4e2641a8b142155b1ec524deb4302a9932295794e8ea7b",
+      "sha256": "9f1d5eb72f0c176a4a4e2641a8b142155b1ec524deb4302a9932295794e8ea7b",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/templates/index.md",
+      "previousSha256": "54c1ed27fd40ab7f3cba77256cb62f552df1061100f6eebff4d0ed5a2c37ca33",
+      "sha256": "54c1ed27fd40ab7f3cba77256cb62f552df1061100f6eebff4d0ed5a2c37ca33",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/troubleshooting/index.md",
+      "previousSha256": "98dd59ce04ff08ce201b869477b02181b2acdfb3916dabb9e8595285ed3c094a",
+      "sha256": "98dd59ce04ff08ce201b869477b02181b2acdfb3916dabb9e8595285ed3c094a",
+      "byteIdentical": true,
+      "capture": null
+    },
+    {
+      "route": "/zh-cn/docs/updates/index.md",
+      "previousSha256": "fc34d69e7cc123937470cc608900659dd9f1619f81f7f69fca9f392d0fc4fe84",
+      "sha256": "fc34d69e7cc123937470cc608900659dd9f1619f81f7f69fca9f392d0fc4fe84",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/zh-cn/docs/updates/index.md",
+        "route": "/zh-cn/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "fc34d69e7cc123937470cc608900659dd9f1619f81f7f69fca9f392d0fc4fe84",
+        "bytes": 7584,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/zh-cn__docs__updates__index.md"
+      }
+    },
+    {
+      "route": "/zh-cn/llms.txt",
+      "previousSha256": "ecc97c9e1ecb1a9ee78b0e2503bf948dbf70c2908eeb8de705580cbf1880d346",
+      "sha256": "ecc97c9e1ecb1a9ee78b0e2503bf948dbf70c2908eeb8de705580cbf1880d346",
+      "byteIdentical": true,
+      "capture": {
+        "url": "http://127.0.0.1:63839/zh-cn/llms.txt",
+        "route": "/zh-cn/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "ecc97c9e1ecb1a9ee78b0e2503bf948dbf70c2908eeb8de705580cbf1880d346",
+        "bytes": 5964,
+        "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-root/bodies/zh-cn__llms.txt"
+      }
+    }
+  ]
+}

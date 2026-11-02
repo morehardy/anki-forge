@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "rubricVersion": "anki-forge-language-quality-v1",
+  "glossaryVersion": "anki-forge-technical-terms-v1",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/de_technical_review/de-mime-rust-source-delta-2026-11-01",
+  "entries": {
+    "rust-api": {
+      "de": {
+        "sourceHash": "070e2826b8450a88c9ef3bc3c4d80fdc7d59197f30844a59f1e61149af3e2a47",
+        "targetHash": "d957f38e55352daa2a1f341167cd78e875cf998e2721b96728bb26255b977dad",
+        "technicalDependencyHash": "923d7d2b1ddfb7abcc3423a94b77d3564e6983cf5c97ab68dc3e97b0946b0e17",
+        "inputFiles": [
+          "anki_forge/examples/docs_workflow.rs",
+          "anki_forge/examples/json_to_anki.rs",
+          "anki_forge/examples/website_showcase.rs",
+          "bindings/node/examples/json_to_anki.mts",
+          "bindings/python/examples/json_to_anki.py",
+          "docs/ai-quickstart.json",
+          "docs/de/rust-api.md",
+          "docs/rust-api.md",
+          "website/language-briefs.json",
+          "website/legacy-sections.json",
+          "website/locale-model.mjs",
+          "website/release-locales.json",
+          "website/scripts/search-documents.mjs",
+          "website/search-concepts.json",
+          "website/search-terms.json",
+          "website/search.config.mjs",
+          "website/section-contracts.json",
+          "website/site-model.mjs",
+          "website/src/components/BrandMark.astro",
+          "website/src/components/CodeBlock.astro",
+          "website/src/components/CopyBlock.astro",
+          "website/src/components/DocsFooter.astro",
+          "website/src/components/DocsHeader.astro",
+          "website/src/components/DocsSearch.astro",
+          "website/src/components/Footer.astro",
+          "website/src/components/Header.astro",
+          "website/src/components/Icon.astro",
+          "website/src/components/LanguageSwitcher.astro",
+          "website/src/components/ThemeControl.astro",
+          "website/src/content/i18n/de.json",
+          "website/src/content/i18n/en.json",
+          "website/src/i18n/client-messages.mjs",
+          "website/src/i18n/de.json",
+          "website/src/i18n/en.json",
+          "website/src/i18n/format-message.mjs",
+          "website/src/i18n/messages.mjs",
+          "website/src/layouts/SiteLayout.astro",
+          "website/src/lib/ai-quickstart.mjs",
+          "website/src/lib/examples.ts",
+          "website/src/lib/search-terms.mjs",
+          "website/src/lib/search.mjs",
+          "website/src/route-middleware.ts",
+          "website/src/scripts/docs-search.ts",
+          "website/src/scripts/site.ts"
+        ],
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "Reviewed full signatures/tables and prepared example against Rust public modules. Distinct FieldKey/TemplateKey, 12 finite u64 counters including max_identity_bytes, zero budget, outcome snapshots/path round-trip, error context, policy and owned candidate lifetimes are preserved.",
+            "Independent complete German reading against the actual English source and relevant three-SDK implementation contracts is recorded in technical-reading-records.json and the 139-file technical-input-hashes.json. All 33 formal German files exactly match the reviewed staging snapshot; all source fences/code blocks and 210 UI/11 framework key-placeholder contracts passed independent corroboration. Metadata/brief/prompt values match those read. The internal-tools consumer API boundary in media was corrected and re-read before this binding.",
+            "Independently inspected the exact six-file DE delta from accepted commit 270f26aa5653a0f56297f46fd35e586da444622b. Reconstructed all 226 prior input files and reproduced all prior 170 source/target/technical hashes. The prior five locales, render/search implementations, schemas and executable programs are unchanged. Only German model/catalog/brief/prompt/search values and the German release-menu entry are added; removing 66 DE model literals recovers exact baseline model bytes. See source-input-audit-final.json and technical-source-delta-notes.md.",
+            "Independently re-read frozen DE vocabulary deltas and complete formal concepts/compatibility/updates bodies: relationship predicates retain domain contexts; stable-key terms target concepts/updates without new intent; package-content wording still needs package context; learning-history terms target client import limitations and do not promise reset or recovery. Existing search context/role precedence implementation was read and is unchanged. Withheld query files were not read for this source approval; actual negative-result semantics remains a separate artifact review.",
+            "Actual public SDK execution reuse was independently re-audited, not rerun: execution-reuse-audit.json verifies 23 current inputs, ten retained APKG ZIP/Zstd/SQLite/identity/media contents, six compare/review outputs and 14 logs/install resolutions. Public 0.3.1 install/runtime and executable programs are unchanged; AI JSON adds only three German prompt maps. The separately read doc-executions.log records the parent's current 14 source-checkout Rust documentation executions/23 APKG observations; it is not a public SDK rerun.",
+            "Full 204-entry independent review remains at docs/plans/evidence/multilingual-ja-de-2026-11-01/de/technical-source-review-final.json, sha256 6c9714b97a551ee28a82415bf361b5427663e6dd26a3d602071ddaa7f817c42b; the previous two-API correction remains at docs/plans/evidence/multilingual-ja-de-2026-11-01/de/technical-source-review-mime-fixed.json, sha256 ca41d76335890ec15287aaf404da989e82723b6895491fcd59167122147e4837. This report adds only the Rust API entry.",
+            "Independently read the complete Rust addition-context paragraph and the exact three inline-code changes. image/* is the typed-image MIME category; audio/* or video/* is accepted for sound references. Category mismatch remains NOTE.MEDIA_USAGE_INVALID; constructors, explicit media/raw HTML, retained import MIME and separate build extension validation keep their original semantics. Code delimiters prevent German punctuation from swallowing wildcard characters.",
+            "Independently scanned all German MIME occurrences: exactly media, rust-guide and the three API pages contain these MIME categories. All five now mark every image/*, audio/* and video/* literal as inline code. The media and Rust authoring pages were already protected. No SDK code, command, schema or publication behavior changed.",
+            "Compared all 259 source-input files against immutable two-API-fix commit 6f5f860117f17859d8cbe1fbe0073590e33564b4 and recomputed all 204 candidate contracts. Only docs/de/rust-api.md changes, and only rust-api/de targetHash differs; the other 203 entry contracts and all source/technicalDependencyHash values remain identical. Source fix is reviewed; the broader DE-ARTIFACT-001 is closed only after fresh final artifact checks cover all three APIs."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "pending",
+          "score": {},
+          "evidence": [],
+          "openIssues": []
+        }
+      }
+    }
+  },
+  "reviewScope": {
+    "axis": "technical",
+    "incrementalEntries": 1,
+    "priorCompleteEntries": 204,
+    "priorCompleteReview": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/technical-source-review-final.json",
+      "sha256": "6c9714b97a551ee28a82415bf361b5427663e6dd26a3d602071ddaa7f817c42b"
+    },
+    "priorPairCorrection": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/technical-source-review-mime-fixed.json",
+      "sha256": "ca41d76335890ec15287aaf404da989e82723b6895491fcd59167122147e4837"
+    },
+    "sourceCandidate": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/source-candidates-mime-complete.json",
+      "sha256": "0c7b259de9c93ff5ad940c4fa2728b04b193718300792715cb39381ba52c2640"
+    },
+    "deltaAudit": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/source-mime-rust-delta-audit.json",
+      "sha256": "5e15a8dff7a819379fe47fa4b66edf08beebebb5b25a42ecf20365d29ff720d9"
+    },
+    "independentOfContentAuthor": true,
+    "openIssues": [],
+    "limits": "Source-only Rust MIME correction; all three API artifact literals require fresh actual output confirmation."
+  }
+}

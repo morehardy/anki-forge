@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "scope": "Final PR #66 candidate after actual Linux CI exposed cross-filesystem Pagefind page ordering and platform-specific embedded WASM. Complete local root/prefix acceptance with a verified portable search producer; no deployment claim.",
+  "sourceCommit": "e9fbc7b4a31dbad934455b0ec1b58695be4dc54e",
+  "inputSha256": "381b5c782abc460fc0612430a2122334f94e42e0b174cdeb8334517acae500eb",
+  "failedCi": "https://github.com/morehardy/anki-forge/actions/runs/41415117624/job/125176976122",
+  "priorSourceAndHeadingAcceptance": "docs/plans/evidence/website-pr66-final-2026-11-02/acceptance.json",
+  "fixes": [
+    "Renewed independent source and artifact reviews after six-language copy edits.",
+    "Declared 12 source-bound historic heading migrations while preserving old anchors and protected links.",
+    "Replaced filesystem-order Pagefind indexing with sorted sequential HTML ingestion and fresh output.",
+    "Pinned unchanged official Linux Pagefind 1.5.2 browser WASM with verified npm tarball integrity and per-file SHA-256, preserving strict reviewed-resource checks.",
+    "Canonicalized Pagefind language-map serialization."
+  ],
+  "crossPlatformSearch": {
+    "status": "passed",
+    "files": 243,
+    "evidence": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/portable-cross-platform-results.json",
+    "independentDiagnostics": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/pagefind-cross-platform-reproduction.json"
+  },
+  "unitTests": {
+    "passed": 156,
+    "failed": 0,
+    "log": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/unit-tests.log"
+  },
+  "sourceReview": {
+    "affectedEntries": 174,
+    "unchangedEntries": 30,
+    "currentInputFiles": 261,
+    "technical": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json",
+    "linguistic": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/linguistic-source-review.json"
+  },
+  "freshSdkExecution": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/usage-execution-audit.json",
+  "retainedNonblockingLinguisticIssues": 32,
+  "environments": {
+    "prefix": {
+      "status": "passed",
+      "manifestSha256": "582a93d3ff296b83f09f01c8f9706dd2b91f5b1b6556bed95b902b7f0da1e706",
+      "engineeringChecks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "browserTests": 52,
+      "sameInputHtmlMachineRebuildFiles": 397,
+      "sameInputSearchRebuildFiles": 243,
+      "usageTasks": 36,
+      "usageResourceBindings": 397,
+      "machineTasks": 24,
+      "machineResourceBindings": 192,
+      "actualMachineHttpResponses": 60,
+      "releaseEvidence": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/engineering/prefix/release-evidence.json",
+      "checkReleaseLog": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/engineering/prefix/check-release.log"
+    },
+    "root": {
+      "status": "passed",
+      "manifestSha256": "66eff750ce5db8cf12e3d3844e8dc42b8f598a844eb2e8788b39f2ec9487958a",
+      "engineeringChecks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "browserTests": 52,
+      "sameInputHtmlMachineRebuildFiles": 397,
+      "sameInputSearchRebuildFiles": 243,
+      "usageTasks": 36,
+      "usageResourceBindings": 397,
+      "machineTasks": 24,
+      "machineResourceBindings": 192,
+      "actualMachineHttpResponses": 60,
+      "releaseEvidence": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/engineering/root/release-evidence.json",
+      "checkReleaseLog": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/engineering/root/check-release.log"
+    }
+  },
+  "limitations": [
+    "Unchanged source prose and machine answers are explicitly inherited only after verified input/resource comparison and current task reading; they are not claimed as fully reread.",
+    "Original reviewed manifests and earlier failed/intermediate evidence remain immutable. Later commits and CI must validate exact input and reviewed-resource bytes.",
+    "Local browser and loopback HTTP acceptance does not establish production deployment."
+  ]
+}

@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 import { serveBuiltSite } from './serve-built-site.mjs';
 import { siteConfig } from '../site.config.mjs';
 import { pagePath, resolvePage, localeIds } from '../site-model.mjs';
-import { locales, localePath } from '../locale-model.mjs';
+import { locales, localePath, configuredLocales } from '../locale-model.mjs';
 import searchQueries from '../search-queries.json' with { type: 'json' };
 import { publishedPages } from './published-pages.mjs';
 import { createTranslator } from '../src/i18n/messages.mjs';
@@ -75,6 +75,20 @@ test('all built content URLs and assets are reachable over HTTP', async () => {
   for (const route of localeIds.map(locale => localePath('/missing-topic-62/', locale))) assert.equal((await fetch(server.url(route))).status, 404);
 });
 
+test('localized search retains native word-form matches beyond the frozen query set', async t => {
+  const { page } = await session(t);
+  for (const [locale, query, expected] of [['es', 'reutilización', 'templates'], ['de', 'Nebenläufig', 'python-api'], ['de', 'Zeichenfolge', 'python-api']]) {
+    if (!localeIds.includes(locale) || !hasTopic(expected)) continue;
+    await page.goto(server.url(pagePath('quickstart', locale)));
+    await page.keyboard.press('Control+k');
+    await visible(page.locator('site-search dialog'));
+    await page.locator('.pagefind-ui__search-input').fill(query);
+    await visible(page.locator(`.pagefind-ui__result-link[href="${server.url(pagePath(expected, locale))}"]`));
+    const results = await page.locator('.pagefind-ui__result-link').evaluateAll(links => links.map(link => link.href));
+    assert.ok(results.every(url => resolvePage(new URL(url).pathname, siteConfig.base)?.locale === locale));
+  }
+});
+
 test('machine links and structured data work without JavaScript', async t => {
   const { page } = await session(t, { javaScriptEnabled: false });
   const examples = [publicTopics.find(topic => topic.type === 'docs'), publicTopics.find(topic => topic.type === 'article')].filter(Boolean);
@@ -99,6 +113,44 @@ test('machine links and structured data work without JavaScript', async t => {
       assert.equal(index.status, 200);
       assert.match(index.headers.get('content-type'), /^text\/plain/);
       for (const route of ['/docs/missing-machine-62/index.md', '/missing-llms-62.txt']) assert.equal((await fetch(server.url(localePath(route, locale)), { redirect: 'manual' })).status, 404);
+    }
+  }
+});
+
+test('all configured language choices stay visible when focused on a short screen without scripts', async t => {
+  const { page } = await session(t, { javaScriptEnabled: false });
+  const choices = Object.entries(configuredLocales).filter(([id]) => id !== 'en');
+  for (const width of [320, 390]) for (const scale of [1, 2]) {
+    await page.setViewportSize({ width, height: 360 });
+    await page.goto(server.url(pagePath('quickstart', 'en')));
+    // Only this browser fixture exposes planned languages; production routes stay unchanged.
+    await page.locator('.site-header .language-menu ul').evaluate((list, entries) => {
+      const original = list.firstElementChild;
+      const items = entries.map(([id, locale]) => {
+        const item = original.cloneNode(true);
+        const link = item.querySelector('a');
+        link.textContent = locale.label;
+        link.hreflang = id;
+        return item;
+      });
+      list.replaceChildren(...items);
+    }, choices);
+    if (scale === 2) await page.evaluate(() => {
+      const sizes = [...document.querySelectorAll('*')].map(element => [element, parseFloat(getComputedStyle(element).fontSize)]);
+      for (const [element, size] of sizes) element.style.fontSize = `${size * 2}px`;
+    });
+    const summary = page.locator('.site-header .language-menu summary');
+    await summary.focus();
+    await summary.press('Enter');
+    for (const [id] of choices) {
+      await page.keyboard.press('Tab');
+      const reachable = await page.evaluate(() => {
+        const element = document.activeElement;
+        const box = element.getBoundingClientRect();
+        return { locale: element.getAttribute('hreflang'), visible: box.x >= 0 && box.right <= innerWidth + 1 && box.y >= 0 && box.bottom <= innerHeight + 1 && element.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)) };
+      });
+      assert.equal(reachable.locale, id);
+      assert.ok(reachable.visible, `${id}: focused language is clipped or covered at ${width}px/${scale * 100}% text`);
     }
   }
 });
@@ -323,6 +375,32 @@ for (const locale of localeIds) {
     await page.locator('site-search [data-close-modal]').click();
     assert.equal(await page.locator('site-search dialog').evaluate(dialog => dialog.open), false);
     await eventually(() => page.locator('site-search [data-open-modal]').evaluate(element => element === document.activeElement), 'Search did not restore focus');
+  });
+
+  test(`${locale}: header controls stay reachable at narrow 200% text zoom`, async t => {
+    const { page } = await session(t);
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 600 });
+      for (const id of ['home', 'quickstart'].filter(hasTopic)) {
+        await page.goto(route(id));
+        await page.evaluate(() => document.documentElement.style.fontSize = '200%');
+        for (const control of await page.locator('.site-header .wordmark, .header-tools > :visible').all()) {
+          const box = await control.boundingBox();
+          assert.ok(box && box.x >= 0 && box.x + box.width <= width + 1, `${locale}/${id} clips a header control at ${width}px with 200% text`);
+          assert.ok(await control.evaluate(element => {
+            const box = element.getBoundingClientRect();
+            return element.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2));
+          }), `${locale}/${id}: another control obscures a header action`);
+        }
+        const menu = page.locator('.site-header .mobile-menu summary');
+        await menu.focus();
+        await menu.press('Enter');
+        const link = page.locator('.site-header .mobile-menu nav a').first();
+        await visible(link);
+        const box = await link.boundingBox();
+        assert.ok(box.x >= 0 && box.x + box.width <= width + 1, 'Opened navigation must stay inside the narrow viewport');
+      }
+    }
   });
 
   test(`${locale}: narrow layouts, no script content and real missing-page recovery`, async t => {

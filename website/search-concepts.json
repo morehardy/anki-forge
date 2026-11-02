@@ -1793,6 +1793,1748 @@
         ],
         "intent": true
       }
+    },
+    "pt-BR": {
+      "__language": {
+        "stopWords": [
+          "a",
+          "o",
+          "as",
+          "os",
+          "um",
+          "uma",
+          "uns",
+          "umas",
+          "e",
+          "ou",
+          "de",
+          "do",
+          "da",
+          "dos",
+          "das",
+          "para",
+          "em",
+          "no",
+          "na",
+          "nos",
+          "nas",
+          "com",
+          "por",
+          "pelo",
+          "pela",
+          "ao",
+          "à",
+          "aos",
+          "às",
+          "é",
+          "são",
+          "como",
+          "qual",
+          "quais",
+          "posso",
+          "eu",
+          "meu",
+          "minha",
+          "meus",
+          "minhas",
+          "me",
+          "favor",
+          "quero",
+          "preciso",
+          "usando",
+          "usar",
+          "use",
+          "sdk",
+          "entre",
+          "sobre",
+          "ser",
+          "isso",
+          "isto",
+          "esse",
+          "essa",
+          "este",
+          "esta",
+          "esses",
+          "essas",
+          "estes",
+          "estas",
+          "devo",
+          "vou",
+          "também",
+          "cada"
+        ]
+      },
+      "python": {
+        "terms": [
+          "Python",
+          "CPython",
+          "pip"
+        ],
+        "sdk": "python"
+      },
+      "node": {
+        "terms": [
+          "Node.js",
+          "Node",
+          "JavaScript",
+          "TypeScript",
+          "npm"
+        ],
+        "sdk": "node"
+      },
+      "rust": {
+        "terms": [
+          "Rust",
+          "Cargo",
+          "crate"
+        ],
+        "sdk": "rust"
+      },
+      "quickstart": {
+        "terms": [
+          "início rápido",
+          "primeiros passos",
+          "começar",
+          "iniciante",
+          "iniciantes",
+          "tutorial",
+          "primeiro baralho",
+          "primeiro baralho do Anki",
+          "primeiro cartão"
+        ],
+        "roles": [
+          "quickstart"
+        ],
+        "intent": true
+      },
+      "reference": {
+        "terms": [
+          "API",
+          "referência",
+          "anotações de tipos",
+          "declarações",
+          "métodos",
+          "funções"
+        ],
+        "roles": [
+          "api"
+        ],
+        "intent": true
+      },
+      "installation": {
+        "terms": [
+          "instalação",
+          "instalar",
+          "configuração inicial",
+          "dependência",
+          "dependências"
+        ],
+        "roles": [
+          "installation",
+          "quickstart"
+        ],
+        "intent": true
+      },
+      "development": {
+        "terms": [
+          "compilação do código-fonte",
+          "compilar a partir do código-fonte",
+          "cópia do repositório",
+          "addon local",
+          "recompilar wrapper"
+        ],
+        "roles": [
+          "development"
+        ],
+        "intent": true
+      },
+      "comparison": {
+        "terms": [
+          "versus",
+          "vs",
+          "alternativa",
+          "alternativas",
+          "vantagens e desvantagens",
+          "comparação de bibliotecas",
+          "escolher biblioteca",
+          "qual biblioteca"
+        ],
+        "roles": [
+          "comparison"
+        ],
+        "intent": true
+      },
+      "migration": {
+        "terms": [
+          "migração",
+          "migrar",
+          "migrando",
+          "mudar de",
+          "trocar de",
+          "substituir genanki",
+          "portar de"
+        ],
+        "roles": [
+          "migration"
+        ],
+        "intent": true
+      },
+      "updates": {
+        "terms": [
+          "atualizar",
+          "atualização",
+          "atualizações",
+          "baralho distribuído",
+          "notas existentes",
+          "alterar uma resposta",
+          "histórico de revisão",
+          "agendamento",
+          "publicar novamente"
+        ],
+        "roles": [
+          "updates"
+        ],
+        "intent": true,
+        "requiresAny": [
+          "atualizar",
+          "atualização",
+          "atualizações",
+          "publicar",
+          "publicação",
+          "distribuído",
+          "distribuição",
+          "base de atualização",
+          "versão",
+          "notas existentes",
+          "alterar uma resposta"
+        ]
+      },
+      "baseline": {
+        "terms": [
+          "base de atualização",
+          "APKG original distribuído",
+          "distribuição original",
+          "APKG original",
+          "reexportação do Anki",
+          "reexportar",
+          "pacote anterior",
+          "evidências de identidade"
+        ],
+        "roles": [
+          "updates"
+        ],
+        "intent": true
+      },
+      "identity": {
+        "terms": [
+          "ID estável",
+          "IDs estáveis",
+          "chave estável",
+          "chaves estáveis",
+          "GUID",
+          "namespace",
+          "chave de negócio",
+          "identidade da nota"
+        ]
+      },
+      "diagnostics": {
+        "terms": [
+          "solução de problemas",
+          "diagnóstico",
+          "diagnósticos",
+          "erro",
+          "erros",
+          "falha",
+          "falhou",
+          "não funciona",
+          "ausente",
+          "desapareceu",
+          "não carrega",
+          "não consegue carregar"
+        ],
+        "roles": [
+          "diagnostics"
+        ],
+        "intent": true
+      },
+      "media": {
+        "terms": [
+          "mídia",
+          "arquivos de mídia",
+          "recursos",
+          "anexos"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "images": {
+        "terms": [
+          "imagem",
+          "imagens",
+          "figura",
+          "figuras",
+          "foto",
+          "fotos",
+          "ilustração"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "audio": {
+        "terms": [
+          "áudio",
+          "som",
+          "sons",
+          "voz",
+          "pronúncia",
+          "mp3",
+          "wav"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "occlusion": {
+        "terms": [
+          "oclusão de imagem",
+          "oclusão",
+          "máscaras em imagens",
+          "ocultar rótulos",
+          "máscaras retangulares",
+          "mascaramento",
+          "regiões de diagramas"
+        ],
+        "roles": [
+          "occlusion"
+        ]
+      },
+      "cloze": {
+        "terms": [
+          "Cloze",
+          "preencher lacunas",
+          "preenchimento de lacunas",
+          "número da omissão",
+          "omissão Cloze",
+          "cartões com lacunas"
+        ],
+        "roles": [
+          "cards"
+        ]
+      },
+      "templates": {
+        "terms": [
+          "modelo de cartão",
+          "modelos de cartão",
+          "template",
+          "templates",
+          "pacote de modelos",
+          "CSS",
+          "fonte",
+          "fontes"
+        ],
+        "roles": [
+          "templates"
+        ]
+      },
+      "note-types": {
+        "terms": [
+          "tipo de nota",
+          "tipos de nota",
+          "modelo personalizado",
+          "modelos personalizados",
+          "campos personalizados",
+          "geração condicional de cartões"
+        ],
+        "roles": [
+          "note-types"
+        ]
+      },
+      "compatibility": {
+        "terms": [
+          "compatibilidade",
+          "plataformas compatíveis",
+          "ambientes compatíveis",
+          "versão mínima",
+          "sistema operacional",
+          "Alpine",
+          "musl",
+          "Electron",
+          "Bun"
+        ],
+        "roles": [
+          "compatibility"
+        ]
+      },
+      "csv": {
+        "terms": [
+          "CSV",
+          "planilha",
+          "planilhas",
+          "Excel",
+          "tabela de vocabulário"
+        ]
+      },
+      "json": {
+        "terms": [
+          "JSON",
+          "dados estruturados",
+          "criação de notas em lote"
+        ]
+      },
+      "ai": {
+        "terms": [
+          "IA",
+          "inteligência artificial",
+          "assistente de programação",
+          "apoio de IA",
+          "gerado por IA",
+          "anotações para Anki"
+        ]
+      },
+      "text": {
+        "terms": [
+          "texto simples",
+          "HTML",
+          "escape",
+          "texto escapado"
+        ]
+      },
+      "fundamentals": {
+        "terms": [
+          "definição",
+          "definições",
+          "conceito",
+          "conceitos",
+          "o que é",
+          "o que são",
+          "significado",
+          "relação",
+          "relações",
+          "agrupamento",
+          "agrupados",
+          "diferença entre",
+          "distinção"
+        ],
+        "requiresAny": [
+          "nota",
+          "notas",
+          "cartão",
+          "cartões",
+          "baralho",
+          "baralhos",
+          "projeto",
+          "APKG",
+          "namespace",
+          "campo",
+          "campos",
+          "modelo de cartão",
+          "modelos de cartão",
+          "modelo"
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "package-structure": {
+        "terms": [
+          "conteúdo",
+          "contém",
+          "contêm",
+          "dentro",
+          "estrutura",
+          "componentes",
+          "composto por"
+        ],
+        "requiresAny": [
+          "APKG",
+          "pacote",
+          "pacotes",
+          "exportação",
+          "exportado"
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "learning": {
+        "terms": [
+          "revisar",
+          "estudar",
+          "estudando",
+          "praticar",
+          "aprendizado",
+          "perguntas",
+          "questionário"
+        ],
+        "weight": 0.25
+      },
+      "customization": {
+        "terms": [
+          "personalizar",
+          "personalização",
+          "adaptar",
+          "design",
+          "projetar"
+        ],
+        "requiresAny": [
+          "campo",
+          "campos",
+          "frente",
+          "verso",
+          "modelo de cartão",
+          "modelos de cartão",
+          "modelo",
+          "tipo de nota"
+        ],
+        "roles": [
+          "note-types"
+        ],
+        "intent": true
+      },
+      "cardinality": {
+        "terms": [
+          "vários",
+          "muitos",
+          "quantos",
+          "uma para muitos",
+          "número de",
+          "quantidade de",
+          "cardinalidade"
+        ],
+        "requiresAll": [
+          [
+            "nota",
+            "notas"
+          ],
+          [
+            "cartão",
+            "cartões"
+          ]
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "occlusion-action": {
+        "terms": [
+          "ocultar",
+          "cobrir",
+          "esconder",
+          "mascarar"
+        ],
+        "requiresAny": [
+          "imagem",
+          "imagens",
+          "figura",
+          "figuras",
+          "diagrama",
+          "diagramas",
+          "ilustração",
+          "foto",
+          "fotos"
+        ],
+        "roles": [
+          "occlusion"
+        ],
+        "consumeContext": true
+      },
+      "project-schema": {
+        "terms": [
+          "ankiforge-project-v1",
+          "ankiforge-project-v2",
+          "schema de projeto",
+          "formato de projeto"
+        ]
+      }
+    },
+    "ja": {
+      "__language": {
+        "stopWords": [
+          "は",
+          "が",
+          "を",
+          "に",
+          "へ",
+          "で",
+          "と",
+          "の",
+          "も",
+          "や",
+          "から",
+          "まで",
+          "より",
+          "ので",
+          "ため",
+          "する",
+          "します",
+          "したい",
+          "した",
+          "して",
+          "できる",
+          "できます",
+          "です",
+          "ます",
+          "ください",
+          "たい",
+          "こと",
+          "もの",
+          "これ",
+          "それ",
+          "この",
+          "その",
+          "どの",
+          "どれ",
+          "どう",
+          "どのように",
+          "私",
+          "自分",
+          "使う",
+          "使って",
+          "使い",
+          "利用",
+          "方法",
+          "ついて",
+          "について",
+          "場合",
+          "時",
+          "とき",
+          "ある",
+          "いる",
+          "なる",
+          "なり",
+          "および",
+          "または",
+          "そして",
+          "例えば",
+          "SDK",
+          "教えて"
+        ]
+      },
+      "python": {
+        "terms": [
+          "Python",
+          "CPython",
+          "pip",
+          "パイソン"
+        ],
+        "sdk": "python"
+      },
+      "node": {
+        "terms": [
+          "Node.js",
+          "Node",
+          "JavaScript",
+          "TypeScript",
+          "npm",
+          "ノード"
+        ],
+        "sdk": "node"
+      },
+      "rust": {
+        "terms": [
+          "Rust",
+          "Cargo",
+          "crate",
+          "ラスト"
+        ],
+        "sdk": "rust"
+      },
+      "quickstart": {
+        "terms": [
+          "クイックスタート",
+          "入門",
+          "初心者",
+          "最初",
+          "初めて",
+          "はじめて",
+          "始める",
+          "はじめる",
+          "チュートリアル",
+          "初回"
+        ],
+        "roles": [
+          "quickstart"
+        ],
+        "intent": true
+      },
+      "reference": {
+        "terms": [
+          "API",
+          "リファレンス",
+          "参照",
+          "型宣言",
+          "型注釈",
+          "メソッド",
+          "関数",
+          "一覧"
+        ],
+        "roles": [
+          "api"
+        ],
+        "intent": true
+      },
+      "installation": {
+        "terms": [
+          "インストール",
+          "導入",
+          "セットアップ",
+          "依存関係",
+          "組み込む",
+          "組み込み"
+        ],
+        "roles": [
+          "installation",
+          "quickstart"
+        ],
+        "intent": true
+      },
+      "development": {
+        "terms": [
+          "ソースビルド",
+          "ソースからビルド",
+          "ソースからコンパイル",
+          "チェックアウト",
+          "ローカルアドオン",
+          "再ビルド",
+          "リポジトリ開発"
+        ],
+        "roles": [
+          "development"
+        ],
+        "intent": true
+      },
+      "comparison": {
+        "terms": [
+          "vs",
+          "versus",
+          "比較するライブラリ",
+          "ライブラリ比較",
+          "どちらを選ぶ",
+          "選び方",
+          "代替",
+          "長所",
+          "短所",
+          "移行コスト"
+        ],
+        "roles": [
+          "comparison"
+        ],
+        "intent": true
+      },
+      "migration": {
+        "terms": [
+          "移行",
+          "移す",
+          "乗り換え",
+          "乗り換える",
+          "置き換え",
+          "旧API",
+          "旧版",
+          "移植"
+        ],
+        "roles": [
+          "migration"
+        ],
+        "intent": true
+      },
+      "updates": {
+        "terms": [
+          "更新",
+          "アップデート",
+          "修正版",
+          "配布済み",
+          "既存ノート",
+          "解答の訂正",
+          "復習履歴",
+          "再公開",
+          "リリース"
+        ],
+        "roles": [
+          "updates"
+        ],
+        "intent": true,
+        "requiresAny": [
+          "更新",
+          "アップデート",
+          "修正",
+          "訂正",
+          "配布",
+          "公開",
+          "リリース",
+          "基準パッケージ",
+          "既存",
+          "バージョン"
+        ]
+      },
+      "baseline": {
+        "terms": [
+          "基準パッケージ",
+          "基準APKG",
+          "オリジナルAPKG",
+          "原本APKG",
+          "前回のパッケージ",
+          "前回配布",
+          "再エクスポート",
+          "再出力",
+          "識別情報の証拠"
+        ],
+        "roles": [
+          "updates"
+        ],
+        "intent": true
+      },
+      "identity": {
+        "terms": [
+          "安定ID",
+          "安定キー",
+          "GUID",
+          "名前空間",
+          "namespace",
+          "業務キー",
+          "識別情報",
+          "識別子",
+          "ノートID"
+        ]
+      },
+      "diagnostics": {
+        "terms": [
+          "トラブルシューティング",
+          "診断",
+          "エラー",
+          "不具合",
+          "失敗",
+          "動かない",
+          "動かなく",
+          "読めない",
+          "読み込めない",
+          "消えた",
+          "見つからない",
+          "欠落"
+        ],
+        "roles": [
+          "diagnostics"
+        ],
+        "intent": true
+      },
+      "media": {
+        "terms": [
+          "メディア",
+          "アセット",
+          "リソース",
+          "添付ファイル"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "images": {
+        "terms": [
+          "画像",
+          "がぞう",
+          "写真",
+          "イラスト",
+          "図",
+          "イメージ"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "audio": {
+        "terms": [
+          "音声",
+          "おんせい",
+          "音",
+          "サウンド",
+          "発音",
+          "オーディオ",
+          "mp3",
+          "wav"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "occlusion": {
+        "terms": [
+          "画像穴埋め",
+          "画像あなうめ",
+          "画像遮蔽",
+          "イメージオクルージョン",
+          "Image Occlusion",
+          "矩形マスク",
+          "長方形マスク",
+          "遮蔽",
+          "マスキング"
+        ],
+        "roles": [
+          "occlusion"
+        ]
+      },
+      "cloze": {
+        "terms": [
+          "Cloze",
+          "クローズ",
+          "穴埋め",
+          "あなうめ",
+          "空欄補充",
+          "削除番号",
+          "穴埋め番号"
+        ],
+        "roles": [
+          "cards"
+        ]
+      },
+      "templates": {
+        "terms": [
+          "カードテンプレート",
+          "テンプレート",
+          "テンプレートバンドル",
+          "バンドル",
+          "CSS",
+          "フォント",
+          "レイアウト"
+        ],
+        "roles": [
+          "templates"
+        ]
+      },
+      "note-types": {
+        "terms": [
+          "ノートタイプ",
+          "ノート型",
+          "独自モデル",
+          "カスタムモデル",
+          "独自フィールド",
+          "条件付き生成"
+        ],
+        "roles": [
+          "note-types"
+        ]
+      },
+      "compatibility": {
+        "terms": [
+          "互換性",
+          "対応環境",
+          "対応プラットフォーム",
+          "検証済み",
+          "最小バージョン",
+          "OS",
+          "Alpine",
+          "musl",
+          "Electron",
+          "Bun"
+        ],
+        "roles": [
+          "compatibility"
+        ]
+      },
+      "csv": {
+        "terms": [
+          "CSV",
+          "表計算",
+          "スプレッドシート",
+          "Excel",
+          "語彙表",
+          "単語帳",
+          "表データ"
+        ]
+      },
+      "json": {
+        "terms": [
+          "JSON",
+          "構造化データ",
+          "一括データ",
+          "JSON入力"
+        ]
+      },
+      "ai": {
+        "terms": [
+          "AI",
+          "人工知能",
+          "アシスタント",
+          "コーディングアシスタント",
+          "学習メモ",
+          "下書き",
+          "プロンプト"
+        ]
+      },
+      "text": {
+        "terms": [
+          "プレーンテキスト",
+          "Text",
+          "HTML",
+          "エスケープ",
+          "文字列"
+        ]
+      },
+      "fundamentals": {
+        "terms": [
+          "概念",
+          "基本",
+          "とは",
+          "意味",
+          "関係",
+          "違い",
+          "区別",
+          "定義",
+          "構成"
+        ],
+        "requiresAny": [
+          "ノート",
+          "カード",
+          "デッキ",
+          "プロジェクト",
+          "APKG",
+          "名前空間",
+          "フィールド",
+          "テンプレート",
+          "モデル"
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "package-structure": {
+        "terms": [
+          "中身",
+          "含まれる",
+          "入っている",
+          "構造",
+          "構成要素"
+        ],
+        "requiresAny": [
+          "APKG",
+          "パッケージ",
+          "エクスポート",
+          "出力"
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "learning": {
+        "terms": [
+          "学習",
+          "勉強",
+          "復習",
+          "練習",
+          "覚える",
+          "問題",
+          "クイズ"
+        ],
+        "weight": 0.25
+      },
+      "customization": {
+        "terms": [
+          "独自",
+          "カスタム",
+          "カスタマイズ",
+          "デザイン",
+          "自作",
+          "定義"
+        ],
+        "requiresAny": [
+          "フィールド",
+          "表面",
+          "裏面",
+          "テンプレート",
+          "モデル",
+          "ノートタイプ"
+        ],
+        "roles": [
+          "note-types"
+        ],
+        "intent": true
+      },
+      "cardinality": {
+        "terms": [
+          "複数",
+          "いくつ",
+          "何枚",
+          "何件",
+          "数",
+          "1対多",
+          "一対多"
+        ],
+        "requiresAll": [
+          [
+            "ノート"
+          ],
+          [
+            "カード"
+          ]
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "occlusion-action": {
+        "terms": [
+          "隠す",
+          "かくす",
+          "隠したい",
+          "覆う",
+          "マスク",
+          "遮蔽"
+        ],
+        "requiresAny": [
+          "画像",
+          "図",
+          "イラスト",
+          "写真",
+          "イメージ"
+        ],
+        "roles": [
+          "occlusion"
+        ],
+        "consumeContext": true
+      }
+    },
+    "de": {
+      "__language": {
+        "stopWords": [
+          "der",
+          "die",
+          "das",
+          "den",
+          "dem",
+          "des",
+          "ein",
+          "eine",
+          "einen",
+          "einem",
+          "einer",
+          "eines",
+          "und",
+          "oder",
+          "mit",
+          "ohne",
+          "von",
+          "vom",
+          "zu",
+          "zum",
+          "zur",
+          "für",
+          "fuer",
+          "in",
+          "im",
+          "an",
+          "am",
+          "auf",
+          "aus",
+          "bei",
+          "als",
+          "ist",
+          "sind",
+          "sein",
+          "wird",
+          "werden",
+          "ich",
+          "du",
+          "wir",
+          "ihr",
+          "sie",
+          "es",
+          "mein",
+          "meine",
+          "dein",
+          "deine",
+          "kann",
+          "können",
+          "koennen",
+          "wie",
+          "was",
+          "wo",
+          "welche",
+          "welcher",
+          "welches",
+          "bitte",
+          "möchte",
+          "moechte",
+          "will",
+          "soll",
+          "sollte",
+          "muss",
+          "müssen",
+          "muessen",
+          "nutzen",
+          "verwenden",
+          "benutze",
+          "sdk",
+          "über",
+          "ueber",
+          "zwischen",
+          "auch",
+          "noch",
+          "diese",
+          "dieser",
+          "dieses"
+        ]
+      },
+      "python": {
+        "terms": [
+          "Python",
+          "CPython",
+          "pip"
+        ],
+        "sdk": "python"
+      },
+      "node": {
+        "terms": [
+          "Node.js",
+          "Node",
+          "JavaScript",
+          "TypeScript",
+          "npm"
+        ],
+        "sdk": "node"
+      },
+      "rust": {
+        "terms": [
+          "Rust",
+          "Cargo",
+          "Crate"
+        ],
+        "sdk": "rust"
+      },
+      "quickstart": {
+        "terms": [
+          "Schnellstart",
+          "Schnelleinstieg",
+          "Einstieg",
+          "erste Schritte",
+          "beginnen",
+          "anfangen",
+          "Anfänger",
+          "Anfaenger",
+          "Tutorial",
+          "erster Stapel",
+          "ersten Stapel",
+          "erste Karte"
+        ],
+        "roles": [
+          "quickstart"
+        ],
+        "intent": true
+      },
+      "reference": {
+        "terms": [
+          "API",
+          "Referenz",
+          "API-Referenz",
+          "Methodenreferenz",
+          "Methoden",
+          "Funktionen",
+          "Typdeklarationen",
+          "Signaturen"
+        ],
+        "roles": [
+          "api"
+        ],
+        "intent": true
+      },
+      "installation": {
+        "terms": [
+          "Installation",
+          "installieren",
+          "einrichten",
+          "Einrichtung",
+          "Abhängigkeit",
+          "Abhängigkeiten",
+          "Abhaengigkeiten",
+          "integrieren"
+        ],
+        "roles": [
+          "installation",
+          "quickstart"
+        ],
+        "intent": true
+      },
+      "development": {
+        "terms": [
+          "aus dem Quellcode bauen",
+          "Quellcode kompilieren",
+          "Quellcode-Build",
+          "Repository entwickeln",
+          "lokales Addon",
+          "Wrapper neu bauen",
+          "maturin develop"
+        ],
+        "roles": [
+          "development"
+        ],
+        "intent": true
+      },
+      "comparison": {
+        "terms": [
+          "versus",
+          "vs",
+          "Alternative",
+          "Alternativen",
+          "Bibliotheksvergleich",
+          "Bibliotheken vergleichen",
+          "Bibliothek wählen",
+          "Bibliothek auswählen",
+          "Vor- und Nachteile"
+        ],
+        "roles": [
+          "comparison"
+        ],
+        "intent": true
+      },
+      "migration": {
+        "terms": [
+          "Migration",
+          "migrieren",
+          "umsteigen",
+          "Umstieg",
+          "wechseln",
+          "genanki ersetzen",
+          "alte API ersetzen"
+        ],
+        "roles": [
+          "migration"
+        ],
+        "intent": true
+      },
+      "updates": {
+        "terms": [
+          "aktualisieren",
+          "Aktualisierung",
+          "Aktualisierungen",
+          "Stapelaktualisierung",
+          "Notizaktualisierung",
+          "verteilten Stapel",
+          "vorhandene Notizen",
+          "Antwort ändern",
+          "erneut veröffentlichen",
+          "Lernplanung",
+          "Wiederholungsverlauf"
+        ],
+        "roles": [
+          "updates"
+        ],
+        "intent": true,
+        "requiresAny": [
+          "aktualisieren",
+          "Aktualisierung",
+          "Aktualisierungen",
+          "Stapelaktualisierung",
+          "Notizaktualisierung",
+          "veröffentlichen",
+          "Veröffentlichung",
+          "verteilt",
+          "verteilten",
+          "Verteilung",
+          "Basisversion",
+          "Version",
+          "vorhandene Notizen",
+          "Antwort ändern"
+        ]
+      },
+      "baseline": {
+        "terms": [
+          "Aktualisierungsbasis",
+          "Basisversion",
+          "ursprünglich verteiltes APKG",
+          "ursprüngliches APKG",
+          "Original-APKG",
+          "urspruengliches APKG",
+          "erneuter Anki-Export",
+          "Anki-Reexport",
+          "Vorgängerpaket",
+          "Identitätsnachweise"
+        ],
+        "roles": [
+          "updates"
+        ],
+        "intent": true
+      },
+      "identity": {
+        "terms": [
+          "stabile ID",
+          "stabile IDs",
+          "stabiler Schlüssel",
+          "stabile Schlüssel",
+          "Notizschlüssel",
+          "Notiz-ID",
+          "GUID",
+          "Namensraum",
+          "namespace",
+          "fachlicher Schlüssel",
+          "Notizidentität",
+          "Notizidentitaet",
+          "stabile Identität",
+          "stabiler Notizschlüssel",
+          "stabile Notizschlüssel",
+          "dauerhafte Schlüssel"
+        ],
+        "roles": [
+          "concepts",
+          "updates"
+        ]
+      },
+      "diagnostics": {
+        "terms": [
+          "Fehlersuche",
+          "Fehlerdiagnose",
+          "Diagnose",
+          "Diagnostik",
+          "Fehler",
+          "fehlgeschlagen",
+          "scheitert",
+          "funktioniert nicht",
+          "fehlt",
+          "verschwunden",
+          "lädt nicht",
+          "laedt nicht",
+          "kann nicht laden"
+        ],
+        "roles": [
+          "diagnostics"
+        ],
+        "intent": true
+      },
+      "media": {
+        "terms": [
+          "Medien",
+          "Mediendatei",
+          "Mediendateien",
+          "Mediendaten",
+          "Medienimport",
+          "Stapelimport",
+          "Anhänge",
+          "Ressourcen"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "images": {
+        "terms": [
+          "Bild",
+          "Bilder",
+          "Bilddatei",
+          "Bilddateien",
+          "Foto",
+          "Fotos",
+          "Illustration",
+          "Abbildung"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "audio": {
+        "terms": [
+          "Audio",
+          "Audiodatei",
+          "Audiodateien",
+          "Ton",
+          "Töne",
+          "Toene",
+          "Klang",
+          "Aussprache",
+          "Stimme",
+          "mp3",
+          "wav"
+        ],
+        "roles": [
+          "media"
+        ]
+      },
+      "occlusion": {
+        "terms": [
+          "Bildverdeckung",
+          "Image Occlusion",
+          "Bildmaske",
+          "Bildmasken",
+          "Rechteckmaske",
+          "Rechteckmasken",
+          "Maskenkoordinaten",
+          "Maskenschlüssel",
+          "Diagrammbeschriftung verdecken"
+        ],
+        "roles": [
+          "occlusion"
+        ]
+      },
+      "cloze": {
+        "terms": [
+          "Cloze",
+          "Lückentext",
+          "Lueckentext",
+          "Lückentextkarte",
+          "Lückentextkarten",
+          "Lückennummer",
+          "Lückennummern",
+          "Lücken ausfüllen"
+        ],
+        "roles": [
+          "cards"
+        ]
+      },
+      "templates": {
+        "terms": [
+          "Vorlage",
+          "Vorlagen",
+          "Kartenvorlage",
+          "Kartenvorlagen",
+          "Vorlagenpaket",
+          "Vorlagenpakete",
+          "Vorlagen-Bundle",
+          "Template",
+          "Templates",
+          "CSS",
+          "Schriftart",
+          "Schriftarten"
+        ],
+        "roles": [
+          "templates"
+        ]
+      },
+      "note-types": {
+        "terms": [
+          "Notiztyp",
+          "Notiztypen",
+          "eigener Notiztyp",
+          "eigene Notiztypen",
+          "eigenes Modell",
+          "benutzerdefinierte Felder",
+          "bedingte Kartenerzeugung"
+        ],
+        "roles": [
+          "note-types"
+        ]
+      },
+      "compatibility": {
+        "terms": [
+          "Kompatibilität",
+          "Kompatibilitaet",
+          "unterstützte Plattformen",
+          "unterstuetzte Plattformen",
+          "geprüfte Umgebungen",
+          "Mindestversion",
+          "Betriebssystem",
+          "Alpine",
+          "musl",
+          "Electron",
+          "Bun",
+          "Lernverlauf",
+          "Lernfortschritt",
+          "Wiederholungsverlauf"
+        ],
+        "roles": [
+          "compatibility"
+        ]
+      },
+      "csv": {
+        "terms": [
+          "CSV",
+          "Tabelle",
+          "Tabellen",
+          "Tabellenkalkulation",
+          "Vokabeltabelle",
+          "Excel",
+          "Tabellenimport"
+        ]
+      },
+      "json": {
+        "terms": [
+          "JSON",
+          "strukturierte Daten",
+          "Notizen stapelweise erstellen"
+        ]
+      },
+      "ai": {
+        "terms": [
+          "KI",
+          "künstliche Intelligenz",
+          "kuenstliche Intelligenz",
+          "KI-Assistent",
+          "Programmierassistent",
+          "KI-Unterstützung",
+          "Kartenentwürfe",
+          "Aufzeichnungen in Karten"
+        ]
+      },
+      "text": {
+        "terms": [
+          "Klartext",
+          "Text",
+          "HTML",
+          "maskieren",
+          "Maskierung",
+          "HTML-Escaping"
+        ]
+      },
+      "fundamentals": {
+        "terms": [
+          "Grundbegriff",
+          "Grundbegriffe",
+          "Konzept",
+          "Konzepte",
+          "was ist",
+          "was sind",
+          "Bedeutung",
+          "Zusammenhang",
+          "Unterschied zwischen",
+          "unterscheiden",
+          "gruppieren",
+          "hängen",
+          "zusammenhängen",
+          "unterscheidet"
+        ],
+        "requiresAny": [
+          "Notiz",
+          "Notizen",
+          "Karte",
+          "Karten",
+          "Stapel",
+          "Projekt",
+          "Project",
+          "APKG",
+          "Namensraum",
+          "Feld",
+          "Felder",
+          "Vorlage",
+          "Vorlagen",
+          "Modell",
+          "Notizfeld",
+          "Notizfelder",
+          "Notizschlüssel"
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "package-structure": {
+        "terms": [
+          "Inhalt",
+          "enthält",
+          "enthalten",
+          "Bestandteile",
+          "Aufbau",
+          "Struktur",
+          "zusammengesetzt",
+          "steckt"
+        ],
+        "requiresAny": [
+          "APKG",
+          "Paket",
+          "Pakete",
+          "Export",
+          "exportiert"
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "learning": {
+        "terms": [
+          "lernen",
+          "üben",
+          "ueben",
+          "wiederholen",
+          "Lernen",
+          "Fragen",
+          "Quiz"
+        ],
+        "weight": 0.25
+      },
+      "customization": {
+        "terms": [
+          "anpassen",
+          "gestalten",
+          "Gestaltung",
+          "Design",
+          "definieren",
+          "eigene"
+        ],
+        "requiresAny": [
+          "Feld",
+          "Felder",
+          "Vorderseite",
+          "Rückseite",
+          "Rueckseite",
+          "Kartenvorlage",
+          "Kartenvorlagen",
+          "Modell",
+          "Notiztyp"
+        ],
+        "roles": [
+          "note-types"
+        ],
+        "intent": true
+      },
+      "cardinality": {
+        "terms": [
+          "mehrere",
+          "viele",
+          "wie viele",
+          "Anzahl",
+          "Kardinalität",
+          "Kartenanzahl",
+          "eine zu mehreren"
+        ],
+        "requiresAll": [
+          [
+            "Notiz",
+            "Notizen"
+          ],
+          [
+            "Karte",
+            "Karten"
+          ]
+        ],
+        "roles": [
+          "concepts"
+        ],
+        "intent": true,
+        "consumeContext": true
+      },
+      "occlusion-action": {
+        "terms": [
+          "verdecken",
+          "verbergen",
+          "abdecken",
+          "verstecken",
+          "maskieren"
+        ],
+        "requiresAny": [
+          "Bild",
+          "Bilder",
+          "Foto",
+          "Fotos",
+          "Diagramm",
+          "Diagramme",
+          "Abbildung",
+          "Beschriftung"
+        ],
+        "roles": [
+          "occlusion"
+        ],
+        "consumeContext": true
+      }
     }
   }
 }

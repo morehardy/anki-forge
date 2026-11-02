@@ -1,0 +1,1233 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/de_technical_review/de-machine-final-prefix-2026-11-01",
+  "currentCapture": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/http-observations.json",
+    "sha256": "cc7f6d89eb3e254e1e9f5e9931b10a1351019be75ba5de8d46373a00dc20a4b7"
+  },
+  "priorCapture": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/http-observations.json",
+    "sha256": "338ae941ffda78c6514c96ca578acf9451c4916eeda007fc1a16012d67db0f7d"
+  },
+  "priorConclusions": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-conclusions-prefix.json",
+    "sha256": "c43895b5a7a7aecddea7ffc1163aead682b51e4264958122ec1441a7ba57e82b"
+  },
+  "priorReport": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-read-prefix.json",
+    "sha256": "c6c0d44329d9ebc83f0d1be660e3fd9a46e28cc21dae4800cb1fb1399fdb9a15"
+  },
+  "scope": "Exact actual old-five-language HTTP response comparison: 50 followed Markdown responses and 20 llms starts. This records byte deltas; it does not author answers or assert a semantic pass.",
+  "comparisons": [
+    {
+      "locale": "en",
+      "task": "python-install",
+      "route": "/anki-forge/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/001-anki-forge_llms.txt.body",
+        "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/001-anki-forge_llms.txt.body",
+        "sha256": "49f46bbdc44c36661819edce0ec7a1d0a6fd271052ab4305d589f95939743bdb"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Español AI documentation index.",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasil AI documentation index.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI documentation index.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutsch AI documentation index."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "en",
+      "task": "python-install",
+      "route": "/anki-forge/docs/python-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/002-anki-forge_docs_python-quickstart_index.md.body",
+        "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/002-anki-forge_docs_python-quickstart_index.md.body",
+        "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "python-install",
+      "route": "/anki-forge/docs/python-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/003-anki-forge_docs_python-api_index.md.body",
+        "sha256": "ce891dfa12abf6e099c563ce509a95f1cab9164bebaff3552e4a0940c56ef886"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/003-anki-forge_docs_python-api_index.md.body",
+        "sha256": "ce891dfa12abf6e099c563ce509a95f1cab9164bebaff3552e4a0940c56ef886"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "python-install",
+      "route": "/anki-forge/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/004-anki-forge_docs_compatibility_index.md.body",
+        "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/004-anki-forge_docs_compatibility_index.md.body",
+        "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "node-api",
+      "route": "/anki-forge/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/005-anki-forge_llms.txt.body",
+        "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/005-anki-forge_llms.txt.body",
+        "sha256": "49f46bbdc44c36661819edce0ec7a1d0a6fd271052ab4305d589f95939743bdb"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Español AI documentation index.",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasil AI documentation index.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI documentation index.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutsch AI documentation index."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "en",
+      "task": "node-api",
+      "route": "/anki-forge/docs/node-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/006-anki-forge_docs_node-api_index.md.body",
+        "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/006-anki-forge_docs_node-api_index.md.body",
+        "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "node-api",
+      "route": "/anki-forge/docs/node-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/007-anki-forge_docs_node-quickstart_index.md.body",
+        "sha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/007-anki-forge_docs_node-quickstart_index.md.body",
+        "sha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "route": "/anki-forge/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/008-anki-forge_llms.txt.body",
+        "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/008-anki-forge_llms.txt.body",
+        "sha256": "49f46bbdc44c36661819edce0ec7a1d0a6fd271052ab4305d589f95939743bdb"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Español AI documentation index.",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasil AI documentation index.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI documentation index.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutsch AI documentation index."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "route": "/anki-forge/docs/json-to-anki/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/009-anki-forge_docs_json-to-anki_index.md.body",
+        "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/009-anki-forge_docs_json-to-anki_index.md.body",
+        "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "route": "/anki-forge/docs/updates/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/010-anki-forge_docs_updates_index.md.body",
+        "sha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/010-anki-forge_docs_updates_index.md.body",
+        "sha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "route": "/anki-forge/docs/media/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/011-anki-forge_docs_media_index.md.body",
+        "sha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/011-anki-forge_docs_media_index.md.body",
+        "sha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/012-anki-forge_llms.txt.body",
+        "sha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/012-anki-forge_llms.txt.body",
+        "sha256": "49f46bbdc44c36661819edce0ec7a1d0a6fd271052ab4305d589f95939743bdb"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Español AI documentation index.",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasil AI documentation index.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI documentation index.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutsch AI documentation index."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "en",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/013-anki-forge_docs_compatibility_index.md.body",
+        "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/013-anki-forge_docs_compatibility_index.md.body",
+        "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "en",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/docs/build-guarantees/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/014-anki-forge_docs_build-guarantees_index.md.body",
+        "sha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/014-anki-forge_docs_build-guarantees_index.md.body",
+        "sha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "route": "/anki-forge/zh-cn/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/015-anki-forge_zh-cn_llms.txt.body",
+        "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/015-anki-forge_zh-cn_llms.txt.body",
+        "sha256": "be392e7b10fabd12ae2ce8470e7990cf5836ba96ffe288e7b209dc96635e75ed"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Español AI 文档索引。",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasil AI 文档索引。",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI 文档索引。",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutsch AI 文档索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "route": "/anki-forge/zh-cn/docs/python-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/016-anki-forge_zh-cn_docs_python-quickstart_index.md.body",
+        "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/016-anki-forge_zh-cn_docs_python-quickstart_index.md.body",
+        "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "route": "/anki-forge/zh-cn/docs/python-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/017-anki-forge_zh-cn_docs_python-api_index.md.body",
+        "sha256": "d58028202432d624b0963444ca00ab1e237133b68fdac85dbe973db2b4066b31"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/017-anki-forge_zh-cn_docs_python-api_index.md.body",
+        "sha256": "d58028202432d624b0963444ca00ab1e237133b68fdac85dbe973db2b4066b31"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "route": "/anki-forge/zh-cn/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/018-anki-forge_zh-cn_docs_compatibility_index.md.body",
+        "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/018-anki-forge_zh-cn_docs_compatibility_index.md.body",
+        "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "node-api",
+      "route": "/anki-forge/zh-cn/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/019-anki-forge_zh-cn_llms.txt.body",
+        "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/019-anki-forge_zh-cn_llms.txt.body",
+        "sha256": "be392e7b10fabd12ae2ce8470e7990cf5836ba96ffe288e7b209dc96635e75ed"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Español AI 文档索引。",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasil AI 文档索引。",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI 文档索引。",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutsch AI 文档索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "node-api",
+      "route": "/anki-forge/zh-cn/docs/node-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/020-anki-forge_zh-cn_docs_node-api_index.md.body",
+        "sha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/020-anki-forge_zh-cn_docs_node-api_index.md.body",
+        "sha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "node-api",
+      "route": "/anki-forge/zh-cn/docs/node-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/021-anki-forge_zh-cn_docs_node-quickstart_index.md.body",
+        "sha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/021-anki-forge_zh-cn_docs_node-quickstart_index.md.body",
+        "sha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "route": "/anki-forge/zh-cn/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/022-anki-forge_zh-cn_llms.txt.body",
+        "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/022-anki-forge_zh-cn_llms.txt.body",
+        "sha256": "be392e7b10fabd12ae2ce8470e7990cf5836ba96ffe288e7b209dc96635e75ed"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Español AI 文档索引。",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasil AI 文档索引。",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI 文档索引。",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutsch AI 文档索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "route": "/anki-forge/zh-cn/docs/json-to-anki/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/023-anki-forge_zh-cn_docs_json-to-anki_index.md.body",
+        "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/023-anki-forge_zh-cn_docs_json-to-anki_index.md.body",
+        "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "route": "/anki-forge/zh-cn/docs/updates/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/024-anki-forge_zh-cn_docs_updates_index.md.body",
+        "sha256": "202f116788465686ef6e979e5629a3439ca603ecb7966f5356792fc0d370fe98"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/024-anki-forge_zh-cn_docs_updates_index.md.body",
+        "sha256": "202f116788465686ef6e979e5629a3439ca603ecb7966f5356792fc0d370fe98"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "route": "/anki-forge/zh-cn/docs/media/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/025-anki-forge_zh-cn_docs_media_index.md.body",
+        "sha256": "a3a1d049675679579fa5da49d0846a3fc4e74db2f7d1a1f9730174e72a90e9f1"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/025-anki-forge_zh-cn_docs_media_index.md.body",
+        "sha256": "a3a1d049675679579fa5da49d0846a3fc4e74db2f7d1a1f9730174e72a90e9f1"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/zh-cn/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/026-anki-forge_zh-cn_llms.txt.body",
+        "sha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/026-anki-forge_zh-cn_llms.txt.body",
+        "sha256": "be392e7b10fabd12ae2ce8470e7990cf5836ba96ffe288e7b209dc96635e75ed"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Español AI 文档索引。",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasil AI 文档索引。",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI 文档索引。",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutsch AI 文档索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/zh-cn/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/027-anki-forge_zh-cn_docs_compatibility_index.md.body",
+        "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/027-anki-forge_zh-cn_docs_compatibility_index.md.body",
+        "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "zh-CN",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/zh-cn/docs/build-guarantees/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/028-anki-forge_zh-cn_docs_build-guarantees_index.md.body",
+        "sha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/028-anki-forge_zh-cn_docs_build-guarantees_index.md.body",
+        "sha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "route": "/anki-forge/es/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/029-anki-forge_es_llms.txt.body",
+        "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/029-anki-forge_es_llms.txt.body",
+        "sha256": "409a7d4c77466e490a70aff546a0dd772e090607aea1c4f754f298238eab5194"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): Índice de documentación para IA en 简体中文.",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Índice de documentación para IA en Português do Brasil.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice de documentación para IA en 日本語.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Índice de documentación para IA en Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "route": "/anki-forge/es/docs/python-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/030-anki-forge_es_docs_python-quickstart_index.md.body",
+        "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/030-anki-forge_es_docs_python-quickstart_index.md.body",
+        "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "route": "/anki-forge/es/docs/python-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/031-anki-forge_es_docs_python-api_index.md.body",
+        "sha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/031-anki-forge_es_docs_python-api_index.md.body",
+        "sha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "route": "/anki-forge/es/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/032-anki-forge_es_docs_compatibility_index.md.body",
+        "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/032-anki-forge_es_docs_compatibility_index.md.body",
+        "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "node-api",
+      "route": "/anki-forge/es/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/033-anki-forge_es_llms.txt.body",
+        "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/033-anki-forge_es_llms.txt.body",
+        "sha256": "409a7d4c77466e490a70aff546a0dd772e090607aea1c4f754f298238eab5194"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): Índice de documentación para IA en 简体中文.",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Índice de documentación para IA en Português do Brasil.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice de documentación para IA en 日本語.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Índice de documentación para IA en Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "es",
+      "task": "node-api",
+      "route": "/anki-forge/es/docs/node-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/034-anki-forge_es_docs_node-api_index.md.body",
+        "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/034-anki-forge_es_docs_node-api_index.md.body",
+        "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "node-api",
+      "route": "/anki-forge/es/docs/node-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/035-anki-forge_es_docs_node-quickstart_index.md.body",
+        "sha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/035-anki-forge_es_docs_node-quickstart_index.md.body",
+        "sha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "route": "/anki-forge/es/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/036-anki-forge_es_llms.txt.body",
+        "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/036-anki-forge_es_llms.txt.body",
+        "sha256": "409a7d4c77466e490a70aff546a0dd772e090607aea1c4f754f298238eab5194"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): Índice de documentación para IA en 简体中文.",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Índice de documentación para IA en Português do Brasil.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice de documentación para IA en 日本語.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Índice de documentación para IA en Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "route": "/anki-forge/es/docs/json-to-anki/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/037-anki-forge_es_docs_json-to-anki_index.md.body",
+        "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/037-anki-forge_es_docs_json-to-anki_index.md.body",
+        "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "route": "/anki-forge/es/docs/updates/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/038-anki-forge_es_docs_updates_index.md.body",
+        "sha256": "09df198c4cfd581ffd8d14cfa4a7b645a698bb553aae251234efff8b108d4bf8"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/038-anki-forge_es_docs_updates_index.md.body",
+        "sha256": "09df198c4cfd581ffd8d14cfa4a7b645a698bb553aae251234efff8b108d4bf8"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "route": "/anki-forge/es/docs/media/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/039-anki-forge_es_docs_media_index.md.body",
+        "sha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/039-anki-forge_es_docs_media_index.md.body",
+        "sha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/es/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/040-anki-forge_es_llms.txt.body",
+        "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/040-anki-forge_es_llms.txt.body",
+        "sha256": "409a7d4c77466e490a70aff546a0dd772e090607aea1c4f754f298238eab5194"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): Índice de documentación para IA en 简体中文.",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Índice de documentación para IA en Português do Brasil.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice de documentación para IA en 日本語.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Índice de documentación para IA en Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "es",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/es/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/041-anki-forge_es_docs_compatibility_index.md.body",
+        "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/041-anki-forge_es_docs_compatibility_index.md.body",
+        "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "es",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/es/docs/build-guarantees/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/042-anki-forge_es_docs_build-guarantees_index.md.body",
+        "sha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/042-anki-forge_es_docs_build-guarantees_index.md.body",
+        "sha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "route": "/anki-forge/pt-br/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/043-anki-forge_pt-br_llms.txt.body",
+        "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/043-anki-forge_pt-br_llms.txt.body",
+        "sha256": "113c2942121ca597bddfbedef5624069e87e2bc1c4d10f2c1cd06746e913a679"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): Índice da documentação para IA em 简体中文.",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Índice da documentação para IA em Español.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice da documentação para IA em 日本語.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Índice da documentação para IA em Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "route": "/anki-forge/pt-br/docs/python-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/044-anki-forge_pt-br_docs_python-quickstart_index.md.body",
+        "sha256": "75d3a00cc4fabc9a1537a65b1d692f9cd06becd28687d45ee456df9cccfba68c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/044-anki-forge_pt-br_docs_python-quickstart_index.md.body",
+        "sha256": "75d3a00cc4fabc9a1537a65b1d692f9cd06becd28687d45ee456df9cccfba68c"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "route": "/anki-forge/pt-br/docs/python-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/045-anki-forge_pt-br_docs_python-api_index.md.body",
+        "sha256": "8b828d3ea22b4521f7a319782b98e71bd245a22e9407cea0932ce8d8aaabad26"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/045-anki-forge_pt-br_docs_python-api_index.md.body",
+        "sha256": "8b828d3ea22b4521f7a319782b98e71bd245a22e9407cea0932ce8d8aaabad26"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "route": "/anki-forge/pt-br/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/046-anki-forge_pt-br_docs_compatibility_index.md.body",
+        "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/046-anki-forge_pt-br_docs_compatibility_index.md.body",
+        "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "node-api",
+      "route": "/anki-forge/pt-br/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/047-anki-forge_pt-br_llms.txt.body",
+        "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/047-anki-forge_pt-br_llms.txt.body",
+        "sha256": "113c2942121ca597bddfbedef5624069e87e2bc1c4d10f2c1cd06746e913a679"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): Índice da documentação para IA em 简体中文.",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Índice da documentação para IA em Español.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice da documentação para IA em 日本語.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Índice da documentação para IA em Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "node-api",
+      "route": "/anki-forge/pt-br/docs/node-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/048-anki-forge_pt-br_docs_node-api_index.md.body",
+        "sha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/048-anki-forge_pt-br_docs_node-api_index.md.body",
+        "sha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "node-api",
+      "route": "/anki-forge/pt-br/docs/node-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/049-anki-forge_pt-br_docs_node-quickstart_index.md.body",
+        "sha256": "8c2f21a3473fd252ae669f45fd68ef0442fafb54c0e56f51e02ac91b8e06510f"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/049-anki-forge_pt-br_docs_node-quickstart_index.md.body",
+        "sha256": "8c2f21a3473fd252ae669f45fd68ef0442fafb54c0e56f51e02ac91b8e06510f"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "route": "/anki-forge/pt-br/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/050-anki-forge_pt-br_llms.txt.body",
+        "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/050-anki-forge_pt-br_llms.txt.body",
+        "sha256": "113c2942121ca597bddfbedef5624069e87e2bc1c4d10f2c1cd06746e913a679"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): Índice da documentação para IA em 简体中文.",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Índice da documentação para IA em Español.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice da documentação para IA em 日本語.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Índice da documentação para IA em Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "route": "/anki-forge/pt-br/docs/json-to-anki/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/051-anki-forge_pt-br_docs_json-to-anki_index.md.body",
+        "sha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/051-anki-forge_pt-br_docs_json-to-anki_index.md.body",
+        "sha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "route": "/anki-forge/pt-br/docs/updates/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/052-anki-forge_pt-br_docs_updates_index.md.body",
+        "sha256": "aabb6df552b57393d144397e8fca791d7a61ca3aa1e4b9718ba2ebd443f9cac7"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/052-anki-forge_pt-br_docs_updates_index.md.body",
+        "sha256": "aabb6df552b57393d144397e8fca791d7a61ca3aa1e4b9718ba2ebd443f9cac7"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "route": "/anki-forge/pt-br/docs/media/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/053-anki-forge_pt-br_docs_media_index.md.body",
+        "sha256": "1df6e3c05e16aae47653b10aa6196fb87ff57d7d67c5f31f07558dbac2d7d3b4"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/053-anki-forge_pt-br_docs_media_index.md.body",
+        "sha256": "1df6e3c05e16aae47653b10aa6196fb87ff57d7d67c5f31f07558dbac2d7d3b4"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/pt-br/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/054-anki-forge_pt-br_llms.txt.body",
+        "sha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/054-anki-forge_pt-br_llms.txt.body",
+        "sha256": "113c2942121ca597bddfbedef5624069e87e2bc1c4d10f2c1cd06746e913a679"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): Índice da documentação para IA em 简体中文.",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Índice da documentação para IA em Español.",
+        " - [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice da documentação para IA em 日本語.",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Índice da documentação para IA em Deutsch."
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/pt-br/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/055-anki-forge_pt-br_docs_compatibility_index.md.body",
+        "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/055-anki-forge_pt-br_docs_compatibility_index.md.body",
+        "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "pt-BR",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/pt-br/docs/build-guarantees/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/056-anki-forge_pt-br_docs_build-guarantees_index.md.body",
+        "sha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/056-anki-forge_pt-br_docs_build-guarantees_index.md.body",
+        "sha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "python-install",
+      "route": "/anki-forge/ja/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/057-anki-forge_ja_llms.txt.body",
+        "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/057-anki-forge_ja_llms.txt.body",
+        "sha256": "c0e0e3cf9cda71d17753c051f9d8db6d8389e8b81c348d99f3f8be54d52f1264"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): 简体中文の AI 向けドキュメント索引。",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Españolの AI 向けドキュメント索引。",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasilの AI 向けドキュメント索引。",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutschの AI 向けドキュメント索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "ja",
+      "task": "python-install",
+      "route": "/anki-forge/ja/docs/python-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/058-anki-forge_ja_docs_python-quickstart_index.md.body",
+        "sha256": "46cf182f9dc3ece8c209bfc32bf65a46882105374b055df39b0b587711ece0c4"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/058-anki-forge_ja_docs_python-quickstart_index.md.body",
+        "sha256": "46cf182f9dc3ece8c209bfc32bf65a46882105374b055df39b0b587711ece0c4"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "python-install",
+      "route": "/anki-forge/ja/docs/python-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/059-anki-forge_ja_docs_python-api_index.md.body",
+        "sha256": "3b64c671e514a509e8c03315374b2b5b57cda7749aea81d7f19a9561aad5b0b2"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/059-anki-forge_ja_docs_python-api_index.md.body",
+        "sha256": "3b64c671e514a509e8c03315374b2b5b57cda7749aea81d7f19a9561aad5b0b2"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "python-install",
+      "route": "/anki-forge/ja/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/060-anki-forge_ja_docs_compatibility_index.md.body",
+        "sha256": "309088006af4caa693e6fb8b92eb6ccb085a6a8ede3279ddffe19e189110beee"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/060-anki-forge_ja_docs_compatibility_index.md.body",
+        "sha256": "309088006af4caa693e6fb8b92eb6ccb085a6a8ede3279ddffe19e189110beee"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "node-api",
+      "route": "/anki-forge/ja/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/061-anki-forge_ja_llms.txt.body",
+        "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/061-anki-forge_ja_llms.txt.body",
+        "sha256": "c0e0e3cf9cda71d17753c051f9d8db6d8389e8b81c348d99f3f8be54d52f1264"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): 简体中文の AI 向けドキュメント索引。",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Españolの AI 向けドキュメント索引。",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasilの AI 向けドキュメント索引。",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutschの AI 向けドキュメント索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "ja",
+      "task": "node-api",
+      "route": "/anki-forge/ja/docs/node-api/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/062-anki-forge_ja_docs_node-api_index.md.body",
+        "sha256": "f9c259ce5d0a1bf34e736d0d755d290464f2cede2fd6638946fa61d69fd6479b"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/062-anki-forge_ja_docs_node-api_index.md.body",
+        "sha256": "f9c259ce5d0a1bf34e736d0d755d290464f2cede2fd6638946fa61d69fd6479b"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "node-api",
+      "route": "/anki-forge/ja/docs/node-quickstart/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/063-anki-forge_ja_docs_node-quickstart_index.md.body",
+        "sha256": "9fdebe1ec79bd7edc441096c0792e527f16e2a6e189b4cf3fcd9ec377926205c"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/063-anki-forge_ja_docs_node-quickstart_index.md.body",
+        "sha256": "9fdebe1ec79bd7edc441096c0792e527f16e2a6e189b4cf3fcd9ec377926205c"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "json-update",
+      "route": "/anki-forge/ja/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/064-anki-forge_ja_llms.txt.body",
+        "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/064-anki-forge_ja_llms.txt.body",
+        "sha256": "c0e0e3cf9cda71d17753c051f9d8db6d8389e8b81c348d99f3f8be54d52f1264"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): 简体中文の AI 向けドキュメント索引。",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Españolの AI 向けドキュメント索引。",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasilの AI 向けドキュメント索引。",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutschの AI 向けドキュメント索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "ja",
+      "task": "json-update",
+      "route": "/anki-forge/ja/docs/json-to-anki/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/065-anki-forge_ja_docs_json-to-anki_index.md.body",
+        "sha256": "474a8dd1ed55ff3a415dff3e58950c46fa29470f7fdf48d902c935a863d97d74"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/065-anki-forge_ja_docs_json-to-anki_index.md.body",
+        "sha256": "474a8dd1ed55ff3a415dff3e58950c46fa29470f7fdf48d902c935a863d97d74"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "json-update",
+      "route": "/anki-forge/ja/docs/updates/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/066-anki-forge_ja_docs_updates_index.md.body",
+        "sha256": "0b9d3365dd9e0432c63ac6f5cc3b3153d94fabab373db0ac9963b81cb1d89eec"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/066-anki-forge_ja_docs_updates_index.md.body",
+        "sha256": "0b9d3365dd9e0432c63ac6f5cc3b3153d94fabab373db0ac9963b81cb1d89eec"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "json-update",
+      "route": "/anki-forge/ja/docs/media/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/067-anki-forge_ja_docs_media_index.md.body",
+        "sha256": "4e9ec3cd8b26c1b851c4fefe807cf68860d070c4ca847dafd7bfa5878fac1177"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/067-anki-forge_ja_docs_media_index.md.body",
+        "sha256": "4e9ec3cd8b26c1b851c4fefe807cf68860d070c4ca847dafd7bfa5878fac1177"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/ja/llms.txt",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/068-anki-forge_ja_llms.txt.body",
+        "sha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/068-anki-forge_ja_llms.txt.body",
+        "sha256": "c0e0e3cf9cda71d17753c051f9d8db6d8389e8b81c348d99f3f8be54d52f1264"
+      },
+      "diff": [
+        "--- ",
+        "+++ ",
+        "@@ -55,3 +55,4 @@",
+        " - [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): 简体中文の AI 向けドキュメント索引。",
+        " - [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Españolの AI 向けドキュメント索引。",
+        " - [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasilの AI 向けドキュメント索引。",
+        "+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutschの AI 向けドキュメント索引。"
+      ],
+      "comparison": "Only the exact added Deutsch index line changes; its text/target must be semantically read by the reviewer."
+    },
+    {
+      "locale": "ja",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/ja/docs/compatibility/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/069-anki-forge_ja_docs_compatibility_index.md.body",
+        "sha256": "309088006af4caa693e6fb8b92eb6ccb085a6a8ede3279ddffe19e189110beee"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/069-anki-forge_ja_docs_compatibility_index.md.body",
+        "sha256": "309088006af4caa693e6fb8b92eb6ccb085a6a8ede3279ddffe19e189110beee"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    },
+    {
+      "locale": "ja",
+      "task": "compatibility-constraints",
+      "route": "/anki-forge/ja/docs/build-guarantees/index.md",
+      "current": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-final-prefix/070-anki-forge_ja_docs_build-guarantees_index.md.body",
+        "sha256": "f1bffb4ba69bec9584fb4f5d57103b4105b264524752a984182668cd2045e255"
+      },
+      "prior": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/070-anki-forge_ja_docs_build-guarantees_index.md.body",
+        "sha256": "f1bffb4ba69bec9584fb4f5d57103b4105b264524752a984182668cd2045e255"
+      },
+      "diff": [],
+      "comparison": "Exact current response bytes equal the independently reviewed accepted Japanese-release response."
+    }
+  ]
+}

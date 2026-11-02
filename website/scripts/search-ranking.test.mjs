@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, mkdtemp, mkdir, writeFile, rm, readdir } from 'node:fs/promises';
 import test from 'node:test';
+import os from 'node:os';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { rankSearchDocuments, plainSearchText, documentRole } from '../src/lib/search.mjs';
+import { canonicalizePagefindEntry, generatePagefind } from './search-documents.mjs';
 
 const vocabulary = JSON.parse(await readFile(new URL('../search-concepts.json', import.meta.url), 'utf8')).locales;
 const doc = (id, title, terms = [], description = '') => ({ id, title, terms, description, type: 'docs', url: `/preview/en/docs/${id}/` });
@@ -19,6 +23,51 @@ const documents = [
   doc('image-occlusion', 'Image Occlusion', ['rectangle masks', 'hide labels on images']),
 ];
 const rank = (query, docs = documents, extra = {}) => rankSearchDocuments(query, docs, 'en', { concepts: vocabulary.en, ...extra });
+
+test('Pagefind produces the same complete index and official browser runtime from reordered files', async t => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-pagefind-portable-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const paths = ['z/index.html', 'a/index.html', 'de/z/index.html', 'de/a/index.html'];
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const snapshots = [];
+  for (const [variant, order] of [['forward', paths], ['reverse', [...paths].reverse()]]) {
+    const site = path.join(directory, variant);
+    for (const file of order) {
+      await mkdir(path.dirname(path.join(site, file)), { recursive: true });
+      await writeFile(path.join(site, file), `<html lang="${file.startsWith('de/') ? 'de' : 'en'}"><title>${file}</title><body><main data-pagefind-body>Search ${file}: reusable packages.</main></body></html>`);
+    }
+    await mkdir(path.join(site, 'pagefind'));
+    await writeFile(path.join(site, 'pagefind', 'stale.pf_index'), 'old shard');
+    await generatePagefind(site);
+    const files = (await readdir(path.join(site, 'pagefind'), { recursive: true, withFileTypes: true })).filter(entry => entry.isFile());
+    const snapshot = {};
+    for (const file of files) {
+      const filename = path.join(file.parentPath, file.name);
+      snapshot[path.relative(path.join(site, 'pagefind'), filename)] = hash(await readFile(filename));
+    }
+    assert.equal(snapshot['stale.pf_index'], undefined, 'Never retain unreferenced previous shards');
+    for (const language of ['en', 'de']) assert.equal(snapshot[`wasm.${language}.pagefind`], hash(await readFile(new URL(`../vendor/pagefind/1.5.2/wasm.${language}.pagefind`, import.meta.url))), 'Use identical official runtime bytes on every host');
+    snapshots.push(snapshot);
+  }
+  assert.deepEqual(snapshots[0], snapshots[1], 'All shards, fragments, metadata, JS and WASM must match');
+});
+
+test('Pagefind language-map order cannot change reviewed artifact bytes', async t => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-pagefind-order-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(path.join(directory, 'pagefind'));
+  const filename = path.join(directory, 'pagefind/pagefind-entry.json');
+  const entry = { version: '1.5.2', languages: { 'zh-cn': { hash: 'zh-cn_123', wasm: null, page_count: 34 }, en: { hash: 'en_456', wasm: 'en', page_count: 34 }, es: { hash: 'es_789', wasm: 'es', page_count: 34 } }, include_characters: ['_', '‿'], extension: { keep: true } };
+  await writeFile(filename, JSON.stringify(entry));
+  await canonicalizePagefindEntry(directory);
+  const first = await readFile(filename, 'utf8');
+  await writeFile(filename, JSON.stringify({ ...entry, languages: Object.fromEntries(Object.entries(entry.languages).reverse()) }));
+  await canonicalizePagefindEntry(directory);
+  assert.equal(await readFile(filename, 'utf8'), first);
+  assert.deepEqual(JSON.parse(first), entry, 'Preserve every language hash, count, WASM selection and other field');
+  await canonicalizePagefindEntry(directory);
+  assert.equal(await readFile(filename, 'utf8'), first, 'Canonicalization must be idempotent');
+});
 
 test('SDK task roles distinguish a first project, reference and diagnosis', () => {
   assert.equal(rank('Python beginner tutorial')[0].id, 'python-quickstart');
@@ -56,6 +105,41 @@ test('Pagefind supplies exact body matches and plain snippets only for catalog U
   assert.equal(plainSearchText('<mark>safe</mark> &#x4e2d;'), 'safe 中');
 });
 
+test('Pagefind word-form matches survive when local tokens cannot recognize their inflection', () => {
+  for (const [locale, query, word] of [['es', 'reutilización', 'Reutiliza'], ['de', 'Nebenläufig', 'Nebenläufigkeit']]) {
+    const docs = [doc('a', 'Reference'), doc('b', 'Guide')];
+    const pagefindResults = [
+      { url: docs[1].url, raw_content: `${word} examples`, locations: [0], excerpt: `<mark>${word}</mark> examples` },
+      { url: docs[0].url, raw_content: `${word} details`, locations: [0], excerpt: `<mark>${word}</mark> details` },
+      { url: '/other-language/foreign/', raw_content: word, locations: [0] },
+    ];
+    const results = rankSearchDocuments(query, docs, locale, { pagefindResults });
+    assert.deepEqual(results.map(result => result.id), ['b', 'a'], 'native matches keep their order and stay within the locale catalog');
+    assert.equal(results[0].excerpt, `${word} examples`);
+  }
+});
+
+test('native word-form matches supplement exact matches without admitting numeric-only hits', () => {
+  const docs = [doc('exact', 'Zeichenfolge'), doc('inflected', 'Python API'), doc('numeric', 'Other')];
+  const pagefindResults = [
+    { url: docs[1].url, raw_content: 'Zeichenfolgen stehen für Text', locations: [0], excerpt: '<mark>Zeichenfolgen</mark> stehen für Text' },
+    { url: docs[0].url, raw_content: 'Zeichenfolge', locations: [0] },
+    { url: docs[2].url, raw_content: 'API 18492', locations: [1], excerpt: 'API <mark>18492</mark>' },
+  ];
+  assert.deepEqual(rankSearchDocuments('Zeichenfolge', docs, 'de', { pagefindResults }).map(result => result.id), ['exact', 'inflected']);
+  for (const query of ['18492', 'qzxqv 18492']) {
+    assert.deepEqual(rankSearchDocuments(query, docs, 'de', { pagefindResults: [pagefindResults[2]] }), []);
+  }
+});
+
+test('native fuzzy matches on stopwords cannot turn unrelated queries into results', () => {
+  const docs = [doc('node-api', 'API de Node')];
+  assert.deepEqual(rankSearchDocuments('desfragmentar fotones cuánticos', docs, 'es', {
+    concepts: vocabulary.es,
+    pagefindResults: [{ url: docs[0].url, raw_content: 'API de Node', locations: [1], excerpt: 'API <mark>de</mark> Node' }],
+  }), []);
+});
+
 test('Chinese compounds and semantic aliases work without whitespace', () => {
   const zh = [
     doc('cards', 'Basic 与 Cloze 卡片', ['填空提示语法', '挖空卡片']),
@@ -78,6 +162,26 @@ test('a new locale supplies vocabulary as data without changing the engine', () 
   const concepts = { __language: { stopWords: ['comment'] }, audio: { terms: ['audio', 'son', 'prononciation'] } };
   const docs = [doc('media', 'Fichiers audio'), doc('cards', 'Cartes de texte')];
   assert.equal(rankSearchDocuments('comment ajouter la prononciation', docs, 'fr', { concepts })[0].id, 'media');
+});
+
+test('Japanese voiced kana stay distinct across equivalent width and Unicode spellings', () => {
+  const docs = [doc('quickstart', 'Rust で Anki カードを生成する'), doc('media', 'メディアのパス')];
+  const search = query => rankSearchDocuments(query, docs, 'ja').map(result => result.id);
+  for (const query of ['カード', 'カード', 'ｶｰﾄﾞ']) assert.deepEqual(search(query), ['quickstart']);
+  assert.deepEqual(search('カート'), [], 'a shopping cart must not match a card');
+  assert.deepEqual(search('パス'), ['media']);
+  for (const query of ['バス', 'ハス']) assert.deepEqual(search(query), [], 'voicing changes the word, not its spelling');
+  for (const [locale, title, query] of [['es', 'Creación rápida', 'creacion rapida'], ['pt-BR', 'Áudio e mídia', 'audio midia'], ['de', 'Größe ändern', 'große andern']]) {
+    assert.deepEqual(rankSearchDocuments(query, [doc('guide', title)], locale).map(result => result.id), ['guide'], 'Latin accent variants remain searchable');
+  }
+});
+
+test('Japanese concept aliases do not match inside a longer Katakana word', () => {
+  const docs = [doc('concepts', 'ノート')];
+  const concepts = { note: { terms: ['ノート'] } };
+  const search = query => rankSearchDocuments(query, docs, 'ja', { concepts }).map(result => result.id);
+  assert.deepEqual(search('ノートのフィールド'), ['concepts']);
+  assert.deepEqual(search('ノートルダム'), [], 'Notre-Dame is not a note authoring task');
 });
 
 test('English plural forms share lexical evidence without fuzzy substring matches', () => {

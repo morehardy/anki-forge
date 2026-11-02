@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/ja_de_infra_audit/ja-technical-source-final-2026-11-01",
+  "previousReview": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/technical-source-review.json",
+    "sha256": "2d0aef003450c125041215dd0239200dd8287a91d92a55bb27e6ce143d678cca"
+  },
+  "sourceCandidate": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/source-candidates-final-v2.json",
+    "sha256": "5b65ccf7f4e45506e3076612e2106accf09707439dc6f9464c0f9f6729388af9"
+  },
+  "previousInputs": 226,
+  "exactFileChanges": [
+    {
+      "path": "docs/ja/media.md",
+      "previousSha256": "cb39e417b12a86e2ad04fda72669ec86212c1ff611a3361389c8742a34caae0f",
+      "currentSha256": "e1e9452b4e70c6537516ffba7312bd68140091817ef22160688fef12f13b9c70"
+    }
+  ],
+  "exactContractChanges": [
+    {
+      "topic": "media",
+      "locale": "ja",
+      "field": "targetHash",
+      "previous": "4b6e48eb66a81e6c646027109923553e099d742a8946e661c1409c3cbdaee5e4",
+      "current": "d6e6bd351bcace519a0c9822d1b964376b3007bba1b11944c40b3af6b87fcd20"
+    }
+  ],
+  "verifiedCurrentEntries": 170,
+  "semanticFinding": "Read the added tools::load_project boundary sentence against the local crate feature gate and public API documentation. It accurately distinguishes internal-tools repository tooling from supported consumer APIs, while NoteType::from_bundle remains a public alternative.",
+  "supportingSource": {
+    "path": "anki_forge/src/lib.rs",
+    "sha256": "46b719c1d75dea7c5c792a4fa4bd607a1ed1339940345207f944a36dea1cdc5f",
+    "lines": "36–40"
+  },
+  "openIssues": []
+}

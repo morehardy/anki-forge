@@ -1,0 +1,680 @@
+
+FILE docs/de/anki-forge-vs-genanki.md
+1: # Anki Forge im Vergleich zu genanki
+2:
+3: Ziehe Anki Forge in Betracht, wenn du einen wiederholbaren Veröffentlichungsablauf entwickelst und Medien mit eigenem Datenbesitz, strukturierte Diagnosen, Vergleiche sowie eine Richtlinienprüfung vor der Veröffentlichung von Aktualisierungen benötigst. Behalte einen bewährten genanki-Ablauf bei, wenn dessen Python-Skripte, Vorlagen und Medien deine Anforderungen bereits erfüllen und die Migration mehr Aufwand als Nutzen bringt.
+4:
+5: | Entscheidung | Anki Forge | genanki |
+6: | --- | --- | --- |
+7: | Programmiersprache | Rust-Kern; Schnittstellen für Rust, Python und Node / TypeScript | Python |
+8: | Gemeinsame Grundlagen | Basic, Cloze, eigene Vorlagen, Medien und Offline-Erzeugung von APKGs | Basic, Cloze, eigene Vorlagen, Medien und Offline-Erzeugung von APKGs |
+9: | Identität | Ausdrücklicher Namensraum und Notizschlüssel; ursprüngliches APKG für Aktualisierungen aufbewahren | Konfigurierbare GUIDs und numerische Modell-/Stapel-IDs; Aktualisierungen beim erneuten Import |
+10: | Vor der Veröffentlichung | Vergleichsbefunde, Risikorichtlinie und geprüfter vorbereiteter Kandidat | Dein Skript und deine Tests legen die Veröffentlichungsprüfung fest |
+11: | Besitz von Mediendaten | Typisierte Bild- und Audioobjekte verwalten unveränderliche Snapshots der Mediendaten | Das Skript liefert Mediendateien und Referenzen für das Paket |
+12: | Bildverdeckung per Code | Rechteckmasken mit Schlüsseln über die öffentliche API | Prüfe ein für deinen Ablauf geeignetes Modell oder eine Erweiterung |
+13: | Laufzeitaufwand | Native Abhängigkeiten; unterstützte Plattform und Interpreter verwenden | Eine bestehende Python-Bereitstellung beizubehalten kann günstiger sein |
+14: | Migrationsaufwand | Alte Identitätszuordnung, Vorlagen und Importe ausdrücklich validieren | Kein Migrationsaufwand bei einer bereits funktionierenden genanki-Pipeline |
+15:
+16: <!-- section: the-same-small-task -->
+17: ## Dieselbe kleine Aufgabe
+18:
+19: Um aus drei JSON-Fragen einen Stapel mit einem Bild und einem Ton zu erstellen, lässt du bei beiden Bibliotheken Python das JSON einlesen und Notizen erzeugen. Mit genanki wählst du Modell- und Stapel-IDs, weist Feldwerte und GUID-Regeln zu, fügst dem Paket Mediendateien hinzu und schreibst das APKG. Mit Anki Forge wählst du einen Namensraum und dauerhafte fachliche Schlüssel, kombinierst Medien mit eigenem Datenbesitz zu Notizen, erzeugst v1, vergleichst v2 mit dem ursprünglichen v1-APKG und bereitest v2 auf dieser Grundlage für die Veröffentlichung vor. Erst danach veröffentlichst du v2. Die [vollständige JSON-Anleitung](/docs/json-to-anki/) enthält Implementierungen für Rust, Python und TypeScript samt Ausführungsbefehlen.
+20:
+21: <!-- section: existing-genanki-decks -->
+22: ## Vorhandene genanki-Stapel
+23:
+24: [genanki unterstützt eigene GUIDs](https://github.com/kerrickstaley/genanki#note-guids), Medien und Aktualisierungen beim erneuten Import. Stabile Identität ist keine exklusive Fähigkeit von Anki Forge. Die Standard-GUID-Regel kann von Feldern abhängen; wähle eine bewusste GUID-Regel, wenn sich Felder ändern werden.
+25:
+26: Anki Forge stellt beliebige numerische genanki-IDs oder GUIDs nicht automatisch wieder her. Behandle deine erste Anki-Forge-Verteilung ohne separat validierte Zuordnung als Identitätswechsel. Weder dieser Vergleich noch ein erfolgreicher APKG-Build verspricht eine verlustfreie Migration oder den Erhalt des gesamten Wiederholungsverlaufs. Lies die [Migrationsanleitung](/docs/genanki-migration/), bevor du einen bestehenden Stapel umstellst.
+27:
+28: <!-- section: historical-performance-evidence -->
+29: ## Historische Leistungsmessung
+30:
+31: Der Vergleich vom 2026-10-08 maß die Rust-Project-API gegen genanki 0.13.1 auf einem Apple M1 Pro. Bei 1.000 Basic-Notizen benötigten die fünf gemessenen Rust-Lastfälle 45,7–53,9 % weniger Exportzeit; einige Medienlastfälle benötigten mehr Spitzenspeicher. Siehe [Methode, Rohdaten und Einschränkungen](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md). Die Messung erfasste nicht die aktuelle Leistung der Python- oder Node-Hosts und garantiert diesen SDKs oder anderen Lastfällen keine entsprechende Geschwindigkeit.
+32:
+33: Anki-Forge-Maintainer · am 2026-10-25 anhand der öffentlichen APIs von Anki Forge 0.3.1, der [genanki-Dokumentation](https://github.com/kerrickstaley/genanki) und der archivierten Messung geprüft. Prüfe die [Laufzeitkompatibilität](/docs/compatibility/) und [wähle eine Programmiersprache](/docs/languages/), um eine neue Aufgabe zu beginnen.
+
+FILE docs/de/build-guarantees.md
+1: # Build- und Ausgabegarantien
+2:
+3: `Project::build` liefert `BuildOutput` nur nach einem erfolgreichen Vorgang mit einem garantierten APKG-Artefakt. Ein fehlgeschlagener Vorgang liefert `BuildError` mit strukturierten Angaben zu Fehlerart und Fehlercode, Beobachtungen, zugrunde liegenden Ursachen und tatsächlichen Veröffentlichungsfakten.
+4:
+5: <!-- section: temporary-and-persistent-artifacts -->
+6: ## Temporäre und persistente Artefakte
+7:
+8: Wähle das Besitzmodell ausdrücklich:
+9:
+10: | Anfrage | Besitz und Lebensdauer |
+11: | --- | --- |
+12: | `BuildOptions::to(path)` | Persistentes Ziel; bleibt nach Freigabe der Handles erhalten |
+13: | `BuildOptions::temporary()` | Temporäre Datei; wird mit ihrem letzten Artefaktbesitzer gelöscht |
+14: | `artifact.persist_to(path)` | Neuer persistenter Besitzer; ursprünglicher Besitzer bleibt nutzbar |
+15:
+16: Halte `BuildOutput` oder ein geklontes Artefakt, solange du einen temporären Pfad liest. Ein Bericht oder JSON-Snapshot verlängert die Dateilebensdauer nicht. Rust gibt Besitzer wie gewöhnlich frei; Node bietet `artifact.close()` für eine deterministische Freigabe. Das Kopieren des Pfades in den Anwendungszustand erzeugt keinen Besitzer.
+17:
+18: Rust-Artefakthandles behalten absolute Pfade, auch wenn der Build oder `persist_to` ein relatives Ziel verwendet. Spätere Änderungen des Arbeitsverzeichnisses leiten Lese- oder Kopiervorgänge eines bestehenden Handles nicht um. Jedes neue Ziel von `persist_to` wird relativ zum Verzeichnis zum Zeitpunkt dieses Aufrufs aufgelöst.
+19:
+20: `BuildReport::snapshot()` enthält nur Beobachtungen. `BuildOutput::snapshot()` und `BuildError::snapshot()` geben zusätzlich das tatsächliche Ergebnis an. Eine Warnung kann in einem erfolgreichen Snapshot vorkommen. Leite das Ergebnis nicht aus dem Schweregrad einer Diagnose, der Existenz eines Pfades oder Vergleichsbefunden in einem Bericht ab.
+21:
+22: <!-- section: baselines-and-publication -->
+23: ## Basisversionen und Veröffentlichung
+24:
+25: Bewahre für Aktualisierungen das ursprünglich verteilte APKG der Vorgängerversion als unveränderliche Basis auf und wähle ein separates Ausgabeziel. Nachweise der Basisversion und Inhalte des Kandidaten werden vor der Veröffentlichung geprüft. Eine Ablehnung durch die Richtlinie ersetzt die Ausgabe nicht. Fehlende oder beschädigte Nachweise und ausgeschöpfte Inspektionsbudgets sind harte Fehler.
+26:
+27: Die Veröffentlichung ersetzt das APKG atomar. Das ist eine Garantie pro Datei; das Schreiben eines separaten JSON-Berichts deiner Anwendung ist ein eigener Vorgang. Der gewöhnliche Build schreibt keine zusätzliche Identitätsdatei: Vollständige versionierte Nachweise sind im verteilten Paket eingebettet.
+28:
+29: Ein später Fehler kann nach der Veröffentlichung auftreten, etwa beim Bestätigen der dauerhaften Speicherung. Fehler-Snapshots zeichnen deshalb `PublicationSnapshot`-Fakten auf: `path`, `stage` (`not_published` oder `published`), `temporary` und Dauerhaftigkeit (`confirmed` oder `unconfirmed`). Prüfe diese Angaben, bevor du den Vorgang wiederholst oder meldest, dass keine Datei geschrieben wurde. `PersistError` erhält ebenfalls die Veröffentlichungsfakten und die tatsächliche E/A-Ursache. Ein atomarer Austausch allein garantiert keine Dauerhaftigkeit nach einem Absturz.
+30:
+31: Die Snapshot-Serialisierung erhält native Pfade, ohne auf das Dateisystem zuzugreifen. Unicode-Pfade bleiben JSON-Zeichenfolgen. Unix-Pfade ohne gültiges UTF-8 verwenden `{"encoding":"unix_bytes","bytes":[...]}`; Windows-Pfade mit ungepaarten UTF-16-Surrogaten verwenden `{"encoding":"windows_wide","units":[...]}`. Die Arrays enthalten exakt die nativen Bytes bzw. Codeeinheiten. Artefaktpfade bei Erfolg, Veröffentlichungspfade bei Fehlern und Pfaddetails in Binding-Fehlern verwenden diese Darstellung. Diese Werte beschreiben Pfade und behalten keinen Artefaktbesitz. Ein Dateisystem kann einen bestimmten nativen Pfad zurückweisen; die Fakten zum Veröffentlichungsfehler bleiben dennoch serialisierbar.
+32:
+33: <!-- section: inspection-limits -->
+34: ## Inspektionslimits
+35:
+36: Endliche Budgets für Archive, Eintragsanzahl, Entpackung, dekodierte Sammlung und Medien sowie zstd-Fenster gelten unabhängig für Basisversion und Kandidat. Beginne mit `InspectLimits::default()` und erhöhe bei Bedarf gezielt das passende Limit. Null bedeutet nicht unbegrenzt. Diese Zähler sind keine prozessweite Speicher- oder CPU-Sandbox; Medienimporte haben ein separates, vorgelagertes Budget pro Datei.
+37:
+38: <!-- section: concurrent-work -->
+39: ## Nebenläufige Vorgänge
+40:
+41: Rust-Builds leihen unveränderlichen Projektzustand aus. Modelle und Medien mit eigenem Datenbesitz können zwischen Projekten geteilt werden. Das Node-Binding erfasst beim Aufruf von Build oder Vergleich einen Projektsnapshot, sodass später hinzugefügte Inhalte die Anfrage nicht verändern. Halte den Artefaktbesitzer, bis alle Leser fertig sind. Den letzten temporären Besitzer zu schließen, während ein separater Nutzer noch dessen Pfad benötigt, ist ein Fehler der Lebensdauerverwaltung in der Anwendung.
+42:
+43: Eine Paketinspektion kann nicht jedes Verhalten im Client bestätigen. Teste Darstellung, Wiedergabe und Aktualisierungsimporte mit den vorgesehenen Anki-Versionen und Einstellungen. Unter [Aktualisierungen](/docs/updates/) findest du die Grenzen bei Lernplanung und Schemaänderungen.
+44:
+45: <!-- section: prepared-publication-from-source -->
+46: ## Vorbereitete Veröffentlichung
+47:
+48: Die vorbereitete Veröffentlichung ist in den veröffentlichten Paketen `0.3.1` enthalten.
+49:
+50: `prepare_publication` erstellt, inspiziert und vergleicht einen privaten Kandidaten; `publish` verwendet dieselbe Datei. Optionen und relative Ziele werden bei der Vorbereitung gebunden. Projektänderungen können den Kandidaten nicht verändern. Die Vorbereitung allein ersetzt das Ziel nicht; das Freigeben oder Schließen eines unveröffentlichten Besitzers entfernt den Kandidaten.
+51:
+52: Jeder Veröffentlichungsversuch verbraucht den Besitzer, auch bei Richtlinien- oder E/A-Fehlern. Bereite ihn erneut vor, um den Vorgang zu wiederholen oder Richtlinie bzw. Ziel zu ändern. Berichte bleiben lesbar und besitzen keine Dateien. Node und Python bieten idempotentes `close()` und einen Nichtverfügbarkeitsfehler mit dem Grund `closed` oder `consumed`. Ein Schließen nach Beginn der Veröffentlichung bricht diese nicht ab. Die Dauer schließt Wartezeit für die Prüfung aus. Ein später Fehler bei der dauerhaften Speicherung kann auf einen erfolgreichen Austausch folgen; prüfe deshalb die tatsächlichen Veröffentlichungsfakten.
+53:
+54: Folge dem [vollständigen Beispiel](/docs/updates/#build-once-review-then-publish) und den API-Referenzen der Sprachen für typisierte Fehler und das Verhalten der Hintergrundarbeit.
+
+FILE docs/de/concepts.md
+1: # Grundbegriffe
+2:
+3: <!-- section: project-and-note -->
+4: ## Project und Notiz
+5:
+6: Ein `Project` steht für eine Veröffentlichung mit einem stabilen Namensraum. Es kann Notizen mehreren Anki-Stapeln zuordnen: `default_deck` legt den Standard fest, `Note::deck` überschreibt ihn. Ein Stapel ist ein Ziel für Karten und kein zusätzlicher Container für das Erstellen von Inhalten, Medien oder Builds.
+7:
+8: Eine `Note` enthält ihr Modell und ihre Inhalte. `project.add(key, note)` weist ihr einen erforderlichen stabilen Quellschlüssel zu und sammelt Abhängigkeiten atomar. Doppelte Schlüssel, unbekannte Felder sowie widersprüchliche Modelle oder Medien führen zu einem Fehler, ohne den Zustand teilweise zu verändern. Behalte den Projektnamensraum und die Datensatzschlüssel bei, wenn du Quelldaten bearbeitest oder neu sortierst. Anzeigenamen und Texte sind keine Identitätsschlüssel.
+9:
+10: <!-- section: models-fields-and-templates -->
+11: ## Modelle, Felder und Vorlagen
+12:
+13: `NoteType::builder(key)` sammelt Deklarationen; `.build()` validiert sie und liefert ein gemeinsam nutzbares, unveränderliches Modell. `model.note()` erzeugt eine Notiz, die das Modell hält. Die eingebauten Notizen für Basic, Cloze und Bildverdeckung bringen ihre eigenen Modelle mit.
+14:
+15: Felder und Vorlagen haben stabile Schlüssel und optionale Anzeigenamen. Verwende in Vorlagen Feldschlüssel, zum Beispiel `{{front}}`, auch wenn der Anzeigename in Anki `正面` lautet. Der Abschluss validiert und kompiliert die Referenzen, einschließlich Abschnitten, Filtern, Cloze und Vorlagen für den Kartenbrowser. Auch Zuweisungen verwenden Schlüssel; es gibt weder erratene Schlüssel noch einen Rückgriff auf Anzeigenamen.
+16:
+17: <!-- section: text-and-html -->
+18: ## Text und HTML
+19:
+20: Gewöhnliche Zeichenfolgen bedeuten immer Text – bei Basic, Cloze und eigenen Notizen. Text maskiert HTML; `Content::html` bindet Markup ausdrücklich ein. Cloze-Syntax wie `{{c1::answer}}` bleibt in Text erhalten, ohne eingebettetes HTML als vertrauenswürdig einzustufen. `Content::sequence` kombiniert Text, HTML, Bilder und Audio in einem Feld.
+21:
+22: Typisierte Bild- und Audioinhalte behalten ihre Medienabhängigkeiten bis zum Export. Wandle Medien vor dem Hinzufügen nicht in Zeichenfolgen um, es sei denn, du deklarierst die Datei zusätzlich ausdrücklich für dein selbst geschriebenes HTML, CSS oder Skript.
+23:
+24: <!-- section: media-ownership -->
+25: ## Besitz von Mediendaten
+26:
+27: `Media` ist ein Snapshot mit eigenem Datenbesitz und einem deterministisch aus dem Inhalt abgeleiteten Dateinamen. Ein Import ist erst erfolgreich, wenn die Eingabe innerhalb ihres Budgets gelesen und validiert wurde. Anschließend darf sich die Quelldatei ändern oder verschwinden. Klone teilen sich den Speicher und können in mehreren Projekten verwendet werden. `with_export_name` wählt einen festen, portablen Dateinamen, ohne bestehende Klone oder Inhaltsknoten zu verändern.
+28:
+29: Typisierte Referenzen sammeln Medien automatisch. Ausdrücklich einem Modell oder Projekt zugewiesene Mediendateien werden auch dann aufgenommen, wenn die statische Analyse ihre Verwendung nicht erkennen kann. Die Bibliothek ermittelt keine Dateiinhalte aus beliebigem HTML oder Skripten.
+30:
+31: <!-- section: build-and-update -->
+32: ## Erzeugen und aktualisieren
+33:
+34: Ein erfolgreicher Build liefert eine Ausgabe, die garantiert ein APKG enthält. Ein Bericht enthält Beobachtungen; ein Snapshot besteht aus JSON-Daten und besitzt keine Dateien. Temporäre Artefakte bleiben nur bestehen, solange mindestens ein Artefaktbesitzer vorhanden ist.
+35:
+36: Eine Aktualisierung verwendet die vollständigen Nachweise, die im ursprünglich verteilten APKG der Vorgängerversion eingebettet sind. Der unabhängige Vergleich trennt Befunde von der Veröffentlichungsrichtlinie. Befunde mit hohem Risiko blockieren Aktualisierungen standardmäßig; harte Fehler lassen sich nicht freigeben. Anki-Importeinstellungen, lokale Änderungen und die Lernplanung der Karten müssen weiterhin im Client geprüft werden. Siehe [Aktualisierungen](/docs/updates/) und [Build-Garantien](/docs/build-guarantees/).
+
+FILE docs/de/csv-to-anki.md
+1: # CSV mit Python in Anki-Karten umwandeln
+2:
+3: Wandle mit Python und Anki Forge eine Vokabeltabelle in eine Anki-Datei im Format `.apkg` um. Dieses Beispiel liest eine UTF-8-CSV-Datei mit den Spalten `id`, `front` und `back`, erstellt Basic-Karten mit Frage und Antwort und exportiert einen Stapel, den du weitergeben kannst. Der CSV-Parser aus Pythons Standardbibliothek liest die Tabelle; Anki Forge erstellt das Paket. Für den Export muss Anki nicht installiert sein.
+4:
+5: Für den einmaligen Import einer Tabelle unterstützt Anki bereits [Textdateien mit Trennzeichen](https://docs.ankiweb.net/manual/importing/text-files). Verwende diese Anleitung, wenn du ein wiederholbar ausführbares Skript, eigene Notiz-IDs und ein verteilbares APKG benötigst. Eine Excel-Datei im Format `.xlsx` musst du zunächst als UTF-8-CSV speichern.
+6:
+7: <!-- section: prepare-csv -->
+8: ## Die CSV-Datei vorbereiten
+9:
+10: Speichere Folgendes als `cards.csv` oder [lade das Beispiel herunter](/generated/recipes/csv-to-anki/cards.csv):
+11:
+12: <!-- source: docs/recipes/csv-to-anki/cards.csv -->
+19: <!-- /source -->
+20:
+21: Übernimm die Kopfzeile unverändert und verwende Kommas als Trennzeichen. Setze Felder mit Kommas, doppelten Anführungszeichen oder Zeilenumbrüchen gemäß den [CSV-Regeln](https://docs.python.org/3/library/csv.html) in Anführungszeichen. Das Skript akzeptiert eine UTF-8-Byte-Order-Mark, wie sie manche Tabellenexporte hinzufügen. Es weist doppelte IDs, fehlende Werte, zusätzliche Spalten und leere Eingaben zurück.
+22:
+23: Vergib eine ID einmal und behalte sie bei, wenn sich die Frage oder Antwort ändert. Leite IDs nicht aus der Zeilenposition oder dem veränderlichen Kartentext ab. Verwende für unabhängige Datensätze unterschiedliche Namensräume; behalte den Namensraum für aufeinanderfolgende Versionen dieses Stapels bei.
+24:
+25: <!-- section: install -->
+26: ## Anki Forge installieren
+27:
+28: Verwende gewöhnliches CPython ab Version 3.11 auf einer [unterstützten Plattform](/docs/compatibility/). Erstelle und aktiviere eine virtuelle Umgebung:
+29:
+35:
+36: Unter Windows aktivierst du sie mit `.venv\Scripts\Activate.ps1`. Für diese Umwandlung benötigst du weder eine Tabellenbibliothek noch einen KI-Dienst.
+37:
+38: <!-- section: convert -->
+39: ## Das APKG erzeugen
+40:
+41: Speichere Folgendes als `csv_to_anki.py` neben `cards.csv` oder [lade das Skript herunter](/generated/recipes/csv-to-anki/csv_to_anki.py):
+42:
+43: <!-- source: bindings/python/examples/csv_to_anki.py -->
+86: <!-- /source -->
+87:
+88: Führe es in diesem Verzeichnis aus:
+89:
+93:
+94: Das Beispiel erzeugt `vocabulary-v1.apkg` mit **drei Notizen und drei Basic-Karten** im Stapel **Spanish**, ohne Medien. Es gibt Folgendes aus:
+95:
+99:
+100: Wähle einen Ausgabepfad, der noch nicht existiert. Das Skript ersetzt keine vorhandene Datei, damit du das ursprünglich verteilte Paket aufbewahren kannst.
+101:
+102: <!-- section: verify-and-extend -->
+103: ## Importieren, prüfen und erweitern
+104:
+105: Öffne `vocabulary-v1.apkg` in Anki. Prüfe, ob der Stapel `hola → hello`, `gracias → thank you` und `adiós → goodbye` enthält. Sieh dir die Kartenvorschau an und prüfe die Akzente. Prüfe den Inhalt vor der Verteilung, besonders wenn eine KI die CSV-Daten entworfen hat.
+106:
+107: Diese Anleitung erstellt Basic-Karten mit reinem Text. Für andere Abläufe:
+108:
+109: - [Anki-Karten mit KI-Unterstützung erstellen](/docs/ai-anki-cards/): Entwirf und prüfe CSV-Zeilen aus Aufzeichnungen.
+110: - [JSON zu Anki](/docs/json-to-anki/): Verwende Python, Node / TypeScript oder Rust, bündle Bilder und Audio und prüfe eine zweite Veröffentlichung.
+111: - [Basic- und Cloze-Karten](/docs/cards/): Wähle zwischen Frage-Antwort- und Lückentextkarten.
+112: - [Erzeugte Anki-Stapel aktualisieren](/docs/updates/): Verwende das ursprüngliche APKG der Vorgängerversion als Aktualisierungsbasis und prüfe den Vergleich.
+113:
+114: Behalte für spätere Veröffentlichungen den Namensraum und die Notiz-IDs bei und durchlaufe vor der Veröffentlichung den Aktualisierungsablauf. Stabile IDs helfen bei der Zuordnung von Notizen; Ankis Importeinstellungen und neuere lokale Änderungen beeinflussen Aktualisierungen weiterhin.
+
+FILE docs/de/media.md
+1: # Bilder und Audio
+2:
+3: Bündle Bilder und Audio in erzeugten Anki-Karten, etwa Vokabelkarten mit Aussprache oder Diagrammfragen. Anki Forge kopiert die bereitgestellten Dateien in das APKG. Zum Erzeugen von Audio oder Bildern, etwa durch Sprachsynthese, benötigst du ein separates Werkzeug. Die Beispiele verwenden Rust; der unten beschriebene Import mehrerer Mediendateien zeigt auch die Python- und Node.js-Aufrufe.
+4:
+5: Ein `Media`-Wert besitzt einen unveränderlichen Snapshot. Importiere Dateien mit `Media::file` oder native Bytes mit einem ausdrücklichen MIME-Typ über `Media::bytes`. Nach erfolgreichem Import können Änderungen oder das Löschen der Quelldatei die Mediendatei nicht mehr verändern. Klone teilen sich den Speicher und können in mehreren Projekten verwendet werden.
+6:
+7: <!-- section: execute-the-media-workflow -->
+8: ## Den Medienablauf ausführen
+9:
+10: Führe im Stammverzeichnis des Repositorys Folgendes aus:
+11:
+16:
+17: Der Ablauf verwendet PNG-/WAV-Testdateien des Repositorys und schreibt `media.apkg` mit einer Notiz, einer Karte und drei Mediendateien. Das zweite Beispiel erzeugt selbst ein kleines Bild und Audio, bindet über CSS referenzierte sowie ausdrücklich deklarierte Medien ein und schreibt `spanish-media.apkg`.
+18:
+19: <!-- source: anki_forge/examples/docs_workflow.rs#media -->
+34: <!-- /source -->
+35:
+36: <!-- section: compose-content-and-explicit-assets -->
+37: ## Inhalte kombinieren und Medien ausdrücklich einbinden
+38:
+39: Dieses vollständige Programm verwendet `fixtures/pixel.png`, `fixtures/silence.wav` und `fixtures/labels.woff`. Übergib in deiner Anwendung deine eigenen Quellpfade. Die Beispielschrift ist die weiterverteilbare Testschrift des Repositorys.
+40:
+67:
+68: Typisierte `image()`- und `sound()`-Werte behalten Abhängigkeiten bis zum Export. Von Hand erstellte HTML-/CSS-/Skriptreferenzen benötigen `builder.asset(media)` oder `project.add_asset(media)`; die Bibliothek leitet keine Dateiinhalte aus beliebigen Zeichenfolgen ab. Eine ausdrücklich deklarierte Mediendatei wird auch ohne statisch erkennbare Referenz aufgenommen.
+69:
+70: Übergib `with_export_name` den wörtlichen Dateinamen. Typisierte Audioreferenzen maskieren HTML-Entitäten bei der Darstellung, sodass ein Name wie `tone&copy;.mp3` weiterhin genau diese Datei bezeichnet. Maskiere den Dateinamen nicht vorab. Prozentzeichen und Fragmentzeichen in Audiodateinamen bleiben wörtlich erhalten; die Namen sind keine URL-Pfade.
+71:
+72: <!-- section: names-mime-and-budgets -->
+73: ## Namen, MIME-Typen und Budgets
+74:
+75: Standardmäßige Exportnamen werden aus dem Inhalt abgeleitet und sind vom Quellpfad unabhängig. Verwende `with_export_name` vor dem Erzeugen von Referenzen, wenn du einen festen Dateinamen benötigst. Das Umbenennen eines Klons benennt frühere Klone oder Inhaltsknoten nicht um.
+76:
+77: Namen dürfen keine Pfade, Steuerzeichen oder nicht portablen reservierten Namen enthalten. Konfliktprüfungen verwenden Unicode NFC und eine Vereinheitlichung der Groß-/Kleinschreibung: Auch Varianten, die sich nur in Schreibweise oder Normalisierung unterscheiden, verursachen Konflikte. Exakt identische Name-Inhalt-Paare sind idempotent; unterschiedliche Inhalte unter demselben Namen führen zu einem Fehler ohne teilweise Registrierung.
+78:
+79: Der vollständige Exportdateiname ist einschließlich Endung auf 255 UTF-8-Bytes begrenzt. Die JSON-Schemas für Projekte und Vorlagenpakete prüfen Dateinamensyntax und Zeichenanzahl; die Lader prüfen zusätzlich dieses Bytebudget. Beispielsweise erfüllen 128 Wiederholungen von `é` die Zeichengrenze des Schemas, belegen aber 256 Bytes und führen beim Laden zu `MEDIA.EXPORT_NAME_INVALID`. Verwende `tools::load_project` oder `NoteType::from_bundle`, um vor dem Build die vollständige Eingabe zu validieren. `tools::load_project` erfordert das Feature `internal-tools` und gehört zu den internen Repository-Werkzeugen, nicht zur unterstützten API für nutzende Anwendungen.
+80:
+81: MIME-Syntax und erkennbarer Inhalt müssen zusammenpassen. Für native Bytes gibt es keine Inline-Beschränkung auf 64 KiB. Das Standard-Importbudget beträgt 256 MiB pro Mediendatei; `file_with_limits` und `bytes_with_limits` akzeptieren vor dem Lesen `MediaLimits { max_bytes }`. Große Snapshots können in temporären Speicher ausgelagert werden, der beim Wegfall des letzten Besitzers aufgeräumt wird. Der Snapshot-Besitz verspricht keine atomare Dateisystemsicht auf eine Quelle, die während des Imports gleichzeitig verändert wird.
+82:
+83: Projekt-JSON wendet dasselbe Standardbudget pro Mediendatei beim Dekodieren eines Inline-Arrays `bytes` an. Es stoppt beim ersten überschüssigen Byte, ohne den Rest des Arrays zu sammeln, und erhält einen `MediaError` mit Limit und beobachteter Byteanzahl. Die Anzahl bei der Zurückweisung ist eine Untergrenze, nicht die Gesamtgröße des ungelesenen Arrays.
+84:
+85: Ein gültiges Medienpaket belegt nicht die Codec-Wiedergabe in jedem Anki-Client. Teste Bilder, Audio und Schriftarten in deinen Zielclients. Siehe [Fehlersuche](/docs/troubleshooting/#media-and-templates).
+86:
+87: <!-- section: typed-image-and-sound-usage -->
+88: ### Typisierte Bilder und Audioreferenzen verwenden
+89:
+90: Konstruktoren bleiben unfehlbar. `Project::add` prüft den beim Import gespeicherten MIME-Typ: Bilder benötigen `image/*`, Audioreferenzen akzeptieren `audio/*` und `video/*`. `application/octet-stream`, Text, Schriftarten und PDF scheitern bei typisierter Verwendung mit `NOTE.MEDIA_USAGE_INVALID`; registriere sie als ausdrückliche Medien für direktes HTML/CSS. Gültige ausdrückliche Deklarationen unbekannter Bild-/Video-MIME-Typen bestehen die Kategorieprüfung, ohne zu bestätigen, dass ein Decoder oder Player die Bytes unterstützt. Das Umbenennen einer Datei ändert den gespeicherten MIME-Typ niemals. Der Build prüft weiterhin unabhängig die bereitgestellten Bytes und die Exportendung: Ein PNG namens `wrong.mp3` kann als Bild hinzugefügt werden und beim Build mit `MEDIA.DECLARED_MIME_MISMATCH` scheitern.
+91:
+92: <!-- section: batch-media-import -->
+93: ## Mehrere Mediendateien importieren
+94:
+95: Diese Methoden sind im veröffentlichten Paket `0.3.1` enthalten.
+96:
+97: Importiere mehrere Dateien mit begrenzter Parallelität, behalte die Eingabereihenfolge bei und halte Mediensnapshots mit eigenem Datenbesitz für den späteren Export:
+98:
+103:
+104: Node verwendet `await Media.files(['first.png', 'second.png'])`; Python verwendet `Media.files(['first.png', 'second.png'])`.
+105:
+106: <!-- section: batch-behavior-and-budgets -->
+107: ### Verhalten und Limits beim Import mehrerer Mediendateien
+108:
+109: Verwende `Media::files(paths)` in Rust, `await Media.files(paths)` in Node oder `Media.files(paths)` in Python, um Dateien in Eingabereihenfolge mit höchstens vier Arbeitern pro Aufruf zu importieren. Gruppen mit weniger als 16 Dateien werden seriell verarbeitet. Rust bietet außerdem `files_with_limits`; Node und Python akzeptieren dieselben Limits wie `file`. Das Limit gilt pro Mediendatei. Schlägt ein Import fehl, wartet der Aufruf auf bereits begonnene Arbeit, gibt die Snapshots der Gruppe frei und liefert den ersten Fehler in Eingabereihenfolge. Bestehende Medienbesitzer bleiben gültig. Python gibt während des Imports den GIL frei; Node führt die Arbeit außerhalb der Ereignisschleife aus. Einzeldateiimporte bleiben sofortige Snapshots mit eigenem Datenbesitz; für parallele Importe müssen Aufrufer ausdrücklich die Stapelmethode wählen.
+110:
+111: Lebende Snapshots teilen sich ein prozessweites Speicherbudget von **64 MiB**. Einzelne Dateien über 1 MiB werden weiterhin in temporäre Dateien gestreamt. Kodierte Medien teilen sich pro Vorbereitung einen bei Bedarf angelegten Pufferpool von **16 MiB** und werden ausgelagert, wenn dieser voll ist. Diese Budgets umfassen keinen sonstigen Arbeitsspeicher und sind keine RSS-Obergrenze; parallele Builds können jeweils einen eigenen Kodierungspool besitzen.
+
+FILE docs/de/node-api.md
+1: # Node- und TypeScript-API
+2:
+3: Der Einstiegspunkt `ankiforge` stellt das einzige Modell zur Inhaltserstellung über Project bereit. Die Typen sind im [öffentlichen Quellcode](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts), in den [Berichtsklassen](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts) und in den [JSON-Snapshot-Deklarationen](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts) definiert. Beginne mit dem [Schnellstart](/docs/node-quickstart/).
+4:
+5: <!-- section: project-and-notes -->
+6: ## Project und Notizen
+7:
+8: | API | Verhalten |
+9: | --- | --- |
+10: | `new Project(namespace)` | Einen stabilen Veröffentlichungsnamensraum validieren |
+11: | `.defaultDeck(name)` | Das Standardziel festlegen; liefert das Projekt |
+12: | `.add(key, note)` | Notiz, Modell und Medien atomar sammeln; doppelte Schlüssel führen zu Fehlern |
+13: | `.addAsset(media)` | Eine ausdrückliche Ressource für direktes HTML/CSS/Skripte einbinden |
+14: | `.clone()` | Unabhängig bearbeitbares Projekt, das unveränderliche Werte teilt |
+15: | `.length` | Anzahl registrierter Notizen |
+16: | `Note.basic(front, back)` / `Note.cloze(text)` | Unveränderliche Notiz mit ihrem eingebauten Modell |
+17: | `model.note().field(key, content)` | Unveränderliche eigene Notiz mit ihrem Modell |
+18: | `note.deck(name).tag(tag).tags(iterable)` | Eine neu konfigurierte Notiz zurückgeben |
+19:
+20: Zeichenfolgen werden immer zu Text, auch Cloze-Zeichenfolgen. Ausdrückliches Markup verwendet `Content.html`. `Content.sequence(iterable)` kombiniert Text, HTML und typisierte Medien. Verwende ausdrückliche fachliche Schlüssel; weder Inhalt noch Anzeigenamen bestimmen die Identität.
+21:
+22: <!-- section: immutable-models -->
+23: ## Unveränderliche Modelle
+24:
+39:
+40: Builder liefern neue Werte. Ein abgeschlossenes Modell hat keine Methoden zum Verändern von Feldern oder Vorlagen. `builder.clozeField(key)` wählt eigene Cloze-Semantik; `builder.css` und `builder.asset` liefern Gestaltung und ausdrückliche Abhängigkeiten. Vorlagen akzeptieren außerdem `name`, `browserFront`, `browserBack` und `targetDeck`. Vorlagenreferenzen und Erzeugungsbedingungen verwenden Feldschlüssel; Anzeigenamen werden für Anki kompiliert. `GenerationRule.ankiDefault()` wählt Ankis Standardverhalten; `all` und `any` wählen ausdrückliche Bedingungen.
+41:
+42: `await NoteType.fromBundle(path, mediaLimits?)` liefert dasselbe unveränderliche Modell aus `template-bundle-v2`. Importierte Texte und Medien hängen nach erfolgreichem Laden nicht mehr vom Quellverzeichnis ab. Modelle lassen sich in mehreren Projekten wiederverwenden; unvereinbare Definitionen unter demselben Modellschlüssel führen atomar zu einem Fehler.
+43:
+44: <!-- section: media-and-image-occlusion -->
+45: ## Medien und Bildverdeckung
+46:
+47: `await Media.file(path, limits?)` und `await Media.bytes(Uint8Array, mime, limits?)` liefern Snapshots mit eigenem Datenbesitz. Quelldateien dürfen sich ändern oder verschwinden, nachdem das `await` erfolgreich abgeschlossen wurde. `withExportName(name)` liefert einen umbenannten Wert, ohne frühere Klone oder Inhalte zu ändern. Lies `filename`, `mediaType` und `byteLength` als Eigenschaften.
+48:
+49: `media.image()` und `.sound()` liefern typisierten Content, der seine Mediendatei automatisch in ein Projekt einbringt. Ausdrückliches `project.addAsset` und `builder.asset` am Modell decken direkte HTML-/CSS-/Skriptreferenzen ab. Medienlimits akzeptieren `{ maxBytes }`; der Standard beträgt 256 MiB, und für native Bytes gibt es keine Inline-Beschränkung auf 64 KiB.
+50:
+60:
+61: Der Standardmodus ist `hide_all_guess_one`; beide Modi erzeugen separate Karten für Masken mit Schlüsseln. Die Methode `.build()` dieses Builders validiert dekodierte Abmessungen, endliche Rechtecke und eindeutige Schlüssel. `image` und `occlusion` sind reservierte erzeugte Felder. Grenzen für Dekodierung und Aktualisierungen beschreibt [Bildverdeckung](/docs/image-occlusion/).
+62:
+63: <!-- section: build-compare-and-output -->
+64: ## Erzeugen, vergleichen und ausgeben
+65:
+66: | API | Ergebnis |
+67: | --- | --- |
+68: | `await project.build(BuildOptions.to(path))` | BuildOutput, das ein persistentes Artefakt besitzt |
+69: | `await project.build(BuildOptions.temporary())` | BuildOutput, das ein temporäres Artefakt besitzt |
+70: | `await project.compare(CompareOptions.against(path))` | Abgeschlossener ComparisonReport, auch bei blockierender Richtlinie |
+71: | `options.updateFrom(path)` | Aktualisierung anhand vollständiger Nachweise der ursprünglichen Verteilung konfigurieren |
+72: | `options.inspectLimits(limits)` | Unabhängige Inspektionszähler überschreiben |
+73: | `options.updatePolicy(policy)` | Risikorichtlinie für Aktualisierung oder Vergleich konfigurieren |
+74:
+75: Eine erfolgreiche Ausgabe bietet `.artifact`, `.report` und `.snapshot()`. `BuildReport` bietet `.counts`, `.baselineCounts`, `.durationMs`, `.diagnostics`, `.comparison` und `.snapshot()`; er enthält weder ein Erfolgs- oder Fehlerergebnis noch Dateibesitz. `.comparison` ist ein `ComparisonReport` oder `null` und verwendet dieselbe Klasse wie `project.compare()`. Vergleiche bieten `.findings`, `.highestRisk`, `.policy`, `.diagnostics` und `.snapshot()`. Snapshot-Feldnamen entsprechen dem Rust-JSON, einschließlich `allows_publication` und `schema_version`; sie sind keine camelCase-Kopien des nativen Berichts. Verwende nach einer Prüfung auf `null` am Vergleichsobjekt `report.comparison.highestRisk` oder im JSON-Snapshot `report.snapshot().comparison.highest_risk`.
+76:
+77: `new UpdatePolicy()` blockiert High/Critical. `.failOn('medium')` ändert den Schwellenwert. `.allow('RISK.NOTE_REMOVED')` akzeptiert ausdrücklich diese ganze Kategorie und erhält ihre Nachweise und ihren Schweregrad. Unbekannte Codes und harte Fehler lassen sich nicht freigeben. Eine Richtlinie bei einem reinen Erstellungs-Build ist ein Fehler. Verwende beim Vergleichen und Erzeugen dieselbe Richtlinie und dieselben Limits, wenn du übereinstimmende Veröffentlichungsentscheidungen benötigst.
+78:
+79: Die Inspektionsoptionen umfassen `maxArchiveBytes`, `maxEntries`, `maxCentralDirectoryBytes`, `maxZipEntryBytes`, `maxZipTotalBytes`, `maxMetaBytes`, `maxMediaMapBytes`, `maxIdentityBytes`, `maxCollectionBytes`, `maxMediaBytes`, `maxDecodedTotalBytes` und `maxZstdWindowBytes`. Werte sind nicht negative sichere Ganzzahlen oder `bigint` bis zum Maximum von u64; `0` ist ein tatsächliches Nullbudget. Die Zähler gelten unabhängig für Basisversion und Kandidat. Unbekannte Optionen führen zu einem Fehler.
+80:
+81: <!-- section: artifact-lifetime-and-concurrency -->
+82: ## Artefaktlebensdauer und Parallelität
+83:
+84: JSON-Snapshot-Pfade verwenden den exportierten Typ `PathSnapshot`. Unicode-Pfade sind Zeichenfolgen; native Pfade ohne gültiges Unicode verwenden `{ encoding: "unix_bytes", bytes: number[] }` oder `{ encoding: "windows_wide", units: number[] }`. Die Arrays erhalten die exakten Unix-Bytes oder Windows-UTF-16-Codeeinheiten. Dazu gehören Artefaktpfade in Build-Snapshots, Veröffentlichungspfade bei Fehlern und strukturierte Pfaddetails von Fehlern. Dekodiere einen kodierten Pfad nur für seine ursprüngliche Plattform; unter Unix erhält `Buffer.from(value.bytes)` einen Bytepfad für Nodes Dateisystemfunktionen. Nodes Methoden zur Inhaltserstellung akzeptieren weiterhin Zeichenfolgenpfade.
+85:
+86: Relative Medien- und Paketpfade werden beim Aufruf des Lesens verankert; Build-Ziele und Basisversionen beim Erstellen der Optionen. Unter POSIX behalten symbolische Links mit nachfolgendem `..` die Traversierungssemantik des Dateisystems. `persistTo` verankert relative Ziele im beim ursprünglichen Build erfassten Arbeitsverzeichnis, auch bei geklonten und persistent gespeicherten Handles. Spätere Änderungen des Arbeitsverzeichnisses leiten diese Pfade nicht um.
+87:
+88: Halte einen Artefaktbesitzer, solange du `.path` verwendest. `.clone()` erzeugt einen unabhängigen Besitzer; `await .close()` gibt diesen Besitzer frei. Der letzte temporäre Besitzer löscht seine Datei. `await .persistTo(path)` liefert ein persistentes Artefakt und lässt das Original auch bei einem Fehler nutzbar. Gewöhnliche Node-Dateistreams können ein Artefakt lesen, solange du seinen Besitzer hältst.
+89:
+90: Snapshots sind eingefrorene JSON-Daten und halten keine nativen Dateien. Eine persistente Datei bleibt nach Freigabe des Besitzers erhalten. `BuildOutput` kann nicht vom Aufrufer konstruiert werden; es entsteht nur durch erfolgreiche Builds.
+91:
+92: Build und Vergleich laufen asynchron auf einem beim Aufruf erfassten Projektsnapshot mit eigenem Datenbesitz. Spätere Änderungen können diese Anfrage nicht verändern. Auch Medienlesen und Paketladen laufen auf Hintergrundarbeitern. Node ESM und CJS teilen dasselbe native Modul und dieselben Klassenidentitäten.
+93:
+94: <!-- section: errors -->
+95: ## Fehler
+96:
+97: `SchemaError`, `AddError`, `MediaError`, `TemplateBundleError`, `ImageOcclusionError`, `PolicyError`, `ConfigurationError`, `CompareError`, `BuildError` und `PersistError` erweitern `ForgeError`. Sie bieten `kind`, `code`, `domain`, den nativen Text der Ursachenverkettung in `causes`, strukturierte `sourceDetails` für erkannte E/A-, Schema-, Medien- und Limitursachen sowie vorgangsspezifische `details`. Die ursprüngliche native Ausnahme bleibt als JS-`cause` erhalten.
+98:
+99: `BuildError.snapshot()` erhält Fehler- und Veröffentlichungsfakten. `BuildError.report` und `CompareError.report` liefern wie `BuildOutput.report` einen `BuildReport`. Verwende an diesen Berichten `.baselineCounts` und `.comparison`; verwende `.snapshot()` für JSON-Felder in snake_case. Ein fehlgeschlagener Vergleich kann Teilbeobachtungen und einen `null`-Vergleich haben. `PersistError.publication` erfasst, ob das Ziel bereits veröffentlicht wurde und ob die Dauerhaftigkeit bestätigt wurde. Medien- und Inspektionsfehler erhalten Limitdetails. Verwende diese maschinenlesbaren Felder, statt Fehlermeldungen zu parsen. `ArtifactClosedError` meldet die Verwendung eines geschlossenen Besitzers; `NativeLoadError` meldet fehlende, inkompatible oder veraltete native Pakete.
+100:
+101: <!-- section: addition-context -->
+102: ## Kontext beim Hinzufügen
+103:
+104: Fehlgeschlagenes Hinzufügen lässt das Projekt unverändert. Strukturierter Kontext erfasst die ursprünglichen Notiz-/Modellschlüssel und das Ziel sowie optionale Details zu Konflikten oder Medienverwendung. Rust bietet `note::{AddContext, AddTarget, AddDetail}` über `AddError::context()` / `detail()`; die SDKs bieten `AddError.details` mit typisiertem Kontext und Details. Node-Felder verwenden camelCase und sind tief eingefroren; Python verwendet snake_case-TypedDicts. Tags behalten ihren Einfügeindex; Feldpositionen behalten ursprüngliche Sequenzindizes (null/None für das Feld, [] für seine Wurzel) und optionale UTF-8-Bytebereiche. Fehler des Standardstapels beim Build haben keine Notiz-/Modellschlüssel und bleiben in der Ursachenverkettung verfügbar.
+105:
+106: Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).
+107:
+108: <!-- section: batch-media-and-prepared-publication -->
+109: <!-- section: source-api-details -->
+110: ## Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten
+111:
+112: Medienimport im Stapel und vorbereitete Veröffentlichung sind im veröffentlichten Paket `0.3.1` enthalten.
+113:
+114: <!-- section: prepare-review-and-publish -->
+115: ### Vorbereiten, prüfen und veröffentlichen
+116:
+140:
+141: `publish()` übernimmt den nativen Besitzer sofort und führt eine Hintergrundaufgabe aus. Jeder Versuch verbraucht ihn, auch eine Ablehnung durch Richtlinie oder E/A-Fehler. Wiederholte Aufrufe werden mit `PreparedPublicationStateError`, Code `BUILD.PREPARED_UNAVAILABLE` und `reason` `consumed` oder `closed` zurückgewiesen. Schließen nach Beginn der Veröffentlichung bricht diese nicht ab. Berichte bleiben nach dem Schließen lesbar. Optionen werden beim Aufruf der Vorbereitung gebunden; eine Änderung von Richtlinie oder Ziel erfordert eine erneute Vorbereitung. Die Dauer schließt Wartezeit für die Prüfung aus. Weder Berichte noch JSON können wieder in einen Besitzer umgewandelt werden.
+142:
+143: Build, Vergleich, Vorbereitung und Klone teilen unveränderliche native Project-Versionen. Inhaltsänderungen bleiben synchron und isoliert. Die erste Änderung, während ein anderer Snapshot lebt, kann das Project kopieren; spätere exklusive Änderungen tun dies nicht. Dadurch wird das Kopieren aus dem Absenden des Promise verlagert. Es verspricht weder schnellere erste Änderungen noch eine geringere maximale Timerverzögerung oder weniger RSS. JavaScript-Byteeingaben werden weiterhin vor der Übergabe an einen Hintergrundarbeiter kopiert. Verwende mit diesen Wrappern Binärdateien für Protokoll 6.
+144:
+145: <!-- section: typescript -->
+146: ## TypeScript
+147:
+148: Installiere `typescript` und `@types/node` in deiner Anwendung. Verwende `main.mts` oder `"type": "module"` und diese `tsconfig.json`:
+149:
+161:
+162: Kompiliere mit `npx tsc` und führe für einen `.mts`-Einstieg anschließend `node dist/main.mjs` aus.
+
+FILE docs/de/python-api.md
+1: # Python-API
+2:
+3: Das SDK ruft die reguläre öffentliche Rust-API über eine native Erweiterung auf. Es enthält `py.typed` und geprüfte öffentliche Signaturen. Beginne mit dem [Schnellstart](/docs/python-quickstart/).
+4:
+5: <!-- section: project-and-note-values -->
+6: ## Projekt- und Notizwerte
+7:
+8: | API | Verhalten |
+9: | --- | --- |
+10: | `Project(namespace, *, default_deck=None)` | Validiert den expliziten stabilen Namensraum und legt den Standardstapel fest |
+11: | `project.add(key, note)` | Übernimmt Notiz, Modell und zugehörige Medien atomar; doppelte Notizschlüssel führen zum Fehler |
+12: | `project.add_asset(media)` | Fügt eine explizite Abhängigkeit für direkt verwendetes HTML, CSS oder Skripte hinzu |
+13: | `len(project)` | Anzahl der erfolgreich hinzugefügten Notizen |
+14: | `Note.basic(front, back)` | Verwendet das eingebaute Basic-Modell; Zeichenfolgen stehen für Text |
+15: | `Note.cloze(text)` | Verwendet das eingebaute Cloze-Modell; Zeichenfolgen stehen für Text und behalten die Cloze-Syntax |
+16: | `note.field(key, content)` | Gibt eine neue Notiz mit der Feldzuweisung zurück; der Schlüssel wird beim Hinzufügen geprüft |
+17: | `note.deck(name)` / `.tag(tag)` / `.tags(tags)` | Gibt eine entsprechend konfigurierte Notiz zurück |
+18: | `note.note_type` | Das unveränderliche Modell, das der Notiz gehört |
+19:
+20: Gewöhnliche Zeichenfolgen werden zu Text. `Content.text(value)` und `Content.html(value)` sind explizite Konstruktoren. `Content.sequence(iterable)` verbindet Zeichenfolgen und Inhalte, ohne sie zu rendern oder Medienabhängigkeiten zu verlieren. Ein bloßer Dateiname wird in einem Feld nicht als Medienreferenz akzeptiert.
+21:
+22: <!-- section: models-and-templates -->
+23: ## Modelle und Vorlagen
+24:
+25: `NoteType.builder(key)` gibt einen unveränderlichen Builder zurück. Seine Methoden `.name`, `.field`, `.template`, `.css`, `.cloze_field` und `.asset` liefern jeweils einen aktualisierten Builder. `.build()` prüft die vollständige Definition und gibt einen unveränderlichen NoteType zurück. `model.note()` erzeugt eine Notiz, die dieses Modell besitzt. `NoteType.from_bundle(path, limits=MediaLimits())` lädt dasselbe Modell samt Dateien aus dem aktuellen Bundle-Format. Das optionale Limit gilt vor dem Lesen getrennt für jede Datei.
+26:
+27: `Field(key, name=None, required=False, sort=False)` trennt den stabilen Schlüssel vom Anzeigenamen. `Template(key, front, back, name=None, browser_front=None, browser_back=None, target_deck=None, generation=GenerationRule())` verwendet in allen Vorlagenquellen Feldschlüssel. `GenerationRule.all(keys)` und `.any(keys)` konfigurieren die Kartenerzeugung. Standardmäßig wird die Bedingung abgeleitet, mit der Anki das Vorhandensein von Feldern prüft. Die Builder-Methode `.cloze_field(key)` deklariert eine eigene Cloze-Erzeugung.
+28:
+29: <!-- section: media-and-occlusion -->
+30: ## Medien und Bildverdeckung
+31:
+32: | API | Verhalten |
+33: | --- | --- |
+34: | `Media.file(path, *, limits=MediaLimits())` | Liest sofort einen Snapshot ein, dessen Daten der Wert besitzt |
+35: | `Media.bytes(data, media_type, *, limits=MediaLimits())` | Besitzt die Bytes mit einem expliziten MIME-Typ |
+36: | `media.with_export_name(name)` | Gibt einen neuen Dateinamenwert zurück, der den Snapshot teilt; bestehende Referenzen behalten ihre Namen |
+37: | `media.filename`, `media.media_type`, `len(media)` | Schreibgeschützte Metadaten des Snapshots |
+38: | `media.image()` / `.sound()` | Typisierte Inhalte, die den Snapshot halten |
+39:
+40: `MediaLimits(max_bytes=256 << 20)` begrenzt jeden Import, bevor ein Snapshot entsteht. Große Medien können in temporären Speicher ausgelagert werden, dessen Lebensdauer über Besitzverhältnisse verwaltet wird. Namenskonflikte werden über alle expliziten und automatisch gesammelten Dateien hinweg geprüft.
+41:
+42: `Note.image_occlusion(media)` gibt einen ImageOcclusionBuilder zurück. Verkette `.mask(Mask.rect(key, x, y, width, height))`, optional `.mode(OcclusionMode.HIDE_ONE_GUESS_ONE)` und abschließend `.build()`. Der Standardmodus ist `HIDE_ALL_GUESS_ONE`. Beim Abschluss wird das Bild dekodiert; stabile Maskenschlüssel sowie endliche Pixelkoordinaten innerhalb des Bildes werden geprüft. Am zurückgegebenen Note-Objekt kannst du `header`, `back_extra` und `comments` wie üblich setzen. Die erzeugten Felder `image` und `occlusion` lassen sich nicht manuell zuweisen.
+43:
+44: <!-- section: operations-and-results -->
+45: ## Operationen und Ergebnisse
+46:
+47: | API | Ergebnis |
+48: | --- | --- |
+49: | `project.build(BuildOptions.to(path))` | BuildOutput mit einem garantiert dauerhaft gespeicherten Artefakt |
+50: | `project.build(BuildOptions.temporary())` | BuildOutput mit einem temporären Artefakt mit verwaltetem Besitz |
+51: | `options.update_from(path)` | Gibt Optionen für eine Aktualisierung anhand vollständiger Nachweise aus der Basisversion zurück |
+52: | `project.compare(CompareOptions.against(path))` | Abgeschlossener ComparisonReport einschließlich einer getrennten Richtlinienentscheidung zur Veröffentlichung |
+53: | `options.update_policy(policy)` | Wendet eine explizite Risikorichtlinie auf Update/Compare an; für Create unzulässig |
+54: | `options.inspect_limits(limits)` | Wendet endliche Grenzen unabhängig auf Basisversion und Kandidat an |
+55:
+56: BuildOutput besitzt `.artifact`, `.report` und `.snapshot()`. BuildReport stellt `.counts` (BuildCounts mit Notizen, Karten und Medien), `.diagnostics`, `.comparison` und `.snapshot()` bereit. Ein Bericht enthält weder ein Erfolgs- oder Fehlerergebnis noch einen Dateibesitzer. ComparisonReport stellt `.findings`, `.policy`, `.allows_publication` und `.snapshot()` bereit. Snapshots sind gewöhnliche, als JSON serialisierbare Dictionaries und enthalten keinen Besitz am Artefakt.
+57:
+58: ApkgArtifact stellt `.path`, `.persist_to(path)` und `.close()` bereit. Eine Kopie mit `copy.copy` hält einen weiteren Besitzer; ein Kontextmanager gibt diesen Besitzer beim Verlassen frei. Eine temporäre Ausgabe verschwindet, sobald ihr letzter Besitzer freigegeben wird. Dauerhaft gespeicherte Pfade bleiben nach dem Aufräumen der Handles erhalten. Schlägt die dauerhafte Speicherung fehl, bleibt das Quell-Handle benutzbar.
+59:
+60: `UpdatePolicy()` blockiert Befunde der Stufen High und Critical. `.fail_on(RiskLevel.MEDIUM)` ändert den Schwellenwert. `.allow('RISK.NOTE_REMOVED')` erlaubt ausdrücklich die gesamte registrierte Kategorie und erhält die Nachweise. Unbekannte Codes werden sofort zurückgewiesen. `InspectLimits` stellt alle endlichen Byte- und Anzahlgrenzen bereit, einschließlich `max_identity_bytes`; vorgeschriebene Prüfungen lassen sich damit nicht abschalten.
+61:
+62: <!-- section: errors-and-concurrency -->
+63: ## Fehler und Nebenläufigkeit
+64:
+65: Fehler lösen SchemaError, AddError, MediaError, ImageOcclusionError, TemplateBundleError, CompareError, PolicyError, BuildError oder PersistError aus. Jede Ausnahme stellt `kind`, `code`, `details`, strukturierte Prüfergebnisse in `source_details` und den Text der Ursachenkette in `causes` bereit. Die native Ausnahme bleibt als `__cause__` erhalten. Wenn verfügbar, bleibt auch die Ursache eines E/A-Fehlers als verketteter OSError erhalten. BuildError bietet `.report` und `.snapshot()`, CompareError einen unvollständigen `.report`. Die Details von PersistError enthalten die tatsächlichen Ergebnisse des Veröffentlichungsvorgangs.
+66:
+67: Native Project-Operationen geben den GIL frei und weisen gleichzeitige Zugriffe auf dasselbe Objekt mit `BINDING.PROJECT_BUSY` zurück. Unabhängige Projekte können parallel arbeiten. Erzeuge nach einem Prozess-Fork alle nativen Werte und Handles neu. Geerbte Handles verweigern Operationen mit `BINDING.FORKED_OBJECT`; ihr Aufräumen kann keine Dateien des Elternprozesses löschen. Im Kindprozess erzeugte Werte funktionieren und werden normal aufgeräumt. Siehe auch [Diagnose](/docs/python-diagnostics/).
+68:
+69: <!-- section: addition-context -->
+70: ## Kontext beim Hinzufügen
+71:
+72: Fehlgeschlagene Hinzufügungen lassen das Projekt unverändert. Der strukturierte Kontext enthält die ursprünglichen Notiz- und Modellschlüssel sowie das Ziel, gegebenenfalls ergänzt um Angaben zum Konflikt oder zur Medienverwendung. Rust stellt `note::{AddContext, AddTarget, AddDetail}` über `AddError::context()` / `detail()` bereit; die SDKs stellen `AddError.details` mit typisiertem Kontext und typisierten Details bereit. Node verwendet camelCase-Felder und friert die Struktur einschließlich aller verschachtelten Werte ein; Python verwendet TypedDicts mit snake_case. Tags behalten ihren Einfügeindex. Feldpositionen behalten die ursprünglichen Sequenzindizes (`null`/`None` für das Feld, `[]` für dessen Wurzel) sowie optionale UTF-8-Bytebereiche. Fehler des Standardstapels beim Build enthalten keine Notiz- oder Modellschlüssel und bleiben in der Ursachenkette verfügbar.
+73:
+74: Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus `image/*`. Tonreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).
+75:
+76: <!-- section: source-api-details -->
+77: ## Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten
+78:
+79: Die Stapelverarbeitung von Medien und die vorbereitete Veröffentlichung sind im veröffentlichten Paket `0.3.1` enthalten.
+80:
+81: <!-- section: prepare-review-and-publish -->
+82: ### Vorbereiten, prüfen und veröffentlichen
+83:
+103:
+104: Ein Veröffentlichungsversuch verbraucht den Besitzer, auch bei einem Richtlinien- oder E/A-Fehler. Spätere Aufrufe lösen `PreparedPublicationStateError` mit dem Code `BUILD.PREPARED_UNAVAILABLE` und dem Grund `closed` oder `consumed` aus. close bricht eine bereits laufende Veröffentlichung nicht ab. Relative Pfade werden beim Aufruf der Vorbereitung gebunden; spätere Änderungen an Project können das geprüfte APKG nicht mehr verändern. Berichte bleiben nach close verfügbar, ohne Dateien am Leben zu halten. Bereite erneut vor, wenn du Optionen ändern oder den Vorgang wiederholen möchtest. Die Dauer enthält keine Wartezeit während der Prüfung. Ein spät auftretender Fehler kann bedeuten, dass die Ersetzung erfolgreich war, ihre dauerhafte Speicherung jedoch nicht bestätigt ist. Prüfe vor weiteren Schritten die tatsächlichen Veröffentlichungsergebnisse. Erforderlich sind native binding protocol 1 und contract bundle 2.1.0; ältere Binärdateien werden auch bei gleicher Versionsnummer abgewiesen.
+
+FILE website/src/i18n/de.json
+{
+  "home.title": "Anki-Karten per Code erzeugen",
+  "home.description": "Erzeuge Anki-Karten und APKG-Stapel mit den quelloffenen APIs für Python, Node.js und Rust. Starte mit CSV, JSON oder einem KI-gestützten Ablauf.",
+  "home.hero1": "Erzeuge Anki-Karten",
+  "home.hero2": "aus deinen Daten.",
+  "home.intro": "Anki Forge ist eine quelloffene Bibliothek zur Erzeugung von Anki-APKGs mit einem Rust-Kern und Schnittstellen für Rust, Python und Node.js. Bündele Medien, nutze eigene Vorlagen und prüfe Aktualisierungen vor der Verteilung.",
+  "home.first": "Ersten Stapel erstellen",
+  "home.json": "Aus JSON erstellen",
+  "home.choose": "Wähle deine Programmiersprache.",
+  "home.install": "Exportiere spanish.apkg mit dem veröffentlichten Paket {version}. Für den normalen Export muss Anki nicht installiert sein.",
+  "home.buildWith": "Mit {language} erstellen",
+  "home.try": "Code ansehen. Karte ausprobieren.",
+  "home.tryDescription": "Wechsle zwischen ausführbaren Rust-Beispielen, drehe die Vorschaukarten um und lade die erzeugten Stapel herunter.",
+  "home.further": "Weitere Möglichkeiten",
+  "home.templates": "Eigene Vorlagen",
+  "home.occlusion": "Verdeckungsmodi",
+  "home.media": "Medien und Video",
+  "home.evolve1": "Ändere deine Notizen.",
+  "home.evolve2": "Behalte ihre IDs bei.",
+  "home.evolveDescription": "Korrigiere eine Definition oder ergänze ein Beispiel. Behalte die Notiz-IDs bei und verwende das ursprünglich verteilte APKG der Vorgängerversion, damit Anki Forge vorhandene Notizen beim erneuten Export zuordnen kann.",
+  "home.updates": "Stapelaktualisierungen verstehen",
+  "home.features": "Mehr Möglichkeiten zum Erstellen",
+  "home.validateTitle": "Probleme vor dem Export finden.",
+  "home.validateDescription": "Prüfe Diagnosemeldungen zu fehlenden Feldern, Medien und Vorlagenproblemen. Integriere die Validierung in deinen Build.",
+  "home.validation": "Validierung kennenlernen",
+  "home.templateTitle": "Deine Karten. Deine Vorlagen.",
+  "home.templateDescription": "Starte mit Basic und Cloze oder definiere eigene Notiztypen. Bewahre HTML, CSS und Medien in wiederverwendbaren Vorlagen-Bundles auf.",
+  "home.templateLink": "Vorlagen kennenlernen",
+  "home.nextTitle": "Vom ersten Stapel bis zur nächsten Aktualisierung",
+  "home.nextDescription": "Starte mit einer CSV-Tabelle, JSON-Daten oder Kartenentwürfen eines KI-Assistenten. Folge einer vollständigen Exportanleitung, ergänze Medien und prüfe Aktualisierungen.",
+  "home.compare": "Mit genanki vergleichen",
+  "nav.home": "Anki-Forge-Startseite",
+  "nav.main": "Hauptnavigation",
+  "nav.mobile": "Mobile Navigation",
+  "nav.menu": "Menü",
+  "nav.repository": "GitHub-Repository",
+  "nav.theme": "Farbschema",
+  "nav.auto": "System",
+  "nav.light": "Hell",
+  "nav.dark": "Dunkel",
+  "nav.skip": "Zum Inhalt springen",
+  "footer.description": "Anki Forge. Anki-APKGs mit Open Source und Rust erzeugen.",
+  "footer.label": "Fußbereich",
+  "footer.articles": "Artikel",
+  "footer.license": "MIT-Lizenz",
+  "workbench.label": "Code- und Kartenbeispiele",
+  "workbench.tabs": "Kartentyp",
+  "workbench.hint": "Rust-Quellcode → Browservorschau",
+  "workbench.source": "Vollständiger Quellcode ↗",
+  "workbench.output": "Ausgabe",
+  "workbench.note": "Browservorschau der exportierten Inhalte; importiere das APKG, um sie in Anki zu prüfen.",
+  "workbench.noScript": "Dies ist das Basic-Beispiel. Sieh dir alle Kartenbeispiele an und lade ihre Stapel herunter.",
+  "card.basic": "Basic",
+  "card.cloze": "Cloze",
+  "card.media": "Medien",
+  "card.occlusion": "Bildverdeckung",
+  "card.direction": "Spanisch → Englisch",
+  "card.meaning": "Was bedeutet das?",
+  "card.sentence": "Vervollständige den Satz",
+  "card.ear": "Gehörbildung",
+  "card.waveform": "Illustrative Wellenform eines synthetischen Tons",
+  "card.cell": "Zellanatomie",
+  "card.hiddenCell": "Querschnitt einer tierischen Zelle mit einer verdeckten Struktur",
+  "card.greeting": "Eine Begrüßung auf Spanisch.",
+  "card.sine": "Ein synthetischer Sinuston",
+  "card.concert": "Eine Sekunde Kammerton A.",
+  "card.revealedCell": "Querschnitt einer tierischen Zelle mit korallenfarbenem Zellkern",
+  "card.play": "Den Beispielton abspielen",
+  "card.audioFallback": "Dein Browser unterstützt kein Audio.",
+  "card.downloadTone": "Den Ton herunterladen.",
+  "card.showAnswer": "Antwort anzeigen",
+  "card.showQuestion": "Frage anzeigen",
+  "card.questionShown": "Frage angezeigt.",
+  "card.answer": "Antwort: {answer}",
+  "update.id": "Stabile Notiz-ID",
+  "update.front": "Vorderseite",
+  "update.back": "Rückseite",
+  "update.try": "Eine Inhaltsänderung ausprobieren.",
+  "update.change": "Antwort aktualisieren",
+  "update.reset": "Beispiel zurücksetzen",
+  "update.changed": "Inhalt geändert. Dieselbe Notiz-ID.",
+  "update.comparison": "Vergleichsergebnis",
+  "update.none": "Keine Änderungen erkannt",
+  "update.policy": "Veröffentlichungsrichtlinie",
+  "update.allowed": "erlaubt diese Änderung",
+  "update.blocked": "blockiert diese Änderung",
+  "update.v1": "v1 herunterladen",
+  "update.v2": "v2 herunterladen",
+  "update.report": "Vergleichsbericht",
+  "update.warning": "Bewahre das ursprünglich verteilte APKG auf. Importeinstellungen und neuere lokale Änderungen beeinflussen Aktualisierungen.",
+  "update.guide": "Aktualisierungsanleitung",
+  "copy.button": "Kopieren",
+  "copy.install": "Installationsbefehl kopieren",
+  "copy.success": "Befehl kopiert.",
+  "copy.fallback": "Befehl ausgewählt. Kopiere ihn mit der Tastatur.",
+  "copy.copied": "Kopiert",
+  "copy.code": "Code kopieren",
+  "copy.codeSuccess": "Code kopiert.",
+  "copy.codeFallback": "Code ausgewählt. Kopiere ihn mit der Tastatur.",
+  "copy.codeLabel": "{language}-Code",
+  "blog.title": "Blog",
+  "blog.description": "Praktische Anleitungen und technische Entscheidungen hinter Anki Forge.",
+  "blog.heading": "Gedanken zur Kartenerstellung.",
+  "blog.rss": "Per RSS folgen ↗",
+  "blog.all": "← Alle Artikel",
+  "blog.continue": "Weiter mit der Anleitung →",
+  "blog.read": "Artikel lesen",
+  "blog.readLabel": "Artikel lesen: {title}",
+  "blog.Tutorial": "Anleitung",
+  "blog.Engineering": "Technik",
+  "blog.feedTitle": "Anki-Forge-Blog",
+  "error.title": "Seite nicht gefunden",
+  "error.description": "Diese Seite wurde nicht gefunden. Kehre zur Anki-Forge-Startseite zurück oder lies die Anleitung zum Erstellen von Stapeln.",
+  "error.heading": "Seite nicht gefunden.",
+  "error.explanation": "Der Link hat sich möglicherweise geändert. Kehre zur Startseite zurück oder suche in der Anleitung nach den benötigten Informationen.",
+  "error.home": "Zur Startseite",
+  "error.guide": "Zur Anleitung →",
+  "examples.title": "Kartenbeispiele",
+  "examples.description": "Entdecke mit Anki Forge erstellte Basic-, Cloze-, Medien- und Bildverdeckungskarten. Lies den Rust-Quellcode und lade die erzeugten Anki-Stapel herunter.",
+  "examples.heading1": "Ein wenig Code.",
+  "examples.heading2": "Karten zum Lernen.",
+  "examples.intro": "Erkunde den Quellcode, drehe die Karten um und öffne die erzeugten Stapel in Anki. Diese Webvorschauen verwenden dieselben Felder wie die Downloads.",
+  "examples.combined": "Stapel mit vier Karten herunterladen",
+  "examples.fullSource": "Vollständigen Quellcode lesen",
+  "examples.excerpt": "Rust-Ausschnitt",
+  "examples.download": "{file} herunterladen",
+  "examples.counts": "{notes} · {cards} · {media}",
+  "examples.updateTitle": "Eine Notiz, zwei Versionen.",
+  "examples.updateDescription": "Der zweite Build ändert die Antwort von „hello“ zu „hello; hi“. Das Programm vergleicht das Ergebnis mit dem ersten Paket und prüft, ob die Notiz-ID gleich geblieben ist.",
+  "examples.workflow": "Aktualisierungsablauf lesen",
+  "examples.limitations": "Ankis Importeinstellungen und lokale Änderungen beeinflussen, wie Aktualisierungen angewendet werden. Die Vorschau zeigt Inhalte und IDs; wie die Karten aussehen und beim Lernen angezeigt werden, bestimmt Anki.",
+  "examples.basic": "Eine spanische Begrüßung mit Frage, Antwort und ausdrücklicher stabiler ID. Beginne hier für einfache Karten mit Vorder- und Rückseite.",
+  "examples.cloze": "Verbirg mit Ankis Cloze-Syntax ein Wort im Kontext. Diese Notiz hat eine Lücke und erzeugt deshalb eine Karte.",
+  "examples.media": "Ein Bild und ein abspielbarer Ton, zusammen mit der Notiz gebündelt. Dieser Ausschnitt verwendet einen im vollständigen Quellcode definierten Notiztyp zur Gehörbildung.",
+  "examples.occlusion": "Ein Rechteck mit stabilem Schlüssel verdeckt den Zellkern in einem illustrierten Zellquerschnitt. Der herunterladbare Stapel verwendet dasselbe Bild und dieselbe Maske wie diese Vorschau.",
+  "ai.title": "Anki Forge mit KI verwenden.",
+  "ai.description": "Wähle eine Programmiersprache, beschreibe deine Aufgabe und füge die Anweisung in deinen KI-Programmierassistenten ein.",
+  "ai.request": "Was soll der Stapel enthalten?",
+  "ai.placeholder": "Erstelle einen Stapel mit spanischen Vokabeln und Audio.",
+  "ai.privacy": "Optional. Deine Anfrage bleibt ausschließlich auf dieser Seite.",
+  "ai.skillQuestion": "Unterstützt dein Programmierassistent Skills?",
+  "ai.skillLink": "Anki Forge Skill öffnen",
+  "ai.noScript": "Kopiere unten eine Vorlage für deine Programmiersprache und ersetze den Aufgabenplatzhalter. Die Installationsbefehle und der Skill sind auch ohne JavaScript verfügbar.",
+  "ai.language": "Programmiersprache der Anwendung",
+  "ai.brief": "KI-Aufgabenbeschreibung",
+  "ai.copy": "KI-Anweisung kopieren",
+  "ai.copied": "Anweisung kopiert. Füge sie in deinen KI-Programmierassistenten ein.",
+  "ai.fallback": "Anweisung ausgewählt. Kopiere sie mit der Tastatur und füge sie in deinen KI-Programmierassistenten ein.",
+  "ai.install": "Installationsbefehl kopieren",
+  "search.loading": "Suche wird geladen…",
+  "search.error": "Die Suche konnte nicht geladen werden. Prüfe deine Verbindung und versuche es erneut.",
+  "copy.noScript": "Ohne JavaScript kannst du Code oder Befehle markieren und mit der Tastatur kopieren.",
+  "hero.description": "Basic-, Cloze-, Medien- und Bildverdeckungskarten drehen sich um und bilden gemeinsam einen APKG-Stapel.",
+  "hero.front": "Vorderseite",
+  "hero.back": "Rückseite",
+  "hero.english": "Englisch",
+  "hero.spanish": "Spanisch",
+  "hero.gap": "Fülle die Lücke.",
+  "hero.media": "Bild + Audio",
+  "hero.deck": "Anki-Stapel",
+  "hero.cards": "Karten",
+  "hero.files": "Medien",
+  "hero.caption": "Vier Kartentypen. ",
+  "hero.oneDeck": "Ein Anki-Stapel.",
+  "performance.title": "Gemessene Exportzeiten",
+  "performance.workload": "1.000 Basic-Notizen pro Testszenario",
+  "performance.export": "{notes} reine Textnotizen exportieren",
+  "performance.range": "Zeitersparnis in fünf Testszenarien",
+  "performance.medians": "Medianwerte aus 10 Durchläufen",
+  "performance.media": "Text, Bilder, Audio.",
+  "performance.faster": "In allen fünf Tests schneller.",
+  "performance.description": "Jeder Test verwendet {notes} Basic-Notizen. Die fünf Tests decken reine Textnotizen, separate Mediendateien und gemeinsam genutzte Medien ab. Die Rust-API von Anki Forge benötigte dabei {minimum}–{maximum} % weniger Exportzeit als genanki.",
+  "performance.chart": "Median der Exportzeiten in Millisekunden",
+  "performance.less": "{value} % weniger Zeit",
+  "performance.more": "{value} % mehr Zeit",
+  "performance.basic-mixed-text-v1": "Nur Text",
+  "performance.basic-image-unique-v2": "Jeweils eigene Bilder",
+  "performance.basic-audio-unique-v2": "Jeweils eigenes Audio",
+  "performance.basic-mixed-unique-v2": "Gemischte, jeweils eigene Medien",
+  "performance.basic-mixed-shared-v2": "Gemischte, gemeinsam verwendete Medien",
+  "site.title": "Anki Forge | Anki-Stapel aus Code erzeugen",
+  "site.socialAlt": "Anki Forge. Anki-Stapel aus Code. Eine spanische Vokabelkarte: hola, hello.",
+  "social.line1": "Anki-Stapel,",
+  "social.line2": "aus Code erzeugt.",
+  "social.description": "Notizen schreiben. Stapel erzeugen. Identität erhalten.",
+  "social.languages": "Spanisch → Englisch",
+  "social.footer": "Open Source · Rust · Anki",
+  "performance.method": "Methode und ursprüngliche Messungen",
+  "performance.limitations": "Gemessen wurde die Erzeugung der Stapel, nicht der Import oder das Lernen in Anki. Auf anderer Hardware oder mit anderen Daten können die Ergebnisse abweichen.",
+  "footer.rss": "RSS",
+  "machine.viewMarkdown": "Markdown anzeigen",
+  "machine.aiIndex": "KI-Dokumentationsindex",
+  "machine.intro": "Anki Forge erzeugt Anki-APKG-Stapel aus Code mit Rust, Node / TypeScript oder Python.",
+  "machine.version": "Aktuelle Version des veröffentlichten Pakets: {version}.",
+  "machine.constraints": "Für einen gewöhnlichen Export muss Anki nicht installiert sein. Die APIs veröffentlichter Pakete unterscheiden sich von Builds aus dem Quellcode. Bewahre für Aktualisierungen das ursprünglich verteilte APKG der Vorgängerversion auf; Ankis Importeinstellungen und neuere lokale Änderungen können das Ergebnis beeinflussen.",
+  "machine.start": "Hier beginnen",
+  "machine.quickstarts": "Schnellstarts",
+  "machine.api": "API-Referenzen",
+  "machine.tasks": "Anleitungen nach Aufgabe",
+  "machine.constraintsGroup": "Einschränkungen",
+  "machine.optional": "Optional",
+  "machine.sourceBuild": "Entwicklungs- und Quellcodeumgebung.",
+  "machine.history": "Historischer Artikel, veröffentlicht am {date}.",
+  "machine.repository": "Quellcode-Repository und Entwicklungsressourcen.",
+  "machine.otherLanguage": "KI-Dokumentationsindex: {language}.",
+  "hero.counts": "{cards} / {media}",
+  "count.notes": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} Notiz",
+      "other": "{count} Notizen"
+    }
+  },
+  "count.cards": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} Karte",
+      "other": "{count} Karten"
+    }
+  },
+  "count.media": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} Mediendatei",
+      "other": "{count} Mediendateien"
+    }
+  },
+  "home.csv": "CSV in Anki umwandeln",
+  "home.aiCards": "Karten mit KI erstellen"
+}

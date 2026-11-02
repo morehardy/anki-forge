@@ -1,0 +1,30 @@
+✖ Pagefind language-map order cannot change reviewed artifact bytes (6.305791ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 226.961625
+
+✖ failing tests:
+
+test at website/scripts/search-ranking.test.mjs:26:1
+✖ Pagefind language-map order cannot change reviewed artifact bytes (6.305791ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '{"version":"1.5.2","languages":{"es":{"hash":"es_789","wasm":"es","page_count":34},"en":{"hash":"en_456","wasm":"en","page_count":34},"zh-cn":{"hash":"zh-cn_123","wasm":null,"page_count":34}},"include_characters":["_","‿"],"extension":{"keep":true}}'
+  - '{"version":"1.5.2","languages":{"zh-cn":{"hash":"zh-cn_123","wasm":null,"page_count":34},"en":{"hash":"en_456","wasm":"en","page_count":34},"es":{"hash":"es_789","wasm":"es","page_count":34}},"include_characters":["_","‿"],"extension":{"keep":true}}'
+  
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/search-ranking.test.mjs:37:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{"version":"1.5.2","languages":{"es":{"hash":"es_789","wasm":"es","page_count":34},"en":{"hash":"en_456","wasm":"en","page_count":34},"zh-cn":{"hash":"zh-cn_123","wasm":null,"page_count":34}},"include_characters":["_","‿"],"extension":{"keep":true}}',
+    expected: '{"version":"1.5.2","languages":{"zh-cn":{"hash":"zh-cn_123","wasm":null,"page_count":34},"en":{"hash":"en_456","wasm":"en","page_count":34},"es":{"hash":"es_789","wasm":"es","page_count":34}},"include_characters":["_","‿"],"extension":{"keep":true}}',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

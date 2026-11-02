@@ -1,0 +1,1279 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/spec_review/pr66-final-linguistic-2026-11-02",
+  "scope": "Actual independent reading of all changed natural-language spans, complete affected Markdown/MDX prose sections with page headings/introduction, UI changed-message groups and neighboring feedback, metadata, all six full AI prompts, glossary and alias changes. Unchanged long-page judgments are explicitly reused only after input verification. The author suggestion list was not used as an independent approval. Code fences omitted from reading packets are unchanged from the independently bound earlier review.",
+  "files": {
+    "docs/ai-quickstart.json": {
+      "currentSha256": "624c774313fc949da3aa744b0742c5aa43f5e81c46ae6aa6491a25b7d5a35980",
+      "previousSha256": "5cf9be6731b67b024af1becfda537e20ccfb0f76a3384a6cec6be9a14381d348",
+      "changedSpans": [
+        {
+          "line": 27,
+          "before": "    \"zh-CN\": \"请帮助我在 {language} 项目中使用 Anki Forge {version}。\\n运行时要求：{runtime}\\n\\n只使用该版本公开文档中的 `ankiforge` 包和公开 API。不要使用 git/path\\n依赖、internal tools、仅源码可用的 API、未发布方法或猜测出来的方法。\\n\\n我的目标：\\n{request}\\n\\n请按以下要求完成：\\n1. 先检查现有项目，再决定需要新增或修改哪些文件。\\n2. 给出准确的安装命令：{install}\\n3. 生成最小但完整、可以直接运行的程序，列出新增或修改的文件。\\n4. 输出持久化的 `.apkg`，并使用稳定的 namespace 和 note key。\\n5. 给出运行命令、预期输出和验证步骤。\\n6. 如果涉及媒体、自定义模板、图片遮挡或牌组更新，请遵循文档中的流程，\\n   不要自行猜测 API。更新时保留上一份原始分发 APKG 作为基线，不使用 Anki 重新导出的包。\\n7. 只有在语言、输入格式、输出路径或身份规则无法判断时才提问。\\n\\n快速开始文档：{quickstart}\",",
+          "after": "    \"zh-CN\": \"请帮助我在 {language} 项目中使用 Anki Forge {version}。\\n运行时要求：{runtime}\\n\\n只使用该版本公开文档中的 `ankiforge` 包和公开 API。不要使用 git/path\\n依赖、内部工具、仅源码可用的 API、未发布方法或猜测出来的方法。\\n\\n我的目标：\\n{request}\\n\\n请按以下要求完成：\\n1. 先检查现有项目，再决定需要新增或修改哪些文件。\\n2. 给出准确的安装命令：{install}\\n3. 生成最小但完整、可以直接运行的程序，列出新增或修改的文件。\\n4. 输出持久化的 `.apkg`，并使用稳定的 namespace 和 note key。\\n5. 给出运行命令、预期输出和验证步骤。\\n6. 如果涉及媒体、自定义模板、图片遮挡或牌组更新，请遵循文档中的流程，\\n   不要自行猜测 API。更新时保留上一份原始分发 APKG 作为基线，不使用 Anki 重新导出的包。\\n7. 只有在语言、输入格式、输出路径或身份规则无法判断时才提问。\\n\\n快速开始文档：{quickstart}\","
+        },
+        {
+          "line": 29,
+          "before": "    \"pt-BR\": \"Ajude-me a usar Anki Forge {version} em uma aplicação {language}.\\nRequisito de execução: {runtime}\\n\\nUse o pacote publicado `ankiforge` e somente a API pública documentada para\\nesta versão. Não use dependências git/path, ferramentas internas, APIs\\nexclusivas do código-fonte, métodos não publicados ou métodos inventados.\\n\\nMinha tarefa:\\n{request}\\n\\nPor favor:\\n1. Examine o projeto existente antes de alterar arquivos.\\n2. Informe a configuração necessária e o comando exato de instalação: {install}\\n3. Crie o menor programa completo e executável e indique cada arquivo a criar ou editar.\\n4. Gere um arquivo `.apkg` persistente e use namespace e chaves de nota estáveis.\\n5. Inclua o comando de execução, a saída esperada e uma etapa de verificação.\\n6. Se a tarefa precisar de mídia, modelos personalizados, oclusão de imagem ou\\n   atualizações, siga o fluxo documentado em vez de presumir a API. Para atualizar,\\n   guarde o APKG original distribuído da versão anterior como base; não use\\n   uma reexportação do Anki.\\n7. Faça somente as perguntas necessárias para esclarecer a linguagem, o formato\\n   da entrada, o caminho de saída ou a regra de identidade.\\n\\nReferência de início rápido: {quickstart}\",",
+          "after": "    \"pt-BR\": \"Ajude-me a usar Anki Forge {version} em uma aplicação {language}.\\nRequisito de execução: {runtime}\\n\\nUse o pacote publicado `ankiforge` e somente a API pública documentada para\\nesta versão. Não use dependências git/path, ferramentas internas, APIs\\nexclusivas do código-fonte, métodos não publicados ou métodos inventados.\\n\\nMinha tarefa:\\n{request}\\n\\nPor favor:\\n1. Examine o projeto existente antes de alterar arquivos.\\n2. Informe a configuração necessária e o comando exato de instalação: {install}\\n3. Crie o menor programa completo e executável e indique cada arquivo a criar ou editar.\\n4. Gere um arquivo `.apkg` persistente e use namespace e chaves de nota estáveis.\\n5. Inclua o comando de execução, a saída esperada e uma etapa de verificação.\\n6. Se a tarefa precisar de mídia, templates personalizados, oclusão de imagem ou\\n   atualizações, siga o fluxo documentado em vez de presumir a API. Para atualizar,\\n   guarde o APKG original distribuído da versão anterior como base; não use\\n   uma reexportação do Anki.\\n7. Faça somente as perguntas necessárias para esclarecer a linguagem, o formato\\n   da entrada, o caminho de saída ou a regra de identidade.\\n\\nReferência de início rápido: {quickstart}\","
+        }
+      ],
+      "independentJudgment": "Read all six full prompts. Only zh-CN internal tools→内部工具 and pt-BR modelos personalizados→templates personalizados change natural language. Exact placeholders, runtime/install commands, published-API restriction, stable identity and original-APKG prohibition remain unchanged."
+    },
+    "website/language-briefs.json": {
+      "currentSha256": "8427d2fdb5c97583f62ca369479d0fd3126261b3ba9c8dbe44fd0811e7990594",
+      "previousSha256": "63d4c0ee424aab444a1cdad25ed5a96250c134b1d1a5aca9204fe858192d8c0e",
+      "changedSpans": [
+        {
+          "line": 47,
+          "before": "      \"imageOcclusion\": \"图片遮挡\"",
+          "after": "      \"imageOcclusion\": \"图片遮挡\",\n      \"identityEvidence\": \"标识映射与修订信息\""
+        },
+        {
+          "line": 116,
+          "before": "      \"imageOcclusion\": \"oclusão de imagem\"",
+          "after": "      \"imageOcclusion\": \"oclusão de imagem\",\n      \"template\": \"template de cartão\""
+        },
+        {
+          "line": 155,
+          "before": "      \"preparedPublication\": \"準備済み公開\",",
+          "after": "      \"preparedPublication\": \"候補を事前生成し、確認後に保存する仕組み\","
+        }
+      ],
+      "independentJudgment": "Read all six briefs. Added zh-CN identityEvidence=标识映射与修订信息, pt-BR template=template de cartão; ja preparedPublication is now an explanatory phrase describing preparation and later saving. Checked related target terminology in changed pages and current unchanged pt-BR templates/custom note types/media/concepts. No glossary-version gate was weakened."
+    },
+    "website/legacy-sections.json": {
+      "currentSha256": "5ec21c8c2b9bae5bd5c23a7e61867fb0ef709448cb06ac1d07bf086350f932de",
+      "previousSha256": "33ea3784cb8bdfc2ef9db95b3f6ce901667cf3a6ddf8fa1e377051c2eee59c0a",
+      "changedSpans": [
+        {
+          "line": 3,
+          "before": "    \"languages\": {\"下一步\": \"next-tasks\"},\n    \"quickstart\": {\"安装\": \"install\", \"生成-apkg\": \"export-your-first-deck\", \"继续完成实际任务\": \"continue\"},\n    \"node-quickstart\": {\"安装\": \"_top\", \"生成-apkg\": \"export-a-deck\", \"继续完成实际任务\": \"typescript-and-next-tasks\"},\n    \"python-quickstart\": {\"安装\": \"_top\", \"生成-apkg\": \"export-a-deck\", \"继续完成实际任务\": \"continue\"},\n    \"json-to-anki\": {\"准备共同输入\": \"shared-inputs\", \"检查结果并导入-anki\": \"check-and-import-the-result\"},\n    \"anki-forge-vs-genanki\": {\"同一任务两种流程\": \"the-same-small-task\", \"已有-genanki-牌组怎么处理\": \"existing-genanki-decks\", \"怎样看待性能数据\": \"historical-performance-evidence\"}",
+          "after": "    \"languages\": {\n      \"下一步\": \"next-tasks\"\n    },\n    \"quickstart\": {\n      \"安装\": \"install\",\n      \"生成-apkg\": \"export-your-first-deck\",\n      \"继续完成实际任务\": \"continue\"\n    },\n    \"node-quickstart\": {\n      \"安装\": \"_top\",\n      \"生成-apkg\": \"export-a-deck\",\n      \"继续完成实际任务\": \"typescript-and-next-tasks\"\n    },\n    \"python-quickstart\": {\n      \"安装\": \"_top\",\n      \"生成-apkg\": \"export-a-deck\",\n      \"继续完成实际任务\": \"continue\"\n    },\n    \"json-to-anki\": {\n      \"准备共同输入\": \"shared-inputs\",\n      \"检查结果并导入-anki\": \"check-and-import-the-result\"\n    },\n    \"anki-forge-vs-genanki\": {\n      \"同一任务两种流程\": \"the-same-small-task\",\n      \"已有-genanki-牌组怎么处理\": \"existing-genanki-decks\",\n      \"怎样看待性能数据\": \"historical-performance-evidence\"\n    },\n    \"build-guarantees\": {\n      \"源码中的预备发布\": \"prepared-publication-from-source\"\n    },\n    \"python-api\": {\n      \"源码-api-详情\": \"source-api-details\"\n    }\n  },\n  \"de\": {\n    \"media\": {\n      \"verhalten-und-budgets-des-stapelimports\": \"batch-behavior-and-budgets\"\n    },\n    \"build-guarantees\": {\n      \"parallele-arbeit\": \"concurrent-work\"\n    },\n    \"node-api\": {\n      \"medienimport-im-stapel-und-vorbereitete-veröffentlichung\": \"batch-media-and-prepared-publication\"\n    },\n    \"python-api\": {\n      \"stapelverarbeitung-von-medien-und-vorbereitete-veröffentlichung\": \"source-api-details\"\n    }\n  },\n  \"en\": {\n    \"build-guarantees\": {\n      \"prepared-publication-from-source\": \"prepared-publication-from-source\"\n    },\n    \"python-api\": {\n      \"source-api-details\": \"source-api-details\"\n    }\n  },\n  \"ja\": {\n    \"build-guarantees\": {\n      \"準備済み公開\": \"prepared-publication-from-source\"\n    },\n    \"node-api\": {\n      \"メディアの一括処理と準備済み公開\": \"batch-media-and-prepared-publication\"\n    },\n    \"python-api\": {\n      \"メディアの一括処理と準備済み公開\": \"source-api-details\"\n    }\n  },\n  \"pt-BR\": {\n    \"troubleshooting\": {\n      \"mídia-e-modelos\": \"media-and-templates\"\n    }\n  },\n  \"es\": {\n    \"blog:stable-ids-and-deck-updates\": {\n      \"dar-un-paquete-de-referencia-a-la-siguiente-generación\": \"give-the-next-build-a-baseline\"\n    }"
+        }
+      ],
+      "independentJudgment": "The added aliases retain old localized headings after editorial renames: en/zh build-guarantees and Python API, de media/build/Node/Python, ja build/Node/Python, pt-BR troubleshooting and es update blog. Existing aliases stay intact; page/task identifiers are unchanged."
+    },
+    "website/site-model.mjs": {
+      "currentSha256": "7149a89c6d6d01e1ed34a188ea1ee6b2c02552a977643ebc86f9c2324df63edc",
+      "previousSha256": "e5a4eea3c3e7277a9f7865b62103566c7822f586a67a5f9548ecefb7a9d6b3d4",
+      "changedSpans": [
+        {
+          "line": 14,
+          "before": "    \"description\": {\"en\": \"Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.\", \"zh-CN\": \"选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。\", \"es\": \"Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles.\", \"pt-BR\": \"Escolha uma linguagem, gere seu primeiro baralho e aprenda a adicionar mídia, modelos e atualizações repetíveis.\", \"ja\": \"言語を選んで最初のデッキを作り、メディア、テンプレート、繰り返し実行できる更新を追加します。\", \"de\": \"Wähle eine Programmiersprache, erzeuge deinen ersten Stapel und ergänze Medien, Vorlagen und wiederholbare Aktualisierungen.\"}",
+          "after": "    \"description\": {\"en\": \"Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.\", \"zh-CN\": \"选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。\", \"es\": \"Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles.\", \"pt-BR\": \"Escolha uma linguagem de programação, gere seu primeiro baralho e aprenda a adicionar mídia e templates e a atualizar o baralho.\", \"ja\": \"言語を選んで最初のデッキを作り、メディア、テンプレート、繰り返し実行できる更新を追加します。\", \"de\": \"Wähle eine Programmiersprache, erzeuge deinen ersten Stapel und ergänze Medien, Vorlagen und wiederholbare Aktualisierungen.\"}"
+        },
+        {
+          "line": 28,
+          "before": "    \"description\": {\"en\": \"Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.\", \"zh-CN\": \"安装公开 Rust 包，编写西班牙语卡片并导出持久保存的 APKG。\", \"es\": \"Instala el paquete de Rust, crea una tarjeta de vocabulario y exporta un archivo APKG persistente con un programa completo.\", \"pt-BR\": \"Instale o pacote público de Rust, crie um cartão de espanhol e exporte um APKG persistente com um programa completo.\", \"ja\": \"Rust の公開パッケージをインストールし、スペイン語のカードを作成して、永続 APKG ファイルを書き出します。\", \"de\": \"Installiere das veröffentlichte Rust-Paket, erstelle eine spanische Vokabelkarte und exportiere mit einem vollständigen Programm ein dauerhaft gespeichertes APKG.\"}",
+          "after": "    \"description\": {\"en\": \"Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.\", \"zh-CN\": \"安装公开 Rust 包，编写西班牙语卡片并导出持久保存的 APKG。\", \"es\": \"Instala el paquete de Rust, crea una tarjeta de vocabulario y exporta un archivo APKG persistente con un programa completo.\", \"pt-BR\": \"Instale o pacote público de Rust, crie um cartão de espanhol e exporte um APKG persistente com um programa completo.\", \"ja\": \"Rust の公開パッケージをインストールし、スペイン語のカードを作成して、後から使える APKG ファイルとして保存します。\", \"de\": \"Installiere das veröffentlichte Rust-Paket, erstelle eine spanische Vokabelkarte und exportiere mit einem vollständigen Programm ein dauerhaft gespeichertes APKG.\"}"
+        },
+        {
+          "line": 76,
+          "before": "    \"title\": {\"en\": \"Reusable Anki card templates, CSS and media\", \"zh-CN\": \"复用 Anki 卡片模板、CSS 与媒体\", \"es\": \"Reutiliza plantillas de Anki, CSS y recursos multimedia\", \"pt-BR\": \"Reutilize modelos de cartão, CSS e mídia no Anki\", \"ja\": \"Anki のカードテンプレート、CSS、メディアを再使用する\", \"de\": \"Anki-Kartenvorlagen, CSS und Medien wiederverwenden\"},\n    \"description\": {\"en\": \"Load a reusable Anki note type from one bundle of card templates, CSS and media, for normal or Cloze cards, with Rust, Python or Node.js.\", \"zh-CN\": \"从一个模板包加载可复用的 Anki 笔记类型，包含卡片模板、CSS 和媒体，支持普通与 Cloze 卡片，可使用 Rust、Python 或 Node.js。\", \"es\": \"Carga un tipo de nota de Anki reutilizable desde un paquete de plantillas, CSS y recursos multimedia, para tarjetas normales o Cloze, con Rust, Python o Node.js.\", \"pt-BR\": \"Carregue um tipo de nota reutilizável de um pacote com modelos, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\", \"ja\": \"Rust、Python、Node.js でテンプレート、CSS、メディアのバンドルから、通常・Cloze カード用の再使用可能なノートタイプを読み込みます。\", \"de\": \"Lade einen wiederverwendbaren Anki-Notiztyp aus einem Paket mit Kartenvorlagen, CSS und Medien – für normale oder Cloze-Karten mit Rust, Python oder Node.js.\"}",
+          "after": "    \"title\": {\"en\": \"Reusable Anki card templates, CSS and media\", \"zh-CN\": \"复用 Anki 卡片模板、CSS 与媒体\", \"es\": \"Reutiliza plantillas de Anki, CSS y recursos multimedia\", \"pt-BR\": \"Reutilize templates de cartão, CSS e mídia no Anki\", \"ja\": \"Anki のカードテンプレート、CSS、メディアを再使用する\", \"de\": \"Anki-Kartenvorlagen, CSS und Medien wiederverwenden\"},\n    \"description\": {\"en\": \"Load a reusable Anki note type from one bundle of card templates, CSS and media, for normal or Cloze cards, with Rust, Python or Node.js.\", \"zh-CN\": \"从一个模板包加载可复用的 Anki 笔记类型，包含卡片模板、CSS 和媒体，支持普通与 Cloze 卡片，可使用 Rust、Python 或 Node.js。\", \"es\": \"Carga un tipo de nota de Anki reutilizable desde un paquete de plantillas, CSS y recursos multimedia, para tarjetas normales o Cloze, con Rust, Python o Node.js.\", \"pt-BR\": \"Carregue um tipo de nota reutilizável de um pacote com templates, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\", \"ja\": \"Rust、Python、Node.js でテンプレート、CSS、メディアのバンドルから、通常・Cloze カード用の再使用可能なノートタイプを読み込みます。\", \"de\": \"Lade einen wiederverwendbaren Anki-Notiztyp aus einem Paket mit Kartenvorlagen, CSS und Medien – für normale oder Cloze-Karten mit Rust, Python oder Node.js.\"}"
+        },
+        {
+          "line": 90,
+          "before": "    \"title\": {\"en\": \"Add to your application\", \"zh-CN\": \"集成到应用\", \"es\": \"Integra Anki Forge en tu aplicación de Rust\", \"pt-BR\": \"Integre o Anki Forge à sua aplicação\", \"ja\": \"アプリケーションに組み込む\", \"de\": \"Anki Forge in deine Anwendung integrieren\"},",
+          "after": "    \"title\": {\"en\": \"Add Anki Forge to a Rust application\", \"zh-CN\": \"集成到 Rust 应用\", \"es\": \"Integra Anki Forge en tu aplicación de Rust\", \"pt-BR\": \"Integre o Anki Forge à sua aplicação Rust\", \"ja\": \"Rust アプリケーションに組み込む\", \"de\": \"Anki Forge in deine Rust-Anwendung integrieren\"},"
+        },
+        {
+          "line": 98,
+          "before": "    \"description\": {\"en\": \"Projects, owned notes and media, stable keys, text and update identity.\", \"zh-CN\": \"理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。\", \"es\": \"Entiende proyectos, notas, mazos, claves estables, recursos multimedia y la identidad de las actualizaciones.\", \"pt-BR\": \"Entenda Project, notas e mídia com propriedade independente, chaves estáveis, texto e identidade nas atualizações.\", \"ja\": \"Project、データを所有するノートとメディア、安定キー、テキスト、更新時の識別情報を理解します。\", \"de\": \"Verstehe Projekte, Notizen und Medien mit eigenem Datenbesitz, stabile Schlüssel, Text und Identität bei Aktualisierungen.\"}",
+          "after": "    \"description\": {\"en\": \"Projects, owned notes and media, stable keys, text and update identity.\", \"zh-CN\": \"理解 Project、笔记与媒体的所有权、稳定键，以及更新时如何识别原有笔记。\", \"es\": \"Entiende proyectos, notas, mazos, claves estables, recursos multimedia y la identidad de las actualizaciones.\", \"pt-BR\": \"Entenda Project, notas e mídia com propriedade independente, chaves estáveis, texto e identidade nas atualizações.\", \"ja\": \"Project、データを所有するノートとメディア、安定キー、テキスト、更新時の識別情報を理解します。\", \"de\": \"Verstehe Projekte, Notizen und Medien mit eigenem Datenbesitz, stabile Schlüssel, Text und Identität bei Aktualisierungen.\"}"
+        },
+        {
+          "line": 112,
+          "before": "    \"description\": {\"en\": \"Declare fields, card templates and generation rules for your own content.\", \"zh-CN\": \"为自己的内容定义字段、卡片模板与生成规则。\", \"es\": \"Define campos, plantillas y reglas de generación con claves estables y modelos inmutables reutilizables.\", \"pt-BR\": \"Defina campos, modelos de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis.\", \"ja\": \"独自コンテンツのフィールド、カードテンプレート、生成ルールを定義します。\", \"de\": \"Definiere Felder, Kartenvorlagen und Erzeugungsregeln für deine Inhalte mit stabilen Schlüsseln und wiederverwendbaren unveränderlichen Modellen.\"}",
+          "after": "    \"description\": {\"en\": \"Declare fields, card templates and generation rules for your own content.\", \"zh-CN\": \"为自己的内容定义字段、卡片模板与生成规则。\", \"es\": \"Define campos, plantillas y reglas de generación con claves estables y modelos inmutables reutilizables.\", \"pt-BR\": \"Defina campos, templates de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis.\", \"ja\": \"独自コンテンツのフィールド、カードテンプレート、生成ルールを定義します。\", \"de\": \"Definiere Felder, Kartenvorlagen und Erzeugungsregeln für deine Inhalte mit stabilen Schlüsseln und wiederverwendbaren unveränderlichen Modellen.\"}"
+        },
+        {
+          "line": 147,
+          "before": "    \"description\": {\"en\": \"Resolve installation, media, template, identity and output errors.\", \"zh-CN\": \"解决安装、媒体、模板、身份与输出错误。\", \"es\": \"Diagnostica errores de instalación, notas, recursos multimedia, plantillas, identidad y publicación de archivos.\", \"pt-BR\": \"Resolva erros de instalação, notas, mídia, modelos, identidade e publicação dos arquivos de saída.\", \"ja\": \"インストール、メディア、テンプレート、識別情報、出力のエラーを解決します。\", \"de\": \"Behebe Fehler bei Installation, Notizen, Medien, Vorlagen, Identität und der Veröffentlichung von Ausgabedateien.\"}",
+          "after": "    \"description\": {\"en\": \"Resolve installation, media, template, identity and output errors.\", \"zh-CN\": \"解决安装、媒体、模板、身份与输出错误。\", \"es\": \"Diagnostica errores de instalación, notas, recursos multimedia, plantillas, identidad y publicación de archivos.\", \"pt-BR\": \"Resolva erros de instalação, notas, mídia, templates, identidade e publicação dos arquivos de saída.\", \"ja\": \"インストール、メディア、テンプレート、識別情報、出力のエラーを解決します。\", \"de\": \"Behebe Fehler bei Installation, Notizen, Medien, Vorlagen, Identität und der Veröffentlichung von Ausgabedateien.\"}"
+        },
+        {
+          "line": 189,
+          "before": "    \"description\": {\"en\": \"Project, media, build options, reports and temporary artifact ownership.\", \"zh-CN\": \"Project、媒体、构建选项、报告和临时产物的所有权。\", \"es\": \"Project, recursos multimedia, opciones de generación, informes y gestión de la vida útil de los archivos temporales.\", \"pt-BR\": \"Project, mídia, opções de geração, relatórios e controle da vida útil dos artefatos temporários em Python.\", \"ja\": \"Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、準備済み公開の API を確認できます。\", \"de\": \"Project, Medien, Build-Optionen, Berichte und die Kontrolle über die Lebensdauer temporärer Artefakte in Python.\"}",
+          "after": "    \"description\": {\"en\": \"Project, media, build options, reports and temporary artifact ownership.\", \"zh-CN\": \"Project、媒体、构建选项、报告和临时产物的所有权。\", \"es\": \"Project, recursos multimedia, opciones de generación, informes y gestión de la vida útil de los archivos temporales.\", \"pt-BR\": \"Project, mídia, opções de geração, relatórios e controle da vida útil dos artefatos temporários em Python.\", \"ja\": \"Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、候補の事前生成と保存に使う API を確認できます。\", \"de\": \"Project, Medien, Build-Optionen, Berichte und die Kontrolle über die Lebensdauer temporärer Artefakte in Python.\"}"
+        }
+      ],
+      "independentJudgment": "Reviewed every changed title/description and its page context. Rust-only installation is now explicit in five titles and therefore sidebars. pt-BR metadata uses programming language, templates versus note types; zh concepts explains ownership and existing-note identity; ja quickstart describes persistent saving and Python metadata explains candidate preparation. Routes/navigation order/topic IDs remain unchanged."
+    },
+    "website/src/i18n/en.json": {
+      "currentSha256": "7fe63adaed05ac83602b64eeb14d0078688396e58da67627c395e3afb8fab707",
+      "previousSha256": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848",
+      "changedSpans": [
+        {
+          "line": 9,
+          "before": "  \"home.choose\": \"Choose your language.\",\n  \"home.install\": \"Export spanish.apkg with the public {version} package. Normal export needs no Anki installation.\",",
+          "after": "  \"home.choose\": \"Choose your programming language.\",\n  \"home.install\": \"Export spanish.apkg with Anki Forge {version}. You do not need to install Anki to export a deck.\","
+        },
+        {
+          "line": 19,
+          "before": "  \"home.evolve2\": \"Keep their identity.\",\n  \"home.evolveDescription\": \"Correct a definition or add an example. Stable IDs and a previous build help Anki Forge match existing notes when you export again.\",",
+          "after": "  \"home.evolve2\": \"Keep the same note IDs.\",\n  \"home.evolveDescription\": \"Correct a definition or add an example. Keep stable note IDs and use the original APKG from the previous release so Anki Forge can match existing notes when you export again.\","
+        },
+        {
+          "line": 82,
+          "before": "  \"update.comparison\": \"Actual comparison\",\n  \"update.none\": \"No findings\",",
+          "after": "  \"update.comparison\": \"Comparison results\",\n  \"update.none\": \"No changes detected\","
+        },
+        {
+          "line": 137,
+          "before": "  \"ai.description\": \"Choose a language, describe your task, then paste the brief into your AI coding assistant.\",\n  \"ai.request\": \"What should the deck do?\",",
+          "after": "  \"ai.description\": \"Choose a programming language, describe your task, then paste the prompt into your AI coding assistant.\",\n  \"ai.request\": \"What kind of deck would you like to create?\","
+        },
+        {
+          "line": 141,
+          "before": "  \"ai.skillQuestion\": \"Your coding assistant supports Skills?\",",
+          "after": "  \"ai.skillQuestion\": \"Does your coding assistant support Skills?\","
+        },
+        {
+          "line": 144,
+          "before": "  \"ai.language\": \"Application language\",",
+          "after": "  \"ai.language\": \"Programming language\","
+        },
+        {
+          "line": 165,
+          "before": "  \"performance.title\": \"The export, measured.\",",
+          "after": "  \"performance.title\": \"Export performance\","
+        },
+        {
+          "line": 172,
+          "before": "  \"performance.description\": \"Each workload contains {notes} Basic notes, covering text-only, unique media and shared mixed media. Rust used {minimum}–{maximum}% less export time than genanki.\",",
+          "after": "  \"performance.description\": \"Each test uses {notes} Basic notes. The five tests cover text-only notes, separate media files and shared media. In these tests, the Anki Forge Rust API took {minimum}–{maximum}% less time to export than genanki.\","
+        },
+        {
+          "line": 195,
+          "before": "  \"machine.constraints\": \"Normal export does not require Anki. Published package APIs differ from source builds. Keep the original previous distribution APKG for updates; Anki import settings and newer local edits can affect the result.\",",
+          "after": "  \"machine.constraints\": \"Exporting a deck does not require Anki. The APIs available in published packages differ from those in source builds. For updates, keep the original APKG from the previous release; Anki import settings and newer local edits can affect the result.\","
+        }
+      ],
+      "independentJudgment": "Programming language distinguishes language selection from content language; the original prior-release APKG is explicit; the AI question now has direct interrogative syntax. Comparison results/No changes detected fit the fixed example context. Performance describes the five historical tests and specifically the Anki Forge Rust API, retaining units and limitations. Machine constraints retain source/public API distinction and import caveats."
+    },
+    "website/src/i18n/zh-CN.json": {
+      "currentSha256": "35c6552f56c65394dcb184878ab1c53c9ff54811f9e8cd8b2e2bcee9f2602417",
+      "previousSha256": "f2cd71a222b1cf4370662a8e46726a1c238977c4bbe57dccc2b900ce7449c093",
+      "changedSpans": [
+        {
+          "line": 10,
+          "before": "  \"home.install\": \"使用公开版本 {version} 导出 spanish.apkg。普通导出不需要安装 Anki。\",",
+          "after": "  \"home.install\": \"使用 Anki Forge {version} 导出 spanish.apkg。导出牌组无需安装 Anki。\","
+        },
+        {
+          "line": 12,
+          "before": "  \"home.try\": \"阅读代码，试用卡片。\",",
+          "after": "  \"home.try\": \"查看代码，预览卡片。\","
+        },
+        {
+          "line": 19,
+          "before": "  \"home.evolve2\": \"保留原有身份。\",\n  \"home.evolveDescription\": \"修正定义或补充示例。稳定 ID 与上一次构建的产物，帮助 Anki Forge 在再次导出时匹配已有笔记。\",",
+          "after": "  \"home.evolve2\": \"保留原有笔记 ID。\",\n  \"home.evolveDescription\": \"修正定义或补充示例时，保留稳定的笔记 ID，并使用上一版分发时的原始 APKG，让 Anki Forge 在再次导出时识别原有笔记。\","
+        },
+        {
+          "line": 82,
+          "before": "  \"update.comparison\": \"实际比较\",\n  \"update.none\": \"无发现项\",",
+          "after": "  \"update.comparison\": \"比较结果\",\n  \"update.none\": \"未检测到变化\","
+        },
+        {
+          "line": 129,
+          "before": "  \"examples.updateDescription\": \"第二次构建把答案从“hello”改为“hello; hi”，与第一个包比较并检查笔记身份是否保留。\",",
+          "after": "  \"examples.updateDescription\": \"第二次构建将答案从“hello”改为“hello; hi”。程序会与第一个包比较，确认笔记 ID 保持不变。\","
+        },
+        {
+          "line": 131,
+          "before": "  \"examples.limitations\": \"Anki 的导入设置和本地编辑会影响更新方式。预览展示内容与身份；实际卡片样式和复习行为由 Anki 决定。\",",
+          "after": "  \"examples.limitations\": \"Anki 的导入设置和本地编辑会影响更新结果。网页预览仅展示内容和笔记标识；实际卡片样式及复习方式由 Anki 决定。\","
+        },
+        {
+          "line": 137,
+          "before": "  \"ai.description\": \"选择开发语言、描述任务，再把提示复制给 AI 编码助手。\",",
+          "after": "  \"ai.description\": \"选择开发语言，描述任务，再把任务说明粘贴给 AI 编程助手。\","
+        },
+        {
+          "line": 141,
+          "before": "  \"ai.skillQuestion\": \"编码助手支持 Skill？\",",
+          "after": "  \"ai.skillQuestion\": \"你的 AI 编程助手支持 Skill 吗？\","
+        },
+        {
+          "line": 145,
+          "before": "  \"ai.brief\": \"AI 提示\",\n  \"ai.copy\": \"复制 AI 提示\",\n  \"ai.copied\": \"提示已复制，可以粘贴给 AI 编码助手。\",\n  \"ai.fallback\": \"提示已选中，请用键盘复制，再粘贴给 AI 编码助手。\",",
+          "after": "  \"ai.brief\": \"给 AI 的任务说明\",\n  \"ai.copy\": \"复制给 AI 的任务说明\",\n  \"ai.copied\": \"任务说明已复制，请粘贴给 AI 编程助手。\",\n  \"ai.fallback\": \"任务说明已选中，请用键盘复制，再粘贴给 AI 编程助手。\","
+        },
+        {
+          "line": 172,
+          "before": "  \"performance.description\": \"每组 {notes} 条 Basic 笔记，覆盖纯文本、不重复媒体和共享混合媒体。Rust 导出耗时比 genanki 低 {minimum}–{maximum}%。\",",
+          "after": "  \"performance.description\": \"每组测试包含 {notes} 条 Basic 笔记。五组测试覆盖纯文本、独立媒体和共享媒体等场景。Anki Forge Rust API 的导出耗时比 genanki 低 {minimum}–{maximum}%。\","
+        },
+        {
+          "line": 179,
+          "before": "  \"performance.basic-mixed-unique-v2\": \"不重复混合媒体\",\n  \"performance.basic-mixed-shared-v2\": \"共享混合媒体\",",
+          "after": "  \"performance.basic-mixed-unique-v2\": \"图片与音频，不共享文件\",\n  \"performance.basic-mixed-shared-v2\": \"图片与音频，共享文件\","
+        }
+      ],
+      "independentJudgment": "“保留原有笔记 ID”与原始 APKG 说明更具体；“任务说明/AI 编程助手”在按钮、成功、手动复制反馈中一致。网页预览与 Anki 结果仍区分。性能说明限定 Anki Forge Rust API 和五组实测，独立/共享文件标签含义清楚，小数插值与单位仍适配。"
+    },
+    "website/src/i18n/es.json": {
+      "currentSha256": "12e6e7af4ed5ecbddd72e0fa6ccc569cad3a4253762990fb34e061f13feba361",
+      "previousSha256": "df2db211fa90c9314f64a32948106a3b1085ed01a74ffe82d679a945e126fab8",
+      "changedSpans": [
+        {
+          "line": 9,
+          "before": "  \"home.choose\": \"Elige tu lenguaje.\",",
+          "after": "  \"home.choose\": \"Elige tu lenguaje de programación.\","
+        },
+        {
+          "line": 66,
+          "before": "  \"card.concert\": \"Un segundo de un la de afinación.\",",
+          "after": "  \"card.concert\": \"Un la de afinación que dura un segundo.\","
+        },
+        {
+          "line": 82,
+          "before": "  \"update.comparison\": \"Comparación real\",\n  \"update.none\": \"Sin hallazgos\",",
+          "after": "  \"update.comparison\": \"Resultado de la comparación\",\n  \"update.none\": \"No se detectaron cambios\","
+        },
+        {
+          "line": 129,
+          "before": "  \"examples.updateDescription\": \"La segunda generación cambia la respuesta de «hello» a «hello; hi». Se compara con el primer paquete y comprueba que se conserva la identidad de la nota.\",",
+          "after": "  \"examples.updateDescription\": \"La segunda versión cambia la respuesta de «hello» a «hello; hi». El programa la compara con el primer paquete y comprueba que el ID de la nota no cambia.\","
+        },
+        {
+          "line": 135,
+          "before": "  \"examples.occlusion\": \"Un rectángulo con clave oculta el núcleo en un dibujo de una célula en corte. El mazo descargable usa la misma imagen y máscara que esta vista previa.\",",
+          "after": "  \"examples.occlusion\": \"Una máscara rectangular con una clave estable oculta el núcleo en un dibujo en corte de una célula. El mazo descargable usa la misma imagen y máscara que esta vista previa.\","
+        },
+        {
+          "line": 137,
+          "before": "  \"ai.description\": \"Elige un lenguaje, describe la tarea y pega las instrucciones en tu asistente de programación con IA.\",\n  \"ai.request\": \"¿Qué debe hacer el mazo?\",",
+          "after": "  \"ai.description\": \"Elige un lenguaje de programación, describe la tarea y pega las instrucciones en tu asistente de programación con IA.\",\n  \"ai.request\": \"¿Qué tipo de mazo quieres crear?\","
+        },
+        {
+          "line": 143,
+          "before": "  \"ai.noScript\": \"Copia una plantilla de lenguaje de abajo y sustituye el texto de la tarea. Los comandos de instalación y la Skill también están disponibles sin JavaScript.\",\n  \"ai.language\": \"Lenguaje de tu aplicación\",",
+          "after": "  \"ai.noScript\": \"Copia la plantilla correspondiente a tu lenguaje de programación y sustituye el marcador de la tarea. Los comandos de instalación y la Skill también están disponibles sin JavaScript.\",\n  \"ai.language\": \"Lenguaje de programación\","
+        },
+        {
+          "line": 165,
+          "before": "  \"performance.title\": \"Medimos la exportación.\",",
+          "after": "  \"performance.title\": \"Tiempos de exportación\","
+        },
+        {
+          "line": 172,
+          "before": "  \"performance.description\": \"Cada carga contiene {notes} notas Basic: solo texto, archivos multimedia únicos o recursos mixtos compartidos. Rust necesitó entre un {minimum} y un {maximum} % menos de tiempo de exportación que genanki.\",",
+          "after": "  \"performance.description\": \"Cada prueba usa {notes} notas Basic. Las cinco pruebas abarcan notas de solo texto, archivos multimedia distintos y recursos compartidos entre notas. En estas pruebas, la API de Rust de Anki Forge tardó entre un {minimum} y un {maximum} % menos en exportar que genanki.\","
+        },
+        {
+          "line": 177,
+          "before": "  \"performance.basic-image-unique-v2\": \"Imágenes únicas\",\n  \"performance.basic-audio-unique-v2\": \"Audio único\",",
+          "after": "  \"performance.basic-image-unique-v2\": \"Una imagen distinta por nota\",\n  \"performance.basic-audio-unique-v2\": \"Un audio distinto por nota\","
+        }
+      ],
+      "independentJudgment": "lenguaje de programación and the no-JavaScript instruction clearly identify the code language and task placeholder. The occlusion example now identifies a rectangular mask with stable key; la de afinación is a tone with one-second duration. Performance labels specify a distinct file per note, preserve localized percent grammar and the five-test/Rust-API scope; no unsupported result is promised."
+    },
+    "website/src/i18n/pt-BR.json": {
+      "currentSha256": "74ad099a5a9c93163bf1a510c3489bb7848370b2a9583a5cdf1d6e3efe385a5d",
+      "previousSha256": "37c3be1e043210e79980d23b879ed3f7353c508ea071491a01dc8aa9bdac9f5f",
+      "changedSpans": [
+        {
+          "line": 6,
+          "before": "  \"home.intro\": \"O Anki Forge é uma biblioteca de código aberto para gerar APKGs do Anki, com núcleo em Rust e interfaces Rust, Python e Node.js. Inclua mídia, use modelos personalizados e revise atualizações antes de distribuí-las.\",",
+          "after": "  \"home.intro\": \"O Anki Forge é uma biblioteca de código aberto para gerar APKGs do Anki, com núcleo em Rust e interfaces Rust, Python e Node.js. Inclua mídia, use templates personalizados e revise atualizações antes de distribuí-las.\","
+        },
+        {
+          "line": 9,
+          "before": "  \"home.choose\": \"Escolha sua linguagem.\",",
+          "after": "  \"home.choose\": \"Escolha sua linguagem de programação.\","
+        },
+        {
+          "line": 15,
+          "before": "  \"home.templates\": \"Modelos personalizados\",",
+          "after": "  \"home.templates\": \"Templates personalizados\","
+        },
+        {
+          "line": 19,
+          "before": "  \"home.evolve2\": \"Preserve a identidade delas.\",\n  \"home.evolveDescription\": \"Corrija uma definição ou acrescente um exemplo. IDs estáveis e uma geração anterior ajudam o Anki Forge a reconhecer as notas existentes na próxima exportação.\",",
+          "after": "  \"home.evolve2\": \"Mantenha os mesmos IDs.\",\n  \"home.evolveDescription\": \"Corrija uma definição ou acrescente um exemplo. Mantenha os IDs das notas e use o APKG original da versão anterior para que o Anki Forge reconheça as notas existentes na próxima exportação.\","
+        },
+        {
+          "line": 24,
+          "before": "  \"home.validateDescription\": \"Consulte diagnósticos de campos ausentes, mídia e problemas nos modelos. Inclua a validação no seu processo de geração.\",",
+          "after": "  \"home.validateDescription\": \"Consulte diagnósticos de campos obrigatórios não preenchidos e problemas de mídia ou templates. Inclua a validação no seu processo de geração.\","
+        },
+        {
+          "line": 26,
+          "before": "  \"home.templateTitle\": \"Seus cartões. Seus modelos.\",\n  \"home.templateDescription\": \"Comece com Basic e Cloze ou defina seus próprios tipos de nota. Reúna HTML, CSS e mídia em pacotes de modelos reutilizáveis.\",\n  \"home.templateLink\": \"Explore os modelos\",",
+          "after": "  \"home.templateTitle\": \"Seus cartões. Seus templates.\",\n  \"home.templateDescription\": \"Comece com Basic e Cloze ou defina seus próprios tipos de nota. Reúna HTML, CSS e mídia em pacotes de templates reutilizáveis.\",\n  \"home.templateLink\": \"Explore os templates\","
+        },
+        {
+          "line": 66,
+          "before": "  \"card.concert\": \"Um segundo de lá de referência.\",",
+          "after": "  \"card.concert\": \"Um tom de lá de referência com duração de um segundo.\","
+        },
+        {
+          "line": 83,
+          "before": "  \"update.none\": \"Nenhuma ocorrência\",",
+          "after": "  \"update.none\": \"Nenhuma alteração detectada\","
+        },
+        {
+          "line": 129,
+          "before": "  \"examples.updateDescription\": \"A segunda geração altera a resposta de “hello” para “hello; hi”. Ela compara o resultado com o primeiro pacote e verifica se a identidade da nota foi preservada.\",",
+          "after": "  \"examples.updateDescription\": \"A segunda versão altera a resposta de “hello” para “hello; hi”. O programa compara o resultado com o primeiro pacote e verifica se o ID da nota foi mantido.\","
+        },
+        {
+          "line": 137,
+          "before": "  \"ai.description\": \"Escolha uma linguagem, descreva sua tarefa e cole as instruções no seu assistente de programação com IA.\",\n  \"ai.request\": \"O que o baralho deve fazer?\",",
+          "after": "  \"ai.description\": \"Escolha uma linguagem de programação, descreva sua tarefa e cole as instruções no seu assistente de programação com IA.\",\n  \"ai.request\": \"Que tipo de baralho você quer criar?\","
+        },
+        {
+          "line": 144,
+          "before": "  \"ai.language\": \"Linguagem da aplicação\",",
+          "after": "  \"ai.language\": \"Linguagem de programação\","
+        },
+        {
+          "line": 165,
+          "before": "  \"performance.title\": \"O tempo de exportação, medido.\",",
+          "after": "  \"performance.title\": \"Tempo de exportação\","
+        },
+        {
+          "line": 172,
+          "before": "  \"performance.description\": \"Cada carga de trabalho contém {notes} notas Basic, com texto, mídia exclusiva ou mídia mista compartilhada. Rust levou de {minimum}% a {maximum}% menos tempo para exportar do que genanki.\",",
+          "after": "  \"performance.description\": \"Cada teste usa {notes} notas Basic. Os cinco testes abrangem notas só com texto, arquivos de mídia diferentes e mídia compartilhada entre notas. Nesses testes, a API Rust do Anki Forge levou de {minimum}% a {maximum}% menos tempo para exportar do que o genanki.\","
+        },
+        {
+          "line": 177,
+          "before": "  \"performance.basic-image-unique-v2\": \"Imagens exclusivas\",\n  \"performance.basic-audio-unique-v2\": \"Áudios exclusivos\",\n  \"performance.basic-mixed-unique-v2\": \"Mídia mista exclusiva\",\n  \"performance.basic-mixed-shared-v2\": \"Mídia mista compartilhada\",",
+          "after": "  \"performance.basic-image-unique-v2\": \"Uma imagem diferente por nota\",\n  \"performance.basic-audio-unique-v2\": \"Um áudio diferente por nota\",\n  \"performance.basic-mixed-unique-v2\": \"Imagens e áudio sem compartilhamento\",\n  \"performance.basic-mixed-shared-v2\": \"Imagens e áudio compartilhados\","
+        }
+      ],
+      "independentJudgment": "templates/template de cartão distinguish presentation templates from tipo de nota/modelo. Linguagem de programação and the deck question identify the task directly; original prior APKG and stable IDs remain explicit. The tone duration and different-per-note versus shared-media labels are natural Brazilian Portuguese; the benchmark remains limited to tested Rust API results."
+    },
+    "website/src/i18n/ja.json": {
+      "currentSha256": "0ac9d540c46da99583aa019d4b13f5d9742764807a0301fec4dbe5a5d0c5d094",
+      "previousSha256": "9a04b6876a332c71367ba94f7751c436a09f0f65a1f7a272e551722c655c63e8",
+      "changedSpans": [
+        {
+          "line": 20,
+          "before": "  \"home.evolveDescription\": \"定義を訂正したり例を追加したりできます。安定した ID と以前のビルドを使い、Anki Forge は再エクスポート時に既存のノートを照合します。\",",
+          "after": "  \"home.evolveDescription\": \"定義の訂正や例の追加ができます。ノート ID を維持し、前回配布したオリジナルの APKG を使うことで、再エクスポート時に既存のノートを照合できます。\","
+        },
+        {
+          "line": 24,
+          "before": "  \"home.validateDescription\": \"未入力のフィールド、メディア、テンプレートの問題を診断結果で確認します。検証をビルドの手順に組み込めます。\",",
+          "after": "  \"home.validateDescription\": \"必須フィールドの未入力や、メディア・テンプレートの問題を診断結果で確認できます。検証をビルド手順に組み込めます。\","
+        },
+        {
+          "line": 49,
+          "before": "  \"workbench.source\": \"完全なソース ↗\",",
+          "after": "  \"workbench.source\": \"ソースコード全体 ↗\","
+        },
+        {
+          "line": 83,
+          "before": "  \"update.none\": \"検出事項なし\",",
+          "after": "  \"update.none\": \"変更は検出されませんでした\","
+        },
+        {
+          "line": 122,
+          "before": "  \"examples.intro\": \"ソースを読み、カードを裏返し、生成されたデッキを Anki で開いてみてください。ウェブのプレビューは、ダウンロードと同じフィールドを使っています。\",\n  \"examples.combined\": \"4枚のカードのデッキをダウンロード\",\n  \"examples.fullSource\": \"完全なソースを読む\",",
+          "after": "  \"examples.intro\": \"ソースコードを読み、カードを裏返して、生成されたデッキを Anki で開いてみてください。ウェブのプレビューとダウンロードできるデッキには、同じフィールドの内容を使っています。\",\n  \"examples.combined\": \"4枚入りのデッキをダウンロード\",\n  \"examples.fullSource\": \"ソースコード全体を読む\","
+        },
+        {
+          "line": 134,
+          "before": "  \"examples.media\": \"ノートに同梱された画像と再生可能な音です。この抜粋は、完全なソースで定義した聴音練習用のノートタイプを使います。\",",
+          "after": "  \"examples.media\": \"ノートに同梱された画像と再生可能な音です。この抜粋は、ソースコード全体で定義した聴音練習用のノートタイプを使います。\","
+        },
+        {
+          "line": 137,
+          "before": "  \"ai.description\": \"言語を選び、作りたいものを記入して、依頼文を AI コーディングアシスタントに貼り付けます。\",",
+          "after": "  \"ai.description\": \"プログラミング言語を選び、作りたいものを記入して、依頼文を AI コーディングアシスタントに貼り付けます。\","
+        },
+        {
+          "line": 144,
+          "before": "  \"ai.language\": \"アプリケーションの言語\",",
+          "after": "  \"ai.language\": \"プログラミング言語\","
+        },
+        {
+          "line": 146,
+          "before": "  \"ai.copy\": \"AI 用プロンプトをコピー\",\n  \"ai.copied\": \"プロンプトをコピーしました。AI コーディングアシスタントに貼り付けてください。\",\n  \"ai.fallback\": \"プロンプトを選択しました。キーボードでコピーし、AI コーディングアシスタントに貼り付けてください。\",",
+          "after": "  \"ai.copy\": \"AI への依頼文をコピー\",\n  \"ai.copied\": \"依頼文をコピーしました。AI コーディングアシスタントに貼り付けてください。\",\n  \"ai.fallback\": \"依頼文を選択しました。キーボードでコピーし、AI コーディングアシスタントに貼り付けてください。\","
+        },
+        {
+          "line": 172,
+          "before": "  \"performance.description\": \"各処理には Basic ノートが{notes}件あり、テキストのみ、個別のメディア、共有する複数種類のメディアを扱います。Rust は genanki よりエクスポート時間が{minimum}〜{maximum}%短くなりました。\",",
+          "after": "  \"performance.description\": \"各テストでは Basic ノートを{notes}件使います。5種類のテストで、テキストのみ、ノートごとに異なるメディア、ノート間で共有するメディアを比較しました。Anki Forge の Rust API は genanki よりエクスポート時間が{minimum}〜{maximum}%短くなりました。\","
+        },
+        {
+          "line": 177,
+          "before": "  \"performance.basic-image-unique-v2\": \"個別の画像\",\n  \"performance.basic-audio-unique-v2\": \"個別の音声\",",
+          "after": "  \"performance.basic-image-unique-v2\": \"ノートごとに異なる画像\",\n  \"performance.basic-audio-unique-v2\": \"ノートごとに異なる音声\","
+        }
+      ],
+      "independentJudgment": "プログラミング言語 and AI への依頼文 are consistent across selection, copy, success and fallback actions. 必須フィールド avoids implying every field is required; ソースコード全体 and 4枚入り name actual actions and counts. The original distributed APKG remains explicit. Performance wording explains different-per-note/shared media and retains Rust API/test limits with correct counters."
+    },
+    "website/src/i18n/de.json": {
+      "currentSha256": "47269a43f42b037a08a84263fab357826ba1df83d9238bb5811957a30181e815",
+      "previousSha256": "a5eca8cec3584cc6ee73bbdcde9688fee6d3ca61c23927da745ce91e6580d915",
+      "changedSpans": [
+        {
+          "line": 19,
+          "before": "  \"home.evolve2\": \"Erhalte ihre Identität.\",\n  \"home.evolveDescription\": \"Korrigiere eine Definition oder ergänze ein Beispiel. Stabile IDs und ein vorheriger Build helfen Anki Forge, vorhandene Notizen beim erneuten Export wiederzuerkennen.\",",
+          "after": "  \"home.evolve2\": \"Behalte ihre IDs bei.\",\n  \"home.evolveDescription\": \"Korrigiere eine Definition oder ergänze ein Beispiel. Behalte die Notiz-IDs bei und verwende das ursprünglich verteilte APKG der Vorgängerversion, damit Anki Forge vorhandene Notizen beim erneuten Export zuordnen kann.\","
+        },
+        {
+          "line": 82,
+          "before": "  \"update.comparison\": \"Tatsächlicher Vergleich\",\n  \"update.none\": \"Keine Befunde\",",
+          "after": "  \"update.comparison\": \"Vergleichsergebnis\",\n  \"update.none\": \"Keine Änderungen erkannt\","
+        },
+        {
+          "line": 114,
+          "before": "  \"error.heading\": \"Diese Seite fehlt.\",",
+          "after": "  \"error.heading\": \"Seite nicht gefunden.\","
+        },
+        {
+          "line": 121,
+          "before": "  \"examples.heading2\": \"Etwas zum Merken.\",",
+          "after": "  \"examples.heading2\": \"Karten zum Lernen.\","
+        },
+        {
+          "line": 129,
+          "before": "  \"examples.updateDescription\": \"Der zweite Build ändert die Antwort von „hello“ zu „hello; hi“. Er vergleicht mit dem ersten Paket und prüft, dass die Notizidentität erhalten bleibt.\",",
+          "after": "  \"examples.updateDescription\": \"Der zweite Build ändert die Antwort von „hello“ zu „hello; hi“. Das Programm vergleicht das Ergebnis mit dem ersten Paket und prüft, ob die Notiz-ID gleich geblieben ist.\","
+        },
+        {
+          "line": 131,
+          "before": "  \"examples.limitations\": \"Ankis Importeinstellungen und lokale Änderungen beeinflussen, wie Aktualisierungen angewendet werden. Die Vorschauen zeigen Inhalt und Identität; Kartengestaltung und Wiederholungsverhalten stammen von Anki.\",",
+          "after": "  \"examples.limitations\": \"Ankis Importeinstellungen und lokale Änderungen beeinflussen, wie Aktualisierungen angewendet werden. Die Vorschau zeigt Inhalte und IDs; wie die Karten aussehen und beim Lernen angezeigt werden, bestimmt Anki.\","
+        },
+        {
+          "line": 165,
+          "before": "  \"performance.title\": \"Der Export, gemessen.\",\n  \"performance.workload\": \"1.000 Basic-Notizen pro Lastfall\",",
+          "after": "  \"performance.title\": \"Gemessene Exportzeiten\",\n  \"performance.workload\": \"1.000 Basic-Notizen pro Testszenario\","
+        },
+        {
+          "line": 168,
+          "before": "  \"performance.range\": \"Weniger Exportzeit in fünf gemessenen Lastfällen\",",
+          "after": "  \"performance.range\": \"Zeitersparnis in fünf Testszenarien\","
+        },
+        {
+          "line": 172,
+          "before": "  \"performance.description\": \"Jeder Lastfall enthält {notes} Basic-Notizen und deckt reinen Text, einzelne Medien oder gemeinsam verwendete gemischte Medien ab. Rust benötigte {minimum}–{maximum} % weniger Exportzeit als genanki.\",",
+          "after": "  \"performance.description\": \"Jeder Test verwendet {notes} Basic-Notizen. Die fünf Tests decken reine Textnotizen, separate Mediendateien und gemeinsam genutzte Medien ab. Die Rust-API von Anki Forge benötigte dabei {minimum}–{maximum} % weniger Exportzeit als genanki.\","
+        },
+        {
+          "line": 189,
+          "before": "  \"performance.limitations\": \"Diese Ergebnisse messen die Stapelerzeugung, nicht die Geschwindigkeit von Anki-Import oder Wiederholungen. Andere Hardware und Lastfälle können abweichen.\",",
+          "after": "  \"performance.limitations\": \"Gemessen wurde die Erzeugung der Stapel, nicht der Import oder das Lernen in Anki. Auf anderer Hardware oder mit anderen Daten können die Ergebnisse abweichen.\","
+        },
+        {
+          "line": 199,
+          "before": "  \"machine.tasks\": \"Aufgabenanleitungen\",",
+          "after": "  \"machine.tasks\": \"Anleitungen nach Aufgabe\","
+        }
+      ],
+      "independentJudgment": "Direct Du instructions remain consistent; Notiz-IDs and ursprünglich verteiltes APKG specify update identity. Seite nicht gefunden and Karten zum Lernen match page tasks. Testszenario and Gemessene Exportzeiten are clearer than Lastfall, with Rust API and non-import benchmark limits retained; Anleitungen nach Aufgabe suits the machine index."
+    },
+    "docs/zh-cn/index.md": {
+      "currentSha256": "4d4e27e3b55a7762417292d76ffd2080508c1901a9265fb0c071ca46fa7e53e6",
+      "previousSha256": "fa3257852f1c090ccb804ebb6758b469e89a847573486dce4a297a4c85936079",
+      "changedSpans": [
+        {
+          "line": 1,
+          "before": "Anki Forge 将笔记、模板与媒体生成 Anki `.apkg` 文件。当学习内容保存在代码或结构化数据中，需要反复构建并分发牌组时，可以使用它。",
+          "after": "Anki Forge 根据笔记、模板和媒体文件生成 Anki `.apkg` 文件。当学习内容保存在代码或结构化数据中，需要反复构建并分发牌组时，可以使用它。"
+        }
+      ],
+      "independentJudgment": "Opening now directly says 根据笔记、模板和媒体文件生成 APKG; the following note/type/card/deck explanation and three-SDK navigation maintain distinct objects."
+    },
+    "website/src/content/i18n/es.json": {
+      "currentSha256": "4a9ecd007c6535b8ae6dcdd166bb7fcc541308d10ee6abdba7ec8ad39e1eeac2",
+      "previousSha256": "5118266f72a1826052442fe0f679b670b031525ea5fdc12cfd2ed60d78fb3117",
+      "changedSpans": [
+        {
+          "line": 5,
+          "before": "  \"pagefind.search_label\": \"Buscar página\",",
+          "after": "  \"pagefind.search_label\": \"Buscar en este sitio\","
+        }
+      ],
+      "independentJudgment": "Buscar en este sitio describes the search scope correctly; neighboring load/clear/no-results/count/error labels and placeholders remain compatible."
+    },
+    "docs/pt-br/index.md": {
+      "currentSha256": "24eaf03ad8f13cd2f07dec61ae1ac79eee56ab37024655b9d62e835582b0af2d",
+      "previousSha256": "30eaf91f30da308312a443839d37875417f6777daf3b8e5141a1b27bcd32e9b6",
+      "changedSpans": [
+        {
+          "line": 1,
+          "before": "O Anki Forge transforma notas, modelos e arquivos de mídia em pacotes `.apkg` do Anki. Use a biblioteca quando seu material de estudo estiver em código ou dados estruturados e você precisar gerar e distribuir novas versões dos baralhos.",
+          "after": "O Anki Forge transforma notas, templates e arquivos de mídia em pacotes `.apkg` do Anki. Use a biblioteca quando seu material de estudo estiver em código ou dados estruturados e você precisar gerar e distribuir novas versões dos baralhos."
+        },
+        {
+          "line": 19,
+          "before": "Uma nota armazena campos; um tipo de nota e seus modelos de cartão transformam esses campos em cartões. Os baralhos agrupam os cartões resultantes no Anki. Os [conceitos fundamentais](/docs/concepts/) explicam essas relações, como `Project` mantém a propriedade dos seus valores e como preservar a identidade das notas.",
+          "after": "Uma nota armazena campos; um tipo de nota e seus templates de cartão transformam esses campos em cartões. Os baralhos agrupam os cartões resultantes no Anki. Os [conceitos fundamentais](/docs/concepts/) explicam essas relações, como `Project` mantém a propriedade dos seus valores e como preservar a identidade das notas."
+        },
+        {
+          "line": 29,
+          "before": "- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de modelos](/docs/templates/): defina campos, layouts e CSS.",
+          "after": "- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de templates](/docs/templates/): defina campos, layouts e CSS."
+        }
+      ],
+      "independentJudgment": "templates and templates de cartão separate card presentation from tipo de nota; the conceptual paragraph still distinguishes notes, types, cards and decks. All three-SDK and next-task labels point to the same tasks."
+    },
+    "docs/ja/json-to-anki.md": {
+      "currentSha256": "e02f5dc636abcac2be6abd8acc45168f28046a41640ef6f3e13683db240d6723",
+      "previousSha256": "3854b6f797272977f5926022df6651e48f9dea5538fe5ca1c1caee20661b2f20",
+      "changedSpans": [
+        {
+          "line": 3,
+          "before": "JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、配布元の APKG と、回答だけを変更して確認済みの更新版を出力します。どちらの版も **ノート3件、カード3枚、メディアファイル2個**になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。",
+          "after": "JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、初回配布用の APKG と、解答だけを変更した検証済みの更新版を出力します。どちらの版も **ノート3件、カード3枚、メディアファイル2個**になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。"
+        }
+      ],
+      "independentJudgment": "初回配布用の APKG and 解答だけを変更した検証済みの更新版 make the two artifacts and answer edit clear. ノート3件/カード3枚/メディア2個, synthetic tone, same IDs, policy review and original baseline remain explicit."
+    },
+    "docs/de/csv-to-anki.md": {
+      "currentSha256": "b3a04408eac39e6ac8118281ab6580e2634e91746f7ae5f69babe1dffd3d2390",
+      "previousSha256": "ed8138ad29306fb0c8cee62b66dc9c06cb8e665240650adccfe7bd76967e3853",
+      "changedSpans": [
+        {
+          "line": 3,
+          "before": "Wandle mit Python und Anki Forge eine Vokabeltabelle in eine Anki-Datei im Format `.apkg` um. Dieses Beispiel liest eine UTF-8-CSV-Datei mit den Spalten `id`, `front` und `back`, erstellt Basic-Karten mit Frage und Antwort und exportiert einen teilbaren Stapel. Der CSV-Parser aus Pythons Standardbibliothek liest die Tabelle; Anki Forge erstellt das Paket. Für den Export muss Anki nicht installiert sein.",
+          "after": "Wandle mit Python und Anki Forge eine Vokabeltabelle in eine Anki-Datei im Format `.apkg` um. Dieses Beispiel liest eine UTF-8-CSV-Datei mit den Spalten `id`, `front` und `back`, erstellt Basic-Karten mit Frage und Antwort und exportiert einen Stapel, den du weitergeben kannst. Der CSV-Parser aus Pythons Standardbibliothek liest die Tabelle; Anki Forge erstellt das Paket. Für den Export muss Anki nicht installiert sein."
+        }
+      ],
+      "independentJudgment": "einen Stapel, den du weitergeben kannst naturally conveys shareable distribution, avoiding teilbar ambiguity. CSV parsing, persistent IDs, no Anki export dependency and import/client checks remain unchanged."
+    },
+    "docs/zh-cn/anki-forge-vs-genanki.md": {
+      "currentSha256": "c6d637aa2fb28ffcce288063e02a821105ae2dc81bd2577ef4661f763ca1d26d",
+      "previousSha256": "fe79c48acc7247921f08a8403b3a24e3ae29ba0977b220c7eab06e779a6fbbea",
+      "changedSpans": [
+        {
+          "line": 11,
+          "before": "| 媒体所有权 | 类型化图片/声音携带拥有所有权的快照 | 脚本提供包媒体文件和引用 |",
+          "after": "| 媒体所有权 | 图片和音频对象持有不可变数据快照，克隆共享存储 | 脚本提供包媒体文件和引用 |"
+        }
+      ],
+      "independentJudgment": "The media ownership row explicitly says 图片和音频对象持有不可变数据快照，克隆共享存储. This clarifies lifetime/storage without implying copyright or independent copies per clone; the comparison qualifications remain."
+    },
+    "docs/es/anki-forge-vs-genanki.md": {
+      "currentSha256": "3abb68874755a603d60d87c324ee7cc8a5469b6dd9e70306b7734b0afa948dd7",
+      "previousSha256": "04cc37e1506ddd0f5ed2616d9d70ea05ab07363c50d165980d6fdae068f4bf14",
+      "changedSpans": [
+        {
+          "line": 3,
+          "before": "Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas que el proyecto conserve los recursos multimedia, diagnósticos estructurados, comparaciones y una revisión de políticas antes de publicar actualizaciones. Conserva un flujo de genanki ya probado si sus scripts de Python, plantillas y recursos multimedia cubren tus necesidades y migrar supone más coste que beneficio.",
+          "after": "Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas conservar los datos multimedia sin depender de los archivos originales, obtener diagnósticos estructurados y revisar las comparaciones y la política de riesgos antes de publicar actualizaciones. Conserva un flujo de genanki ya probado si sus scripts de Python, plantillas y recursos multimedia cubren tus necesidades y migrar supone más coste que beneficio."
+        }
+      ],
+      "independentJudgment": "The opening now explains media data retained independently of original files and separates diagnostics, comparison and risk-policy review. Neutral technical Spanish remains consistent with the migration-cost and unsupported-guarantee limitations."
+    },
+    "docs/pt-br/anki-forge-vs-genanki.md": {
+      "currentSha256": "bd822e22f5dc6fb4ea11e4b82b6864df1b9ba7b20dd0a7592149f27947b9b5b8",
+      "previousSha256": "b0b7c1a19279dd4bb3ac615d5794fc876aaaf7f554afecf3138f5242d444a35b",
+      "changedSpans": [
+        {
+          "line": 11,
+          "before": "| Propriedade da mídia | Imagens e sons tipados contêm cópias independentes dos dados | O script fornece os arquivos de mídia e suas referências ao pacote |",
+          "after": "| Propriedade da mídia | Os valores tipados de imagem e áudio mantêm snapshots independentes dos arquivos de origem; clones compartilham o armazenamento | O script fornece os arquivos de mídia e suas referências ao pacote |"
+        }
+      ],
+      "independentJudgment": "The media row explicitly states snapshots are independent of source files while clones share storage, so independente does not promise cloned file duplication. Cost/migration/performance limits are retained."
+    },
+    "docs/de/anki-forge-vs-genanki.md": {
+      "currentSha256": "a9f8db3a70838a5abc6d57e0bf6bc67013d6379af4eec6a48f8f633894c0f34f",
+      "previousSha256": "451e1d2e6d0ab45ad152c1f88bb06e51acc21372cc11e808de5cc3493583dd2b",
+      "changedSpans": [
+        {
+          "line": 11,
+          "before": "| Besitz von Mediendaten | Typisierte Bilder und Audio tragen Snapshots mit eigenem Datenbesitz | Das Skript liefert Mediendateien und Referenzen für das Paket |",
+          "after": "| Besitz von Mediendaten | Typisierte Bild- und Audioobjekte verwalten unveränderliche Snapshots der Mediendaten | Das Skript liefert Mediendateien und Referenzen für das Paket |"
+        }
+      ],
+      "independentJudgment": "Typisierte Bild- und Audioobjekte verwalten unveränderliche Snapshots makes the ownership row concrete and grammatically natural. Migration and benchmark limitations remain unchanged."
+    },
+    "docs/zh-cn/rust-guide.md": {
+      "currentSha256": "2f3bf87c02fc1476c75c245e51b4e9693e833bcd2f8621b7ffcbf6f4100116b5",
+      "previousSha256": "0766dabbb020a38c80f1edd9fca8f167c77f7a6d4f5abd1e5f5fa2ff078a13de",
+      "changedSpans": [
+        {
+          "line": 31,
+          "before": "`Media::file` 与 `Media::bytes` 获取拥有所有权的快照。导入成功后不再需要保留源文件。`image.image()` 和 `audio.sound()` 生成结构化内容；`Content::sequence` 将它们与文本或 HTML 组合。原始 HTML、CSS 或脚本资源必须通过 `builder.asset` 或 `project.add_asset` 显式包含。参见[媒体](../media.md)和[模板包](../template-bundles.md)。",
+          "after": "`Media::file` 与 `Media::bytes` 返回持有媒体数据快照的 `Media` 对象。导入成功后不再需要保留源文件。`image.image()` 和 `audio.sound()` 生成结构化内容；`Content::sequence` 将它们与文本或 HTML 组合。原始 HTML、CSS 或脚本资源必须通过 `builder.asset` 或 `project.add_asset` 显式包含。参见[媒体](../media.md)和[模板包](../template-bundles.md)。"
+        },
+        {
+          "line": 58,
+          "before": "`Media::image()` 和 `sound()` 保持不会失败。添加时，图片要求 `image/*`，声音引用要求 `audio/*` 或 `video/*`。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。这检查保留的 MIME，并非解码或播放。原始 HTML 和显式资源保持原有行为。导出重命名不会改变 MIME：PNG 改名为 `wrong.mp3` 后可以通过图片添加，但构建的独立探测或扩展名检查仍可能返回 `MEDIA.DECLARED_MIME_MISMATCH`。",
+          "after": "`Media::image()` 和 `sound()` 本身不会返回错误。添加时，图片要求 `image/*`，声音引用要求 `audio/*` 或 `video/*`。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。这检查保留的 MIME，并非解码或播放。原始 HTML 和显式资源保持原有行为。导出重命名不会改变 MIME：PNG 改名为 `wrong.mp3` 后可以通过图片添加，但构建的独立探测或扩展名检查仍可能返回 `MEDIA.DECLARED_MIME_MISMATCH`。"
+        }
+      ],
+      "independentJudgment": "Snapshot ownership is stated as a Media object retaining data, with source files unnecessary after successful import. 本身不会返回错误 naturally describes image/sound constructors while addition/build checks remain explicit. Resolves L007-rust-guide."
+    },
+    "docs/template-bundles.md": {
+      "currentSha256": "0d33eb5235db8a3e895d81c6d99640a68cd11483977b294cb89746d3a38b350c",
+      "previousSha256": "8695e7f6f40d19911dd072a16bd5d07f43e2a250618eb6c0aefc06a39451f53f",
+      "changedSpans": [
+        {
+          "line": 9,
+          "before": "A bundle is a reusable model declaration, template text, CSS and explicit media\nclosure. `NoteType::from_bundle(directory)` validates the complete bundle and",
+          "after": "A bundle contains a reusable note type definition, template text, CSS and all explicitly declared media dependencies. `NoteType::from_bundle(directory)` validates the complete bundle and"
+        }
+      ],
+      "independentJudgment": "The bundle now names the note type definition and explicitly declared media dependencies in normal technical English. Complete validation, owned snapshots, immutable NoteType and no partial project modification remain in context."
+    },
+    "docs/zh-cn/templates.md": {
+      "currentSha256": "6754113a8f5d9091eda5985bc8a6d09e4c6b4b3e502f08858e2ae3ca121e5de2",
+      "previousSha256": "14e4a855f6dc2486b6e180523477e7919f946f0c44263dee6495f126c615cb76",
+      "changedSpans": [
+        {
+          "line": 5,
+          "before": "模板包是一组可复用的模型声明、模板文本、CSS 和显式媒体依赖闭包。`NoteType::from_bundle(directory)` 校验完整模板包并取得拥有所有权的快照，再返回与内联编写相同的不可变 `NoteType`。它不会部分修改项目。",
+          "after": "模板包包含可复用的笔记类型定义、模板文本、CSS，以及显式声明的全部媒体依赖。`NoteType::from_bundle(directory)` 校验完整模板包并保存模板包及媒体数据的快照，再返回与内联编写相同的不可变 `NoteType`。它不会部分修改项目。"
+        }
+      ],
+      "independentJudgment": "A bundle now explicitly contains note type definition, template text, CSS and declared media dependencies, with snapshots captured before returning immutable NoteType. The unchanged intro still omits the loading verb, so its old minor is retained."
+    },
+    "docs/zh-cn/api.md": {
+      "currentSha256": "a62b8eef11ff0b0ad082a8e18ada55128556b0260c95c7d094193eec4c081a1e",
+      "previousSha256": "e6cc07f90a030bd3a24ff7d53d8569010772600e9cdff582edd906a851bc925d",
+      "changedSpans": [
+        {
+          "line": 14,
+          "before": "为每条逻辑笔记保留稳定的项目命名空间和笔记键。更新已有版本还需要原始分发 APKG。Anki 重新导出的文件不能替代原包内的完整身份证据。",
+          "after": "为每条逻辑笔记保留稳定的项目命名空间和笔记键。更新已有版本还需要原始分发 APKG。Anki 重新导出的文件不能替代原包内的完整标识映射与修订信息。"
+        }
+      ],
+      "independentJudgment": "完整标识映射与修订信息 makes the required baseline evidence concrete; the same paragraph still rejects an Anki re-export and requires stable namespace/note keys."
+    },
+    "docs/ja/installation.md": {
+      "currentSha256": "af311ab98a93fafe635b5cd894fe5dffb1f39a5cbb599a2db7a6b482547c7e98",
+      "previousSha256": "a5cc1a82631b4cd68a3f007b274ee193e5cbe8ad85d545adeba7ee9e5e10c77b",
+      "changedSpans": [
+        {
+          "line": 14,
+          "before": "公開 `ankiforge` crate には、Basic、Cloze、独自のノートタイプ、データを所有するメディア、画像穴埋め、比較、準備済み公開が含まれます。デフォルトの feature は空です。通常のアプリケーションコードでリポジトリ専用の feature を有効にする必要はありません。",
+          "after": "公開 `ankiforge` crate には、Basic、Cloze、独自のノートタイプ、データを所有するメディア、画像穴埋め、比較、候補ファイルの事前生成が含まれます。デフォルトの feature は空です。通常のアプリケーションコードでリポジトリ専用の feature を有効にする必要はありません。"
+        }
+      ],
+      "independentJudgment": "候補ファイルの事前生成 naturally names the preparation capability within the public-crate list. Rust/native prerequisites, no default features and separate JSON parser remain in context; it does not claim publication during preparation."
+    },
+    "docs/zh-cn/concepts.md": {
+      "currentSha256": "176221cea9ed103c5aae29bc527ee0ceac4a329a53b50d6a9fe6360f3c3c9ae9",
+      "previousSha256": "d96916d3e573822c4bc9f918a0b00f86fefad8062a8d42330a5942b18f017823",
+      "changedSpans": [
+        {
+          "line": 23,
+          "before": "`Media` 是拥有所有权的快照，文件名由内容确定。只有在预算范围内完成读取与校验后，导入才会成功；之后源文件可以改变或消失。克隆共享存储，可用于多个项目。`with_export_name` 选择固定且可移植的文件名，不会改变已有克隆或内容节点。",
+          "after": "`Media` 持有媒体数据的不可变快照，并管理其生命周期；导出文件名由内容确定。只有在预算范围内完成读取与校验后，导入才会成功；之后源文件可以改变或消失。克隆共享存储，可用于多个项目。`with_export_name` 选择固定且可移植的文件名，不会改变已有克隆或内容节点。"
+        }
+      ],
+      "independentJudgment": "Media 持有媒体数据的不可变快照，并管理其生命周期 explains ownership directly. The surrounding successful-import prerequisite and clone shared storage keep the technical meaning precise."
+    },
+    "docs/de/concepts.md": {
+      "currentSha256": "9574f0e60ce8b0b7757cec54161e1e10d40ec3449ffb5a1226bf54dd91c318cd",
+      "previousSha256": "ca7c65832736756c6e00332a886a0e83ccada81916d1a7bb458b3b69b3908a56",
+      "changedSpans": [
+        {
+          "line": 8,
+          "before": "Eine `Note` enthält ihr Modell und ihre Inhalte. `project.add(key, note)` weist ihr einen erforderlichen stabilen Quellschlüssel zu und sammelt Abhängigkeiten atomar. Doppelte Schlüssel, unbekannte Felder sowie widersprüchliche Modelle oder Medien führen zu einem Fehler, ohne den Zustand teilweise zu verändern. Der Projektnamensraum und die Datensatzschlüssel müssen Änderungen und einer Umordnung der Quelldaten standhalten. Anzeigenamen und Texte sind keine Identitätsschlüssel.",
+          "after": "Eine `Note` enthält ihr Modell und ihre Inhalte. `project.add(key, note)` weist ihr einen erforderlichen stabilen Quellschlüssel zu und sammelt Abhängigkeiten atomar. Doppelte Schlüssel, unbekannte Felder sowie widersprüchliche Modelle oder Medien führen zu einem Fehler, ohne den Zustand teilweise zu verändern. Behalte den Projektnamensraum und die Datensatzschlüssel bei, wenn du Quelldaten bearbeitest oder neu sortierst. Anzeigenamen und Texte sind keine Identitätsschlüssel."
+        }
+      ],
+      "independentJudgment": "Behalte ... bei, wenn du Quelldaten bearbeitest oder neu sortierst is a direct actionable instruction to retain namespace/record keys. It preserves the distinction from display names and content."
+    },
+    "docs/cards.md": {
+      "currentSha256": "8045851d51a2f400b246f6614f53ccf907fbf31b5e5ead13eb10cbabfc0cfe7f",
+      "previousSha256": "8de0e93bf4a3b94d18d8214687d78b70a32b53e16b2369692da7c624f028d5f8",
+      "changedSpans": [
+        {
+          "line": 4,
+          "before": "from code instead of adding them one at a time in Anki. A Basic note has a front\nand back. A Cloze note generates one card for each supported deletion number.",
+          "after": "from code instead of adding them one at a time in Anki. A Basic note stores front and back fields, which its template uses to generate a question-and-answer card. A Cloze note generates one card for each supported deletion number."
+        }
+      ],
+      "independentJudgment": "The fuller Basic definition distinguishes stored front/back fields from the generated question-and-answer card. The surrounding two-note/three-card example and Cloze deletion count still agree; no changed command or API."
+    },
+    "docs/zh-cn/media.md": {
+      "currentSha256": "1e5fe4decbd6789239dd776fd068ed9a583beb7b3cd106578083d4caba05808e",
+      "previousSha256": "a2a3ebf687d9a30e1624340839f3c8262eeff6b5defecf958a034db5f55a8b65",
+      "changedSpans": [
+        {
+          "line": 105,
+          "before": "Rust 使用 `Media::files(paths)`，Node 使用 `await Media.files(paths)`，Python 使用 `Media.files(paths)`，按输入顺序导入文件，每次调用最多四个工作线程。少于 16 个文件时串行运行。Rust 还提供 `files_with_limits`；Node 和 Python 接受与 `file` 相同的限制。限制按每个资源计算。若某项导入失败，调用会等待已启动的工作完成、释放此批次的快照，并返回输入顺序中的第一个错误。已有媒体所有者继续有效。Python 在导入期间释放 GIL；Node 在事件循环之外执行工作。单文件导入仍立即产生拥有所有权的快照；调用方必须选择批量方法才能获得导入并发。",
+          "after": "Rust 使用 `Media::files(paths)`，Node 使用 `await Media.files(paths)`，Python 使用 `Media.files(paths)`，按输入顺序导入文件，每次调用最多四个工作线程。少于 16 个文件时串行运行。Rust 还提供 `files_with_limits`；Node 和 Python 接受与 `file` 相同的限制。限制按每个资源计算。若某项导入失败，调用会等待已启动的工作完成、释放此批次的快照，并返回输入顺序中的第一个错误。已有媒体所有者继续有效。Python 在导入期间释放 GIL；Node 在事件循环之外执行工作。单文件导入仍立即返回持有媒体数据快照的对象；调用方必须选择批量方法才能获得导入并发。"
+        }
+      ],
+      "independentJudgment": "The batch paragraph now describes the immediate single-file return as a snapshot-owning object, without implying parallel work. Four-worker/under-16 serial/input-order-error behavior and memory-budget limits remain explicit; unrelated old phrasing/navigation minors remain."
+    },
+    "docs/ja/media.md": {
+      "currentSha256": "336abcc728c38092698782c9b501fbaed716fb08384227e444c142d5bd345730",
+      "previousSha256": "e1e9452b4e70c6537516ffba7312bd68140091817ef22160688fef12f13b9c70",
+      "changedSpans": [
+        {
+          "line": 3,
+          "before": "発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と音声を同梱します。Anki Forge は、指定されたファイルを APKG にコピーします。音声合成などによる音声・画像の作成には別のツールが必要です。例では Rust を使います。後半の一括インポートでは Python と Node.js の呼び出しも示します。",
+          "after": "発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と音声を同梱します。Anki Forge は、指定されたファイルを APKG にコピーします。音声や画像の作成には別のツールが必要です。たとえば、読み上げ音声は音声合成ツールで用意します。例では Rust を使います。後半の一括インポートでは Python と Node.js の呼び出しも示します。"
+        }
+      ],
+      "independentJudgment": "Image/audio creation is now separate from the concrete example of TTS supplying read-aloud audio; it no longer suggests speech synthesis makes images. Snapshot ownership, MIME and client playback limits remain unchanged."
+    },
+    "docs/de/media.md": {
+      "currentSha256": "4b9358b8c1f03a79617daf6b8815079320a6a415ae3cc77fea59c037d7464be3",
+      "previousSha256": "cba638b0700073d214d98011cfeb0691cbb043cc2d95bb664ac6a57d29ec6971",
+      "changedSpans": [
+        {
+          "line": 3,
+          "before": "Bündle Bilder und Audio in erzeugten Anki-Karten, etwa Vokabelkarten mit Aussprache oder Diagrammfragen. Anki Forge kopiert die bereitgestellten Dateien in das APKG. Zum Erzeugen von Audio oder Bildern, etwa durch Sprachsynthese, benötigst du ein separates Werkzeug. Die Beispiele verwenden Rust; der unten beschriebene Stapelimport zeigt auch die Python- und Node.js-Aufrufe.",
+          "after": "Bündle Bilder und Audio in erzeugten Anki-Karten, etwa Vokabelkarten mit Aussprache oder Diagrammfragen. Anki Forge kopiert die bereitgestellten Dateien in das APKG. Zum Erzeugen von Audio oder Bildern, etwa durch Sprachsynthese, benötigst du ein separates Werkzeug. Die Beispiele verwenden Rust; der unten beschriebene Import mehrerer Mediendateien zeigt auch die Python- und Node.js-Aufrufe."
+        },
+        {
+          "line": 107,
+          "before": "### Verhalten und Budgets des Stapelimports",
+          "after": "### Verhalten und Limits beim Import mehrerer Mediendateien"
+        }
+      ],
+      "independentJudgment": "Import mehrerer Mediendateien and Verhalten und Limits ... avoid confusing batch import with an Anki deck. The full paragraph retains input order, bounded concurrency, error cleanup and per-file budgets."
+    },
+    "docs/updates.md": {
+      "currentSha256": "dc9d09c2874c19fd91f926beeedf56e79a123ab0464a68d0f82f85c522eff1dd",
+      "previousSha256": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+      "changedSpans": [
+        {
+          "line": 1,
+          "before": "# Update and distribute a publication",
+          "after": "# Update and distribute a deck"
+        }
+      ],
+      "independentJudgment": "The heading names the user object, a deck, rather than a publication. Original distribution baseline, same namespace/keys, policy gates, client limitations and the complete example remain consistent."
+    },
+    "docs/zh-cn/updates.md": {
+      "currentSha256": "e97e6faa39713154f65787183a5e601818a7650fd97c08f89264db7fa68409cd",
+      "previousSha256": "83b373f4166efb68518dc8d4f9954b2015748e71e8bdb2bd55abcc377854207c",
+      "changedSpans": [
+        {
+          "line": 5,
+          "before": "保持项目命名空间和笔记、模型、字段、模板键稳定。每次新版本基于之前的**原始分发 APKG** 构建，该包携带完整、带版本的身份证据。将包和源代码修订一起保存。",
+          "after": "保持项目命名空间和笔记、模型、字段、模板键稳定。每个新版本都以上一版分发时的**原始 APKG** 为基准构建。包内包含完整的标识映射和修订信息，且这些信息采用带版本号的格式。请将原始包与对应的源码版本一起保存。"
+        }
+      ],
+      "independentJudgment": "The baseline paragraph now uses three direct sentences: previous original distributed APKG, complete mapping/revision data in a versioned format, and keeping source revision. It does not change identity or overwrite policy. The old introduction/metadata minors remain."
+    },
+    "docs/es/updates.md": {
+      "currentSha256": "f088f5a173bacafeb087fbdb86881e19280ccabcfb9bd1d3c725bb11604fc165",
+      "previousSha256": "19380eb677013ee27ca173e7d4719e6003ca8a7847337349185ce2b5164976d0",
+      "changedSpans": [
+        {
+          "line": 1,
+          "before": "# Actualiza y distribuye una publicación",
+          "after": "# Actualiza y distribuye un mazo"
+        },
+        {
+          "line": 71,
+          "before": "La ausencia o corrupción de las pruebas de identidad, un espacio de nombres distinto, los datos no válidos de la versión candidata y los límites de inspección son errores, no categorías de riesgo que se puedan autorizar. Si el análisis no puede terminar, la comparación devuelve un error con las observaciones que haya completado. Establecer una política explícita en una solicitud de creación sin `update_from` es un error de configuración, independientemente del orden de las llamadas a los métodos de configuración.",
+          "after": "La ausencia o corrupción de las pruebas de identidad, un espacio de nombres distinto, los datos no válidos de la versión candidata y la superación de los límites de inspección son errores, no categorías de riesgo que se puedan autorizar. Si el análisis no puede terminar, la comparación devuelve un error con las observaciones que haya completado. Establecer una política explícita en una solicitud de creación sin `update_from` es un error de configuración, independientemente del orden de las llamadas a los métodos de configuración."
+        }
+      ],
+      "independentJudgment": "Actualiza y distribuye un mazo names the deck directly. The original APKG, identity evidence, policy/category behavior and client-import limitations remain explicit."
+    },
+    "docs/pt-br/updates.md": {
+      "currentSha256": "2f67030b0285a4cf8b38e0b509e2fe4f791d6152ba6362e19edd443e0fc957ae",
+      "previousSha256": "5e91f21e8f184b43143baeb301c9b5a9e6034b42f3ffc67391af12de0d173305",
+      "changedSpans": [
+        {
+          "line": 5,
+          "before": "Mantenha estáveis o namespace do projeto e as chaves de notas, modelos, campos e modelos de cartão. Gere cada nova versão a partir do **APKG original distribuído** anterior, que contém evidências completas de identidade em um formato versionado. Guarde o pacote junto com a revisão do seu código-fonte.",
+          "after": "Mantenha estáveis o namespace do projeto e as chaves de notas, tipos de nota, campos e templates de cartão. Gere cada nova versão a partir do **APKG original distribuído** anterior, que contém evidências completas de identidade em um formato versionado. Guarde o pacote junto com a revisão do seu código-fonte."
+        },
+        {
+          "line": 71,
+          "before": "Evidências ausentes ou corrompidas, divergência de namespace, dados inválidos do candidato e limites de inspeção são erros que impedem a operação, não categorias de risco que podem ser permitidas. Quando a análise não consegue terminar, a comparação retorna um erro com as observações já concluídas. Informar uma política explícita em uma criação sem `update_from` é um erro de configuração, independentemente da ordem dos métodos de configuração.",
+          "after": "Evidências ausentes ou corrompidas, divergência de namespace, dados inválidos do candidato e a ultrapassagem dos limites de inspeção são erros que impedem a operação, não categorias de risco que podem ser permitidas. Quando a análise não consegue terminar, a comparação retorna um erro com as observações já concluídas. Informar uma política explícita em uma criação sem `update_from` é um erro de configuração, independentemente da ordem dos métodos de configuração."
+        },
+        {
+          "line": 76,
+          "before": "O pacote inclui `ankiforge-identity.json` no formato `ankiforge-identity-v1`. Ele vincula IDs de modelos e configurações, GUIDs de notas, posições históricas de campos e modelos de cartão, ordinais de cartões e máscaras, revisões e mídia à coleção real e aos dados do pacote. Uma reexportação pelo Anki não preserva essas evidências e não serve como base de atualização. Evidências ausentes nunca são reconstruídas silenciosamente.",
+          "after": "O pacote inclui `ankiforge-identity.json` no formato `ankiforge-identity-v1`. Ele vincula IDs de modelos e configurações, GUIDs de notas, posições históricas de campos e templates de cartão, ordinais de cartões e máscaras, revisões e mídia à coleção real e aos dados do pacote. Uma reexportação pelo Anki não preserva essas evidências e não serve como base de atualização. Evidências ausentes nunca são reconstruídas silenciosamente."
+        },
+        {
+          "line": 78,
+          "before": "Alterar nomes de exibição ou conteúdo preserva as chaves de identidade. Conteúdo inalterado mantém a revisão da base; conteúdo alterado recebe uma revisão posterior. Reordenar campos ou modelos de cartão preserva as correspondências históricas. Identidades desativadas permanecem reservadas para que a restauração da mesma chave possa reutilizá-las. Uma chave de nota não pode ser transferida para outro modelo, e uma chave de modelo não pode alternar entre os tipos normal e Cloze.",
+          "after": "Alterar nomes de exibição ou conteúdo preserva as chaves de identidade. Conteúdo inalterado mantém a revisão da base; conteúdo alterado recebe uma revisão posterior. Reordenar campos ou templates de cartão preserva as correspondências históricas. Identidades desativadas permanecem reservadas para que a restauração da mesma chave possa reutilizá-las. Uma chave de nota não pode ser transferida para outro modelo, e uma chave de modelo não pode alternar entre os tipos normal e Cloze."
+        },
+        {
+          "line": 83,
+          "before": "Um APKG é um pacote de distribuição, não um mecanismo de sincronização de exclusões. Omitir notas, campos, modelos de cartão ou máscaras não exclui os dados existentes de quem estuda. Mudanças no esquema de campos e modelos de cartão ou no campo de ordenação apresentam alto risco, pois seu comportamento depende das opções de mesclagem e importação do Anki. Mudanças de esquema podem copiar modelos ou atualizar os carimbos de data das notas de destino antes da comparação do conteúdo das notas.",
+          "after": "Um APKG é um pacote de distribuição, não um mecanismo de sincronização de exclusões. Omitir notas, campos, templates de cartão ou máscaras não exclui os dados existentes de quem estuda. Mudanças no esquema de campos e templates de cartão ou no campo de ordenação apresentam alto risco, pois seu comportamento depende das opções de mesclagem e importação do Anki. Mudanças de esquema podem copiar modelos ou atualizar os carimbos de data das notas de destino antes da comparação do conteúdo das notas."
+        }
+      ],
+      "independentJudgment": "The stable-key and schema paragraphs now distinguish tipos de nota from templates de cartão. Removing fields/templates remains non-deleting, reordering preserves mappings, and client merge risks remain qualified. New deck heading is clearer."
+    },
+    "docs/ja/updates.md": {
+      "currentSha256": "03ab8171947b2f507b151bd9b88456a873071408b3657ce37eeeb8cec20ac5aa",
+      "previousSha256": "3c7c8e628b08c69d253ca6453bdf9ea922068d6d0eae3c71f10a753babfa1bc2",
+      "changedSpans": [
+        {
+          "line": 94,
+          "before": "一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。準備済み公開では、実際の APKG と確認対象のレポートの対応を保てます。",
+          "after": "一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。`prepare_publication` で候補を準備し、確認後に `publish` で保存すると、レポートで確認したものと同じ APKG を書き出せます。"
+        }
+      ],
+      "independentJudgment": "The paragraph names prepare_publication and publish directly: prepare once, review, then save the same APKG. It preserves the warning that an ordinary second build produces another candidate and the later policy/client checks."
+    },
+    "docs/build-guarantees.md": {
+      "currentSha256": "c6d8f76e785e65b099ccde5b062fd223dad7ad0ad20b8d1bc446d0cb6edb1a4a",
+      "previousSha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+      "changedSpans": [
+        {
+          "line": 82,
+          "before": "## Prepared publication from source",
+          "after": "<!-- section: prepared-publication-from-source -->\n## Prepare, review and publish"
+        }
+      ],
+      "independentJudgment": "Prepare, review and publish accurately names the complete public-package workflow. The unchanged next sentence explicitly includes public 0.3.1; stable section marker preserves the historic anchor. Resolves L002-en."
+    },
+    "docs/zh-cn/build-guarantees.md": {
+      "currentSha256": "87654fb1c056fb9c434ef45e0df7eb669e598100685acac02c11576a3d98ac5c",
+      "previousSha256": "5d7f6e975cd181ec7fe980b9a2e3f223bf50f99b0fb65207e8dfbf183eaf17af",
+      "changedSpans": [
+        {
+          "line": 41,
+          "before": "## 源码中的预备发布",
+          "after": "<!-- section: prepared-publication-from-source -->\n## 准备候选包并在审阅后写入目标文件"
+        }
+      ],
+      "independentJudgment": "准备候选包并在审阅后写入目标文件 describes the actual prepare/review/publish sequence. Public 0.3.1 and one consumed candidate remain explicit; old section identity is preserved. Resolves L002-zh-CN."
+    },
+    "docs/es/build-guarantees.md": {
+      "currentSha256": "0328d2f828399fc67c844ba08d13aa38fe37be3bf8db33751f5189ecf3510492",
+      "previousSha256": "a9783373464d0dc6dab67c4fb6b9acb9a12a22dac3c6294ade252055e58e5211",
+      "changedSpans": [
+        {
+          "line": 54,
+          "before": "Sigue [el ejemplo completo](/docs/updates/#build-once-review-then-publish-from-source) y las referencias de las API de cada lenguaje para conocer los errores tipados y el funcionamiento de los trabajadores.",
+          "after": "Sigue [el ejemplo completo](/docs/updates/#build-once-review-then-publish-from-source) y las referencias de las API de cada lenguaje para conocer los errores tipados y el funcionamiento de los hilos de trabajo."
+        }
+      ],
+      "independentJudgment": "hilos de trabajo accurately names worker threads in the concluding reference, unlike the human-worker connotation of trabajadores. Candidate consumption and late-I/O publication facts remain in full context."
+    },
+    "docs/ja/build-guarantees.md": {
+      "currentSha256": "0f17e56cab2a358b980fe8ec0b19dee95843bf8e0576807815059042e495b7a9",
+      "previousSha256": "9e9c66491f660e69f6bd391339aac8112d50c633722660c3f5602d51120b405c",
+      "changedSpans": [
+        {
+          "line": 46,
+          "before": "## 準備済み公開",
+          "after": "## 候補ファイルを準備し、確認後に保存する"
+        },
+        {
+          "line": 48,
+          "before": "準備済み公開は、公開 `0.3.1` パッケージに含まれています。",
+          "after": "候補を事前に生成し、確認後に保存する機能は、公開 `0.3.1` パッケージに含まれています。"
+        }
+      ],
+      "independentJudgment": "候補ファイルを準備し、確認後に保存する and its first sentence explain prepared publication naturally. The full section preserves a single private candidate, no destination replacement at preparation, consuming publish, and late-failure facts."
+    },
+    "docs/de/build-guarantees.md": {
+      "currentSha256": "f080df904a040468f243b4a2864aefc90c2aecda6708d92629e4d9255d8d3bdf",
+      "previousSha256": "966f32043bbf829a52ef54321ea87767a5af589948cf228747662da7bf612f1e",
+      "changedSpans": [
+        {
+          "line": 3,
+          "before": "`Project::build` liefert `BuildOutput` nur nach einem erfolgreichen Vorgang mit einem garantierten APKG-Artefakt. Ein fehlgeschlagener Vorgang liefert `BuildError` mit strukturierter Art und Code, Beobachtungen, zugrunde liegenden Ursachen und tatsächlichen Veröffentlichungsfakten.",
+          "after": "`Project::build` liefert `BuildOutput` nur nach einem erfolgreichen Vorgang mit einem garantierten APKG-Artefakt. Ein fehlgeschlagener Vorgang liefert `BuildError` mit strukturierten Angaben zu Fehlerart und Fehlercode, Beobachtungen, zugrunde liegenden Ursachen und tatsächlichen Veröffentlichungsfakten."
+        },
+        {
+          "line": 39,
+          "before": "## Parallele Arbeit",
+          "after": "## Nebenläufige Vorgänge"
+        }
+      ],
+      "independentJudgment": "Fehlerart und Fehlercode explicitly names the structured error attributes; Nebenläufige Vorgänge fits snapshot/lifetime behavior and the maintained Du-register. Publication and client guarantees are unchanged."
+    },
+    "docs/zh-cn/troubleshooting.md": {
+      "currentSha256": "99e54b3bfe63fe4014cdfb7f501b9ded114baee3fca48e7f81e887ef777fb9ed",
+      "previousSha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f",
+      "changedSpans": [
+        {
+          "line": 49,
+          "before": "基线应为含完整身份证据的原始分发 APKG。Anki 重新导出的包不保留该证据。更新策略不能放行命名空间不匹配或证据损坏。",
+          "after": "基线应为含完整标识映射与修订信息的原始分发 APKG。Anki 重新导出的包不保留该证据。更新策略不能放行命名空间不匹配或证据损坏。"
+        }
+      ],
+      "independentJudgment": "The original baseline requirement now names 完整标识映射与修订信息; Anki re-export, mismatch and corrupt evidence remain disallowed. Existing IO rectangle wording is unchanged and retained."
+    },
+    "docs/pt-br/troubleshooting.md": {
+      "currentSha256": "6128c6cbf7203869e3f9b2679b677ebb0fb5c98a6c96af9421002692b81665f4",
+      "previousSha256": "5f20692772452a77b49afaa868eae955a151ec960ee8cbd8c22ae216e122262c",
+      "changedSpans": [
+        {
+          "line": 35,
+          "before": "## Mídia e modelos",
+          "after": "## Mídia e templates"
+        },
+        {
+          "line": 45,
+          "before": "| Falha ao carregar um pacote de modelos | Use bundle-v2, chaves explícitas, modelos baseados em chaves e caminhos internos ao pacote |",
+          "after": "| Falha ao carregar um pacote de templates | Use bundle-v2, chaves explícitas, templates baseados em chaves e caminhos internos ao pacote |"
+        }
+      ],
+      "independentJudgment": "Mídia e templates and pacote de templates match the resource being loaded. The body distinguishes model asset declarations from template references; old heading is registered as a historic alias."
+    },
+    "docs/zh-cn/compatibility.md": {
+      "currentSha256": "b9b3b8b816c34d6dfaa57ac4aa23db15c8862b04749ff2320e0fabab4077cc75",
+      "previousSha256": "617bfe97d87e825467371377e8711d757469b6d007d4ca7fb9962f6ab10ed87c",
+      "changedSpans": [
+        {
+          "line": 21,
+          "before": "更新时保留之前的原始分发 APKG。Anki 重新导出的文件不保留所需身份证据。包中不再包含某条笔记，并不会将其从学习者的集合中删除。字段或模板变化、排序字段、本地编辑和复习历史需要针对客户端测试。",
+          "after": "更新时保留之前的原始分发 APKG。Anki 重新导出的文件不保留所需标识映射与修订信息。包中不再包含某条笔记，并不会将其从学习者的集合中删除。字段或模板变化、排序字段、本地编辑和复习历史需要针对客户端测试。"
+        }
+      ],
+      "independentJudgment": "The required 标识映射与修订信息 replaces abstract 身份证据 in the original-baseline constraint. It still rejects re-export and preserves all client/version/import limitations."
+    },
+    "docs/ja/compatibility.md": {
+      "currentSha256": "dae13cf8309aaf16a9797f820d9aea73b625b0461df7433dd72b44002440ad6c",
+      "previousSha256": "1dbf64698229e3678678cd0d10a5c2accd87e54b3adcf1dd5154f503acbd4619",
+      "changedSpans": [
+        {
+          "line": 16,
+          "before": "[メディアの一括インポート](/docs/media/#batch-media-import)と[準備済み公開](/docs/updates/#build-once-review-then-publish)のガイドで扱う機能は、公開 `0.3.1` パッケージで使用できます。",
+          "after": "[メディアの一括インポート](/docs/media/#batch-media-import)と[候補を確認してから保存する手順](/docs/updates/#build-once-review-then-publish)のガイドで扱う機能は、公開 `0.3.1` パッケージで使用できます。"
+        }
+      ],
+      "independentJudgment": "候補を確認してから保存する手順 accurately names the linked workflow; public 0.3.1, platform support versus executed checks, and client limits remain distinct."
+    },
+    "docs/zh-cn/rust-api.md": {
+      "currentSha256": "bf752e41824bd3bb6bca2a98e1c120bfb94edea4e5802297a327d4ee70e02ca3",
+      "previousSha256": "7d4432c78d62063d5205b9524765456674ad12aad23201a035e433fac7517de9",
+      "changedSpans": [
+        {
+          "line": 3,
+          "before": "crate 根提供常用值：`Project`、`Note`、`NoteType`、`Field`、`Template`、`Content`、`Media`、`BuildOptions` 和 `BuildOutput`。公开领域模块为 `note`、`schema`、`media`、`build`、`update` 与 `diagnostics`。仓库工具是独立且由 feature 控制的接口；消费者应用不需要它们。",
+          "after": "crate 根提供常用值：`Project`、`Note`、`NoteType`、`Field`、`Template`、`Content`、`Media`、`BuildOptions` 和 `BuildOutput`。公开领域模块为 `note`、`schema`、`media`、`build`、`update` 与 `diagnostics`。仓库工具是独立且由 feature 控制的接口；使用本库的应用不需要这些工具。"
+        },
+        {
+          "line": 54,
+          "before": "`project.compare(update::CompareOptions::against(path))` 返回完成的 `ComparisonReport`，即使高风险发现项阻止其策略。它提供 `findings()`、`highest_risk()`、`policy()`、`diagnostics()` 和 `snapshot()`。`UpdatePolicy::default()` 阻止 High/Critical；`.fail_on(level)` 改变阈值，`.allow(RiskCode)` 接受整个已注册风险类别。它不能接受身份证据缺失或损坏等硬错误。",
+          "after": "`project.compare(update::CompareOptions::against(path))` 返回完成的 `ComparisonReport`，即使高风险发现项阻止其策略。它提供 `findings()`、`highest_risk()`、`policy()`、`diagnostics()` 和 `snapshot()`。`UpdatePolicy::default()` 阻止 High/Critical；`.fail_on(level)` 改变阈值，`.allow(RiskCode)` 接受整个已注册风险类别。它不能接受标识映射与修订信息缺失或损坏等硬错误。"
+        },
+        {
+          "line": 98,
+          "before": "预备阶段执行完整的受限检查与比较。直到 `publish` 才发布目标；它使用同一私有候选包并复查基线别名。相对路径在预备调用时绑定。项目编辑不能改变候选包。报告耗时不含审阅等待。释放未发布所有者会清理它；已发布临时输出遵循通常的最后产物所有者清理规则。不能从 JSON 恢复所有者，也不能对已消耗所有者重试。原生构建省略未使用的暂存 manifest，但保留内嵌身份证据与媒体验证。内部暂存工具仍接收完整 manifest 和指纹。",
+          "after": "预备阶段执行完整的受限检查与比较。直到 `publish` 才发布目标；它使用同一私有候选包并复查基线别名。相对路径在预备调用时绑定。项目编辑不能改变候选包。报告耗时不含审阅等待。释放未发布所有者会清理它；已发布临时输出遵循通常的最后产物所有者清理规则。不能从 JSON 恢复所有者，也不能对已消耗所有者重试。原生构建省略未使用的暂存 manifest，但仍内嵌标识映射与修订信息，并保留媒体验证。内部暂存工具仍接收完整 manifest 和指纹。"
+        }
+      ],
+      "independentJudgment": "The edited statements clarify external applications do not need repository tools, hard errors include missing/corrupt identity mapping/revision data, and native builds retain that data. Existing owned-reference/保持不会失败 minors are unchanged and retained."
+    },
+    "docs/ja/rust-api.md": {
+      "currentSha256": "aa41ace32c23cd069f0372f14cdb82e4a8daa0171b2123390d01e4e9a37aa797",
+      "previousSha256": "44f86e9fa09a1563256c3e4f1a002adeede89175ea612028a3189bad53b82cb4",
+      "changedSpans": [
+        {
+          "line": 79,
+          "before": "準備済み公開 API は、公開 `0.3.1` パッケージに含まれています。",
+          "after": "候補の事前生成と保存を行う API は、公開 `0.3.1` パッケージに含まれています。"
+        }
+      ],
+      "independentJudgment": "候補の事前生成と保存を行う API is a natural explanation of prepared publication and explicitly stays in public 0.3.1. The one-candidate source example is unchanged; the old 深く凍結 minor remains."
+    },
+    "docs/pt-br/node-quickstart.md": {
+      "currentSha256": "454a6e0012fddb933688e592cd00dd45ffdfe945497a46ebecfc49dc43cd345f",
+      "previousSha256": "9bb7efa79d1f1eece82cc1d364bd108468f331264aa9fff57c5e99ecf6ae595e",
+      "changedSpans": [
+        {
+          "line": 44,
+          "before": "- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de modelos](/docs/templates/)",
+          "after": "- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de templates](/docs/templates/)"
+        }
+      ],
+      "independentJudgment": "The next-task link now says pacotes de templates, consistent with the destination and distinct from tipos de nota. The complete Node command/program and optional native dependency requirement are untouched."
+    },
+    "docs/zh-cn/node-api.md": {
+      "currentSha256": "06469c7f709d908eca98a806e3cf80dff0c119336107cc87ef01a9ea4c6430e7",
+      "previousSha256": "4ac2fbc3679542af661a2ff5172ad2d9b20daa575d3b5cf2deefcc4b06a0f07f",
+      "changedSpans": [
+        {
+          "line": 44,
+          "before": "`await Media.file(path, limits?)` 和 `await Media.bytes(Uint8Array, mime, limits?)` 返回拥有所有权的快照。await 成功后源文件可改变或消失。`withExportName(name)` 返回重命名值，不改变之前的克隆或内容。通过属性读取 `filename`、`mediaType` 和 `byteLength`。",
+          "after": "`await Media.file(path, limits?)` 和 `await Media.bytes(Uint8Array, mime, limits?)` 返回持有媒体数据快照的 `Media` 对象。导入成功后，修改或删除源文件不会改变已导入的媒体数据。`withExportName(name)` 返回重命名值，不改变之前的克隆或内容。通过属性读取 `filename`、`mediaType` 和 `byteLength`。"
+        }
+      ],
+      "independentJudgment": "The Media.file/bytes result is now a Media object holding the snapshot; successful import allows source-file changes/removal without changing imported bytes. Existing renaming and earlier-clone distinctions remain."
+    },
+    "docs/ja/node-api.md": {
+      "currentSha256": "7a6fe1cf161e4b6aee2ff84d6b8b6f187e66376a18c97e489d1a966cabd275ad",
+      "previousSha256": "a7e3b2466f6b1860929ca28d1283b689495cf47a71c5f4d976701e6d244968f7",
+      "changedSpans": [
+        {
+          "line": 3,
+          "before": "`ankiforge` エントリーポイントは、作成用モデルとして Project のみを公開します。型は[公開ソース](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts)、[レポートクラス](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts)、[JSON スナップショットの型宣言](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts)にあります。[クイックスタート](/docs/node-quickstart/)から始めてください。",
+          "after": "`ankiforge` の公開 API では、`Project` を中心にノートやメディアを組み立てます。型は[公開ソース](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts)、[レポートクラス](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts)、[JSON スナップショットの型宣言](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts)にあります。[クイックスタート](/docs/node-quickstart/)から始めてください。"
+        },
+        {
+          "line": 111,
+          "before": "## メディアの一括処理と準備済み公開",
+          "after": "## メディアの一括処理と候補ファイルの事前生成"
+        },
+        {
+          "line": 113,
+          "before": "メディアの一括処理と準備済み公開は、公開 `0.3.1` パッケージに含まれています。",
+          "after": "メディアの一括処理と候補ファイルの事前生成は、公開 `0.3.1` パッケージに含まれています。"
+        }
+      ],
+      "independentJudgment": "The opening describes Project-centered assembly instead of implying Project is the only exported value. 候補ファイルの事前生成 is explained by the same prepare/review/publish lifecycle below. Existing 深く凍結 minor is retained."
+    },
+    "docs/de/node-api.md": {
+      "currentSha256": "e3da36aabe6765613b3420a62ab0504b342543423ccee1ac647f8e86d5e5e79a",
+      "previousSha256": "9eb661fae21ce15f7c9f25010e6642c52338cf2ffd9f925f81f5c6ed2a8d3fae",
+      "changedSpans": [
+        {
+          "line": 110,
+          "before": "## Medienimport im Stapel und vorbereitete Veröffentlichung",
+          "after": "## Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten"
+        }
+      ],
+      "independentJudgment": "Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten names two concrete operations. The public 0.3.1 claim, one consumed owner and worker lifecycle remain intact; old heading alias is preserved."
+    },
+    "docs/pt-br/python-quickstart.md": {
+      "currentSha256": "500f1a2d96e21c2583bd1338e9dc3e999e321c5a99bd3ac8735ac087032d0527",
+      "previousSha256": "d42037dbd3bc8e4c36bcba6968a74966adf1bb05cd69f7da353e25d1f0625784",
+      "changedSpans": [
+        {
+          "line": 43,
+          "before": "- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de modelos](/docs/templates/)",
+          "after": "- [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de templates](/docs/templates/)"
+        }
+      ],
+      "independentJudgment": "The next-task link now says pacotes de templates; Python installation, executable program and next-task destinations are unchanged."
+    },
+    "docs/python/api.md": {
+      "currentSha256": "9741b58bd3a7cfd8d0c888681352f8ea708a3493c04e2d3e2dd69ee9cdcd8e91",
+      "previousSha256": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+      "changedSpans": [
+        {
+          "line": 82,
+          "before": "## Source API details",
+          "after": "<!-- section: source-api-details -->\n## Batch media and prepared publication"
+        }
+      ],
+      "independentJudgment": "Batch media and prepared publication names the public 0.3.1 capabilities described by this section instead of suggesting source-only APIs. Stable section marker remains. Resolves L003-en."
+    },
+    "docs/zh-cn/python-api.md": {
+      "currentSha256": "3774995fb7d9071dc7f93d18cab9b3955b5f65231bc6eb9b151ffc6b09ea695a",
+      "previousSha256": "29db80f1af39809197c38e33a6af315501da5586a4ecc6a01f77202773ddddfd",
+      "changedSpans": [
+        {
+          "line": 31,
+          "before": "| `Media.file(path, *, limits=MediaLimits())` | 立即读取拥有所有权的快照 |",
+          "after": "| `Media.file(path, *, limits=MediaLimits())` | 读取媒体数据并返回持有快照的 `Media` 对象 |"
+        },
+        {
+          "line": 70,
+          "before": "## 源码 API 详情",
+          "after": "<!-- section: source-api-details -->\n## 批量媒体处理与预备发布"
+        }
+      ],
+      "independentJudgment": "Media.file explicitly reads bytes and returns a snapshot-owning Media. 批量媒体处理与预备发布 corrects the old source-only heading, while the public 0.3.1 prerequisite and lifecycle details remain. Resolves L003-zh-CN only; 保持不会失败 remains."
+    },
+    "docs/ja/python-api.md": {
+      "currentSha256": "08eb2c1a2d460cefafdfb6593e7db28e71c6ad865c26e10d248c6e7420cafcc0",
+      "previousSha256": "93da1e958c3e3640e6ab98273e161deebde6ab325e9732869c3422cfeb58f6ff",
+      "changedSpans": [
+        {
+          "line": 77,
+          "before": "## メディアの一括処理と準備済み公開",
+          "after": "## メディアの一括処理と候補ファイルの事前生成"
+        },
+        {
+          "line": 79,
+          "before": "メディアの一括処理と準備済み公開は、公開パッケージ `0.3.1` に含まれています。",
+          "after": "メディアの一括処理と候補ファイルの事前生成は、公開パッケージ `0.3.1` に含まれています。"
+        }
+      ],
+      "independentJudgment": "The heading and introduction use 候補ファイルの事前生成, followed by explicit preparation/review/publication and consumed-owner/error facts. Public 0.3.1 remains explicit; no execution or availability promise changed."
+    },
+    "docs/de/python-api.md": {
+      "currentSha256": "3e609cd741f908fbf59c918ab8bcfc36d6efbf491bacaece9e840f19429ba805",
+      "previousSha256": "3f9c8ef43cbe56ef2c51530d19d0005f558008590168c4e5025408642f4acfb2",
+      "changedSpans": [
+        {
+          "line": 77,
+          "before": "## Stapelverarbeitung von Medien und vorbereitete Veröffentlichung",
+          "after": "## Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten"
+        }
+      ],
+      "independentJudgment": "The concrete multi-file/preparation heading fits the section and remains separate from publication. The full public-version/lifecycle paragraph still describes errors, reprepare and late replacement facts."
+    },
+    "docs/zh-cn/python-diagnostics.md": {
+      "currentSha256": "cf933fa320e074b93f0067af6c3d521c68b5465ca7100eebde45d37285ed0307",
+      "previousSha256": "18fa83415cf6e7e1b1e57d44f2c66ff5240d21663bb1520fbc8a0ae53e01704f",
+      "changedSpans": [
+        {
+          "line": 34,
+          "before": "完成的比较即使发现 High 风险也正常返回。通过 `comparison.allows_publication` 查看策略决定。无法读取的基线、缺失完整身份证据、无效候选包或预算超限会抛出 CompareError；`.report` 包含失败前完成的观察结果。",
+          "after": "完成的比较即使发现 High 风险也正常返回。通过 `comparison.allows_publication` 查看策略决定。无法读取的基线、缺失完整标识映射与修订信息、无效候选包或预算超限会抛出 CompareError；`.report` 包含失败前完成的观察结果。"
+        }
+      ],
+      "independentJudgment": "Missing 完整标识映射与修订信息 is clearly an operation error alongside invalid baseline/candidate/limits. It remains distinct from allowed risk categories and completed comparison policy."
+    },
+    "docs/zh-cn/python-migration.md": {
+      "currentSha256": "b8dea64aea2d5015c1a4bfc498b0c78f8e4289d3033212b1e65875079bba6026",
+      "previousSha256": "d3ba868ff20b98f54538e366263bea6f2f86799e355748db84e5e021bb235979",
+      "changedSpans": [
+        {
+          "line": 22,
+          "before": "只有携带当前身份证据的完整原始分发 APKG 才能作为更新基线。不会自动恢复旧模板包和旧 APKG 证据。新流程见 README 与可执行示例。",
+          "after": "只有携带当前标识映射与修订信息的完整原始分发 APKG 才能作为更新基线。不会自动恢复旧模板包和旧 APKG 证据。新流程见 README 与可执行示例。"
+        }
+      ],
+      "independentJudgment": "The final paragraph requires current 标识映射与修订信息 in the complete original distributed package. The old/new API mapping and refusal to recover old evidence are unchanged."
+    },
+    "docs/pt-br/python-migration.md": {
+      "currentSha256": "cf65f4cafa888f348bd808d46134fd4420262d4fd66fa2e7c586583c201d2f6a",
+      "previousSha256": "14c7bcb9c296927c2d2ca34e7ae51bd7f23356431ec4cbd5eb4881f051884757",
+      "changedSpans": [
+        {
+          "line": 13,
+          "before": "| Registro de mídia do projeto | Cópias independentes de `Media.file` / `Media.bytes` |",
+          "after": "| Registro de mídia do projeto | Snapshots de `Media.file` / `Media.bytes` que não dependem dos arquivos de origem |"
+        },
+        {
+          "line": 22,
+          "before": "Somente APKGs originais distribuídos completos, com as evidências de identidade atuais, servem como base de atualização. Pacotes de modelos antigos e evidências de APKGs anteriores não são recuperados automaticamente. Consulte o [README do SDK](https://github.com/morehardy/anki-forge/blob/main/bindings/python/README.md) e seus exemplos executáveis para seguir o novo fluxo.",
+          "after": "Somente APKGs originais distribuídos completos, com as evidências de identidade atuais, servem como base de atualização. Pacotes de templates antigos e evidências de APKGs anteriores não são recuperados automaticamente. Consulte o [README do SDK](https://github.com/morehardy/anki-forge/blob/main/bindings/python/README.md) e seus exemplos executáveis para seguir o novo fluxo."
+        }
+      ],
+      "independentJudgment": "The media registry mapping now explicitly retains snapshots independently of source files; old bundles are pacotes de templates. It still requires current original APKG evidence and does not offer an old API compatibility layer."
+    },
+    "docs/ja/python-migration.md": {
+      "currentSha256": "700636aaa12eb494af0e95d66f88d129393ebef0ad9fc08e62e8ef87507c04e5",
+      "previousSha256": "7de219491d7eeeb77f74c4d0e4742b44ece5726936815e93024c1002cb75d1f3",
+      "changedSpans": [
+        {
+          "line": 17,
+          "before": "| 任意の成果物と ensure_success | 成果物が保証された `BuildOutput`。失敗時は構造化エラーを送出 |",
+          "after": "| 成果物がない場合もある戻り値と ensure_success | 成果物が保証された `BuildOutput`。失敗時は構造化エラーを送出 |"
+        }
+      ],
+      "independentJudgment": "成果物がない場合もある戻り値 correctly explains an optional return artifact in the old API, instead of arbitrary artifact. The current guaranteed BuildOutput/structured-error contrast is clear."
+    },
+    "docs/zh-cn/genanki-migration.md": {
+      "currentSha256": "d392324c36c626923d44c188dc73c34bb013e58690f0364b59de056a653530ce",
+      "previousSha256": "d484bf3260f897ad2f7f7e49e7397d2ddf81c65e56017316c0a527c08e7d2e83",
+      "changedSpans": [
+        {
+          "line": 36,
+          "before": "后续发布创建具有相同命名空间和数据键的新 Project，并调用 `BuildOptions.to(next_path).update_from(previous_original_apkg)`。原始 APKG 提供完整身份证据。此流程不会从任意旧包恢复身份，也不承诺自动转换已有 genanki 数字 ID/GUID。除非经过单独验证的数据迁移建立了对应关系，否则应把新模型的首次分发视为明确的身份边界。",
+          "after": "后续发布创建具有相同命名空间和数据键的新 Project，并调用 `BuildOptions.to(next_path).update_from(previous_original_apkg)`。原始 APKG 提供完整标识映射与修订信息。此流程不会从任意旧包恢复身份，也不承诺自动转换已有 genanki 数字 ID/GUID。除非经过单独验证的数据迁移建立了对应关系，否则应把新模型的首次分发视为明确的身份边界。"
+        }
+      ],
+      "independentJudgment": "原始 APKG 提供完整标识映射与修订信息 clarifies baseline evidence while retaining no arbitrary legacy-ID recovery and explicit migration boundaries. The old AnkiForge brand-spacing minor is still present and retained."
+    },
+    "docs/pt-br/genanki-migration.md": {
+      "currentSha256": "9be9edb3dd37e231d382a7d1a60d46a031c467a9b5824b6d10edf7ab47ea6d18",
+      "previousSha256": "18966d0055cf53620dd9090e5f7dc1abc069c4e705179cb733b6b0574fd87d7f",
+      "changedSpans": [
+        {
+          "line": 5,
+          "before": "O Anki Forge usa chaves de dados estáveis, modelos imutáveis validados, cópias independentes de mídia e operações explícitas de geração e atualização. Trata-se de um novo modelo de criação de conteúdo; ele não emula objetos genanki nem as antigas interfaces Deck e lockfile do Anki Forge.",
+          "after": "O Anki Forge usa chaves de dados estáveis, modelos imutáveis validados, snapshots de mídia que não dependem dos arquivos de origem e operações explícitas de geração e atualização. Trata-se de um novo modelo de criação de conteúdo; ele não emula objetos genanki nem as antigas interfaces Deck e lockfile do Anki Forge."
+        },
+        {
+          "line": 32,
+          "before": "As expressões dos modelos usam chaves Field. Os nomes de exibição podem ser traduzidos de forma independente; a biblioteca converte as referências às chaves nos nomes de campo do Anki. A finalização do modelo rejeita declarações ausentes ou conflitantes antes que uma nota possa ser adicionada. A adição de notas coleta automaticamente as dependências dos modelos e rejeita definições conflitantes para uma mesma chave de modelo.",
+          "after": "As expressões dos templates de cartão usam as chaves dos campos (Field). Os nomes de exibição podem ser traduzidos de forma independente; a biblioteca converte as referências às chaves nos nomes de campo do Anki. A finalização do modelo rejeita declarações ausentes ou conflitantes antes que uma nota possa ser adicionada. A adição de notas coleta automaticamente as dependências dos modelos e rejeita definições conflitantes para uma mesma chave de modelo."
+        }
+      ],
+      "independentJudgment": "The opening explains source-file-independent snapshots; template expressions now use templates de cartão while modelo remains the note type. Stable key, explicit asset and migration-identity instructions remain intact."
+    },
+    "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx": {
+      "currentSha256": "bea6bf6e6f4f3aa73d35bdaa83e1cce7e1ce4dd460313946e5a286975a7349f1",
+      "previousSha256": "66922194e8fcbc6bb137a4fbc0b55f47c19fc38d4b4159f4b4a14d2b6a901589",
+      "changedSpans": [
+        {
+          "line": 4,
+          "before": "title: 笔记身份应当比措辞更持久",
+          "after": "title: 修改笔记内容时，保持 ID 不变"
+        },
+        {
+          "line": 58,
+          "before": "分发前检查构建报告及其更新安全诊断。如果构建无法协调某条笔记的身份，应调查源数据和基线，不能仅把存在输出文件当作更新正确的证据。",
+          "after": "分发前检查构建报告及其更新安全诊断。如果构建时无法确认某条笔记与旧版本的对应关系，请检查源数据和基准包；不能仅凭输出文件存在就认定更新正确。"
+        }
+      ],
+      "independentJudgment": "The title now says 修改笔记内容时，保持 ID 不变; the last section tells readers to inspect source/baseline if identity cannot be reconciled, not infer correctness from file existence. The unchanged 仅…本身只是 minor is retained."
+    },
+    "website/src/content/blog/es/stable-ids-and-deck-updates.mdx": {
+      "currentSha256": "19cb51ba1d219551c15f3510e0210d9e2b925a1de7db2e6216f736d35bbfe4fb",
+      "previousSha256": "9d95cdcff3d90abdc8f6b0cf86c65068cdce6a365e6aec122897040ecd807e88",
+      "changedSpans": [
+        {
+          "line": 36,
+          "before": "",
+          "after": "<span id=\"dar-un-paquete-de-referencia-a-la-siguiente-generación\" data-section-alias=\"give-the-next-build-a-baseline\"></span>"
+        },
+        {
+          "line": 39,
+          "before": "## Dar un paquete de referencia a la siguiente generación",
+          "after": "## Usar el paquete anterior como referencia"
+        }
+      ],
+      "independentJudgment": "Usar el paquete anterior como referencia is a direct baseline heading. Current full section keeps distinct previous/next paths and the original distributed package, and explicitly preserves both historic anchors."
+    },
+    "website/src/content/blog/pt-br/stable-ids-and-deck-updates.mdx": {
+      "currentSha256": "4c8bf5de8400786eff80655b198f61ebb07038ca3e83700068d1c95527c9681d",
+      "previousSha256": "dbf77fbde63e2c2583a4fc2eb8a38f24bc78cbf954b16abc7995e595d9590ddc",
+      "changedSpans": [
+        {
+          "line": 4,
+          "before": "title: A identidade da nota deve durar mais que seu texto",
+          "after": "title: Atualize o conteúdo da nota sem mudar seu ID"
+        }
+      ],
+      "independentJudgment": "Atualize o conteúdo da nota sem mudar seu ID makes the article task concrete. Full prose preserves namespace, previous original APKG, distinct paths, review and Anki import limitations."
+    },
+    "website/src/content/blog/ja/stable-ids-and-deck-updates.mdx": {
+      "currentSha256": "9c6698433dc9f6bae4729b0b44e6b3f096f8ae45f96214aa706efe089e316ccc",
+      "previousSha256": "b0e2d64ad0ddb06d0211e3721a81f37a1dc99652673c0687302d1ee282ed9784",
+      "changedSpans": [
+        {
+          "line": 53,
+          "before": "生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、対応する基準パッケージではありません。",
+          "after": "生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、更新の基準パッケージとして使用できません。"
+        }
+      ],
+      "independentJudgment": "The final baseline sentence explicitly says an Anki re-export cannot serve as the update baseline. The shared CodeBlock and source snippet match the prior independently reviewed fix; the rest of the article preserves identity and client limitations."
+    }
+  },
+  "readingPackets": [
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-reading-contexts-en.txt",
+      "sha256": "40876128cc70f8291c3b7bbc3892f9b124124bfeccd81b3119d2cef1245e0e14",
+      "description": "Actually read the entire packet: page headings/introduction and full affected prose sections; unchanged code omitted."
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-reading-contexts-zh-CN.txt",
+      "sha256": "bd0edadaa30061ad9b241aba7547da303fcf09d546f05be919eefe41a5f6ded7",
+      "description": "Actually read the entire packet: page headings/introduction and full affected prose sections; unchanged code omitted."
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-reading-contexts-es.txt",
+      "sha256": "df5abec6301b92f3f6c8fa9f18cb31c36c44f86d30ccd4cba2d977c835a0168d",
+      "description": "Actually read the entire packet: page headings/introduction and full affected prose sections; unchanged code omitted."
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-reading-contexts-pt-BR.txt",
+      "sha256": "b1b4c1c96ab9649dc56f81e4b399c1ba0c6824c887f54e563dc9eadd9d049a3a",
+      "description": "Actually read the entire packet: page headings/introduction and full affected prose sections; unchanged code omitted."
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-reading-contexts-ja.txt",
+      "sha256": "a8da52c0ee918e904cdea4cafb394a23c7d1a0de5ac3d92d5226f289d1ec4728",
+      "description": "Actually read the entire packet: page headings/introduction and full affected prose sections; unchanged code omitted."
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-reading-contexts-de.txt",
+      "sha256": "e36acf3ca75f8ca16534ff7a721c67df3e19bdfbba37092f37b59893e5715362",
+      "description": "Actually read the entire packet: page headings/introduction and full affected prose sections; unchanged code omitted."
+    }
+  ]
+}

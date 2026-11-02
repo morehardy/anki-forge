@@ -1,0 +1,257 @@
+diff --git a/website/scripts/browser.test.mjs b/website/scripts/browser.test.mjs
+index fe74170..f69ab10 100644
+--- a/website/scripts/browser.test.mjs
++++ b/website/scripts/browser.test.mjs
+@@ -75,6 +75,20 @@ test('all built content URLs and assets are reachable over HTTP', async () => {
+   for (const route of localeIds.map(locale => localePath('/missing-topic-62/', locale))) assert.equal((await fetch(server.url(route))).status, 404);
+ });
+
++test('localized search retains native word-form matches beyond the frozen query set', async t => {
++  const { page } = await session(t);
++  for (const [locale, query, expected] of [['es', 'reutilización', 'templates'], ['de', 'Nebenläufig', 'python-api'], ['de', 'Zeichenfolge', 'python-api']]) {
++    if (!localeIds.includes(locale) || !hasTopic(expected)) continue;
++    await page.goto(server.url(pagePath('quickstart', locale)));
++    await page.keyboard.press('Control+k');
++    await visible(page.locator('site-search dialog'));
++    await page.locator('.pagefind-ui__search-input').fill(query);
++    await visible(page.locator(`.pagefind-ui__result-link[href="${server.url(pagePath(expected, locale))}"]`));
++    const results = await page.locator('.pagefind-ui__result-link').evaluateAll(links => links.map(link => link.href));
++    assert.ok(results.every(url => resolvePage(new URL(url).pathname, siteConfig.base)?.locale === locale));
++  }
++});
++
+ test('machine links and structured data work without JavaScript', async t => {
+   const { page } = await session(t, { javaScriptEnabled: false });
+   const examples = [publicTopics.find(topic => topic.type === 'docs'), publicTopics.find(topic => topic.type === 'article')].filter(Boolean);
+diff --git a/website/scripts/check-site.mjs b/website/scripts/check-site.mjs
+index c242328..06bb4b4 100644
+--- a/website/scripts/check-site.mjs
++++ b/website/scripts/check-site.mjs
+@@ -180,6 +180,7 @@ const ai = await loadAiQuickstart();
+ for (const locale of localeIds) {
+ const home = pages.get(path.join(dist, pagePath('home', locale).slice(1), 'index.html'));
+ const t = createTranslator(locale);
++const decimal = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+ record(home.$('#ai-quickstart[data-ai-quickstart]').length === 1, 'Missing AI quickstart anchor');
+ for (const [key, language] of Object.entries(ai.languages)) {
+   const panel = home.$(`[data-ai-panel="${key}"]`);
+@@ -193,15 +194,15 @@ for (const [key, language] of Object.entries(ai.languages)) {
+ for (const result of benchmark.results) {
+   const row = home.$(`[data-profile="${result.profile}"]`);
+   record(row.length === 1, `Missing benchmark workload ${result.profile}`);
+-  record(row.find('p').text() === `${result.rust.toFixed(1)} ms / ${result.genanki.toFixed(1)} ms`, `Incorrect benchmark times ${result.profile}`);
+-  record(row.find('strong').text() === t(result.saved >= 0 ? 'performance.less' : 'performance.more', { value: Math.abs(result.saved).toFixed(1) }), `Incorrect benchmark advantage ${result.profile}`);
++  record(row.find('p').text() === `${decimal.format(result.rust)} ms / ${decimal.format(result.genanki)} ms`, `${locale}: incorrect benchmark times ${result.profile}`);
++  record(row.find('strong').text() === t(result.saved >= 0 ? 'performance.less' : 'performance.more', { value: decimal.format(Math.abs(result.saved)) }), `${locale}: incorrect benchmark advantage ${result.profile}`);
+   for (const implementation of ['rust', 'genanki']) {
+     record(row.attr('style').includes(`--${implementation}-width: ${result[implementation] / benchmark.maxTime * 100}%`), `Incorrect chart scale ${result.profile}/${implementation}`);
+   }
+ }
+ const metrics = home.$('.home-performance-metric').text();
+-record(metrics.includes(benchmark.results[0].rust.toFixed(1)), 'Incorrect text export headline');
+-if (benchmark.minimumSaved >= 0) record(metrics.includes(`${benchmark.minimumSaved.toFixed(1)}–${benchmark.maximumSaved.toFixed(1)}`), 'Incorrect time advantage headline');
++record(metrics.includes(decimal.format(benchmark.results[0].rust)), `${locale}: incorrect text export headline`);
++if (benchmark.minimumSaved >= 0) record(metrics.includes(`${decimal.format(benchmark.minimumSaved)}–${decimal.format(benchmark.maximumSaved)}`), `${locale}: incorrect time advantage headline`);
+
+
+ }
+diff --git a/website/scripts/search-ranking.test.mjs b/website/scripts/search-ranking.test.mjs
+index a419083..4e18c64 100644
+--- a/website/scripts/search-ranking.test.mjs
++++ b/website/scripts/search-ranking.test.mjs
+@@ -56,6 +56,41 @@ test('Pagefind supplies exact body matches and plain snippets only for catalog U
+   assert.equal(plainSearchText('<mark>safe</mark> &#x4e2d;'), 'safe 中');
+ });
+
++test('Pagefind word-form matches survive when local tokens cannot recognize their inflection', () => {
++  for (const [locale, query, word] of [['es', 'reutilización', 'Reutiliza'], ['de', 'Nebenläufig', 'Nebenläufigkeit']]) {
++    const docs = [doc('a', 'Reference'), doc('b', 'Guide')];
++    const pagefindResults = [
++      { url: docs[1].url, raw_content: `${word} examples`, locations: [0], excerpt: `<mark>${word}</mark> examples` },
++      { url: docs[0].url, raw_content: `${word} details`, locations: [0], excerpt: `<mark>${word}</mark> details` },
++      { url: '/other-language/foreign/', raw_content: word, locations: [0] },
++    ];
++    const results = rankSearchDocuments(query, docs, locale, { pagefindResults });
++    assert.deepEqual(results.map(result => result.id), ['b', 'a'], 'native matches keep their order and stay within the locale catalog');
++    assert.equal(results[0].excerpt, `${word} examples`);
++  }
++});
++
++test('native word-form matches supplement exact matches without admitting numeric-only hits', () => {
++  const docs = [doc('exact', 'Zeichenfolge'), doc('inflected', 'Python API'), doc('numeric', 'Other')];
++  const pagefindResults = [
++    { url: docs[1].url, raw_content: 'Zeichenfolgen stehen für Text', locations: [0], excerpt: '<mark>Zeichenfolgen</mark> stehen für Text' },
++    { url: docs[0].url, raw_content: 'Zeichenfolge', locations: [0] },
++    { url: docs[2].url, raw_content: 'API 18492', locations: [1], excerpt: 'API <mark>18492</mark>' },
++  ];
++  assert.deepEqual(rankSearchDocuments('Zeichenfolge', docs, 'de', { pagefindResults }).map(result => result.id), ['exact', 'inflected']);
++  for (const query of ['18492', 'qzxqv 18492']) {
++    assert.deepEqual(rankSearchDocuments(query, docs, 'de', { pagefindResults: [pagefindResults[2]] }), []);
++  }
++});
++
++test('native fuzzy matches on stopwords cannot turn unrelated queries into results', () => {
++  const docs = [doc('node-api', 'API de Node')];
++  assert.deepEqual(rankSearchDocuments('desfragmentar fotones cuánticos', docs, 'es', {
++    concepts: vocabulary.es,
++    pagefindResults: [{ url: docs[0].url, raw_content: 'API de Node', locations: [1], excerpt: 'API <mark>de</mark> Node' }],
++  }), []);
++});
++
+ test('Chinese compounds and semantic aliases work without whitespace', () => {
+   const zh = [
+     doc('cards', 'Basic 与 Cloze 卡片', ['填空提示语法', '挖空卡片']),
+diff --git a/website/src/components/PerformanceEvidence.astro b/website/src/components/PerformanceEvidence.astro
+index 806a21c..e17484a 100644
+--- a/website/src/components/PerformanceEvidence.astro
++++ b/website/src/components/PerformanceEvidence.astro
+@@ -5,23 +5,24 @@ import { createTranslator } from '../i18n/messages.mjs';
+ const t = createTranslator(locale);
+ import benchmark from '../generated/benchmark.json';
+ const { results, maxTime, minimumSaved, maximumSaved } = benchmark;
+-const advantage = (saved: number) => t(saved >= 0 ? 'performance.less' : 'performance.more', { value: Math.abs(saved).toFixed(1) });
++const decimal = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
++const advantage = (saved: number) => t(saved >= 0 ? 'performance.less' : 'performance.more', { value: decimal.format(Math.abs(saved)) });
+ ---
+ <section data-module="performance" class="home-performance" aria-labelledby="performance-heading">
+   <div class="home-performance-summary">
+     <div class="home-performance-title"><h2 id="performance-heading">{t('performance.title')}</h2><p>Rust Project API / genanki 0.13.1 · {t('performance.workload')}</p></div>
+-    <div class="home-performance-metric"><strong>{results[0].rust.toFixed(1)}<span> ms</span></strong><span>{t('performance.export', { notes: benchmark.notes.toLocaleString(locale) })}</span></div>
+-    {minimumSaved >= 0 && <div class="home-performance-metric"><strong>{minimumSaved.toFixed(1)}–{maximumSaved.toFixed(1)}<span>%</span></strong><span>{t('performance.range')}</span></div>}
++    <div class="home-performance-metric"><strong>{decimal.format(results[0].rust)}<span> ms</span></strong><span>{t('performance.export', { notes: benchmark.notes.toLocaleString(locale) })}</span></div>
++    {minimumSaved >= 0 && <div class="home-performance-metric"><strong>{decimal.format(minimumSaved)}–{decimal.format(maximumSaved)}<span>%</span></strong><span>{t('performance.range')}</span></div>}
+   </div>
+   <p class="home-performance-context">Rust Project API · Apple M1 Pro · {t('performance.medians')}</p>
+   <div class="home-benchmark" data-reveal>
+-    <div class="home-benchmark-intro"><h3>{t('performance.media')}<br />{t('performance.faster')}</h3><p>{t('performance.description', { notes: benchmark.notes.toLocaleString(locale), minimum: minimumSaved.toFixed(1), maximum: maximumSaved.toFixed(1) })}</p></div>
++    <div class="home-benchmark-intro"><h3>{t('performance.media')}<br />{t('performance.faster')}</h3><p>{t('performance.description', { notes: benchmark.notes.toLocaleString(locale), minimum: decimal.format(minimumSaved), maximum: decimal.format(maximumSaved) })}</p></div>
+     <div class="home-benchmark-chart" aria-label={t('performance.chart')}>
+       <div class="home-benchmark-key"><span><i class="home-key-rust"></i>Anki Forge Rust</span><span><i class="home-key-genanki"></i>genanki</span></div>
+       {results.map(result => <div class="home-benchmark-row" data-profile={result.profile} style={`--rust-width: ${result.rust / maxTime * 100}%; --genanki-width: ${result.genanki / maxTime * 100}%`}>
+         <div class="home-benchmark-label"><span>{t(`performance.${result.profile}`)}</span><strong>{advantage(result.saved)}</strong></div>
+         <div class="home-benchmark-bars" aria-hidden="true"><span class="home-rust-bar"></span><span class="home-genanki-bar"></span></div>
+-        <p>{result.rust.toFixed(1)} ms <span>/ {result.genanki.toFixed(1)} ms</span></p>
++        <p>{decimal.format(result.rust)} ms <span>/ {decimal.format(result.genanki)} ms</span></p>
+       </div>)}
+     </div>
+   </div>
+diff --git a/website/src/content/blog/ja/stable-ids-and-deck-updates.mdx b/website/src/content/blog/ja/stable-ids-and-deck-updates.mdx
+index 228c4e0..fcadd80 100644
+--- a/website/src/content/blog/ja/stable-ids-and-deck-updates.mdx
++++ b/website/src/content/blog/ja/stable-ids-and-deck-updates.mdx
+@@ -7,6 +7,8 @@ date: 2026-09-22
+ category: Engineering
+ ---
+
++import CodeBlock from '../../../components/CodeBlock.astro';
++import { updateExample } from '../../../lib/examples';
+ import { sitePath } from '../../../lib/site';
+
+ 生成したデッキが、最初のエクスポートで完成することはあまりありません。定義を改善し、例を分かりやすくし、誤りを修正していきます。次のビルドでは、どのノートが内容を改善した同じノートなのかを識別する必要があります。
+@@ -37,11 +39,7 @@ import { sitePath } from '../../../lib/site';
+
+ 前回のパッケージは、以前に何をエクスポートしたかを Anki Forge に伝えます。修正したプロジェクトをビルドするときに使います。
+
+-```rust
+-let comparison = project.compare(CompareOptions::against(&previous))?;
+-ensure!(comparison.policy().allows_publication());
+-let built = project.build(BuildOptions::to(&next).update_from(&previous))?;
+-```
++<CodeBlock code={updateExample.source} />
+
+ この抜粋では、`project` に修正済みのノートが入り、`previous` がバージョン1を指し、`next` はバージョン2の別のパスです。<a href={sitePath('/generated/website_showcase.rs')}>完全な例</a>には両方のプロジェクト定義があり、1件のノートの識別情報が保持されたことを検証します。
+
+diff --git a/website/src/content/blog/ja/your-first-anki-deck.mdx b/website/src/content/blog/ja/your-first-anki-deck.mdx
+index 47f61db..a17146a 100644
+--- a/website/src/content/blog/ja/your-first-anki-deck.mdx
++++ b/website/src/content/blog/ja/your-first-anki-deck.mdx
+@@ -7,6 +7,8 @@ date: 2026-09-22
+ category: Tutorial
+ ---
+
++import CodeBlock from '../../../components/CodeBlock.astro';
++import { quickstartSource } from '../../../lib/examples';
+ import { sitePath, repository } from '../../../lib/site';
+
+ 学習内容がスクリプト、データセット、複数のファイルにすでにまとまっているなら、Anki デッキの生成を自動化すると、同じ作業を繰り返しやすくなります。ソースは Git で確認できる形に保ち、エクスポートを再実行可能な1つの手順にできます。
+@@ -20,17 +22,7 @@ import { sitePath, repository } from '../../../lib/site';
+
+ リポジトリにある最小の Rust サンプルです。
+
+-```rust
+-use ankiforge::{BuildOptions, Note, Project};
+-
+-fn main() -> Result<(), Box<dyn std::error::Error>> {
+-    let mut project = Project::new("spanish")?.default_deck("Spanish");
+-    project.add("es:hola", Note::basic("hola", "hello"))?;
+-    let output = project.build(BuildOptions::to("spanish.apkg"))?;
+-    println!("{}", output.artifact().path().display());
+-    Ok(())
+-}
+-```
++<CodeBlock code={quickstartSource} />
+
+ `Project::new("spanish")` が名前空間を作成します。`Note::basic("hola", "hello")` が Basic ノートを作り、`project.add("es:hola", note)` が安定キーを割り当て、`build(BuildOptions::to(...))` がパッケージを書き出します。
+
+diff --git a/website/src/lib/search.mjs b/website/src/lib/search.mjs
+index c25795c..a890859 100644
+--- a/website/src/lib/search.mjs
++++ b/website/src/lib/search.mjs
+@@ -64,6 +64,16 @@ function pagePath(url) {
+   catch { return ''; }
+ }
+
++function pagefindMatchedWords(result, locale, stopwords) {
++  if (typeof result.raw_content !== 'string' || !Array.isArray(result.locations)) return [];
++  // Pagefind locations address its original whitespace/ZWS-delimited content.
++  // Numeric and stopword-only fuzzy matches are not retrieval evidence.
++  const words = result.raw_content.includes('\u200b') ? result.raw_content.split('\u200b') : result.raw_content.split(/\s+/u);
++  return [...new Set(result.locations.filter(location => Number.isInteger(location) && location >= 0)
++    .map(location => plainSearchText(words[location])).filter(word => [...tokens(word, locale)]
++      .some(token => !stopwords.has(token) && (!HAN.test(token) || [...token].length > 1))))];
++}
++
+ /** Stable content roles, independent of URL layout, language and deployment base. */
+ export function documentRole(document) {
+   if (document.type === 'home') return 'overview';
+@@ -154,7 +164,8 @@ function queryFeatures(query, definitions, stopwords, locale) {
+
+ /**
+  * Rank only the supplied locale's real documents. Pagefind contributes body evidence
+- * and snippets; it cannot introduce URLs, and fuzzy/numeric-only hits are rejected.
++ * and snippets; it cannot introduce URLs or numeric-only hits. Its word-form
++ * matches supplement locally ranked results without reimplementing its stemmers.
+  * Score = field evidence × inverse document frequency × matched query coverage,
+  * with stable task-role and SDK priors. Unknown words are ignored, never AND gates.
+  */
+@@ -188,12 +199,11 @@ export function rankSearchDocuments(query, documents, locale, { pagefindResults
+   // Only corpus-supported features enter coverage. A novel adjective cannot hide a
+   // good exact match, but novel strings without any useful evidence return nothing.
+   const known = features.map((_, index) => index).filter(index => frequencies[index] > 0);
+-  if (!known.length) return [];
+   const totalWeight = known.reduce((sum, index) => sum + idfs[index], 0);
+   const intentFeatures = features.filter(feature => feature.definition?.intent);
+   const roles = new Set((intentFeatures.length ? intentFeatures : features).flatMap(feature => feature.definition?.roles ?? []));
+   const sdks = new Set(features.map(feature => feature.definition?.sdk).filter(Boolean));
+-  return records.flatMap(({ document, body, evidence }) => {
++  const ranked = records.flatMap(({ document, body, evidence }) => {
+     const matched = known.filter(index => evidence[index] > 0);
+     if (!matched.length) return [];
+     let score = matched.reduce((sum, index) => sum + evidence[index] * idfs[index], 0);
+@@ -215,4 +225,16 @@ export function rankSearchDocuments(query, documents, locale, { pagefindResults
+     const excerpt = plainSearchText(body?.excerpt || document.description);
+     return [{ ...document, score, matchedTerms: matched.map(index => features[index].label), excerpt }];
+   }).sort((left, right) => right.score - left.score || left.url.localeCompare(right.url));
++
++  const catalog = new Map(documents.map(document => [pagePath(document.url), document]));
++  const rankedPaths = new Set(ranked.map(document => pagePath(document.url)));
++  // Preserve Pagefind's ordering for body matches our exact-token model misses.
++  // Zero denotes no local ranking score; these results follow the scored group.
++  for (const [key, body] of pagefind) {
++    const document = catalog.get(key);
++    if (!document || rankedPaths.has(key)) continue;
++    const matchedTerms = pagefindMatchedWords(body, locale, stopwords);
++    if (matchedTerms.length) ranked.push({ ...document, score: 0, matchedTerms, excerpt: plainSearchText(body.excerpt || document.description) });
++  }
++  return ranked;
+ }

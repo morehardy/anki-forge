@@ -1,0 +1,7 @@
+{
+  "scope": "test-harness permission diagnosis",
+  "observed": "After CDP deny/grant and detaching the first article session, the next full navigation reported clipboard-write prompt and clipboard-read denied; the application correctly displayed Japanese manual-copy fallback. Explicit CDP grant made the second article announce Japanese success. The runner now re-grants both context clipboard permissions before each article so success/denial/restoration each start from a known permission state.",
+  "implementationChanged": false,
+  "initialTasksCompleted": 36,
+  "initialNumericLocalesCompleted": 6
+}

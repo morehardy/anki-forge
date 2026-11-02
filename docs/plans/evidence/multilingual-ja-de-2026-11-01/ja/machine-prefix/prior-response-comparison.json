@@ -1,0 +1,666 @@
+{
+  "schemaVersion": 1,
+  "currentCapture": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/machine-prefix/http-observations.json",
+    "sha256": "338ae941ffda78c6514c96ca578acf9451c4916eeda007fc1a16012d67db0f7d"
+  },
+  "priorCapture": {
+    "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/machine-final-prefix/http-observations.json",
+    "sha256": "aa6b67088fcfd4deffaf0bb2ee8e861a03d40dd3d2668606767008c129cfd04e"
+  },
+  "priorReview": {
+    "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/machine-read-prefix.json",
+    "sha256": "ba0443b69cfd3be784b8595cdcf8beaf89d8e5de995b470918eff144bd1ca12c"
+  },
+  "scope": "Actual old-four-locale response comparison and explicit retention of prior authored answers. Forty followed Markdown bodies are byte-identical; each of sixteen actual llms starts adds only the displayed Japanese-language index link. Those four localized link descriptions were read; they do not alter task instructions or switch language fallback. No fresh full reading of unchanged old-four-locale prose is claimed.",
+  "rows": [
+    {
+      "locale": "en",
+      "task": "python-install",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/llms.txt",
+      "previousSha256": "018db657f97de1b187ef2147bf9389a680105b6bd93fec163d8d265bbf2f5a1f",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/llms.txt",
+      "currentSha256": "49f46bbdc44c36661819edce0ec7a1d0a6fd271052ab4305d589f95939743bdb",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI documentation index.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "python-install",
+      "topic": "python-quickstart",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/docs/python-quickstart/index.md",
+      "previousSha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/docs/python-quickstart/index.md",
+      "currentSha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "python-install",
+      "topic": "python-api",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/docs/python-api/index.md",
+      "previousSha256": "ce891dfa12abf6e099c563ce509a95f1cab9164bebaff3552e4a0940c56ef886",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/docs/python-api/index.md",
+      "currentSha256": "ce891dfa12abf6e099c563ce509a95f1cab9164bebaff3552e4a0940c56ef886",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "python-install",
+      "topic": "compatibility",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/docs/compatibility/index.md",
+      "previousSha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/docs/compatibility/index.md",
+      "currentSha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "node-api",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/llms.txt",
+      "previousSha256": "018db657f97de1b187ef2147bf9389a680105b6bd93fec163d8d265bbf2f5a1f",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/llms.txt",
+      "currentSha256": "49f46bbdc44c36661819edce0ec7a1d0a6fd271052ab4305d589f95939743bdb",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI documentation index.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "node-api",
+      "topic": "node-api",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/docs/node-api/index.md",
+      "previousSha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/docs/node-api/index.md",
+      "currentSha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "node-api",
+      "topic": "node-quickstart",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/docs/node-quickstart/index.md",
+      "previousSha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/docs/node-quickstart/index.md",
+      "currentSha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/llms.txt",
+      "previousSha256": "018db657f97de1b187ef2147bf9389a680105b6bd93fec163d8d265bbf2f5a1f",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/llms.txt",
+      "currentSha256": "49f46bbdc44c36661819edce0ec7a1d0a6fd271052ab4305d589f95939743bdb",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI documentation index.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "topic": "json-to-anki",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/docs/json-to-anki/index.md",
+      "previousSha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/docs/json-to-anki/index.md",
+      "currentSha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "topic": "updates",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/docs/updates/index.md",
+      "previousSha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/docs/updates/index.md",
+      "currentSha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "topic": "media",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/docs/media/index.md",
+      "previousSha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/docs/media/index.md",
+      "currentSha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "compatibility-constraints",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/llms.txt",
+      "previousSha256": "018db657f97de1b187ef2147bf9389a680105b6bd93fec163d8d265bbf2f5a1f",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/llms.txt",
+      "currentSha256": "49f46bbdc44c36661819edce0ec7a1d0a6fd271052ab4305d589f95939743bdb",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI documentation index.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "compatibility-constraints",
+      "topic": "compatibility",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/docs/compatibility/index.md",
+      "previousSha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/docs/compatibility/index.md",
+      "currentSha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "en",
+      "task": "compatibility-constraints",
+      "topic": "build-guarantees",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/docs/build-guarantees/index.md",
+      "previousSha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/docs/build-guarantees/index.md",
+      "currentSha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/llms.txt",
+      "previousSha256": "02aa99cc31803f38402887a79b11eedb4f62e67a4563820ed1313601bf487c02",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/llms.txt",
+      "currentSha256": "be392e7b10fabd12ae2ce8470e7990cf5836ba96ffe288e7b209dc96635e75ed",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI 文档索引。\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "topic": "python-quickstart",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/docs/python-quickstart/index.md",
+      "previousSha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/docs/python-quickstart/index.md",
+      "currentSha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "topic": "python-api",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/docs/python-api/index.md",
+      "previousSha256": "d58028202432d624b0963444ca00ab1e237133b68fdac85dbe973db2b4066b31",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/docs/python-api/index.md",
+      "currentSha256": "d58028202432d624b0963444ca00ab1e237133b68fdac85dbe973db2b4066b31",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "topic": "compatibility",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/docs/compatibility/index.md",
+      "previousSha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/docs/compatibility/index.md",
+      "currentSha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "node-api",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/llms.txt",
+      "previousSha256": "02aa99cc31803f38402887a79b11eedb4f62e67a4563820ed1313601bf487c02",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/llms.txt",
+      "currentSha256": "be392e7b10fabd12ae2ce8470e7990cf5836ba96ffe288e7b209dc96635e75ed",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI 文档索引。\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "node-api",
+      "topic": "node-api",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/docs/node-api/index.md",
+      "previousSha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/docs/node-api/index.md",
+      "currentSha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "node-api",
+      "topic": "node-quickstart",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/docs/node-quickstart/index.md",
+      "previousSha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/docs/node-quickstart/index.md",
+      "currentSha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/llms.txt",
+      "previousSha256": "02aa99cc31803f38402887a79b11eedb4f62e67a4563820ed1313601bf487c02",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/llms.txt",
+      "currentSha256": "be392e7b10fabd12ae2ce8470e7990cf5836ba96ffe288e7b209dc96635e75ed",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI 文档索引。\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "topic": "json-to-anki",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/docs/json-to-anki/index.md",
+      "previousSha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/docs/json-to-anki/index.md",
+      "currentSha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "topic": "updates",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/docs/updates/index.md",
+      "previousSha256": "202f116788465686ef6e979e5629a3439ca603ecb7966f5356792fc0d370fe98",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/docs/updates/index.md",
+      "currentSha256": "202f116788465686ef6e979e5629a3439ca603ecb7966f5356792fc0d370fe98",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "topic": "media",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/docs/media/index.md",
+      "previousSha256": "a3a1d049675679579fa5da49d0846a3fc4e74db2f7d1a1f9730174e72a90e9f1",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/docs/media/index.md",
+      "currentSha256": "a3a1d049675679579fa5da49d0846a3fc4e74db2f7d1a1f9730174e72a90e9f1",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "compatibility-constraints",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/llms.txt",
+      "previousSha256": "02aa99cc31803f38402887a79b11eedb4f62e67a4563820ed1313601bf487c02",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/llms.txt",
+      "currentSha256": "be392e7b10fabd12ae2ce8470e7990cf5836ba96ffe288e7b209dc96635e75ed",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): 日本語 AI 文档索引。\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "compatibility-constraints",
+      "topic": "compatibility",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/docs/compatibility/index.md",
+      "previousSha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/docs/compatibility/index.md",
+      "currentSha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "zh-CN",
+      "task": "compatibility-constraints",
+      "topic": "build-guarantees",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/zh-cn/docs/build-guarantees/index.md",
+      "previousSha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/zh-cn/docs/build-guarantees/index.md",
+      "currentSha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/llms.txt",
+      "previousSha256": "d17a1b50932de3f7da63e491d20db71cc337a0039638da4fdac0a17aa99a1f9b",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/llms.txt",
+      "currentSha256": "409a7d4c77466e490a70aff546a0dd772e090607aea1c4f754f298238eab5194",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice de documentación para IA en 日本語.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "topic": "python-quickstart",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/docs/python-quickstart/index.md",
+      "previousSha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/docs/python-quickstart/index.md",
+      "currentSha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "topic": "python-api",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/docs/python-api/index.md",
+      "previousSha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/docs/python-api/index.md",
+      "currentSha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "topic": "compatibility",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/docs/compatibility/index.md",
+      "previousSha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/docs/compatibility/index.md",
+      "currentSha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "node-api",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/llms.txt",
+      "previousSha256": "d17a1b50932de3f7da63e491d20db71cc337a0039638da4fdac0a17aa99a1f9b",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/llms.txt",
+      "currentSha256": "409a7d4c77466e490a70aff546a0dd772e090607aea1c4f754f298238eab5194",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice de documentación para IA en 日本語.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "node-api",
+      "topic": "node-api",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/docs/node-api/index.md",
+      "previousSha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/docs/node-api/index.md",
+      "currentSha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "node-api",
+      "topic": "node-quickstart",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/docs/node-quickstart/index.md",
+      "previousSha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/docs/node-quickstart/index.md",
+      "currentSha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/llms.txt",
+      "previousSha256": "d17a1b50932de3f7da63e491d20db71cc337a0039638da4fdac0a17aa99a1f9b",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/llms.txt",
+      "currentSha256": "409a7d4c77466e490a70aff546a0dd772e090607aea1c4f754f298238eab5194",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice de documentación para IA en 日本語.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "topic": "json-to-anki",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/docs/json-to-anki/index.md",
+      "previousSha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/docs/json-to-anki/index.md",
+      "currentSha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "topic": "updates",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/docs/updates/index.md",
+      "previousSha256": "09df198c4cfd581ffd8d14cfa4a7b645a698bb553aae251234efff8b108d4bf8",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/docs/updates/index.md",
+      "currentSha256": "09df198c4cfd581ffd8d14cfa4a7b645a698bb553aae251234efff8b108d4bf8",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "topic": "media",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/docs/media/index.md",
+      "previousSha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/docs/media/index.md",
+      "currentSha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "compatibility-constraints",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/llms.txt",
+      "previousSha256": "d17a1b50932de3f7da63e491d20db71cc337a0039638da4fdac0a17aa99a1f9b",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/llms.txt",
+      "currentSha256": "409a7d4c77466e490a70aff546a0dd772e090607aea1c4f754f298238eab5194",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice de documentación para IA en 日本語.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "compatibility-constraints",
+      "topic": "compatibility",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/docs/compatibility/index.md",
+      "previousSha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/docs/compatibility/index.md",
+      "currentSha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "es",
+      "task": "compatibility-constraints",
+      "topic": "build-guarantees",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/es/docs/build-guarantees/index.md",
+      "previousSha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/es/docs/build-guarantees/index.md",
+      "currentSha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/llms.txt",
+      "previousSha256": "e1fc9c59ef38f2950a9af7f887d58ff9a768834756c7d5f1403ecf165efcfd0f",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/llms.txt",
+      "currentSha256": "113c2942121ca597bddfbedef5624069e87e2bc1c4d10f2c1cd06746e913a679",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice da documentação para IA em 日本語.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "topic": "python-quickstart",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/docs/python-quickstart/index.md",
+      "previousSha256": "75d3a00cc4fabc9a1537a65b1d692f9cd06becd28687d45ee456df9cccfba68c",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/docs/python-quickstart/index.md",
+      "currentSha256": "75d3a00cc4fabc9a1537a65b1d692f9cd06becd28687d45ee456df9cccfba68c",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "topic": "python-api",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/docs/python-api/index.md",
+      "previousSha256": "8b828d3ea22b4521f7a319782b98e71bd245a22e9407cea0932ce8d8aaabad26",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/docs/python-api/index.md",
+      "currentSha256": "8b828d3ea22b4521f7a319782b98e71bd245a22e9407cea0932ce8d8aaabad26",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "topic": "compatibility",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/docs/compatibility/index.md",
+      "previousSha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/docs/compatibility/index.md",
+      "currentSha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "node-api",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/llms.txt",
+      "previousSha256": "e1fc9c59ef38f2950a9af7f887d58ff9a768834756c7d5f1403ecf165efcfd0f",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/llms.txt",
+      "currentSha256": "113c2942121ca597bddfbedef5624069e87e2bc1c4d10f2c1cd06746e913a679",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice da documentação para IA em 日本語.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "node-api",
+      "topic": "node-api",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/docs/node-api/index.md",
+      "previousSha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/docs/node-api/index.md",
+      "currentSha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "node-api",
+      "topic": "node-quickstart",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/docs/node-quickstart/index.md",
+      "previousSha256": "8c2f21a3473fd252ae669f45fd68ef0442fafb54c0e56f51e02ac91b8e06510f",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/docs/node-quickstart/index.md",
+      "currentSha256": "8c2f21a3473fd252ae669f45fd68ef0442fafb54c0e56f51e02ac91b8e06510f",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/llms.txt",
+      "previousSha256": "e1fc9c59ef38f2950a9af7f887d58ff9a768834756c7d5f1403ecf165efcfd0f",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/llms.txt",
+      "currentSha256": "113c2942121ca597bddfbedef5624069e87e2bc1c4d10f2c1cd06746e913a679",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice da documentação para IA em 日本語.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "topic": "json-to-anki",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/docs/json-to-anki/index.md",
+      "previousSha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/docs/json-to-anki/index.md",
+      "currentSha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "topic": "updates",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/docs/updates/index.md",
+      "previousSha256": "aabb6df552b57393d144397e8fca791d7a61ca3aa1e4b9718ba2ebd443f9cac7",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/docs/updates/index.md",
+      "currentSha256": "aabb6df552b57393d144397e8fca791d7a61ca3aa1e4b9718ba2ebd443f9cac7",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "topic": "media",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/docs/media/index.md",
+      "previousSha256": "1df6e3c05e16aae47653b10aa6196fb87ff57d7d67c5f31f07558dbac2d7d3b4",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/docs/media/index.md",
+      "currentSha256": "1df6e3c05e16aae47653b10aa6196fb87ff57d7d67c5f31f07558dbac2d7d3b4",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "compatibility-constraints",
+      "topic": "llms",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/llms.txt",
+      "previousSha256": "e1fc9c59ef38f2950a9af7f887d58ff9a768834756c7d5f1403ecf165efcfd0f",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/llms.txt",
+      "currentSha256": "113c2942121ca597bddfbedef5624069e87e2bc1c4d10f2c1cd06746e913a679",
+      "exactAddedLinesRead": [
+        "- [日本語](https://morehardy.github.io/anki-forge/ja/llms.txt): Índice da documentação para IA em 日本語.\n"
+      ],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "compatibility-constraints",
+      "topic": "compatibility",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/docs/compatibility/index.md",
+      "previousSha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/docs/compatibility/index.md",
+      "currentSha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    },
+    {
+      "locale": "pt-BR",
+      "task": "compatibility-constraints",
+      "topic": "build-guarantees",
+      "previousUrl": "http://127.0.0.1:63684/anki-forge/pt-br/docs/build-guarantees/index.md",
+      "previousSha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0",
+      "currentUrl": "http://127.0.0.1:54223/anki-forge/pt-br/docs/build-guarantees/index.md",
+      "currentSha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0",
+      "exactAddedLinesRead": [],
+      "allOtherBytesEqual": true
+    }
+  ]
+}

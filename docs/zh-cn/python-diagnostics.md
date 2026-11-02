@@ -31,7 +31,7 @@ print(comparison.findings)
 print(comparison.policy)
 ```
 
-完成的比较即使发现 High 风险也正常返回。通过 `comparison.allows_publication` 查看策略决定。无法读取的基线、缺失完整身份证据、无效候选包或预算超限会抛出 CompareError；`.report` 包含失败前完成的观察结果。
+完成的比较即使发现 High 风险也正常返回。通过 `comparison.allows_publication` 查看策略决定。无法读取的基线、缺失完整标识映射与修订信息、无效候选包或预算超限会抛出 CompareError；`.report` 包含失败前完成的观察结果。
 
 默认策略阻止 High 和 Critical 发现项。审阅特定风险类别后，可显式接受：
 

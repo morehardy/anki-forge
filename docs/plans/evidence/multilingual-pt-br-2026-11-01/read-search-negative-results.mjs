@@ -1,0 +1,15 @@
+// Capture actual result bodies for independent negative-query semantic review.
+import assert from 'node:assert/strict';
+import{readFile,writeFile,mkdir}from'node:fs/promises';
+import{createHash}from'node:crypto';
+import{createRequire}from'node:module';
+import{pathToFileURL}from'node:url';
+import path from'node:path';
+const [artifactArg,resultsArg,label]=process.argv.slice(2),root=process.cwd(),artifact=path.resolve(artifactArg),out=path.join(root,'docs/plans/evidence/multilingual-pt-br-2026-11-01',`search-negative-${label}`);
+const sha=b=>createHash('sha256').update(b).digest('hex');const mb=await readFile(path.join(artifact,'generated/site-manifest.json')),manifest=JSON.parse(mb),rb=await readFile(resultsArg),results=JSON.parse(rb);
+assert.equal(results.mode,'release-candidate');assert.equal(results.manifestSha256,sha(mb));
+process.env.SITE_URL=manifest.configuration.site;process.env.SITE_BASE=manifest.configuration.base;process.env.SITE_CUSTOM_DOMAIN=manifest.configuration.customDomain||'';
+const{serveBuiltSite}=await import(pathToFileURL(path.join(root,'website/scripts/serve-built-site.mjs')));const require=createRequire(root+'/website/package.json');const{load}=require('cheerio');
+const records=new Map(manifest.pages.map(x=>[x.route,x]));await mkdir(out,{recursive:true});await writeFile(path.join(out,'origin-manifest.json'),mb);
+const server=await serveBuiltSite({directory:artifact});const observations={schemaVersion:1,reviewerRun:'/root/pt_br_technical',scope:'actual-html-response-observations-only',manifestSha256:sha(mb),resultPath:path.relative(root,path.resolve(resultsArg)),resultSha256:sha(rb),querySetSha256:results.querySetSha256,configuration:manifest.configuration,readOrigin:server.origin,cases:[]};let n=0;
+try{for(const result of results.results['pt-BR'].filter(x=>x.kind==='negative')){const reads=[];for(const hit of result.top3){const r=records.get(hit.url);assert.equal(r?.locale,'pt-BR');assert.equal(r.id,hit.pageId);const response=await fetch(server.origin+hit.url,{redirect:'manual'}),bytes=Buffer.from(await response.arrayBuffer());assert.equal(response.status,200);assert.equal(sha(bytes),r.sha256);assert.match(response.headers.get('content-type'),/^text\/html/);const filename=`${String(++n).padStart(2,'0')}-${hit.pageId.replaceAll(':','_')}.html`,body=new TextDecoder('utf-8',{fatal:true}).decode(bytes),$=load(body);const text=$('main').text().replace(/\s+/g,' ').trim();await writeFile(path.join(out,filename),bytes);reads.push({...hit,actualUrl:response.url,status:response.status,headers:Object.fromEntries(response.headers),sha256:sha(bytes),path:path.relative(root,path.join(out,filename)),mainText:text,paragraphs:$('main p, main tr').map((_,e)=>$(e).text().replace(/\s+/g,' ').trim()).get()});}observations.cases.push({...result,reads});console.log(`${label}/${result.id}: ${reads.length} actual result body reads`);}await writeFile(path.join(out,'http-observations.json'),JSON.stringify(observations,null,2)+'\n');}finally{await server.close();}

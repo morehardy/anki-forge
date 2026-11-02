@@ -1,0 +1,157 @@
+{
+  "reviewer": "/root",
+  "scope": "Fresh manual inspection of the five named final-artifact images and all 16 geometry observations. Compared actual earlier screenshots explicitly; no Linux CI or browser UI zoom claim.",
+  "manifestSha256": "62f9efd1c1417f9392407093209128887498c0a33295a4806ebfd4423f2250c6",
+  "imagesRead": [
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/layout-final-prefix/de-home-320-200.png",
+      "sha256": "9a602b5860c82489cb35314f4d21c5a4c6bf93e57b5e16783de6d04f62bef080"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/layout-final-prefix/de-python-quickstart-390-200.png",
+      "sha256": "6ad975d2b3377d5f7bc0e33f848fbc8d926a914c53f54af605e7e82a6ddcbc97"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/layout-final-prefix/og-de.png",
+      "sha256": "6ff8c08d6a2b0c4783f07511e1344ab530e52aa126688ec1af599ebea2fb0038"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/layout-final-prefix/de-home-768-200.png",
+      "sha256": "a4b37e8459b331d8494189bef52a48f0120c86ff9195c2784373c25e2897074f"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/layout-final-prefix/de-python-quickstart-768-200.png",
+      "sha256": "70b9ccb8cba4da92363098c19cbe2afdfde5cd26e228f4753c91e0d7f54901c9"
+    }
+  ],
+  "observations": [
+    "The final 320px home and 390px documentation screenshots with CSS text enlarged to 200% keep controls and text within the viewport. Open language menus intentionally overlay the body.",
+    "All 16 viewport/text-scale measurements have no horizontal overflow or page errors. Actual heading font is .SF NS on macOS Chrome.",
+    "German 1200x630 social graphic retains the full headline, description and footer without clipping or card overlap.",
+    "Freshly inspected both 768px/200% captures whose PNG bytes differed from the earlier run; headings, controls and document text are intact. All 16 measured geometries equal the earlier candidate."
+  ],
+  "priorArtifactComparison": [
+    {
+      "id": "home",
+      "width": 320,
+      "scale": 1,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "home",
+      "width": 320,
+      "scale": 2,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "home",
+      "width": 390,
+      "scale": 1,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "home",
+      "width": 390,
+      "scale": 2,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "home",
+      "width": 768,
+      "scale": 1,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "home",
+      "width": 768,
+      "scale": 2,
+      "sameScreenshot": false,
+      "sameGeometry": true
+    },
+    {
+      "id": "home",
+      "width": 1440,
+      "scale": 1,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "home",
+      "width": 1440,
+      "scale": 2,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "python-quickstart",
+      "width": 320,
+      "scale": 1,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "python-quickstart",
+      "width": 320,
+      "scale": 2,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "python-quickstart",
+      "width": 390,
+      "scale": 1,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "python-quickstart",
+      "width": 390,
+      "scale": 2,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "python-quickstart",
+      "width": 768,
+      "scale": 1,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "python-quickstart",
+      "width": 768,
+      "scale": 2,
+      "sameScreenshot": false,
+      "sameGeometry": true
+    },
+    {
+      "id": "python-quickstart",
+      "width": 1440,
+      "scale": 1,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    },
+    {
+      "id": "python-quickstart",
+      "width": 1440,
+      "scale": 2,
+      "sameScreenshot": true,
+      "sameGeometry": true
+    }
+  ],
+  "openIssues": [
+    {
+      "severity": "minor",
+      "description": "Inherited search title text concatenates the two visual hero lines; previously recorded in review/inherited-search-title-display-minor.json. The visible page renders line separation correctly."
+    },
+    {
+      "severity": "preference",
+      "description": "At the narrower 320px documentation width and 200% CSS text size, erzeugen may wrap its final letter to another line. No text is lost or clipped; retained as a nonblocking typography preference."
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "baseline_counts": {
+    "cards": 3,
+    "media": 2,
+    "notes": 3
+  },
+  "candidate_counts": {
+    "cards": 3,
+    "media": 2,
+    "notes": 3
+  },
+  "diagnostics": [],
+  "findings": [
+    {
+      "code": "RISK.NOTE_CHANGED",
+      "evidence": [
+        {
+          "after": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6",
+          "before": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+          "selector": "notes[\"bio:cell\"]"
+        }
+      ],
+      "level": "low",
+      "message": "Content, deck or tags changed. Acceptance still depends on the target Anki import settings and local modification times."
+    }
+  ],
+  "highest_risk": "low",
+  "policy": {
+    "allowed_codes": [],
+    "allows_publication": true,
+    "blocking_findings": [],
+    "threshold": "high",
+    "unmatched_allowances": []
+  },
+  "schema_version": "ankiforge-comparison-v1"
+}

@@ -1,0 +1,438 @@
+[
+  {
+    "id": "ja-core-01",
+    "kind": "core",
+    "query": "Rustで最初のAPKGを書き出す",
+    "locale": "ja",
+    "intentId": "first-apkg-rust",
+    "sdk": "rust",
+    "expectedPageIds": [
+      "quickstart"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-02",
+    "kind": "core",
+    "query": "TypeScriptでAnkiデッキを作る",
+    "locale": "ja",
+    "intentId": "first-apkg-node",
+    "sdk": "node",
+    "expectedPageIds": [
+      "node-quickstart"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-03",
+    "kind": "core",
+    "query": "Pythonで問題と答えからAPKGを生成",
+    "locale": "ja",
+    "intentId": "first-apkg-python",
+    "sdk": "python",
+    "expectedPageIds": [
+      "python-quickstart"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-04",
+    "kind": "core",
+    "query": "JSONから画像と音声入りデッキを作成",
+    "locale": "ja",
+    "intentId": "json-with-media",
+    "sdk": null,
+    "expectedPageIds": [
+      "json-to-anki"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-05",
+    "kind": "core",
+    "query": "配布済みの元のAPKGを使ってデッキを更新",
+    "locale": "ja",
+    "intentId": "update-original-baseline",
+    "sdk": null,
+    "expectedPageIds": [
+      "updates"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-06",
+    "kind": "core",
+    "query": "Anki Forgeとgenankiの違いを比較",
+    "locale": "ja",
+    "intentId": "compare-genanki",
+    "sdk": null,
+    "expectedPageIds": [
+      "anki-forge-vs-genanki"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-07",
+    "kind": "core",
+    "query": "genankiから移行してノートの識別子を保つ",
+    "locale": "ja",
+    "intentId": "migrate-genanki",
+    "sdk": "python",
+    "expectedPageIds": [
+      "genanki-migration"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-08",
+    "kind": "core",
+    "query": "カードに画像と発音の音声を付ける",
+    "locale": "ja",
+    "intentId": "attach-image-audio",
+    "sdk": null,
+    "expectedPageIds": [
+      "media"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-09",
+    "kind": "core",
+    "query": "一つの文章に複数の穴埋めを作る",
+    "locale": "ja",
+    "intentId": "create-cloze",
+    "sdk": null,
+    "expectedPageIds": [
+      "cards"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-10",
+    "kind": "core",
+    "query": "カードの表と裏を独自のフィールドで作りたい",
+    "locale": "ja",
+    "intentId": "custom-card-template",
+    "sdk": null,
+    "expectedPageIds": [
+      "templates",
+      "custom-notetypes"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-11",
+    "kind": "core",
+    "query": "解剖図の名称を隠したカードを作る",
+    "locale": "ja",
+    "intentId": "create-image-occlusion",
+    "sdk": null,
+    "expectedPageIds": [
+      "image-occlusion"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-core-12",
+    "kind": "core",
+    "query": "デッキ生成エラーの原因を調べて直す",
+    "locale": "ja",
+    "intentId": "repair-generation-error",
+    "sdk": null,
+    "expectedPageIds": [
+      "troubleshooting"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-terminology-01",
+    "kind": "terminology",
+    "query": "デッキとノートはどのような関係？",
+    "locale": "ja",
+    "intentId": "term-deck",
+    "sdk": null,
+    "expectedPageIds": [
+      "concepts"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-terminology-02",
+    "kind": "terminology",
+    "query": "ノートのフィールドとカードの違い",
+    "locale": "ja",
+    "intentId": "term-note",
+    "sdk": null,
+    "expectedPageIds": [
+      "concepts"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-terminology-03",
+    "kind": "terminology",
+    "query": "一つのノートから複数のカードは作れる？",
+    "locale": "ja",
+    "intentId": "term-card",
+    "sdk": null,
+    "expectedPageIds": [
+      "concepts",
+      "cards"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-terminology-04",
+    "kind": "terminology",
+    "query": "APKGファイルの中には何が入る？",
+    "locale": "ja",
+    "intentId": "term-apkg",
+    "sdk": null,
+    "expectedPageIds": [
+      "concepts",
+      "compatibility"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-terminology-05",
+    "kind": "terminology",
+    "query": "genankiとの互換性と移行の制約",
+    "locale": "ja",
+    "intentId": "term-genanki",
+    "sdk": null,
+    "expectedPageIds": [
+      "anki-forge-vs-genanki",
+      "genanki-migration"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-terminology-06",
+    "kind": "terminology",
+    "query": "Image Occlusionの矩形マスク",
+    "locale": "ja",
+    "intentId": "term-image-occlusion",
+    "sdk": null,
+    "expectedPageIds": [
+      "image-occlusion"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-terminology-07",
+    "kind": "terminology",
+    "query": "名前空間と安定したノートキー",
+    "locale": "ja",
+    "intentId": "term-namespace-note-key",
+    "sdk": null,
+    "expectedPageIds": [
+      "updates",
+      "concepts"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-terminology-08",
+    "kind": "terminology",
+    "query": "Clozeのc1とc2は何を表す？",
+    "locale": "ja",
+    "intentId": "term-cloze",
+    "sdk": null,
+    "expectedPageIds": [
+      "cards"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-variant-01",
+    "kind": "variant",
+    "query": "JSONでサウンド付きのカードを作る",
+    "locale": "ja",
+    "intentId": "variant-json-audio",
+    "sdk": null,
+    "expectedPageIds": [
+      "json-to-anki",
+      "media"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-variant-02",
+    "kind": "variant",
+    "query": "同じノートのこたえだけ書きかえたい",
+    "locale": "ja",
+    "intentId": "variant-answer-update",
+    "sdk": null,
+    "expectedPageIds": [
+      "updates"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-variant-03",
+    "kind": "variant",
+    "query": "ずのラベルをかくして復習する",
+    "locale": "ja",
+    "intentId": "variant-cover-diagram",
+    "sdk": null,
+    "expectedPageIds": [
+      "image-occlusion"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-variant-04",
+    "kind": "variant",
+    "query": "genankiをやめてPythonのankiforgeに切り替えたい",
+    "locale": "ja",
+    "intentId": "variant-switch-genanki",
+    "sdk": "python",
+    "expectedPageIds": [
+      "genanki-migration"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-variant-05",
+    "kind": "variant",
+    "query": "インポートしたデッキで画像が見えない",
+    "locale": "ja",
+    "intentId": "variant-missing-picture",
+    "sdk": null,
+    "expectedPageIds": [
+      "media",
+      "troubleshooting"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null
+  },
+  {
+    "id": "ja-negative-01",
+    "kind": "negative",
+    "query": "zxqvnj 847261 qqqrzz",
+    "locale": "ja",
+    "intentId": "negative-gibberish",
+    "sdk": null,
+    "expectedPageIds": [],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null,
+    "expectedBoundary": "無意味な入力に対応する作業やページはない。空の結果でよいが、検索の操作と入力の修正ができること。"
+  },
+  {
+    "id": "ja-negative-02",
+    "kind": "negative",
+    "query": "ankiforge-project-v1を変更せずそのまま使う",
+    "locale": "ja",
+    "intentId": "negative-old-schema",
+    "sdk": null,
+    "expectedPageIds": [
+      "json-to-anki",
+      "troubleshooting",
+      "rust-guide"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null,
+    "expectedBoundary": "ツールのレシピはankiforge-project-v2を要求し、v1を拒否する。結果がある場合は変換が必要であることを説明し、変更していないv1を受理すると案内しない。空の結果でもよい。"
+  },
+  {
+    "id": "ja-negative-03",
+    "kind": "negative",
+    "query": "Ankiで再エクスポートしたAPKGを更新の基準にする",
+    "locale": "ja",
+    "intentId": "negative-reexport-baseline",
+    "sdk": null,
+    "expectedPageIds": [
+      "updates",
+      "compatibility",
+      "troubleshooting"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null,
+    "expectedBoundary": "更新には前回配布したオリジナルAPKGが必要。Ankiから再エクスポートしたAPKGを代わりの基準パッケージとして推奨しない。空の結果でもよい。"
+  },
+  {
+    "id": "ja-negative-04",
+    "kind": "negative",
+    "query": "PNGをwrong.mp3に名前変更して音声として使う",
+    "locale": "ja",
+    "intentId": "negative-mime-rename",
+    "sdk": null,
+    "expectedPageIds": [
+      "media",
+      "troubleshooting"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null,
+    "expectedBoundary": "名前変更ではファイルのバイト列や保持されたMIMEは変わらない。wrong.mp3と名付けたPNGは独立した内容検査や拡張子検査で失敗し得る。正しい入力または実際の変換を案内し、名前変更を変換と説明しない。空の結果でもよい。"
+  },
+  {
+    "id": "ja-negative-05",
+    "kind": "negative",
+    "query": "Ankiの復習履歴を直接リセットする",
+    "locale": "ja",
+    "intentId": "negative-edit-study-progress",
+    "sdk": null,
+    "expectedPageIds": [
+      "compatibility",
+      "updates"
+    ],
+    "provenance": "ai-seed",
+    "sourceUrl": null,
+    "observedAt": null,
+    "expectedBoundary": "ライブラリはAPKGを生成し、インストール済みAnkiのコレクションや学習進捗を直接編集しない。結果はパッケージ生成とクライアントのインポートの境界を守り、復習履歴の直接編集を約束しない。空の結果でもよい。"
+  }
+]

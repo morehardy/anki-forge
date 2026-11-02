@@ -44,7 +44,8 @@
       "namespace": "命名空间",
       "stableKey": "稳定笔记键",
       "originalApkg": "原始分发 APKG",
-      "imageOcclusion": "图片遮挡"
+      "imageOcclusion": "图片遮挡",
+      "identityEvidence": "标识映射与修订信息"
     },
     "protected": [
       "Anki Forge",
@@ -100,5 +101,134 @@
       "Prometer que la política de publicación controla las opciones de importación o los cambios locales de Anki"
     ],
     "ownership": "Describe quién conserva los bytes y el ciclo de vida de los recursos multimedia. La propiedad en Rust no significa derechos de autor ni permisos del usuario de Anki."
+  },
+  "pt-BR": {
+    "audience": "Desenvolvedores que integram os pacotes públicos de Rust, Node.js ou Python para gerar e atualizar baralhos APKG do Anki, com documentação em português do Brasil.",
+    "register": "Português brasileiro técnico, direto e natural. Use imperativos como crie, instale e confira; evite traduzir literalmente expressões idiomáticas. Explique pré-requisitos junto à etapa e limitações junto à afirmação afetada. Distinga linguagem de programação de idioma do conteúdo. Não traduza identificadores da API nem prometa resultados de busca não medidos.",
+    "terms": {
+      "note": "nota",
+      "card": "cartão",
+      "deck": "baralho",
+      "noteType": "tipo de nota",
+      "namespace": "namespace",
+      "stableKey": "chave estável da nota",
+      "originalApkg": "APKG original distribuído",
+      "imageOcclusion": "oclusão de imagem",
+      "template": "template de cartão"
+    },
+    "protected": [
+      "Anki Forge",
+      "ankiforge",
+      "genanki",
+      "APKG",
+      "API",
+      "JSON",
+      "Rust",
+      "Node.js",
+      "Python",
+      "Basic",
+      "Cloze"
+    ],
+    "avoid": [
+      "Usar nota e cartão como sinônimos",
+      "Apresentar uma reexportação do Anki como base original válida para atualização",
+      "Atribuir ao pacote publicado recursos disponíveis apenas no código-fonte",
+      "Prometer que IDs estáveis preservam todo o histórico ou substituem edições locais independentemente das opções de importação",
+      "Traduzir o trocadilho Notes on making notes de forma literal"
+    ],
+    "ownership": "Explique quem mantém os bytes e controla a vida útil dos valores e arquivos. Propriedade em Rust não significa direitos autorais nem permissões do usuário do Anki."
+  },
+  "ja": {
+    "audience": "公開されている Rust、Python、Node.js パッケージをアプリケーションに組み込み、Anki 用 APKG を生成・更新する開発者。",
+    "register": "です・ます調の簡潔な技術説明。主語を過剰に補わず、操作は「〜します」、必要条件や禁止事項は理由とともに明示します。前提は該当する手順の近く、制約は影響を受ける結論の近くに置きます。見出しは作業内容を端的に示します。",
+    "terms": {
+      "note": "ノート",
+      "card": "カード",
+      "deck": "デッキ",
+      "noteType": "ノートタイプ",
+      "namespace": "名前空間",
+      "stableKey": "ノートの安定キー",
+      "originalApkg": "配布時のオリジナル APKG",
+      "imageOcclusion": "画像穴埋め",
+      "baseline": "基準パッケージ",
+      "template": "テンプレート",
+      "preparedPublication": "候補を事前生成し、確認後に保存する仕組み",
+      "snapshot": "スナップショット"
+    },
+    "protected": [
+      "Anki Forge",
+      "ankiforge",
+      "genanki",
+      "APKG",
+      "API",
+      "JSON",
+      "Rust",
+      "Node.js",
+      "Python",
+      "Basic",
+      "Cloze"
+    ],
+    "avoid": [
+      "ノートとカードを同義語として扱わない。",
+      "Anki から再エクスポートした APKG を更新の基準として案内しない。",
+      "一時成果物の保持や Rust の所有権を、著作権またはユーザー権限と混同しない。",
+      "コードの文字列、API 名、パッケージ名、安定キーを翻訳しない。",
+      "ソースだけで使える機能を公開パッケージの機能として紹介しない。",
+      "既存の復習状態やインポート結果を無条件に保証しない。"
+    ],
+    "ownership": "値がデータや一時ファイルの生存期間を管理する意味で「所有する」を使います。単に画面で表示するという意味の「持つ」と区別し、最後の所有者の解放で一時ファイルが削除されることを説明します。",
+    "languageChecks": [
+      "数字＋件／枚／個を対象に応じて使い分ける。",
+      "Cloze は API／モデル名として保持し、説明では穴埋めカードと補足する。",
+      "無空白の日本語検索、漢字・かな表記、英字 API と日本語の混在を検証する。",
+      "句読点や括弧の行頭禁則、狭い画面の折り返し、SNS共有用画像の日本語フォントを確認する。"
+    ],
+    "status": "draft/full-candidate"
+  },
+  "de": {
+    "audience": "Entwicklerinnen und Entwickler, die die veröffentlichten Rust-, Python- oder Node.js-Pakete zur Erzeugung und Aktualisierung von Anki-APKGs integrieren.",
+    "register": "Direkte technische Anleitungen mit einheitlicher Du-Ansprache. Voraussetzungen stehen unmittelbar vor dem betroffenen Schritt, Einschränkungen bei der Aussage, die sie begrenzen. Überschriften benennen konkrete Aufgaben; unnötige englische Substantivketten vermeiden.",
+    "terms": {
+      "note": "Notiz",
+      "card": "Karte",
+      "deck": "Stapel",
+      "noteType": "Notiztyp",
+      "namespace": "Namensraum",
+      "stableKey": "stabiler Notizschlüssel",
+      "originalApkg": "ursprünglich verteiltes APKG",
+      "imageOcclusion": "Bildverdeckung",
+      "baseline": "Basisversion",
+      "template": "Vorlage",
+      "preparedPublication": "vorbereitete Veröffentlichung",
+      "snapshot": "Snapshot"
+    },
+    "protected": [
+      "Anki Forge",
+      "ankiforge",
+      "genanki",
+      "APKG",
+      "API",
+      "JSON",
+      "Rust",
+      "Node.js",
+      "Python",
+      "Basic",
+      "Cloze"
+    ],
+    "avoid": [
+      "Notiz und Karte nicht synonym verwenden.",
+      "Einen erneuten Anki-Export nicht als gültige Aktualisierungsbasis empfehlen.",
+      "Besitz von Daten oder temporären Dateien nicht mit Urheberrecht oder Benutzerrechten verwechseln.",
+      "Codezeichenfolgen, API-Namen, Paketnamen und stabile Schlüssel nicht übersetzen.",
+      "Nur im Quellcode verfügbare Funktionen nicht als Funktionen des veröffentlichten Pakets darstellen.",
+      "Keine uneingeschränkten Zusagen über Lernplanung oder Importergebnisse machen."
+    ],
+    "ownership": "Besitz beschreibt die Zuständigkeit für die Lebensdauer von Daten oder Dateien. Bei Bedarf erklären, welcher Wert den Snapshot hält und wann der letzte Besitzer eine temporäre Datei freigibt. Gemeinsamer Besitz ist keine Kopie der Dateiinhalte.",
+    "languageChecks": [
+      "Singular und Plural nach Intl.PluralRules unterscheiden; Zählwerte nicht mit einem starren Substantiv verbinden.",
+      "Zusammengesetzte Suchwörter und getrennte Formulierungen prüfen, ohne englisches Stemming vorauszusetzen.",
+      "Umlaute, ß und Schreibvarianten in natürlichen Aufgabenfragen prüfen.",
+      "Lange Schaltflächen, Navigationseinträge, Sprachbezeichnungen und Tabellenüberschriften dürfen bei 200 Prozent Textvergrößerung nicht abgeschnitten werden."
+    ]
   }
 }

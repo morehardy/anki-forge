@@ -1,0 +1,1649 @@
+{
+  "schemaVersion": 1,
+  "kind": "machine-read",
+  "status": "passed",
+  "mode": "release-candidate",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/standards_review/pr66-current-machine-prefix-2026-11-02",
+  "inputSha256": "fd6716207f6f5557895553e95f710a27cc66cee6d4bbd1cacf0ddc56b7aceebf",
+  "configuration": {
+    "site": "https://morehardy.github.io",
+    "base": "/anki-forge",
+    "customDomain": ""
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es",
+    "pt-BR",
+    "ja",
+    "de"
+  ],
+  "readOrigin": "http://127.0.0.1:62813",
+  "originManifest": {
+    "path": "docs/plans/evidence/website-pr66-final-2026-11-02/prefix-site-manifest.json",
+    "sha256": "2568825da22b987d21c323442d57882b17626f1dfc51a2e33f4d9cc86aad88ec",
+    "commit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+    "description": "Actual new PR #66 archive manifest whose saved HTTP responses and current machine resources were independently read and verified in this run."
+  },
+  "method": "Independent AI reading of coordinator-captured current HTTP response bodies. Read six locale llms entries, all six complete Python quickstarts, all six Node quickstart programs and Node API artifact/report/lifetime/consume passages, all six JSON recipe prose/result/limitations and unchanged shell commands, all six complete compatibility and build-guarantee prose, and update/media baseline/client/budget passages. All 65 changed resource deltas were separately read, including metadata, headings and articles beyond the four tasks. Fresh localized answers were authored from this reading. Exact executable JSON-recipe blocks were compared to the prior reviewed actual archive, not rerun in this machine review. SDK execution belongs to the separate usage reviewer.",
+  "captureProvenance": "HTTP GETs were performed by the coordinator capture-machine.mjs on the two archive directories, at the localhost origins recorded in each observation. This reviewer read those saved actual response bytes and independently matched them to archive and manifest. No deployed-site request or hosting/MIME acceptance is claimed.",
+  "scope": "Exactly 192 Markdown/llms resources per configuration. There are 96 saved HTTP responses per configuration, including all 65 changed resources. The remaining resources retain explicit verified old-archive review lineage. No unread showcase metadata or application HTML is bound by this report.",
+  "rootScope": "Direct current prefix captured-body semantic reading, with unchanged sections explicitly inherited as described in semantic-reading evidence.",
+  "previousReview": {
+    "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-read-prefix.json",
+    "sha256": "ec4839f1097e38f5265949bafc6d791e4f53bba45779715ccacf8991118f16ed",
+    "originManifest": {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/prefix-site-manifest.json",
+      "sha256": "1067fdcf3d4c9e43c058628d0ad9557a91055c6c0764a1970623072c94097612",
+      "commit": "6d4625639fc1477222b41880d29724c162baa3be",
+      "description": "Actual frozen isolated-candidate manifest whose archive files were served and read in this run."
+    }
+  },
+  "resourceBindings": [
+    {
+      "route": "/anki-forge/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "6d8f67b9b7aef15c53417003ae0f9edf810f289dffb0c089b173dab587c9530b"
+    },
+    {
+      "route": "/anki-forge/blog/your-first-anki-deck/index.md",
+      "sha256": "da294c14fd14e0978edb1108330e32c42f25fd23011728f81a1fd092543971d9"
+    },
+    {
+      "route": "/anki-forge/de/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "c04913d1ae3800e1b02511df95e7d0aaf2fb87450c1798c6de36b5393d5ffcaf"
+    },
+    {
+      "route": "/anki-forge/de/blog/your-first-anki-deck/index.md",
+      "sha256": "1278b44326027408b849fcc73eeef10895fec6e03c656501dd47e482c71bf1f8"
+    },
+    {
+      "route": "/anki-forge/de/docs/ai-anki-cards/index.md",
+      "sha256": "f50fcb4ecef97a029366412358792b262e6f5805d32cef4d92320166a5933a73"
+    },
+    {
+      "route": "/anki-forge/de/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "b488609ceb0853019edf5bd0064fe5cb50cb219c4afbb1902d28d82f25d9c2dc"
+    },
+    {
+      "route": "/anki-forge/de/docs/api/index.md",
+      "sha256": "49e483040a6c344416830f059d5597228f14b633d4ae26cf05c31b9dce070036"
+    },
+    {
+      "route": "/anki-forge/de/docs/build-guarantees/index.md",
+      "sha256": "060ee702c8a6b98db5f6f589f26e28d5d8cf9219fd06743ce90b71a1b7951eb6"
+    },
+    {
+      "route": "/anki-forge/de/docs/cards/index.md",
+      "sha256": "cce3f7b9204e56f1b87d37a2ebc540ba8d6bc9db177c5020aecc43ef6ffd5df9"
+    },
+    {
+      "route": "/anki-forge/de/docs/compatibility/index.md",
+      "sha256": "807f090e9d53cd8536b8df037e7f3dbf9e64c3526fca85445509ff9855af67e6"
+    },
+    {
+      "route": "/anki-forge/de/docs/concepts/index.md",
+      "sha256": "0a4e7158b313bb3d29e84818039646ead3e36390307abff4369f8b7092017eb3"
+    },
+    {
+      "route": "/anki-forge/de/docs/csv-to-anki/index.md",
+      "sha256": "7acbbbcb58ba4fe0de2c89d6b1635d2ebffcc1885d998d0cac9751facc4f594c"
+    },
+    {
+      "route": "/anki-forge/de/docs/custom-notetypes/index.md",
+      "sha256": "2b546bc045a7b2620b5e0fb5e1467768c55a90a3e4526e584a50b80433c9eb27"
+    },
+    {
+      "route": "/anki-forge/de/docs/development/index.md",
+      "sha256": "bdbb3effa1c69c9c412145e7729573a1eb1e47b2d67a7d4a6665be36fb59dad0"
+    },
+    {
+      "route": "/anki-forge/de/docs/genanki-migration/index.md",
+      "sha256": "3a7b4f4039bb14e7916c5a315cbccca4bd518352c77d19f794c7e1db3745f3ce"
+    },
+    {
+      "route": "/anki-forge/de/docs/image-occlusion/index.md",
+      "sha256": "c6a55829c21033da88cde754f1eeeb227293680fc0f9c7c598ccd9037096b54e"
+    },
+    {
+      "route": "/anki-forge/de/docs/index.md",
+      "sha256": "350473c3db14762eec9e5baad8c5cc8029194069e77057f5d8dbac4d7b2ac9cc"
+    },
+    {
+      "route": "/anki-forge/de/docs/installation/index.md",
+      "sha256": "4d425ac7db5af80f11997889bf1e645f7214f61a6ece4fb7e75a06d5fd2565b8"
+    },
+    {
+      "route": "/anki-forge/de/docs/json-to-anki/index.md",
+      "sha256": "1a89e59c2fe15eff7da2d3d996398342ead4166e29ed7e325dff064524ca23de"
+    },
+    {
+      "route": "/anki-forge/de/docs/languages/index.md",
+      "sha256": "84cba06100115a4f4ec5f56056926a1f3491d3931f3d33007c6787f7bb516ab2"
+    },
+    {
+      "route": "/anki-forge/de/docs/media/index.md",
+      "sha256": "779d3187a7e9802dade1de5a67f519cded59956632faa0aa49b5d74ce9c0efac"
+    },
+    {
+      "route": "/anki-forge/de/docs/node-api/index.md",
+      "sha256": "a9b33a1ef625407c9ec83ba4efeaff0ea967c542a732cad342ba7ef1fe6ce637"
+    },
+    {
+      "route": "/anki-forge/de/docs/node-quickstart/index.md",
+      "sha256": "01461a686c3bf1095f37417e9508e8d08e3dd4f9efcd2c1b93ab9377b398f37b"
+    },
+    {
+      "route": "/anki-forge/de/docs/python-api/index.md",
+      "sha256": "ff05f8bb688bb85d39889d9572e5f827fce588aea7fa9851d017faf1445c2c4d"
+    },
+    {
+      "route": "/anki-forge/de/docs/python-diagnostics/index.md",
+      "sha256": "d7d130da08be9582f2321fe676362fbc37781d42303ad4ed77e30e861cbbd498"
+    },
+    {
+      "route": "/anki-forge/de/docs/python-migration/index.md",
+      "sha256": "e158ff9a354d794439ae20a0edb307bf90c1ecdaf9b08218e0f2e71667f0af1f"
+    },
+    {
+      "route": "/anki-forge/de/docs/python-quickstart/index.md",
+      "sha256": "e4484200649722bee10f98a4bcddc595eabb2883a71412ddc7e1bcff1f983fe0"
+    },
+    {
+      "route": "/anki-forge/de/docs/quickstart/index.md",
+      "sha256": "7e009b261fccb3a98cd71a4d91b3cc7100ce46bcbe134e9af2654e5052dd74a6"
+    },
+    {
+      "route": "/anki-forge/de/docs/rust-api/index.md",
+      "sha256": "0d82b30dff9b03ad22aa83a7b266e4b59ea006d36c2cf390df9be18f2cef25bd"
+    },
+    {
+      "route": "/anki-forge/de/docs/rust-guide/index.md",
+      "sha256": "163dec7ca20af2545a3f5b030e65b3ea3ba21b8c2c33e36b9d7ffc02addf66d3"
+    },
+    {
+      "route": "/anki-forge/de/docs/templates/index.md",
+      "sha256": "be144f7df48b83942f0fc9a1b08841d519977011b47082e959c4a5471b7461af"
+    },
+    {
+      "route": "/anki-forge/de/docs/troubleshooting/index.md",
+      "sha256": "a0b8c69fdb9fc4d2dc619826fa621fb4e67be8d523975c4131f9b6e9ba481342"
+    },
+    {
+      "route": "/anki-forge/de/docs/updates/index.md",
+      "sha256": "8eeff44204fe9676247ce2a25e58873ea4c120fdcebc83b85e28c48f30df43c8"
+    },
+    {
+      "route": "/anki-forge/de/llms.txt",
+      "sha256": "d5185f233372e7f328e4161aa494fc25db9609b15b094bd1e7270c84ef6cb88a"
+    },
+    {
+      "route": "/anki-forge/docs/ai-anki-cards/index.md",
+      "sha256": "8101e2d8972fcd07b57ce89310a72db50ae33c1cbc9b2ab8989c6119478c612d"
+    },
+    {
+      "route": "/anki-forge/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "8206e190781c310eed6cf352735be5029db0426ead23c590de5b77c8d6217d9b"
+    },
+    {
+      "route": "/anki-forge/docs/api/index.md",
+      "sha256": "c6f03886dc61421de202632f779007fad7c4b36ca528128f230ec785228dcad6"
+    },
+    {
+      "route": "/anki-forge/docs/build-guarantees/index.md",
+      "sha256": "d365afba67c22e358082e9fc029cfc40a48d31587e433dd45400f27fee6589f7"
+    },
+    {
+      "route": "/anki-forge/docs/cards/index.md",
+      "sha256": "bb30b78eb61fa771fe1a83916c33002dc14bfce39e2c9603ce4333818a59a77f"
+    },
+    {
+      "route": "/anki-forge/docs/compatibility/index.md",
+      "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e"
+    },
+    {
+      "route": "/anki-forge/docs/concepts/index.md",
+      "sha256": "d19a7fdaed78bbbcf9f8d81f510a505d7ff3de219a3bfef151216b159906b22c"
+    },
+    {
+      "route": "/anki-forge/docs/csv-to-anki/index.md",
+      "sha256": "4b87db9d89416ba5ff1ee07c559c2e1d24d16013e28dbe1ec5945408fb6f68dc"
+    },
+    {
+      "route": "/anki-forge/docs/custom-notetypes/index.md",
+      "sha256": "139ffbf1d5f353efe77366f9ba308fce46358b8df1005ea7af45377504619dbb"
+    },
+    {
+      "route": "/anki-forge/docs/development/index.md",
+      "sha256": "f3a9d4015939e9ead7a166834eb1a65d3a7b736408cbdb3e5280f3858ab4a99d"
+    },
+    {
+      "route": "/anki-forge/docs/genanki-migration/index.md",
+      "sha256": "005e556007d6ba329468d2e5feb94c0f9e96a322450de13de45328b32309f551"
+    },
+    {
+      "route": "/anki-forge/docs/image-occlusion/index.md",
+      "sha256": "ec272077b737326e8a5ec26ba3801cd11bdcef2d8445667a89f1563dcf61e198"
+    },
+    {
+      "route": "/anki-forge/docs/index.md",
+      "sha256": "7eecdc87b955477c31ac4d4e145a6a602490d8080fa3aa16da0a44d3fa4d253d"
+    },
+    {
+      "route": "/anki-forge/docs/installation/index.md",
+      "sha256": "cf97fa2b22f57801f9761355026ec40acd17745e8db3bcca18561811fcc068cc"
+    },
+    {
+      "route": "/anki-forge/docs/json-to-anki/index.md",
+      "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b"
+    },
+    {
+      "route": "/anki-forge/docs/languages/index.md",
+      "sha256": "fef006176fde2d5f83ac5fcc5092eaaf74efd2f527d775d66ef9136f1d91a89c"
+    },
+    {
+      "route": "/anki-forge/docs/media/index.md",
+      "sha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817"
+    },
+    {
+      "route": "/anki-forge/docs/node-api/index.md",
+      "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448"
+    },
+    {
+      "route": "/anki-forge/docs/node-quickstart/index.md",
+      "sha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a"
+    },
+    {
+      "route": "/anki-forge/docs/python-api/index.md",
+      "sha256": "fce41da29bd84f62260357fa3a4b0400476612367a96c92429698d5790dab7fd"
+    },
+    {
+      "route": "/anki-forge/docs/python-diagnostics/index.md",
+      "sha256": "a10a07013ba9f1f12b9efb2028fe5714db6f1610b6c9f7f6a03a7f063429eac8"
+    },
+    {
+      "route": "/anki-forge/docs/python-migration/index.md",
+      "sha256": "88d11532da9c30cd6891b2f333fb3b5434033c0acf494a77517185230ef792d6"
+    },
+    {
+      "route": "/anki-forge/docs/python-quickstart/index.md",
+      "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf"
+    },
+    {
+      "route": "/anki-forge/docs/quickstart/index.md",
+      "sha256": "a4589b5cfe58886981f88d083ec139619da5534106993ffc644683b9a644ba49"
+    },
+    {
+      "route": "/anki-forge/docs/rust-api/index.md",
+      "sha256": "58c8b1e0a4a213a2f9a03b0854a1fc2bd32beb0d24c1e50a1b0ff3eeaad6acca"
+    },
+    {
+      "route": "/anki-forge/docs/rust-guide/index.md",
+      "sha256": "22fa47e05a0b6317dc2db79efce21ea71b2dde7162e7d024e44e27fc0c1d6a0b"
+    },
+    {
+      "route": "/anki-forge/docs/templates/index.md",
+      "sha256": "718573d317c11183da32b6d16751699a63208b4f2f5eb326409fbd8dcc2ae863"
+    },
+    {
+      "route": "/anki-forge/docs/troubleshooting/index.md",
+      "sha256": "1b3fce42ef630b797dbdc7f58f031448d6039c394810980b70daec3cc643e595"
+    },
+    {
+      "route": "/anki-forge/docs/updates/index.md",
+      "sha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54"
+    },
+    {
+      "route": "/anki-forge/es/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "e1f76b3d8805b1219d84f3e601bd9195bcf3fe56a0d1db7b626ed9768aa16a31"
+    },
+    {
+      "route": "/anki-forge/es/blog/your-first-anki-deck/index.md",
+      "sha256": "d63713c6a08c0a9ded170220dac67977f2facde2cd8ae2e40972e13426b462a2"
+    },
+    {
+      "route": "/anki-forge/es/docs/ai-anki-cards/index.md",
+      "sha256": "6da84ae75592d1e8ab7a16159892f2b9ec4ab6cb309c4790d53d7c44cadae168"
+    },
+    {
+      "route": "/anki-forge/es/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "6270c1b396640bd93ebd5021d1fb7128c90322133ef9d5d8402363382155274b"
+    },
+    {
+      "route": "/anki-forge/es/docs/api/index.md",
+      "sha256": "c1caf257197c1608b27771e79cf2a6c37d111a261fb48669d6e70b7d1426bf4a"
+    },
+    {
+      "route": "/anki-forge/es/docs/build-guarantees/index.md",
+      "sha256": "6c78d78d7905e783c7ed09694c936b00d719b2d673a3c78b609ef1ad1a6522e3"
+    },
+    {
+      "route": "/anki-forge/es/docs/cards/index.md",
+      "sha256": "e9e4414e49cb0a24472e64c140dd05ef25fd3671ff3ef62bf0bc3f54744ab4cb"
+    },
+    {
+      "route": "/anki-forge/es/docs/compatibility/index.md",
+      "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561"
+    },
+    {
+      "route": "/anki-forge/es/docs/concepts/index.md",
+      "sha256": "27fe0659feeb4577ce85fd3628479371705cff5cc362ec55c9d01321fc8aaa50"
+    },
+    {
+      "route": "/anki-forge/es/docs/csv-to-anki/index.md",
+      "sha256": "90ca8ad6a8acf7eb8736394ea0cc04129715b65e61c825bcc45fa6fb28356e64"
+    },
+    {
+      "route": "/anki-forge/es/docs/custom-notetypes/index.md",
+      "sha256": "2c22f3c99f4ac0719b15ff5a5cb73ef428f0c9bb4c7bf36de8a826b61caafb0c"
+    },
+    {
+      "route": "/anki-forge/es/docs/development/index.md",
+      "sha256": "b62bc3d0e4bab808e22666e1b7a2009b89e43929e674ed464ba086c9ac823d6e"
+    },
+    {
+      "route": "/anki-forge/es/docs/genanki-migration/index.md",
+      "sha256": "44834bdc82d9309b5a3ecbd87d40b3fcb3805b39acf108b580af17834c062b24"
+    },
+    {
+      "route": "/anki-forge/es/docs/image-occlusion/index.md",
+      "sha256": "27783ea8e03a4f237589e58c2e7dc1fc83e828038867b3fe3d0e27bf7b8e569a"
+    },
+    {
+      "route": "/anki-forge/es/docs/index.md",
+      "sha256": "cb689d0a1caf659fc7c634f0ccb483cea5fd5223133c2d3ef7fc524378bbea78"
+    },
+    {
+      "route": "/anki-forge/es/docs/installation/index.md",
+      "sha256": "f95dd3110b15f05d62f87e171901228ec2c67962906eb2f51b5fe8e0058889bd"
+    },
+    {
+      "route": "/anki-forge/es/docs/json-to-anki/index.md",
+      "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c"
+    },
+    {
+      "route": "/anki-forge/es/docs/languages/index.md",
+      "sha256": "0d484d10b25a387f86fa053fa6e2adf90792be161437af41bdf3c38046c0b6dd"
+    },
+    {
+      "route": "/anki-forge/es/docs/media/index.md",
+      "sha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929"
+    },
+    {
+      "route": "/anki-forge/es/docs/node-api/index.md",
+      "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84"
+    },
+    {
+      "route": "/anki-forge/es/docs/node-quickstart/index.md",
+      "sha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3"
+    },
+    {
+      "route": "/anki-forge/es/docs/python-api/index.md",
+      "sha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69"
+    },
+    {
+      "route": "/anki-forge/es/docs/python-diagnostics/index.md",
+      "sha256": "7bf8512118b5e1083203d72dcf536ae4ec7c5ac39a0cfea8f366fd6dabcdf4db"
+    },
+    {
+      "route": "/anki-forge/es/docs/python-migration/index.md",
+      "sha256": "be79c1233d8ac8c731d5cf8cd62ce253d3e99388f9f443d59018802e11f256f3"
+    },
+    {
+      "route": "/anki-forge/es/docs/python-quickstart/index.md",
+      "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a"
+    },
+    {
+      "route": "/anki-forge/es/docs/quickstart/index.md",
+      "sha256": "5d8ed767c6669c95fb97104543bd4327ee183c41e3844c9c5a291d586f928ad3"
+    },
+    {
+      "route": "/anki-forge/es/docs/rust-api/index.md",
+      "sha256": "5268e0ddb2a9726a23652133de2cad5aa5c8ea6681382440a7ce472c2f3fa958"
+    },
+    {
+      "route": "/anki-forge/es/docs/rust-guide/index.md",
+      "sha256": "eeaff8a038b36bf7151d8ca3655a4c12aa65fdb68281c54559850a4d71c50624"
+    },
+    {
+      "route": "/anki-forge/es/docs/templates/index.md",
+      "sha256": "331364d195d3c82a4c14c41d37ce46fe487221ee3e92794c1dbc93c69af94bb3"
+    },
+    {
+      "route": "/anki-forge/es/docs/troubleshooting/index.md",
+      "sha256": "a2a3a42bcd7a6ab2b511bf9e736667ad8b302dc8781e428008bd200420be5b4f"
+    },
+    {
+      "route": "/anki-forge/es/docs/updates/index.md",
+      "sha256": "b9b2cc72ed62f822aec0e9e7fc16b34cadf78f6868148360aaaef472ed09a952"
+    },
+    {
+      "route": "/anki-forge/es/llms.txt",
+      "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d"
+    },
+    {
+      "route": "/anki-forge/ja/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "27889b9b84c108a76bfed3450fb624286424e412766f4f87cdec2d2014eb621e"
+    },
+    {
+      "route": "/anki-forge/ja/blog/your-first-anki-deck/index.md",
+      "sha256": "631e800eb152dbb484c781f9fd2e1760e5174be420c59664066ebed744490f87"
+    },
+    {
+      "route": "/anki-forge/ja/docs/ai-anki-cards/index.md",
+      "sha256": "2e5b420c62be33ab6ab6d9a7dbb29369adb25b322c26af15f9af8fa37c7579aa"
+    },
+    {
+      "route": "/anki-forge/ja/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "e39308bb4bf191a1a65acdec3f1c3cec9579fe7922ac1c3accb6e0d3206329c9"
+    },
+    {
+      "route": "/anki-forge/ja/docs/api/index.md",
+      "sha256": "cceb5e5237186743b653895831b5079dc8ecf475180a1a16adae3b63232b5673"
+    },
+    {
+      "route": "/anki-forge/ja/docs/build-guarantees/index.md",
+      "sha256": "c7841c160a0d0295411b2d5627410d26e93e51a49cf76aa7d82c794fd0e1e1fb"
+    },
+    {
+      "route": "/anki-forge/ja/docs/cards/index.md",
+      "sha256": "0d245a2517435ac3215170422ea139e7858e0cf38dc784601fd33d306636accb"
+    },
+    {
+      "route": "/anki-forge/ja/docs/compatibility/index.md",
+      "sha256": "52d890b6eda66d3bab3423a6be5ee374f3b106487f517a386b17a1aa0465ab7d"
+    },
+    {
+      "route": "/anki-forge/ja/docs/concepts/index.md",
+      "sha256": "4f08d0583b1e8355f8bb83b0d756118c336f20dd93106329f0adf297ba2482c6"
+    },
+    {
+      "route": "/anki-forge/ja/docs/csv-to-anki/index.md",
+      "sha256": "808923aee7e79aca33f63dfd39d77dac70437acf6768cba1c9661a45775b28df"
+    },
+    {
+      "route": "/anki-forge/ja/docs/custom-notetypes/index.md",
+      "sha256": "04b21b38940ea18e554e1ec2fc520fa42bf2625b083f815f55f03e5e31c15094"
+    },
+    {
+      "route": "/anki-forge/ja/docs/development/index.md",
+      "sha256": "2d3023b9a31da475971214d0380dda676f724f6e4939e202d6146b4639ce6ec2"
+    },
+    {
+      "route": "/anki-forge/ja/docs/genanki-migration/index.md",
+      "sha256": "4b281a1e07383523e9dbec98b95672768b7d24e9458f997d1cfaff5088027046"
+    },
+    {
+      "route": "/anki-forge/ja/docs/image-occlusion/index.md",
+      "sha256": "cf55864ad55c5ac7be9bd7352096ffd4a58e50c4351eba2d4907581d605a3fb9"
+    },
+    {
+      "route": "/anki-forge/ja/docs/index.md",
+      "sha256": "881d8b6e811225424d84a030134952732cf734a43847e5aa34a625499d1eac3f"
+    },
+    {
+      "route": "/anki-forge/ja/docs/installation/index.md",
+      "sha256": "3b07b38605db66b81df26e3b381392a35d7c1374793501700507719558a9d0ce"
+    },
+    {
+      "route": "/anki-forge/ja/docs/json-to-anki/index.md",
+      "sha256": "dacec422e610b238e4d185172e12033e339b74905682915e5c33c2b9080dc284"
+    },
+    {
+      "route": "/anki-forge/ja/docs/languages/index.md",
+      "sha256": "94f170807eeaab2ab74f3750320e6b0bce4af9e407309ea73c4490060c6e4de8"
+    },
+    {
+      "route": "/anki-forge/ja/docs/media/index.md",
+      "sha256": "1374c52f20eebdb6d17e1f19e64f67a79517e008d072dedb387777601edb391f"
+    },
+    {
+      "route": "/anki-forge/ja/docs/node-api/index.md",
+      "sha256": "8aa77f2fafb1af29f6268553af8510bc3b4e16e89f77dd69d7d04c3cb174fa5e"
+    },
+    {
+      "route": "/anki-forge/ja/docs/node-quickstart/index.md",
+      "sha256": "9fdebe1ec79bd7edc441096c0792e527f16e2a6e189b4cf3fcd9ec377926205c"
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-api/index.md",
+      "sha256": "a4dbe2b60bf17adc083ec31bc12abdb7772324864c1d79f1194a4d0aa60251fa"
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-diagnostics/index.md",
+      "sha256": "88a1557d90afb2814b4679b20fc1afa9d968a5c092cc0198997c638af2ff21e9"
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-migration/index.md",
+      "sha256": "3710accf7545e898f2b98239c8f316ac9a0b4355aa6e1d1735d9257637f30937"
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-quickstart/index.md",
+      "sha256": "46cf182f9dc3ece8c209bfc32bf65a46882105374b055df39b0b587711ece0c4"
+    },
+    {
+      "route": "/anki-forge/ja/docs/quickstart/index.md",
+      "sha256": "a7bc6860fc267e2049700b03f6c715e920ed2a32a085a9b4fb3938a82703b9be"
+    },
+    {
+      "route": "/anki-forge/ja/docs/rust-api/index.md",
+      "sha256": "e17338e19780955a86be1b084dbce929d0030e326e0c33442c5dda075486e194"
+    },
+    {
+      "route": "/anki-forge/ja/docs/rust-guide/index.md",
+      "sha256": "a45613b0f7ef560475f5072d729ae9f0c6bd4786c537c1f4239593fba6a7e4c2"
+    },
+    {
+      "route": "/anki-forge/ja/docs/templates/index.md",
+      "sha256": "4c66968bf145daa9b80bd51763e128cbe45f9188f781dfcf085e16d3072adb00"
+    },
+    {
+      "route": "/anki-forge/ja/docs/troubleshooting/index.md",
+      "sha256": "ea6fe0bc78933b3ef5df2e692aa28e81b78220813c8797485e7919e409dc6748"
+    },
+    {
+      "route": "/anki-forge/ja/docs/updates/index.md",
+      "sha256": "fe80a6908897a962b8510af0fbee110d9f9d4963832ac80dd8d2018544dc9c53"
+    },
+    {
+      "route": "/anki-forge/ja/llms.txt",
+      "sha256": "3145b8f74114903e44daca25840c2360c38e4a851a4a5f763316c28352c72a28"
+    },
+    {
+      "route": "/anki-forge/llms.txt",
+      "sha256": "f5b259b4c92ea378239d98b301967459f522b3fb4424b9f1339db0f97a31c08e"
+    },
+    {
+      "route": "/anki-forge/pt-br/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "0ad6eb120248deb7bb383b4fc8368f05813f701ef9a74ca63e5be06e0dc6fac1"
+    },
+    {
+      "route": "/anki-forge/pt-br/blog/your-first-anki-deck/index.md",
+      "sha256": "8eb7f675ad1e1b48596191a559ccf30bac2eefeead6c74921c580c9daa767bfb"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/ai-anki-cards/index.md",
+      "sha256": "fa6da584c9949a289bee500a838cf64e5e9627d0bd6f3b9029e6788c6882b939"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "1905b63bb1d196730eb1eff5bf0ffa900b5ffddd933956ac8e5b3b4ea3fa5c38"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/api/index.md",
+      "sha256": "c8ca239fc099efb286f5bec1effe8cd34f25ebc3e2ed209961cdb70988d8303f"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/build-guarantees/index.md",
+      "sha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/cards/index.md",
+      "sha256": "dec3990451d9de964ca7f8966900ef8cf63c74f6639817fd7f94975bdea0871d"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/compatibility/index.md",
+      "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/concepts/index.md",
+      "sha256": "0e0d67eb233d1d024b3a51d29d9287f30e4a510fc74eabc3c15379b16b861c02"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/csv-to-anki/index.md",
+      "sha256": "597af138257f6a90fb7b5f005ed20554231e270f67981f75eda8947dc0abb7f5"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/custom-notetypes/index.md",
+      "sha256": "f1790f96b4bc06721b6e97231d077ae4f35111a0eea50dc639e0154b2187a508"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/development/index.md",
+      "sha256": "144273065ae13e279aa3fdde993350ab6053ebca7df9a44d56029e42794da378"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/genanki-migration/index.md",
+      "sha256": "f58aeaef9d05167586e1440aab46b849190fa9dae9869e6c645ee66a30fb606d"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/image-occlusion/index.md",
+      "sha256": "a11c45b2d3c8edd9ae75287da7dd9aa61c407d757b5141c5f4967578a997c8c7"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/index.md",
+      "sha256": "dd0a69d49361b1d9f906651f36e6e1b18ba9f089018cd5e1b8576a6e28005754"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/installation/index.md",
+      "sha256": "fd2a63390efd87993909022b3df21fd0478053c3db795f04bbe0ca988d179097"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/json-to-anki/index.md",
+      "sha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/languages/index.md",
+      "sha256": "0e50187553c7e2cb69f4c71400fdc70712fcf11e3eeedab75a911083657e6308"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/media/index.md",
+      "sha256": "1df6e3c05e16aae47653b10aa6196fb87ff57d7d67c5f31f07558dbac2d7d3b4"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/node-api/index.md",
+      "sha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/node-quickstart/index.md",
+      "sha256": "0e4f8662bf201e81387f2d4a530581c48eff946a4954c5eaed8b8dca69f29e9c"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-api/index.md",
+      "sha256": "8b828d3ea22b4521f7a319782b98e71bd245a22e9407cea0932ce8d8aaabad26"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-diagnostics/index.md",
+      "sha256": "36554be8297e3ee539af8f814c551e6d7609f3ccda5f5ebf7864b3408af160cf"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-migration/index.md",
+      "sha256": "9482dc32825426760f28a297458a6f1b75e22c65aea481083ba8e52c47827ec8"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-quickstart/index.md",
+      "sha256": "9b4832ffd24ad5f18ae3e8fff9632e271f59c33143211550f7fa36fe1d9d5eb3"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/quickstart/index.md",
+      "sha256": "4a023c9502f46e4920d347a88805098dca6a62ddee5ae09fcf8c6a91d5698065"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/rust-api/index.md",
+      "sha256": "d593654160c9b3bef85e2e403661969c06c07fee009876c59a71ca141308d8e3"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/rust-guide/index.md",
+      "sha256": "455802a84df3306570d2249c32afb8008f0134a6922861e8cef086c34be63902"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/templates/index.md",
+      "sha256": "db87d3156b7ddd37dc48d51fd7e0b3ede66919874ee4160be71469c0d884fd40"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/troubleshooting/index.md",
+      "sha256": "85b1666845bf141ffe889409315ca10afbbc8f32dfbe512f07b6c8ca8220d95d"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/updates/index.md",
+      "sha256": "e6de316a63e882ac7644033cf17d1b833bf4950e9857b98469e4882359ec799b"
+    },
+    {
+      "route": "/anki-forge/pt-br/llms.txt",
+      "sha256": "469174d87d33e753dc6bfab0c6fdc7ae972ae0b0be3b7bd4f58af8eb20d04dd4"
+    },
+    {
+      "route": "/anki-forge/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "3c9b278c869f9c681e12233064719b9235710b4ad422e1b6f8db1c83926818da"
+    },
+    {
+      "route": "/anki-forge/zh-cn/blog/your-first-anki-deck/index.md",
+      "sha256": "e252130841688a1b0d4f69a236e3b483d2f8396e6058faab943e6f2d71035a23"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/ai-anki-cards/index.md",
+      "sha256": "1cd43e83fceafef9fd1e1522b7e708561b857779817131fc6304c138829d92f1"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "940a5349a4b69c9d6235476023f36650501a3e52fa597ea5afbd8879694e3fc9"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/api/index.md",
+      "sha256": "e10b5a94f94ac4741b94096f47b4acdd6124e7876236c38fa86def200271f5ce"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/build-guarantees/index.md",
+      "sha256": "827dce8afcc0551c24f9ec6ccff6ed7bac0d31bafdc40ed8eeda819b16dc9ca1"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/cards/index.md",
+      "sha256": "74e1976beb7ea5055a8c1602c06b3d6bdd133d6f420802506cc289956d31e03f"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/compatibility/index.md",
+      "sha256": "282f19677991f30825f40bf431d7c0db998eefe34589311ed76ab63c4660fa08"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/concepts/index.md",
+      "sha256": "027e6456d2f823ea27abfb3003c25f53ef52f81e62aca19b2e5e52698463a3b7"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/csv-to-anki/index.md",
+      "sha256": "f35c352e1898e3a3472182e73d38ea867ef225ec2c34c3e740849bb95b2098f8"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/custom-notetypes/index.md",
+      "sha256": "c7ed665205b3d78511fac92c204326b5812d7fd95eb60cf94afea5374918aaa4"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/development/index.md",
+      "sha256": "01c9084eb7893f4b389c1103e1da747d8580fed287727cdaeab29d1b67cb3c75"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/genanki-migration/index.md",
+      "sha256": "84c25b0df6b4c4f3f03eb1345d4479bbea3938737c0c61a751866089e84dee03"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/image-occlusion/index.md",
+      "sha256": "dd3c0aa40c86d1de08993aea2b8fc29cbcda95e9209043129c65d633db51c1a8"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/index.md",
+      "sha256": "c20257c291baf83a38e2c32066a308f5400b017bfa9bb438f26490da35e4c86b"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/installation/index.md",
+      "sha256": "fa0c719c36227cda67de929d81faa05ddadff6d64327b8785146361af9d15c19"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/json-to-anki/index.md",
+      "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/languages/index.md",
+      "sha256": "a041ad9e5b93395a69c3d4e65e69ce3e10535518d3199948bc281a0eeba0f1ac"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/media/index.md",
+      "sha256": "dc169cb4da105e53b08ebf5d6443f986c2baa1c39a280a8ffd46212efdf4e4eb"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/node-api/index.md",
+      "sha256": "89a2b4e0e9c18d1acb7fd52eb8977a576a92c9d4e8fcfafc49c3ffc29fbea637"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/node-quickstart/index.md",
+      "sha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-api/index.md",
+      "sha256": "a3e647c84fbb23a70d84e03c809cc02d4dcabdfbf48f9b9aa32b6e37df526cb9"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-diagnostics/index.md",
+      "sha256": "ee0965ef34758e48807a477ebd8f3435d7ea5c654ce982128f2ddb36ed1c24cd"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-migration/index.md",
+      "sha256": "e646d2a695eaa3ee18f7d7add1dd783a95c9efabe6a7bfa1b4db0c3f7a06d8fb"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-quickstart/index.md",
+      "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/quickstart/index.md",
+      "sha256": "e58a9ecd751d00c6f4cbc16c2d65ec532164a8df0d9c49c2964b3dee6731a5cd"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/rust-api/index.md",
+      "sha256": "253c887d8b2b2b3506b363dbf67685d39c19034c930d510388dda4e7abcf58a9"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/rust-guide/index.md",
+      "sha256": "b359a9b7c5954d1cd4bfd99f0b84230ff564dcd6583b8b03ec60fd1ac58219a6"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/templates/index.md",
+      "sha256": "3f68b3611953bc3b97b10f439f31dc3386143d973cbb45e909d9b87ae1ecf980"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/troubleshooting/index.md",
+      "sha256": "c840799a16862ed6f8ef6f002b7952174d110c0048df5c37bd1f2fc23d5f9b1f"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/updates/index.md",
+      "sha256": "25b4f537d00a520167960e61f91a41cd3400db6c3e175102f20ef27a0a26cc0a"
+    },
+    {
+      "route": "/anki-forge/zh-cn/llms.txt",
+      "sha256": "8960ab17e462cd416469f0837e7bbb30768e59d30e4ddd73739a42aac905a968"
+    }
+  ],
+  "entries": {
+    "en": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/docs/python-quickstart/index.md",
+            "http://127.0.0.1:62813/anki-forge/docs/compatibility/index.md"
+          ],
+          "answer": "Use ordinary CPython 3.11+ with a matching platform wheel; the documented release checks cover 3.11–3.14. Create an environment with `python -m venv .venv`, activate `. .venv/bin/activate` (PowerShell: `.venv\\Scripts\\Activate.ps1`), and install `python -m pip install ankiforge==0.3.1`. Save the quickstart's complete program as `main.py`: it creates Project('spanish', default_deck='Spanish'), adds key 'es:hola' with Note.basic('hola', 'hello'), and builds with BuildOptions.to('spanish.apkg'). Run `python main.py`; expect a persistent APKG containing hola → hello in Spanish. Keep the namespace and key for subsequent versions. Export itself needs no Anki; importing and playback require checking the intended Anki client.\n\nSources: http://127.0.0.1:62813/anki-forge/llms.txt, http://127.0.0.1:62813/anki-forge/docs/python-quickstart/index.md, http://127.0.0.1:62813/anki-forge/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/docs/python-quickstart/index.md",
+              "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf",
+              "observation": "The localized llms entry leads to a complete virtualenv/pinned-pip/main.py path, ordinary CPython and native-wheel prerequisites, persistent Spanish/hola→hello result, stable identity and bounded client compatibility. The answer uses the current captured localized instructions."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/docs/node-api/index.md",
+            "http://127.0.0.1:62813/anki-forge/docs/node-quickstart/index.md"
+          ],
+          "answer": "Start with Node.js 22.13+ and `npm install --include=optional ankiforge@0.3.1`; the matching native dependency is required. The complete main.mjs uses Project, Note and BuildOptions, awaits project.build(BuildOptions.to('spanish.apkg')), reads output.artifact.path, then awaits output.artifact.close(). Run `node main.mjs`. BuildOutput owns the artifact and exposes report/snapshot; BuildReport records observations, not success or file ownership. A persistent file survives close, whereas the final temporary owner deletes its file. Retain an owner while reading a temporary path. Snapshot JSON owns nothing. Prepared publish attempts consume their owner even on policy or I/O rejection, so retry by preparing again and inspect publication facts after errors.\n\nSources: http://127.0.0.1:62813/anki-forge/llms.txt, http://127.0.0.1:62813/anki-forge/docs/node-api/index.md, http://127.0.0.1:62813/anki-forge/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/docs/node-api/index.md",
+              "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+              "observation": "Read current localized complete quickstart and API passages for awaited build, persistent/temporary ownership, BuildOutput versus BuildReport, report snapshots and consumed prepared publication. The fresh answer retains native installation prerequisites and lifetime/error constraints."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/docs/json-to-anki/index.md",
+            "http://127.0.0.1:62813/anki-forge/docs/updates/index.md",
+            "http://127.0.0.1:62813/anki-forge/docs/media/index.md"
+          ],
+          "answer": "Follow the local JSON recipe and put v1.json, v2.json, cell.png and tone.wav in recipe/. The caller parses namespace/deck/notes; preserve namespace biology-json and the three business IDs. Choose a complete SDK program: Python runs `python main.py recipe output/python`, Rust runs `cargo run -- recipe output/rust`, or compile main.mts with the documented NodeNext command and run `node dist/main.mjs recipe output/node`. Each release contains 3 notes, 3 cards and 2 media files. Keep the original v1.apkg as baseline and publish v2 separately after checking comparison.json and review.json; this edit changes only the first answer, records RISK.NOTE_CHANGED and allows publication. Publish the reviewed prepared candidate. Anki re-exports are unsuitable baselines; import does not delete omitted notes or guarantee local review history.\n\nSources: http://127.0.0.1:62813/anki-forge/llms.txt, http://127.0.0.1:62813/anki-forge/docs/json-to-anki/index.md, http://127.0.0.1:62813/anki-forge/docs/updates/index.md, http://127.0.0.1:62813/anki-forge/docs/media/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/docs/json-to-anki/index.md",
+              "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+              "observation": "Read the current recipe prose, shared-input links, SDK run commands, counts, review report/policy outcome, original baseline and client limits. All ten fenced blocks per locale match the prior actual reviewed archive; no new SDK execution is claimed. Read supporting updates/media constraints as documented."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/docs/compatibility/index.md",
+            "http://127.0.0.1:62813/anki-forge/docs/build-guarantees/index.md"
+          ],
+          "answer": "The compatibility page dates its 0.3.1 package record to 2026-10-13. It records Rust 1.92+, Node 22.13 and the 22/24/26 lines, and ordinary CPython 3.11–3.14. Native packages cover macOS arm64/x64, Linux x64 GNU/glibc and Windows x64; package existence is not proof of every host. Browser/Electron/Bun, musl and ARM64 Linux/Windows are outside recorded Node checks; other Python implementations, free-threaded interpreters and subinterpreters need separate validation. Export needs no Anki, but import/rendering/codecs/settings and update effects require client checks. APKG replacement is atomic per file, not a transaction with a separate report or a crash-durability guarantee. A late error may follow publication; inspect stage and durability before retrying. Inspection limits are finite independent counters, not a process sandbox.\n\nSources: http://127.0.0.1:62813/anki-forge/llms.txt, http://127.0.0.1:62813/anki-forge/docs/compatibility/index.md, http://127.0.0.1:62813/anki-forge/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/docs/compatibility/index.md",
+              "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+              "observation": "Read the current complete localized compatibility and build-guarantee prose. The answer preserves the dated package record, verified-versus-available distinction, excluded platforms, client conditions, per-file atomicity, late publication errors and non-sandbox inspection limits."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "zh-CN": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/zh-cn/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/zh-cn/docs/python-quickstart/index.md",
+            "http://127.0.0.1:62813/anki-forge/zh-cn/docs/compatibility/index.md"
+          ],
+          "answer": "使用有匹配平台 wheel 的普通 CPython 3.11+；文档中的发布检查覆盖 3.11–3.14。运行 `python -m venv .venv`，用 `. .venv/bin/activate` 激活（PowerShell 用 `.venv\\Scripts\\Activate.ps1`），再执行 `python -m pip install ankiforge==0.3.1`。将快速开始的完整程序保存为 main.py：创建 namespace 为 spanish、默认牌组为 Spanish 的 Project，添加键 es:hola 与 Note.basic('hola', 'hello')，使用 BuildOptions.to('spanish.apkg') 构建。执行 `python main.py` 后应得到持久 APKG，其中 Spanish 牌组包含 hola → hello。后续版本保持 namespace 和键不变。导出无需安装 Anki；导入和播放仍需在目标客户端验证。\n\nSources: http://127.0.0.1:62813/anki-forge/zh-cn/llms.txt, http://127.0.0.1:62813/anki-forge/zh-cn/docs/python-quickstart/index.md, http://127.0.0.1:62813/anki-forge/zh-cn/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/zh-cn/docs/python-quickstart/index.md",
+              "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74",
+              "observation": "The localized llms entry leads to a complete virtualenv/pinned-pip/main.py path, ordinary CPython and native-wheel prerequisites, persistent Spanish/hola→hello result, stable identity and bounded client compatibility. The answer uses the current captured localized instructions."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/zh-cn/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/zh-cn/docs/node-api/index.md",
+            "http://127.0.0.1:62813/anki-forge/zh-cn/docs/node-quickstart/index.md"
+          ],
+          "answer": "使用 Node.js 22.13+，运行 `npm install --include=optional ankiforge@0.3.1` 安装公开包及匹配的原生依赖。快速开始的 main.mjs 导入 Project、Note、BuildOptions，await project.build(BuildOptions.to('spanish.apkg'))，读取 output.artifact.path，最后 await output.artifact.close()；以 `node main.mjs` 运行。BuildOutput 拥有产物并提供 report/snapshot；BuildReport 只有观察结果，没有操作结果或文件所有权。持久文件关闭后保留，临时文件则在最后一个所有者释放时删除，读取期间必须保留所有者；JSON 快照不会延长寿命。预备发布每次 publish 尝试都会消耗所有者，策略或 I/O 拒绝也如此；重试需重新准备，并检查错误中的实际发布状态。\n\nSources: http://127.0.0.1:62813/anki-forge/zh-cn/llms.txt, http://127.0.0.1:62813/anki-forge/zh-cn/docs/node-api/index.md, http://127.0.0.1:62813/anki-forge/zh-cn/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/zh-cn/docs/node-api/index.md",
+              "sha256": "89a2b4e0e9c18d1acb7fd52eb8977a576a92c9d4e8fcfafc49c3ffc29fbea637",
+              "observation": "Read current localized complete quickstart and API passages for awaited build, persistent/temporary ownership, BuildOutput versus BuildReport, report snapshots and consumed prepared publication. The fresh answer retains native installation prerequisites and lifetime/error constraints."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/zh-cn/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/zh-cn/docs/json-to-anki/index.md",
+            "http://127.0.0.1:62813/anki-forge/zh-cn/docs/updates/index.md",
+            "http://127.0.0.1:62813/anki-forge/zh-cn/docs/media/index.md"
+          ],
+          "answer": "从 JSON 示例下载 v1.json、v2.json、cell.png、tone.wav 放入 recipe/。JSON 由调用方解析，保留 biology-json 命名空间和三条业务 ID。选择完整 SDK 程序：Python 执行 `python main.py recipe output/python`；Rust 执行 `cargo run -- recipe output/rust`；Node 按文档 NodeNext 命令编译 main.mts，再运行 `node dist/main.mjs recipe output/node`。每版应有 3 条笔记、3 张卡片、2 个媒体文件。保留原始分发 v1.apkg 作基线，将 v2 写到另一路径；检查 comparison.json、review.json，本例仅改变首条答案，出现 RISK.NOTE_CHANGED 且策略允许发布。发布的必须是已审阅预备候选包。Anki 重新导出的包不能作基线；省略笔记不会删除客户端笔记，客户端本地修改和复习状态需单独验证。\n\nSources: http://127.0.0.1:62813/anki-forge/zh-cn/llms.txt, http://127.0.0.1:62813/anki-forge/zh-cn/docs/json-to-anki/index.md, http://127.0.0.1:62813/anki-forge/zh-cn/docs/updates/index.md, http://127.0.0.1:62813/anki-forge/zh-cn/docs/media/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/zh-cn/docs/json-to-anki/index.md",
+              "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+              "observation": "Read the current recipe prose, shared-input links, SDK run commands, counts, review report/policy outcome, original baseline and client limits. All ten fenced blocks per locale match the prior actual reviewed archive; no new SDK execution is claimed. Read supporting updates/media constraints as documented."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/zh-cn/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/zh-cn/docs/compatibility/index.md",
+            "http://127.0.0.1:62813/anki-forge/zh-cn/docs/build-guarantees/index.md"
+          ],
+          "answer": "兼容性页将公开包 0.3.1 的检查时间限定为 2026-10-13。记录覆盖 Rust 1.92+、Node 22.13 及 22/24/26 系列、普通 CPython 3.11–3.14。原生包面向 macOS arm64/x64、Linux x64 GNU/glibc、Windows x64，存在包不代表每台主机都测试过。浏览器、Electron、Bun、musl、ARM64 Linux/Windows 不在记录的 Node 范围；其他 Python 实现、自由线程与子解释器需另验。导出无需 Anki，但导入、渲染、编解码器、设置及更新效果依赖客户端。APKG 是单文件原子替换，不与独立报告构成事务，也不自动保证崩溃持久性。晚期错误可能发生在替换后，重试前检查 stage 和 durability。检查预算不是进程级资源沙箱。\n\nSources: http://127.0.0.1:62813/anki-forge/zh-cn/llms.txt, http://127.0.0.1:62813/anki-forge/zh-cn/docs/compatibility/index.md, http://127.0.0.1:62813/anki-forge/zh-cn/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/zh-cn/docs/compatibility/index.md",
+              "sha256": "282f19677991f30825f40bf431d7c0db998eefe34589311ed76ab63c4660fa08",
+              "observation": "Read the current complete localized compatibility and build-guarantee prose. The answer preserves the dated package record, verified-versus-available distinction, excluded platforms, client conditions, per-file atomicity, late publication errors and non-sandbox inspection limits."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "es": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/es/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/es/docs/python-quickstart/index.md",
+            "http://127.0.0.1:62813/anki-forge/es/docs/compatibility/index.md"
+          ],
+          "answer": "Usa CPython convencional 3.11 o posterior con un wheel compatible; las comprobaciones documentadas cubren 3.11–3.14. Crea el entorno con `python -m venv .venv`, actívalo con `. .venv/bin/activate` (PowerShell: `.venv\\Scripts\\Activate.ps1`) e instala `python -m pip install ankiforge==0.3.1`. Guarda el programa completo del inicio rápido como main.py: Project usa el espacio spanish y el mazo Spanish, añade es:hola mediante Note.basic('hola', 'hello') y genera BuildOptions.to('spanish.apkg'). Ejecuta `python main.py`. El APKG persistente debe contener hola → hello. Conserva el espacio de nombres y la clave en futuras versiones. Exportar no necesita Anki; verifica la importación y reproducción en tu cliente.\n\nSources: http://127.0.0.1:62813/anki-forge/es/llms.txt, http://127.0.0.1:62813/anki-forge/es/docs/python-quickstart/index.md, http://127.0.0.1:62813/anki-forge/es/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/es/docs/python-quickstart/index.md",
+              "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a",
+              "observation": "The localized llms entry leads to a complete virtualenv/pinned-pip/main.py path, ordinary CPython and native-wheel prerequisites, persistent Spanish/hola→hello result, stable identity and bounded client compatibility. The answer uses the current captured localized instructions."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/es/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/es/docs/node-api/index.md",
+            "http://127.0.0.1:62813/anki-forge/es/docs/node-quickstart/index.md"
+          ],
+          "answer": "Necesitas Node.js 22.13 o posterior y `npm install --include=optional ankiforge@0.3.1`, incluida su dependencia nativa. El main.mjs completo importa Project, Note y BuildOptions, espera project.build(BuildOptions.to('spanish.apkg')), lee output.artifact.path y ejecuta await output.artifact.close(); ejecútalo con `node main.mjs`. BuildOutput conserva el archivo y expone report/snapshot. BuildReport solo contiene observaciones, sin resultado ni propiedad del archivo. Cerrar un artefacto persistente conserva su archivo; liberar el último propietario temporal lo elimina. Mantén un propietario mientras lees la ruta: el JSON no prolonga su vida. Cada intento de publish consume el candidato preparado, incluso ante rechazo por política o E/S; prepara otro para reintentar y comprueba los datos reales de publicación tras un error.\n\nSources: http://127.0.0.1:62813/anki-forge/es/llms.txt, http://127.0.0.1:62813/anki-forge/es/docs/node-api/index.md, http://127.0.0.1:62813/anki-forge/es/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/es/docs/node-api/index.md",
+              "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84",
+              "observation": "Read current localized complete quickstart and API passages for awaited build, persistent/temporary ownership, BuildOutput versus BuildReport, report snapshots and consumed prepared publication. The fresh answer retains native installation prerequisites and lifetime/error constraints."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/es/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/es/docs/json-to-anki/index.md",
+            "http://127.0.0.1:62813/anki-forge/es/docs/updates/index.md",
+            "http://127.0.0.1:62813/anki-forge/es/docs/media/index.md"
+          ],
+          "answer": "Descarga v1.json, v2.json, cell.png y tone.wav en recipe/. La aplicación analiza el JSON; conserva biology-json y los tres ID de negocio. Elige el programa completo de un SDK: `python main.py recipe output/python`, `cargo run -- recipe output/rust`, o compila main.mts con el comando NodeNext indicado y ejecuta `node dist/main.mjs recipe output/node`. Cada versión debe contener 3 notas, 3 tarjetas y 2 archivos multimedia. Guarda el APKG v1 original de distribución y publica v2 en otra ruta después de revisar comparison.json y review.json. El cambio de la primera respuesta registra RISK.NOTE_CHANGED, sin notas añadidas o eliminadas, y permite publicar el candidato preparado revisado. Una reexportación de Anki no sirve de base; importar no elimina notas omitidas ni garantiza el historial local.\n\nSources: http://127.0.0.1:62813/anki-forge/es/llms.txt, http://127.0.0.1:62813/anki-forge/es/docs/json-to-anki/index.md, http://127.0.0.1:62813/anki-forge/es/docs/updates/index.md, http://127.0.0.1:62813/anki-forge/es/docs/media/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/es/docs/json-to-anki/index.md",
+              "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c",
+              "observation": "Read the current recipe prose, shared-input links, SDK run commands, counts, review report/policy outcome, original baseline and client limits. All ten fenced blocks per locale match the prior actual reviewed archive; no new SDK execution is claimed. Read supporting updates/media constraints as documented."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/es/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/es/docs/compatibility/index.md",
+            "http://127.0.0.1:62813/anki-forge/es/docs/build-guarantees/index.md"
+          ],
+          "answer": "La página fecha la comprobación de los paquetes 0.3.1 en 2026-10-13. Registra Rust 1.92+, Node 22.13 y las ramas 22/24/26, y CPython convencional 3.11–3.14. Hay paquetes nativos para macOS arm64/x64, Linux x64 GNU/glibc y Windows x64; disponibilidad no significa prueba en todos los equipos. Navegadores, Electron, Bun, musl y Linux/Windows ARM64 quedan fuera de las pruebas de Node; otras implementaciones de Python, intérpretes sin GIL y subintérpretes requieren validación aparte. Exportar no necesita Anki, pero importación, códecs, representación y actualizaciones dependen del cliente. El reemplazo APKG es atómico por archivo, no una transacción junto al informe ni garantía de durabilidad tras un fallo. Antes de reintentar un error tardío, revisa stage y durability. Los límites de inspección no son un aislamiento de recursos del proceso.\n\nSources: http://127.0.0.1:62813/anki-forge/es/llms.txt, http://127.0.0.1:62813/anki-forge/es/docs/compatibility/index.md, http://127.0.0.1:62813/anki-forge/es/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/es/docs/compatibility/index.md",
+              "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+              "observation": "Read the current complete localized compatibility and build-guarantee prose. The answer preserves the dated package record, verified-versus-available distinction, excluded platforms, client conditions, per-file atomicity, late publication errors and non-sandbox inspection limits."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "pt-BR": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/pt-br/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/pt-br/docs/python-quickstart/index.md",
+            "http://127.0.0.1:62813/anki-forge/pt-br/docs/compatibility/index.md"
+          ],
+          "answer": "Use CPython convencional 3.11 ou posterior com wheel compatível; a verificação registrada cobre 3.11–3.14. Crie o ambiente com `python -m venv .venv`, ative com `. .venv/bin/activate` (PowerShell: `.venv\\Scripts\\Activate.ps1`) e instale `python -m pip install ankiforge==0.3.1`. Salve o programa completo do início rápido como main.py: ele cria Project com namespace spanish e baralho Spanish, adiciona es:hola com Note.basic('hola', 'hello') e gera BuildOptions.to('spanish.apkg'). Rode `python main.py`. O arquivo persistente deve conter hola → hello. Preserve namespace e chave nas edições seguintes. Exportar não exige Anki; a importação e a reprodução precisam ser verificadas no cliente de destino.\n\nSources: http://127.0.0.1:62813/anki-forge/pt-br/llms.txt, http://127.0.0.1:62813/anki-forge/pt-br/docs/python-quickstart/index.md, http://127.0.0.1:62813/anki-forge/pt-br/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/pt-br/docs/python-quickstart/index.md",
+              "sha256": "9b4832ffd24ad5f18ae3e8fff9632e271f59c33143211550f7fa36fe1d9d5eb3",
+              "observation": "The localized llms entry leads to a complete virtualenv/pinned-pip/main.py path, ordinary CPython and native-wheel prerequisites, persistent Spanish/hola→hello result, stable identity and bounded client compatibility. The answer uses the current captured localized instructions."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/pt-br/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/pt-br/docs/node-api/index.md",
+            "http://127.0.0.1:62813/anki-forge/pt-br/docs/node-quickstart/index.md"
+          ],
+          "answer": "Use Node.js 22.13 ou posterior e instale `npm install --include=optional ankiforge@0.3.1` com a dependência nativa correspondente. O main.mjs completo usa Project, Note e BuildOptions, aguarda project.build(BuildOptions.to('spanish.apkg')), lê output.artifact.path e fecha com await output.artifact.close(); execute `node main.mjs`. BuildOutput mantém o artefato e fornece report/snapshot; BuildReport tem observações, sem resultado da operação nem propriedade de arquivo. Um arquivo persistente permanece após close; o temporário desaparece ao liberar seu último proprietário. Mantenha o proprietário durante a leitura, pois JSON não prolonga essa vida. Toda tentativa de publish consome o candidato preparado, inclusive rejeições de política ou E/S. Prepare novamente para tentar outra vez e confira os fatos de publicação em caso de erro.\n\nSources: http://127.0.0.1:62813/anki-forge/pt-br/llms.txt, http://127.0.0.1:62813/anki-forge/pt-br/docs/node-api/index.md, http://127.0.0.1:62813/anki-forge/pt-br/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/pt-br/docs/node-api/index.md",
+              "sha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c",
+              "observation": "Read current localized complete quickstart and API passages for awaited build, persistent/temporary ownership, BuildOutput versus BuildReport, report snapshots and consumed prepared publication. The fresh answer retains native installation prerequisites and lifetime/error constraints."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/pt-br/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/pt-br/docs/json-to-anki/index.md",
+            "http://127.0.0.1:62813/anki-forge/pt-br/docs/updates/index.md",
+            "http://127.0.0.1:62813/anki-forge/pt-br/docs/media/index.md"
+          ],
+          "answer": "Coloque v1.json, v2.json, cell.png e tone.wav em recipe/. A aplicação interpreta o JSON; mantenha biology-json e os três IDs de negócio. Escolha um programa completo: `python main.py recipe output/python`, `cargo run -- recipe output/rust`, ou compile main.mts pelo comando NodeNext documentado e rode `node dist/main.mjs recipe output/node`. Cada versão deve ter 3 notas, 3 cartões e 2 arquivos de mídia. Preserve o APKG v1 originalmente distribuído como base e grave v2 em outro caminho. Confira comparison.json e review.json: a mudança só na primeira resposta gera RISK.NOTE_CHANGED, sem notas adicionadas ou removidas, e permite publicar o candidato preparado revisado. Reexportações do Anki não servem como base. Importar não exclui notas omitidas nem garante o histórico local; teste o cliente.\n\nSources: http://127.0.0.1:62813/anki-forge/pt-br/llms.txt, http://127.0.0.1:62813/anki-forge/pt-br/docs/json-to-anki/index.md, http://127.0.0.1:62813/anki-forge/pt-br/docs/updates/index.md, http://127.0.0.1:62813/anki-forge/pt-br/docs/media/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/pt-br/docs/json-to-anki/index.md",
+              "sha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7",
+              "observation": "Read the current recipe prose, shared-input links, SDK run commands, counts, review report/policy outcome, original baseline and client limits. All ten fenced blocks per locale match the prior actual reviewed archive; no new SDK execution is claimed. Read supporting updates/media constraints as documented."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/pt-br/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/pt-br/docs/compatibility/index.md",
+            "http://127.0.0.1:62813/anki-forge/pt-br/docs/build-guarantees/index.md"
+          ],
+          "answer": "A página registra os pacotes 0.3.1 conforme a verificação de 2026-10-13: Rust 1.92+, Node 22.13 e séries 22/24/26, CPython convencional 3.11–3.14. Os pacotes nativos cobrem macOS arm64/x64, Linux x64 GNU/glibc e Windows x64; isso não prova execução em toda máquina. Navegadores, Electron, Bun, musl e Linux/Windows ARM64 ficam fora das verificações de Node; outras implementações de Python, interpretadores sem GIL e subinterpretadores exigem teste separado. Exportar dispensa Anki, mas importação, codecs, renderização e atualizações dependem do cliente. A substituição atômica vale por APKG, não pelo conjunto com um relatório nem como garantia contra perda após falha. Um erro tardio pode ocorrer depois da publicação: examine stage e durability antes de repetir. Os limites de inspeção não isolam todos os recursos do processo.\n\nSources: http://127.0.0.1:62813/anki-forge/pt-br/llms.txt, http://127.0.0.1:62813/anki-forge/pt-br/docs/compatibility/index.md, http://127.0.0.1:62813/anki-forge/pt-br/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/pt-br/docs/compatibility/index.md",
+              "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf",
+              "observation": "Read the current complete localized compatibility and build-guarantee prose. The answer preserves the dated package record, verified-versus-available distinction, excluded platforms, client conditions, per-file atomicity, late publication errors and non-sandbox inspection limits."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "ja": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/ja/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/ja/docs/python-quickstart/index.md",
+            "http://127.0.0.1:62813/anki-forge/ja/docs/compatibility/index.md"
+          ],
+          "answer": "対応する wheel がある通常の CPython 3.11 以降を使います。記録されたリリース検査は 3.11–3.14 です。`python -m venv .venv` の後、`. .venv/bin/activate`（PowerShell は `.venv\\Scripts\\Activate.ps1`）で有効にし、`python -m pip install ankiforge==0.3.1` を実行します。クイックスタートの完全なコードを main.py に保存します。名前空間 spanish、デッキ Spanish の Project に es:hola と Note.basic('hola', 'hello') を追加し、BuildOptions.to('spanish.apkg') で生成します。`python main.py` の出力は hola → hello を含む永続 APKG です。次回も名前空間とキーを維持します。エクスポートに Anki は不要ですが、インポートや再生は対象クライアントで確認します。\n\nSources: http://127.0.0.1:62813/anki-forge/ja/llms.txt, http://127.0.0.1:62813/anki-forge/ja/docs/python-quickstart/index.md, http://127.0.0.1:62813/anki-forge/ja/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/ja/docs/python-quickstart/index.md",
+              "sha256": "46cf182f9dc3ece8c209bfc32bf65a46882105374b055df39b0b587711ece0c4",
+              "observation": "The localized llms entry leads to a complete virtualenv/pinned-pip/main.py path, ordinary CPython and native-wheel prerequisites, persistent Spanish/hola→hello result, stable identity and bounded client compatibility. The answer uses the current captured localized instructions."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/ja/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/ja/docs/node-api/index.md",
+            "http://127.0.0.1:62813/anki-forge/ja/docs/node-quickstart/index.md"
+          ],
+          "answer": "Node.js 22.13 以降で `npm install --include=optional ankiforge@0.3.1` を実行し、対応するネイティブ依存も入れます。完全な main.mjs は Project、Note、BuildOptions を使い、project.build(BuildOptions.to('spanish.apkg')) を await して output.artifact.path を読み、最後に await output.artifact.close() します。`node main.mjs` で実行できます。BuildOutput は成果物を所有し report/snapshot を公開します。BuildReport は観測結果であり、成功・失敗やファイル所有権ではありません。永続ファイルは close 後も残り、一時ファイルは最後の所有者とともに削除されます。読み取り中は所有者を保持し、JSON に寿命延長を期待しないでください。準備済み候補の publish はポリシーや I/O 拒否も含め毎回消費されるため、再試行には再準備が必要です。エラー後は実際の公開状態を確認します。\n\nSources: http://127.0.0.1:62813/anki-forge/ja/llms.txt, http://127.0.0.1:62813/anki-forge/ja/docs/node-api/index.md, http://127.0.0.1:62813/anki-forge/ja/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/ja/docs/node-api/index.md",
+              "sha256": "8aa77f2fafb1af29f6268553af8510bc3b4e16e89f77dd69d7d04c3cb174fa5e",
+              "observation": "Read current localized complete quickstart and API passages for awaited build, persistent/temporary ownership, BuildOutput versus BuildReport, report snapshots and consumed prepared publication. The fresh answer retains native installation prerequisites and lifetime/error constraints."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/ja/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/ja/docs/json-to-anki/index.md",
+            "http://127.0.0.1:62813/anki-forge/ja/docs/updates/index.md",
+            "http://127.0.0.1:62813/anki-forge/ja/docs/media/index.md"
+          ],
+          "answer": "v1.json、v2.json、cell.png、tone.wav を recipe/ に置きます。JSON は呼び出し側で解析し、biology-json と3つの業務 ID を維持します。完全な SDK プログラムを1つ選び、Python なら `python main.py recipe output/python`、Rust なら `cargo run -- recipe output/rust` を実行します。Node は文書の NodeNext コマンドで main.mts をコンパイルし、`node dist/main.mjs recipe output/node` を実行します。各版はノート3件、カード3枚、メディア2個です。配布時のオリジナル v1.apkg を保存して基準にし、v2 は別のパスに出します。comparison.json と review.json で最初の回答だけの変更、RISK.NOTE_CHANGED、追加・削除なし、公開許可を確認して同じ準備済み候補を公開します。Anki 再エクスポートは基準にできず、ノートの省略による削除や各学習者の履歴保持も保証されません。\n\nSources: http://127.0.0.1:62813/anki-forge/ja/llms.txt, http://127.0.0.1:62813/anki-forge/ja/docs/json-to-anki/index.md, http://127.0.0.1:62813/anki-forge/ja/docs/updates/index.md, http://127.0.0.1:62813/anki-forge/ja/docs/media/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/ja/docs/json-to-anki/index.md",
+              "sha256": "dacec422e610b238e4d185172e12033e339b74905682915e5c33c2b9080dc284",
+              "observation": "Read the current recipe prose, shared-input links, SDK run commands, counts, review report/policy outcome, original baseline and client limits. All ten fenced blocks per locale match the prior actual reviewed archive; no new SDK execution is claimed. Read supporting updates/media constraints as documented."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/ja/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/ja/docs/compatibility/index.md",
+            "http://127.0.0.1:62813/anki-forge/ja/docs/build-guarantees/index.md"
+          ],
+          "answer": "互換性ページの 0.3.1 は2026-10-13の確認記録です。Rust 1.92 以降、Node 22.13 と22/24/26、通常の CPython 3.11–3.14 を記録しています。ネイティブパッケージは macOS arm64/x64、Linux x64 GNU/glibc、Windows x64 向けですが、全ホストでの成功を意味しません。ブラウザー、Electron、Bun、musl、ARM64 Linux/Windows は Node の記録範囲外です。他の Python 実装、free-threaded、サブインタープリターも別途検証します。出力には Anki 不要でも、インポート、描画、コーデック、設定、更新効果は対象クライアントに依存します。APKG のアトミック置換はファイル単位で、別レポートとの一括トランザクションやクラッシュ後の耐久性を保証しません。公開後の遅いエラーもあるため、再試行前に stage と durability を確認します。検査上限はプロセス全体のサンドボックスではありません。\n\nSources: http://127.0.0.1:62813/anki-forge/ja/llms.txt, http://127.0.0.1:62813/anki-forge/ja/docs/compatibility/index.md, http://127.0.0.1:62813/anki-forge/ja/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/ja/docs/compatibility/index.md",
+              "sha256": "52d890b6eda66d3bab3423a6be5ee374f3b106487f517a386b17a1aa0465ab7d",
+              "observation": "Read the current complete localized compatibility and build-guarantee prose. The answer preserves the dated package record, verified-versus-available distinction, excluded platforms, client conditions, per-file atomicity, late publication errors and non-sandbox inspection limits."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    },
+    "de": {
+      "aiMachineReadReview": [
+        {
+          "id": "python-install",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/de/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/de/docs/python-quickstart/index.md",
+            "http://127.0.0.1:62813/anki-forge/de/docs/compatibility/index.md"
+          ],
+          "answer": "Verwende reguläres CPython ab 3.11 mit passendem Plattform-Wheel; die dokumentierten Release-Prüfungen decken 3.11–3.14 ab. Erzeuge mit `python -m venv .venv` eine Umgebung, aktiviere sie über `. .venv/bin/activate` (PowerShell: `.venv\\Scripts\\Activate.ps1`) und installiere `python -m pip install ankiforge==0.3.1`. Speichere das vollständige Schnellstartprogramm als main.py: Project verwendet den Namensraum spanish und Stapel Spanish, fügt es:hola mit Note.basic('hola', 'hello') hinzu und baut mit BuildOptions.to('spanish.apkg'). Starte `python main.py`. Das persistente APKG enthält hola → hello. Behalte Namensraum und Schlüssel bei späteren Änderungen bei. Der Export benötigt kein Anki; Import und Wiedergabe sind im Zielclient zu prüfen.\n\nSources: http://127.0.0.1:62813/anki-forge/de/llms.txt, http://127.0.0.1:62813/anki-forge/de/docs/python-quickstart/index.md, http://127.0.0.1:62813/anki-forge/de/docs/compatibility/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/de/docs/python-quickstart/index.md",
+              "sha256": "e4484200649722bee10f98a4bcddc595eabb2883a71412ddc7e1bcff1f983fe0",
+              "observation": "The localized llms entry leads to a complete virtualenv/pinned-pip/main.py path, ordinary CPython and native-wheel prerequisites, persistent Spanish/hola→hello result, stable identity and bounded client compatibility. The answer uses the current captured localized instructions."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "node-api",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/de/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/de/docs/node-api/index.md",
+            "http://127.0.0.1:62813/anki-forge/de/docs/node-quickstart/index.md"
+          ],
+          "answer": "Benötigt werden Node.js ab 22.13 und `npm install --include=optional ankiforge@0.3.1` samt passender nativer Abhängigkeit. Das vollständige main.mjs importiert Project, Note und BuildOptions, wartet auf project.build(BuildOptions.to('spanish.apkg')), liest output.artifact.path und ruft await output.artifact.close() auf. Ausführen mit `node main.mjs`. BuildOutput besitzt das Artefakt und bietet report/snapshot; BuildReport enthält Beobachtungen, keinen Operationsausgang oder Dateibesitz. Persistente Dateien bleiben nach close erhalten, temporäre verschwinden mit dem letzten Besitzer. Halte beim Lesen einen Besitzer; JSON verlängert die Lebensdauer nicht. Jeder publish-Versuch verbraucht den vorbereiteten Kandidaten, auch bei Richtlinien- oder E/A-Ablehnung. Bereite ihn für einen neuen Versuch erneut vor und prüfe bei Fehlern die tatsächlichen Veröffentlichungsfakten.\n\nSources: http://127.0.0.1:62813/anki-forge/de/llms.txt, http://127.0.0.1:62813/anki-forge/de/docs/node-api/index.md, http://127.0.0.1:62813/anki-forge/de/docs/node-quickstart/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/de/docs/node-api/index.md",
+              "sha256": "a9b33a1ef625407c9ec83ba4efeaff0ea967c542a732cad342ba7ef1fe6ce637",
+              "observation": "Read current localized complete quickstart and API passages for awaited build, persistent/temporary ownership, BuildOutput versus BuildReport, report snapshots and consumed prepared publication. The fresh answer retains native installation prerequisites and lifetime/error constraints."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "json-update",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/de/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/de/docs/json-to-anki/index.md",
+            "http://127.0.0.1:62813/anki-forge/de/docs/updates/index.md",
+            "http://127.0.0.1:62813/anki-forge/de/docs/media/index.md"
+          ],
+          "answer": "Lege v1.json, v2.json, cell.png und tone.wav unter recipe/ ab. Die Anwendung liest das JSON; biology-json und die drei fachlichen IDs bleiben stabil. Wähle ein vollständiges SDK-Programm: `python main.py recipe output/python`, `cargo run -- recipe output/rust` oder kompiliere main.mts mit dem dokumentierten NodeNext-Befehl und starte `node dist/main.mjs recipe output/node`. Jede Version enthält 3 Notizen, 3 Karten und 2 Mediendateien. Bewahre das ursprünglich verteilte v1.apkg als Basis auf und schreibe v2 an einen anderen Pfad. comparison.json und review.json sollen die Änderung nur der ersten Antwort, RISK.NOTE_CHANGED, keine hinzugefügten/entfernten Notizen und die Veröffentlichungsfreigabe zeigen. Veröffentlicht wird derselbe geprüfte Kandidat. Ein Anki-Reexport ist keine geeignete Basis; der Import löscht keine ausgelassenen Notizen und garantiert keinen individuellen Wiederholungsverlauf.\n\nSources: http://127.0.0.1:62813/anki-forge/de/llms.txt, http://127.0.0.1:62813/anki-forge/de/docs/json-to-anki/index.md, http://127.0.0.1:62813/anki-forge/de/docs/updates/index.md, http://127.0.0.1:62813/anki-forge/de/docs/media/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/de/docs/json-to-anki/index.md",
+              "sha256": "1a89e59c2fe15eff7da2d3d996398342ead4166e29ed7e325dff064524ca23de",
+              "observation": "Read the current recipe prose, shared-input links, SDK run commands, counts, review report/policy outcome, original baseline and client limits. All ten fenced blocks per locale match the prior actual reviewed archive; no new SDK execution is claimed. Read supporting updates/media constraints as documented."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        },
+        {
+          "id": "compatibility-constraints",
+          "status": "passed",
+          "readUrls": [
+            "http://127.0.0.1:62813/anki-forge/de/llms.txt",
+            "http://127.0.0.1:62813/anki-forge/de/docs/compatibility/index.md",
+            "http://127.0.0.1:62813/anki-forge/de/docs/build-guarantees/index.md"
+          ],
+          "answer": "Die Kompatibilitätsseite datiert den Paketstand 0.3.1 auf die Prüfung vom 2026-10-13. Dokumentiert sind Rust ab 1.92, Node 22.13 sowie 22/24/26 und reguläres CPython 3.11–3.14. Native Pakete decken macOS arm64/x64, Linux x64 GNU/glibc und Windows x64 ab, nicht nachweislich jeden Host. Browser, Electron, Bun, musl und ARM64 Linux/Windows liegen außerhalb der Node-Prüfabdeckung; andere Python-Implementierungen, Interpreter ohne GIL und Subinterpreter benötigen eigene Tests. Exportieren benötigt kein Anki, doch Import, Darstellung, Codecs, Einstellungen und Aktualisierungen hängen vom Client ab. Der atomare APKG-Austausch gilt pro Datei, nicht gemeinsam mit einem Bericht und nicht automatisch als Absturz-Dauerhaftigkeit. Ein später Fehler kann nach der Veröffentlichung auftreten; prüfe stage und durability vor dem Wiederholen. Inspektionslimits sind keine Ressourcen-Sandbox für den Prozess.\n\nSources: http://127.0.0.1:62813/anki-forge/de/llms.txt, http://127.0.0.1:62813/anki-forge/de/docs/compatibility/index.md, http://127.0.0.1:62813/anki-forge/de/docs/build-guarantees/index.md",
+          "evidence": [
+            {
+              "route": "/anki-forge/de/docs/compatibility/index.md",
+              "sha256": "807f090e9d53cd8536b8df037e7f3dbf9e64c3526fca85445509ff9855af67e6",
+              "observation": "Read the current complete localized compatibility and build-guarantee prose. The answer preserves the dated package record, verified-versus-available distinction, excluded platforms, client conditions, per-file atomicity, late publication errors and non-sandbox inspection limits."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-semantic-reading.json",
+              "sha256": "04ce64f9bc0175a75f8ecd661076e9ee61a7a1efa4cd6929be4ba4877f6fa8b4",
+              "description": "Fresh localized answer, exact manual reading scope and all 65 separately reviewed changed-resource observations; explicit unchanged-section and root/prefix lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-machine-prefix-input-audit.json",
+              "sha256": "519796267cac0c76f1242ce50b04636fbf872c7092d47b401c03fcd9846409c6",
+              "description": "Independent old/current archive hash comparison for all 192 machine resources and exact match of every saved HTTP body; retains the real previous manifest/report lineage."
+            },
+            {
+              "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+              "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+              "description": "Coordinator actual localhost HTTP GET records and saved-body paths, independently verified by this reviewer; not claimed as deployed hosting validation."
+            }
+          ],
+          "openIssues": []
+        }
+      ],
+      "openIssues": []
+    }
+  },
+  "openIssues": [],
+  "limitations": [
+    "No deployment has occurred or been validated by this review.",
+    "This is a machine-readable documentation review; SDK execution and Anki client behavior require their distinct usage/client evidence.",
+    "HTTP retrieval was performed by the coordinator; independent reviewer read saved exact HTTP response bodies, not an independently fetched second set."
+  ]
+}

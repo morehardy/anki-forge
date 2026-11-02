@@ -1,0 +1,26 @@
+npm warn Unknown user config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> anki-forge-website@0.1.0 generate:search
+> node scripts/search-documents.mjs
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: /pt-br/docs/rust-guide/: search vocabulary differs from rendered HTML
++ actual - expected
+
++ 'criar notas com Rust ciclo de vida de Project em Rust adição atômica de notas reutilizar modelo com propriedade independente Content::sequence erros estruturados em Rust AddError::context chaves estáveis dos registros de origem propriedade do artefato temporário atualizar com update_from em Rust AddTarget e AddDetail ankiforge-project-v2'
+- 'criar notas com Rust ciclo de vida de Project em Rust adição atômica de notas reutilizar modelo com propriedade independente Content::sequence erros estruturados em Rust AddError::context chaves estáveis dos registros de origem propriedade do artefato temporário atualizar com update_from em Rust AddTarget e AddDetail ankiforge-project-v2 schema de projeto e compatibilidade dos dados ankiforge-project-v1 rejeitado ankiforge-project-v2 sem name no nível superior'
+
+    at generateSearchDocuments (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/search-documents.mjs:32:14)
+    at async file:///Users/hp/Desktop/2026/anki-forge/website/scripts/search-documents.mjs:49:90 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'criar notas com Rust ciclo de vida de Project em Rust adição atômica de notas reutilizar modelo com propriedade independente Content::sequence erros estruturados em Rust AddError::context chaves estáveis dos registros de origem propriedade do artefato temporário atualizar com update_from em Rust AddTarget e AddDetail ankiforge-project-v2',
+  expected: 'criar notas com Rust ciclo de vida de Project em Rust adição atômica de notas reutilizar modelo com propriedade independente Content::sequence erros estruturados em Rust AddError::context chaves estáveis dos registros de origem propriedade do artefato temporário atualizar com update_from em Rust AddTarget e AddDetail ankiforge-project-v2 schema de projeto e compatibilidade dos dados ankiforge-project-v1 rejeitado ankiforge-project-v2 sem name no nível superior',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

@@ -1,0 +1,181 @@
+✔ all built content URLs and assets are reachable over HTTP (731.378458ms)
+✖ machine links and structured data work without JavaScript (364.243875ms)
+✖ all configured language choices stay visible when focused on a short screen without scripts (476.7965ms)
+✔ en: card tabs, keyboard, flip, audio, updates and downloads (888.199791ms)
+✔ en: real clipboard, denial fallback, AI task and localized guides (1268.933166ms)
+✖ en: docs search, section navigation, copy and theme continuity (10359.311042ms)
+✔ en: native documentation code-copy denial and recovery (706.919208ms)
+✔ en: mobile navigation, native sidebar, system theme and legacy sections (1190.705042ms)
+✔ en: search loading failure has localized feedback and a close action (554.169042ms)
+✖ en: header controls stay reachable at narrow 200% text zoom (403.638791ms)
+✔ en: narrow layouts, no script content and real missing-page recovery (2687.186958ms)
+✔ zh-CN: card tabs, keyboard, flip, audio, updates and downloads (697.676ms)
+✔ zh-CN: real clipboard, denial fallback, AI task and localized guides (1140.415666ms)
+✖ zh-CN: docs search, section navigation, copy and theme continuity (10373.687292ms)
+✔ zh-CN: native documentation code-copy denial and recovery (806.217292ms)
+✔ zh-CN: mobile navigation, native sidebar, system theme and legacy sections (1339.493167ms)
+✔ zh-CN: search loading failure has localized feedback and a close action (741.474584ms)
+✖ zh-CN: header controls stay reachable at narrow 200% text zoom (434.692167ms)
+✔ zh-CN: narrow layouts, no script content and real missing-page recovery (3190.28525ms)
+✔ es: card tabs, keyboard, flip, audio, updates and downloads (738.238125ms)
+✔ es: real clipboard, denial fallback, AI task and localized guides (1249.342167ms)
+✖ es: docs search, section navigation, copy and theme continuity (10398.744458ms)
+✔ es: native documentation code-copy denial and recovery (638.0875ms)
+✔ es: mobile navigation, native sidebar, system theme and legacy sections (1357.798042ms)
+✔ es: search loading failure has localized feedback and a close action (557.198333ms)
+✖ es: header controls stay reachable at narrow 200% text zoom (403.642375ms)
+✔ es: narrow layouts, no script content and real missing-page recovery (3042.64025ms)
+✔ pt-BR: card tabs, keyboard, flip, audio, updates and downloads (629.594625ms)
+✔ pt-BR: real clipboard, denial fallback, AI task and localized guides (1127.432209ms)
+✖ pt-BR: docs search, section navigation, copy and theme continuity (10401.019792ms)
+✔ pt-BR: native documentation code-copy denial and recovery (712.769291ms)
+✔ pt-BR: mobile navigation, native sidebar, system theme and legacy sections (1217.749208ms)
+✔ pt-BR: search loading failure has localized feedback and a close action (528.920708ms)
+✖ pt-BR: header controls stay reachable at narrow 200% text zoom (401.354458ms)
+✔ pt-BR: narrow layouts, no script content and real missing-page recovery (2666.409958ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 25
+ℹ fail 10
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 75650.410541
+
+✖ failing tests:
+
+test at scripts/browser.test.mjs:78:1
+✖ machine links and structured data work without JavaScript (364.243875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  404 !== 200
+  
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:91:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 404,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/browser.test.mjs:106:1
+✖ all configured language choices stay visible when focused on a short screen without scripts (476.7965ms)
+  AssertionError [ERR_ASSERTION]: es: focused language is clipped or covered at 320px/200% text
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:139:14)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/browser.test.mjs:221:3
+✖ en: docs search, section navigation, copy and theme continuity (10359.311042ms)
+  locator.waitFor: Timeout 10000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('.pagefind-ui__result-link').first() to be visible[22m
+  
+      at visible (/Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:30:36)
+      at TestContext.<anonymous> (/Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:230:11) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('.pagefind-ui__result-link').first() to be visible" ]
+  }
+
+test at scripts/browser.test.mjs:366:3
+✖ en: header controls stay reachable at narrow 200% text zoom (403.638791ms)
+  AssertionError [ERR_ASSERTION]: en/home clips a header control at 320px with 200% text
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:375:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/browser.test.mjs:221:3
+✖ zh-CN: docs search, section navigation, copy and theme continuity (10373.687292ms)
+  locator.waitFor: Timeout 10000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('.pagefind-ui__result-link').first() to be visible[22m
+  
+      at visible (/Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:30:36)
+      at TestContext.<anonymous> (/Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:230:11) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('.pagefind-ui__result-link').first() to be visible" ]
+  }
+
+test at scripts/browser.test.mjs:366:3
+✖ zh-CN: header controls stay reachable at narrow 200% text zoom (434.692167ms)
+  AssertionError [ERR_ASSERTION]: zh-CN/home clips a header control at 320px with 200% text
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:375:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/browser.test.mjs:221:3
+✖ es: docs search, section navigation, copy and theme continuity (10398.744458ms)
+  locator.waitFor: Timeout 10000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('.pagefind-ui__result-link').first() to be visible[22m
+  
+      at visible (/Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:30:36)
+      at TestContext.<anonymous> (/Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:230:11) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('.pagefind-ui__result-link').first() to be visible" ]
+  }
+
+test at scripts/browser.test.mjs:366:3
+✖ es: header controls stay reachable at narrow 200% text zoom (403.642375ms)
+  AssertionError [ERR_ASSERTION]: es/home clips a header control at 320px with 200% text
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:375:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/browser.test.mjs:221:3
+✖ pt-BR: docs search, section navigation, copy and theme continuity (10401.019792ms)
+  locator.waitFor: Timeout 10000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('.pagefind-ui__result-link').first() to be visible[22m
+  
+      at visible (/Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:30:36)
+      at TestContext.<anonymous> (/Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:230:11) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('.pagefind-ui__result-link').first() to be visible" ]
+  }
+
+test at scripts/browser.test.mjs:366:3
+✖ pt-BR: header controls stay reachable at narrow 200% text zoom (401.354458ms)
+  AssertionError [ERR_ASSERTION]: pt-BR/home clips a header control at 320px with 200% text
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:375:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

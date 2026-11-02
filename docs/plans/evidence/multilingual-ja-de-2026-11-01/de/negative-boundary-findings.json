@@ -1,0 +1,42 @@
+{
+  "reviewerRun": "/root/de_technical_review/de-negative-prefix-2026-11-01",
+  "scope": "Independent semantic findings after reading all 12 actual HTML result-body prose/table entries for the five frozen German negative cases. Bindings and root deployment comparison are separate; rankings alone do not produce these judgments.",
+  "cases": {
+    "de-negative-01": {
+      "conclusion": "The meaningless input has no results and invents no supported task. Empty output is allowed by the frozen boundary. Search/input-correction usability is assessed separately by the browser review, not inferred from this semantic result.",
+      "hits": []
+    },
+    "de-negative-02": {
+      "conclusion": "The first result explicitly requires ankiforge-project-v2 and rejects v1, while keeping package identity-v1 distinct. Python API and CSV results describe public typed authoring and a caller-side CSV parser; neither promises to accept an unchanged old tool recipe. The CSV output name vocabulary-v1.apkg denotes a release version, not acceptance of schema v1. Secondary results are not themselves migration instructions, but do not contradict the capability boundary.",
+      "hits": [
+        {"pageId": "rust-guide", "quote": "Tool-Rezepte verlangen jetzt ankiforge-project-v2 ohne name auf oberster Ebene; v1 wird zurückgewiesen.", "observation": "Direct rejection of legacy v1 tool input; adjacent contract bundle 2.1.0 and identity-v1 are explicitly different contracts."},
+        {"pageId": "python-api", "quote": "Das SDK ruft die reguläre öffentliche Rust-API über eine native Erweiterung auf.", "observation": "The full public authoring/model/media/operation API is described; it does not expose an unchanged legacy tool-recipe loader."},
+        {"pageId": "csv-to-anki", "quote": "Der CSV-Parser aus Pythons Standardbibliothek liest die Tabelle; Anki Forge erstellt das Paket.", "observation": "Explicit caller-side CSV parsing with id/front/back validation. The generated filename's v1 is a package version, not an old JSON schema claim."}
+      ]
+    },
+    "de-negative-03": {
+      "conclusion": "Updates directly says an Anki re-export loses required embedded evidence; the identity article explicitly calls it unsupported as a baseline. The homepage tells readers to retain the original distribution and warns about local edits/import settings. None presents a re-exported Anki package as a substitute for the original distribution.",
+      "hits": [
+        {"pageId": "updates", "quote": "Ein erneuter Export aus Anki erhält diese Nachweise nicht und ist daher keine geeignete Aktualisierungsbasis.", "observation": "The body requires complete embedded identity evidence and refuses silent reconstruction; it explicitly rejects the requested baseline."},
+        {"pageId": "blog:stable-ids-and-deck-updates", "quote": "Bewahre das ursprüngliche Paket auf, das du verteilt hast; ein erneuter Export aus Anki ist keine unterstützte Basisversion.", "observation": "The article's package-baseline discussion preserves the original evidence and client-import qualifications."},
+        {"pageId": "home", "quote": "Bewahre das ursprünglich verteilte APKG auf.", "observation": "The update demonstration points to the original distribution and nearby import/local-edit limitations. Regenerating content is not described as obtaining a baseline by Anki re-export."}
+      ]
+    },
+    "de-negative-04": {
+      "conclusion": "Media and Rust authoring explicitly say renaming leaves MIME unchanged and give wrong.mp3 as a possible MIME/extension failure. Typed audio requires the retained audio/video category; changing a PNG filename is no conversion. The JSON guide uses a real PNG and WAV and typed image/sound nodes; it offers no rename-to-convert shortcut.",
+      "hits": [
+        {"pageId": "media", "quote": "Das Umbenennen einer Datei ändert den gespeicherten MIME-Typ niemals.", "observation": "The same paragraph distinguishes retained MIME category validation from independent byte/extension validation and explicitly discusses PNG named wrong.mp3."},
+        {"pageId": "rust-guide", "quote": "Das Umbenennen beim Export ändert den MIME-Typ nicht", "observation": "The exact wrong.mp3 example can fail with MEDIA.DECLARED_MIME_MISMATCH; typed audio is not made valid by renaming."},
+        {"pageId": "json-to-anki", "quote": "Das Bild zeigt eine Zelle; die Audiodatei enthält einen kurzen erzeugten Ton, keine gesprochene Vokabel.", "observation": "The documented inputs are actual cell.png and tone.wav with distinct typed uses. This valid-input recipe does not promise MIME conversion."}
+      ]
+    },
+    "de-negative-05": {
+      "conclusion": "The leading compatibility result places import and review-history behavior in the target client and requires client-specific tests. The migration guide creates a new Project/APKG from stable keys and refuses arbitrary legacy identity recovery; troubleshooting addresses authoring, import-baseline, policy and file-lifetime failures. These bodies contain no direct collection mutation, reset-history method or reset promise. They explain package/import constraints rather than claiming to perform the requested reset. This passes the capability boundary without claiming each secondary result is a dedicated reset guide.",
+      "hits": [
+        {"pageId": "compatibility", "quote": "Feld- und Vorlagenänderungen, Sortierfelder, lokale Änderungen und Wiederholungsverlauf erfordern Tests für den jeweiligen Client.", "observation": "Review history is expressly client-specific; normal export does not require an installed Anki client, and omission does not delete learner notes."},
+        {"pageId": "genanki-migration", "quote": "Dieser Ablauf stellt keine Identität aus beliebigen älteren Paketen wieder her", "observation": "Migration is described as authoring a new distribution with explicit keys and original APKG evidence, not editing a learner's live collection or resetting history."},
+        {"pageId": "troubleshooting", "quote": "Verwende als Basis das ursprünglich verteilte APKG mit vollständigen Identitätsnachweisen.", "observation": "All remedies concern supported authoring/media/build/import-evidence contracts. Nothing offers a collection or scheduling reset; generic relevance is not a promise to perform the unsupported action."}
+      ]
+    }
+  }
+}

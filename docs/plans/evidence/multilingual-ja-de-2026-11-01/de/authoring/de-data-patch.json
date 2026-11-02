@@ -1,0 +1,1174 @@
+{
+  "schemaVersion": 1,
+  "locale": "de",
+  "documents": {
+    "docs": {
+      "title": "Anki-Stapel aus Code erzeugen",
+      "description": "Wähle eine Programmiersprache, erzeuge deinen ersten Stapel und ergänze Medien, Vorlagen und wiederholbare Aktualisierungen."
+    },
+    "languages": {
+      "title": "Deine Programmiersprache wählen",
+      "description": "Installiere das veröffentlichte Paket für Rust, Node oder Python und exportiere deinen ersten Anki-Stapel."
+    },
+    "quickstart": {
+      "title": "Anki-Karten mit Rust erzeugen",
+      "description": "Installiere das veröffentlichte Rust-Paket, erstelle eine spanische Vokabelkarte und exportiere mit einem vollständigen Programm ein dauerhaft gespeichertes APKG."
+    },
+    "json-to-anki": {
+      "title": "Anki-Stapel aus JSON erzeugen und aktualisieren",
+      "description": "Lies JSON mit Rust, Python oder TypeScript ein, bündle Bilder und Audio und prüfe eine APKG-Aktualisierung, die nur eine Antwort ändert."
+    },
+    "csv-to-anki": {
+      "title": "CSV zu Anki: Karten mit Python erzeugen",
+      "description": "Wandle eine UTF-8-Vokabeltabelle mit einem vollständigen Python-Skript in ein Anki-APKG um – mit CSV-Beispiel, stabilen Notiz-IDs und Importprüfungen."
+    },
+    "ai-anki-cards": {
+      "title": "Anki-Karten mit KI-Unterstützung: von Aufzeichnungen zum APKG",
+      "description": "Lass einen KI-Assistenten Karten entwerfen, prüfe die Antworten und exportiere mit Anki Forge ein APKG. Nutze CSV oder eine Aufgabenbeschreibung für Programmierassistenten."
+    },
+    "anki-forge-vs-genanki": {
+      "title": "Anki Forge oder genanki: passend zu deinem Ablauf wählen",
+      "description": "Vergleiche die Erstellung von Anki-APKGs, Laufzeitanforderungen, Aktualisierungsprüfungen und Migrationsaufwand."
+    },
+    "development": {
+      "title": "SDKs aus dem Quellcode bauen",
+      "description": "Baue SDKs und Beispiele aus dem Repository und unterscheide Quellcodefunktionen von veröffentlichten Paketen."
+    },
+    "rust-guide": {
+      "title": "Inhalte mit Rust erstellen",
+      "description": "Erstelle Projekte, validiere Notizen und verwalte Medien und Aktualisierungen über die unterstützte Rust-API."
+    },
+    "templates": {
+      "title": "Anki-Kartenvorlagen, CSS und Medien wiederverwenden",
+      "description": "Lade einen wiederverwendbaren Anki-Notiztyp aus einem Paket mit Kartenvorlagen, CSS und Medien – für normale oder Cloze-Karten mit Rust, Python oder Node.js."
+    },
+    "api": {
+      "title": "Überblick über die öffentliche API",
+      "description": "Finde die Rust-, Python- und Node-APIs für Inhaltserstellung, Medien, Diagnostik und Aktualisierungen."
+    },
+    "installation": {
+      "title": "Anki Forge in deine Anwendung integrieren",
+      "description": "Installiere das veröffentlichte Rust-Crate, konfiguriere Cargo-Abhängigkeiten und wähle die nächste Anleitung."
+    },
+    "concepts": {
+      "title": "Grundbegriffe",
+      "description": "Verstehe Projekte, Notizen und Medien mit eigenem Datenbesitz, stabile Schlüssel, Text und Identität bei Aktualisierungen."
+    },
+    "cards": {
+      "title": "Basic- und Cloze-Karten für Anki erzeugen",
+      "description": "Erzeuge Basic-Karten mit Frage und Antwort sowie Cloze-Lückentextkarten aus Code. Ein geprüftes Rust-Beispiel erstellt zwei Notizen und drei Karten."
+    },
+    "custom-notetypes": {
+      "title": "Eigene Notiztypen",
+      "description": "Definiere Felder, Kartenvorlagen und Erzeugungsregeln für deine Inhalte mit stabilen Schlüsseln und wiederverwendbaren unveränderlichen Modellen."
+    },
+    "media": {
+      "title": "Anki-Karten um Bilder und Audio ergänzen",
+      "description": "Importiere mit Rust, Python oder Node.js Dateien, kombiniere Karteninhalte und verwalte Exportnamen, MIME-Typen und Medienbudgets."
+    },
+    "image-occlusion": {
+      "title": "Anki-Karten mit Bildverdeckung erzeugen",
+      "description": "Erzeuge Bildverdeckungskarten per Code mit Rust, Python oder Node.js: Gib Bild und Rechteckmasken vor und wähle einen der beiden Verdeckungsmodi."
+    },
+    "updates": {
+      "title": "Anki-Stapel mit stabilen Notiz-IDs aktualisieren",
+      "description": "Veröffentliche eine neue Stapelversion: Behalte stabile Notiz-IDs bei, verwende das ursprüngliche APKG der Vorgängerversion als Basis und prüfe den Vergleich vor der Verteilung."
+    },
+    "build-guarantees": {
+      "title": "Build- und Ausgabegarantien",
+      "description": "Verstehe temporäre Artefakte, Pfadschutz, Inspektionsgrenzen und die Veröffentlichung geprüfter Kandidaten."
+    },
+    "troubleshooting": {
+      "title": "Fehlersuche",
+      "description": "Behebe Fehler bei Installation, Notizen, Medien, Vorlagen, Identität und der Veröffentlichung von Ausgabedateien."
+    },
+    "compatibility": {
+      "title": "Kompatibilität und geprüfte Umgebungen",
+      "description": "Prüfe veröffentlichte Pakete, verifizierte Laufzeitumgebungen und Bedingungen für Import und Wiedergabe in Anki-Clients."
+    },
+    "rust-api": {
+      "title": "Rust-API-Referenz",
+      "description": "Finde öffentliche Methoden zur Inhaltserstellung, Build-Vorgaben, Berichte und Diagnoseverhalten in Rust."
+    },
+    "node-quickstart": {
+      "title": "Anki-Karten mit Node.js erzeugen",
+      "description": "Installiere ankiforge über npm, erzeuge Karten mit Node.js oder TypeScript und exportiere einen APKG-Stapel zum Import in Anki."
+    },
+    "node-api": {
+      "title": "Node- und TypeScript-API",
+      "description": "Öffentliche Methoden, asynchrones Verhalten, Build-Optionen, Ausgabedateien und Berichte des Node-SDK."
+    },
+    "python-quickstart": {
+      "title": "Anki-Karten mit Python erzeugen",
+      "description": "Installiere ankiforge über PyPI, erzeuge Karten mit einem kurzen Python-Skript und exportiere einen APKG-Stapel zum Import in Anki."
+    },
+    "python-api": {
+      "title": "Python-API",
+      "description": "Project, Medien, Build-Optionen, Berichte und die Kontrolle über die Lebensdauer temporärer Artefakte in Python."
+    },
+    "python-diagnostics": {
+      "title": "Python-Diagnostik",
+      "description": "Verstehe native Fehler bei der Inhaltserstellung, Build-Berichte, Aktualisierungsnachweise und Risikorichtlinien in Python."
+    },
+    "python-migration": {
+      "title": "Umstieg auf die neue Python-API",
+      "description": "Passe deinen Code an das aktuelle Python-SDK mit eigenem Datenbesitz an und verstehe den Bruch mit der früheren API."
+    },
+    "genanki-migration": {
+      "title": "Von genanki zu Anki Forge wechseln",
+      "description": "Verstehe, wie du Notizen, Modelle, Vorlagen und Medien aus genanki an die stabilen Schlüssel und das Inhaltsmodell von Anki Forge anpasst."
+    }
+  },
+  "docGroups": [
+    "Hier beginnen",
+    "Anleitungen",
+    "Anleitungen nach Programmiersprache",
+    "Referenz",
+    "Hilfe"
+  ],
+  "navigation": {
+    "docs": "Anleitung",
+    "examples": "Beispiele",
+    "blog": "Blog"
+  },
+  "languageBrief": {
+    "audience": "Entwicklerinnen und Entwickler, die die veröffentlichten Rust-, Python- oder Node.js-Pakete zur Erzeugung und Aktualisierung von Anki-APKGs integrieren.",
+    "register": "Direkte technische Anleitungen mit einheitlicher Du-Ansprache. Voraussetzungen stehen unmittelbar vor dem betroffenen Schritt, Einschränkungen bei der Aussage, die sie begrenzen. Überschriften benennen konkrete Aufgaben; unnötige englische Substantivketten vermeiden.",
+    "terms": {
+      "note": "Notiz",
+      "card": "Karte",
+      "deck": "Stapel",
+      "noteType": "Notiztyp",
+      "namespace": "Namensraum",
+      "stableKey": "stabiler Notizschlüssel",
+      "originalApkg": "ursprünglich verteiltes APKG",
+      "imageOcclusion": "Bildverdeckung",
+      "baseline": "Basisversion",
+      "template": "Vorlage",
+      "preparedPublication": "vorbereitete Veröffentlichung",
+      "snapshot": "Snapshot"
+    },
+    "protected": [
+      "Anki Forge",
+      "ankiforge",
+      "genanki",
+      "APKG",
+      "API",
+      "JSON",
+      "Rust",
+      "Node.js",
+      "Python",
+      "Basic",
+      "Cloze"
+    ],
+    "avoid": [
+      "Notiz und Karte nicht synonym verwenden.",
+      "Einen erneuten Anki-Export nicht als gültige Aktualisierungsbasis empfehlen.",
+      "Besitz von Daten oder temporären Dateien nicht mit Urheberrecht oder Benutzerrechten verwechseln.",
+      "Codezeichenfolgen, API-Namen, Paketnamen und stabile Schlüssel nicht übersetzen.",
+      "Nur im Quellcode verfügbare Funktionen nicht als Funktionen des veröffentlichten Pakets darstellen.",
+      "Keine uneingeschränkten Zusagen über Lernplanung oder Importergebnisse machen."
+    ],
+    "ownership": "Besitz beschreibt die Zuständigkeit für die Lebensdauer von Daten oder Dateien. Bei Bedarf erklären, welcher Wert den Snapshot hält und wann der letzte Besitzer eine temporäre Datei freigibt. Gemeinsamer Besitz ist keine Kopie der Dateiinhalte.",
+    "languageChecks": [
+      "Singular und Plural nach Intl.PluralRules unterscheiden; Zählwerte nicht mit einem starren Substantiv verbinden.",
+      "Zusammengesetzte Suchwörter und getrennte Formulierungen prüfen, ohne englisches Stemming vorauszusetzen.",
+      "Umlaute, ß und Schreibvarianten in natürlichen Aufgabenfragen prüfen.",
+      "Lange Schaltflächen, Navigationseinträge, Sprachbezeichnungen und Tabellenüberschriften dürfen bei 200 Prozent Textvergrößerung nicht abgeschnitten werden."
+    ]
+  },
+  "prompts": {
+    "de": "Hilf mir, Anki Forge {version} in einer {language}-Anwendung zu verwenden.\nLaufzeitanforderung: {runtime}\n\nVerwende das veröffentlichte Paket `ankiforge` und ausschließlich die für\n diese Version dokumentierte öffentliche API. Verwende keine git-/path-Abhängigkeiten,\n internen Werkzeuge, nur im Quellcode verfügbaren APIs, unveröffentlichten oder\n erfundenen Methoden.\n\nMeine Aufgabe:\n{request}\n\nBitte:\n1. Prüfe das bestehende Projekt, bevor du Dateien änderst.\n2. Nenne die erforderliche Einrichtung und den genauen Installationsbefehl: {install}\n3. Erstelle das kleinste vollständige, ausführbare Programm und nenne jede anzulegende oder zu bearbeitende Datei.\n4. Erzeuge eine dauerhaft gespeicherte `.apkg`-Datei und verwende einen stabilen Namensraum und stabile Notizschlüssel.\n5. Gib den Ausführungsbefehl, die erwartete Ausgabe und einen Prüfschritt an.\n6. Wenn die Aufgabe Medien, eigene Vorlagen, Bildverdeckung oder Aktualisierungen\n   benötigt, folge dem dokumentierten Ablauf, statt die API zu erraten. Bewahre für\n   Aktualisierungen das ursprünglich verteilte APKG der Vorgängerversion als Basis\n   auf; verwende keinen erneuten Export aus Anki.\n7. Stelle nur die Fragen, die zur Klärung von Programmiersprache, Eingabeformat,\n   Ausgabepfad oder Identitätsregel nötig sind.\n\nSchnellstart-Referenz: {quickstart}"
+  },
+  "requestPlaceholders": {
+    "de": "<beschreibe deine Aufgabe>"
+  },
+  "promptContracts": {
+    "de": {
+      "required": [
+        "veröffentlichte Paket",
+        "öffentliche API",
+        "dauerhaft gespeicherte",
+        "stabilen Namensraum und stabile Notizschlüssel",
+        "Ausführungsbefehl",
+        "Prüfschritt",
+        "ursprünglich verteilte APKG"
+      ],
+      "maxWords": 500
+    }
+  },
+  "searchTerms": {
+    "docs": [
+      "Dokumentationsübersicht",
+      "Anki-Stapel aus Code",
+      "Notizen erstellen",
+      "Anleitungen finden",
+      "strukturierte Lerninhalte",
+      "wiederholbare Stapelveröffentlichung",
+      "Notizfelder und Kartenvorlagen"
+    ],
+    "languages": [
+      "Programmiersprache wählen",
+      "SDK auswählen",
+      "Rust Python Node.js TypeScript",
+      "veröffentlichte Pakete installieren",
+      "native Laufzeitvoraussetzungen",
+      "APKG ohne Anki exportieren"
+    ],
+    "quickstart": [
+      "Rust-Schnellstart",
+      "erster Anki-Stapel mit Rust",
+      "Rust Einstieg",
+      "cargo new anki-deck",
+      "cargo run",
+      "src/main.rs",
+      "spanish.apkg",
+      "stabiler Schlüssel es:hola"
+    ],
+    "json-to-anki": [
+      "JSON zu Anki",
+      "JSON in APKG umwandeln",
+      "strukturierte Daten",
+      "Notizen stapelweise erstellen",
+      "JSON.parse",
+      "json.loads",
+      "serde_json",
+      "TypeScript JSON",
+      "Bilder und Audio aus JSON",
+      "nur die Antwort aktualisieren",
+      "comparison.json review.json",
+      "dauerhafte fachliche Schlüssel"
+    ],
+    "csv-to-anki": [
+      "CSV zu Anki",
+      "CSV in APKG umwandeln",
+      "Vokabeltabelle",
+      "Tabellenimport",
+      "Excel als UTF-8-CSV speichern",
+      "Basic-Karten mit Python",
+      "Spalten id front back",
+      "csv_to_anki.py",
+      "eindeutige Notiz-IDs",
+      "CSV-Kopfzeile und Anführungszeichen",
+      "vocabulary-v1.apkg"
+    ],
+    "ai-anki-cards": [
+      "Anki-Karten mit KI",
+      "künstliche Intelligenz",
+      "Kartenentwürfe aus Aufzeichnungen",
+      "Fragen und Antworten entwerfen",
+      "KI-Antworten prüfen",
+      "Programmierassistent",
+      "Aufgabenbeschreibung",
+      "Quellmaterial prüfen",
+      "CSV entwerfen",
+      "PDF-Extraktion und OCR außerhalb der Bibliothek"
+    ],
+    "anki-forge-vs-genanki": [
+      "Anki Forge im Vergleich zu genanki",
+      "Bibliotheksvergleich",
+      "genanki Alternative",
+      "Bibliothek auswählen",
+      "Vor- und Nachteile",
+      "Laufzeitaufwand",
+      "Migrationsaufwand",
+      "historische Exportmessung",
+      "Rust und genanki Benchmark"
+    ],
+    "development": [
+      "SDK aus dem Quellcode bauen",
+      "Repository entwickeln",
+      "Quellcode kompilieren",
+      "Cargo Pfadabhängigkeit",
+      "Node-Addon lokal bauen",
+      "maturin develop",
+      "Quellcode und veröffentlichte Pakete",
+      "lokale Tarballs"
+    ],
+    "rust-guide": [
+      "Rust-Anleitung",
+      "Project erstellen",
+      "Rust Datenbesitz",
+      "Modelle und Medien",
+      "Notizen atomar hinzufügen",
+      "stabile Notizschlüssel",
+      "AddError context",
+      "Tool-Rezepte ankiforge-project-v2",
+      "v1 zurückgewiesen"
+    ],
+    "templates": [
+      "Vorlagenpaket",
+      "Vorlagen-Bundle",
+      "Kartendesign wiederverwenden",
+      "CSS und Schriftarten",
+      "anki-template.yaml",
+      "template-bundle-v2",
+      "Cloze-Vorlage",
+      "Notiztyp laden",
+      "Paketpfade",
+      "UTF-8-Bytebudget"
+    ],
+    "api": [
+      "öffentliche API",
+      "API-Übersicht",
+      "Rust Python Node Schnittstellen",
+      "Methoden zur Inhaltserstellung",
+      "Medien-API",
+      "Diagnose-API",
+      "Vergleich und Veröffentlichung"
+    ],
+    "installation": [
+      "Anki Forge installieren",
+      "Rust-Anwendung integrieren",
+      "Cargo-Abhängigkeiten",
+      "cargo add ankiforge",
+      "Rust 1.92",
+      "serde serde_json",
+      "veröffentlichtes Crate",
+      "Linker und Build-Werkzeuge"
+    ],
+    "concepts": [
+      "Grundbegriffe",
+      "Notiz Karte Stapel",
+      "Notiz und Karte unterscheiden",
+      "Projekt Namensraum",
+      "Felder und Vorlagen",
+      "mehrere Karten pro Notiz",
+      "APKG-Bestandteile",
+      "stabile Identität",
+      "Text und HTML",
+      "Datenbesitz",
+      "Snapshot"
+    ],
+    "cards": [
+      "Basic-Karten",
+      "Frage-Antwort-Karten",
+      "Cloze-Karten",
+      "Lückentext",
+      "Lueckentext",
+      "Lückennummern",
+      "zwei Notizen drei Karten",
+      "back_extra",
+      "Text statt HTML",
+      "Kartennummer ändern"
+    ],
+    "custom-notetypes": [
+      "eigene Notiztypen",
+      "benutzerdefinierte Felder",
+      "unveränderliches Modell",
+      "Anzeigenamen und Schlüssel",
+      "Feldschlüssel",
+      "Vorlagenschlüssel",
+      "Pflichtfelder",
+      "Sortierfeld",
+      "bedingte Kartenerzeugung",
+      "GenerationRule"
+    ],
+    "media": [
+      "Bilder und Audio",
+      "Mediendateien importieren",
+      "Medienimport im Stapel",
+      "Stapelimport",
+      "Media.files",
+      "Aussprache",
+      "Audiodateien",
+      "Exportnamen",
+      "MIME-Typ",
+      "Dateiendung",
+      "Medienbudget",
+      "Schriftarten",
+      "keine Sprachsynthese"
+    ],
+    "image-occlusion": [
+      "Bildverdeckung",
+      "Bildmasken",
+      "Image Occlusion",
+      "Rechteckmasken",
+      "Diagrammbeschriftung verdecken",
+      "Maskenkoordinaten",
+      "Maskenschlüssel",
+      "HideAllGuessOne",
+      "HideOneGuessOne",
+      "EXIF-Ausrichtung",
+      "Pixelkoordinaten",
+      "keine automatische Beschriftungserkennung"
+    ],
+    "updates": [
+      "Stapel aktualisieren",
+      "Stapelaktualisierung",
+      "Notizaktualisierung",
+      "Antwort ändern",
+      "ursprünglich verteiltes APKG",
+      "Basisversion",
+      "Aktualisierungsbasis",
+      "erneuter Anki-Export",
+      "Risikovergleich",
+      "Veröffentlichungsrichtlinie",
+      "vorbereiten prüfen veröffentlichen",
+      "Lernplanung und lokale Änderungen"
+    ],
+    "build-guarantees": [
+      "Build-Garantien",
+      "Ausgabegarantien",
+      "temporäre Artefakte",
+      "persistente Dateien",
+      "Dateilebensdauer",
+      "letzter Besitzer",
+      "atomarer Dateiaustausch",
+      "Dauerhaftigkeit",
+      "Veröffentlichungsphase",
+      "native Pfade",
+      "Inspektionslimits",
+      "vorbereitete Veröffentlichung verbraucht Besitzer"
+    ],
+    "troubleshooting": [
+      "Fehlersuche",
+      "Fehlerdiagnose",
+      "Installation fehlgeschlagen",
+      "native Erweiterung fehlt",
+      "NOTE.KEY_DUPLICATE",
+      "NOTE.FIELD_UNKNOWN",
+      "NOTE.MEDIA_USAGE_INVALID",
+      "MEDIA.DECLARED_MIME_MISMATCH",
+      "Vorlagenfehler",
+      "Ausgabepfad verschwunden",
+      "Richtlinie blockiert"
+    ],
+    "compatibility": [
+      "Kompatibilität",
+      "unterstützte Plattformen",
+      "geprüfte Umgebungen",
+      "Mindestversion",
+      "Betriebssystem",
+      "CPython Wheels",
+      "Node native Pakete",
+      "macOS Linux Windows",
+      "Alpine musl",
+      "Electron Bun",
+      "Anki-Import",
+      "Codec-Wiedergabe"
+    ],
+    "rust-api": [
+      "Rust-API",
+      "Methodenreferenz Rust",
+      "BuildOptions",
+      "InspectLimits",
+      "ApkgArtifact",
+      "BuildReport",
+      "BuildError",
+      "ComparisonReport",
+      "AddContext",
+      "prepare_publication",
+      "PathSnapshot"
+    ],
+    "node-quickstart": [
+      "Node.js-Schnellstart",
+      "JavaScript Einstieg",
+      "erster Stapel mit Node",
+      "npm install ankiforge",
+      "main.mjs",
+      "node main.mjs",
+      "CommonJS ESM",
+      "TypeScript installieren"
+    ],
+    "node-api": [
+      "Node-API",
+      "TypeScript-API",
+      "JavaScript Methoden",
+      "asynchroner Build",
+      "Promise",
+      "Ereignisschleife",
+      "Medienarbeiter",
+      "artifact.close",
+      "BuildOptions.updateFrom",
+      "tsconfig.json",
+      "snake_case Snapshot",
+      "camelCase Bericht"
+    ],
+    "python-quickstart": [
+      "Python-Schnellstart",
+      "erster Stapel mit Python",
+      "pip install ankiforge",
+      "virtuelle Umgebung",
+      "venv",
+      "main.py",
+      "Python-Skript ausführen",
+      "PyPI-Wheel"
+    ],
+    "python-api": [
+      "Python-API",
+      "Python Methodenreferenz",
+      "Project Note Media",
+      "BuildOptions",
+      "BuildOutput",
+      "temporärer Dateibesitz",
+      "Python Kontextmanager",
+      "GIL",
+      "Fork-Grenzen",
+      "prepare_publication"
+    ],
+    "python-diagnostics": [
+      "Python-Diagnostik",
+      "Python Fehlerbehandlung",
+      "BuildError",
+      "CompareError",
+      "PersistError",
+      "kind code causes",
+      "source_details",
+      "Risikokategorie freigeben",
+      "allows_publication",
+      "Inspektionsbudget",
+      "native Erweiterung fehlerhaft"
+    ],
+    "python-migration": [
+      "Python-API umstellen",
+      "alte API ersetzen",
+      "Clean-slate-API",
+      "anki-forge anki_forge ankiforge",
+      "Deck Registry Runtime entfernt",
+      "neues Datenbesitzmodell",
+      "PyO3 im selben Prozess"
+    ],
+    "genanki-migration": [
+      "von genanki umsteigen",
+      "genanki migrieren",
+      "Migration zu Anki Forge",
+      "numerische IDs und GUIDs",
+      "Identitätszuordnung",
+      "genanki Modell übertragen",
+      "Feldnamen und stabile Schlüssel",
+      "HTML ausdrücklich markieren",
+      "keine automatische ID-Konvertierung"
+    ],
+    "blog:your-first-anki-deck": [
+      "erster Anki-Stapel",
+      "Rust-Einstiegsartikel",
+      "hola hello",
+      "stabile Notiz-ID",
+      "ein vollständiges Programm",
+      "von einer Notiz zu mehreren Karten"
+    ],
+    "blog:stable-ids-and-deck-updates": [
+      "Notizidentität und Inhalt",
+      "stabile IDs",
+      "Formulierung ändern",
+      "ursprüngliches Paket aufbewahren",
+      "Basisversion für nächsten Build",
+      "Import prüfen",
+      "zwei Versionen vergleichen"
+    ]
+  },
+  "searchConcepts": {
+    "__language": {
+      "stopWords": [
+        "der",
+        "die",
+        "das",
+        "den",
+        "dem",
+        "des",
+        "ein",
+        "eine",
+        "einen",
+        "einem",
+        "einer",
+        "eines",
+        "und",
+        "oder",
+        "mit",
+        "ohne",
+        "von",
+        "vom",
+        "zu",
+        "zum",
+        "zur",
+        "für",
+        "fuer",
+        "in",
+        "im",
+        "an",
+        "am",
+        "auf",
+        "aus",
+        "bei",
+        "als",
+        "ist",
+        "sind",
+        "sein",
+        "wird",
+        "werden",
+        "ich",
+        "du",
+        "wir",
+        "ihr",
+        "sie",
+        "es",
+        "mein",
+        "meine",
+        "dein",
+        "deine",
+        "kann",
+        "können",
+        "koennen",
+        "wie",
+        "was",
+        "wo",
+        "welche",
+        "welcher",
+        "welches",
+        "bitte",
+        "möchte",
+        "moechte",
+        "will",
+        "soll",
+        "sollte",
+        "muss",
+        "müssen",
+        "muessen",
+        "nutzen",
+        "verwenden",
+        "benutze",
+        "sdk",
+        "über",
+        "ueber",
+        "zwischen",
+        "auch",
+        "noch",
+        "diese",
+        "dieser",
+        "dieses"
+      ]
+    },
+    "python": {
+      "terms": [
+        "Python",
+        "CPython",
+        "pip"
+      ],
+      "sdk": "python"
+    },
+    "node": {
+      "terms": [
+        "Node.js",
+        "Node",
+        "JavaScript",
+        "TypeScript",
+        "npm"
+      ],
+      "sdk": "node"
+    },
+    "rust": {
+      "terms": [
+        "Rust",
+        "Cargo",
+        "Crate"
+      ],
+      "sdk": "rust"
+    },
+    "quickstart": {
+      "terms": [
+        "Schnellstart",
+        "Schnelleinstieg",
+        "Einstieg",
+        "erste Schritte",
+        "beginnen",
+        "anfangen",
+        "Anfänger",
+        "Anfaenger",
+        "Tutorial",
+        "erster Stapel",
+        "ersten Stapel",
+        "erste Karte"
+      ],
+      "roles": [
+        "quickstart"
+      ],
+      "intent": true
+    },
+    "reference": {
+      "terms": [
+        "API",
+        "Referenz",
+        "API-Referenz",
+        "Methodenreferenz",
+        "Methoden",
+        "Funktionen",
+        "Typdeklarationen",
+        "Signaturen"
+      ],
+      "roles": [
+        "api"
+      ],
+      "intent": true
+    },
+    "installation": {
+      "terms": [
+        "Installation",
+        "installieren",
+        "einrichten",
+        "Einrichtung",
+        "Abhängigkeit",
+        "Abhängigkeiten",
+        "Abhaengigkeiten",
+        "integrieren"
+      ],
+      "roles": [
+        "installation",
+        "quickstart"
+      ],
+      "intent": true
+    },
+    "development": {
+      "terms": [
+        "aus dem Quellcode bauen",
+        "Quellcode kompilieren",
+        "Quellcode-Build",
+        "Repository entwickeln",
+        "lokales Addon",
+        "Wrapper neu bauen",
+        "maturin develop"
+      ],
+      "roles": [
+        "development"
+      ],
+      "intent": true
+    },
+    "comparison": {
+      "terms": [
+        "versus",
+        "vs",
+        "Alternative",
+        "Alternativen",
+        "Bibliotheksvergleich",
+        "Bibliotheken vergleichen",
+        "Bibliothek wählen",
+        "Bibliothek auswählen",
+        "Vor- und Nachteile"
+      ],
+      "roles": [
+        "comparison"
+      ],
+      "intent": true
+    },
+    "migration": {
+      "terms": [
+        "Migration",
+        "migrieren",
+        "umsteigen",
+        "Umstieg",
+        "wechseln",
+        "genanki ersetzen",
+        "alte API ersetzen"
+      ],
+      "roles": [
+        "migration"
+      ],
+      "intent": true
+    },
+    "updates": {
+      "terms": [
+        "aktualisieren",
+        "Aktualisierung",
+        "Aktualisierungen",
+        "Stapelaktualisierung",
+        "Notizaktualisierung",
+        "verteilten Stapel",
+        "vorhandene Notizen",
+        "Antwort ändern",
+        "erneut veröffentlichen",
+        "Lernplanung",
+        "Wiederholungsverlauf"
+      ],
+      "roles": [
+        "updates"
+      ],
+      "intent": true,
+      "requiresAny": [
+        "aktualisieren",
+        "Aktualisierung",
+        "Aktualisierungen",
+        "Stapelaktualisierung",
+        "Notizaktualisierung",
+        "veröffentlichen",
+        "Veröffentlichung",
+        "verteilt",
+        "verteilten",
+        "Verteilung",
+        "Basisversion",
+        "Version",
+        "vorhandene Notizen",
+        "Antwort ändern"
+      ]
+    },
+    "baseline": {
+      "terms": [
+        "Aktualisierungsbasis",
+        "Basisversion",
+        "ursprünglich verteiltes APKG",
+        "ursprüngliches APKG",
+        "Original-APKG",
+        "urspruengliches APKG",
+        "erneuter Anki-Export",
+        "Anki-Reexport",
+        "Vorgängerpaket",
+        "Identitätsnachweise"
+      ],
+      "roles": [
+        "updates"
+      ],
+      "intent": true
+    },
+    "identity": {
+      "terms": [
+        "stabile ID",
+        "stabile IDs",
+        "stabiler Schlüssel",
+        "stabile Schlüssel",
+        "Notizschlüssel",
+        "Notiz-ID",
+        "GUID",
+        "Namensraum",
+        "namespace",
+        "fachlicher Schlüssel",
+        "Notizidentität",
+        "Notizidentitaet"
+      ]
+    },
+    "diagnostics": {
+      "terms": [
+        "Fehlersuche",
+        "Fehlerdiagnose",
+        "Diagnose",
+        "Diagnostik",
+        "Fehler",
+        "fehlgeschlagen",
+        "scheitert",
+        "funktioniert nicht",
+        "fehlt",
+        "verschwunden",
+        "lädt nicht",
+        "laedt nicht",
+        "kann nicht laden"
+      ],
+      "roles": [
+        "diagnostics"
+      ],
+      "intent": true
+    },
+    "media": {
+      "terms": [
+        "Medien",
+        "Mediendatei",
+        "Mediendateien",
+        "Mediendaten",
+        "Medienimport",
+        "Stapelimport",
+        "Anhänge",
+        "Ressourcen"
+      ],
+      "roles": [
+        "media"
+      ]
+    },
+    "images": {
+      "terms": [
+        "Bild",
+        "Bilder",
+        "Bilddatei",
+        "Bilddateien",
+        "Foto",
+        "Fotos",
+        "Illustration",
+        "Abbildung"
+      ],
+      "roles": [
+        "media"
+      ]
+    },
+    "audio": {
+      "terms": [
+        "Audio",
+        "Audiodatei",
+        "Audiodateien",
+        "Ton",
+        "Töne",
+        "Toene",
+        "Klang",
+        "Aussprache",
+        "Stimme",
+        "mp3",
+        "wav"
+      ],
+      "roles": [
+        "media"
+      ]
+    },
+    "occlusion": {
+      "terms": [
+        "Bildverdeckung",
+        "Image Occlusion",
+        "Bildmaske",
+        "Bildmasken",
+        "Rechteckmaske",
+        "Rechteckmasken",
+        "Maskenkoordinaten",
+        "Maskenschlüssel",
+        "Diagrammbeschriftung verdecken"
+      ],
+      "roles": [
+        "occlusion"
+      ]
+    },
+    "cloze": {
+      "terms": [
+        "Cloze",
+        "Lückentext",
+        "Lueckentext",
+        "Lückentextkarte",
+        "Lückentextkarten",
+        "Lückennummer",
+        "Lückennummern",
+        "Lücken ausfüllen"
+      ],
+      "roles": [
+        "cards"
+      ]
+    },
+    "templates": {
+      "terms": [
+        "Vorlage",
+        "Vorlagen",
+        "Kartenvorlage",
+        "Kartenvorlagen",
+        "Vorlagenpaket",
+        "Vorlagenpakete",
+        "Vorlagen-Bundle",
+        "Template",
+        "Templates",
+        "CSS",
+        "Schriftart",
+        "Schriftarten"
+      ],
+      "roles": [
+        "templates"
+      ]
+    },
+    "note-types": {
+      "terms": [
+        "Notiztyp",
+        "Notiztypen",
+        "eigener Notiztyp",
+        "eigene Notiztypen",
+        "eigenes Modell",
+        "benutzerdefinierte Felder",
+        "bedingte Kartenerzeugung"
+      ],
+      "roles": [
+        "note-types"
+      ]
+    },
+    "compatibility": {
+      "terms": [
+        "Kompatibilität",
+        "Kompatibilitaet",
+        "unterstützte Plattformen",
+        "unterstuetzte Plattformen",
+        "geprüfte Umgebungen",
+        "Mindestversion",
+        "Betriebssystem",
+        "Alpine",
+        "musl",
+        "Electron",
+        "Bun"
+      ],
+      "roles": [
+        "compatibility"
+      ]
+    },
+    "csv": {
+      "terms": [
+        "CSV",
+        "Tabelle",
+        "Tabellen",
+        "Tabellenkalkulation",
+        "Vokabeltabelle",
+        "Excel",
+        "Tabellenimport"
+      ]
+    },
+    "json": {
+      "terms": [
+        "JSON",
+        "strukturierte Daten",
+        "Notizen stapelweise erstellen"
+      ]
+    },
+    "ai": {
+      "terms": [
+        "KI",
+        "künstliche Intelligenz",
+        "kuenstliche Intelligenz",
+        "KI-Assistent",
+        "Programmierassistent",
+        "KI-Unterstützung",
+        "Kartenentwürfe",
+        "Aufzeichnungen in Karten"
+      ]
+    },
+    "text": {
+      "terms": [
+        "Klartext",
+        "Text",
+        "HTML",
+        "maskieren",
+        "Maskierung",
+        "HTML-Escaping"
+      ]
+    },
+    "fundamentals": {
+      "terms": [
+        "Grundbegriff",
+        "Grundbegriffe",
+        "Konzept",
+        "Konzepte",
+        "was ist",
+        "was sind",
+        "Bedeutung",
+        "Zusammenhang",
+        "Unterschied zwischen",
+        "unterscheiden",
+        "gruppieren"
+      ],
+      "requiresAny": [
+        "Notiz",
+        "Notizen",
+        "Karte",
+        "Karten",
+        "Stapel",
+        "Projekt",
+        "Project",
+        "APKG",
+        "Namensraum",
+        "Feld",
+        "Felder",
+        "Vorlage",
+        "Vorlagen",
+        "Modell"
+      ],
+      "roles": [
+        "concepts"
+      ],
+      "intent": true,
+      "consumeContext": true
+    },
+    "package-structure": {
+      "terms": [
+        "Inhalt",
+        "enthält",
+        "enthalten",
+        "Bestandteile",
+        "Aufbau",
+        "Struktur",
+        "zusammengesetzt"
+      ],
+      "requiresAny": [
+        "APKG",
+        "Paket",
+        "Pakete",
+        "Export",
+        "exportiert"
+      ],
+      "roles": [
+        "concepts"
+      ],
+      "intent": true,
+      "consumeContext": true
+    },
+    "learning": {
+      "terms": [
+        "lernen",
+        "üben",
+        "ueben",
+        "wiederholen",
+        "Lernen",
+        "Fragen",
+        "Quiz"
+      ],
+      "weight": 0.25
+    },
+    "customization": {
+      "terms": [
+        "anpassen",
+        "gestalten",
+        "Gestaltung",
+        "Design",
+        "definieren",
+        "eigene"
+      ],
+      "requiresAny": [
+        "Feld",
+        "Felder",
+        "Vorderseite",
+        "Rückseite",
+        "Rueckseite",
+        "Kartenvorlage",
+        "Kartenvorlagen",
+        "Modell",
+        "Notiztyp"
+      ],
+      "roles": [
+        "note-types"
+      ],
+      "intent": true
+    },
+    "cardinality": {
+      "terms": [
+        "mehrere",
+        "viele",
+        "wie viele",
+        "Anzahl",
+        "Kardinalität",
+        "Kartenanzahl",
+        "eine zu mehreren"
+      ],
+      "requiresAll": [
+        [
+          "Notiz",
+          "Notizen"
+        ],
+        [
+          "Karte",
+          "Karten"
+        ]
+      ],
+      "roles": [
+        "concepts"
+      ],
+      "intent": true,
+      "consumeContext": true
+    },
+    "occlusion-action": {
+      "terms": [
+        "verdecken",
+        "verbergen",
+        "abdecken",
+        "verstecken",
+        "maskieren"
+      ],
+      "requiresAny": [
+        "Bild",
+        "Bilder",
+        "Foto",
+        "Fotos",
+        "Diagramm",
+        "Diagramme",
+        "Abbildung",
+        "Beschriftung"
+      ],
+      "roles": [
+        "occlusion"
+      ],
+      "consumeContext": true
+    }
+  }
+}

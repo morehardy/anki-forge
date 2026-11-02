@@ -1,0 +1,120 @@
+{
+  "scope": "All eleven new root HTTP result rows compared to final prefix bodies actually reviewed. Ten rows match exactly; homepage has one reviewed href prefix change inside the noscript node extracted by the HTML parser. Only that exact link is replaced; no words or technical restrictions are removed. Raw HTML hashes and actual URLs are separate for each configuration.",
+  "rows": [
+    {
+      "case": "pt-BR-negative-02",
+      "pageId": "rust-guide",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/docs/rust-guide/",
+      "prefixSha256": "b8007fe59cce9e85d7337c53299416b6305d2636a4af0dd8be3f16941aabbd54",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/docs/rust-guide/",
+      "rootSha256": "cd629b838f1f2aa74c3c3a82d7b96d4b5d4ce5c2c74283d6c1a2ea5298e07565",
+      "normalization": null,
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    },
+    {
+      "case": "pt-BR-negative-02",
+      "pageId": "updates",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/docs/updates/",
+      "prefixSha256": "eee5a81c7c2acda97750f2dcab721d88016e4ba716f180af16bfd88b0385be7b",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/docs/updates/",
+      "rootSha256": "13e575d885d7187b0996d8338e9100b71bfe36fa2a2ec7c6a3aa0fad15693512",
+      "normalization": null,
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    },
+    {
+      "case": "pt-BR-negative-02",
+      "pageId": "home",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/",
+      "prefixSha256": "90e2c8cf91641f95cc311c453b0f7515e7d860579acb94e3b4096256c598143b",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/",
+      "rootSha256": "a9623a219ae06ca5ef0f4b298183d7b9e9f2526da0764031295c09db76cf019f",
+      "normalization": {
+        "before": "href=\"/anki-forge/pt-br/examples/\"",
+        "after": "href=\"/pt-br/examples/\"",
+        "occurrencesInMainText": 1,
+        "reason": "Exact deployment-prefix difference in the homepage no-JavaScript examples href; all text and technical claims unchanged."
+      },
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    },
+    {
+      "case": "pt-BR-negative-03",
+      "pageId": "updates",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/docs/updates/",
+      "prefixSha256": "eee5a81c7c2acda97750f2dcab721d88016e4ba716f180af16bfd88b0385be7b",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/docs/updates/",
+      "rootSha256": "13e575d885d7187b0996d8338e9100b71bfe36fa2a2ec7c6a3aa0fad15693512",
+      "normalization": null,
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    },
+    {
+      "case": "pt-BR-negative-03",
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/blog/stable-ids-and-deck-updates/",
+      "prefixSha256": "655ed24fc10405cb1635dec274a63c75747f59f81efa1f0ce7e15b63fdd1a5ad",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/blog/stable-ids-and-deck-updates/",
+      "rootSha256": "6a5e97baa44aeb20470b3126adfbbbd2e394df8f3998bf144fc75b49ac6c0078",
+      "normalization": null,
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    },
+    {
+      "case": "pt-BR-negative-03",
+      "pageId": "troubleshooting",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/docs/troubleshooting/",
+      "prefixSha256": "22d9149d8f63ec3d1d18f0e4b7f4ce546f1ad8acd93c5ee17abccbaca7165457",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/docs/troubleshooting/",
+      "rootSha256": "c72fa0e3b40b1d5326bcaedcc0dd1f3eb54bed99812c0909f4cda1c6a2391568",
+      "normalization": null,
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    },
+    {
+      "case": "pt-BR-negative-04",
+      "pageId": "media",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/docs/media/",
+      "prefixSha256": "7a52b2f3e1c635b17871a0e614b0874a65f68279728463a70b835b739b9800d7",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/docs/media/",
+      "rootSha256": "32549f709a1c1f8ef8ba852e9f473831fb9a3c934b924daf54e2b1c1278a765e",
+      "normalization": null,
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    },
+    {
+      "case": "pt-BR-negative-04",
+      "pageId": "json-to-anki",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/docs/json-to-anki/",
+      "prefixSha256": "52cc691af9dd57d15f9ed268118c77a527d83eec1b8a8d08de7273e80a5296c1",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/docs/json-to-anki/",
+      "rootSha256": "59621a43c7c149a44578ddcc87286ba0036528f043040d37d608db83c479504c",
+      "normalization": null,
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    },
+    {
+      "case": "pt-BR-negative-05",
+      "pageId": "anki-forge-vs-genanki",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/docs/anki-forge-vs-genanki/",
+      "prefixSha256": "2fbd00fb4d807ced888b9aa2ecc355a591bc7b7de9160ce07657bfd83d0d4414",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/docs/anki-forge-vs-genanki/",
+      "rootSha256": "68de9e7ef41b04681a2fb071fa5dd32c11f813df9b8c784892e6b83873090d3d",
+      "normalization": null,
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    },
+    {
+      "case": "pt-BR-negative-05",
+      "pageId": "compatibility",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/docs/compatibility/",
+      "prefixSha256": "23bff6f6bc90d6273e497bbef597c4aeea48f660107d3b85556b68aaa00f8e69",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/docs/compatibility/",
+      "rootSha256": "06dc72dec59a0bfd50fd88e789f3d1c0e8b32346ed0f02b95f06e00801706308",
+      "normalization": null,
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    },
+    {
+      "case": "pt-BR-negative-05",
+      "pageId": "blog:your-first-anki-deck",
+      "prefixUrl": "http://127.0.0.1:64903/anki-forge/pt-br/blog/your-first-anki-deck/",
+      "prefixSha256": "e80f536628e09c8306ccd7df19d42da40b5f6ab3ee578776eb3af7826f7c8155",
+      "rootUrl": "http://127.0.0.1:50610/pt-br/blog/your-first-anki-deck/",
+      "rootSha256": "a6913e2e3582bcc0492215ff3a158b6097e11f3059123d6ad0b3f8f3f1dbf915",
+      "normalization": null,
+      "mainTextAndParagraphsEqualAfterRecordedReplacement": true
+    }
+  ]
+}

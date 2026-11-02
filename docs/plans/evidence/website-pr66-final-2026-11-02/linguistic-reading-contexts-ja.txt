@@ -1,0 +1,517 @@
+
+FILE docs/ja/build-guarantees.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # ビルドと出力の保証
+2:
+3: `Project::build` は操作が成功した場合にのみ `BuildOutput` を返し、APKG 成果物の存在を保証します。失敗した操作は、構造化された kind/code、観測結果、原因、実際の公開状況を持つ `BuildError` を返します。
+4:
+5: <!-- section: temporary-and-persistent-artifacts -->
+6: ## 一時成果物と永続成果物
+23: ## 基準パッケージと公開
+34: ## 検査の上限
+39: ## 並行処理
+46: ## 候補ファイルを準備し、確認後に保存する
+47:
+48: 候補を事前に生成し、確認後に保存する機能は、公開 `0.3.1` パッケージに含まれています。
+49:
+50: `prepare_publication` は1つの非公開の候補をビルド・検査・比較します。`publish` は同じファイルを使います。オプションと相対保存先は準備時に確定します。プロジェクトを編集しても候補は変わりません。準備だけで保存先が置き換わることはありません。未公開の所有者をドロップまたは閉じると候補が削除されます。
+51:
+52: 公開の試行は、ポリシー拒否や I/O 失敗を含めて、必ず所有者を消費します。再試行したり、ポリシーや保存先を変えたりするには、再び準備してください。レポートは引き続き読めますが、ファイルは所有しません。Node と Python は冪等な `close()` と、理由が `closed` または `consumed` の利用不可エラーを提供します。公開開始後に閉じてもキャンセルはしません。所要時間にはレビュー待ち時間を含みません。置き換え成功後に耐久性の確認が失敗する場合があるため、実際の公開状況を確認してください。
+53:
+54: [完全な例](/docs/updates/#build-once-review-then-publish)と各言語の API リファレンスで、型付きエラーとワーカーの動作を確認できます。
+
+FILE docs/ja/compatibility.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 互換性
+2:
+3: <!-- section: packages-and-verified-environments -->
+4: ## パッケージと検証済みの環境
+5:
+6: 2026-10-13の確認時点で、Rust・npm・PyPI の公開パッケージは `0.3.1` です。[Rust](/docs/installation/)、[Node / TypeScript](/docs/node-quickstart/)、[Python](/docs/python-quickstart/) から始めてください。
+7:
+8: | インターフェース | パッケージ | 実行環境と検証 |
+9: | --- | --- | --- |
+10: | Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | Rust 1.92.0 と検証時の stable。対応する4プラットフォームすべてでパッケージ利用側を検査し、公開 crates.io パッケージの新規利用側も確認 |
+11: | Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | Node 22.13.0、検証時の22・24・26。公開 npm からのインストール、ESM/CJS、TypeScript の16件の検査 |
+12: | Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | 通常の CPython 3.11〜3.14。隔離環境で公開 PyPI wheel をインストールする16件の検査 |
+13:
+14: 公開ネイティブパッケージは macOS arm64/x64、Linux x64 GNU/glibc、Windows x64 に対応します。パッケージが存在するだけで、すべてのホストで実行テストが成功したことにはなりません。[Node の検証範囲](https://github.com/morehardy/anki-forge/blob/main/bindings/node/COVERAGE.md)、[Python の検証範囲](https://github.com/morehardy/anki-forge/blob/main/bindings/python/COVERAGE.md)、リリースの証拠に、実施した検査を記録しています。`0.3.1` の成功したリリース実行は [Rust](https://github.com/morehardy/anki-forge/actions/runs/38371221696)、[npm](https://github.com/morehardy/anki-forge/actions/runs/38371222114)、[PyPI](https://github.com/morehardy/anki-forge/actions/runs/38371222047) です。他の Python 実装、free-threaded インタープリター、サブインタープリターは別途検証が必要です。ブラウザー、Electron、Bun、Alpine/musl、ARM64 Linux/Windows は、記録済みの Node 検証範囲外です。
+15:
+16: [メディアの一括インポート](/docs/media/#batch-media-import)と[候補を確認してから保存する手順](/docs/updates/#build-once-review-then-publish)のガイドで扱う機能は、公開 `0.3.1` パッケージで使用できます。
+17:
+18: <!-- section: anki-import-and-playback -->
+19: ## Anki でのインポートと再生
+
+FILE docs/ja/installation.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Rust アプリケーションに Anki Forge を組み込む
+2:
+3: Rust 1.92 以降を使用します。既存の Cargo アプリケーションに公開 crate をインストールします。
+4:
+12: ## Cargo の依存関係
+13:
+14: 公開 `ankiforge` crate には、Basic、Cloze、独自のノートタイプ、データを所有するメディア、画像穴埋め、比較、候補ファイルの事前生成が含まれます。デフォルトの feature は空です。通常のアプリケーションコードでリポジトリ専用の feature を有効にする必要はありません。
+15:
+16: crate はネイティブの Rust ライブラリです。Rust ツールチェーンに必要な、利用環境のリンカーとビルドツールをインストールしてください。デプロイ先を選ぶ際は[検証済みの環境](/docs/compatibility/)を参照してください。最小要件は Rust 1.92 です。一覧に載っているプラットフォームでも、すべてのターゲットやサードパーティ製ツールチェーンの設定で動くことを保証するものではありません。
+17:
+18: JSON を入力に使う場合は、呼び出し側でパース用の依存関係を明示的に追加します。
+19:
+24:
+25: [JSON から APKG を生成するレシピ](/docs/json-to-anki/#rust)には、パーサー、メディア処理、更新手順を含む完全な例があります。SDK 自体は汎用の JSON・CSV 変換機能を提供しません。
+26:
+27: <!-- section: choose-the-next-guide -->
+28: ## 次のガイドを選ぶ
+
+FILE docs/ja/json-to-anki.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # JSON から Anki デッキを生成して更新する
+2:
+3: JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、初回配布用の APKG と、解答だけを変更した検証済みの更新版を出力します。どちらの版も **ノート3件、カード3枚、メディアファイル2個**になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。
+4:
+5: 管理：Anki Forge メンテナー · 英語原文の確認日：2026-10-25。
+6:
+7: <!-- section: shared-inputs -->
+8: ## 共通の入力ファイル
+9:
+10: [v1.json](/generated/recipes/json-to-anki/v1.json)、[v2.json](/generated/recipes/json-to-anki/v2.json)、[cell.png](/generated/recipes/json-to-anki/cell.png)、[tone.wav](/generated/recipes/json-to-anki/tone.wav)をダウンロードします。画像は細胞の模式図です。音声は短い合成音で、単語の読み上げではありません。新しく作るアプリケーションのディレクトリごとに、次の4ファイルを `recipe/` に置きます。
+11:
+20:
+21: 両方の JSON ファイルには `namespace`、`deck` と3件の `notes` があり、各ノートに継続して使う `id`、`front`、`back` が含まれます。v2 で変わるのは最初の回答だけです。JSON の解析は呼び出し側で行い、Anki Forge はノートの作成と APKG の生成を担当します。信頼できない入力を扱う場合は、ノートを作る前にアプリケーション側のスキーマで検証してください。
+22:
+23: <!-- section: rust -->
+24: ## Rust
+25:
+26: Rust 1.92 以降を使います。JSON の解析には `serde` と `serde_json` を使用します。Anki Forge は公開パッケージ 0.3.1 を使います。
+27:
+35:
+36: 次のコードを `src/main.rs` に保存します。`recipe/` は `Cargo.toml` と同じディレクトリに作成してください。
+37:
+38: <!-- source: anki_forge/examples/json_to_anki.rs -->
+108: <!-- /source -->
+109:
+113:
+114: <!-- section: python -->
+115: ## Python
+116:
+117: 対応プラットフォームの wheel がある通常の CPython 3.11 以降を使います。リリースチェックの対象は 3.11–3.14 です。Windows では `.venv\Scripts\Activate.ps1` で仮想環境を有効にします。Anki Forge は公開パッケージ 0.3.1 を使います。
+118:
+126:
+127: 次のコードを `main.py` に保存し、同じディレクトリに `recipe/` を作成します。
+128:
+129: <!-- source: bindings/python/examples/json_to_anki.py -->
+174: <!-- /source -->
+175:
+179:
+180: <!-- section: node -->
+181: ## Node
+182:
+183: Node.js 22.13 以降と、実行環境に合うネイティブの optional dependency が必要です。この例は TypeScript を JavaScript にコンパイルして Node.js で実行します。Anki Forge は公開パッケージ 0.3.1 を使います。
+184:
+192:
+193: 次のコードを `main.mts` に保存し、同じディレクトリに `recipe/` を作成します。
+194:
+195: <!-- source: bindings/node/examples/json_to_anki.mts -->
+252: <!-- /source -->
+253:
+258:
+259: <!-- section: check-and-import-the-result -->
+260: ## 出力を確認してインポートする
+261:
+262: 選んだプログラムは `output/<language>/v2.apkg` のパスを表示します。`v1.apkg` も一緒に保管してください。回答だけを変えた今回の編集では、`comparison.json` と `review.json` に `RISK.NOTE_CHANGED` が記録され、追加・削除されたノートはなく、`policy.allows_publication: true` になります。プログラムは公開前に、準備済み候補についてもポリシーを確認します。どちらかの版が出力先ディレクトリに存在する場合、そのディレクトリは再利用しません。
+263:
+264: まず `v1.apkg` を Anki にインポートします。Biology デッキに Basic カードが3枚あり、細胞の画像と合成音が含まれていることを確認します。次に `v2.apkg` をインポートし、最初の回答が「The basic structural and functional unit of life」になり、ノート数は3件のままであることを確認します。`biology-json` という名前空間がこの配布プロジェクトを識別します。各業務 ID がノートの安定キーとなり、Anki Forge はその識別情報から Anki 用の GUID を生成します。名前空間と3つのキーは変更しないでください。
+265:
+266: 更新の基準には、**配布時のオリジナル**の v1 APKG を使います。Anki から再エクスポートしたファイルは使えません。クライアント側のインポート時の照合、ローカルでの編集、学習スケジュールへの影響は、Anki のバージョン、ノートタイプ、インポート設定によって変わります。リリース前に対象クライアントで検証してください。後のパッケージで省かれたノートも、インポートだけでは削除されません。compare／build の成功は、すべての学習者の復習状態を保証するものではありません。
+267:
+268: 詳しくは[更新の条件](/docs/updates/)、[メディア](/docs/media/)、[API 一覧](/docs/api/)、[ライブラリの選択](/docs/anki-forge-vs-genanki/)を参照してください。
+
+FILE docs/ja/media.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 画像と音声
+2:
+3: 発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と音声を同梱します。Anki Forge は、指定されたファイルを APKG にコピーします。音声や画像の作成には別のツールが必要です。たとえば、読み上げ音声は音声合成ツールで用意します。例では Rust を使います。後半の一括インポートでは Python と Node.js の呼び出しも示します。
+4:
+5: `Media` の値は不変のスナップショットを所有します。ファイルは `Media::file`、ネイティブのバイト列は MIME タイプを明示した `Media::bytes` でインポートします。インポート成功後に元ファイルを変更・削除してもアセットは変わりません。クローンはストレージを共有し、複数のプロジェクトで使えます。
+6:
+7: <!-- section: execute-the-media-workflow -->
+8: ## メディアの作成手順を実行する
+9:
+10: リポジトリのルートから実行します。
+11:
+16:
+17: この手順はリポジトリの PNG・WAV フィクスチャーを使い、ノート1件、カード1枚、アセット3個を含む `media.apkg` を書き出します。2つ目の例は小さな画像と音声を自ら生成し、CSS から参照するメディアと明示的なメディアを含めた `spanish-media.apkg` を書き出します。
+18:
+19: <!-- source: anki_forge/examples/docs_workflow.rs#media -->
+34: <!-- /source -->
+35:
+36: <!-- section: compose-content-and-explicit-assets -->
+37: ## コンテンツと明示的なアセットを組み合わせる
+38:
+39: 次の完全なプログラムは `fixtures/pixel.png`、`fixtures/silence.wav`、`fixtures/labels.woff` を使います。自分のアプリケーションでは使用するファイルのパスを渡してください。フィクスチャーのフォントは、リポジトリの再配布可能なテスト用フォントです。
+40:
+67:
+68: 型付きの `image()` と `sound()` の値は、エクスポートまで依存関係を保持します。手書きの HTML・CSS・スクリプトで参照する場合は、`builder.asset(media)` または `project.add_asset(media)` が必要です。ライブラリは任意の文字列からファイルの内容を推測しません。明示的なアセットは、静的に検出可能な参照がなくても含まれます。
+69:
+70: `with_export_name` には実際のファイル名をそのまま渡してください。型付き音声参照は描画時に HTML エンティティをエスケープするため、`tone&copy;.mp3` のような名前も、その名前のアセットを正確に参照します。ファイル名を事前にエスケープしないでください。音声ファイル名のパーセント記号やフラグメント記号は文字どおり扱い、URL パスとは解釈しません。
+71:
+72: <!-- section: names-mime-and-budgets -->
+73: ## 名前、MIME、上限
+74:
+75: 既定のエクスポート名は内容から導かれ、元のパスには依存しません。固定のファイル名が必要なら、参照を作成する前に `with_export_name` を使います。クローンの名前を変えても、それ以前のクローンやコンテンツノードの名前は変わりません。
+76:
+77: 名前にパス、制御文字、移植性のない予約名を含めることはできません。競合検査は Unicode NFC と大文字・小文字の正規化を使います。そのため、大文字・小文字または正規化形式だけが異なる名前も競合します。名前と内容が完全に一致する組み合わせの登録は冪等です。同じ名前で異なる内容を登録すると、部分的に登録せず失敗します。
+78:
+79: 拡張子を含めたエクスポート名全体の上限は UTF-8 で255バイトです。プロジェクトとテンプレートバンドルの JSON Schema は、ファイル名の構文と文字数を検査します。ローダーはバイト数も検査します。たとえば `é` を128回繰り返すとスキーマの文字数上限は通りますが、256バイトになるため、読み込み時に `MEDIA.EXPORT_NAME_INVALID` を返します。ビルド前に `tools::load_project` または `NoteType::from_bundle` で入力全体を検証してください。 `tools::load_project` は `internal-tools` feature が必要なリポジトリ内部向けの API であり、利用側アプリケーション向けのサポート対象 API には含まれません。
+80:
+81: MIME の構文と、判別可能な内容は一致する必要があります。ネイティブのバイト列には64 KiBのインライン上限はありません。インポートの既定上限はアセットごとに256 MiBです。`file_with_limits` と `bytes_with_limits` は、読み取り前に `MediaLimits { max_bytes }` を受け取ります。大きなスナップショットは一時ストレージに退避される場合があり、最後の所有者が解放されると削除されます。スナップショットを所有していても、インポート中に同時変更される元ファイルについて、ファイルシステムのアトミックな読み取り像を保証するものではありません。
+82:
+83: プロジェクト JSON では、インラインの `bytes` 配列をデコードするときにも同じ既定のアセット単位の上限を適用します。最初の超過バイトで停止し、配列の残りは収集しません。エラーには上限と観測バイト数を持つ `MediaError` が保持されます。拒否時のバイト数は下限であり、未読部分を含む配列全体のサイズではありません。
+84:
+85: 有効なメディアパッケージであっても、すべての Anki クライアントでコーデックが再生できるとは限りません。対象クライアントで画像、音声、フォントをテストしてください。[トラブルシューティング](/docs/troubleshooting/#media-and-templates)を参照してください。
+86:
+87: <!-- section: typed-image-and-sound-usage -->
+88: ### 型付きの画像・音声としての使用
+89:
+90: コンストラクター自体は引き続き失敗しません。`Project::add` はインポート時に保持した MIME を検査します。画像には `image/*`、音声参照には `audio/*` と `video/*` を受け付けます。`application/octet-stream`、テキスト、フォント、PDF の型付き使用は `NOTE.MEDIA_USAGE_INVALID` になります。直接記述した HTML・CSS 用の明示的アセットとして登録してください。正しい形式で明示した未知の画像・動画 MIME は種類の検査を通りますが、デコーダーやプレーヤーがそのバイト列に対応することを保証するものではありません。改名によって保持済みの MIME が変わることはありません。ビルドでは配置済みのバイト列を判別し、エクスポート拡張子を独立して検証します。`wrong.mp3` という名前の PNG は画像としての追加に成功しても、ビルドで `MEDIA.DECLARED_MIME_MISMATCH` になることがあります。
+91:
+92: <a id="batch-import-from-source"></a>
+93:
+94: <!-- section: batch-media-import -->
+95: ## メディアの一括インポート
+96:
+97: これらのメソッドは公開 `0.3.1` パッケージに含まれています。
+98:
+99: 同時実行数を制限して複数のファイルをインポートし、入力順を保ちながら、後のエクスポートに使うメディアスナップショットを所有します。
+100:
+105:
+106: Node では `await Media.files(['first.png', 'second.png'])`、Python では `Media.files(['first.png', 'second.png'])` を使います。
+107:
+108: <!-- section: batch-behavior-and-budgets -->
+109: ### 一括処理の動作と上限
+110:
+111: Rust では `Media::files(paths)`、Node では `await Media.files(paths)`、Python では `Media.files(paths)` を使います。呼び出しごとに最大4ワーカーで、入力順にファイルをインポートします。16ファイル未満のバッチは逐次実行します。Rust には `files_with_limits` もあります。Node と Python は `file` と同じ上限指定を受け付けます。上限はアセットごとに適用します。インポートに失敗すると、開始済みの処理を待ってからバッチのスナップショットを破棄し、入力順で最初のエラーを返します。既存のメディア所有者は引き続き有効です。Python はインポート中に GIL を解放し、Node はイベントループの外で処理します。単一ファイルのインポートは、従来どおりその場でデータを所有するスナップショットを取得します。同時実行を使うには、一括メソッドを明示的に選んでください。
+112:
+113: 生存中のスナップショットは、プロセス全体で **64 MiB** のメモリ枠を共有します。1 MiBを超える個々のアセットは、引き続き一時ファイルへストリーミングします。エンコード済みメディアは、準備処理ごとに遅延確保する **16 MiB** のバッファープールを共有し、いっぱいになると一時ストレージへ退避します。これらの上限は他の作業用メモリを含まず、RSS の上限ではありません。同時ビルドはそれぞれ独自のエンコード用プールを所有できます。
+
+FILE docs/ja/node-api.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Node と TypeScript API
+2:
+3: `ankiforge` の公開 API では、`Project` を中心にノートやメディアを組み立てます。型は[公開ソース](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts)、[レポートクラス](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts)、[JSON スナップショットの型宣言](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts)にあります。[クイックスタート](/docs/node-quickstart/)から始めてください。
+4:
+5: <!-- section: project-and-notes -->
+6: ## プロジェクトとノート
+7:
+8: | API | 動作 |
+9: | --- | --- |
+10: | `new Project(namespace)` | 配布物の安定した名前空間を検証する |
+11: | `.defaultDeck(name)` | 既定の配置先を設定し、プロジェクトを返す |
+12: | `.add(key, note)` | ノート・モデル・メディアをアトミックに収集する。キーの重複は失敗する |
+13: | `.addAsset(media)` | 直接記述した HTML・CSS・スクリプト用の明示的リソースを追加する |
+14: | `.clone()` | 不変の値を共有する、独立して編集可能なプロジェクトを返す |
+15: | `.length` | 登録済みノート数 |
+16: | `Note.basic(front, back)` / `Note.cloze(text)` | 組み込みモデルを保持する不変のノート |
+17: | `model.note().field(key, content)` | モデルを保持する不変の独自ノート |
+18: | `note.deck(name).tag(tag).tags(iterable)` | 新たに設定したノートを返す |
+19:
+20: Cloze の文字列を含め、文字列は常に Text になります。マークアップを明示するには `Content.html` を使います。`Content.sequence(iterable)` はテキスト、HTML、型付きメディアを組み合わせます。明示的な業務キーを使ってください。内容や表示名から識別情報を導くことはありません。
+21:
+22: <!-- section: immutable-models -->
+23: ## 不変のモデル
+24:
+39:
+40: ビルダーは新しい値を返します。完成済みモデルにはフィールド・テンプレートを変更するメソッドがありません。`builder.clozeField(key)` は独自モデルに Cloze の動作を指定します。`builder.css` と `builder.asset` はスタイルと明示的な依存関係を設定します。テンプレートには `name`、`browserFront`、`browserBack`、`targetDeck` も指定できます。テンプレート参照と生成条件はフィールドキーを使い、表示名は Anki 向けにコンパイルされます。`GenerationRule.ankiDefault()` は Anki の既定動作、`all` と `any` は明示的な条件を選択します。
+41:
+42: `await NoteType.fromBundle(path, mediaLimits?)` は `template-bundle-v2` から同じ不変モデルを返します。成功後、読み込んだテキスト・アセットは元のディレクトリに依存しません。モデルはプロジェクト間で再使用できます。同じモデルキーで定義が両立しない場合は、部分的に変更せず失敗します。
+43:
+44: <!-- section: media-and-image-occlusion -->
+45: ## メディアと画像穴埋め
+46:
+47: `await Media.file(path, limits?)` と `await Media.bytes(Uint8Array, mime, limits?)` は、データを所有するスナップショットを返します。await が成功した後は元ファイルを変更・削除できます。`withExportName(name)` は、それ以前のクローンやコンテンツを変更せず、改名した値を返します。`filename`、`mediaType`、`byteLength` はプロパティとして読み取ります。
+48:
+49: `media.image()` と `.sound()` は、プロジェクトへのアセット追加を自動で行う型付き Content を返します。直接記述した HTML・CSS・スクリプトの参照には、明示的な `project.addAsset` とモデルの `builder.asset` を使います。メディア上限は `{ maxBytes }` を受け付けます。既定値は256 MiBで、ネイティブバイト列に64 KiBのインライン上限はありません。
+50:
+60:
+61: 既定のモードは `hide_all_guess_one` です。どちらのモードもキー付きマスクごとに別のカードを生成します。この画像穴埋めビルダーの `.build()` は、デコード後のサイズ、有限の矩形、一意のキーを検証します。`image` と `occlusion` は予約済みの自動生成フィールドです。デコードと更新の制約は[画像穴埋め](/docs/image-occlusion/)を参照してください。
+62:
+63: <!-- section: build-compare-and-output -->
+64: ## ビルド、比較、出力
+65:
+66: | API | 結果 |
+67: | --- | --- |
+68: | `await project.build(BuildOptions.to(path))` | 永続成果物を所有する BuildOutput |
+69: | `await project.build(BuildOptions.temporary())` | 一時成果物を所有する BuildOutput |
+70: | `await project.compare(CompareOptions.against(path))` | ポリシーによる公開拒否も含む、完了した ComparisonReport |
+71: | `options.updateFrom(path)` | 配布時のオリジナルパッケージの完全な証拠を使った更新を設定 |
+72: | `options.inspectLimits(limits)` | 独立した検査カウンターを上書き |
+73: | `options.updatePolicy(policy)` | 更新・比較のリスクポリシーを設定 |
+74:
+75: 成功した出力は `.artifact`、`.report`、`.snapshot()` を公開します。`BuildReport` は `.counts`、`.baselineCounts`、`.durationMs`、`.diagnostics`、`.comparison`、`.snapshot()` を公開します。成功・失敗の結果やファイルの所有権は持ちません。`.comparison` は `ComparisonReport` または `null` で、`project.compare()` と同じクラスを使います。比較は `.findings`、`.highestRisk`、`.policy`、`.diagnostics`、`.snapshot()` を公開します。スナップショットのフィールド名は、`allows_publication` や `schema_version` を含めて Rust の JSON と一致します。ネイティブレポートを camelCase にしたコピーではありません。`null` でないことを確認した後、比較オブジェクトでは `report.comparison.highestRisk`、JSON スナップショットでは `report.snapshot().comparison.highest_risk` を使います。
+76:
+77: `new UpdatePolicy()` は High/Critical を拒否します。`.failOn('medium')` はしきい値を変更します。`.allow('RISK.NOTE_REMOVED')` は証拠と重大度を保持したまま、その分類全体を明示的に許可します。不明なコードとハードエラーは許可できません。新規作成だけのビルドにポリシーを指定するとエラーになります。比較とビルドの公開判断を一致させるには、同じポリシーと上限を使ってください。
+78:
+79: 検査オプションには `maxArchiveBytes`、`maxEntries`、`maxCentralDirectoryBytes`、`maxZipEntryBytes`、`maxZipTotalBytes`、`maxMetaBytes`、`maxMediaMapBytes`、`maxIdentityBytes`、`maxCollectionBytes`、`maxMediaBytes`、`maxDecodedTotalBytes`、`maxZstdWindowBytes` があります。値は非負の安全な整数、または u64 の最大値までの `bigint` です。0は実際に上限0を意味します。カウンターは基準パッケージと候補に独立して適用します。不明なオプションはエラーになります。
+80:
+81: <!-- section: artifact-lifetime-and-concurrency -->
+82: ## 成果物の生存期間と並行処理
+83:
+84: JSON スナップショットのパスは、エクスポートされた `PathSnapshot` 型を使います。Unicode パスは文字列です。Unicode でないネイティブパスは `{ encoding: "unix_bytes", bytes: number[] }` または `{ encoding: "windows_wide", units: number[] }` になります。配列は正確な Unix のバイト列または Windows の UTF-16 コード単位を保持します。ビルドスナップショットの成果物パス、失敗時の公開パス、構造化エラーのパス詳細が対象です。エンコード済みのパスは元のプラットフォームでのみデコードしてください。Unix では `Buffer.from(value.bytes)` が、Node のファイルシステム関数で使えるバイト列のパスを保持します。Node の作成メソッドは引き続き文字列のパスを受け付けます。
+85:
+86: 相対的なメディア・バンドルのパスは読み取りの呼び出し時に、ビルド先と基準パッケージはオプション作成時に基準ディレクトリが確定します。POSIX では、シンボリックリンクの後の `..` はファイルシステムでのパス走査の意味を保持します。`persistTo` は、クローン済み・永続化済みハンドルも含め、元のビルドが記録した作業ディレクトリを相対保存先の基準にします。後から作業ディレクトリを変えても、これらのパスは変わりません。
+87:
+88: `.path` を利用している間は成果物の所有者を保持します。`.clone()` は独立した所有者を作り、`await .close()` はその所有者を解放します。最後の一時所有者が解放されるとファイルが削除されます。`await .persistTo(path)` は永続成果物を返し、失敗しても元の成果物は使用できます。所有者を保持していれば、標準の Node ファイルストリームで成果物を読み取れます。
+89:
+90: スナップショットは凍結済みの JSON データで、ネイティブファイルを保持しません。永続ファイルは所有者の解放後も残ります。`BuildOutput` は呼び出し側で構築できず、成功したビルドによってのみ作成されます。
+91:
+92: ビルドと比較は、呼び出し時に取得した所有付きのプロジェクトスナップショット上で非同期実行します。後の編集でその要求が変わることはありません。メディアの読み取りとバンドルの読み込みもワーカーで実行します。Node の ESM と CJS は同じネイティブモジュールとクラス識別子を共有します。
+93:
+94: <!-- section: errors -->
+95: ## エラー
+96:
+97: `SchemaError`、`AddError`、`MediaError`、`TemplateBundleError`、`ImageOcclusionError`、`PolicyError`、`ConfigurationError`、`CompareError`、`BuildError`、`PersistError` は `ForgeError` を継承します。`kind`、`code`、`domain`、ネイティブ原因チェーンのテキスト `causes`、認識可能な I/O・スキーマ・メディア・上限の原因を構造化した `sourceDetails`、操作の `details` を公開します。元のネイティブ例外は JS の `cause` に保持されます。
+98:
+99: `BuildError.snapshot()` は失敗と公開状況を保持します。`BuildError.report` と `CompareError.report` は `BuildOutput.report` と同じ BuildReport を返します。これらのレポートでは `.baselineCounts` と `.comparison` を使い、snake_case の JSON フィールドには `.snapshot()` を使います。失敗した比較では、一部の観測結果と `null` の比較が含まれる場合があります。`PersistError.publication` は、保存先がすでに公開されたか、耐久性が確認されたかを記録します。メディア・検査エラーは上限の詳細を保持します。エラーメッセージの解析ではなく、これらの機械処理用フィールドを使ってください。`ArtifactClosedError` は閉じた所有者の使用、`NativeLoadError` はネイティブパッケージの欠落・非互換・古いバージョンを報告します。
+100:
+101: <!-- section: addition-context -->
+102: ## 追加時のコンテキスト
+103:
+104: 追加に失敗してもプロジェクトは変わりません。構造化コンテキストには元のノート・モデルのキーと対象を記録し、必要に応じて競合やメディア使用の詳細を付けます。Rust では `AddError::context()` / `detail()` を通じて `note::{AddContext, AddTarget, AddDetail}` を取得できます。SDK では `AddError.details` が型付きの context/detail を提供します。Node のフィールドは camelCase で深く凍結されています。Python は snake_case の TypedDict を使います。タグは挿入時のインデックスを保持します。フィールドの位置は、元のシーケンスインデックス（フィールド自体は null/None、ルートは []）と任意の UTF-8 バイト範囲を保持します。ビルド時の既定デッキのエラーはノート・モデルのキーを持たず、原因チェーンから確認できます。
+105:
+106: 型付き画像を追加する際は image/* MIME が必要です。音声参照には audio/* または video/* を受け付けます。他の種類は `NOTE.MEDIA_USAGE_INVALID` になります。コンストラクター自体は失敗せず、明示的アセットと直接記述した HTML には影響しません。検査はインポート時に保持した MIME を使い、再生を保証しません。ビルド時の独立した MIME・拡張子検証も引き続き適用されます。対象と詳細の完全な対応表は[設計文書](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)を参照してください。
+107:
+108: <a id="source-api-details"></a>
+109:
+110: <!-- section: batch-media-and-prepared-publication -->
+111: ## メディアの一括処理と候補ファイルの事前生成
+112:
+113: メディアの一括処理と候補ファイルの事前生成は、公開 `0.3.1` パッケージに含まれています。
+114:
+115: <!-- section: prepare-review-and-publish -->
+116: ### 準備、確認、公開
+117:
+141:
+142: `publish()` はネイティブの所有者を即座に取得し、1つのワーカータスクを実行します。ポリシーや I/O による拒否を含め、すべての試行で所有者を消費します。再呼び出しは `PreparedPublicationStateError` で拒否され、コードは `BUILD.PREPARED_UNAVAILABLE`、`reason` は `consumed` または `closed` です。公開開始後に閉じてもキャンセルされません。閉じた後もレポートは読めます。オプションは準備の呼び出し時に確定します。ポリシーや保存先を変えるには、再び準備する必要があります。所要時間には確認待ち時間を含みません。レポートや JSON を所有者へ戻すことはできません。
+143:
+144: ビルド、比較、準備、クローンは、不変のネイティブ Project のバージョンを共有します。作成時の変更は引き続き同期的で、互いに独立しています。別のスナップショットが生存している間の最初の変更では、Project がコピーされる場合があります。その後に排他的に行う変更ではコピーしません。これによりコピー処理は Promise の送信時から移りますが、最初の編集の高速化、最悪タイマー遅延の改善、RSS の削減を保証するものではありません。JavaScript のバイト列入力は、引き続きワーカー送信前にコピーします。これらのラッパーにはプロトコル6のバイナリーを使ってください。
+145:
+146: <!-- section: typescript -->
+147: ## TypeScript
+148:
+149: アプリケーションに `typescript` と `@types/node` をインストールします。`main.mts` または `"type": "module"` を使い、次の `tsconfig.json` を設定します。
+150:
+162:
+163: `npx tsc` でコンパイルします。`.mts` のエントリーなら `node dist/main.mjs` で実行します。
+
+FILE docs/ja/python-api.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Python API
+2:
+3: この SDK は、ネイティブ拡張を通じて標準の Rust 公開 API を呼び出します。`py.typed` と検証済みの公開シグネチャを含みます。まずは[クイックスタート](/docs/python-quickstart/)を参照してください。
+4:
+5: <!-- section: project-and-note-values -->
+6: ## プロジェクトとノートの値
+23: ## モデルとテンプレート
+30: ## メディアと画像穴埋め
+45: ## 操作と結果
+63: ## エラーと並行処理
+70: ## ノート追加時のコンテキスト
+77: ## メディアの一括処理と候補ファイルの事前生成
+78:
+79: メディアの一括処理と候補ファイルの事前生成は、公開パッケージ `0.3.1` に含まれています。
+80:
+81: <!-- section: prepare-review-and-publish -->
+82: ### 準備、確認、公開
+83:
+103:
+104: 公開を一度試みると、ポリシー違反や I/O エラーで失敗した場合も含めて所有者を消費します。その後の呼び出しは `PreparedPublicationStateError` となり、コードは `BUILD.PREPARED_UNAVAILABLE`、理由は `closed` または `consumed` です。close は、すでに実行中の公開処理を取り消しません。相対パスは準備の呼び出し時に確定し、後から Project を変更しても確認対象の APKG は変わりません。レポートは close 後も利用でき、ファイルは保持しません。オプションの変更や再試行には、もう一度準備を行ってください。所要時間には確認待ちの時間は含まれません。遅い段階のエラーでは、置換に成功していても永続性が未確認の場合があります。対応を決める前に、公開処理の実際の結果を確認してください。ネイティブ binding protocol 1 と contract bundle 2.1.0 が必要です。同じバージョン番号でも古いバイナリは拒否されます。
+
+FILE docs/ja/python-migration.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Python API の刷新
+2:
+3: `python -m pip install ankiforge` と `from ankiforge import ...` を使います。以前の配布名 `anki-forge` とインポート名 `anki_forge` は、互換エイリアスではありません。ソースをチェックアウトして使う場合、名前を変更した後は Maturin でネイティブ拡張を再ビルドしてください。[セットアップガイド](https://github.com/morehardy/anki-forge/blob/main/bindings/python/README.md)を参照してください。
+4:
+5: 旧 API の互換レイヤーは残していません。従来の Deck・レジストリ・ランタイムの API を、データを所有する公開モデルに置き換えます。
+6:
+7: | 従来の手順 | 現在の手順 |
+8: | --- | --- |
+9: | 安定 ID が任意の Deck または Project | `Project(namespace, default_deck=...)` |
+10: | `add_note(note)` と内容由来の識別情報 | `add(stable_key, note)` |
+11: | 変更可能な NoteType と add_notetype | `NoteType.builder(key)...build()` の後に `model.note()` |
+12: | 文字列によるモデル参照 | ノートが検証済みモデルを所有 |
+13: | プロジェクトのメディアレジストリ | 独立した `Media.file` / `Media.bytes` スナップショット |
+14: | インラインで描画したメディアとフィールド専用 setter | `Content.sequence`、`media.image()`、`media.sound()`、`Note.field` |
+15: | 暗黙の HTML | 文字列は Text。HTML には `Content.html` を使う |
+16: | 安定した識別情報のないマスク | `Mask.rect(key, x, y, width, height)` |
+17: | 成果物がない場合もある戻り値と ensure_success | 成果物が保証された `BuildOutput`。失敗時は構造化エラーを送出 |
+18: | 診断からレポートの成功・失敗を推測 | Output/Error のスナップショットが実際の結果を示す。Report は観測結果のみ |
+19: | Diff、lockfile、更新安全性の切り替え | `compare(CompareOptions.against(...))`、`BuildOptions.update_from(...)` |
+20: | 実行時のサブプロセス用パッケージ | デフォルト Rust API へのプロセス内 PyO3 バインディング |
+21:
+22: 更新の基準に使えるのは、現在の識別情報の証拠を持つ完全な配布時のオリジナル APKG だけです。旧バンドルや古い APKG の証拠を自動復元することはありません。新しい手順は README と実行可能なサンプルを参照してください。
+
+FILE docs/ja/rust-api.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Rust API
+2:
+3: よく使う値は crate のルートにあります。`Project`、`Note`、`NoteType`、`Field`、`Template`、`Content`、`Media`、`BuildOptions`、`BuildOutput` です。公開されている機能別モジュールは `note`、`schema`、`media`、`build`、`update`、`diagnostics` です。リポジトリのツール群は、feature で有効にする別の API 群です。利用側のアプリケーションに必要ありません。
+4:
+5: <!-- section: authoring -->
+6: ## コンテンツの作成
+25: ## コンテンツとメディア
+34: ## ビルドのオプション
+54: ## ビルド、比較、出力
+61: ## レポートとエラー
+70: ## 追加時のコンテキスト
+77: ## 一度確認した候補をそのまま公開する
+78:
+79: 候補の事前生成と保存を行う API は、公開 `0.3.1` パッケージに含まれています。
+80:
+
+FILE docs/ja/updates.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # 配布済みのデッキを更新する
+2:
+3: すでに配布した Anki デッキに訂正や新しいカードを届けます。ノートの ID を安定させると、Anki Forge と Anki は既存のノートを新規ノートとして扱わずに識別できます。ただし、実際に何が更新されるかには、Anki のインポート設定や、それより新しいローカルでの編集も影響します。
+4:
+5: プロジェクトの名前空間と、ノート・モデル・フィールド・テンプレートのキーは変更しないでください。新しいリリースは、完全なバージョン付き識別情報を含む、前回の**配布時のオリジナル APKG**を基準に作成します。そのパッケージを対応するソースのリビジョンと一緒に保管してください。
+6:
+8: ## 2つの版を生成して比較する
+42: ## ポリシーと検査の上限
+74: ## 識別情報とその根拠
+81: ## クライアントのインポート動作と公開前の確認
+90: ## 一度だけビルドし、確認してから公開する
+91:
+92: この API は公開パッケージ `0.3.1` に含まれています。
+93:
+94: 一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。`prepare_publication` で候補を準備し、確認後に `publish` で保存すると、レポートで確認したものと同じ APKG を書き出せます。
+95:
+96: <!-- source: anki_forge/examples/docs_publication.rs -->
+122: <!-- /source -->
+123:
+124: 固定したソースのチェックアウトで、上の完全なプログラムを `anki_forge/examples/docs_publication.rs` に保存します。この例は本ガイドで追加するもので、`1199196` には含まれていません。その後、次を実行します。
+125:
+129:
+130: この例はリポジトリのルートに `spanish-original.apkg` を書き出し、ポリシーが公開を認めた場合は `spanish-reviewed.apkg` も書き出します。準備の段階では公開先は変更されません。配布を承認する前に検出事項を確認し、クライアントへのインポートをテストしてください。この例が自動的に公開するのは、ポリシーが許容する単純な内容変更だけです。ベンチマークはこのワークフローを測定していません。
+131:
+132: [ビルドのライフサイクル](/docs/build-guarantees/#prepared-publication-from-source)、[Rust API](/docs/rust-api/#review-once-publish-once)、[Node API](/docs/node-api/#prepare-review-and-publish)、[Python API](/docs/python-api/#prepare-review-and-publish)も参照してください。
+
+FILE website/src/content/blog/ja/stable-ids-and-deck-updates.mdx (all headings; entire changed prose sections; unchanged code omitted)
+1: ---
+2: locale: ja
+3: translationKey: stable-ids-and-deck-updates
+4: title: 表現を変えても、ノートの識別情報は保つ
+5: description: 生成した Anki デッキの更新で、安定 ID とビルドの基準パッケージがどう連携するかを説明します。
+6: date: 2026-09-22
+7: category: Engineering
+8: ---
+9:
+10: import CodeBlock from '../../../components/CodeBlock.astro';
+11: import { updateExample } from '../../../lib/examples';
+12: import { sitePath } from '../../../lib/site';
+13:
+14: 生成したデッキが、最初のエクスポートで完成することはあまりありません。定義を改善し、例を分かりやすくし、誤りを修正していきます。次のビルドでは、どのノートが内容を改善した同じノートなのかを識別する必要があります。
+15:
+16: 次の小さな編集を考えてみます。
+17:
+18: | フィールド | 最初のバージョン | 次のバージョン |
+19: | --- | --- | --- |
+20: | 表面 | hola | hola |
+21: | 裏面 | hello | hello; hi |
+22: | 安定 ID | es:hola | es:hola |
+23:
+24: 意味の説明は広がりましたが、論理的なノートは同じです。
+25:
+26: <span id="separate-identity-from-content" data-section-alias="separate-identity-from-content"></span>
+27:
+28: {/* section: separate-identity-from-content */}
+29: ## 識別情報を内容から分離する
+30:
+31: 明示的な安定 ID は、ノートに永続的なキーを与えます。ノートを編集するときは ID を保ち、別の論理ノートを作るときは新しい ID を選びます。
+32:
+33: 識別情報にはプロジェクトの文脈もあります。同じデッキのリリース間では、プロジェクトの名前空間を揃えてください。ノート ID 単体は、繰り返し実行できる更新手順の一部にすぎません。
+34:
+35: <span id="give-the-next-build-a-baseline" data-section-alias="give-the-next-build-a-baseline"></span>
+36:
+37: {/* section: give-the-next-build-a-baseline */}
+38: ## 次のビルドに基準パッケージを渡す
+39:
+40: 前回のパッケージは、以前に何をエクスポートしたかを Anki Forge に伝えます。修正したプロジェクトをビルドするときに使います。
+41:
+42: <CodeBlock code={updateExample.source} />
+43:
+44: この抜粋では、`project` に修正済みのノートが入り、`previous` がバージョン1を指し、`next` はバージョン2の別のパスです。<a href={sitePath('/generated/website_showcase.rs')}>完全な例</a>には両方のプロジェクト定義があり、1件のノートの識別情報が保持されたことを検証します。
+45:
+46: 入力と出力のパッケージは別のパスに保存してください。基準パッケージを上書きすると、リリースを理解・検証するために必要な証拠を失います。
+47:
+48: <span id="keep-the-original-distributed-package" data-section-alias="keep-the-original-distributed-package"></span>
+49:
+50: {/* section: keep-the-original-distributed-package */}
+51: ## 配布時のオリジナルパッケージを保持する
+52:
+53: 生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、更新の基準パッケージとして使用できません。
+54:
+55: <a href={sitePath('/ja/docs/updates/')}>更新ガイド</a>では、厳密な更新、リスクポリシー、クライアントでのインポートの制約を説明します。
+56:
+57: <span id="inspect-the-build-and-the-import" data-section-alias="inspect-the-build-and-the-import"></span>
+58:
+59: {/* section: inspect-the-build-and-the-import */}
+60: ## ビルドとインポートを確認する
+61:
+62: パッケージを配布する前に、ビルドレポートと更新の安全性に関する診断を確認します。ビルドがノートの識別情報を整合させられない場合は、出力ファイルを更新の正しさの証拠とせず、ソースと基準パッケージを調べてください。
+63:
+64: その後、Anki 独自のインポート動作が適用されます。インポート設定、既存ノートの内容、ローカル編集、Anki のバージョンが結果に影響する場合があります。安定した識別情報はノートの照合に役立ちますが、それらの選択を上書きしたり、すべてのインポートでローカル状態のあらゆる側面が保持されると約束したりするものではありません。
+65:
+66: <a href={sitePath('/ja/examples/#updates')}>2つのバージョンのサンプル</a>には両方のパッケージがあります。自分のリリース手順を設計する前に、小さく確認しやすい更新を試せます。
+
+FILE website/src/content/blog/ja/your-first-anki-deck.mdx (all headings; entire changed prose sections; unchanged code omitted)
+1: ---
+2: locale: ja
+3: translationKey: your-first-anki-deck
+4: title: Rust で最初の Anki デッキを作る
+5: description: 短い Rust プログラムから、Anki で開けるスペイン語のカードを作成します。
+6: date: 2026-09-22
+7: category: Tutorial
+8: ---
+9:
+10: import CodeBlock from '../../../components/CodeBlock.astro';
+11: import { quickstartSource } from '../../../lib/examples';
+12: import { sitePath, repository } from '../../../lib/site';
+13:
+14: 学習内容がスクリプト、データセット、複数のファイルにすでにまとまっているなら、Anki デッキの生成を自動化すると、同じ作業を繰り返しやすくなります。ソースは Git で確認できる形に保ち、エクスポートを再実行可能な1つの手順にできます。
+15:
+16: まずは **hola** の1語から始めます。表面にスペイン語の挨拶、裏面に英語の意味を表示するカードを作りましょう。
+17:
+18: <span id="a-complete-program" data-section-alias="a-complete-program"></span>
+19:
+20: {/* section: a-complete-program */}
+21: ## 完全なプログラム
+22:
+23: リポジトリにある最小の Rust サンプルです。
+24:
+25: <CodeBlock code={quickstartSource} />
+26:
+27: `Project::new("spanish")` が名前空間を作成します。`Note::basic("hola", "hello")` が Basic ノートを作り、`project.add("es:hola", note)` が安定キーを割り当て、`build(BuildOptions::to(...))` がパッケージを書き出します。
+28:
+29: `build` は成功した場合にのみ `BuildOutput` を返します。`?` 演算子が型付きの失敗を伝播するため、スクリプトはエラーとして終了できます。
+30:
+31: <span id="install-and-run" data-section-alias="install-and-run"></span>
+32:
+33: {/* section: install-and-run */}
+34: ## インストールして実行する
+35:
+36: 公開パッケージのインストールと実行コマンドは、<a href={sitePath('/ja/docs/quickstart/')}>現行のクイックスタート</a>に従ってください。自分のプロジェクトで同じプログラムを使うには、<a href={sitePath('/ja/docs/installation/')}>アプリケーションに組み込む</a>を参照します。
+37:
+38: エクスポート後、`spanish.apkg` を Anki にインポートし、最初のカードの解答を表示してみてください。
+39:
+40: 先に完成形を確認したい場合は、<a href={sitePath('/ja/examples/#basic')}>このサイトの Basic サンプル</a>からパッケージをダウンロードできます。
+41:
+42: <span id="give-the-note-an-identity" data-section-alias="give-the-note-an-identity"></span>
+43:
+44: {/* section: give-the-note-an-identity */}
+45: ## ノートに識別情報を与える
+46:
+47: 文字列 `es:hola` は、名前空間 `spanish` 内の明示的な安定ノートキーです。解答の言い方とは独立して、どのノートかを示します。後で “hello” を “hello; hi” に広げても、同じ ID を使えます。
+48:
+49: 論理的なノートごとに別の ID を使ってください。ソースに語彙項目の ID など永続的なキーがあるなら、そのキーを出発点にできます。編集予定の本文だけから識別情報を作ることは避けてください。
+50:
+51: 配布済みデッキの更新には、リリース履歴も必要です。前回配布時のオリジナルパッケージを保持し、<a href={sitePath('/ja/docs/updates/')}>文書化された更新手順</a>に従ってください。
+52:
+53: <span id="grow-from-one-note" data-section-alias="grow-from-one-note"></span>
+54:
+55: {/* section: grow-from-one-note */}
+56: ## 1件のノートから広げる
+57:
+58: 別の挨拶には、新しい Basic ノートを作り、新しいキーで追加します。文中の単語を穴埋めにするなら、<a href={sitePath('/ja/examples/#cloze')}>Cloze ノート</a>を使います。さらに表現豊かなカードには、プロジェクト API でフィールドとテンプレートを定義し、画像や音声をノートと一緒に同梱できます。
+59:
+60: <a href={sitePath('/ja/docs/rust-guide/')}>Rust での作成ガイド</a>では、診断、メディア、繰り返し実行できるビルドへ進みます。<a href={`${repository}/tree/main/anki_forge/examples`}>リポジトリのサンプル</a>には、次の開発の土台になる実行可能なプログラムがあります。

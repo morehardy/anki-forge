@@ -1,0 +1,142 @@
+{
+  "reviewerRun": "/root/de_technical_review/staging-2026-11-01",
+  "status": "read-complete-pending-formal-freeze",
+  "entries": {
+    "home": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Read all German catalog values with HomePage, AiQuickstart, PerformanceEvidence and generated-example consumers. Public 0.3.1/runtime installation, persistent APKG, stable identities, original baseline and client limitations remain intact. Benchmark is Rust Project API versus genanki 0.13.1 on Apple M1 Pro, five 1,000-note workloads and ten-run medians; CSV values support 45.7–53.9% saved export time, not Python/Node, import or review performance."
+    },
+    "examples": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "The four sample kinds and combined four-card deck match website_showcase.rs: Basic 1/1/0, Cloze 1/1/0, media 1/1/2, occlusion 1/1/1, combined 4/4/3. Update copy says one answer changes under es:hola and retains import/local-edit limitations; previews are not claims about Anki scheduling."
+    },
+    "blog-list": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "German catalog and BlogPage filter posts by data.locale, preserving both article translation keys, dates, categories, titles and descriptions; no cross-locale article substitution is promised."
+    },
+    "docs": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Read the whole overview against the English MDX. Distinguishes note fields, note types/templates and decks; directs each public SDK to its own complete quickstart and distinguishes caller-parsed CSV/JSON, media, custom models and update evidence."
+    },
+    "languages": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Installation names and pins are ankiforge 0.3.1 in all three registries, Rust 1.92+, Node 22.13+ and ordinary CPython 3.11–3.14 recorded checks. Public first-deck paths are separate from source builds and TypeScript configuration."
+    },
+    "quickstart": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Complete Rust main retains spanish namespace, es:hola, persistent spanish.apkg, Result propagation and artifact access. Installation/run commands and original-distribution advice match current example."
+    },
+    "json-to-anki": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Read all three complete programs and prose. Caller parses Dataset; each note keeps business id and shared typed image/audio; separate v1/v2 destinations preserve original baseline. Independent comparison and prepared candidate both check policy; publication uses reviewed file. Expected 3 notes/3 cards/2 media and one answer-only RISK.NOTE_CHANGED match sources; Anki import/client/scheduling caveats remain explicit."
+    },
+    "csv-to-anki": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Read the full CSV parser and command. UTF-8 BOM, exact id/front/back header, quoting, nonempty values, unique stripped ids, no overwrite and no empty dataset match the Python implementation. Example yields three text Basic notes/cards with no media, caller-side parsing and stable IDs; XLSX is exported as CSV first."
+    },
+    "ai-anki-cards": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "AI drafts/reviews content or code; website constructs prompt locally. No OCR/PDF extraction, audio synthesis or label detection is claimed. English prompt/code fixture remains exact; reviewed CSV, persistent original package and human/client verification are required."
+    },
+    "anki-forge-vs-genanki": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "The corrected sequential comparison sentence now says build v1, compare/prepare v2 against original v1, then publish. Does not claim genanki lacks stable identity. Arbitrary numerical IDs/GUIDs are not automatically migrated; historical Rust benchmark scope and non-guarantees remain intact."
+    },
+    "development": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Source checkout, Rust pinned toolchain, paired facade/native local tarballs and Maturin commands are explicitly distinct from registry installs; installed wheels need no runtime Cargo. No source-only capability is advertised as a published method."
+    },
+    "rust-guide": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Project::add atomically validates keys/fields/decks/tags and collects owned models/media. Reports are observations; output/error snapshots contain outcome. Ownership and immutable model claims match core. MIME-category add validation differs from later extension sniffing. Tool recipe v2, no project title, contract 2.1.0 and identity-v1 remain distinct."
+    },
+    "api": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Public root API overview preserves supported three SDKs, owned media/diagnostics/update links and original APKG as mandatory complete identity evidence; re-export is not a replacement."
+    },
+    "installation": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Public Rust crate has empty default features and needs no repository-only feature for normal consumer use; serde dependencies belong to caller parser, and generic JSON/CSV conversion is not claimed."
+    },
+    "concepts": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Whole page retains atomic add, field keys versus display names, escaped Text versus explicit HTML, typed media dependency retention, independent snapshots, last-owner cleanup and high-risk policy versus hard errors."
+    },
+    "cards": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Source helper checks two notes/three cards. Basic uses one front/back, Cloze card count follows supported deletion numbers 1–500, back_extra is exact, content is Text and key/ordinal changes have update implications."
+    },
+    "custom-notetypes": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Full current text and example read after whitespace correction. Empty/whitespace-only/surrounding-whitespace keys fail; interior spaces are not incorrectly forbidden. Builder validates immutable model, field/template keys bind references, required/sort/generation semantics and atomic model conflicts match schema code."
+    },
+    "media": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Read full page and final boundary correction. Media is owned immutable snapshot; explicit raw assets remain; literal sound names/rename behavior, NFC/case conflicts, 255 UTF-8 bytes versus schema scalar length, per-asset 256 MiB and 64/16 MiB shared pools match source. Batch ordering/failure cleanup/16-file threshold/four workers and MIME category versus playback distinction are preserved. tools::load_project now explicitly requires internal-tools and is outside supported consumer API."
+    },
+    "image-occlusion": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Builder decodes PNG/JPEG/GIF/WebP/BMP, EXIF-correct display pixels, positive in-bounds finite rectangles, unique stable mask keys and independent 256 MiB decode budget. Both modes, reserved fields, 1–500 ordinal history and non-deletion of learner cards are accurate."
+    },
+    "updates": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Read both workflows and policy example. Original complete identity-v1 APKG is required; compare returns completed blocked findings while hard failures are errors. Defaults block High/Critical; allow applies whole category, not a selected note. Prepared publish consumes same inspected candidate; client merge/local edits/scheduling and no deletion synchronization caveats are explicit."
+    },
+    "templates": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Manifest remains template-bundle-v2 with required stable keys, declared assets and keyed template references. Bundle loader owns snapshots, rejects unknown properties/path escape, enforces UTF-8 text limits 256 KiB/2 MiB and per-asset MediaLimits, and adds runtime byte validation beyond JSON Schema."
+    },
+    "build-guarantees": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Temporary last-owner cleanup, persistent survival, report-versus-output outcome, atomic per-file replacement versus durability, failure publication facts and native path encodings all match source. Budgets are independent per APKG, zero not unlimited; prepared attempt consumes owner even on error, close does not cancel started publish."
+    },
+    "compatibility": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Distinguishes recorded runtime checks from package availability and unsupported Node hosts. Ordinary export needs no Anki; playback/import depends on client/codecs/settings. Omissions do not synchronize deletions and original identity evidence is required for updates."
+    },
+    "rust-api": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Reviewed full signatures/tables and prepared example against Rust public modules. Distinct FieldKey/TemplateKey, 12 finite u64 counters including max_identity_bytes, zero budget, outcome snapshots/path round-trip, error context, policy and owned candidate lifetimes are preserved."
+    },
+    "node-quickstart": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Complete ESM program awaits build and artifact close; persistent output survives close. Node 22.13+, native optional dependency and supported TypeScript/CommonJS routes match facade."
+    },
+    "node-api": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Reviewed full page against facade/native code: immutable note/model values, async media/build, snapshot-at-invocation/copy-on-write, camelCase report versus snake_case snapshots, safe-integer/bigint limits, relative path binding and original build baseDir persistTo. Prepared owner is consumed immediately, worker close cannot cancel; protocol 6 retained."
+    },
+    "python-quickstart": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Complete script creates persistent spanish.apkg with namespace/key unchanged. Virtual environment/Windows activation, CPython/wheel requirement and no-Anki export match package and source."
+    },
+    "python-api": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Reviewed full page against Python wrapper and native state. Builder/note immutability, signatures, copies/context-managed temporary ownership, native paths, per-asset limits, GIL release/busy rejection/fork guard, structured errors and consumed prepared owner match. Protocol 1 and contract 2.1.0 are preserved."
+    },
+    "python-diagnostics": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Machine kind/code, causes/source_details and outcome distinction match reports/errors. Comparison may complete with blocked policy; category allowance cannot permit evidence errors. Original APKG, finite independent budgets, native path encodings and persist failures remain explicit."
+    },
+    "troubleshooting": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Read whole symptom/correction tables against English and SDK codes. Duplicate/unknown/required fields and model conflicts have correct remedies; media import and inspect budgets remain separate. Original APKG and hard-error boundary, policy reuse, temporary ownership and final persistent-storage failure wording match actual contracts."
+    },
+    "python-migration": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "New distribution/import is ankiforge; former aliases and registry/runtime authoring API are not retained. Notes own models, content defaults to text, stable keys replace derived identity and original complete evidence is required."
+    },
+    "genanki-migration": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Read complete runnable model example. Separates numerical ID/GUID migration from creating a new keyed publication; no automatic identity recovery/review-history guarantee. Explicit HTML, typed media ownership and raw asset declarations match wrappers."
+    },
+    "blog:your-first-anki-deck": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Whole German article compared to English including frontmatter and injected quickstart. Namespace/key differ from text; BuildOutput only follows success; separate original prior package needed for updates and German article destinations are explicit."
+    },
+    "blog:stable-ids-and-deck-updates": {
+      "scope": "staging semantic review; not frozen source approval",
+      "finding": "Whole article preserves es:hola through hello→hello;hi, project namespace, separate baseline/output paths, original embedded identity evidence and Anki import/local-edit limitations. CodeBlock comes from verified shared showcase source."
+    }
+  }
+}

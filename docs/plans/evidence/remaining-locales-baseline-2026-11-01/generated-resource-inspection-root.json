@@ -1,0 +1,814 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent semantic inspection of actual changed generated resources after maintenance backport; no broad byte equality claim.",
+  "changedResources": [
+    {
+      "route": "/generated/cell-anatomy.apkg",
+      "previousSha256": "720699f2a3980a1d387c0bd2ceaa4ebd0ce4d5850e1fb45e9b4e6ffd400cb208",
+      "currentSha256": "e2e424176e5b21d9d90f8c4dbcad1ccf843ea4f4af0a686726695e33d105bbdf",
+      "kind": "regenerated-showcase-apkg",
+      "observations": {
+        "notes": [
+          [
+            "eee02636766d8e2a4a2f0afb749b846c",
+            671859442414049,
+            "{{c1::image-occlusion:rect:left=0.35406698564593303:top=0.22505307855626328:width=0.28708133971291866:height=0.49256900212314225:oi=1}}<br>\u001f<img src=\"cell-anatomy.png\">\u001fCell anatomy\u001fNucleus\u001f"
+          ]
+        ],
+        "cards": [
+          [
+            "eee02636766d8e2a4a2f0afb749b846c",
+            0
+          ]
+        ],
+        "decodedMediaHashes": {
+          "0": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+        },
+        "decodedMediaMapSha256": "37f63959793d5cdb8f2667471e06920dc6ef57148459168268a5fcd96027c728",
+        "identityExceptRevisionTimesAndPayloadDigests": {
+          "format_version": "ankiforge-identity-v1",
+          "media": {
+            "cell-anatomy.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          },
+          "identity": {
+            "namespace": "website-cell-anatomy",
+            "models": {
+              "image_occlusion": {
+                "id": 671859442414049,
+                "kind": "cloze",
+                "sort_field": "occlusion",
+                "active": true,
+                "content_hash": "3bf93208a53c995b4a27832f9722c17ed2751001148cc34d2404ba87a7ab4a77",
+                "fields": {
+                  "back_extra": {
+                    "id": 3096440590173501,
+                    "slot": 3,
+                    "ordinal": 3
+                  },
+                  "comments": {
+                    "id": 828152224302781,
+                    "slot": 4,
+                    "ordinal": 4
+                  },
+                  "header": {
+                    "id": 2181003099227105,
+                    "slot": 2,
+                    "ordinal": 2
+                  },
+                  "image": {
+                    "id": 3463297792434445,
+                    "slot": 1,
+                    "ordinal": 1
+                  },
+                  "occlusion": {
+                    "id": 967509784046697,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "field_high_water": 5,
+                "templates": {
+                  "card": {
+                    "id": 2606208563348115,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "template_high_water": 1
+              }
+            },
+            "notes": {
+              "cell:nucleus": {
+                "guid": "eee02636766d8e2a4a2f0afb749b846c",
+                "model": "image_occlusion",
+                "active": true,
+                "content_hash": "7ab76c1d08f769f2118f8d86905476c14d54bc6a583ecbd7f0d5db64a9dc7ed4",
+                "masks": {
+                  "nucleus": {
+                    "ordinal": 0,
+                    "active": true
+                  }
+                },
+                "mask_high_water": 1,
+                "cards": {
+                  "mask:nucleus": 0
+                }
+              }
+            },
+            "media_history": {
+              "cell-anatomy.png": {
+                "size": 178597,
+                "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+              }
+            }
+          }
+        }
+      },
+      "conclusion": "SQLite integrity passes; GUID/model/content/card ordinals, decoded media and identity keys exactly equal. Revision-time and collection/identity payload digests intentionally excluded from semantic comparison; binary hashes are not claimed equal."
+    },
+    {
+      "route": "/generated/ear-training.apkg",
+      "previousSha256": "430d0595cb02d059870c1714378746b9f5181d13758506928337bf8525c34b4b",
+      "currentSha256": "bb000f8d7d80b4db372295c0e41764512f718c39b77f55dc1d0e56fd8a24a5ea",
+      "kind": "regenerated-showcase-apkg",
+      "observations": {
+        "notes": [
+          [
+            "84035d94c2e446c24532280d028dc849",
+            4141805024815261,
+            "Name this pitch.\u001fA4, 440 Hz\u001f<img src=\"waveform.svg\">\u001f[sound:concert-a.wav]"
+          ]
+        ],
+        "cards": [
+          [
+            "84035d94c2e446c24532280d028dc849",
+            0
+          ]
+        ],
+        "decodedMediaHashes": {
+          "0": "7cba91cd55453cf2b9cdd40e72597441020c3a35ce68c1f1900f89268312a51e",
+          "1": "c123272ca84ac2365d0f4e7c88f99defa1c9dcbdf178d59c8150570ae0e2cecf"
+        },
+        "decodedMediaMapSha256": "0001a221b46105296ca279de9e624a38548777ea39ef9b881164ab266a520b18",
+        "identityExceptRevisionTimesAndPayloadDigests": {
+          "format_version": "ankiforge-identity-v1",
+          "media": {
+            "concert-a.wav": {
+              "size": 16044,
+              "sha1": "c7cba1c7a9cab6dd2f77fd4f8c86c34a90b135e0"
+            },
+            "waveform.svg": {
+              "size": 3373,
+              "sha1": "25b68d616762ad2516136a5b8e15ca16e769b9be"
+            }
+          },
+          "identity": {
+            "namespace": "website-ear-training",
+            "models": {
+              "ear-training": {
+                "id": 4141805024815261,
+                "kind": "normal",
+                "sort_field": "prompt",
+                "active": true,
+                "content_hash": "f304aa4e2e65c7134c83407c6752ae36b6ae51190249dff004a8e31a761a1df6",
+                "fields": {
+                  "answer": {
+                    "id": 2858214478544288,
+                    "slot": 1,
+                    "ordinal": 1
+                  },
+                  "audio": {
+                    "id": 1241423446263076,
+                    "slot": 3,
+                    "ordinal": 3
+                  },
+                  "picture": {
+                    "id": 2761214789322277,
+                    "slot": 2,
+                    "ordinal": 2
+                  },
+                  "prompt": {
+                    "id": 4303901294786177,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "field_high_water": 4,
+                "templates": {
+                  "listen": {
+                    "id": 3093766817036711,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "template_high_water": 1
+              }
+            },
+            "notes": {
+              "sound:a4": {
+                "guid": "84035d94c2e446c24532280d028dc849",
+                "model": "ear-training",
+                "active": true,
+                "content_hash": "7e42159c03b9c326856cd2f7af6c643717a4aca84cc2cfafd7491672ad800800",
+                "masks": {},
+                "mask_high_water": 0,
+                "cards": {
+                  "template:listen": 0
+                }
+              }
+            },
+            "media_history": {
+              "concert-a.wav": {
+                "size": 16044,
+                "sha1": "c7cba1c7a9cab6dd2f77fd4f8c86c34a90b135e0"
+              },
+              "waveform.svg": {
+                "size": 3373,
+                "sha1": "25b68d616762ad2516136a5b8e15ca16e769b9be"
+              }
+            }
+          }
+        }
+      },
+      "conclusion": "SQLite integrity passes; GUID/model/content/card ordinals, decoded media and identity keys exactly equal. Revision-time and collection/identity payload digests intentionally excluded from semantic comparison; binary hashes are not claimed equal."
+    },
+    {
+      "route": "/generated/showcase.apkg",
+      "previousSha256": "d72ca55bb6dfd86ba40f82a873f81c47e14029368d2d8f8f181e94c671daaeff",
+      "currentSha256": "f8d9acbf9c8fa1c524c811f56f41b39be06aefc670dfad14afa05d2088e13aab",
+      "kind": "regenerated-showcase-apkg",
+      "observations": {
+        "notes": [
+          [
+            "243613e674bc7ce27b527d86441c5225",
+            700402855906736,
+            "A sound&#39;s pitch depends on its {{c1::frequency}}.\u001f"
+          ],
+          [
+            "49f6d3eebd716ab2bd30b1f0c0c5e2e3",
+            4301090979829509,
+            "Name this pitch.\u001fA4, 440 Hz\u001f<img src=\"waveform.svg\">\u001f[sound:concert-a.wav]"
+          ],
+          [
+            "a105a9d2c5f3ea8fed98a74e82c41390",
+            4355540404165613,
+            "hola\u001fhello"
+          ],
+          [
+            "ff70fdc7b10a6e33a6318b0856f66d74",
+            2131651859467512,
+            "{{c1::image-occlusion:rect:left=0.35406698564593303:top=0.22505307855626328:width=0.28708133971291866:height=0.49256900212314225:oi=1}}<br>\u001f<img src=\"cell-anatomy.png\">\u001fCell anatomy\u001fNucleus\u001f"
+          ]
+        ],
+        "cards": [
+          [
+            "243613e674bc7ce27b527d86441c5225",
+            0
+          ],
+          [
+            "49f6d3eebd716ab2bd30b1f0c0c5e2e3",
+            0
+          ],
+          [
+            "a105a9d2c5f3ea8fed98a74e82c41390",
+            0
+          ],
+          [
+            "ff70fdc7b10a6e33a6318b0856f66d74",
+            0
+          ]
+        ],
+        "decodedMediaHashes": {
+          "0": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+          "1": "7cba91cd55453cf2b9cdd40e72597441020c3a35ce68c1f1900f89268312a51e",
+          "2": "c123272ca84ac2365d0f4e7c88f99defa1c9dcbdf178d59c8150570ae0e2cecf"
+        },
+        "decodedMediaMapSha256": "1f5808e87559bdbfeee59b51612b08c435b169d82791bb7ecbd169758526517b",
+        "identityExceptRevisionTimesAndPayloadDigests": {
+          "format_version": "ankiforge-identity-v1",
+          "media": {
+            "cell-anatomy.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            },
+            "concert-a.wav": {
+              "size": 16044,
+              "sha1": "c7cba1c7a9cab6dd2f77fd4f8c86c34a90b135e0"
+            },
+            "waveform.svg": {
+              "size": 3373,
+              "sha1": "25b68d616762ad2516136a5b8e15ca16e769b9be"
+            }
+          },
+          "identity": {
+            "namespace": "website-all-cards",
+            "models": {
+              "basic": {
+                "id": 4355540404165613,
+                "kind": "normal",
+                "sort_field": "front",
+                "active": true,
+                "content_hash": "d1077f1114d0a8715537e4a49d0fae1c30289fe7b74a28c3bf63c3734bebd52f",
+                "fields": {
+                  "back": {
+                    "id": 4412952112219930,
+                    "slot": 1,
+                    "ordinal": 1
+                  },
+                  "front": {
+                    "id": 1269658500562718,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "field_high_water": 2,
+                "templates": {
+                  "card": {
+                    "id": 2884206032429336,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "template_high_water": 1
+              },
+              "cloze": {
+                "id": 700402855906736,
+                "kind": "cloze",
+                "sort_field": "text",
+                "active": true,
+                "content_hash": "3a777419e4193f9e66c3d553d14eacbee1888e3c3d03bc29b0c8e0dd6dd35cd7",
+                "fields": {
+                  "back_extra": {
+                    "id": 369761272494455,
+                    "slot": 1,
+                    "ordinal": 1
+                  },
+                  "text": {
+                    "id": 2064446336707774,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "field_high_water": 2,
+                "templates": {
+                  "card": {
+                    "id": 3018156731821978,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "template_high_water": 1
+              },
+              "ear-training": {
+                "id": 4301090979829509,
+                "kind": "normal",
+                "sort_field": "prompt",
+                "active": true,
+                "content_hash": "5d9e69bdb1179cdff424cd5617fa8fc995bfb6215b22e7247f182d27c855811c",
+                "fields": {
+                  "answer": {
+                    "id": 2081833558728397,
+                    "slot": 1,
+                    "ordinal": 1
+                  },
+                  "audio": {
+                    "id": 3860634628912983,
+                    "slot": 3,
+                    "ordinal": 3
+                  },
+                  "picture": {
+                    "id": 2126448917317205,
+                    "slot": 2,
+                    "ordinal": 2
+                  },
+                  "prompt": {
+                    "id": 3385959403443634,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "field_high_water": 4,
+                "templates": {
+                  "listen": {
+                    "id": 2645145574832149,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "template_high_water": 1
+              },
+              "image_occlusion": {
+                "id": 2131651859467512,
+                "kind": "cloze",
+                "sort_field": "occlusion",
+                "active": true,
+                "content_hash": "40a63ba1f34c0486442a21af7588ed847a13c8f6c847725259933c64fb553753",
+                "fields": {
+                  "back_extra": {
+                    "id": 1887646262971673,
+                    "slot": 3,
+                    "ordinal": 3
+                  },
+                  "comments": {
+                    "id": 3442507280619757,
+                    "slot": 4,
+                    "ordinal": 4
+                  },
+                  "header": {
+                    "id": 613621345427257,
+                    "slot": 2,
+                    "ordinal": 2
+                  },
+                  "image": {
+                    "id": 2210378568358123,
+                    "slot": 1,
+                    "ordinal": 1
+                  },
+                  "occlusion": {
+                    "id": 1766032326925628,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "field_high_water": 5,
+                "templates": {
+                  "card": {
+                    "id": 595375657796437,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "template_high_water": 1
+              }
+            },
+            "notes": {
+              "cell:nucleus": {
+                "guid": "ff70fdc7b10a6e33a6318b0856f66d74",
+                "model": "image_occlusion",
+                "active": true,
+                "content_hash": "e4561be9270fa7f66b9653093a1ea966488933d4ca34effc527d1ec1d0d77f00",
+                "masks": {
+                  "nucleus": {
+                    "ordinal": 0,
+                    "active": true
+                  }
+                },
+                "mask_high_water": 1,
+                "cards": {
+                  "mask:nucleus": 0
+                }
+              },
+              "es:hola": {
+                "guid": "a105a9d2c5f3ea8fed98a74e82c41390",
+                "model": "basic",
+                "active": true,
+                "content_hash": "82a190a6e3451bae62b43f0c7d6b5356773bcaef6e4efbf9b634376cff137e71",
+                "masks": {},
+                "mask_high_water": 0,
+                "cards": {
+                  "template:card": 0
+                }
+              },
+              "sound:a4": {
+                "guid": "49f6d3eebd716ab2bd30b1f0c0c5e2e3",
+                "model": "ear-training",
+                "active": true,
+                "content_hash": "de4b84f8c57988870a21e366f26d9a60f948ec0d073799c2636c1f0c6db9cf03",
+                "masks": {},
+                "mask_high_water": 0,
+                "cards": {
+                  "template:listen": 0
+                }
+              },
+              "sound:pitch": {
+                "guid": "243613e674bc7ce27b527d86441c5225",
+                "model": "cloze",
+                "active": true,
+                "content_hash": "484a7e69049b31829577737d847ce8d78698fcc9c8365e601c4e3581320e3882",
+                "masks": {},
+                "mask_high_water": 0,
+                "cards": {
+                  "cloze:1": 0
+                }
+              }
+            },
+            "media_history": {
+              "cell-anatomy.png": {
+                "size": 178597,
+                "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+              },
+              "concert-a.wav": {
+                "size": 16044,
+                "sha1": "c7cba1c7a9cab6dd2f77fd4f8c86c34a90b135e0"
+              },
+              "waveform.svg": {
+                "size": 3373,
+                "sha1": "25b68d616762ad2516136a5b8e15ca16e769b9be"
+              }
+            }
+          }
+        }
+      },
+      "conclusion": "SQLite integrity passes; GUID/model/content/card ordinals, decoded media and identity keys exactly equal. Revision-time and collection/identity payload digests intentionally excluded from semantic comparison; binary hashes are not claimed equal."
+    },
+    {
+      "route": "/generated/showcase.json",
+      "previousSha256": "3ab50d823452001e7ba1c40e3c61bd983ef25c8eb6b6f778e603e54d1924afe8",
+      "currentSha256": "82297d698b83d69b8f9c3ada074f311ad45bb3be663e4612e386a19e362c4c02",
+      "kind": "showcase-provenance",
+      "previousCommit": "76f17ee0c964334c9fd11b426a0a7c73c9487eea",
+      "currentCommit": "1a448e963ee7d28125d0c637e22e398409e0fae8",
+      "conclusion": "Only generated APKG byte sizes/hashes and actual sourceCommit differ; displayed content, counts, comparison and source digest exactly equal."
+    },
+    {
+      "route": "/generated/sound.apkg",
+      "previousSha256": "39950a6a8c9bf13031e571d27196be48aa5abc09a5197d1075cb63b72d6c96d6",
+      "currentSha256": "fa21895be4ff333f2af9c720ec33c6acd059f6286224084e73e2aa6ac0406ac0",
+      "kind": "regenerated-showcase-apkg",
+      "observations": {
+        "notes": [
+          [
+            "d33ae63bc3f25084c113fdf0873a1f95",
+            1752956918798489,
+            "A sound&#39;s pitch depends on its {{c1::frequency}}.\u001fMore cycles per second, higher pitch."
+          ]
+        ],
+        "cards": [
+          [
+            "d33ae63bc3f25084c113fdf0873a1f95",
+            0
+          ]
+        ],
+        "decodedMediaHashes": {},
+        "decodedMediaMapSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "identityExceptRevisionTimesAndPayloadDigests": {
+          "format_version": "ankiforge-identity-v1",
+          "media": {},
+          "identity": {
+            "namespace": "website-sound",
+            "models": {
+              "cloze": {
+                "id": 1752956918798489,
+                "kind": "cloze",
+                "sort_field": "text",
+                "active": true,
+                "content_hash": "d0e3d2b6b7de79a30289ada892e8018c116fdea59a477552deb7486272fc9a13",
+                "fields": {
+                  "back_extra": {
+                    "id": 3991763900988489,
+                    "slot": 1,
+                    "ordinal": 1
+                  },
+                  "text": {
+                    "id": 2163488893335234,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "field_high_water": 2,
+                "templates": {
+                  "card": {
+                    "id": 516983503904310,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "template_high_water": 1
+              }
+            },
+            "notes": {
+              "sound:pitch": {
+                "guid": "d33ae63bc3f25084c113fdf0873a1f95",
+                "model": "cloze",
+                "active": true,
+                "content_hash": "d01851b546be54d88f8718c3f56f89867f142fcdcebceb150bf3c4e138942d3f",
+                "masks": {},
+                "mask_high_water": 0,
+                "cards": {
+                  "cloze:1": 0
+                }
+              }
+            },
+            "media_history": {}
+          }
+        }
+      },
+      "conclusion": "SQLite integrity passes; GUID/model/content/card ordinals, decoded media and identity keys exactly equal. Revision-time and collection/identity payload digests intentionally excluded from semantic comparison; binary hashes are not claimed equal."
+    },
+    {
+      "route": "/generated/spanish-v1.apkg",
+      "previousSha256": "c3c5d1e203b78450a8e75e1c638ab37d5fbc3e37883ef1acd1ddff24ac5fe7ea",
+      "currentSha256": "4785a05f68a70ca3ebd00683186107b5b925b3785ebfabf542dc9f6a0ebeae24",
+      "kind": "regenerated-showcase-apkg",
+      "observations": {
+        "notes": [
+          [
+            "aaf05442c6721ba14cf48d7802f35de0",
+            4446440072942514,
+            "hola\u001fhello"
+          ]
+        ],
+        "cards": [
+          [
+            "aaf05442c6721ba14cf48d7802f35de0",
+            0
+          ]
+        ],
+        "decodedMediaHashes": {},
+        "decodedMediaMapSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "identityExceptRevisionTimesAndPayloadDigests": {
+          "format_version": "ankiforge-identity-v1",
+          "media": {},
+          "identity": {
+            "namespace": "spanish",
+            "models": {
+              "basic": {
+                "id": 4446440072942514,
+                "kind": "normal",
+                "sort_field": "front",
+                "active": true,
+                "content_hash": "de52262149b1d0084ee5eb0f549ec1e3d6d4464114634605a6d88e03fee6f961",
+                "fields": {
+                  "back": {
+                    "id": 2086052983137506,
+                    "slot": 1,
+                    "ordinal": 1
+                  },
+                  "front": {
+                    "id": 1446251127562207,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "field_high_water": 2,
+                "templates": {
+                  "card": {
+                    "id": 2049222423285953,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "template_high_water": 1
+              }
+            },
+            "notes": {
+              "es:hola": {
+                "guid": "aaf05442c6721ba14cf48d7802f35de0",
+                "model": "basic",
+                "active": true,
+                "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+                "masks": {},
+                "mask_high_water": 0,
+                "cards": {
+                  "template:card": 0
+                }
+              }
+            },
+            "media_history": {}
+          }
+        }
+      },
+      "conclusion": "SQLite integrity passes; GUID/model/content/card ordinals, decoded media and identity keys exactly equal. Revision-time and collection/identity payload digests intentionally excluded from semantic comparison; binary hashes are not claimed equal."
+    },
+    {
+      "route": "/generated/spanish-v2.apkg",
+      "previousSha256": "ef83a78684ad3174c04b3fc1c64023b12f77177a418f1011de32048c519ccc80",
+      "currentSha256": "e616ac12014b93adc00d177fd5eab9d7a8f668c572aa8d512d9ed37638a844ee",
+      "kind": "regenerated-showcase-apkg",
+      "observations": {
+        "notes": [
+          [
+            "aaf05442c6721ba14cf48d7802f35de0",
+            4446440072942514,
+            "hola\u001fhello; hi"
+          ]
+        ],
+        "cards": [
+          [
+            "aaf05442c6721ba14cf48d7802f35de0",
+            0
+          ]
+        ],
+        "decodedMediaHashes": {},
+        "decodedMediaMapSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "identityExceptRevisionTimesAndPayloadDigests": {
+          "format_version": "ankiforge-identity-v1",
+          "media": {},
+          "identity": {
+            "namespace": "spanish",
+            "models": {
+              "basic": {
+                "id": 4446440072942514,
+                "kind": "normal",
+                "sort_field": "front",
+                "active": true,
+                "content_hash": "de52262149b1d0084ee5eb0f549ec1e3d6d4464114634605a6d88e03fee6f961",
+                "fields": {
+                  "back": {
+                    "id": 2086052983137506,
+                    "slot": 1,
+                    "ordinal": 1
+                  },
+                  "front": {
+                    "id": 1446251127562207,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "field_high_water": 2,
+                "templates": {
+                  "card": {
+                    "id": 2049222423285953,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "template_high_water": 1
+              }
+            },
+            "notes": {
+              "es:hola": {
+                "guid": "aaf05442c6721ba14cf48d7802f35de0",
+                "model": "basic",
+                "active": true,
+                "content_hash": "8cf2bfeb2f90e43eb0499dcf4c7839dc25e4f2a54351f4c83c2d60c43fa7afd2",
+                "masks": {},
+                "mask_high_water": 0,
+                "cards": {
+                  "template:card": 0
+                }
+              }
+            },
+            "media_history": {}
+          }
+        }
+      },
+      "conclusion": "SQLite integrity passes; GUID/model/content/card ordinals, decoded media and identity keys exactly equal. Revision-time and collection/identity payload digests intentionally excluded from semantic comparison; binary hashes are not claimed equal."
+    },
+    {
+      "route": "/generated/spanish.apkg",
+      "previousSha256": "c3c5d1e203b78450a8e75e1c638ab37d5fbc3e37883ef1acd1ddff24ac5fe7ea",
+      "currentSha256": "4785a05f68a70ca3ebd00683186107b5b925b3785ebfabf542dc9f6a0ebeae24",
+      "kind": "regenerated-showcase-apkg",
+      "observations": {
+        "notes": [
+          [
+            "aaf05442c6721ba14cf48d7802f35de0",
+            4446440072942514,
+            "hola\u001fhello"
+          ]
+        ],
+        "cards": [
+          [
+            "aaf05442c6721ba14cf48d7802f35de0",
+            0
+          ]
+        ],
+        "decodedMediaHashes": {},
+        "decodedMediaMapSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "identityExceptRevisionTimesAndPayloadDigests": {
+          "format_version": "ankiforge-identity-v1",
+          "media": {},
+          "identity": {
+            "namespace": "spanish",
+            "models": {
+              "basic": {
+                "id": 4446440072942514,
+                "kind": "normal",
+                "sort_field": "front",
+                "active": true,
+                "content_hash": "de52262149b1d0084ee5eb0f549ec1e3d6d4464114634605a6d88e03fee6f961",
+                "fields": {
+                  "back": {
+                    "id": 2086052983137506,
+                    "slot": 1,
+                    "ordinal": 1
+                  },
+                  "front": {
+                    "id": 1446251127562207,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "field_high_water": 2,
+                "templates": {
+                  "card": {
+                    "id": 2049222423285953,
+                    "slot": 0,
+                    "ordinal": 0
+                  }
+                },
+                "template_high_water": 1
+              }
+            },
+            "notes": {
+              "es:hola": {
+                "guid": "aaf05442c6721ba14cf48d7802f35de0",
+                "model": "basic",
+                "active": true,
+                "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+                "masks": {},
+                "mask_high_water": 0,
+                "cards": {
+                  "template:card": 0
+                }
+              }
+            },
+            "media_history": {}
+          }
+        }
+      },
+      "conclusion": "SQLite integrity passes; GUID/model/content/card ordinals, decoded media and identity keys exactly equal. Revision-time and collection/identity payload digests intentionally excluded from semantic comparison; binary hashes are not claimed equal."
+    },
+    {
+      "route": "/pagefind/pagefind-entry.json",
+      "previousSha256": "d8c6757411da3adca934448df4f983681a356e9c148690ae76823294d5c0e686",
+      "currentSha256": "541ff60fe3d3d77f397db75077a1e3b8a6963db752fc989fadc6ee04b733d3f4",
+      "kind": "json-key-order-only",
+      "conclusion": "Parsed JSON exactly equal, including language index hashes; object key serialization order differs."
+    }
+  ]
+}

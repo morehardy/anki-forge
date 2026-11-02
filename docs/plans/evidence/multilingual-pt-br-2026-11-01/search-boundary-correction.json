@@ -1,0 +1,8 @@
+{
+  "reason": "Independent technical review corrected scope of schema requirement from public SDK package to tool recipes; no query, intent, expected pages, threshold or rank changed.",
+  "finding": "pt-BR-negative-02 expectedBoundary",
+  "before": "O pacote público 0.3.1 exige ankiforge-project-v2 e rejeita v1. Um resultado pode explicar a conversão necessária, mas não deve afirmar que v1 é aceito sem alterações. Resultado vazio é aceitável.",
+  "after": "As receitas das ferramentas exigem ankiforge-project-v2 e rejeitam v1. Um resultado pode explicar a conversão necessária, mas não deve afirmar que v1 é aceito sem alterações. Resultado vazio é aceitável.",
+  "originalFrozenQueries": "docs/plans/evidence/remaining-locales-2026-11-01/pt-br-search-queries-frozen.json",
+  "fixtureSha256": "99dce779f45b0823f619d2252647946fd5466bafd091a8582041fd7d19b1e3c5"
+}

@@ -1,0 +1,33 @@
+npm warn Unknown user config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> anki-forge-website@0.1.0 precheck
+> npm run prepare:site
+
+npm warn Unknown env config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown user config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> anki-forge-website@0.1.0 prepare:site
+> node scripts/prepare-site.mjs
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: home/en: sourceHash changed; independent source review required
++ actual - expected
+
++ 'b2f0835f5ced1d93648f7fc5eb53c7bd1fd858edd61f6f9673352bdf2e8066ce'
+- '6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0'
+
+    at checkSourceReview (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/check-content.mjs:93:64)
+    at async checkContent (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/check-content.mjs:80:27)
+    at async file:///Users/hp/Desktop/2026/anki-forge/website/scripts/prepare-site.mjs:23:1 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'b2f0835f5ced1d93648f7fc5eb53c7bd1fd858edd61f6f9673352bdf2e8066ce',
+  expected: '6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

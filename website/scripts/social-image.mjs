@@ -2,7 +2,7 @@ import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 import { createTranslator } from '../src/i18n/messages.mjs';
-import { localeIds, socialImagePath } from '../locale-model.mjs';
+import { locales, localeIds, socialImagePath } from '../locale-model.mjs';
 
 const escape = value => String(value).replace(/[<>&"']/g, character => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' })[character]);
 
@@ -23,9 +23,10 @@ export async function prepareBrandAssets(website, example) {
   // A share graphic drawn from the same fields as the compiled Basic deck.
   for (const locale of localeIds) {
   const t = createTranslator(locale);
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  const fontFamily = locales[locale].socialFontFamily ?? 'Arial, Noto Sans CJK SC, PingFang SC, DejaVu Sans, sans-serif';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" lang="${locale}" xml:lang="${locale}" width="1200" height="630" viewBox="0 0 1200 630">
     <rect width="1200" height="630" fill="#f8faf9"/>
-    <g font-family="Arial, Noto Sans CJK SC, PingFang SC, DejaVu Sans, sans-serif">
+    <g font-family="${escape(fontFamily)}">
       ${icon.replace('<svg ', '<svg x="64" y="45" width="48" height="48" ').replace('#fdfefd', '#f8faf9')}
       <text x="124" y="84" fill="#116e60" font-size="30" font-weight="700">ankiforge</text>
       <text x="64" y="245" fill="#142d29" font-size="70" font-weight="700" letter-spacing="-3">${t('social.line1')}</text>

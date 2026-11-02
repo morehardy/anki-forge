@@ -1,0 +1,58 @@
+# Anki Forge
+
+> Anki Forge は Rust、Node / TypeScript、Python のコードから Anki APKG デッキを生成します。
+
+現在の公開パッケージのバージョン: 0.3.1。 通常のエクスポートに Anki は必要ありません。公開パッケージの API とソースビルドは異なります。更新には前回配布時のオリジナル APKG を保持してください。Anki のインポート設定と新しいローカル編集が結果に影響する場合があります。
+
+- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)
+- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)
+- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)
+
+## ここから始める
+
+- [コードから Anki デッキを生成する](https://morehardy.github.io/anki-forge/ja/docs/index.md): 言語を選んで最初のデッキを作り、メディア、テンプレート、繰り返し実行できる更新を追加します。
+- [プログラミング言語を選ぶ](https://morehardy.github.io/anki-forge/ja/docs/languages/index.md): Rust、Node、Python の公開パッケージをインストールして、最初の Anki デッキをエクスポートします。
+- [互換性と検証済みの環境](https://morehardy.github.io/anki-forge/ja/docs/compatibility/index.md): 公開パッケージ、検証した実行環境、Anki クライアントでのインポートと再生の条件を確認します。
+
+## クイックスタート
+
+- [Rust で Anki カードを生成する](https://morehardy.github.io/anki-forge/ja/docs/quickstart/index.md): Rust の公開パッケージをインストールし、スペイン語のカードを作成して、後から使える APKG ファイルとして保存します。
+- [Node.js で Anki カードを生成する](https://morehardy.github.io/anki-forge/ja/docs/node-quickstart/index.md): 公開 Node パッケージをインストールし、完全な JavaScript プログラムで最初の永続 APKG をエクスポートします。
+- [Python で Anki カードを生成する](https://morehardy.github.io/anki-forge/ja/docs/python-quickstart/index.md): 仮想環境に公開 Python パッケージをインストールし、短い完全なプログラムで永続 APKG を作成します。
+
+## API リファレンス
+
+- [公開 API の概要](https://morehardy.github.io/anki-forge/ja/docs/api/index.md): 作成、メディア、診断、更新に使う Rust、Python、Node の API を探せます。
+- [Rust API ガイド](https://morehardy.github.io/anki-forge/ja/docs/rust-api/index.md): 公開される作成メソッド、ビルドの既定値、レポート、診断の動作を確認できます。
+- [Node と TypeScript API](https://morehardy.github.io/anki-forge/ja/docs/node-api/index.md): Node SDK の作成メソッド、非同期処理、メディア、所有権、型付きレポート、TypeScript の設定を確認できます。
+- [Python API リファレンス](https://morehardy.github.io/anki-forge/ja/docs/python-api/index.md): Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、候補の事前生成と保存に使う API を確認できます。
+
+## 作業別ガイド
+
+- [Python で CSV を Anki カードに変換する](https://morehardy.github.io/anki-forge/ja/docs/csv-to-anki/index.md): UTF-8 の語彙表を Anki APKG に変換する完全な Python スクリプト。CSV サンプル、安定したノート ID、インポート確認の手順を含みます。
+- [JSON から Anki デッキを生成・更新する](https://morehardy.github.io/anki-forge/ja/docs/json-to-anki/index.md): Rust、Python、TypeScript で JSON を読み取り、画像と音声を同梱し、解答だけを変更する APKG 更新を確認します。
+- [AI を使った Anki カード作成：学習メモから APKG へ](https://morehardy.github.io/anki-forge/ja/docs/ai-anki-cards/index.md): AI アシスタントでカードの下書きを作り、解答を確認して Anki Forge で APKG を生成。CSV の手順とコーディングアシスタント向け依頼文を用意しています。
+- [Anki の Basic と Cloze カードを生成する](https://morehardy.github.io/anki-forge/ja/docs/cards/index.md): コードで質問・解答の Basic カードと穴埋めの Cloze カードを生成。検証済みの Rust サンプルは2件のノートから3枚のカードを作ります。
+- [Anki カードに画像と音声を追加する](https://morehardy.github.io/anki-forge/ja/docs/media/index.md): Rust、Python、Node.js で画像・音声をインポートしてカードを組み立て、エクスポート名、MIME タイプ、メディア上限を管理します。
+- [Anki のカードテンプレート、CSS、メディアを再使用する](https://morehardy.github.io/anki-forge/ja/docs/templates/index.md): Rust、Python、Node.js でテンプレート、CSS、メディアのバンドルから、通常・Cloze カード用の再使用可能なノートタイプを読み込みます。
+- [Anki の画像穴埋めカードを生成する](https://morehardy.github.io/anki-forge/ja/docs/image-occlusion/index.md): Rust、Python、Node.js で画像と指定した矩形マスクから画像穴埋めカードを作ります。2つの遮蔽モードに対応しています。
+- [安定したノート ID で Anki デッキを更新する](https://morehardy.github.io/anki-forge/ja/docs/updates/index.md): ノート ID を維持し、前回配布時のオリジナル APKG を基準にビルドして、比較を確認してから新バージョンを配布します。
+
+## 制約
+
+- [ビルドと出力の保証](https://morehardy.github.io/anki-forge/ja/docs/build-guarantees/index.md): 一時成果物、パスの保護、検査の上限、確認済み候補の公開を理解します。
+- [トラブルシューティング](https://morehardy.github.io/anki-forge/ja/docs/troubleshooting/index.md): インストール、メディア、テンプレート、識別情報、出力のエラーを解決します。
+
+## Optional
+
+- [Anki Forge と genanki：作業に合う選択](https://morehardy.github.io/anki-forge/ja/docs/anki-forge-vs-genanki/index.md): Anki APKG の作成手順、実行環境の要件、更新の確認、移行コストを比較します。
+- [genanki からの移行](https://morehardy.github.io/anki-forge/ja/docs/genanki-migration/index.md): genanki のモデル、フィールド、デッキ、メディアを Anki Forge の概念に対応付け、識別情報を引き継ぐ条件を確認します。
+- [ソースから SDK をビルドする](https://morehardy.github.io/anki-forge/ja/docs/development/index.md): 開発・ソース環境。 チェックアウトしたソースから SDK とサンプルをビルドし、公開パッケージとソース専用の機能を区別します。
+- [Rust で最初の Anki デッキを作る](https://morehardy.github.io/anki-forge/ja/blog/your-first-anki-deck/index.md): 2026-09-22公開の過去の記事。 短い Rust プログラムから、Anki で開けるスペイン語のカードを作成します。
+- [表現を変えても、ノートの識別情報は保つ](https://morehardy.github.io/anki-forge/ja/blog/stable-ids-and-deck-updates/index.md): 2026-09-22公開の過去の記事。 生成した Anki デッキの更新で、安定 ID とビルドの基準パッケージがどう連携するかを説明します。
+- [GitHub](https://github.com/morehardy/anki-forge): ソースリポジトリと開発用リソース。
+- [English](https://morehardy.github.io/anki-forge/llms.txt): Englishの AI 向けドキュメント索引。
+- [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): 简体中文の AI 向けドキュメント索引。
+- [Español](https://morehardy.github.io/anki-forge/es/llms.txt): Españolの AI 向けドキュメント索引。
+- [Português do Brasil](https://morehardy.github.io/anki-forge/pt-br/llms.txt): Português do Brasilの AI 向けドキュメント索引。
+- [Deutsch](https://morehardy.github.io/anki-forge/de/llms.txt): Deutschの AI 向けドキュメント索引。

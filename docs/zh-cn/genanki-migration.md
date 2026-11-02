@@ -33,6 +33,6 @@ project.build(BuildOptions.to('vocabulary.apkg'))
 
 字符串是纯文本；有意加入 HTML 时使用 `Content.html(...)`。通过 `media.image()`、`media.sound()` 和 `Content.sequence(...)` 组合内容。原路径被移除或编辑后，文件快照仍有效。原始 HTML、CSS 或脚本引用的依赖，必须在模型构建器上用 `.asset(media)` 或通过 `project.add_asset(media)` 显式声明。
 
-后续发布创建具有相同命名空间和数据键的新 Project，并调用 `BuildOptions.to(next_path).update_from(previous_original_apkg)`。原始 APKG 提供完整身份证据。此流程不会从任意旧包恢复身份，也不承诺自动转换已有 genanki 数字 ID/GUID。除非经过单独验证的数据迁移建立了对应关系，否则应把新模型的首次分发视为明确的身份边界。
+后续发布创建具有相同命名空间和数据键的新 Project，并调用 `BuildOptions.to(next_path).update_from(previous_original_apkg)`。原始 APKG 提供完整标识映射与修订信息。此流程不会从任意旧包恢复身份，也不承诺自动转换已有 genanki 数字 ID/GUID。除非经过单独验证的数据迁移建立了对应关系，否则应把新模型的首次分发视为明确的身份边界。
 
 参见[入门](../python/quick-start.md)、[API 参考](../python/api.md)和[更新策略](../python/diagnostics.md)。

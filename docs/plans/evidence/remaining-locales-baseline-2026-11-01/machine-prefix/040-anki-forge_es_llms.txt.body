@@ -1,0 +1,55 @@
+# Anki Forge
+
+> Anki Forge genera mazos APKG de Anki a partir de código en Rust, Node.js/TypeScript o Python.
+
+Versión actual del paquete público: 0.3.1. La exportación normal no requiere Anki. Las API de los paquetes públicos difieren de las versiones compiladas desde el código fuente. Conserva el APKG original de la distribución anterior para las actualizaciones; las opciones de importación de Anki y los cambios locales más recientes pueden afectar al resultado.
+
+- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)
+- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)
+- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)
+
+## Empieza aquí
+
+- [Crea mazos de Anki con código](https://morehardy.github.io/anki-forge/es/docs/index.md): Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles.
+- [Elige tu lenguaje de programación](https://morehardy.github.io/anki-forge/es/docs/languages/index.md): Instala el paquete publicado de Rust, Node.js o Python y exporta tu primer mazo de Anki.
+- [Compatibilidad de Anki Forge y entornos verificados](https://morehardy.github.io/anki-forge/es/docs/compatibility/index.md): Consulta los paquetes públicos, los entornos probados y las condiciones de importación y reproducción en Anki.
+
+## Primeros pasos
+
+- [Genera un APKG de Anki con Rust](https://morehardy.github.io/anki-forge/es/docs/quickstart/index.md): Instala el paquete de Rust, crea una tarjeta de vocabulario y exporta un archivo APKG persistente con un programa completo.
+- [Genera un APKG de Anki con Node.js](https://morehardy.github.io/anki-forge/es/docs/node-quickstart/index.md): Instala el paquete publicado de Node.js y exporta tu primer mazo con un programa completo. Continúa con TypeScript, imágenes y actualizaciones.
+- [Genera un APKG de Anki con Python](https://morehardy.github.io/anki-forge/es/docs/python-quickstart/index.md): Instala el wheel publicado de Python y crea tu primer archivo APKG de Anki con un programa completo y claves de nota estables.
+
+## Referencias de las API
+
+- [Resumen de la API pública](https://morehardy.github.io/anki-forge/es/docs/api/index.md): Encuentra las API de Rust, Python y Node para crear notas, añadir recursos multimedia, diagnosticar errores y revisar actualizaciones.
+- [Referencia de la API de Rust](https://morehardy.github.io/anki-forge/es/docs/rust-api/index.md): Consulta los métodos de creación de contenido, las opciones de generación, los informes y los errores públicos de Rust.
+- [API de Node y TypeScript](https://morehardy.github.io/anki-forge/es/docs/node-api/index.md): Métodos públicos de Node, operaciones asíncronas, opciones de generación, gestión de archivos de salida e informes.
+- [API de Python](https://morehardy.github.io/anki-forge/es/docs/python-api/index.md): Project, recursos multimedia, opciones de generación, informes y gestión de la vida útil de los archivos temporales.
+
+## Guías por tarea
+
+- [CSV a Anki: crea tarjetas con Python](https://morehardy.github.io/anki-forge/es/docs/csv-to-anki/index.md): Convierte una hoja de vocabulario CSV UTF-8 en un APKG con un script completo de Python, ID de nota estables y comprobaciones de importación.
+- [Genera y actualiza mazos de Anki desde JSON](https://morehardy.github.io/anki-forge/es/docs/json-to-anki/index.md): Lee JSON con Rust, Python o TypeScript, incluye imágenes y audio y revisa una actualización de APKG que solo cambia una respuesta.
+- [Crea tarjetas de Anki con ayuda de IA](https://morehardy.github.io/anki-forge/es/docs/ai-anki-cards/index.md): Prepara tarjetas a partir de tus apuntes con un asistente de IA, revisa las respuestas y exporta un APKG con Anki Forge mediante CSV o código.
+- [Crea tarjetas Basic y Cloze de Anki](https://morehardy.github.io/anki-forge/es/docs/cards/index.md): Genera desde código tarjetas Basic de Anki de pregunta y respuesta y tarjetas Cloze con huecos. Un ejemplo verificado de Rust crea dos notas y tres tarjetas.
+- [Añade imágenes y audio a tus tarjetas Anki](https://morehardy.github.io/anki-forge/es/docs/media/index.md): Añade imágenes y audio a las tarjetas Anki que generes con Rust, Python o Node.js. Importa archivos, combina contenido y gestiona nombres de exportación, tipos MIME y límites de importación.
+- [Reutiliza plantillas de Anki, CSS y recursos multimedia](https://morehardy.github.io/anki-forge/es/docs/templates/index.md): Carga un tipo de nota de Anki reutilizable desde un paquete de plantillas, CSS y recursos multimedia, para tarjetas normales o Cloze, con Rust, Python o Node.js.
+- [Genera tarjetas Anki con oclusión de imágenes](https://morehardy.github.io/anki-forge/es/docs/image-occlusion/index.md): Crea tarjetas de oclusión de imágenes de Anki desde código con Rust, Python o Node.js: proporciona la imagen y las máscaras rectangulares y elige uno de los dos modos de oclusión.
+- [Actualiza mazos de Anki con ID de nota estables](https://morehardy.github.io/anki-forge/es/docs/updates/index.md): Publica una nueva versión de un mazo de Anki generado: conserva los ID de nota estables, parte del APKG original anterior y revisa la comparación antes de distribuirlo.
+
+## Limitaciones
+
+- [Garantías de generación y de los archivos APKG](https://morehardy.github.io/anki-forge/es/docs/build-guarantees/index.md): Comprende la vida útil de los archivos, los límites de inspección y la publicación de una versión candidata revisada.
+- [Soluciona errores de Anki Forge](https://morehardy.github.io/anki-forge/es/docs/troubleshooting/index.md): Diagnostica errores de instalación, notas, recursos multimedia, plantillas, identidad y publicación de archivos.
+
+## Optional
+
+- [Anki Forge frente a genanki: cuál elegir](https://morehardy.github.io/anki-forge/es/docs/anki-forge-vs-genanki/index.md): Compara la creación de APKG, los entornos de ejecución, la revisión de actualizaciones y los costes de migración de Anki Forge y genanki.
+- [Pasar de genanki a Anki Forge](https://morehardy.github.io/anki-forge/es/docs/genanki-migration/index.md): Adapta notas, modelos, plantillas y recursos multimedia de genanki al modelo de Anki Forge y sus claves estables.
+- [Compila los SDK desde el código fuente](https://morehardy.github.io/anki-forge/es/docs/development/index.md): Entorno de desarrollo y compilación desde el código fuente. Compila los SDK y ejecuta los ejemplos desde el repositorio. Distingue estas compilaciones de los paquetes publicados.
+- [Crea tu primer mazo de Anki con Rust](https://morehardy.github.io/anki-forge/es/blog/your-first-anki-deck/index.md): Artículo histórico publicado el 2026-09-22. De un pequeño programa en Rust a una tarjeta de vocabulario en español que puedes abrir en Anki.
+- [Identidades estables para actualizar mazos de Anki](https://morehardy.github.io/anki-forge/es/blog/stable-ids-and-deck-updates/index.md): Artículo histórico publicado el 2026-09-22. Cómo combinar ID estables y un paquete de referencia al actualizar un mazo de Anki generado.
+- [GitHub](https://github.com/morehardy/anki-forge): Repositorio y recursos de desarrollo.
+- [English](https://morehardy.github.io/anki-forge/llms.txt): Índice de documentación para IA en English.
+- [简体中文](https://morehardy.github.io/anki-forge/zh-cn/llms.txt): Índice de documentación para IA en 简体中文.

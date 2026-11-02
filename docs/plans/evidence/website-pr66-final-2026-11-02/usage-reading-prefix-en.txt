@@ -1,0 +1,375 @@
+
+rust-basic http://127.0.0.1:63533/anki-forge/docs/quickstart/
+Generate Anki flashcards with Rust
+
+Use Rust 1.92 or later. For another language, choose Node / TypeScript or Python.
+
+Install
+Section titled “Install”
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Export your first deck
+Section titled “Export your first deck”
+
+Save this complete program as src/main.rs:
+
+Copy code
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+The program writes a persistent spanish.apkg. Open it in Anki, import it and study hola → hello in the Spanish deck. Exporting needs no Anki installation.
+
+The namespace spanish and stable key es:hola identify this note through later content changes. You can also download the website’s Basic example.
+
+Continue
+Section titled “Continue”
+
+Follow the JSON to Anki recipe for a complete media and update task.
+
+Add images and audio, custom note types, or Image Occlusion. Keep the original distribution APKG before comparing and publishing an update. Read the Rust API or verified environments for details.
+
+View Markdown
+
+Edit page
+Previous
+Choose your language
+Next
+Add Anki Forge to a Rust application
+
+Anki Forge. Open source Anki APKG generation, powered by Rust.
+
+Articles
+RSS
+MIT license
+AI documentation index
+
+python-basic http://127.0.0.1:63533/anki-forge/docs/python-quickstart/
+Generate Anki flashcards with Python
+
+Create and activate a virtual environment, then install the public PyPI package:
+
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+On Windows, activate with .venv\Scripts\Activate.ps1. Use ordinary CPython 3.11 or later and a matching platform wheel; CPython 3.11–3.14 is covered by recorded release checks; see verified environments.
+
+Export a deck
+Section titled “Export a deck”
+
+Save this as main.py:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Open the persistent spanish.apkg in Anki. It contains hola → hello in Spanish. Keep namespace spanish and note key es:hola stable for later edits. Exporting does not require Anki to be installed.
+
+Continue
+Section titled “Continue”
+
+For a vocabulary spreadsheet, follow CSV to Anki. To draft cards from source notes, start with AI-assisted card generation.
+
+For a complete media and update task, follow JSON to Anki.
+
+Images and audio and Python media API
+Custom note types and template bundles
+Image Occlusion
+Compare and update
+Python API and diagnostics
+Move from genanki
+
+For native source builds, use source builds.
+
+View Markdown
+
+Edit page
+Previous
+Generate Anki flashcards with Node.js
+Next
+Python API transition
+
+Anki Forge. Open source Anki APKG generation, powered by Rust.
+
+Articles
+RSS
+MIT license
+AI documentation index
+
+node-basic http://127.0.0.1:63533/anki-forge/docs/node-quickstart/
+Generate Anki flashcards with Node.js
+
+Use Node.js 22.13 or later. In a new application directory:
+
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+This installs the public npm package and the matching native optional dependency. See verified environments for platform coverage.
+
+Export a deck
+Section titled “Export a deck”
+
+Save this as main.mjs:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Open the persistent spanish.apkg in Anki. It contains hola → hello in Spanish. Keep namespace spanish and key es:hola stable for later edits. Closing the persistent artifact leaves the file on disk. Exporting does not require Anki to be installed.
+
+TypeScript and next tasks
+Section titled “TypeScript and next tasks”
+
+The JSON to Anki recipe includes a complete TypeScript compile-and-run path.
+
+Use .mjs for ESM, or require('ankiforge') for CommonJS. TypeScript declarations ship with the package; see TypeScript configuration.
+
+Images and audio and Node media API
+Custom note types and template bundles
+Image Occlusion
+Compare and update
+Node API and troubleshooting
+
+Source builds and local packaging are in source builds.
+
+View Markdown
+
+Edit page
+Previous
+Rust authoring guide
+Next
+Generate Anki flashcards with Python
+
+Anki Forge. Open source Anki APKG generation, powered by Rust.
+
+Articles
+RSS
+MIT license
+AI documentation index
+
+json-media http://127.0.0.1:63533/anki-forge/docs/json-to-anki/
+Generate and update Anki decks from JSON
+
+Read three biology questions from JSON, add a shared image and audio clip, and export an original APKG plus a reviewed answer-only update. Each release should contain 3 notes, 3 cards and 2 media files. Choose one SDK below; each is a complete program. Normal export needs no Anki installation.
+
+Maintained by Anki Forge maintainers · reviewed 2026-10-25.
+
+Shared inputs
+Section titled “Shared inputs”
+
+Download v1.json, v2.json, cell.png and tone.wav. The image is a cell diagram; the audio is a short generated tone, not spoken vocabulary. In each new application directory, put these four files in recipe/:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Both JSON files contain namespace, deck and three notes with durable id, front and back values. v2 changes only the first answer. The caller parses JSON; Anki Forge handles authoring and APKG generation. For untrusted inputs, validate your application’s schema before constructing notes.
+
+Rust
+Section titled “Rust”
+
+Rust 1.92+. JSON parsing uses serde and serde_json. Use public Anki Forge 0.3.1.
+
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Save as src/main.rs (create recipe/ alongside Cargo.toml):
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Python
+Section titled “Python”
+
+Ordinary CPython 3.11+ with a platform wheel; 3.11–3.14 is covered by release checks. On Windows, activate with .venv\Scripts\Activate.ps1. Use public Anki Forge 0.3.1.
+
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Save as main.py (create recipe/ alongside main.py):
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Node
+Section titled “Node”
+
+Node.js 22.13+ and a matching native optional dependency. This program compiles TypeScript to JavaScript and runs on Node.js. Use public Anki Forge 0.3.1.
+
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Save as main.mts (create recipe/ alongside main.mts):
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Check and import the result
+Section titled “Check and import the result”
+
+The selected program prints output/<language>/v2.apkg. Keep v1.apkg alongside it; comparison.json and review.json record RISK.NOTE_CHANGED, no added or removed notes, and policy.allows_publication: true for this answer-only edit. The program checks the policy again on the prepared candidate before publishing. It refuses to reuse an output directory containing either release.
+
+Import v1.apkg into Anki: expect the Biology deck with three Basic cards, the cell image and the tone. Then import v2.apkg: check that the first answer becomes “The basic structural and functional unit of life”, with three notes remaining. The namespace biology-json identifies this publishing project. Each business ID is a stable note key; Anki Forge derives the GUID used by Anki from that identity. Keep the namespace and those three keys unchanged.
+
+Use the original distribution v1 APKG as the update baseline, never an Anki re-export. Client import matching, local edits and scheduling depend on Anki version, note types and import settings; validate your target client before a release. Importing a package does not remove notes omitted from a later package. A successful compare/build is not a guarantee about every learner’s review state.
+
+See update conditions, media, API navigation and library selection.
+
+View Markdown
+
+Edit page
+Previous
+CSV to Anki: generate flashcards with Python
+Next
+AI-assisted Anki flashcards: from notes to APKG
+
+Anki Forge. Open source Anki APKG generation, powered by Rust.
+
+Articles
+RSS
+MIT license
+AI documentation index
+
+original-baseline-update http://127.0.0.1:63533/anki-forge/docs/updates/
+Update Anki decks with stable note IDs
+
+Publish corrections or new cards for an Anki deck you have already distributed. Stable note IDs help Anki Forge and Anki recognize existing notes instead of treating them as new ones; Anki’s import settings and newer local edits still affect what changes.
+
+Keep the project namespace and note/model/field/template keys stable. Build each new release from the previous original distribution APKG, which carries complete versioned identity evidence. Save that package with its source revision.
+
+Run two versions and compare
+Section titled “Run two versions and compare”
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+This writes spanish-v1.apkg and spanish-v2.apkg, compares the changed answer, and checks the updated package counts. The executable source is:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+compare completes successfully even when findings would block publication. Read comparison.policy().allows_publication() separately from the original risk level and evidence. build(...update_from(...)) runs the same analysis and returns BuildError if its policy blocks the candidate, before publication.
+
+Policy and inspection limits
+Section titled “Policy and inspection limits”
+
+This full program selects a stricter threshold and uses the same configuration for comparison and update:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+The default policy blocks High and Critical findings. After reviewing a specific category, a caller can deliberately choose UpdatePolicy::default().allow(RiskCode::NoteRemoved). It accepts all findings in that category, retaining their original level and evidence. It does not claim to approve selected notes individually. An allowance with no matching finding produces a warning; unknown risk codes are rejected. Do not automatically allow every code returned by a comparison.
+
+Missing or corrupt evidence, namespace mismatch, invalid candidate data and inspection limits are hard errors, not allowable risk categories. Comparison returns an error with completed observations when analysis cannot finish. Explicit policy on a create request without update_from is a configuration error regardless of setter order.
+
+Evidence and identity
+Section titled “Evidence and identity”
+
+The package includes ankiforge-identity.json with the ankiforge-identity-v1 format. It binds model/config IDs, note GUIDs, historical field/template slots, card/mask ordinals, revisions and media to the actual collection and payloads. Anki re-export does not preserve this evidence and is not a usable update baseline. Missing evidence is never silently reconstructed.
+
+Display-name and content edits preserve identity keys. Unchanged content keeps its baseline revision; changed content advances it. Reordering fields/templates preserves historical mappings. Retired identities remain reserved so that restoring the same key can reuse them. A note key cannot move to another model, and a model key cannot change between normal and Cloze kinds.
+
+Client import behavior and release review
+Section titled “Client import behavior and release review”
+
+An APKG is a distribution package, not deletion synchronization. Omitting notes, fields, templates or masks does not delete existing learner data. Field/template schema changes and sort-field changes are high-risk because Anki merge and import settings affect their behavior. Schema changes can copy models or update target note timestamps before note-content comparison.
+
+Test first import and updates into an existing collection on the clients you support. Check fields, GUIDs, card sets, local edits and existing scheduling with the intended merge and note-update settings. Stable identity alone does not promise that newer local edits are overwritten or deleted history is restored.
+
+Write candidates to a path separate from the archived baseline. After review, distribute the accepted package and retain it as the next release’s evidence. See build guarantees for ownership and publication facts.
+
+Build once, review then publish
+Section titled “Build once, review then publish”
+
+This API is included in the public 0.3.1 package.
+
+Build once, inspect the report, then publish the same candidate file. Reviewing and then running a second ordinary build creates another candidate; prepared publication keeps the actual APKG tied to the reviewed report.
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+From the pinned source checkout, save the complete program above as anki_forge/examples/docs_publication.rs (this guide adds the example; it is not bundled in 1199196). Then run:
+
+Terminal window
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+The example writes spanish-original.apkg and, when the policy allows publication, spanish-reviewed.apkg to the repository root. Preparation does not publish the destination. Review the findings and test your client import before approving distribution; the example automatically publishes only this simple content edit when its policy allows it. The benchmark does not measure this workflow.
+
+See build lifecycle, Rust API, Node API and Python API.
+
+View Markdown
+
+Edit page
+Previous
+Generate Anki Image Occlusion cards
+Next
+Rust authoring guide
+
+Anki Forge. Open source Anki APKG generation, powered by Rust.
+
+Articles
+RSS
+MIT license
+AI documentation index
+
+troubleshooting http://127.0.0.1:63533/anki-forge/docs/troubleshooting/
+Troubleshooting
+
+Use the structured kind and code from the failing operation, plus its source chain and observations. Display text is for humans and may change. A failed operation and a completed comparison whose policy blocks publication are different results.
+
+Installation
+Section titled “Installation”
+Symptom	Check
+Rust rejects the toolchain	Run rustc --version; use Rust 1.92+ and check cargo tree -i ankiforge for the installed version
+Node cannot load its native package	Run node -p "process.platform + '/' + process.arch" and npm ls ankiforge; reinstall with npm install --include=optional ankiforge@0.3.1
+Node reports a native/wrapper mismatch	Use matching package versions; reinstall from the same registry version, or rebuild both from the same checkout
+Python cannot load its extension	Run python -m pip show ankiforge and python -m pip debug --verbose; check interpreter and wheel OS/CPU tags
+Python selects a source distribution	Choose a matching wheel/interpreter, or follow source builds with a compiler
+
+See verified environments, Node setup and Python setup.
+
+Models and notes
+Section titled “Models and notes”
+Symptom	Correction
+Invalid or empty key	Supply an explicit stable key; display names are separate
+NOTE.KEY_DUPLICATE	Give each logical source record one unique key
+NOTE.FIELD_UNKNOWN	Assign the field’s key, not its display name
+NOTE.FIELD_REQUIRED	Fill fields declared required() before adding
+NOTE.MODEL_CONFLICT	Reuse the same completed model for one model key
+Template reference error	Use declared keys in templates; inspect the original source byte range
+HTML appears literally	Use Content::html only for intentional markup
+Missing Cloze cards	Supply {{c1::answer}} syntax with supported numbers 1–500
+
+An add failure is atomic. Correct the note/model and retry; no partial model or media registration needs to be undone. Model builders must finish with .build() before they can create custom notes.
+
+Media and templates
+Section titled “Media and templates”
+Symptom	Correction
+File import fails	Check the source at Media::file time; later source deletion is supported
+MIME/content mismatch	Pass the actual MIME type to the bytes constructor
+Export-name conflict	Choose unique portable names; case and Unicode normalization variants conflict
+Missing raw HTML/CSS/script resource	Declare it with model asset or project add_asset
+Media import exceeds a limit	Explicitly raise MediaLimits.max_bytes before importing
+Build inspection exceeds a limit	Adjust the relevant InspectLimits counter for this operation
+Bundle load fails	Use bundle-v2, explicit keys, key-based templates and paths within the bundle
+IO rectangle fails	Check decoded display dimensions, finite coordinates and unique mask keys
+
+Text defaults are uniform across all note kinds. Media nodes collect dependencies; manually writing a filename does not import its bytes. A valid package still requires client playback checks for the codec/font you intend to use.
+
+Updates and outputs
+Section titled “Updates and outputs”
+
+Use an original distribution APKG containing complete identity evidence as the baseline. Anki re-exported packages do not retain that evidence. A namespace mismatch or corrupt evidence cannot be accepted by an update policy.
+
+A completed comparison can have allows_publication == false. Inspect original findings and evidence before selecting an explicit risk-category allowance. Do not blanket-allow every result. The same policy must be passed to the actual update build if you want the same decision. A policy on a create-only request is an error.
+
+If a temporary path disappeared, retain its output/artifact owner until all readers finish. Reports and JSON snapshots are not owners. For persistence failures, inspect the error’s publication stage and durability: an error can be returned after a destination was already published. See output guarantees.
+
+View Markdown
+
+Edit page
+Previous
+Compatibility and releases
+Next
+Python diagnostics
+
+Anki Forge. Open source Anki APKG generation, powered by Rust.
+
+Articles
+RSS
+MIT license
+AI documentation index

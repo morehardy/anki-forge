@@ -19,4 +19,4 @@
 | Diff、lockfile 与更新安全开关 | `compare(CompareOptions.against(...))`、`BuildOptions.update_from(...)` |
 | Runtime 子进程包 | 进程内 PyO3 绑定，调用默认 Rust API |
 
-只有携带当前身份证据的完整原始分发 APKG 才能作为更新基线。不会自动恢复旧模板包和旧 APKG 证据。新流程见 README 与可执行示例。
+只有携带当前标识映射与修订信息的完整原始分发 APKG 才能作为更新基线。不会自动恢复旧模板包和旧 APKG 证据。新流程见 README 与可执行示例。

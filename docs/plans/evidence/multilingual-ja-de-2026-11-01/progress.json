@@ -1,0 +1,83 @@
+{
+  "status": "complete-local-candidates",
+  "scope": "Complete Japanese then German full local candidates, continuing the approved implement workflow; no push/deployment authorization inferred.",
+  "baselineCommit": "231bcd56b71765f71b6700141e7237d8561f20bc",
+  "branch": "codex/multilingual-common",
+  "remoteMainObserved": {
+    "commit": "ad98a6f5b9293e7657429e3ed423d11e55259a74",
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es"
+    ],
+    "source": "GitHub connector fetch_commit(main) and fetch_file(website/release-locales.json,main), 2026-11-01"
+  },
+  "implementationSequence": [
+    "Japanese: five-language source review and dual-configuration 100 post-build tasks",
+    "German: six-language source review and dual-configuration 120 post-build tasks"
+  ],
+  "authors": {
+    "ja": "/root/ja_full_author: dedicated live-language files, root owns shared integration",
+    "de": "/root/de_full_author: excluded evidence staging until Japanese acceptance complete"
+  },
+  "queries": "queries/authorship.json, independently written and frozen before production search vocabulary or ranking output was inspected",
+  "publicationBoundary": "Keep the verified three-language production baseline unchanged. P0 then Portuguese publication and production-baseline advancement remain prior deployment steps; candidate snapshots must not impersonate published historical surfaces.",
+  "japanese": {
+    "status": "local-acceptance-complete",
+    "sourceCommit": "5a50666dbc15e9aa7342de1d3d6587d1a9f147bd",
+    "inputSha256": "85f5276a59a50143053000a91fe702d76521e13fb9232db86a2498016a029d1f",
+    "independentPostBuildTasks": 100,
+    "unitTests": 149,
+    "acceptance": "ja/acceptance.md",
+    "candidateBranch": "codex/japanese-candidate",
+    "acceptanceCommit": "270f26aa5653a0f56297f46fd35e586da444622b"
+  },
+  "german": {
+    "status": "local-acceptance-complete",
+    "locales": 6,
+    "search": {
+      "initial": {
+        "core": 12,
+        "positive": 21,
+        "negative": 4
+      },
+      "corrected": {
+        "core": 12,
+        "positive": 25,
+        "negative": 5
+      }
+    },
+    "queriesAndThresholdsUnchanged": true,
+    "previewTypecheck": "123 files; no errors/warnings/hints",
+    "realDocExecutions": 14,
+    "realApkgChecks": 23,
+    "sourceCommit": "7b5f539ec2b8c34a0a9ac052531cda9571e97725",
+    "inputSha256": "c1c3b90c31ad677b850f62e53bb1634d8a1696034faa7543fc877246ee6c0695",
+    "unitTests": 149,
+    "strictTypecheck": "123 files; no errors/warnings/hints",
+    "finalEngineeringConfigurations": [
+      "prefix",
+      "root"
+    ],
+    "prefixFinalAcceptance": "passed",
+    "rootFinalAcceptance": "passed",
+    "independentPostBuildTasks": 120,
+    "acceptance": "de/acceptance.md",
+    "mimeIssue": "closed-in-both-final-environments",
+    "acceptanceCommit": "8a74534717a47fc923c182b83ada8618ebce62ee"
+  },
+  "finalReview": {
+    "baselineCommit": "231bcd56b71765f71b6700141e7237d8561f20bc",
+    "reviewedCommit": "8a74534717a47fc923c182b83ada8618ebce62ee",
+    "standards": {
+      "findings": 0,
+      "highestSeverity": null,
+      "report": "standards-review.md"
+    },
+    "spec": {
+      "findings": 0,
+      "highestSeverity": null,
+      "report": "spec-review.md"
+    }
+  }
+}

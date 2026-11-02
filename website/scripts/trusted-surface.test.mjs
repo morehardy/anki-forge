@@ -8,7 +8,8 @@ test('CI trusts the base revision even when a candidate edits its own baseline',
   for (const [name, bytes] of Object.entries(selected)) assert.equal(bytes.toString(), `verified:${name}`);
 });
 test('the initial migration accepts only the pinned independent captures', async () => {
-  const selected = await selectTrustedSurfaces(() => null, name => readFile(new URL(`../${name}`, import.meta.url)));
+  // Production baselines advance after verified releases; bootstrap captures do not.
+  const selected = await selectTrustedSurfaces(() => null, name => readFile(new URL(`./fixtures/bootstrap-surfaces/${name}`, import.meta.url)));
   assert.deepEqual(Object.keys(selected), Object.keys(bootstrapDigests));
   await assert.rejects(selectTrustedSurfaces(() => null, () => Buffer.from('{"pages":[]}')), /initial baseline differs/);
 });

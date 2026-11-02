@@ -1,0 +1,348 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/spec_review/pr66-final-usage-2026-11-02",
+  "scope": "Independent actual current HTML reading for six tasks per locale. Full visible task prose was read via usage-reading-prefix packets; code blocks were separately captured and complete quickstart/JSON programs verified through actual clipboard. The second configuration independently navigated and captured equal body/code/download bytes, established by the exact comparison record. Home performance text and extra examples/blog-list headings were read; supplemental full-page snapshots are retained without claiming a new full editorial audit of all their text.",
+  "comparison": {
+    "path": "docs/plans/evidence/website-pr66-final-2026-11-02/usage-dual-configuration-comparison.json",
+    "sha256": "9376f1dd5cffffe28f6d980cd06b9448da61e2bbd7a24a24212e49536e9d520a"
+  },
+  "sourceIssuePolicy": "All 32 unresolved source minor/preference observations remain in the frozen source report and are carried in report openIssues. A usage pass means no task-blocking defect found, not that all wording preferences were removed.",
+  "locales": {
+    "en": {
+      "tasks": [
+        {
+          "id": "rust-basic",
+          "actualHeading": "Generate Anki flashcards with Rust",
+          "actualQuote": "The program writes a persistent spanish.apkg. Open it in Anki, import it and study hola → hello in the Spanish deck. Exporting needs no Anki installation.",
+          "judgment": "The actual localized page provides Rust 1.92+, public package 0.3.1, a complete src/main.rs, cargo run and persistent spanish.apkg with hola → hello. It distinguishes exporting without Anki from importing into Anki, and retains namespace spanish and key es:hola. The actual copied full program matches current source."
+        },
+        {
+          "id": "python-basic",
+          "actualHeading": "Generate Anki flashcards with Python",
+          "actualQuote": "On Windows, activate with .venv\\Scripts\\Activate.ps1. Use ordinary CPython 3.11 or later and a matching platform wheel; CPython 3.11–3.14 is covered by recorded release checks; see verified environments.",
+          "judgment": "The actual localized search led to this language Python quickstart. Its virtual-environment setup, Windows activation alternative, ordinary CPython 3.11+ / matching wheel condition, public 0.3.1, main.py and persistent spanish.apkg are coherent. The actual copied complete program matches source; installation coverage is stated as recorded release checks, not newly claimed tests on every runtime."
+        },
+        {
+          "id": "node-basic",
+          "actualHeading": "Generate Anki flashcards with Node.js",
+          "actualQuote": "Use Node.js 22.13 or later. In a new application directory:",
+          "judgment": "The actual localized sidebar led to Node quickstart. It states Node.js 22.13+, the public npm package with matching native optional dependency, complete ESM main.mjs and persistent output after artifact closure. TypeScript instructions are linked separately. The actual copied program matches current source."
+        },
+        {
+          "id": "json-media",
+          "actualHeading": "Generate and update Anki decks from JSON",
+          "actualQuote": "Read three biology questions from JSON, add a shared image and audio clip, and export an original APKG plus a reviewed answer-only update. Each release should contain 3 notes, 3 cards and 2 media files. Choose one SDK below; each is a complete program. Normal export needs no Anki installation.",
+          "judgment": "The actual page supplies all four inputs in recipe/, complete Rust/Python/Node programs and matching runtime/install/run steps. I read the 3 notes / 3 cards / 2 media expectation, one-answer-only update, explicit original v1 baseline, separate output directory and repeated policy check. All three complete programs were copied and all four input URLs downloaded. It keeps client import, local-edit, scheduling and non-deletion limits explicit."
+        },
+        {
+          "id": "original-baseline-update",
+          "actualHeading": "Update Anki decks with stable note IDs",
+          "actualQuote": "Keep the project namespace and note/model/field/template keys stable. Build each new release from the previous original distribution APKG, which carries complete versioned identity evidence. Save that package with its source revision.",
+          "judgment": "The actual localized update text requires the previous original distribution APKG with identity evidence and unchanged namespace/note/model/field/template keys. It distinguishes successful compare from policy permission, retains hard-error and risk-category limits, explains that Anki re-export is unusable, and says preparation does not publish. The accepted candidate remains the reviewed file; client import checks are still required. Fresh three-SDK JSON execution demonstrates this same original-baseline workflow without claiming a new native Anki import."
+        },
+        {
+          "id": "troubleshooting",
+          "actualHeading": "Troubleshooting",
+          "actualQuote": "NOTE.KEY_DUPLICATE\tGive each logical source record one unique key",
+          "judgment": "The actual localized table directs NOTE.KEY_DUPLICATE to one unique key per logical source record; it distinguishes operation failure from completed comparison that blocks publication. Atomic add/retry, explicit structured kind/code and original distribution baseline remain clear. The fresh Python log shows AddError NOTE.KEY_DUPLICATE followed by successful corrected output, independently decoded as two notes/two cards."
+        }
+      ],
+      "performance": {
+        "actualDescription": "Each test uses 1,000 Basic notes. The five tests cover text-only notes, separate media files and shared media. In these tests, the Anki Forge Rust API took 45.7–53.9% less time to export than genanki.",
+        "primaryMetric": "52.7 ms",
+        "rangeMetric": "45.7–53.9%",
+        "judgment": "Read current five-workload Rust/API comparison, all five timing rows, 1,000 Basic-note scope and hardware/Anki-import limitation. Displayed decimals agree with current locale-specific expected values; comma locales es/pt-BR/de, decimal-point locales en/zh-CN/ja."
+      },
+      "extraHeadings": [
+        {
+          "pageId": "examples",
+          "heading": "A little code.\nSomething to remember."
+        },
+        {
+          "pageId": "blog-list",
+          "heading": "Notes on making notes."
+        }
+      ]
+    },
+    "zh-CN": {
+      "tasks": [
+        {
+          "id": "rust-basic",
+          "actualHeading": "用 Rust 生成 Anki 卡片",
+          "actualQuote": "程序写出持久保存的 spanish.apkg。在 Anki 中打开并导入后，可在 Spanish 牌组中学习 hola → hello。导出不需要安装 Anki。",
+          "judgment": "The actual localized page provides Rust 1.92+, public package 0.3.1, a complete src/main.rs, cargo run and persistent spanish.apkg with hola → hello. It distinguishes exporting without Anki from importing into Anki, and retains namespace spanish and key es:hola. The actual copied full program matches current source."
+        },
+        {
+          "id": "python-basic",
+          "actualHeading": "用 Python 生成 Anki 卡片",
+          "actualQuote": "Windows 使用 .venv\\Scripts\\Activate.ps1 激活。使用普通 CPython 3.11 或更高版本及匹配的平台 wheel；已有发布检查覆盖 CPython 3.11–3.14，参见已验证环境。",
+          "judgment": "The actual localized search led to this language Python quickstart. Its virtual-environment setup, Windows activation alternative, ordinary CPython 3.11+ / matching wheel condition, public 0.3.1, main.py and persistent spanish.apkg are coherent. The actual copied complete program matches source; installation coverage is stated as recorded release checks, not newly claimed tests on every runtime."
+        },
+        {
+          "id": "node-basic",
+          "actualHeading": "用 Node.js 生成 Anki 卡片",
+          "actualQuote": "使用 Node.js 22.13 或更高版本。在新的应用目录中运行：",
+          "judgment": "The actual localized sidebar led to Node quickstart. It states Node.js 22.13+, the public npm package with matching native optional dependency, complete ESM main.mjs and persistent output after artifact closure. TypeScript instructions are linked separately. The actual copied program matches current source."
+        },
+        {
+          "id": "json-media",
+          "actualHeading": "用 JSON 数据生成并更新 Anki 牌组",
+          "actualQuote": "从 JSON 读取三个生物学问题，添加共享图片与音频，导出原始 APKG 和经过检查的仅修改答案的更新。每个版本应包含 3 条笔记、3 张卡片和 2 个媒体文件。选择下方任一 SDK，每份都是完整程序。普通导出不需要安装 Anki。",
+          "judgment": "The actual page supplies all four inputs in recipe/, complete Rust/Python/Node programs and matching runtime/install/run steps. I read the 3 notes / 3 cards / 2 media expectation, one-answer-only update, explicit original v1 baseline, separate output directory and repeated policy check. All three complete programs were copied and all four input URLs downloaded. It keeps client import, local-edit, scheduling and non-deletion limits explicit."
+        },
+        {
+          "id": "original-baseline-update",
+          "actualHeading": "用稳定笔记 ID 更新 Anki 牌组",
+          "actualQuote": "保持项目命名空间和笔记、模型、字段、模板键稳定。每个新版本都以上一版分发时的原始 APKG 为基准构建。包内包含完整的标识映射和修订信息，且这些信息采用带版本号的格式。请将原始包与对应的源码版本一起保存。",
+          "judgment": "The actual localized update text requires the previous original distribution APKG with identity evidence and unchanged namespace/note/model/field/template keys. It distinguishes successful compare from policy permission, retains hard-error and risk-category limits, explains that Anki re-export is unusable, and says preparation does not publish. The accepted candidate remains the reviewed file; client import checks are still required. Fresh three-SDK JSON execution demonstrates this same original-baseline workflow without claiming a new native Anki import."
+        },
+        {
+          "id": "troubleshooting",
+          "actualHeading": "排查问题",
+          "actualQuote": "NOTE.KEY_DUPLICATE\t每条逻辑源记录使用唯一键",
+          "judgment": "The actual localized table directs NOTE.KEY_DUPLICATE to one unique key per logical source record; it distinguishes operation failure from completed comparison that blocks publication. Atomic add/retry, explicit structured kind/code and original distribution baseline remain clear. The fresh Python log shows AddError NOTE.KEY_DUPLICATE followed by successful corrected output, independently decoded as two notes/two cards."
+        }
+      ],
+      "performance": {
+        "actualDescription": "每组测试包含 1,000 条 Basic 笔记。五组测试覆盖纯文本、独立媒体和共享媒体等场景。Anki Forge Rust API 的导出耗时比 genanki 低 45.7–53.9%。",
+        "primaryMetric": "52.7 ms",
+        "rangeMetric": "45.7–53.9%",
+        "judgment": "Read current five-workload Rust/API comparison, all five timing rows, 1,000 Basic-note scope and hardware/Anki-import limitation. Displayed decimals agree with current locale-specific expected values; comma locales es/pt-BR/de, decimal-point locales en/zh-CN/ja."
+      },
+      "extraHeadings": [
+        {
+          "pageId": "examples",
+          "heading": "一点代码，\n留住值得记忆的内容。"
+        },
+        {
+          "pageId": "blog-list",
+          "heading": "Anki 牌组制作与开发实践。"
+        }
+      ]
+    },
+    "es": {
+      "tasks": [
+        {
+          "id": "rust-basic",
+          "actualHeading": "Genera un APKG de Anki con Rust",
+          "actualQuote": "El programa escribe el archivo persistente spanish.apkg. Ábrelo en Anki, impórtalo y estudia hola → hello en el mazo Spanish. No necesitas instalar Anki para exportar el archivo.",
+          "judgment": "The actual localized page provides Rust 1.92+, public package 0.3.1, a complete src/main.rs, cargo run and persistent spanish.apkg with hola → hello. It distinguishes exporting without Anki from importing into Anki, and retains namespace spanish and key es:hola. The actual copied full program matches current source."
+        },
+        {
+          "id": "python-basic",
+          "actualHeading": "Genera un APKG de Anki con Python",
+          "actualQuote": "En Windows, actívalo con .venv\\Scripts\\Activate.ps1. Usa CPython estándar 3.11 o posterior y un wheel que corresponda a tu plataforma; las comprobaciones de publicación registradas cubren CPython 3.11–3.14. Consulta los entornos verificados.",
+          "judgment": "The actual localized search led to this language Python quickstart. Its virtual-environment setup, Windows activation alternative, ordinary CPython 3.11+ / matching wheel condition, public 0.3.1, main.py and persistent spanish.apkg are coherent. The actual copied complete program matches source; installation coverage is stated as recorded release checks, not newly claimed tests on every runtime."
+        },
+        {
+          "id": "node-basic",
+          "actualHeading": "Genera un APKG de Anki con Node.js",
+          "actualQuote": "Usa Node.js 22.13 o posterior. En un directorio nuevo de aplicación:",
+          "judgment": "The actual localized sidebar led to Node quickstart. It states Node.js 22.13+, the public npm package with matching native optional dependency, complete ESM main.mjs and persistent output after artifact closure. TypeScript instructions are linked separately. The actual copied program matches current source."
+        },
+        {
+          "id": "json-media",
+          "actualHeading": "Genera y actualiza mazos de Anki desde JSON",
+          "actualQuote": "Lee tres preguntas de biología desde JSON, añade una imagen y un fragmento de audio compartidos y exporta un APKG original junto con una actualización revisada que solo cambia una respuesta. Cada versión debe contener 3 notas, 3 tarjetas y 2 archivos multimedia. Elige uno de los SDK siguientes; cada ejemplo es un programa completo. La exportación habitual no requiere instalar Anki.",
+          "judgment": "The actual page supplies all four inputs in recipe/, complete Rust/Python/Node programs and matching runtime/install/run steps. I read the 3 notes / 3 cards / 2 media expectation, one-answer-only update, explicit original v1 baseline, separate output directory and repeated policy check. All three complete programs were copied and all four input URLs downloaded. It keeps client import, local-edit, scheduling and non-deletion limits explicit."
+        },
+        {
+          "id": "original-baseline-update",
+          "actualHeading": "Actualiza mazos de Anki con ID de nota estables",
+          "actualQuote": "Mantén estables el espacio de nombres del proyecto y las claves de notas, modelos, campos y plantillas. Genera cada versión nueva a partir del APKG original de distribución anterior, que contiene pruebas completas de identidad con su versión de formato. Guarda ese paquete junto con la revisión de su código fuente.",
+          "judgment": "The actual localized update text requires the previous original distribution APKG with identity evidence and unchanged namespace/note/model/field/template keys. It distinguishes successful compare from policy permission, retains hard-error and risk-category limits, explains that Anki re-export is unusable, and says preparation does not publish. The accepted candidate remains the reviewed file; client import checks are still required. Fresh three-SDK JSON execution demonstrates this same original-baseline workflow without claiming a new native Anki import."
+        },
+        {
+          "id": "troubleshooting",
+          "actualHeading": "Soluciona errores de Anki Forge",
+          "actualQuote": "NOTE.KEY_DUPLICATE\tAsigna una clave única a cada registro lógico de origen",
+          "judgment": "The actual localized table directs NOTE.KEY_DUPLICATE to one unique key per logical source record; it distinguishes operation failure from completed comparison that blocks publication. Atomic add/retry, explicit structured kind/code and original distribution baseline remain clear. The fresh Python log shows AddError NOTE.KEY_DUPLICATE followed by successful corrected output, independently decoded as two notes/two cards."
+        }
+      ],
+      "performance": {
+        "actualDescription": "Cada prueba usa 1000 notas Basic. Las cinco pruebas abarcan notas de solo texto, archivos multimedia distintos y recursos compartidos entre notas. En estas pruebas, la API de Rust de Anki Forge tardó entre un 45,7 y un 53,9 % menos en exportar que genanki.",
+        "primaryMetric": "52,7 ms",
+        "rangeMetric": "45,7–53,9%",
+        "judgment": "Read current five-workload Rust/API comparison, all five timing rows, 1,000 Basic-note scope and hardware/Anki-import limitation. Displayed decimals agree with current locale-specific expected values; comma locales es/pt-BR/de, decimal-point locales en/zh-CN/ja."
+      },
+      "extraHeadings": [
+        {
+          "pageId": "examples",
+          "heading": "Un poco de código.\nAlgo que recordar."
+        },
+        {
+          "pageId": "blog-list",
+          "heading": "Ideas y guías para crear mazos."
+        }
+      ]
+    },
+    "pt-BR": {
+      "tasks": [
+        {
+          "id": "rust-basic",
+          "actualHeading": "Gere cartões do Anki com Rust",
+          "actualQuote": "O programa grava o arquivo persistente spanish.apkg. Abra-o no Anki, importe-o e estude hola → hello no baralho Spanish. A exportação não exige que o Anki esteja instalado.",
+          "judgment": "The actual localized page provides Rust 1.92+, public package 0.3.1, a complete src/main.rs, cargo run and persistent spanish.apkg with hola → hello. It distinguishes exporting without Anki from importing into Anki, and retains namespace spanish and key es:hola. The actual copied full program matches current source."
+        },
+        {
+          "id": "python-basic",
+          "actualHeading": "Gere cartões do Anki com Python",
+          "actualQuote": "No Windows, ative o ambiente com .venv\\Scripts\\Activate.ps1. Use CPython convencional 3.11 ou posterior e um wheel correspondente à plataforma; as verificações registradas de lançamento abrangem CPython 3.11–3.14. Consulte os ambientes verificados.",
+          "judgment": "The actual localized search led to this language Python quickstart. Its virtual-environment setup, Windows activation alternative, ordinary CPython 3.11+ / matching wheel condition, public 0.3.1, main.py and persistent spanish.apkg are coherent. The actual copied complete program matches source; installation coverage is stated as recorded release checks, not newly claimed tests on every runtime."
+        },
+        {
+          "id": "node-basic",
+          "actualHeading": "Gere cartões do Anki com Node.js",
+          "actualQuote": "Use Node.js 22.13 ou posterior. Em um novo diretório de aplicação:",
+          "judgment": "The actual localized sidebar led to Node quickstart. It states Node.js 22.13+, the public npm package with matching native optional dependency, complete ESM main.mjs and persistent output after artifact closure. TypeScript instructions are linked separately. The actual copied program matches current source."
+        },
+        {
+          "id": "json-media",
+          "actualHeading": "Gere e atualize baralhos do Anki a partir de JSON",
+          "actualQuote": "Leia três perguntas de biologia em JSON, adicione uma imagem e um áudio compartilhados e exporte um APKG original seguido de uma atualização revisada que altera apenas uma resposta. Cada versão deve conter 3 notas, 3 cartões e 2 arquivos de mídia. Escolha um dos SDKs abaixo; cada exemplo é um programa completo. A exportação normal não exige que o Anki esteja instalado.",
+          "judgment": "The actual page supplies all four inputs in recipe/, complete Rust/Python/Node programs and matching runtime/install/run steps. I read the 3 notes / 3 cards / 2 media expectation, one-answer-only update, explicit original v1 baseline, separate output directory and repeated policy check. All three complete programs were copied and all four input URLs downloaded. It keeps client import, local-edit, scheduling and non-deletion limits explicit."
+        },
+        {
+          "id": "original-baseline-update",
+          "actualHeading": "Atualize baralhos do Anki com IDs de nota estáveis",
+          "actualQuote": "Mantenha estáveis o namespace do projeto e as chaves de notas, tipos de nota, campos e templates de cartão. Gere cada nova versão a partir do APKG original distribuído anterior, que contém evidências completas de identidade em um formato versionado. Guarde o pacote junto com a revisão do seu código-fonte.",
+          "judgment": "The actual localized update text requires the previous original distribution APKG with identity evidence and unchanged namespace/note/model/field/template keys. It distinguishes successful compare from policy permission, retains hard-error and risk-category limits, explains that Anki re-export is unusable, and says preparation does not publish. The accepted candidate remains the reviewed file; client import checks are still required. Fresh three-SDK JSON execution demonstrates this same original-baseline workflow without claiming a new native Anki import."
+        },
+        {
+          "id": "troubleshooting",
+          "actualHeading": "Solução de problemas",
+          "actualQuote": "NOTE.KEY_DUPLICATE\tAtribua uma chave única a cada registro lógico de origem",
+          "judgment": "The actual localized table directs NOTE.KEY_DUPLICATE to one unique key per logical source record; it distinguishes operation failure from completed comparison that blocks publication. Atomic add/retry, explicit structured kind/code and original distribution baseline remain clear. The fresh Python log shows AddError NOTE.KEY_DUPLICATE followed by successful corrected output, independently decoded as two notes/two cards."
+        }
+      ],
+      "performance": {
+        "actualDescription": "Cada teste usa 1.000 notas Basic. Os cinco testes abrangem notas só com texto, arquivos de mídia diferentes e mídia compartilhada entre notas. Nesses testes, a API Rust do Anki Forge levou de 45,7% a 53,9% menos tempo para exportar do que o genanki.",
+        "primaryMetric": "52,7 ms",
+        "rangeMetric": "45,7–53,9%",
+        "judgment": "Read current five-workload Rust/API comparison, all five timing rows, 1,000 Basic-note scope and hardware/Anki-import limitation. Displayed decimals agree with current locale-specific expected values; comma locales es/pt-BR/de, decimal-point locales en/zh-CN/ja."
+      },
+      "extraHeadings": [
+        {
+          "pageId": "examples",
+          "heading": "Um pouco de código.\nAlgo para lembrar."
+        },
+        {
+          "pageId": "blog-list",
+          "heading": "Como criar e manter suas notas."
+        }
+      ]
+    },
+    "ja": {
+      "tasks": [
+        {
+          "id": "rust-basic",
+          "actualHeading": "Rust で Anki カードを生成する",
+          "actualQuote": "プログラムは永続ファイル spanish.apkg を書き出します。Anki で開いてインポートすると、Spanish デッキの hola → hello を学習できます。エクスポート時に Anki のインストールは必要ありません。",
+          "judgment": "The actual localized page provides Rust 1.92+, public package 0.3.1, a complete src/main.rs, cargo run and persistent spanish.apkg with hola → hello. It distinguishes exporting without Anki from importing into Anki, and retains namespace spanish and key es:hola. The actual copied full program matches current source."
+        },
+        {
+          "id": "python-basic",
+          "actualHeading": "Python で Anki カードを生成する",
+          "actualQuote": "Windows では .venv\\Scripts\\Activate.ps1 で有効にします。通常の CPython 3.11 以降と、プラットフォームに一致する wheel を使用してください。記録済みのリリース検証では CPython 3.11〜3.14 を確認しています。検証済みの環境を参照してください。",
+          "judgment": "The actual localized search led to this language Python quickstart. Its virtual-environment setup, Windows activation alternative, ordinary CPython 3.11+ / matching wheel condition, public 0.3.1, main.py and persistent spanish.apkg are coherent. The actual copied complete program matches source; installation coverage is stated as recorded release checks, not newly claimed tests on every runtime."
+        },
+        {
+          "id": "node-basic",
+          "actualHeading": "Node.js で Anki カードを生成する",
+          "actualQuote": "Node.js 22.13 以降を使います。新しいアプリケーションのディレクトリで実行します。",
+          "judgment": "The actual localized sidebar led to Node quickstart. It states Node.js 22.13+, the public npm package with matching native optional dependency, complete ESM main.mjs and persistent output after artifact closure. TypeScript instructions are linked separately. The actual copied program matches current source."
+        },
+        {
+          "id": "json-media",
+          "actualHeading": "JSON から Anki デッキを生成・更新する",
+          "actualQuote": "JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、初回配布用の APKG と、解答だけを変更した検証済みの更新版を出力します。どちらの版も ノート3件、カード3枚、メディアファイル2個になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。",
+          "judgment": "The actual page supplies all four inputs in recipe/, complete Rust/Python/Node programs and matching runtime/install/run steps. I read the 3 notes / 3 cards / 2 media expectation, one-answer-only update, explicit original v1 baseline, separate output directory and repeated policy check. All three complete programs were copied and all four input URLs downloaded. It keeps client import, local-edit, scheduling and non-deletion limits explicit."
+        },
+        {
+          "id": "original-baseline-update",
+          "actualHeading": "安定したノート ID で Anki デッキを更新する",
+          "actualQuote": "プロジェクトの名前空間と、ノート・モデル・フィールド・テンプレートのキーは変更しないでください。新しいリリースは、完全なバージョン付き識別情報を含む、前回の配布時のオリジナル APKGを基準に作成します。そのパッケージを対応するソースのリビジョンと一緒に保管してください。",
+          "judgment": "The actual localized update text requires the previous original distribution APKG with identity evidence and unchanged namespace/note/model/field/template keys. It distinguishes successful compare from policy permission, retains hard-error and risk-category limits, explains that Anki re-export is unusable, and says preparation does not publish. The accepted candidate remains the reviewed file; client import checks are still required. Fresh three-SDK JSON execution demonstrates this same original-baseline workflow without claiming a new native Anki import."
+        },
+        {
+          "id": "troubleshooting",
+          "actualHeading": "トラブルシューティング",
+          "actualQuote": "NOTE.KEY_DUPLICATE\t論理的なソースレコードごとに一意のキーを1つ割り当てます",
+          "judgment": "The actual localized table directs NOTE.KEY_DUPLICATE to one unique key per logical source record; it distinguishes operation failure from completed comparison that blocks publication. Atomic add/retry, explicit structured kind/code and original distribution baseline remain clear. The fresh Python log shows AddError NOTE.KEY_DUPLICATE followed by successful corrected output, independently decoded as two notes/two cards."
+        }
+      ],
+      "performance": {
+        "actualDescription": "各テストでは Basic ノートを1,000件使います。5種類のテストで、テキストのみ、ノートごとに異なるメディア、ノート間で共有するメディアを比較しました。Anki Forge の Rust API は genanki よりエクスポート時間が45.7〜53.9%短くなりました。",
+        "primaryMetric": "52.7 ms",
+        "rangeMetric": "45.7–53.9%",
+        "judgment": "Read current five-workload Rust/API comparison, all five timing rows, 1,000 Basic-note scope and hardware/Anki-import limitation. Displayed decimals agree with current locale-specific expected values; comma locales es/pt-BR/de, decimal-point locales en/zh-CN/ja."
+      },
+      "extraHeadings": [
+        {
+          "pageId": "examples",
+          "heading": "少しのコードから、\n記憶に残るカードへ。"
+        },
+        {
+          "pageId": "blog-list",
+          "heading": "カード作成の実践と設計。"
+        }
+      ]
+    },
+    "de": {
+      "tasks": [
+        {
+          "id": "rust-basic",
+          "actualHeading": "Anki-Karten mit Rust erzeugen",
+          "actualQuote": "Das Programm schreibt die dauerhaft gespeicherte Datei spanish.apkg. Öffne sie in Anki, importiere sie und lerne hola → hello im Stapel Spanish. Für den Export muss Anki nicht installiert sein.",
+          "judgment": "The actual localized page provides Rust 1.92+, public package 0.3.1, a complete src/main.rs, cargo run and persistent spanish.apkg with hola → hello. It distinguishes exporting without Anki from importing into Anki, and retains namespace spanish and key es:hola. The actual copied full program matches current source."
+        },
+        {
+          "id": "python-basic",
+          "actualHeading": "Anki-Karten mit Python erzeugen",
+          "actualQuote": "Unter Windows aktivierst du die Umgebung mit .venv\\Scripts\\Activate.ps1. Verwende gewöhnliches CPython ab Version 3.11 und ein passendes Wheel für deine Plattform. CPython 3.11–3.14 sind durch dokumentierte Release-Prüfungen abgedeckt; siehe geprüfte Umgebungen.",
+          "judgment": "The actual localized search led to this language Python quickstart. Its virtual-environment setup, Windows activation alternative, ordinary CPython 3.11+ / matching wheel condition, public 0.3.1, main.py and persistent spanish.apkg are coherent. The actual copied complete program matches source; installation coverage is stated as recorded release checks, not newly claimed tests on every runtime."
+        },
+        {
+          "id": "node-basic",
+          "actualHeading": "Anki-Karten mit Node.js erzeugen",
+          "actualQuote": "Verwende Node.js ab Version 22.13. Führe in einem neuen Anwendungsverzeichnis Folgendes aus:",
+          "judgment": "The actual localized sidebar led to Node quickstart. It states Node.js 22.13+, the public npm package with matching native optional dependency, complete ESM main.mjs and persistent output after artifact closure. TypeScript instructions are linked separately. The actual copied program matches current source."
+        },
+        {
+          "id": "json-media",
+          "actualHeading": "Anki-Stapel aus JSON erzeugen und aktualisieren",
+          "actualQuote": "Lies drei Biologiefragen aus JSON ein, ergänze ein gemeinsames Bild und einen Audioclip und exportiere ein ursprüngliches APKG sowie eine geprüfte Aktualisierung, die nur eine Antwort ändert. Jede Version soll 3 Notizen, 3 Karten und 2 Mediendateien enthalten. Wähle unten ein SDK; jedes Beispiel ist ein vollständiges Programm. Für den normalen Export muss Anki nicht installiert sein.",
+          "judgment": "The actual page supplies all four inputs in recipe/, complete Rust/Python/Node programs and matching runtime/install/run steps. I read the 3 notes / 3 cards / 2 media expectation, one-answer-only update, explicit original v1 baseline, separate output directory and repeated policy check. All three complete programs were copied and all four input URLs downloaded. It keeps client import, local-edit, scheduling and non-deletion limits explicit."
+        },
+        {
+          "id": "original-baseline-update",
+          "actualHeading": "Anki-Stapel mit stabilen Notiz-IDs aktualisieren",
+          "actualQuote": "Behalte den Projektnamensraum sowie die Schlüssel für Notizen, Modelle, Felder und Vorlagen unverändert bei. Erzeuge jede neue Version auf Basis des vorherigen ursprünglich verteilten APKG, das vollständige, versionierte Identitätsnachweise enthält. Bewahre das Paket zusammen mit der zugehörigen Quellcoderevision auf.",
+          "judgment": "The actual localized update text requires the previous original distribution APKG with identity evidence and unchanged namespace/note/model/field/template keys. It distinguishes successful compare from policy permission, retains hard-error and risk-category limits, explains that Anki re-export is unusable, and says preparation does not publish. The accepted candidate remains the reviewed file; client import checks are still required. Fresh three-SDK JSON execution demonstrates this same original-baseline workflow without claiming a new native Anki import."
+        },
+        {
+          "id": "troubleshooting",
+          "actualHeading": "Fehlersuche",
+          "actualQuote": "NOTE.KEY_DUPLICATE\tGib jedem logischen Quelldatensatz einen eindeutigen Schlüssel",
+          "judgment": "The actual localized table directs NOTE.KEY_DUPLICATE to one unique key per logical source record; it distinguishes operation failure from completed comparison that blocks publication. Atomic add/retry, explicit structured kind/code and original distribution baseline remain clear. The fresh Python log shows AddError NOTE.KEY_DUPLICATE followed by successful corrected output, independently decoded as two notes/two cards."
+        }
+      ],
+      "performance": {
+        "actualDescription": "Jeder Test verwendet 1.000 Basic-Notizen. Die fünf Tests decken reine Textnotizen, separate Mediendateien und gemeinsam genutzte Medien ab. Die Rust-API von Anki Forge benötigte dabei 45,7–53,9 % weniger Exportzeit als genanki.",
+        "primaryMetric": "52,7 ms",
+        "rangeMetric": "45,7–53,9%",
+        "judgment": "Read current five-workload Rust/API comparison, all five timing rows, 1,000 Basic-note scope and hardware/Anki-import limitation. Displayed decimals agree with current locale-specific expected values; comma locales es/pt-BR/de, decimal-point locales en/zh-CN/ja."
+      },
+      "extraHeadings": [
+        {
+          "pageId": "examples",
+          "heading": "Ein wenig Code.\nKarten zum Lernen."
+        },
+        {
+          "pageId": "blog-list",
+          "heading": "Gedanken zur Kartenerstellung."
+        }
+      ]
+    }
+  }
+}

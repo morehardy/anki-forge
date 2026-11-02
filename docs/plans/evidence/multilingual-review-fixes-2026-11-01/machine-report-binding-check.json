@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/standards_review/machine-final-binding-check-2026-11-01",
+  "scope": "Only the isolated 6d4625639fc1477222b41880d29724c162baa3be plus seven multilingual review-fix implementation inputs and this batch of source/post-build review records. Concurrent edits in the original shared workspace are excluded. This is an undeployed release candidate.",
+  "inputSha256": "a2618b25656a1b4adfafb3add60ad85b5699b32a3217e01c8e5b125c53a8f833",
+  "status": "passed",
+  "checks": [
+    "Both archived manifest bytes match the reviewed evidence manifests.",
+    "All 384 resource bindings match actual frozen archive byte digests and sizes; UTF-8 decoding succeeds.",
+    "All 120 actual saved HTTP response bodies match their captured and manifest digests.",
+    "Each of the 48 task entries starts at its actual locale llms URL, follows explicit same-locale links, and uses matching canonical/language declarations.",
+    "Answers and declared reading scope were authored after current task-passage review; capture status was not promoted as a substitute for semantic review."
+  ],
+  "reports": [
+    {
+      "environment": "prefix",
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-read-prefix.json",
+      "sha256": "ec4839f1097e38f5265949bafc6d791e4f53bba45779715ccacf8991118f16ed",
+      "bytes": 129147,
+      "tasks": 24,
+      "verifiedMachineResources": 192,
+      "actualHttpResponses": 60,
+      "readOrigin": "http://127.0.0.1:54909"
+    },
+    {
+      "environment": "root",
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-read-root.json",
+      "sha256": "82cc238a49097fde24fa8468b0c88bed336f41abf1c0c508f7875708edb27374",
+      "bytes": 124331,
+      "tasks": 24,
+      "verifiedMachineResources": 192,
+      "actualHttpResponses": 60,
+      "readOrigin": "http://127.0.0.1:55907"
+    }
+  ]
+}

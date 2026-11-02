@@ -1,19 +1,20 @@
 {
   "schemaVersion": 1,
   "source": {
-    "kind": "verified-publication",
-    "workflowRun": 40506577765,
-    "workflowUrl": "https://github.com/morehardy/anki-forge/actions/runs/40506577765",
-    "manifestArtifact": 12735666568,
-    "manifestArchiveSha256": "9b11a3a6bf4a3b9e1cd49186a8e8141def19d87c90f599682e4c5b11574b9f07",
-    "pagesArtifact": 12735975579,
-    "pagesArchiveSha256": "fe3ac1d63219fd1914b7841c27c5a2c9db0430ff0f005927be801cf6160e15a1",
-    "commit": "732a40f0e6f3e534233330dac7898fdca1593a27",
-    "inputSha256": "43f851f1d9c5ed6e5b8e795823824826bfb36760993f7296d5a6e90925803402",
-    "manifestSha256": "4f07b277d0ccd329117b52caaf501c46f44eafd307e6dd375c2383200c7e8ebd"
+    "workflowRun": "https://github.com/morehardy/anki-forge/actions/runs/41314923919",
+    "pagesArtifactId": 13086822527,
+    "pagesArtifactDigest": "sha256:59aa095ea9672e59c432bfcde6af90b35670b300d09831a3388e7006e5d50c4e",
+    "verifiedManifestArtifactId": 13087226627,
+    "verifiedManifestArtifactDigest": "sha256:d528e8d1bfe9d10f8e75bd1d54df5953966b6e1a3c2d83549eedf583e5910766",
+    "deployedVerification": "deploy job 124874543206: production identity and live browser steps succeeded",
+    "localLiveCheck": "docs/plans/evidence/remaining-locales-2026-11-01/engineering/three-locale-live.log",
+    "commit": "ad98a6f5b9293e7657429e3ed423d11e55259a74",
+    "inputSha256": "45e8c5d4c32f5ccdc3d4c7a7169d2d3d0d14707526ca41c4217d8dbf16830724",
+    "manifestSha256": "1c6c5d5c23815cb8eb41eacee0e3865343cf77f7350c35ee95429f2ea395becc"
   },
   "locales": [
     "en",
+    "es",
     "zh-CN"
   ],
   "pages": [
@@ -34,7 +35,12 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/blog/#webpage"
+      ],
+      "llms": "/llms.txt"
     },
     {
       "route": "/blog/stable-ids-and-deck-updates/",
@@ -73,7 +79,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/blog/stable-ids-and-deck-updates/#article",
+        "https://ankiforge.dev/blog/stable-ids-and-deck-updates/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/blog/stable-ids-and-deck-updates/index.md"
     },
     {
       "route": "/blog/your-first-anki-deck/",
@@ -112,7 +125,82 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/blog/your-first-anki-deck/#article",
+        "https://ankiforge.dev/blog/your-first-anki-deck/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/blog/your-first-anki-deck/index.md"
+    },
+    {
+      "route": "/docs/ai-anki-cards/",
+      "pageId": "ai-anki-cards",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "AI-assisted Anki flashcards: from notes to APKG",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "choose-input",
+          "task": "choose-input",
+          "heading": "Start with source material you can check"
+        },
+        {
+          "id": "start-with-source-material-you-can-check",
+          "heading": "Start with source material you can check",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "draft-cards",
+          "task": "draft-cards",
+          "heading": "Ask for CSV cards"
+        },
+        {
+          "id": "ask-for-csv-cards",
+          "heading": "Ask for CSV cards",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "export-apkg",
+          "task": "export-apkg",
+          "heading": "Turn reviewed cards into an APKG"
+        },
+        {
+          "id": "turn-reviewed-cards-into-an-apkg",
+          "heading": "Turn reviewed cards into an APKG",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "check-result",
+          "task": "check-result",
+          "heading": "Check the cards before studying"
+        },
+        {
+          "id": "check-the-cards-before-studying",
+          "heading": "Check the cards before studying",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/ai-anki-cards/#article",
+        "https://ankiforge.dev/docs/ai-anki-cards/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/ai-anki-cards/index.md"
     },
     {
       "route": "/docs/anki-forge-vs-genanki/",
@@ -148,7 +236,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/anki-forge-vs-genanki/#article",
+        "https://ankiforge.dev/docs/anki-forge-vs-genanki/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/anki-forge-vs-genanki/index.md"
     },
     {
       "route": "/docs/api/",
@@ -179,7 +274,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/api/#article",
+        "https://ankiforge.dev/docs/api/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/api/index.md"
     },
     {
       "route": "/docs/build-guarantees/",
@@ -225,7 +327,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/build-guarantees/#article",
+        "https://ankiforge.dev/docs/build-guarantees/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/build-guarantees/index.md"
     },
     {
       "route": "/docs/cards/",
@@ -234,7 +343,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "Basic and Cloze cards",
+          "heading": "Generate Anki Basic and Cloze flashcards",
           "headingLevel": "h1"
         },
         {
@@ -256,7 +365,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/cards/#article",
+        "https://ankiforge.dev/docs/cards/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/cards/index.md"
     },
     {
       "route": "/docs/compatibility/",
@@ -287,7 +403,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/compatibility/#article",
+        "https://ankiforge.dev/docs/compatibility/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/compatibility/index.md"
     },
     {
       "route": "/docs/concepts/",
@@ -333,7 +456,82 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/concepts/#article",
+        "https://ankiforge.dev/docs/concepts/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/concepts/index.md"
+    },
+    {
+      "route": "/docs/csv-to-anki/",
+      "pageId": "csv-to-anki",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "CSV to Anki: generate flashcards with Python",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "prepare-csv",
+          "task": "prepare-csv",
+          "heading": "Prepare the CSV"
+        },
+        {
+          "id": "prepare-the-csv",
+          "heading": "Prepare the CSV",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "install",
+          "task": "install",
+          "heading": "Install Anki Forge"
+        },
+        {
+          "id": "install-anki-forge",
+          "heading": "Install Anki Forge",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "convert",
+          "task": "convert",
+          "heading": "Generate the APKG"
+        },
+        {
+          "id": "generate-the-apkg",
+          "heading": "Generate the APKG",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "verify-and-extend",
+          "task": "verify-and-extend",
+          "heading": "Import, check and extend"
+        },
+        {
+          "id": "import-check-and-extend",
+          "heading": "Import, check and extend",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/csv-to-anki/#article",
+        "https://ankiforge.dev/docs/csv-to-anki/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/csv-to-anki/index.md"
     },
     {
       "route": "/docs/custom-notetypes/",
@@ -369,7 +567,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/custom-notetypes/#article",
+        "https://ankiforge.dev/docs/custom-notetypes/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/custom-notetypes/index.md"
     },
     {
       "route": "/docs/development/",
@@ -395,7 +600,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/development/#article",
+        "https://ankiforge.dev/docs/development/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/development/index.md"
     },
     {
       "route": "/docs/genanki-migration/",
@@ -416,7 +628,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/genanki-migration/#article",
+        "https://ankiforge.dev/docs/genanki-migration/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/genanki-migration/index.md"
     },
     {
       "route": "/docs/image-occlusion/",
@@ -425,7 +644,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "Image Occlusion",
+          "heading": "Generate Anki Image Occlusion cards",
           "headingLevel": "h1"
         },
         {
@@ -447,7 +666,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/image-occlusion/#article",
+        "https://ankiforge.dev/docs/image-occlusion/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/image-occlusion/index.md"
     },
     {
       "route": "/docs/",
@@ -488,7 +714,13 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/index.md"
     },
     {
       "route": "/docs/installation/",
@@ -519,7 +751,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/installation/#article",
+        "https://ankiforge.dev/docs/installation/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/installation/index.md"
     },
     {
       "route": "/docs/json-to-anki/",
@@ -565,7 +804,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/json-to-anki/#article",
+        "https://ankiforge.dev/docs/json-to-anki/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/json-to-anki/index.md"
     },
     {
       "route": "/docs/languages/",
@@ -591,7 +837,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/languages/#article",
+        "https://ankiforge.dev/docs/languages/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/languages/index.md"
     },
     {
       "route": "/docs/media/",
@@ -600,7 +853,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "Images and audio",
+          "heading": "Add images and audio to Anki cards",
           "headingLevel": "h1"
         },
         {
@@ -645,7 +898,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/media/#article",
+        "https://ankiforge.dev/docs/media/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/media/index.md"
     },
     {
       "route": "/docs/node-api/",
@@ -719,7 +979,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/node-api/#article",
+        "https://ankiforge.dev/docs/node-api/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/node-api/index.md"
     },
     {
       "route": "/docs/node-quickstart/",
@@ -728,7 +995,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "Generate an Anki APKG with Node.js",
+          "heading": "Generate Anki flashcards with Node.js",
           "headingLevel": "h1"
         },
         {
@@ -750,7 +1017,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/node-quickstart/#article",
+        "https://ankiforge.dev/docs/node-quickstart/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/node-quickstart/index.md"
     },
     {
       "route": "/docs/python-api/",
@@ -811,7 +1085,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/python-api/#article",
+        "https://ankiforge.dev/docs/python-api/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/python-api/index.md"
     },
     {
       "route": "/docs/python-diagnostics/",
@@ -842,7 +1123,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/python-diagnostics/#article",
+        "https://ankiforge.dev/docs/python-diagnostics/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/python-diagnostics/index.md"
     },
     {
       "route": "/docs/python-migration/",
@@ -863,7 +1151,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/python-migration/#article",
+        "https://ankiforge.dev/docs/python-migration/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/python-migration/index.md"
     },
     {
       "route": "/docs/python-quickstart/",
@@ -872,7 +1167,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "Generate an Anki APKG with Python",
+          "heading": "Generate Anki flashcards with Python",
           "headingLevel": "h1"
         },
         {
@@ -894,7 +1189,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/python-quickstart/#article",
+        "https://ankiforge.dev/docs/python-quickstart/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/python-quickstart/index.md"
     },
     {
       "route": "/docs/quickstart/",
@@ -903,7 +1205,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "Generate an Anki APKG with Rust",
+          "heading": "Generate Anki flashcards with Rust",
           "headingLevel": "h1"
         },
         {
@@ -930,7 +1232,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/quickstart/#article",
+        "https://ankiforge.dev/docs/quickstart/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/quickstart/index.md"
     },
     {
       "route": "/docs/rust-api/",
@@ -986,7 +1295,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/rust-api/#article",
+        "https://ankiforge.dev/docs/rust-api/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/rust-api/index.md"
     },
     {
       "route": "/docs/rust-guide/",
@@ -1037,7 +1353,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/rust-guide/#article",
+        "https://ankiforge.dev/docs/rust-guide/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/rust-guide/index.md"
     },
     {
       "route": "/docs/templates/",
@@ -1046,7 +1369,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "Template bundles",
+          "heading": "Reusable Anki card templates, CSS and media",
           "headingLevel": "h1"
         },
         {
@@ -1078,7 +1401,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/templates/#article",
+        "https://ankiforge.dev/docs/templates/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/templates/index.md"
     },
     {
       "route": "/docs/troubleshooting/",
@@ -1119,7 +1449,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/troubleshooting/#article",
+        "https://ankiforge.dev/docs/troubleshooting/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/troubleshooting/index.md"
     },
     {
       "route": "/docs/updates/",
@@ -1128,7 +1465,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "Update and distribute",
+          "heading": "Update Anki decks with stable note IDs",
           "headingLevel": "h1"
         },
         {
@@ -1168,7 +1505,2247 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/docs/updates/#article",
+        "https://ankiforge.dev/docs/updates/#webpage"
+      ],
+      "llms": "/llms.txt",
+      "markdown": "/docs/updates/index.md"
+    },
+    {
+      "route": "/es/blog/",
+      "pageId": "blog",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "main"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/blog/#webpage"
+      ],
+      "llms": "/es/llms.txt"
+    },
+    {
+      "route": "/es/blog/stable-ids-and-deck-updates/",
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "separate-identity-from-content",
+          "task": "separate-identity-from-content",
+          "heading": "Separar la identidad del contenido"
+        },
+        {
+          "id": "separar-la-identidad-del-contenido",
+          "heading": "Separar la identidad del contenido",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "give-the-next-build-a-baseline",
+          "task": "give-the-next-build-a-baseline",
+          "heading": "Dar un paquete de referencia a la siguiente generación"
+        },
+        {
+          "id": "dar-un-paquete-de-referencia-a-la-siguiente-generación",
+          "heading": "Dar un paquete de referencia a la siguiente generación",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "keep-the-original-distributed-package",
+          "task": "keep-the-original-distributed-package",
+          "heading": "Conservar el paquete original distribuido"
+        },
+        {
+          "id": "conservar-el-paquete-original-distribuido",
+          "heading": "Conservar el paquete original distribuido",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "inspect-the-build-and-the-import",
+          "task": "inspect-the-build-and-the-import",
+          "heading": "Revisar la generación y la importación"
+        },
+        {
+          "id": "revisar-la-generación-y-la-importación",
+          "heading": "Revisar la generación y la importación",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/blog/stable-ids-and-deck-updates/#article",
+        "https://ankiforge.dev/es/blog/stable-ids-and-deck-updates/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/blog/stable-ids-and-deck-updates/index.md"
+    },
+    {
+      "route": "/es/blog/your-first-anki-deck/",
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "a-complete-program",
+          "task": "a-complete-program",
+          "heading": "Un programa completo"
+        },
+        {
+          "id": "un-programa-completo",
+          "heading": "Un programa completo",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "install-and-run",
+          "task": "install-and-run",
+          "heading": "Instalar y ejecutar"
+        },
+        {
+          "id": "instalar-y-ejecutar",
+          "heading": "Instalar y ejecutar",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "give-the-note-an-identity",
+          "task": "give-the-note-an-identity",
+          "heading": "Dar una identidad a la nota"
+        },
+        {
+          "id": "dar-una-identidad-a-la-nota",
+          "heading": "Dar una identidad a la nota",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "grow-from-one-note",
+          "task": "grow-from-one-note",
+          "heading": "Ampliar el ejemplo"
+        },
+        {
+          "id": "ampliar-el-ejemplo",
+          "heading": "Ampliar el ejemplo",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/blog/your-first-anki-deck/#article",
+        "https://ankiforge.dev/es/blog/your-first-anki-deck/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/blog/your-first-anki-deck/index.md"
+    },
+    {
+      "route": "/es/docs/ai-anki-cards/",
+      "pageId": "ai-anki-cards",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Crea tarjetas de Anki con ayuda de IA",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "choose-input",
+          "task": "choose-input",
+          "heading": "Empieza con material que puedas comprobar"
+        },
+        {
+          "id": "empieza-con-material-que-puedas-comprobar",
+          "heading": "Empieza con material que puedas comprobar",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "draft-cards",
+          "task": "draft-cards",
+          "heading": "Pide tarjetas en formato CSV"
+        },
+        {
+          "id": "pide-tarjetas-en-formato-csv",
+          "heading": "Pide tarjetas en formato CSV",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "export-apkg",
+          "task": "export-apkg",
+          "heading": "Convierte las tarjetas revisadas en un APKG"
+        },
+        {
+          "id": "convierte-las-tarjetas-revisadas-en-un-apkg",
+          "heading": "Convierte las tarjetas revisadas en un APKG",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "check-result",
+          "task": "check-result",
+          "heading": "Revisa las tarjetas antes de estudiar"
+        },
+        {
+          "id": "revisa-las-tarjetas-antes-de-estudiar",
+          "heading": "Revisa las tarjetas antes de estudiar",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/ai-anki-cards/#article",
+        "https://ankiforge.dev/es/docs/ai-anki-cards/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/ai-anki-cards/index.md"
+    },
+    {
+      "route": "/es/docs/anki-forge-vs-genanki/",
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Anki Forge frente a genanki: cuál elegir",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "the-same-small-task",
+          "task": "the-same-small-task",
+          "heading": "La misma tarea sencilla"
+        },
+        {
+          "id": "la-misma-tarea-sencilla",
+          "heading": "La misma tarea sencilla",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "existing-genanki-decks",
+          "task": "existing-genanki-decks",
+          "heading": "Mazos de genanki existentes"
+        },
+        {
+          "id": "mazos-de-genanki-existentes",
+          "heading": "Mazos de genanki existentes",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "historical-performance-evidence",
+          "task": "historical-performance-evidence",
+          "heading": "Datos históricos de rendimiento"
+        },
+        {
+          "id": "datos-históricos-de-rendimiento",
+          "heading": "Datos históricos de rendimiento",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/anki-forge-vs-genanki/#article",
+        "https://ankiforge.dev/es/docs/anki-forge-vs-genanki/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/anki-forge-vs-genanki/index.md"
+    },
+    {
+      "route": "/es/docs/api/",
+      "pageId": "api",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Resumen de la API pública",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "stable-note-identity",
+          "task": "stable-note-identity",
+          "heading": "Identidad estable de las notas"
+        },
+        {
+          "id": "identidad-estable-de-las-notas",
+          "heading": "Identidad estable de las notas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "start-with-a-task",
+          "task": "start-with-a-task",
+          "heading": "Empieza por una tarea"
+        },
+        {
+          "id": "empieza-por-una-tarea",
+          "heading": "Empieza por una tarea",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/api/#article",
+        "https://ankiforge.dev/es/docs/api/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/api/index.md"
+    },
+    {
+      "route": "/es/docs/build-guarantees/",
+      "pageId": "build-guarantees",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Garantías de generación y de los archivos APKG",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "temporary-and-persistent-artifacts",
+          "task": "temporary-and-persistent-artifacts",
+          "heading": "Archivos temporales y persistentes"
+        },
+        {
+          "id": "archivos-temporales-y-persistentes",
+          "heading": "Archivos temporales y persistentes",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "baselines-and-publication",
+          "task": "baselines-and-publication",
+          "heading": "Bases de actualización y publicación"
+        },
+        {
+          "id": "bases-de-actualización-y-publicación",
+          "heading": "Bases de actualización y publicación",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "inspection-limits",
+          "task": "inspection-limits",
+          "heading": "Límites de inspección"
+        },
+        {
+          "id": "límites-de-inspección",
+          "heading": "Límites de inspección",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "concurrent-work",
+          "task": "concurrent-work",
+          "heading": "Trabajo concurrente"
+        },
+        {
+          "id": "trabajo-concurrente",
+          "heading": "Trabajo concurrente",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "prepared-publication-from-source",
+          "task": "prepared-publication-from-source",
+          "heading": "Publicación preparada"
+        },
+        {
+          "id": "publicación-preparada",
+          "heading": "Publicación preparada",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/build-guarantees/#article",
+        "https://ankiforge.dev/es/docs/build-guarantees/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/build-guarantees/index.md"
+    },
+    {
+      "route": "/es/docs/cards/",
+      "pageId": "cards",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Crea tarjetas Basic y Cloze de Anki",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "author-the-notes",
+          "task": "author-the-notes",
+          "heading": "Escribe las notas"
+        },
+        {
+          "id": "escribe-las-notas",
+          "heading": "Escribe las notas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "text-fields-and-card-identity",
+          "task": "text-fields-and-card-identity",
+          "heading": "Texto, campos e identidad de las tarjetas"
+        },
+        {
+          "id": "texto-campos-e-identidad-de-las-tarjetas",
+          "heading": "Texto, campos e identidad de las tarjetas",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/cards/#article",
+        "https://ankiforge.dev/es/docs/cards/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/cards/index.md"
+    },
+    {
+      "route": "/es/docs/compatibility/",
+      "pageId": "compatibility",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Compatibilidad de Anki Forge y entornos verificados",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "packages-and-verified-environments",
+          "task": "packages-and-verified-environments",
+          "heading": "Paquetes y entornos verificados"
+        },
+        {
+          "id": "paquetes-y-entornos-verificados",
+          "heading": "Paquetes y entornos verificados",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "anki-import-and-playback",
+          "task": "anki-import-and-playback",
+          "heading": "Importación y reproducción en Anki"
+        },
+        {
+          "id": "importación-y-reproducción-en-anki",
+          "heading": "Importación y reproducción en Anki",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/compatibility/#article",
+        "https://ankiforge.dev/es/docs/compatibility/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/compatibility/index.md"
+    },
+    {
+      "route": "/es/docs/concepts/",
+      "pageId": "concepts",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Conceptos fundamentales de Anki Forge",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "project-and-note",
+          "task": "project-and-note",
+          "heading": "Proyecto y nota"
+        },
+        {
+          "id": "proyecto-y-nota",
+          "heading": "Proyecto y nota",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-fields-and-templates",
+          "task": "models-fields-and-templates",
+          "heading": "Modelos, campos y plantillas"
+        },
+        {
+          "id": "modelos-campos-y-plantillas",
+          "heading": "Modelos, campos y plantillas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "text-and-html",
+          "task": "text-and-html",
+          "heading": "Texto y HTML"
+        },
+        {
+          "id": "texto-y-html",
+          "heading": "Texto y HTML",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-ownership",
+          "task": "media-ownership",
+          "heading": "Cómo se conservan los recursos multimedia"
+        },
+        {
+          "id": "cómo-se-conservan-los-recursos-multimedia",
+          "heading": "Cómo se conservan los recursos multimedia",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-and-update",
+          "task": "build-and-update",
+          "heading": "Generación y actualización"
+        },
+        {
+          "id": "generación-y-actualización",
+          "heading": "Generación y actualización",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/concepts/#article",
+        "https://ankiforge.dev/es/docs/concepts/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/concepts/index.md"
+    },
+    {
+      "route": "/es/docs/csv-to-anki/",
+      "pageId": "csv-to-anki",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "CSV a Anki: crea tarjetas con Python",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "prepare-csv",
+          "task": "prepare-csv",
+          "heading": "Prepara el CSV"
+        },
+        {
+          "id": "prepara-el-csv",
+          "heading": "Prepara el CSV",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "install",
+          "task": "install",
+          "heading": "Instala Anki Forge"
+        },
+        {
+          "id": "instala-anki-forge",
+          "heading": "Instala Anki Forge",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "convert",
+          "task": "convert",
+          "heading": "Genera el APKG"
+        },
+        {
+          "id": "genera-el-apkg",
+          "heading": "Genera el APKG",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "verify-and-extend",
+          "task": "verify-and-extend",
+          "heading": "Importa, comprueba y amplía"
+        },
+        {
+          "id": "importa-comprueba-y-amplía",
+          "heading": "Importa, comprueba y amplía",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/csv-to-anki/#article",
+        "https://ankiforge.dev/es/docs/csv-to-anki/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/csv-to-anki/index.md"
+    },
+    {
+      "route": "/es/docs/custom-notetypes/",
+      "pageId": "custom-notetypes",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Crea tipos de nota personalizados para Anki",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "executable-example",
+          "task": "executable-example",
+          "heading": "Ejemplo ejecutable"
+        },
+        {
+          "id": "ejemplo-ejecutable",
+          "heading": "Ejemplo ejecutable",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "keys-and-names",
+          "task": "keys-and-names",
+          "heading": "Claves y nombres"
+        },
+        {
+          "id": "claves-y-nombres",
+          "heading": "Claves y nombres",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "validation-and-generation",
+          "task": "validation-and-generation",
+          "heading": "Validación y generación"
+        },
+        {
+          "id": "validación-y-generación",
+          "heading": "Validación y generación",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/custom-notetypes/#article",
+        "https://ankiforge.dev/es/docs/custom-notetypes/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/custom-notetypes/index.md"
+    },
+    {
+      "route": "/es/docs/development/",
+      "pageId": "development",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Compila los SDK desde el código fuente",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "source-builds",
+          "task": "source-builds",
+          "heading": "Compilación desde el código fuente"
+        },
+        {
+          "id": "compilación-desde-el-código-fuente",
+          "heading": "Compilación desde el código fuente",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/development/#article",
+        "https://ankiforge.dev/es/docs/development/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/development/index.md"
+    },
+    {
+      "route": "/es/docs/genanki-migration/",
+      "pageId": "genanki-migration",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Pasar de genanki a Anki Forge",
+          "headingLevel": "h1"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/genanki-migration/#article",
+        "https://ankiforge.dev/es/docs/genanki-migration/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/genanki-migration/index.md"
+    },
+    {
+      "route": "/es/docs/image-occlusion/",
+      "pageId": "image-occlusion",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Genera tarjetas Anki con oclusión de imágenes",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "run-the-example",
+          "task": "run-the-example",
+          "heading": "Ejecuta el ejemplo"
+        },
+        {
+          "id": "ejecuta-el-ejemplo",
+          "heading": "Ejecuta el ejemplo",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "multiple-masks-and-modes",
+          "task": "multiple-masks-and-modes",
+          "heading": "Varias máscaras y modos"
+        },
+        {
+          "id": "varias-máscaras-y-modos",
+          "heading": "Varias máscaras y modos",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/image-occlusion/#article",
+        "https://ankiforge.dev/es/docs/image-occlusion/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/image-occlusion/index.md"
+    },
+    {
+      "route": "/es/docs/",
+      "pageId": "docs",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Crea mazos de Anki con código",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "start-with-your-language",
+          "task": "start-with-your-language",
+          "heading": "Empieza con tu lenguaje"
+        },
+        {
+          "id": "empieza-con-tu-lenguaje",
+          "heading": "Empieza con tu lenguaje",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "understand-the-pieces",
+          "task": "understand-the-pieces",
+          "heading": "Entiende las piezas"
+        },
+        {
+          "id": "entiende-las-piezas",
+          "heading": "Entiende las piezas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-your-next-feature",
+          "task": "build-your-next-feature",
+          "heading": "Añade la siguiente función"
+        },
+        {
+          "id": "añade-la-siguiente-función",
+          "heading": "Añade la siguiente función",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "find-answers-and-contribute",
+          "task": "find-answers-and-contribute",
+          "heading": "Encuentra respuestas y participa"
+        },
+        {
+          "id": "encuentra-respuestas-y-participa",
+          "heading": "Encuentra respuestas y participa",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/index.md"
+    },
+    {
+      "route": "/es/docs/installation/",
+      "pageId": "installation",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Integra Anki Forge en tu aplicación de Rust",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "cargo-dependencies",
+          "task": "cargo-dependencies",
+          "heading": "Dependencias de Cargo"
+        },
+        {
+          "id": "dependencias-de-cargo",
+          "heading": "Dependencias de Cargo",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "choose-the-next-guide",
+          "task": "choose-the-next-guide",
+          "heading": "Elige la siguiente guía"
+        },
+        {
+          "id": "elige-la-siguiente-guía",
+          "heading": "Elige la siguiente guía",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/installation/#article",
+        "https://ankiforge.dev/es/docs/installation/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/installation/index.md"
+    },
+    {
+      "route": "/es/docs/json-to-anki/",
+      "pageId": "json-to-anki",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Genera y actualiza mazos de Anki desde JSON",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "shared-inputs",
+          "task": "shared-inputs",
+          "heading": "Archivos de entrada compartidos"
+        },
+        {
+          "id": "archivos-de-entrada-compartidos",
+          "heading": "Archivos de entrada compartidos",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "rust",
+          "heading": "Rust",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "python",
+          "heading": "Python",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "node",
+          "heading": "Node",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "check-and-import-the-result",
+          "task": "check-and-import-the-result",
+          "heading": "Comprueba e importa el resultado"
+        },
+        {
+          "id": "comprueba-e-importa-el-resultado",
+          "heading": "Comprueba e importa el resultado",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 10,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/json-to-anki/#article",
+        "https://ankiforge.dev/es/docs/json-to-anki/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/json-to-anki/index.md"
+    },
+    {
+      "route": "/es/docs/languages/",
+      "pageId": "languages",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Elige tu lenguaje de programación",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "next-tasks",
+          "task": "next-tasks",
+          "heading": "Qué hacer después"
+        },
+        {
+          "id": "qué-hacer-después",
+          "heading": "Qué hacer después",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/languages/#article",
+        "https://ankiforge.dev/es/docs/languages/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/languages/index.md"
+    },
+    {
+      "route": "/es/docs/media/",
+      "pageId": "media",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Añade imágenes y audio a tus tarjetas Anki",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "execute-the-media-workflow",
+          "task": "execute-the-media-workflow",
+          "heading": "Ejecuta el flujo de trabajo multimedia"
+        },
+        {
+          "id": "ejecuta-el-flujo-de-trabajo-multimedia",
+          "heading": "Ejecuta el flujo de trabajo multimedia",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "compose-content-and-explicit-assets",
+          "task": "compose-content-and-explicit-assets",
+          "heading": "Combina contenido y recursos explícitos"
+        },
+        {
+          "id": "combina-contenido-y-recursos-explícitos",
+          "heading": "Combina contenido y recursos explícitos",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "names-mime-and-budgets",
+          "task": "names-mime-and-budgets",
+          "heading": "Nombres, tipos MIME y límites"
+        },
+        {
+          "id": "nombres-tipos-mime-y-límites",
+          "heading": "Nombres, tipos MIME y límites",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "typed-image-and-sound-usage",
+          "task": "typed-image-and-sound-usage",
+          "heading": "Uso tipado de imágenes y sonidos"
+        },
+        {
+          "id": "uso-tipado-de-imágenes-y-sonidos",
+          "heading": "Uso tipado de imágenes y sonidos",
+          "headingLevel": "h3"
+        },
+        {
+          "id": "batch-import-from-source"
+        },
+        {
+          "id": "batch-media-import",
+          "task": "batch-media-import",
+          "heading": "Importación de recursos multimedia por lotes"
+        },
+        {
+          "id": "importación-de-recursos-multimedia-por-lotes",
+          "heading": "Importación de recursos multimedia por lotes",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "batch-behavior-and-budgets",
+          "task": "batch-behavior-and-budgets",
+          "heading": "Comportamiento y límites de los lotes"
+        },
+        {
+          "id": "comportamiento-y-límites-de-los-lotes",
+          "heading": "Comportamiento y límites de los lotes",
+          "headingLevel": "h3"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/media/#article",
+        "https://ankiforge.dev/es/docs/media/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/media/index.md"
+    },
+    {
+      "route": "/es/docs/node-api/",
+      "pageId": "node-api",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "API de Node y TypeScript",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "project-and-notes",
+          "task": "project-and-notes",
+          "heading": "Proyecto y notas"
+        },
+        {
+          "id": "proyecto-y-notas",
+          "heading": "Proyecto y notas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "immutable-models",
+          "task": "immutable-models",
+          "heading": "Modelos inmutables"
+        },
+        {
+          "id": "modelos-inmutables",
+          "heading": "Modelos inmutables",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-and-image-occlusion",
+          "task": "media-and-image-occlusion",
+          "heading": "Recursos multimedia y oclusión de imágenes"
+        },
+        {
+          "id": "recursos-multimedia-y-oclusión-de-imágenes",
+          "heading": "Recursos multimedia y oclusión de imágenes",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-compare-and-output",
+          "task": "build-compare-and-output",
+          "heading": "Generación, comparación y salida"
+        },
+        {
+          "id": "generación-comparación-y-salida",
+          "heading": "Generación, comparación y salida",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "artifact-lifetime-and-concurrency",
+          "task": "artifact-lifetime-and-concurrency",
+          "heading": "Vida útil del archivo de salida y concurrencia"
+        },
+        {
+          "id": "vida-útil-del-archivo-de-salida-y-concurrencia",
+          "heading": "Vida útil del archivo de salida y concurrencia",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "errors",
+          "task": "errors",
+          "heading": "Errores"
+        },
+        {
+          "id": "errores",
+          "heading": "Errores",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-context",
+          "task": "addition-context",
+          "heading": "Contexto al añadir notas"
+        },
+        {
+          "id": "contexto-al-añadir-notas",
+          "heading": "Contexto al añadir notas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "source-api-details"
+        },
+        {
+          "id": "batch-media-and-prepared-publication",
+          "task": "batch-media-and-prepared-publication",
+          "heading": "Recursos multimedia por lotes y publicación preparada"
+        },
+        {
+          "id": "recursos-multimedia-por-lotes-y-publicación-preparada",
+          "heading": "Recursos multimedia por lotes y publicación preparada",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "prepare-review-and-publish",
+          "task": "prepare-review-and-publish",
+          "heading": "Preparar, revisar y publicar"
+        },
+        {
+          "id": "preparar-revisar-y-publicar",
+          "heading": "Preparar, revisar y publicar",
+          "headingLevel": "h3"
+        },
+        {
+          "id": "typescript",
+          "heading": "TypeScript",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/node-api/#article",
+        "https://ankiforge.dev/es/docs/node-api/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/node-api/index.md"
+    },
+    {
+      "route": "/es/docs/node-quickstart/",
+      "pageId": "node-quickstart",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Genera un APKG de Anki con Node.js",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "export-a-deck",
+          "task": "export-a-deck",
+          "heading": "Exporta un mazo"
+        },
+        {
+          "id": "exporta-un-mazo",
+          "heading": "Exporta un mazo",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "typescript-and-next-tasks",
+          "task": "typescript-and-next-tasks",
+          "heading": "TypeScript y siguientes pasos"
+        },
+        {
+          "id": "typescript-y-siguientes-pasos",
+          "heading": "TypeScript y siguientes pasos",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/node-quickstart/#article",
+        "https://ankiforge.dev/es/docs/node-quickstart/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/node-quickstart/index.md"
+    },
+    {
+      "route": "/es/docs/python-api/",
+      "pageId": "python-api",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "API de Python",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "project-and-note-values",
+          "task": "project-and-note-values",
+          "heading": "Valores de proyecto y nota"
+        },
+        {
+          "id": "valores-de-proyecto-y-nota",
+          "heading": "Valores de proyecto y nota",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-and-templates",
+          "task": "models-and-templates",
+          "heading": "Modelos y plantillas"
+        },
+        {
+          "id": "modelos-y-plantillas",
+          "heading": "Modelos y plantillas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-and-occlusion",
+          "task": "media-and-occlusion",
+          "heading": "Recursos multimedia y oclusión"
+        },
+        {
+          "id": "recursos-multimedia-y-oclusión",
+          "heading": "Recursos multimedia y oclusión",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "operations-and-results",
+          "task": "operations-and-results",
+          "heading": "Operaciones y resultados"
+        },
+        {
+          "id": "operaciones-y-resultados",
+          "heading": "Operaciones y resultados",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "errors-and-concurrency",
+          "task": "errors-and-concurrency",
+          "heading": "Errores y concurrencia"
+        },
+        {
+          "id": "errores-y-concurrencia",
+          "heading": "Errores y concurrencia",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-context",
+          "task": "addition-context",
+          "heading": "Contexto al añadir notas"
+        },
+        {
+          "id": "contexto-al-añadir-notas",
+          "heading": "Contexto al añadir notas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "source-api-details",
+          "task": "source-api-details",
+          "heading": "Operaciones por lotes y publicación preparada"
+        },
+        {
+          "id": "operaciones-por-lotes-y-publicación-preparada",
+          "heading": "Operaciones por lotes y publicación preparada",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "prepare-review-and-publish",
+          "task": "prepare-review-and-publish",
+          "heading": "Preparar, revisar y publicar"
+        },
+        {
+          "id": "preparar-revisar-y-publicar",
+          "heading": "Preparar, revisar y publicar",
+          "headingLevel": "h3"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/python-api/#article",
+        "https://ankiforge.dev/es/docs/python-api/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/python-api/index.md"
+    },
+    {
+      "route": "/es/docs/python-diagnostics/",
+      "pageId": "python-diagnostics",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Diagnósticos de Python",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "compare-before-publication",
+          "task": "compare-before-publication",
+          "heading": "Comparar antes de publicar"
+        },
+        {
+          "id": "comparar-antes-de-publicar",
+          "heading": "Comparar antes de publicar",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "budgets-and-artifact-ownership",
+          "task": "budgets-and-artifact-ownership",
+          "heading": "Límites y propiedad del archivo de salida"
+        },
+        {
+          "id": "límites-y-propiedad-del-archivo-de-salida",
+          "heading": "Límites y propiedad del archivo de salida",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/python-diagnostics/#article",
+        "https://ankiforge.dev/es/docs/python-diagnostics/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/python-diagnostics/index.md"
+    },
+    {
+      "route": "/es/docs/python-migration/",
+      "pageId": "python-migration",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Transición a la nueva API de Python",
+          "headingLevel": "h1"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/python-migration/#article",
+        "https://ankiforge.dev/es/docs/python-migration/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/python-migration/index.md"
+    },
+    {
+      "route": "/es/docs/python-quickstart/",
+      "pageId": "python-quickstart",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Genera un APKG de Anki con Python",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "export-a-deck",
+          "task": "export-a-deck",
+          "heading": "Exporta un mazo"
+        },
+        {
+          "id": "exporta-un-mazo",
+          "heading": "Exporta un mazo",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "continue",
+          "task": "continue",
+          "heading": "Continúa"
+        },
+        {
+          "id": "continúa",
+          "heading": "Continúa",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/python-quickstart/#article",
+        "https://ankiforge.dev/es/docs/python-quickstart/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/python-quickstart/index.md"
+    },
+    {
+      "route": "/es/docs/quickstart/",
+      "pageId": "quickstart",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Genera un APKG de Anki con Rust",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "install",
+          "task": "install",
+          "heading": "Instalación"
+        },
+        {
+          "id": "instalación",
+          "heading": "Instalación",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "export-your-first-deck",
+          "task": "export-your-first-deck",
+          "heading": "Exporta tu primer mazo"
+        },
+        {
+          "id": "exporta-tu-primer-mazo",
+          "heading": "Exporta tu primer mazo",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "continue",
+          "task": "continue",
+          "heading": "Continúa"
+        },
+        {
+          "id": "continúa",
+          "heading": "Continúa",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/quickstart/#article",
+        "https://ankiforge.dev/es/docs/quickstart/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/quickstart/index.md"
+    },
+    {
+      "route": "/es/docs/rust-api/",
+      "pageId": "rust-api",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Referencia de la API de Rust",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "authoring",
+          "task": "authoring",
+          "heading": "Crear contenido"
+        },
+        {
+          "id": "crear-contenido",
+          "heading": "Crear contenido",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "content-and-media",
+          "task": "content-and-media",
+          "heading": "Contenido y recursos multimedia"
+        },
+        {
+          "id": "contenido-y-recursos-multimedia",
+          "heading": "Contenido y recursos multimedia",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-options",
+          "task": "build-options",
+          "heading": "Opciones de generación"
+        },
+        {
+          "id": "opciones-de-generación",
+          "heading": "Opciones de generación",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-compare-and-output",
+          "task": "build-compare-and-output",
+          "heading": "Generación, comparación y salida"
+        },
+        {
+          "id": "generación-comparación-y-salida",
+          "heading": "Generación, comparación y salida",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "reports-and-errors",
+          "task": "reports-and-errors",
+          "heading": "Informes y errores"
+        },
+        {
+          "id": "informes-y-errores",
+          "heading": "Informes y errores",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-context",
+          "task": "addition-context",
+          "heading": "Contexto al añadir notas"
+        },
+        {
+          "id": "contexto-al-añadir-notas",
+          "heading": "Contexto al añadir notas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "review-once-publish-once",
+          "task": "review-once-publish-once",
+          "heading": "Revisa una vez y publica una vez"
+        },
+        {
+          "id": "revisa-una-vez-y-publica-una-vez",
+          "heading": "Revisa una vez y publica una vez",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/rust-api/#article",
+        "https://ankiforge.dev/es/docs/rust-api/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/rust-api/index.md"
+    },
+    {
+      "route": "/es/docs/rust-guide/",
+      "pageId": "rust-guide",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Guía de desarrollo con Rust",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "projects-and-diagnostics",
+          "task": "projects-and-diagnostics",
+          "heading": "Proyectos y diagnósticos"
+        },
+        {
+          "id": "proyectos-y-diagnósticos",
+          "heading": "Proyectos y diagnósticos",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-and-assets",
+          "task": "models-and-assets",
+          "heading": "Modelos y recursos"
+        },
+        {
+          "id": "modelos-y-recursos",
+          "heading": "Modelos y recursos",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "output-ownership",
+          "task": "output-ownership",
+          "heading": "Propiedad del archivo de salida"
+        },
+        {
+          "id": "propiedad-del-archivo-de-salida",
+          "heading": "Propiedad del archivo de salida",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "stable-note-identity",
+          "task": "stable-note-identity",
+          "heading": "Identidad estable de las notas"
+        },
+        {
+          "id": "identidad-estable-de-las-notas",
+          "heading": "Identidad estable de las notas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "updating-distributed-decks",
+          "task": "updating-distributed-decks",
+          "heading": "Actualizar mazos distribuidos"
+        },
+        {
+          "id": "actualizar-mazos-distribuidos",
+          "heading": "Actualizar mazos distribuidos",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-errors-and-media-categories",
+          "task": "addition-errors-and-media-categories",
+          "heading": "Errores al añadir notas y categorías multimedia"
+        },
+        {
+          "id": "errores-al-añadir-notas-y-categorías-multimedia",
+          "heading": "Errores al añadir notas y categorías multimedia",
+          "headingLevel": "h3"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/rust-guide/#article",
+        "https://ankiforge.dev/es/docs/rust-guide/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/rust-guide/index.md"
+    },
+    {
+      "route": "/es/docs/templates/",
+      "pageId": "templates",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Reutiliza plantillas de Anki, CSS y recursos multimedia",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "run-the-bundled-example",
+          "task": "run-the-bundled-example",
+          "heading": "Ejecuta el ejemplo con el paquete de plantillas"
+        },
+        {
+          "id": "ejecuta-el-ejemplo-con-el-paquete-de-plantillas",
+          "heading": "Ejecuta el ejemplo con el paquete de plantillas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "manifest-and-template-references",
+          "task": "manifest-and-template-references",
+          "heading": "Manifiesto y referencias de las plantillas"
+        },
+        {
+          "id": "manifiesto-y-referencias-de-las-plantillas",
+          "heading": "Manifiesto y referencias de las plantillas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "load-and-reuse-a-model",
+          "task": "load-and-reuse-a-model",
+          "heading": "Carga y reutiliza un modelo"
+        },
+        {
+          "id": "carga-y-reutiliza-un-modelo",
+          "heading": "Carga y reutiliza un modelo",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "assets-and-budgets",
+          "task": "assets-and-budgets",
+          "heading": "Recursos y límites"
+        },
+        {
+          "id": "recursos-y-límites",
+          "heading": "Recursos y límites",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/templates/#article",
+        "https://ankiforge.dev/es/docs/templates/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/templates/index.md"
+    },
+    {
+      "route": "/es/docs/troubleshooting/",
+      "pageId": "troubleshooting",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Soluciona errores de Anki Forge",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "installation",
+          "task": "installation",
+          "heading": "Instalación"
+        },
+        {
+          "id": "instalación",
+          "heading": "Instalación",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-and-notes",
+          "task": "models-and-notes",
+          "heading": "Modelos y notas"
+        },
+        {
+          "id": "modelos-y-notas",
+          "heading": "Modelos y notas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-and-templates",
+          "task": "media-and-templates",
+          "heading": "Recursos multimedia y plantillas"
+        },
+        {
+          "id": "recursos-multimedia-y-plantillas",
+          "heading": "Recursos multimedia y plantillas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "updates-and-outputs",
+          "task": "updates-and-outputs",
+          "heading": "Actualizaciones y archivos de salida"
+        },
+        {
+          "id": "actualizaciones-y-archivos-de-salida",
+          "heading": "Actualizaciones y archivos de salida",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/troubleshooting/#article",
+        "https://ankiforge.dev/es/docs/troubleshooting/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/troubleshooting/index.md"
+    },
+    {
+      "route": "/es/docs/updates/",
+      "pageId": "updates",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Actualiza mazos de Anki con ID de nota estables",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "run-two-versions-and-compare",
+          "task": "run-two-versions-and-compare",
+          "heading": "Genera dos versiones y compáralas"
+        },
+        {
+          "id": "genera-dos-versiones-y-compáralas",
+          "heading": "Genera dos versiones y compáralas",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "policy-and-inspection-limits",
+          "task": "policy-and-inspection-limits",
+          "heading": "Política y límites de inspección"
+        },
+        {
+          "id": "política-y-límites-de-inspección",
+          "heading": "Política y límites de inspección",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "evidence-and-identity",
+          "task": "evidence-and-identity",
+          "heading": "Pruebas e identidad"
+        },
+        {
+          "id": "pruebas-e-identidad",
+          "heading": "Pruebas e identidad",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "client-import-behavior-and-release-review",
+          "task": "client-import-behavior-and-release-review",
+          "heading": "Importación en el cliente y revisión de versiones"
+        },
+        {
+          "id": "importación-en-el-cliente-y-revisión-de-versiones",
+          "heading": "Importación en el cliente y revisión de versiones",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-once-review-then-publish-from-source"
+        },
+        {
+          "id": "build-once-review-then-publish",
+          "task": "build-once-review-then-publish",
+          "heading": "Genera una vez, revisa y publica"
+        },
+        {
+          "id": "genera-una-vez-revisa-y-publica",
+          "heading": "Genera una vez, revisa y publica",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/docs/updates/#article",
+        "https://ankiforge.dev/es/docs/updates/#webpage"
+      ],
+      "llms": "/es/llms.txt",
+      "markdown": "/es/docs/updates/index.md"
+    },
+    {
+      "route": "/es/examples/",
+      "pageId": "examples",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "basic"
+        },
+        {
+          "id": "basic-heading",
+          "heading": "Basic",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-basic-card-status"
+        },
+        {
+          "id": "cloze"
+        },
+        {
+          "id": "cloze-heading",
+          "heading": "Cloze",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-cloze-card-status"
+        },
+        {
+          "id": "media"
+        },
+        {
+          "id": "media-heading",
+          "heading": "Multimedia",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-media-card-status"
+        },
+        {
+          "id": "occlusion"
+        },
+        {
+          "id": "occlusion-heading",
+          "heading": "Oclusión de imágenes",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-occlusion-card-status"
+        },
+        {
+          "id": "updates"
+        },
+        {
+          "id": "updates-heading",
+          "heading": "Una nota, dos versiones.",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 9,
+        "search": 0,
+        "codeCopy": 5,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/examples/#webpage"
+      ],
+      "llms": "/es/llms.txt"
+    },
+    {
+      "route": "/es/",
+      "pageId": "home",
+      "locale": "es",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "hero-title",
+          "heading": "Genera tarjetas Ankia partir de tus datos.",
+          "headingLevel": "h1",
+          "containerModule": "hero"
+        },
+        {
+          "id": "install-heading",
+          "heading": "Elige tu lenguaje.",
+          "headingLevel": "h2",
+          "containerModule": "install"
+        },
+        {
+          "id": "ai-quickstart",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-heading",
+          "heading": "Usa Anki Forge con IA.",
+          "headingLevel": "h2",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-request",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-request-hint",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-tab-rust",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-tab-node",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-tab-python",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-panel-rust",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-panel-node",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-panel-python",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "performance-heading",
+          "heading": "Medimos la exportación.",
+          "headingLevel": "h2",
+          "containerModule": "performance"
+        },
+        {
+          "id": "examples-heading",
+          "heading": "Explora el código. Prueba la tarjeta.",
+          "headingLevel": "h2",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-basic",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-cloze",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-media",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-occlusion",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-basic",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-basic-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-cloze",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-cloze-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-media",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-media-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-occlusion",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-occlusion-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "identity-heading",
+          "heading": "Mejora tus notas.Conserva su identidad.",
+          "headingLevel": "h2",
+          "containerModule": "updates"
+        },
+        {
+          "id": "workflow-heading",
+          "task": "next-heading",
+          "heading": "Del primer mazo a la próxima actualización",
+          "containerModule": "next"
+        },
+        {
+          "id": "next-heading",
+          "heading": "Del primer mazo a la próxima actualización",
+          "headingLevel": "h2",
+          "containerModule": "next"
+        }
+      ],
+      "capabilities": {
+        "downloads": 6,
+        "search": 0,
+        "codeCopy": 13,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#source",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/es/#webpage"
+      ],
+      "llms": "/es/llms.txt"
     },
     {
       "route": "/examples/",
@@ -1239,7 +3816,12 @@
         "audio": 1,
         "updates": 1
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/examples/#webpage"
+      ],
+      "llms": "/llms.txt"
     },
     {
       "route": "/",
@@ -1251,7 +3833,7 @@
         },
         {
           "id": "hero-title",
-          "heading": "Turn your datainto Anki decks.",
+          "heading": "Generate Anki flashcardsfrom your data.",
           "headingLevel": "h1",
           "containerModule": "hero"
         },
@@ -1394,7 +3976,13 @@
         "audio": 1,
         "updates": 1
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#source",
+        "https://ankiforge.dev/#webpage",
+        "https://ankiforge.dev/#website"
+      ],
+      "llms": "/llms.txt"
     },
     {
       "route": "/zh-cn/blog/",
@@ -1413,7 +4001,12 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/blog/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt"
     },
     {
       "route": "/zh-cn/blog/stable-ids-and-deck-updates/",
@@ -1472,7 +4065,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/blog/stable-ids-and-deck-updates/#article",
+        "https://ankiforge.dev/zh-cn/blog/stable-ids-and-deck-updates/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/blog/stable-ids-and-deck-updates/index.md"
     },
     {
       "route": "/zh-cn/blog/your-first-anki-deck/",
@@ -1531,7 +4131,82 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/blog/your-first-anki-deck/#article",
+        "https://ankiforge.dev/zh-cn/blog/your-first-anki-deck/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/blog/your-first-anki-deck/index.md"
+    },
+    {
+      "route": "/zh-cn/docs/ai-anki-cards/",
+      "pageId": "ai-anki-cards",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "choose-input",
+          "task": "choose-input",
+          "heading": "从可以核对的原始材料开始"
+        },
+        {
+          "id": "从可以核对的原始材料开始",
+          "heading": "从可以核对的原始材料开始",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "draft-cards",
+          "task": "draft-cards",
+          "heading": "让 AI 起草 CSV 卡片"
+        },
+        {
+          "id": "让-ai-起草-csv-卡片",
+          "heading": "让 AI 起草 CSV 卡片",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "export-apkg",
+          "task": "export-apkg",
+          "heading": "将审核后的卡片导出为 APKG"
+        },
+        {
+          "id": "将审核后的卡片导出为-apkg",
+          "heading": "将审核后的卡片导出为 APKG",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "check-result",
+          "task": "check-result",
+          "heading": "学习前检查卡片"
+        },
+        {
+          "id": "学习前检查卡片",
+          "heading": "学习前检查卡片",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/ai-anki-cards/#article",
+        "https://ankiforge.dev/zh-cn/docs/ai-anki-cards/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/ai-anki-cards/index.md"
     },
     {
       "route": "/zh-cn/docs/anki-forge-vs-genanki/",
@@ -1597,7 +4272,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/anki-forge-vs-genanki/#article",
+        "https://ankiforge.dev/zh-cn/docs/anki-forge-vs-genanki/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/anki-forge-vs-genanki/index.md"
     },
     {
       "route": "/zh-cn/docs/api/",
@@ -1638,7 +4320,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/api/#article",
+        "https://ankiforge.dev/zh-cn/docs/api/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/api/index.md"
     },
     {
       "route": "/zh-cn/docs/build-guarantees/",
@@ -1709,7 +4398,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/build-guarantees/#article",
+        "https://ankiforge.dev/zh-cn/docs/build-guarantees/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/build-guarantees/index.md"
     },
     {
       "route": "/zh-cn/docs/cards/",
@@ -1718,7 +4414,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "Basic 与 Cloze 卡片",
+          "heading": "生成 Anki 问答卡片与 Cloze 填空卡片",
           "headingLevel": "h1"
         },
         {
@@ -1750,7 +4446,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/cards/#article",
+        "https://ankiforge.dev/zh-cn/docs/cards/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/cards/index.md"
     },
     {
       "route": "/zh-cn/docs/compatibility/",
@@ -1791,7 +4494,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/compatibility/#article",
+        "https://ankiforge.dev/zh-cn/docs/compatibility/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/compatibility/index.md"
     },
     {
       "route": "/zh-cn/docs/concepts/",
@@ -1862,7 +4572,82 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/concepts/#article",
+        "https://ankiforge.dev/zh-cn/docs/concepts/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/concepts/index.md"
+    },
+    {
+      "route": "/zh-cn/docs/csv-to-anki/",
+      "pageId": "csv-to-anki",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "CSV 转 Anki：用 Python 批量生成卡片",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "prepare-csv",
+          "task": "prepare-csv",
+          "heading": "准备 CSV"
+        },
+        {
+          "id": "准备-csv",
+          "heading": "准备 CSV",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "install",
+          "task": "install",
+          "heading": "安装 Anki Forge"
+        },
+        {
+          "id": "安装-anki-forge",
+          "heading": "安装 Anki Forge",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "convert",
+          "task": "convert",
+          "heading": "生成 APKG"
+        },
+        {
+          "id": "生成-apkg",
+          "heading": "生成 APKG",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "verify-and-extend",
+          "task": "verify-and-extend",
+          "heading": "导入、检查与扩展"
+        },
+        {
+          "id": "导入检查与扩展",
+          "heading": "导入、检查与扩展",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/csv-to-anki/#article",
+        "https://ankiforge.dev/zh-cn/docs/csv-to-anki/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/csv-to-anki/index.md"
     },
     {
       "route": "/zh-cn/docs/custom-notetypes/",
@@ -1913,7 +4698,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/custom-notetypes/#article",
+        "https://ankiforge.dev/zh-cn/docs/custom-notetypes/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/custom-notetypes/index.md"
     },
     {
       "route": "/zh-cn/docs/development/",
@@ -1944,7 +4736,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/development/#article",
+        "https://ankiforge.dev/zh-cn/docs/development/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/development/index.md"
     },
     {
       "route": "/zh-cn/docs/genanki-migration/",
@@ -1965,7 +4764,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/genanki-migration/#article",
+        "https://ankiforge.dev/zh-cn/docs/genanki-migration/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/genanki-migration/index.md"
     },
     {
       "route": "/zh-cn/docs/image-occlusion/",
@@ -1974,7 +4780,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "图片遮挡",
+          "heading": "生成 Anki 图片遮挡卡片",
           "headingLevel": "h1"
         },
         {
@@ -2006,7 +4812,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/image-occlusion/#article",
+        "https://ankiforge.dev/zh-cn/docs/image-occlusion/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/image-occlusion/index.md"
     },
     {
       "route": "/zh-cn/docs/",
@@ -2067,7 +4880,13 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/index.md"
     },
     {
       "route": "/zh-cn/docs/installation/",
@@ -2108,7 +4927,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/installation/#article",
+        "https://ankiforge.dev/zh-cn/docs/installation/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/installation/index.md"
     },
     {
       "route": "/zh-cn/docs/json-to-anki/",
@@ -2174,7 +5000,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/json-to-anki/#article",
+        "https://ankiforge.dev/zh-cn/docs/json-to-anki/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/json-to-anki/index.md"
     },
     {
       "route": "/zh-cn/docs/languages/",
@@ -2210,7 +5043,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/languages/#article",
+        "https://ankiforge.dev/zh-cn/docs/languages/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/languages/index.md"
     },
     {
       "route": "/zh-cn/docs/media/",
@@ -2219,7 +5059,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "图片与音频",
+          "heading": "为 Anki 卡片添加图片与音频",
           "headingLevel": "h1"
         },
         {
@@ -2294,7 +5134,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/media/#article",
+        "https://ankiforge.dev/zh-cn/docs/media/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/media/index.md"
     },
     {
       "route": "/zh-cn/docs/node-api/",
@@ -2413,7 +5260,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/node-api/#article",
+        "https://ankiforge.dev/zh-cn/docs/node-api/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/node-api/index.md"
     },
     {
       "route": "/zh-cn/docs/node-quickstart/",
@@ -2422,7 +5276,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "用 Node.js 生成 Anki APKG",
+          "heading": "用 Node.js 生成 Anki 卡片",
           "headingLevel": "h1"
         },
         {
@@ -2469,7 +5323,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/node-quickstart/#article",
+        "https://ankiforge.dev/zh-cn/docs/node-quickstart/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/node-quickstart/index.md"
     },
     {
       "route": "/zh-cn/docs/python-api/",
@@ -2570,7 +5431,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/python-api/#article",
+        "https://ankiforge.dev/zh-cn/docs/python-api/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/python-api/index.md"
     },
     {
       "route": "/zh-cn/docs/python-diagnostics/",
@@ -2611,7 +5479,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/python-diagnostics/#article",
+        "https://ankiforge.dev/zh-cn/docs/python-diagnostics/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/python-diagnostics/index.md"
     },
     {
       "route": "/zh-cn/docs/python-migration/",
@@ -2632,7 +5507,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/python-migration/#article",
+        "https://ankiforge.dev/zh-cn/docs/python-migration/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/python-migration/index.md"
     },
     {
       "route": "/zh-cn/docs/python-quickstart/",
@@ -2641,7 +5523,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "用 Python 生成 Anki APKG",
+          "heading": "用 Python 生成 Anki 卡片",
           "headingLevel": "h1"
         },
         {
@@ -2688,7 +5570,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/python-quickstart/#article",
+        "https://ankiforge.dev/zh-cn/docs/python-quickstart/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/python-quickstart/index.md"
     },
     {
       "route": "/zh-cn/docs/quickstart/",
@@ -2697,7 +5586,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "用 Rust 生成 Anki APKG",
+          "heading": "用 Rust 生成 Anki 卡片",
           "headingLevel": "h1"
         },
         {
@@ -2749,7 +5638,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/quickstart/#article",
+        "https://ankiforge.dev/zh-cn/docs/quickstart/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/quickstart/index.md"
     },
     {
       "route": "/zh-cn/docs/rust-api/",
@@ -2840,7 +5736,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/rust-api/#article",
+        "https://ankiforge.dev/zh-cn/docs/rust-api/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/rust-api/index.md"
     },
     {
       "route": "/zh-cn/docs/rust-guide/",
@@ -2921,7 +5824,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/rust-guide/#article",
+        "https://ankiforge.dev/zh-cn/docs/rust-guide/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/rust-guide/index.md"
     },
     {
       "route": "/zh-cn/docs/templates/",
@@ -2930,7 +5840,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "模板包",
+          "heading": "复用 Anki 卡片模板、CSS 与媒体",
           "headingLevel": "h1"
         },
         {
@@ -2982,7 +5892,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/templates/#article",
+        "https://ankiforge.dev/zh-cn/docs/templates/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/templates/index.md"
     },
     {
       "route": "/zh-cn/docs/troubleshooting/",
@@ -3043,7 +5960,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/troubleshooting/#article",
+        "https://ankiforge.dev/zh-cn/docs/troubleshooting/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/troubleshooting/index.md"
     },
     {
       "route": "/zh-cn/docs/updates/",
@@ -3052,7 +5976,7 @@
       "anchors": [
         {
           "id": "_top",
-          "heading": "更新与分发",
+          "heading": "用稳定笔记 ID 更新 Anki 牌组",
           "headingLevel": "h1"
         },
         {
@@ -3117,7 +6041,14 @@
         "audio": 0,
         "updates": 0
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/docs/updates/#article",
+        "https://ankiforge.dev/zh-cn/docs/updates/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt",
+      "markdown": "/zh-cn/docs/updates/index.md"
     },
     {
       "route": "/zh-cn/examples/",
@@ -3188,7 +6119,12 @@
         "audio": 1,
         "updates": 1
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/examples/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt"
     },
     {
       "route": "/zh-cn/",
@@ -3200,7 +6136,7 @@
         },
         {
           "id": "hero-title",
-          "heading": "把你的数据变成 Anki 牌组。",
+          "heading": "从你的数据批量生成 Anki 卡片。",
           "headingLevel": "h1",
           "containerModule": "hero"
         },
@@ -3343,8 +6279,399 @@
         "audio": 1,
         "updates": 1
       },
-      "entities": []
+      "entities": [
+        "https://ankiforge.dev/#software",
+        "https://ankiforge.dev/#source",
+        "https://ankiforge.dev/#website",
+        "https://ankiforge.dev/zh-cn/#webpage"
+      ],
+      "llms": "/zh-cn/llms.txt"
     }
   ],
-  "machineResources": []
+  "machineResources": [
+    {
+      "route": "/blog/stable-ids-and-deck-updates/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/blog/your-first-anki-deck/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/ai-anki-cards/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/anki-forge-vs-genanki/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/build-guarantees/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/cards/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/compatibility/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/concepts/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/csv-to-anki/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/custom-notetypes/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/development/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/genanki-migration/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/image-occlusion/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/installation/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/json-to-anki/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/languages/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/media/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/node-api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/node-quickstart/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/python-api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/python-diagnostics/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/python-migration/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/python-quickstart/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/quickstart/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/rust-api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/rust-guide/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/templates/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/troubleshooting/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/docs/updates/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/blog/stable-ids-and-deck-updates/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/blog/your-first-anki-deck/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/ai-anki-cards/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/anki-forge-vs-genanki/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/build-guarantees/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/cards/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/compatibility/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/concepts/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/csv-to-anki/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/custom-notetypes/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/development/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/genanki-migration/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/image-occlusion/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/installation/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/json-to-anki/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/languages/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/media/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/node-api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/node-quickstart/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/python-api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/python-diagnostics/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/python-migration/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/python-quickstart/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/quickstart/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/rust-api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/rust-guide/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/templates/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/troubleshooting/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/docs/updates/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/es/llms.txt",
+      "kind": "llms"
+    },
+    {
+      "route": "/llms.txt",
+      "kind": "llms"
+    },
+    {
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/blog/your-first-anki-deck/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/ai-anki-cards/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/cards/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/concepts/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/csv-to-anki/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/custom-notetypes/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/development/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/genanki-migration/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/image-occlusion/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/installation/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/json-to-anki/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/languages/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/media/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/node-api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/node-quickstart/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/python-api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/python-diagnostics/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/python-migration/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/python-quickstart/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/quickstart/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/rust-api/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/rust-guide/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/templates/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/troubleshooting/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/docs/updates/index.md",
+      "kind": "markdown"
+    },
+    {
+      "route": "/zh-cn/llms.txt",
+      "kind": "llms"
+    }
+  ]
 }

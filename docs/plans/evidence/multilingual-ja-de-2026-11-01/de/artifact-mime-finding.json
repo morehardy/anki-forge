@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "DE-ARTIFACT-001",
+  "severity": "minor",
+  "status": "observed-in-original-artifact-source-corrected-awaiting-new-http",
+  "reviewerRun": "/root/de_technical_review/de-machine-prefix-2026-11-01",
+  "originalCommit": "8f2c77e331147961dce5c0d929a9f5097270a5f8",
+  "capture": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-prefix/http-observations.json",
+    "sha256": "eaec8d974c8c16c0aa5520c94ff1a1acee4cacdb2e38f926bc98850dea6cbbc9"
+  },
+  "examples": [
+    {
+      "topic": "python-api",
+      "route": "/anki-forge/de/docs/python-api/index.md",
+      "response": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-prefix/073-anki-forge_de_docs_python-api_index.md.body",
+        "sha256": "c80a5b2cfc5c52d1916e9539df7ed082ef49b953bcc883b2036105783783ad22"
+      },
+      "actualMarkdownParagraph": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus image/_. Tonreferenzen akzeptieren audio/_ oder video/\\*. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "observation": "German punctuation after an unquoted MIME wildcard allowed emphasis parsing; image/_ and audio/_ in this Markdown response do not preserve the literal MIME wildcard. The media guide uses inline-code wildcards correctly."
+    },
+    {
+      "topic": "node-api",
+      "route": "/anki-forge/de/docs/node-api/index.md",
+      "response": {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/machine-prefix/076-anki-forge_de_docs_node-api_index.md.body",
+        "sha256": "55fb89742922e946f28ca9c71d3dea7e92a73ff6a0943e8be76fbdf88cd558c7"
+      },
+      "actualMarkdownParagraph": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/_; Audioreferenzen akzeptieren audio/_ oder video/\\*. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "observation": "German punctuation after an unquoted MIME wildcard allowed emphasis parsing; image/_ and audio/_ in this Markdown response do not preserve the literal MIME wildcard. The media guide uses inline-code wildcards correctly."
+    }
+  ],
+  "scope": "Actual new German rendering issue, not a prior-five-language issue. All older-language corresponding responses were inspected and preserve escaped wildcard stars. This does not change the task API or imply a different supported MIME category; it damages the displayed technical literal.",
+  "sourceCorrection": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/technical-source-review-mime-fixed.json",
+    "sha256": "ca41d76335890ec15287aaf404da989e82723b6895491fcd59167122147e4837"
+  },
+  "requiredFollowup": "Read fresh final-prefix and final-root HTTP bodies and confirm literal image/*, audio/* and video/* survive as inline code. Preserve the original artifact and this finding."
+}

@@ -1,0 +1,95 @@
+diff --git a/website/search-concepts.json b/website/search-concepts.json
+index 094dfc1..9b68cf8 100644
+--- a/website/search-concepts.json
++++ b/website/search-concepts.json
+@@ -2345,6 +2345,14 @@
+           "occlusion"
+         ],
+         "consumeContext": true
++      },
++      "project-schema": {
++        "terms": [
++          "ankiforge-project-v1",
++          "ankiforge-project-v2",
++          "schema de projeto",
++          "formato de projeto"
++        ]
+       }
+     }
+   }
+diff --git a/website/search-terms.json b/website/search-terms.json
+index 21b7088..df140ad 100644
+--- a/website/search-terms.json
++++ b/website/search-terms.json
+@@ -1509,7 +1509,10 @@
+         "propriedade do artefato temporário",
+         "atualizar com update_from em Rust",
+         "AddTarget e AddDetail",
+-        "ankiforge-project-v2"
++        "ankiforge-project-v2",
++        "schema de projeto e compatibilidade dos dados",
++        "ankiforge-project-v1 rejeitado",
++        "ankiforge-project-v2 sem name no nível superior"
+       ],
+       "api": [
+         "visão geral da API pública",
+diff --git a/website/src/components/DocsHeader.astro b/website/src/components/DocsHeader.astro
+index ef749f7..0cdfad2 100644
+--- a/website/src/components/DocsHeader.astro
++++ b/website/src/components/DocsHeader.astro
+@@ -21,8 +21,8 @@ const locale = localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL);
+     .docs-header .wordmark svg { width: 24px; }
+     .docs-header .header-tools { gap: 6px; }
+   }
+-  @media (max-width: 374px) {
+-    :root { --sl-nav-height: 8.5rem; }
++  @media (max-width: 480px) {
++    :root { --sl-nav-height: 9rem; }
+     .docs-header .docs-search { order: 0; width: auto; margin-left: auto; }
+     .docs-header .header-tools { order: 1; width: 100%; justify-content: space-between; }
+   }
+diff --git a/website/src/components/LanguageSwitcher.astro b/website/src/components/LanguageSwitcher.astro
+index 0ee90d6..1f0ad18 100644
+--- a/website/src/components/LanguageSwitcher.astro
++++ b/website/src/components/LanguageSwitcher.astro
+@@ -21,11 +21,16 @@ const common = page && !['docs', 'article'].includes(page.type);
+   <ul>{targets.map(target => <li><a class="language-switch" data-language-switch data-section-map={JSON.stringify(target.mapping)} data-section-ids={JSON.stringify(target.targetIds)} data-common-sections={common || undefined} href={target.href} hreflang={target.locale} lang={target.locale}>{target.label}</a></li>)}</ul>
+ </details>)}
+ <style>
+-  .language-switch { white-space: nowrap; font-size: 0.875rem; }
+-  .language-menu { position: relative; font-size: 0.875rem; }
+-  .language-menu summary { cursor: pointer; white-space: nowrap; }
+-  .language-menu ul { position: absolute; top: 100%; right: 0; z-index: 20; min-width: max-content; margin: 8px 0 0; padding: 8px 12px; list-style: none; border: 1px solid var(--af-line); border-radius: 8px; background: var(--af-paper); }
++  .language-switch { white-space: normal; overflow-wrap: anywhere; font-size: 0.875rem; }
++  .language-menu { position: relative; min-width: 0; max-width: 100%; font-size: 0.875rem; }
++  :global(.header-tools) .language-menu { position: static; }
++  .language-menu summary { cursor: pointer; white-space: normal; overflow-wrap: anywhere; }
++  .language-menu ul { position: absolute; top: 100%; right: 0; z-index: 20; min-width: 0; width: max-content; max-width: 100%; max-height: min(20rem, 50dvh); overflow: auto; margin: 8px 0 0; padding: 8px 12px; list-style: none; border: 1px solid var(--af-line); border-radius: 8px; background: var(--af-paper); }
+   .language-menu li + li { margin-top: 8px; }
++  .language-menu ul a { display: block; line-height: 1.25; }
++  @media (max-height: 500px) {
++    :global(.header-tools) .language-menu ul { position: fixed; top: auto; bottom: 16px; right: 16px; max-width: calc(100vw - 32px); max-height: 25dvh; }
++  }
+ </style>
+ <script>
+   document.querySelectorAll<HTMLAnchorElement>('[data-language-switch]').forEach(link => {
+diff --git a/website/src/styles/global.css b/website/src/styles/global.css
+index 4a70e65..37dc67f 100644
+--- a/website/src/styles/global.css
++++ b/website/src/styles/global.css
+@@ -230,11 +230,13 @@ code { font-size: 0.86em; }
+ 
+ /* Keep all shared tools operable at 320px and at increased text sizes. */
+ .site-header { flex-wrap: wrap; min-height: 76px; height: auto; padding-block: 12px; }
+-.header-tools { margin-left: auto; flex-shrink: 0; }
+-.mobile-menu summary, .mobile-menu nav a { white-space: nowrap; }
++.header-tools { position: relative; margin-left: auto; flex-shrink: 0; min-width: 0; max-width: 100%; flex-wrap: wrap; justify-content: flex-end; }
++.mobile-menu summary { white-space: nowrap; }
++.mobile-menu nav a { white-space: normal; overflow-wrap: anywhere; }
+ @media (max-width: 767px) {
+   .site-header { column-gap: 10px; row-gap: 8px; }
+   .header-tools { gap: 8px; }
++  .mobile-menu nav { top: 100%; right: 0; max-width: 100%; }
+ }
+ @media (max-width: 420px) {
+   .site-header .wordmark > span:last-child { display: none; }

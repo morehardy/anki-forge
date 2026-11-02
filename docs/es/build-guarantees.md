@@ -51,4 +51,4 @@ La publicación preparada está incluida en los paquetes públicos `0.3.1`.
 
 Cada intento de publicación consume el objeto que mantiene la versión candidata, incluso si falla la política o la E/S. Vuelve a preparar para reintentar o para cambiar la política o el destino. Los informes siguen siendo legibles y no conservan archivos. Node y Python ofrecen `close()` idempotente y un error de indisponibilidad con motivo `closed` o `consumed`; cerrar después de que empiece la publicación no la cancela. La duración no incluye la espera de revisión. Un fallo tardío de durabilidad puede producirse después de un reemplazo correcto, por lo que debes comprobar los datos reales de la publicación.
 
-Sigue [el ejemplo completo](/docs/updates/#build-once-review-then-publish-from-source) y las referencias de las API de cada lenguaje para conocer los errores tipados y el funcionamiento de los trabajadores.
+Sigue [el ejemplo completo](/docs/updates/#build-once-review-then-publish-from-source) y las referencias de las API de cada lenguaje para conocer los errores tipados y el funcionamiento de los hilos de trabajo.

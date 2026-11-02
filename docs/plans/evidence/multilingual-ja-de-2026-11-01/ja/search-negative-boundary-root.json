@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-negative-search-boundary-review",
+  "status": "passed",
+  "mode": "release-candidate",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/ja_de_infra_audit/ja-negative-root-2026-11-01",
+  "scope": "Five frozen Japanese negative queries only. Twelve actual top-three HTML result rows, nine distinct bodies, independently read for capability boundaries; the nonsense query has no result. This is separate from ranking, all positive-query acceptance and browser interaction checks. The source independent query file was not read.",
+  "inputSha256": "85f5276a59a50143053000a91fe702d76521e13fb9232db86a2498016a029d1f",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es",
+    "pt-BR",
+    "ja"
+  ],
+  "readOrigin": "http://127.0.0.1:56048",
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/origin-manifest.json",
+    "sha256": "23f7c509d6ddbe5dec65cf0274309926129ef3c910cffcb900913b608efd564c",
+    "commit": "5a50666dbc15e9aa7342de1d3d6587d1a9f147bd"
+  },
+  "searchResults": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/engineering/root/search-results.json",
+    "sha256": "a30a6529f330e65c48bcb8b5510905f901f1a54ba79c6bc08e895c649f159f9f"
+  },
+  "querySetSha256": "7658c069baf2f5babc626c1b81ed8a85a77cde36f7510264e7f3b706b95159a9",
+  "rawHttpObservations": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/http-observations.json",
+    "sha256": "346fef2b8112503f6a170d0b3f234ca2cc771f0f7ce209ee46e3ed21031284b3"
+  },
+  "resourceBindings": [
+    {
+      "route": "/ja/",
+      "sha256": "3fed8784540b3dc69449757c6084457c370257ca7c2038e91b98e2fffe535e55"
+    },
+    {
+      "route": "/ja/docs/rust-guide/",
+      "sha256": "82231416e0a7018861393ba8cef6cd2c150b5b2064864cd36cb245a33cfa2af9"
+    },
+    {
+      "route": "/ja/docs/api/",
+      "sha256": "70ca2057882547f40d7b688e39f8839145896cee70cc3a08ac0d5770007f00fc"
+    },
+    {
+      "route": "/ja/docs/updates/",
+      "sha256": "0521e819ff96b4e4c8642696690b12e60863ac1286de2261a8f03d66f5d8d6a4"
+    },
+    {
+      "route": "/ja/blog/stable-ids-and-deck-updates/",
+      "sha256": "2651bc04f823edee3a61fb1c38ad9fa36685ec085931acadea3ec5275a01e008"
+    },
+    {
+      "route": "/ja/docs/json-to-anki/",
+      "sha256": "e6e47412d66496133b6d95dba05b91d1e84bf8abf165f48c9f2a9d9829b8bb1a"
+    },
+    {
+      "route": "/ja/docs/media/",
+      "sha256": "e952d716159216e3471cc9d95f631ca1e4b6987a4fcd39d8f57d1a0ce8ee3ace"
+    },
+    {
+      "route": "/ja/docs/compatibility/",
+      "sha256": "6fcb53e7f154f80ccee3357c3ea0a515f64c1a97c3ef398bac7c759c16689dcd"
+    },
+    {
+      "route": "/ja/docs/ai-anki-cards/",
+      "sha256": "65bd18aad8158f850a5e338c0936cacfbd6927bb5bf1d4610931565ecce12ecf"
+    }
+  ],
+  "cases": [
+    {
+      "id": "ja-negative-01",
+      "query": "zxqvnj 847261 qqqrzz",
+      "intentId": "negative-gibberish",
+      "expectedBoundary": "無意味な入力に対応する作業やページはない。空の結果でよいが、検索の操作と入力の修正ができること。",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "The exact nonsense input has no result bodies. Empty output is permitted by this frozen boundary; no supported task is invented. Keyboard/input-correction usability is a separate browser check and is not established by this semantic report.",
+      "actualResultBodies": [],
+      "openIssues": []
+    },
+    {
+      "id": "ja-negative-02",
+      "query": "ankiforge-project-v1を変更せずそのまま使う",
+      "intentId": "negative-old-schema",
+      "expectedBoundary": "ツールのレシピはankiforge-project-v2を要求し、v1を拒否する。結果がある場合は変換が必要であることを説明し、変更していないv1を受理すると案内しない。空の結果でもよい。",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "The second result directly requires ankiforge-project-v2 without top-level name and explicitly rejects v1. It distinguishes that tool schema from the still-valid ankiforge-identity-v1 evidence format. The first home result and third API overview describe generic caller-provided CSV/JSON or public authoring APIs; neither promises to accept an unchanged legacy v1 tool recipe. This passes the capability boundary, without claiming the homepage itself gives migration instructions.",
+      "actualResultBodies": [
+        {
+          "pageId": "home",
+          "url": "http://127.0.0.1:56048/ja/",
+          "route": "/ja/",
+          "sha256": "3fed8784540b3dc69449757c6084457c370257ca7c2038e91b98e2fffe535e55",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/01-home.html",
+            "sha256": "3fed8784540b3dc69449757c6084457c370257ca7c2038e91b98e2fffe535e55"
+          },
+          "quote": "CSV の表、JSON データ、AI アシスタントが下書きしたカードから始めます。",
+          "observation": "Generic learning input is an authoring starting point; this paragraph does not name or accept a legacy tool schema."
+        },
+        {
+          "pageId": "rust-guide",
+          "url": "http://127.0.0.1:56048/ja/docs/rust-guide/",
+          "route": "/ja/docs/rust-guide/",
+          "sha256": "82231416e0a7018861393ba8cef6cd2c150b5b2064864cd36cb245a33cfa2af9",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/02-rust-guide.html",
+            "sha256": "82231416e0a7018861393ba8cef6cd2c150b5b2064864cd36cb245a33cfa2af9"
+          },
+          "quote": "ツール用レシピにはトップレベルの name を持たない ankiforge-project-v2 が必要です。v1 は拒否されます。",
+          "observation": "Direct unsupported-v1 boundary, with the required replacement format; adjacent identity-v1 is explicitly a different package-evidence format."
+        },
+        {
+          "pageId": "api",
+          "url": "http://127.0.0.1:56048/ja/docs/api/",
+          "route": "/ja/docs/api/",
+          "sha256": "70ca2057882547f40d7b688e39f8839145896cee70cc3a08ac0d5770007f00fc",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/03-api.html",
+            "sha256": "70ca2057882547f40d7b688e39f8839145896cee70cc3a08ac0d5770007f00fc"
+          },
+          "quote": "公開 ankiforge パッケージでノートを作成し、メディアを同梱して、新しいデッキを配布する前に更新内容を確認できます。",
+          "observation": "Public note authoring is described without an assurance that an old JSON tool recipe can be submitted unchanged."
+        }
+      ],
+      "openIssues": []
+    },
+    {
+      "id": "ja-negative-03",
+      "query": "Ankiで再エクスポートしたAPKGを更新の基準にする",
+      "intentId": "negative-reexport-baseline",
+      "expectedBoundary": "更新には前回配布したオリジナルAPKGが必要。Ankiから再エクスポートしたAPKGを代わりの基準パッケージとして推奨しない。空の結果でもよい。",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "All three actual result bodies require the original distribution APKG and reject an Anki re-export as the baseline. The update guide also refuses to silently reconstruct missing evidence or waive it with a risk-category allowance. The blog and runnable JSON recipe preserve the same baseline boundary.",
+      "actualResultBodies": [
+        {
+          "pageId": "updates",
+          "url": "http://127.0.0.1:56048/ja/docs/updates/",
+          "route": "/ja/docs/updates/",
+          "sha256": "0521e819ff96b4e4c8642696690b12e60863ac1286de2261a8f03d66f5d8d6a4",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/04-updates.html",
+            "sha256": "0521e819ff96b4e4c8642696690b12e60863ac1286de2261a8f03d66f5d8d6a4"
+          },
+          "quote": "Anki からの再エクスポートではこの情報が保持されないため、更新の基準には使えません。",
+          "observation": "Embedded complete identity/revision evidence must remain in the original package; missing evidence is not reconstructed."
+        },
+        {
+          "pageId": "blog:stable-ids-and-deck-updates",
+          "url": "http://127.0.0.1:56048/ja/blog/stable-ids-and-deck-updates/",
+          "route": "/ja/blog/stable-ids-and-deck-updates/",
+          "sha256": "2651bc04f823edee3a61fb1c38ad9fa36685ec085931acadea3ec5275a01e008",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/05-blog_stable-ids-and-deck-updates.html",
+            "sha256": "2651bc04f823edee3a61fb1c38ad9fa36685ec085931acadea3ec5275a01e008"
+          },
+          "quote": "Anki から再エクスポートしたファイルは、対応する基準パッケージではありません。",
+          "observation": "The historical post explicitly excludes a client re-export rather than implying stable note keys alone recover the baseline."
+        },
+        {
+          "pageId": "json-to-anki",
+          "url": "http://127.0.0.1:56048/ja/docs/json-to-anki/",
+          "route": "/ja/docs/json-to-anki/",
+          "sha256": "e6e47412d66496133b6d95dba05b91d1e84bf8abf165f48c9f2a9d9829b8bb1a",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/06-json-to-anki.html",
+            "sha256": "e6e47412d66496133b6d95dba05b91d1e84bf8abf165f48c9f2a9d9829b8bb1a"
+          },
+          "quote": "Anki から再エクスポートしたファイルは使えません。",
+          "observation": "The recipe requires original v1 at a separate path and retains it for the reviewed v2 publication."
+        }
+      ],
+      "openIssues": []
+    },
+    {
+      "id": "ja-negative-04",
+      "query": "PNGをwrong.mp3に名前変更して音声として使う",
+      "intentId": "negative-mime-rename",
+      "expectedBoundary": "名前変更ではファイルのバイト列や保持されたMIMEは変わらない。wrong.mp3と名付けたPNGは独立した内容検査や拡張子検査で失敗し得る。正しい入力または実際の変換を案内し、名前変更を変換と説明しない。空の結果でもよい。",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "Both the media guide and Rust guide explicitly state that renaming does not change retained MIME and identify independent content/extension checks that may reject PNG bytes named wrong.mp3. Typed image acceptance is not audio conversion or playback proof. The JSON recipe uses genuine separate PNG and WAV assets and labels the sound as a generated tone; no returned body presents renaming as conversion.",
+      "actualResultBodies": [
+        {
+          "pageId": "media",
+          "url": "http://127.0.0.1:56048/ja/docs/media/",
+          "route": "/ja/docs/media/",
+          "sha256": "e952d716159216e3471cc9d95f631ca1e4b6987a4fcd39d8f57d1a0ce8ee3ace",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/07-media.html",
+            "sha256": "e952d716159216e3471cc9d95f631ca1e4b6987a4fcd39d8f57d1a0ce8ee3ace"
+          },
+          "quote": "改名によって保持済みの MIME が変わることはありません。",
+          "observation": "The surrounding paragraph identifies wrong.mp3/PNG and MEDIA.DECLARED_MIME_MISMATCH; category validation and independent build checks are separate."
+        },
+        {
+          "pageId": "rust-guide",
+          "url": "http://127.0.0.1:56048/ja/docs/rust-guide/",
+          "route": "/ja/docs/rust-guide/",
+          "sha256": "82231416e0a7018861393ba8cef6cd2c150b5b2064864cd36cb245a33cfa2af9",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/08-rust-guide.html",
+            "sha256": "82231416e0a7018861393ba8cef6cd2c150b5b2064864cd36cb245a33cfa2af9"
+          },
+          "quote": "エクスポート名を変更しても MIME は変わりません。",
+          "observation": "The very next sentence discusses PNG renamed wrong.mp3 and the independent build extension/content inspection."
+        },
+        {
+          "pageId": "json-to-anki",
+          "url": "http://127.0.0.1:56048/ja/docs/json-to-anki/",
+          "route": "/ja/docs/json-to-anki/",
+          "sha256": "e6e47412d66496133b6d95dba05b91d1e84bf8abf165f48c9f2a9d9829b8bb1a",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/09-json-to-anki.html",
+            "sha256": "e6e47412d66496133b6d95dba05b91d1e84bf8abf165f48c9f2a9d9829b8bb1a"
+          },
+          "quote": "画像は細胞の模式図です。音声は短い合成音で、単語の読み上げではありません。",
+          "observation": "The actual recipe supplies cell.png and tone.wav and preserves those bytes; it does not claim to synthesize speech or turn image data into audio by a filename change."
+        }
+      ],
+      "openIssues": []
+    },
+    {
+      "id": "ja-negative-05",
+      "query": "Ankiの復習履歴を直接リセットする",
+      "intentId": "negative-edit-study-progress",
+      "expectedBoundary": "ライブラリはAPKGを生成し、インストール済みAnkiのコレクションや学習進捗を直接編集しない。結果はパッケージ生成とクライアントのインポートの境界を守り、復習履歴の直接編集を約束しない。空の結果でもよい。",
+      "rankGatePassed": true,
+      "semanticBoundaryStatus": "passed",
+      "conclusion": "The update, compatibility and AI-drafting results consistently describe writing an APKG and then testing/importing it in Anki. The update guide disclaims deletion synchronization and recovery of deleted history; compatibility assigns review/import outcomes to client-specific tests; the AI guide exports a package and then asks the user to open it. None provides an API or procedure to directly reset an installed collection or study history. This is non-endorsement of the unsupported capability, not an assertion that every page explicitly says a reset method is unavailable.",
+      "actualResultBodies": [
+        {
+          "pageId": "updates",
+          "url": "http://127.0.0.1:56048/ja/docs/updates/",
+          "route": "/ja/docs/updates/",
+          "sha256": "0521e819ff96b4e4c8642696690b12e60863ac1286de2261a8f03d66f5d8d6a4",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/10-updates.html",
+            "sha256": "0521e819ff96b4e4c8642696690b12e60863ac1286de2261a8f03d66f5d8d6a4"
+          },
+          "quote": "APKG は配布用パッケージであり、削除を同期する仕組みではありません。",
+          "observation": "The surrounding client section also refuses to guarantee recovery of deleted history and requires testing local edits and existing schedules in Anki."
+        },
+        {
+          "pageId": "compatibility",
+          "url": "http://127.0.0.1:56048/ja/docs/compatibility/",
+          "route": "/ja/docs/compatibility/",
+          "sha256": "6fcb53e7f154f80ccee3357c3ea0a515f64c1a97c3ef398bac7c759c16689dcd",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/11-compatibility.html",
+            "sha256": "6fcb53e7f154f80ccee3357c3ea0a515f64c1a97c3ef398bac7c759c16689dcd"
+          },
+          "quote": "フィールド・テンプレートの変更、並べ替え用フィールド、ローカルの編集、復習履歴は、クライアントごとのテストが必要です。",
+          "observation": "Export success is distinct from client rendering/import/review behavior; no direct collection modification capability is advertised."
+        },
+        {
+          "pageId": "ai-anki-cards",
+          "url": "http://127.0.0.1:56048/ja/docs/ai-anki-cards/",
+          "route": "/ja/docs/ai-anki-cards/",
+          "sha256": "65bd18aad8158f850a5e338c0936cacfbd6927bb5bf1d4610931565ecce12ecf",
+          "bodyEvidence": {
+            "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/12-ai-anki-cards.html",
+            "sha256": "65bd18aad8158f850a5e338c0936cacfbd6927bb5bf1d4610931565ecce12ecf"
+          },
+          "quote": "生成した APKG を Anki で開き、カード数、質問、解答、書式を確認します。",
+          "observation": "The described result is a package to import, not an operation on installed Anki state. The same guide says the prompt builder is local text composition without model calls/uploads."
+        }
+      ],
+      "openIssues": []
+    }
+  ],
+  "openIssues": [],
+  "semanticComparison": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-root/body-comparison.json",
+    "sha256": "40d29a0f2e2e795f23ffffa9deeede7f25a62039dd0233a3596ab56f024cc59e"
+  },
+  "semanticReviewMethod": "Fresh root requests retain the same five queries and twelve actual result rows. All paragraphs are exactly equal to the independently read prefix HTML. All mainText is also equal except one homepage noscript href, whose exact /anki-forge/ja/examples/ -> /ja/examples/ change was inspected and is correct for root deployment. No technical statement, capability boundary, code or result identity changed. This actual delta review retains the manually authored prefix semantic conclusions."
+}

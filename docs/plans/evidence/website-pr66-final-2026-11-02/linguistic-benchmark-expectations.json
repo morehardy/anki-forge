@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/spec_review/pr66-final-linguistic-2026-11-02",
+  "scope": "Fresh source expectations for the current independently read six-language performance copy and unchanged measured data. Not a browser observation or artifact pass.",
+  "sourceBindings": [
+    {
+      "path": "website/src/i18n/en.json",
+      "sha256": "7fe63adaed05ac83602b64eeb14d0078688396e58da67627c395e3afb8fab707"
+    },
+    {
+      "path": "website/src/i18n/zh-CN.json",
+      "sha256": "35c6552f56c65394dcb184878ab1c53c9ff54811f9e8cd8b2e2bcee9f2602417"
+    },
+    {
+      "path": "website/src/i18n/es.json",
+      "sha256": "12e6e7af4ed5ecbddd72e0fa6ccc569cad3a4253762990fb34e061f13feba361"
+    },
+    {
+      "path": "website/src/i18n/pt-BR.json",
+      "sha256": "74ad099a5a9c93163bf1a510c3489bb7848370b2a9583a5cdf1d6e3efe385a5d"
+    },
+    {
+      "path": "website/src/i18n/ja.json",
+      "sha256": "0ac9d540c46da99583aa019d4b13f5d9742764807a0301fec4dbe5a5d0c5d094"
+    },
+    {
+      "path": "website/src/i18n/de.json",
+      "sha256": "47269a43f42b037a08a84263fab357826ba1df83d9238bb5811957a30181e815"
+    },
+    {
+      "path": "docs/benchmark-presentation.json",
+      "sha256": "487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074"
+    },
+    {
+      "path": "docs/performance/20261008/comparison.csv",
+      "sha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999"
+    },
+    {
+      "path": "website/src/components/PerformanceEvidence.astro",
+      "sha256": "d18b75a10ab6b02bc18ad37b32de1ca64a4f81fadb3841f7d92610a3b323a5ce"
+    }
+  ],
+  "benchmarkSamples": {
+    "en": {
+      "rust": "52.7 ms",
+      "range": "45.7–53.9%",
+      "description": "Each test uses 1,000 Basic notes. The five tests cover text-only notes, separate media files and shared media. In these tests, the Anki Forge Rust API took 45.7–53.9% less time to export than genanki.",
+      "less": "49.8% less time",
+      "more": "2.1% more time",
+      "rows": [
+        "52.7 ms / 105.0 ms",
+        "150.7 ms / 320.2 ms",
+        "128.7 ms / 275.4 ms",
+        "110.5 ms / 239.5 ms",
+        "61.4 ms / 112.9 ms"
+      ],
+      "labels": [
+        "Text only",
+        "Unique images",
+        "Unique audio",
+        "Mixed, unique media",
+        "Mixed, shared media"
+      ],
+      "limitations": "These results measure deck generation, not Anki import or review speed; other hardware and workloads may differ."
+    },
+    "zh-CN": {
+      "rust": "52.7 ms",
+      "range": "45.7–53.9%",
+      "description": "每组测试包含 1,000 条 Basic 笔记。五组测试覆盖纯文本、独立媒体和共享媒体等场景。Anki Forge Rust API 的导出耗时比 genanki 低 45.7–53.9%。",
+      "less": "耗时低 49.8%",
+      "more": "耗时高 2.1%",
+      "rows": [
+        "52.7 ms / 105.0 ms",
+        "150.7 ms / 320.2 ms",
+        "128.7 ms / 275.4 ms",
+        "110.5 ms / 239.5 ms",
+        "61.4 ms / 112.9 ms"
+      ],
+      "labels": [
+        "纯文本",
+        "不重复图片",
+        "不重复音频",
+        "图片与音频，不共享文件",
+        "图片与音频，共享文件"
+      ],
+      "limitations": "这些结果测量牌组生成，不代表 Anki 导入或复习速度；其他硬件与工作负载可能不同。"
+    },
+    "es": {
+      "rust": "52,7 ms",
+      "range": "45,7–53,9%",
+      "description": "Cada prueba usa 1000 notas Basic. Las cinco pruebas abarcan notas de solo texto, archivos multimedia distintos y recursos compartidos entre notas. En estas pruebas, la API de Rust de Anki Forge tardó entre un 45,7 y un 53,9 % menos en exportar que genanki.",
+      "less": "49,8 % menos de tiempo",
+      "more": "2,1 % más de tiempo",
+      "rows": [
+        "52,7 ms / 105,0 ms",
+        "150,7 ms / 320,2 ms",
+        "128,7 ms / 275,4 ms",
+        "110,5 ms / 239,5 ms",
+        "61,4 ms / 112,9 ms"
+      ],
+      "labels": [
+        "Solo texto",
+        "Una imagen distinta por nota",
+        "Un audio distinto por nota",
+        "Multimedia mixta, recursos únicos",
+        "Multimedia mixta, recursos compartidos"
+      ],
+      "limitations": "Estas pruebas miden la generación del mazo, no la velocidad de importación o de repaso en Anki. Los resultados pueden variar con otro equipo u otras cargas de trabajo."
+    },
+    "pt-BR": {
+      "rust": "52,7 ms",
+      "range": "45,7–53,9%",
+      "description": "Cada teste usa 1.000 notas Basic. Os cinco testes abrangem notas só com texto, arquivos de mídia diferentes e mídia compartilhada entre notas. Nesses testes, a API Rust do Anki Forge levou de 45,7% a 53,9% menos tempo para exportar do que o genanki.",
+      "less": "49,8% menos tempo",
+      "more": "2,1% mais tempo",
+      "rows": [
+        "52,7 ms / 105,0 ms",
+        "150,7 ms / 320,2 ms",
+        "128,7 ms / 275,4 ms",
+        "110,5 ms / 239,5 ms",
+        "61,4 ms / 112,9 ms"
+      ],
+      "labels": [
+        "Somente texto",
+        "Uma imagem diferente por nota",
+        "Um áudio diferente por nota",
+        "Imagens e áudio sem compartilhamento",
+        "Imagens e áudio compartilhados"
+      ],
+      "limitations": "Os resultados medem a geração de baralhos, não a velocidade de importação ou revisão no Anki; outros equipamentos e cargas de trabalho podem apresentar resultados diferentes."
+    },
+    "ja": {
+      "rust": "52.7 ms",
+      "range": "45.7–53.9%",
+      "description": "各テストでは Basic ノートを1,000件使います。5種類のテストで、テキストのみ、ノートごとに異なるメディア、ノート間で共有するメディアを比較しました。Anki Forge の Rust API は genanki よりエクスポート時間が45.7〜53.9%短くなりました。",
+      "less": "時間が49.8%短縮",
+      "more": "時間が2.1%増加",
+      "rows": [
+        "52.7 ms / 105.0 ms",
+        "150.7 ms / 320.2 ms",
+        "128.7 ms / 275.4 ms",
+        "110.5 ms / 239.5 ms",
+        "61.4 ms / 112.9 ms"
+      ],
+      "labels": [
+        "テキストのみ",
+        "ノートごとに異なる画像",
+        "ノートごとに異なる音声",
+        "複数種類の個別メディア",
+        "複数種類の共有メディア"
+      ],
+      "limitations": "この結果はデッキの生成時間を測ったもので、Anki へのインポートや復習の速さではありません。ハードウェアや処理内容によって異なる場合があります。"
+    },
+    "de": {
+      "rust": "52,7 ms",
+      "range": "45,7–53,9%",
+      "description": "Jeder Test verwendet 1.000 Basic-Notizen. Die fünf Tests decken reine Textnotizen, separate Mediendateien und gemeinsam genutzte Medien ab. Die Rust-API von Anki Forge benötigte dabei 45,7–53,9 % weniger Exportzeit als genanki.",
+      "less": "49,8 % weniger Zeit",
+      "more": "2,1 % mehr Zeit",
+      "rows": [
+        "52,7 ms / 105,0 ms",
+        "150,7 ms / 320,2 ms",
+        "128,7 ms / 275,4 ms",
+        "110,5 ms / 239,5 ms",
+        "61,4 ms / 112,9 ms"
+      ],
+      "labels": [
+        "Nur Text",
+        "Jeweils eigene Bilder",
+        "Jeweils eigenes Audio",
+        "Gemischte, jeweils eigene Medien",
+        "Gemischte, gemeinsam verwendete Medien"
+      ],
+      "limitations": "Gemessen wurde die Erzeugung der Stapel, nicht der Import oder das Lernen in Anki. Auf anderer Hardware oder mit anderen Daten können die Ergebnisse abweichen."
+    }
+  }
+}

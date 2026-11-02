@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "status": "requires-fix-before-final-acceptance",
+  "reviewerRun": "/root/pt_br_linguistic/browser-layout-initial-2026-11-01",
+  "originManifestSha256": "e24261d6fd90146c71a8ed51fb5667268b7849d06ba9cca8f1680784acb21729",
+  "inputSha256": "7c587ece1d281594c497d37f67a30afdec01439a9095ef9aaa89e152bdc5b474",
+  "observations": {
+    "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/usage-layout-prefix-initial/accessibility-observations.json",
+    "sha256": "e93cd9c71f1694bb6bb6f46c8e19031bd648ee3f32504b0705aa5a5e4edfc37c"
+  },
+  "findings": [
+    {
+      "id": "pt-br-200pct-header-controls",
+      "severity": "major",
+      "scope": "pt-BR home and docs at 320/390px with measured html font-size multiplied from 16px to 32px",
+      "observation": "Home header does not wrap its tools: whole document expands to 443/447px and the Menu summary is beyond the viewport. Documentation containers mask horizontal overflow, but visual inspection shows the mobile navigation button obscures the end of the Portuguese language label and theme controls are clipped. documentWidth alone did not detect the documentation issue.",
+      "screenshots": [
+        {
+          "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/usage-layout-prefix-initial/pt-BR-home-320-text-200-menu.png",
+          "sha256": "5aa5b715d6c76c7f63abe63a03f5f4505d3e9b32fd53fad12f0c4d4aef63c1e2"
+        },
+        {
+          "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/usage-layout-prefix-initial/pt-BR-home-390-text-200-menu.png",
+          "sha256": "4030ac462a2bcb9e6fe14db278141e94a3be1d7971bbabade482bad48a32242a"
+        },
+        {
+          "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/usage-layout-prefix-initial/pt-BR-python-quickstart-320-text-200-menu.png",
+          "sha256": "ff6aab1642304a36da417aa6bbf346a3de5be9a6c575d2de87cf23502f5d9d6f"
+        },
+        {
+          "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/usage-layout-prefix-initial/pt-BR-python-quickstart-390-text-200-menu.png",
+          "sha256": "c1ab08d5d5966fec1f671f6445ac7ec708fb33dc63f053b66c745ea404ad2df7"
+        }
+      ],
+      "requiredFollowup": "Parent to revise layout; independent browser observer to rerun against new archived artifact and visually inspect the result before closing."
+    }
+  ],
+  "positiveObservations": [
+    "Initial prefix completed 24 actual desktop task paths with real clipboard copies and four HTTP input downloads per language.",
+    "Keyboard Tab reached the 320px language summary; Enter opened it, Tab selected English and Enter followed the same-topic link.",
+    "With page JavaScript disabled, three complete Portuguese AI briefs remained readable, native language details opened through the keyboard, and the Rust quickstart link exposed cargo run and spanish.apkg."
+  ],
+  "limits": "Initial candidate is superseded for release acceptance. It is retained as genuine observations; no new inputSha256 is substituted and no final usage-task passing report is emitted."
+}

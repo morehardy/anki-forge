@@ -1,0 +1,100 @@
+# Python-API
+
+Canonical page: https://morehardy.github.io/anki-forge/de/docs/python-api/
+Language: de
+Description: Project, Medien, Build-Optionen, Berichte und die Kontrolle über die Lebensdauer temporärer Artefakte in Python.
+
+Das SDK ruft die reguläre öffentliche Rust-API über eine native Erweiterung auf. Es enthält `py.typed` und geprüfte öffentliche Signaturen. Beginne mit dem [Schnellstart](https://morehardy.github.io/anki-forge/de/docs/python-quickstart/).
+
+## Projekt- und Notizwerte
+
+| API | Verhalten |
+| --- | --- |
+| `Project(namespace, *, default_deck=None)` | Validiert den expliziten stabilen Namensraum und legt den Standardstapel fest |
+| `project.add(key, note)` | Übernimmt Notiz, Modell und zugehörige Medien atomar; doppelte Notizschlüssel führen zum Fehler |
+| `project.add_asset(media)` | Fügt eine explizite Abhängigkeit für direkt verwendetes HTML, CSS oder Skripte hinzu |
+| `len(project)` | Anzahl der erfolgreich hinzugefügten Notizen |
+| `Note.basic(front, back)` | Verwendet das eingebaute Basic-Modell; Zeichenfolgen stehen für Text |
+| `Note.cloze(text)` | Verwendet das eingebaute Cloze-Modell; Zeichenfolgen stehen für Text und behalten die Cloze-Syntax |
+| `note.field(key, content)` | Gibt eine neue Notiz mit der Feldzuweisung zurück; der Schlüssel wird beim Hinzufügen geprüft |
+| `note.deck(name)` / `.tag(tag)` / `.tags(tags)` | Gibt eine entsprechend konfigurierte Notiz zurück |
+| `note.note_type` | Das unveränderliche Modell, das der Notiz gehört |
+
+Gewöhnliche Zeichenfolgen werden zu Text. `Content.text(value)` und `Content.html(value)` sind explizite Konstruktoren. `Content.sequence(iterable)` verbindet Zeichenfolgen und Inhalte, ohne sie zu rendern oder Medienabhängigkeiten zu verlieren. Ein bloßer Dateiname wird in einem Feld nicht als Medienreferenz akzeptiert.
+
+## Modelle und Vorlagen
+
+`NoteType.builder(key)` gibt einen unveränderlichen Builder zurück. Seine Methoden `.name`, `.field`, `.template`, `.css`, `.cloze_field` und `.asset` liefern jeweils einen aktualisierten Builder. `.build()` prüft die vollständige Definition und gibt einen unveränderlichen NoteType zurück. `model.note()` erzeugt eine Notiz, die dieses Modell besitzt. `NoteType.from_bundle(path, limits=MediaLimits())` lädt dasselbe Modell samt Dateien aus dem aktuellen Bundle-Format. Das optionale Limit gilt vor dem Lesen getrennt für jede Datei.
+
+`Field(key, name=None, required=False, sort=False)` trennt den stabilen Schlüssel vom Anzeigenamen. `Template(key, front, back, name=None, browser_front=None, browser_back=None, target_deck=None, generation=GenerationRule())` verwendet in allen Vorlagenquellen Feldschlüssel. `GenerationRule.all(keys)` und `.any(keys)` konfigurieren die Kartenerzeugung. Standardmäßig wird die Bedingung abgeleitet, mit der Anki das Vorhandensein von Feldern prüft. Die Builder-Methode `.cloze_field(key)` deklariert eine eigene Cloze-Erzeugung.
+
+## Medien und Bildverdeckung
+
+| API | Verhalten |
+| --- | --- |
+| `Media.file(path, *, limits=MediaLimits())` | Liest sofort einen Snapshot ein, dessen Daten der Wert besitzt |
+| `Media.bytes(data, media_type, *, limits=MediaLimits())` | Besitzt die Bytes mit einem expliziten MIME-Typ |
+| `media.with_export_name(name)` | Gibt einen neuen Dateinamenwert zurück, der den Snapshot teilt; bestehende Referenzen behalten ihre Namen |
+| `media.filename`, `media.media_type`, `len(media)` | Schreibgeschützte Metadaten des Snapshots |
+| `media.image()` / `.sound()` | Typisierte Inhalte, die den Snapshot halten |
+
+`MediaLimits(max_bytes=256 << 20)` begrenzt jeden Import, bevor ein Snapshot entsteht. Große Medien können in temporären Speicher ausgelagert werden, dessen Lebensdauer über Besitzverhältnisse verwaltet wird. Namenskonflikte werden über alle expliziten und automatisch gesammelten Dateien hinweg geprüft.
+
+`Note.image_occlusion(media)` gibt einen ImageOcclusionBuilder zurück. Verkette `.mask(Mask.rect(key, x, y, width, height))`, optional `.mode(OcclusionMode.HIDE_ONE_GUESS_ONE)` und abschließend `.build()`. Der Standardmodus ist `HIDE_ALL_GUESS_ONE`. Beim Abschluss wird das Bild dekodiert; stabile Maskenschlüssel sowie endliche Pixelkoordinaten innerhalb des Bildes werden geprüft. Am zurückgegebenen Note-Objekt kannst du `header`, `back_extra` und `comments` wie üblich setzen. Die erzeugten Felder `image` und `occlusion` lassen sich nicht manuell zuweisen.
+
+## Operationen und Ergebnisse
+
+| API | Ergebnis |
+| --- | --- |
+| `project.build(BuildOptions.to(path))` | BuildOutput mit einem garantiert dauerhaft gespeicherten Artefakt |
+| `project.build(BuildOptions.temporary())` | BuildOutput mit einem temporären Artefakt mit verwaltetem Besitz |
+| `options.update_from(path)` | Gibt Optionen für eine Aktualisierung anhand vollständiger Nachweise aus der Basisversion zurück |
+| `project.compare(CompareOptions.against(path))` | Abgeschlossener ComparisonReport einschließlich einer getrennten Richtlinienentscheidung zur Veröffentlichung |
+| `options.update_policy(policy)` | Wendet eine explizite Risikorichtlinie auf Update/Compare an; für Create unzulässig |
+| `options.inspect_limits(limits)` | Wendet endliche Grenzen unabhängig auf Basisversion und Kandidat an |
+
+BuildOutput besitzt `.artifact`, `.report` und `.snapshot()`. BuildReport stellt `.counts` (BuildCounts mit Notizen, Karten und Medien), `.diagnostics`, `.comparison` und `.snapshot()` bereit. Ein Bericht enthält weder ein Erfolgs- oder Fehlerergebnis noch einen Dateibesitzer. ComparisonReport stellt `.findings`, `.policy`, `.allows_publication` und `.snapshot()` bereit. Snapshots sind gewöhnliche, als JSON serialisierbare Dictionaries und enthalten keinen Besitz am Artefakt.
+
+ApkgArtifact stellt `.path`, `.persist_to(path)` und `.close()` bereit. Eine Kopie mit `copy.copy` hält einen weiteren Besitzer; ein Kontextmanager gibt diesen Besitzer beim Verlassen frei. Eine temporäre Ausgabe verschwindet, sobald ihr letzter Besitzer freigegeben wird. Dauerhaft gespeicherte Pfade bleiben nach dem Aufräumen der Handles erhalten. Schlägt die dauerhafte Speicherung fehl, bleibt das Quell-Handle benutzbar.
+
+`UpdatePolicy()` blockiert Befunde der Stufen High und Critical. `.fail_on(RiskLevel.MEDIUM)` ändert den Schwellenwert. `.allow('RISK.NOTE_REMOVED')` erlaubt ausdrücklich die gesamte registrierte Kategorie und erhält die Nachweise. Unbekannte Codes werden sofort zurückgewiesen. `InspectLimits` stellt alle endlichen Byte- und Anzahlgrenzen bereit, einschließlich `max_identity_bytes`; vorgeschriebene Prüfungen lassen sich damit nicht abschalten.
+
+## Fehler und Nebenläufigkeit
+
+Fehler lösen SchemaError, AddError, MediaError, ImageOcclusionError, TemplateBundleError, CompareError, PolicyError, BuildError oder PersistError aus. Jede Ausnahme stellt `kind`, `code`, `details`, strukturierte Prüfergebnisse in `source_details` und den Text der Ursachenkette in `causes` bereit. Die native Ausnahme bleibt als `__cause__` erhalten. Wenn verfügbar, bleibt auch die Ursache eines E/A-Fehlers als verketteter OSError erhalten. BuildError bietet `.report` und `.snapshot()`, CompareError einen unvollständigen `.report`. Die Details von PersistError enthalten die tatsächlichen Ergebnisse des Veröffentlichungsvorgangs.
+
+Native Project-Operationen geben den GIL frei und weisen gleichzeitige Zugriffe auf dasselbe Objekt mit `BINDING.PROJECT_BUSY` zurück. Unabhängige Projekte können parallel arbeiten. Erzeuge nach einem Prozess-Fork alle nativen Werte und Handles neu. Geerbte Handles verweigern Operationen mit `BINDING.FORKED_OBJECT`; ihr Aufräumen kann keine Dateien des Elternprozesses löschen. Im Kindprozess erzeugte Werte funktionieren und werden normal aufgeräumt. Siehe auch [Diagnose](https://morehardy.github.io/anki-forge/de/docs/python-diagnostics/).
+
+## Kontext beim Hinzufügen
+
+Fehlgeschlagene Hinzufügungen lassen das Projekt unverändert. Der strukturierte Kontext enthält die ursprünglichen Notiz- und Modellschlüssel sowie das Ziel, gegebenenfalls ergänzt um Angaben zum Konflikt oder zur Medienverwendung. Rust stellt `note::{AddContext, AddTarget, AddDetail}` über `AddError::context()` / `detail()` bereit; die SDKs stellen `AddError.details` mit typisiertem Kontext und typisierten Details bereit. Node verwendet camelCase-Felder und friert die Struktur einschließlich aller verschachtelten Werte ein; Python verwendet TypedDicts mit snake\_case. Tags behalten ihren Einfügeindex. Feldpositionen behalten die ursprünglichen Sequenzindizes (`null`/`None` für das Feld, `[]` für dessen Wurzel) sowie optionale UTF-8-Bytebereiche. Fehler des Standardstapels beim Build enthalten keine Notiz- oder Modellschlüssel und bleiben in der Ursachenkette verfügbar.
+
+Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus image/_. Tonreferenzen akzeptieren audio/_ oder video/\*. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).
+
+## Stapelverarbeitung von Medien und vorbereitete Veröffentlichung
+
+Die Stapelverarbeitung von Medien und die vorbereitete Veröffentlichung sind im veröffentlichten Paket `0.3.1` enthalten.
+
+### Vorbereiten, prüfen und veröffentlichen
+
+```python
+from ankiforge import Project, Note, BuildOptions, BuildError
+project = Project('review-once').add('one', Note.basic('Question', 'Answer'))
+previous = project.build(BuildOptions.to('previous.apkg'))
+previous.artifact.close()
+prepared = project.prepare_publication(
+    BuildOptions.to('next.apkg').update_from('previous.apkg')
+)
+try:
+    report = prepared.report  # observations; does not own the candidate
+    if report.comparison is None or report.comparison.allows_publication:
+        output = prepared.publish()
+        output.artifact.close()  # persistent next.apkg remains
+except BuildError as error:
+    print(error.snapshot()['result'])  # actual publication/durability facts
+    raise
+finally:
+    prepared.close()  # idempotent; deletes an unused candidate
+```
+
+Ein Veröffentlichungsversuch verbraucht den Besitzer, auch bei einem Richtlinien- oder E/A-Fehler. Spätere Aufrufe lösen `PreparedPublicationStateError` mit dem Code `BUILD.PREPARED_UNAVAILABLE` und dem Grund `closed` oder `consumed` aus. close bricht eine bereits laufende Veröffentlichung nicht ab. Relative Pfade werden beim Aufruf der Vorbereitung gebunden; spätere Änderungen an Project können das geprüfte APKG nicht mehr verändern. Berichte bleiben nach close verfügbar, ohne Dateien am Leben zu halten. Bereite erneut vor, wenn du Optionen ändern oder den Vorgang wiederholen möchtest. Die Dauer enthält keine Wartezeit während der Prüfung. Ein spät auftretender Fehler kann bedeuten, dass die Ersetzung erfolgreich war, ihre dauerhafte Speicherung jedoch nicht bestätigt ist. Prüfe vor weiteren Schritten die tatsächlichen Veröffentlichungsergebnisse. Erforderlich sind native binding protocol 1 und contract bundle 2.1.0; ältere Binärdateien werden auch bei gleicher Versionsnummer abgewiesen.

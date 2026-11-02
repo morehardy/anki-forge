@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/pt_br_technical/final-post-build-acceptance-2026-11-01",
+  "status": "passed",
+  "scope": "Independent final machine-read and Portuguese negative-result semantic acceptance, plus explicitly reused SDK executions with fresh input/APKG inspection. This summary does not claim browser, full search ranking, all positive query, build or unit-test ownership. Source technical reports remain separately sealed.",
+  "inputSha256": "035f635c8d91691475f8e8be98bd915bc3b02652046dbc3e154876f06317d99d",
+  "environments": {
+    "prefix": {
+      "configuration": {
+        "site": "https://morehardy.github.io",
+        "base": "/anki-forge",
+        "customDomain": ""
+      },
+      "manifestSha256": "05c8e5e987153fbf8da2b6a934cdaa8ae2e27e9fff14af5d7134b601222aff8e",
+      "sourceCommit": "24da571c26da12fcbcbccb5007e090900c9bff71",
+      "machineReadOrigin": "http://127.0.0.1:63684",
+      "machineTasks": 16,
+      "machineHttpResponses": 56,
+      "machineResourceBindings": 128,
+      "machineReview": {
+        "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/machine-read-prefix.json",
+        "sha256": "ba0443b69cfd3be784b8595cdcf8beaf89d8e5de995b470918eff144bd1ca12c"
+      },
+      "negativeSearchReadOrigin": "http://127.0.0.1:64903",
+      "negativeSearchCases": 5,
+      "negativeResultRowHttpReads": 11,
+      "negativeDistinctPages": 10,
+      "negativeSemanticReview": {
+        "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-boundary-prefix.json",
+        "sha256": "3cb4a985f3f0284f92df67b32105ce8ba0519251f83cda3e2ed1fb24409bc175"
+      }
+    },
+    "root": {
+      "configuration": {
+        "site": "https://ankiforge.dev",
+        "base": "/",
+        "customDomain": "ankiforge.dev"
+      },
+      "manifestSha256": "e402cf153a6f60548799a7dfcd486fd32fd2b0b2b31d604d2fa18d6de7dcbf46",
+      "sourceCommit": "24da571c26da12fcbcbccb5007e090900c9bff71",
+      "machineReadOrigin": "http://127.0.0.1:65463",
+      "machineTasks": 16,
+      "machineHttpResponses": 56,
+      "machineResourceBindings": 128,
+      "machineReview": {
+        "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/machine-read-root.json",
+        "sha256": "55f9700f7be2ee1e55d79e8301e531539aedf82cce6df1740d8e9b06181fcd9a"
+      },
+      "negativeSearchReadOrigin": "http://127.0.0.1:50610",
+      "negativeSearchCases": 5,
+      "negativeResultRowHttpReads": 11,
+      "negativeDistinctPages": 10,
+      "negativeSemanticReview": {
+        "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/search-negative-boundary-root.json",
+        "sha256": "442aa66a21cd514f5cdc83da6b1acbc95e8bfa09ce06d13a1971780361c753a4"
+      }
+    }
+  },
+  "totals": {
+    "machineTasks": 32,
+    "machineHttpResponses": 112,
+    "negativeSearchCases": 10,
+    "negativeResultRowHttpReads": 22,
+    "sdkExecutionsRerun": 0,
+    "retainedApkgsFreshlyInspected": 10,
+    "executionInputBindingsFreshlyChecked": 23,
+    "comparisonReportsChecked": 6,
+    "executionAndInstallationRecordsChecked": 14
+  },
+  "executionReuseAudit": {
+    "path": "docs/plans/evidence/multilingual-pt-br-2026-11-01/execution-reuse-audit.json",
+    "sha256": "b0282d29e2de33f624f8b484ffb18d03dfecf2471f7dfa7577933439fcbfb2f8"
+  },
+  "semanticReuseDisclosure": "Final machine responses were fetched anew for every task and compared to actual bodies this reviewer had read, permitting only exact deployment URL replacement. Root search result text was compared to the final prefix text actually reviewed; only one homepage noscript examples href changed its deployment prefix. Detailed comparisons and independently written answers/findings are retained with each report. No old passing answer was copied from another reviewer.",
+  "finalEvidenceVerification": "All per-task machine evidence file hashes, all negative-result HTML hashes, every current execution input binding and the two origin manifest identities were rechecked before writing this summary.",
+  "openIssues": []
+}

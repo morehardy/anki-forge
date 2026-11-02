@@ -1,0 +1,346 @@
+{
+  "scope": "Actual manifest-bound German documentation HTML and Markdown MIME-literal regression observations.",
+  "helper": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/verify-mime-literals.mjs",
+    "sha256": "3da778bc7598f0dcdd57c110ecdef6300bf8d77125da1efe78d2a93f3a7af035"
+  },
+  "readOrigin": "http://127.0.0.1:64009",
+  "manifestSha256": "a7276d9989d0648de6f0bfcca3e78a6d7a0f4a3db5d92dbc670b1ab20f60d279",
+  "inputSha256": "c1c3b90c31ad677b850f62e53bb1634d8a1696034faa7543fc877246ee6c0695",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "status": "passed",
+  "records": [
+    {
+      "id": "python-api",
+      "route": "/de/docs/python-api/",
+      "htmlSha256": "070e1144974db82a76b2b993ae3abdd9746ab07d9555b1f0a593b6ca1fc1bf0a",
+      "markdownSha256": "99c49a03e85513ebc450f563764ebe7cf1264e0aa6c0abb1fb74271d14924f5b",
+      "text": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus image/*. Tonreferenzen akzeptieren audio/* oder video/*. Andere Kategorien führen zu NOTE.MEDIA_USAGE_INVALID. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im Entwurfsdokument.",
+      "code": [
+        "image/*",
+        "audio/*",
+        "video/*",
+        "NOTE.MEDIA_USAGE_INVALID"
+      ],
+      "markdown": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus `image/*`. Tonreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "audio/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        }
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:64009/de/docs/python-api/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Mon, 02 Nov 2026 01:55:34 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-green-final-root-http/python-api.html",
+          "sha256": "070e1144974db82a76b2b993ae3abdd9746ab07d9555b1f0a593b6ca1fc1bf0a",
+          "bytes": 86039
+        },
+        {
+          "url": "http://127.0.0.1:64009/de/docs/python-api/index.md",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/markdown; charset=utf-8",
+            "date": "Mon, 02 Nov 2026 01:55:34 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-green-final-root-http/python-api.md",
+          "sha256": "99c49a03e85513ebc450f563764ebe7cf1264e0aa6c0abb1fb74271d14924f5b",
+          "bytes": 11438
+        }
+      ]
+    },
+    {
+      "id": "node-api",
+      "route": "/de/docs/node-api/",
+      "htmlSha256": "09e213f113e99b30a0229a9fb349a07a9516157f1d51b2362479d53bb51cc9ef",
+      "markdownSha256": "b3082cdd5a3dac14fb08172780560670588806d94ba4b3c830391b1070ca03ce",
+      "text": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/*; Audioreferenzen akzeptieren audio/* oder video/*. Andere Kategorien lösen NOTE.MEDIA_USAGE_INVALID aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im Entwurf.",
+      "code": [
+        "image/*",
+        "audio/*",
+        "video/*",
+        "NOTE.MEDIA_USAGE_INVALID"
+      ],
+      "markdown": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "audio/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        }
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:64009/de/docs/node-api/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Mon, 02 Nov 2026 01:55:34 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-green-final-root-http/node-api.html",
+          "sha256": "09e213f113e99b30a0229a9fb349a07a9516157f1d51b2362479d53bb51cc9ef",
+          "bytes": 115337
+        },
+        {
+          "url": "http://127.0.0.1:64009/de/docs/node-api/index.md",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/markdown; charset=utf-8",
+            "date": "Mon, 02 Nov 2026 01:55:34 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-green-final-root-http/node-api.md",
+          "sha256": "b3082cdd5a3dac14fb08172780560670588806d94ba4b3c830391b1070ca03ce",
+          "bytes": 15227
+        }
+      ]
+    },
+    {
+      "id": "rust-api",
+      "route": "/de/docs/rust-api/",
+      "htmlSha256": "46e349306ab92a22d0485f3459be07a870562169b89e7d141f7997bee5f7e06b",
+      "markdownSha256": "be70ea5f8ec862ced603755b1e4d8a8b638e5aaf6721fa24f5a879acb864a890",
+      "text": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/*; Audioreferenzen akzeptieren audio/* oder video/*. Andere Kategorien lösen NOTE.MEDIA_USAGE_INVALID aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im Entwurf.",
+      "code": [
+        "image/*",
+        "audio/*",
+        "video/*",
+        "NOTE.MEDIA_USAGE_INVALID"
+      ],
+      "markdown": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "audio/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        }
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:64009/de/docs/rust-api/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Mon, 02 Nov 2026 01:55:34 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-green-final-root-http/rust-api.html",
+          "sha256": "46e349306ab92a22d0485f3459be07a870562169b89e7d141f7997bee5f7e06b",
+          "bytes": 82790
+        },
+        {
+          "url": "http://127.0.0.1:64009/de/docs/rust-api/index.md",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/markdown; charset=utf-8",
+            "date": "Mon, 02 Nov 2026 01:55:34 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-green-final-root-http/rust-api.md",
+          "sha256": "be70ea5f8ec862ced603755b1e4d8a8b638e5aaf6721fa24f5a879acb864a890",
+          "bytes": 10826
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "route": "/de/docs/media/",
+      "htmlSha256": "28d4431815cfc3673f4a75001eedd58e67b89774e1e027101cde88d87b41ee68",
+      "markdownSha256": "de9a0a051392b99beab0c68d2d73c1cc84a8131e4bd7d55c470762e805230b35",
+      "text": "Konstruktoren bleiben unfehlbar. Project::add prüft den beim Import gespeicherten MIME-Typ: Bilder benötigen image/*, Audioreferenzen akzeptieren audio/* und video/*. application/octet-stream, Text, Schriftarten und PDF scheitern bei typisierter Verwendung mit NOTE.MEDIA_USAGE_INVALID; registriere sie als ausdrückliche Medien für direktes HTML/CSS. Gültige ausdrückliche Deklarationen unbekannter Bild-/Video-MIME-Typen bestehen die Kategorieprüfung, ohne zu bestätigen, dass ein Decoder oder Player die Bytes unterstützt. Das Umbenennen einer Datei ändert den gespeicherten MIME-Typ niemals. Der Build prüft weiterhin unabhängig die bereitgestellten Bytes und die Exportendung: Ein PNG namens wrong.mp3 kann als Bild hinzugefügt werden und beim Build mit MEDIA.DECLARED_MIME_MISMATCH scheitern.",
+      "code": [
+        "Project::add",
+        "image/*",
+        "audio/*",
+        "video/*",
+        "application/octet-stream",
+        "NOTE.MEDIA_USAGE_INVALID",
+        "wrong.mp3",
+        "MEDIA.DECLARED_MIME_MISMATCH"
+      ],
+      "markdown": "Konstruktoren bleiben unfehlbar. `Project::add` prüft den beim Import gespeicherten MIME-Typ: Bilder benötigen `image/*`, Audioreferenzen akzeptieren `audio/*` und `video/*`. `application/octet-stream`, Text, Schriftarten und PDF scheitern bei typisierter Verwendung mit `NOTE.MEDIA_USAGE_INVALID`; registriere sie als ausdrückliche Medien für direktes HTML/CSS. Gültige ausdrückliche Deklarationen unbekannter Bild-/Video-MIME-Typen bestehen die Kategorieprüfung, ohne zu bestätigen, dass ein Decoder oder Player die Bytes unterstützt. Das Umbenennen einer Datei ändert den gespeicherten MIME-Typ niemals. Der Build prüft weiterhin unabhängig die bereitgestellten Bytes und die Exportendung: Ein PNG namens `wrong.mp3` kann als Bild hinzugefügt werden und beim Build mit `MEDIA.DECLARED_MIME_MISMATCH` scheitern.",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "audio/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        }
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:64009/de/docs/media/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Mon, 02 Nov 2026 01:55:34 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-green-final-root-http/media.html",
+          "sha256": "28d4431815cfc3673f4a75001eedd58e67b89774e1e027101cde88d87b41ee68",
+          "bytes": 98811
+        },
+        {
+          "url": "http://127.0.0.1:64009/de/docs/media/index.md",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/markdown; charset=utf-8",
+            "date": "Mon, 02 Nov 2026 01:55:34 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-green-final-root-http/media.md",
+          "sha256": "de9a0a051392b99beab0c68d2d73c1cc84a8131e4bd7d55c470762e805230b35",
+          "bytes": 9652
+        }
+      ]
+    },
+    {
+      "id": "rust-guide",
+      "route": "/de/docs/rust-guide/",
+      "htmlSha256": "e0f53064dffd797c8d2a32575cfda3c9e3e98be7686c7d50a3ea842616333717",
+      "markdownSha256": "73ca45217299a63224bd225580711d777d4d4f93b770924e4d1ac0203f4cfa44",
+      "text": "Media::image() und sound() bleiben unfehlbar. Beim Hinzufügen wird für Bilder image/* verlangt; Audioreferenzen akzeptieren audio/* oder video/*. Andere Kategorien führen zu NOTE.MEDIA_USAGE_INVALID. Geprüft wird der gespeicherte MIME-Typ, nicht die Dekodierung oder Wiedergabe. Direktes HTML und ausdrücklich deklarierte Medien behalten ihr bisheriges Verhalten. Das Umbenennen beim Export ändert den MIME-Typ nicht: Ein PNG mit dem Namen wrong.mp3 kann als Bild hinzugefügt werden, aber bei der unabhängigen Inhalts-/Dateiendungsprüfung des Builds mit MEDIA.DECLARED_MIME_MISMATCH scheitern.",
+      "code": [
+        "Media::image()",
+        "sound()",
+        "image/*",
+        "audio/*",
+        "video/*",
+        "NOTE.MEDIA_USAGE_INVALID",
+        "wrong.mp3",
+        "MEDIA.DECLARED_MIME_MISMATCH"
+      ],
+      "markdown": "`Media::image()` und `sound()` bleiben unfehlbar. Beim Hinzufügen wird für Bilder `image/*` verlangt; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Geprüft wird der gespeicherte MIME-Typ, nicht die Dekodierung oder Wiedergabe. Direktes HTML und ausdrücklich deklarierte Medien behalten ihr bisheriges Verhalten. Das Umbenennen beim Export ändert den MIME-Typ nicht: Ein PNG mit dem Namen `wrong.mp3` kann als Bild hinzugefügt werden, aber bei der unabhängigen Inhalts-/Dateiendungsprüfung des Builds mit `MEDIA.DECLARED_MIME_MISMATCH` scheitern.",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "audio/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        }
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:64009/de/docs/rust-guide/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Mon, 02 Nov 2026 01:55:34 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-green-final-root-http/rust-guide.html",
+          "sha256": "e0f53064dffd797c8d2a32575cfda3c9e3e98be7686c7d50a3ea842616333717",
+          "bytes": 76431
+        },
+        {
+          "url": "http://127.0.0.1:64009/de/docs/rust-guide/index.md",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/markdown; charset=utf-8",
+            "date": "Mon, 02 Nov 2026 01:55:34 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/mime-green-final-root-http/rust-guide.md",
+          "sha256": "73ca45217299a63224bd225580711d777d4d4f93b770924e4d1ac0203f4cfa44",
+          "bytes": 6669
+        }
+      ]
+    }
+  ]
+}

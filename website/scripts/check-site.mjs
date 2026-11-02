@@ -180,6 +180,7 @@ const ai = await loadAiQuickstart();
 for (const locale of localeIds) {
 const home = pages.get(path.join(dist, pagePath('home', locale).slice(1), 'index.html'));
 const t = createTranslator(locale);
+const decimal = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 record(home.$('#ai-quickstart[data-ai-quickstart]').length === 1, 'Missing AI quickstart anchor');
 for (const [key, language] of Object.entries(ai.languages)) {
   const panel = home.$(`[data-ai-panel="${key}"]`);
@@ -193,15 +194,15 @@ for (const [key, language] of Object.entries(ai.languages)) {
 for (const result of benchmark.results) {
   const row = home.$(`[data-profile="${result.profile}"]`);
   record(row.length === 1, `Missing benchmark workload ${result.profile}`);
-  record(row.find('p').text() === `${result.rust.toFixed(1)} ms / ${result.genanki.toFixed(1)} ms`, `Incorrect benchmark times ${result.profile}`);
-  record(row.find('strong').text() === t(result.saved >= 0 ? 'performance.less' : 'performance.more', { value: Math.abs(result.saved).toFixed(1) }), `Incorrect benchmark advantage ${result.profile}`);
+  record(row.find('p').text() === `${decimal.format(result.rust)} ms / ${decimal.format(result.genanki)} ms`, `${locale}: incorrect benchmark times ${result.profile}`);
+  record(row.find('strong').text() === t(result.saved >= 0 ? 'performance.less' : 'performance.more', { value: decimal.format(Math.abs(result.saved)) }), `${locale}: incorrect benchmark advantage ${result.profile}`);
   for (const implementation of ['rust', 'genanki']) {
     record(row.attr('style').includes(`--${implementation}-width: ${result[implementation] / benchmark.maxTime * 100}%`), `Incorrect chart scale ${result.profile}/${implementation}`);
   }
 }
 const metrics = home.$('.home-performance-metric').text();
-record(metrics.includes(benchmark.results[0].rust.toFixed(1)), 'Incorrect text export headline');
-if (benchmark.minimumSaved >= 0) record(metrics.includes(`${benchmark.minimumSaved.toFixed(1)}–${benchmark.maximumSaved.toFixed(1)}`), 'Incorrect time advantage headline');
+record(metrics.includes(decimal.format(benchmark.results[0].rust)), `${locale}: incorrect text export headline`);
+if (benchmark.minimumSaved >= 0) record(metrics.includes(`${decimal.format(benchmark.minimumSaved)}–${decimal.format(benchmark.maximumSaved)}`), `${locale}: incorrect time advantage headline`);
 
 
 }

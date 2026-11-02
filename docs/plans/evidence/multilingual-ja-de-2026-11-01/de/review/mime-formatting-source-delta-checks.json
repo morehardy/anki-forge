@@ -1,0 +1,1291 @@
+{
+  "schemaVersion": 1,
+  "status": "verified",
+  "sourceBaseline": "8f2c77e331147961dce5c0d929a9f5097270a5f8",
+  "priorCandidate": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/source-candidates-final.json",
+    "sha256": "93002e043d0bdebee6d516fd324dbe625094812b67868674281b8ce74efa559e"
+  },
+  "currentCandidate": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/source-candidates-mime-fixed.json",
+    "sha256": "719ea15495149279836888f3687d262351c0e63ec3560fe6db61b68da25cd4b3"
+  },
+  "priorFullLanguageReport": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/linguistic-source-review-final.json",
+    "sha256": "8ed3c869e135e1978d4fb9251dcb480fcb832a7535a650215d9ad1a75d9a9bec"
+  },
+  "counts": {
+    "allEntries": 204,
+    "changedEntries": 2,
+    "unchangedEntries": 202
+  },
+  "changed": [
+    {
+      "topic": "node-api",
+      "locale": "de",
+      "fields": [
+        "targetHash"
+      ]
+    },
+    {
+      "topic": "python-api",
+      "locale": "de",
+      "fields": [
+        "targetHash"
+      ]
+    }
+  ],
+  "paragraphs": [
+    {
+      "topic": "python-api",
+      "file": "docs/de/python-api.md",
+      "line": 74,
+      "beforeSha256": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771",
+      "afterSha256": "3f9c8ef43cbe56ef2c51530d19d0005f558008590168c4e5025408642f4acfb2",
+      "before": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus image/*. Tonreferenzen akzeptieren audio/* oder video/*. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "after": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus `image/*`. Tonreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "change": "Only six inline-code delimiter characters added, one pair around each literal MIME family."
+    },
+    {
+      "topic": "node-api",
+      "file": "docs/de/node-api.md",
+      "line": 106,
+      "beforeSha256": "4ec0367f34a6249bea09de1e5657ed681cd1f8a6fac607e9c00631cee95ae0c6",
+      "afterSha256": "9eb661fae21ce15f7c9f25010e6642c52338cf2ffd9f925f81f5c6ed2a8d3fae",
+      "before": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/*; Audioreferenzen akzeptieren audio/* oder video/*. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "after": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "change": "Only six inline-code delimiter characters added, one pair around each literal MIME family."
+    }
+  ],
+  "checks": [
+    {
+      "topic": "home",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "home",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "home",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "home",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "home",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "home",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "examples",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "examples",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "examples",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "examples",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "examples",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "examples",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "docs",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "docs",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "docs",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "docs",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "docs",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "docs",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "languages",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "languages",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "languages",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "languages",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "languages",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "languages",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "quickstart",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "quickstart",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "quickstart",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "quickstart",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "quickstart",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "quickstart",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "json-to-anki",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "csv-to-anki",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "ai-anki-cards",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "anki-forge-vs-genanki",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "development",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "development",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "development",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "development",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "development",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "development",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-guide",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "templates",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "templates",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "templates",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "templates",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "templates",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "templates",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "api",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "api",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "api",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "api",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "api",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "api",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "installation",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "installation",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "installation",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "installation",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "installation",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "installation",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "concepts",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "concepts",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "concepts",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "concepts",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "concepts",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "concepts",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "cards",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "cards",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "cards",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "cards",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "cards",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "cards",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "custom-notetypes",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "media",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "media",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "media",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "media",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "media",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "media",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "image-occlusion",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "updates",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "updates",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "updates",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "updates",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "updates",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "updates",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "build-guarantees",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "troubleshooting",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "compatibility",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "compatibility",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "compatibility",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "compatibility",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "compatibility",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "compatibility",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-api",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-api",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-api",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-api",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-api",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "rust-api",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-quickstart",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-api",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-api",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-api",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-api",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-api",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "node-api",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": [
+        "targetHash"
+      ]
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-quickstart",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-api",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-api",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-api",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-api",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-api",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-api",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": [
+        "targetHash"
+      ]
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-diagnostics",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-migration",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-migration",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-migration",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-migration",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-migration",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "python-migration",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "genanki-migration",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:your-first-anki-deck",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "en",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "zh-CN",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "es",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "pt-BR",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "ja",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    },
+    {
+      "topic": "blog:stable-ids-and-deck-updates",
+      "locale": "de",
+      "currentSignatureMatches": true,
+      "changedFields": []
+    }
+  ],
+  "issues": []
+}

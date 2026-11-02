@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/spec_review/pagefind-stability-linguistic-2026-11-02",
+  "status": "reviewed",
+  "scope": "Actual producer-only incremental review against immutable 0001985b. No fresh rereading of unchanged long prose is claimed.",
+  "changes": [
+    {
+      "path": "website/scripts/search-documents.mjs",
+      "observation": "Read the 9-line canonicalizePagefindEntry function and its single call after existing generated search directories. JSON.parse/stringify preserves all actual six-language metadata values, including null WASM, page counts, version and Unicode include_characters. Only languages key order and output whitespace are normalized; no user-facing string or ranking logic is changed."
+    },
+    {
+      "path": "website/scripts/search-ranking.test.mjs",
+      "observation": "Read the added reversal/deepEqual/idempotence regression. Independently applied the actual producer to six rotations of the real full six-language entry; identical bytes and parsed equality verified. This is a concrete check of the reported random-key-order failure, not a new language quality score."
+    },
+    {
+      "path": "website/src/scripts/docs-search.ts",
+      "observation": "Existing UI creates Pagefind instance without language override and calls init(). Actual Pagefind 1.5.2 code reads HTML lang, lowercases it and resolves an exact language key. en/zh-cn/es/pt-br/ja/de all exist with unchanged metadata. Unsupported-language equal-count fallback can become deterministic; no equivalence claim is made for unsupported locale fallback."
+    }
+  ],
+  "spec": [
+    {
+      "path": "docs/plans/2026-10-27-multilingual-implementation-spec.md",
+      "line": 268,
+      "quote": "修订后只允许复用输入确实未变化的检查结果；",
+      "application": "All 259 current inputs were compared with immutable baseline bytes; all old and current 204 triples independently recomputed. Only producer-driven target hashes of 174 docs entries changed, so prior full-prose judgments are reused with explicit current delta evidence."
+    },
+    {
+      "path": "docs/plans/2026-10-27-multilingual-implementation-spec.md",
+      "line": 59,
+      "quote": "真实构建中查询命中、语言正确；日语分词及 pt-BR 映射可用；",
+      "application": "Exact current six-language lookup mapping and unchanged hash/WASM metadata verified; actual fresh built browser query acceptance remains a separate follow-up."
+    }
+  ],
+  "migrationInputs": {
+    "path": "website/public-surface-migrations.json",
+    "sha256": "27bb0121d012b0ba2c68f0f8cfc5482542868128a466f1507218d4a88d429c68"
+  },
+  "migrationObservations": [
+    {
+      "pageId": "build-guarantees",
+      "locale": "en",
+      "toHeading": "Prepare, review and publish",
+      "observation": "Only the current independently reviewed target hash changes. Heading wording, native/semantic IDs, old aliases, scope and protected destinations are byte-identical to the prior approved migration."
+    },
+    {
+      "pageId": "python-api",
+      "locale": "en",
+      "toHeading": "Batch media and prepared publication",
+      "observation": "Only the current independently reviewed target hash changes. Heading wording, native/semantic IDs, old aliases, scope and protected destinations are byte-identical to the prior approved migration."
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "zh-CN",
+      "toHeading": "准备候选包并在审阅后写入目标文件",
+      "observation": "Only the current independently reviewed target hash changes. Heading wording, native/semantic IDs, old aliases, scope and protected destinations are byte-identical to the prior approved migration."
+    },
+    {
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "toHeading": "批量媒体处理与预备发布",
+      "observation": "Only the current independently reviewed target hash changes. Heading wording, native/semantic IDs, old aliases, scope and protected destinations are byte-identical to the prior approved migration."
+    }
+  ],
+  "inputAudit": {
+    "path": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/linguistic-delta-input-audit.json",
+    "sha256": "9d123e2c47f949c362422fade7f2602287f1d0071f5534229b4997d405d9e3e8"
+  },
+  "openIssues": []
+}

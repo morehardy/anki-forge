@@ -1,0 +1,1203 @@
+{
+  "schemaVersion": 1,
+  "locale": "pt-BR",
+  "documents": {
+    "docs": {
+      "title": "Crie baralhos do Anki com código",
+      "description": "Escolha uma linguagem, gere seu primeiro baralho e aprenda a adicionar mídia, modelos e atualizações repetíveis."
+    },
+    "languages": {
+      "title": "Escolha sua linguagem de programação",
+      "description": "Instale o pacote público de Rust, Node ou Python e exporte seu primeiro baralho do Anki."
+    },
+    "quickstart": {
+      "title": "Gere cartões do Anki com Rust",
+      "description": "Instale o pacote público de Rust, crie um cartão de espanhol e exporte um APKG persistente com um programa completo."
+    },
+    "installation": {
+      "title": "Integre o Anki Forge à sua aplicação",
+      "description": "Instale o crate público de Rust, configure as dependências do Cargo e escolha o próximo guia."
+    },
+    "concepts": {
+      "title": "Conceitos fundamentais",
+      "description": "Entenda Project, notas e mídia com propriedade independente, chaves estáveis, texto e identidade nas atualizações."
+    },
+    "json-to-anki": {
+      "title": "Gere e atualize baralhos do Anki a partir de JSON",
+      "description": "Leia JSON com Rust, Python ou TypeScript, inclua imagens e áudio e revise uma atualização de APKG que altera apenas uma resposta."
+    },
+    "csv-to-anki": {
+      "title": "CSV para Anki: gere cartões com Python",
+      "description": "Converta uma planilha de vocabulário CSV UTF-8 em um APKG com um script Python completo, IDs de nota estáveis e verificações de importação."
+    },
+    "ai-anki-cards": {
+      "title": "Crie cartões do Anki com apoio de IA",
+      "description": "Crie rascunhos de cartões a partir das suas anotações, confira as respostas e exporte um APKG com Anki Forge usando CSV ou instruções para um assistente de programação."
+    },
+    "anki-forge-vs-genanki": {
+      "title": "Anki Forge ou genanki: escolha para o seu fluxo",
+      "description": "Compare a criação de APKGs do Anki, os requisitos de execução, a revisão de atualizações e os custos de migração."
+    },
+    "development": {
+      "title": "Compile os SDKs a partir do código-fonte",
+      "description": "Compile os SDKs e execute exemplos a partir do repositório, distinguindo os recursos do código-fonte dos pacotes publicados."
+    },
+    "rust-guide": {
+      "title": "Guia de desenvolvimento com Rust",
+      "description": "Crie projetos, valide notas, gerencie mídia e atualize baralhos pela API pública de Rust."
+    },
+    "cards": {
+      "title": "Gere cartões Basic e Cloze do Anki",
+      "description": "Gere cartões Basic de pergunta e resposta e cartões Cloze com lacunas usando código. Um exemplo verificado em Rust cria duas notas e três cartões."
+    },
+    "media": {
+      "title": "Adicione imagens e áudio aos cartões do Anki",
+      "description": "Use Rust, Python ou Node.js para importar arquivos, compor cartões com imagens e áudio e gerenciar nomes de exportação, tipos MIME e limites de mídia."
+    },
+    "custom-notetypes": {
+      "title": "Crie tipos de nota personalizados",
+      "description": "Defina campos, modelos de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis."
+    },
+    "image-occlusion": {
+      "title": "Gere cartões de oclusão de imagem do Anki",
+      "description": "Crie cartões de oclusão de imagem com Rust, Python ou Node.js: forneça a imagem e as máscaras retangulares e escolha um dos dois modos de oclusão."
+    },
+    "updates": {
+      "title": "Atualize baralhos do Anki com IDs de nota estáveis",
+      "description": "Publique uma nova versão de um baralho gerado: preserve os IDs das notas, use o APKG original anterior como base e revise a comparação antes de distribuir."
+    },
+    "build-guarantees": {
+      "title": "Garantias de geração e dos arquivos de saída",
+      "description": "Entenda os artefatos temporários, a proteção dos caminhos, os limites de inspeção e a publicação de candidatos revisados."
+    },
+    "compatibility": {
+      "title": "Compatibilidade e ambientes verificados",
+      "description": "Consulte os pacotes públicos, os ambientes testados e as condições de importação e reprodução nos clientes Anki."
+    },
+    "api": {
+      "title": "Visão geral das APIs públicas",
+      "description": "Encontre as APIs de Rust, Python e Node para criar notas, incluir mídia, diagnosticar erros e revisar atualizações."
+    },
+    "rust-api": {
+      "title": "Referência da API de Rust",
+      "description": "Consulte os métodos públicos de criação de conteúdo, os padrões de geração, os relatórios e os diagnósticos de Rust."
+    },
+    "node-quickstart": {
+      "title": "Gere cartões do Anki com Node.js",
+      "description": "Instale ankiforge pelo npm, gere cartões com Node.js ou TypeScript e exporte um baralho APKG para importar no Anki."
+    },
+    "node-api": {
+      "title": "API de Node e TypeScript",
+      "description": "Métodos públicos, comportamento assíncrono, opções de geração, arquivos de saída e relatórios do SDK de Node."
+    },
+    "python-quickstart": {
+      "title": "Gere cartões do Anki com Python",
+      "description": "Instale ankiforge pelo PyPI, crie cartões de pergunta e resposta com um script Python curto e exporte um baralho APKG para importar no Anki."
+    },
+    "python-api": {
+      "title": "API de Python",
+      "description": "Project, mídia, opções de geração, relatórios e controle da vida útil dos artefatos temporários em Python."
+    },
+    "python-diagnostics": {
+      "title": "Diagnósticos de Python",
+      "description": "Entenda os erros nativos de criação de conteúdo, os relatórios de geração, as evidências e as políticas de atualização em Python."
+    },
+    "python-migration": {
+      "title": "Transição para a nova API de Python",
+      "description": "Adapte seu código ao SDK atual de Python, que mantém a propriedade dos seus valores, e entenda a ruptura com a API anterior."
+    },
+    "genanki-migration": {
+      "title": "Migre do genanki para o Anki Forge",
+      "description": "Entenda como adaptar notas, modelos e mídia do genanki às chaves estáveis e ao modelo de criação de conteúdo do Anki Forge."
+    },
+    "troubleshooting": {
+      "title": "Solução de problemas",
+      "description": "Resolva erros de instalação, notas, mídia, modelos, identidade e publicação dos arquivos de saída."
+    },
+    "templates": {
+      "title": "Reutilize modelos de cartão, CSS e mídia no Anki",
+      "description": "Carregue um tipo de nota reutilizável de um pacote com modelos, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js."
+    }
+  },
+  "docGroups": [
+    "Comece aqui",
+    "Guias",
+    "Guias por linguagem",
+    "Referência",
+    "Ajuda"
+  ],
+  "navigation": {
+    "docs": "Guia",
+    "examples": "Exemplos",
+    "blog": "Blog"
+  },
+  "languageBrief": {
+    "audience": "Desenvolvedores que integram os pacotes públicos de Rust, Node.js ou Python para gerar e atualizar baralhos APKG do Anki, com documentação em português do Brasil.",
+    "register": "Português brasileiro técnico, direto e natural. Use imperativos como crie, instale e confira; evite traduzir literalmente expressões idiomáticas. Explique pré-requisitos junto à etapa e limitações junto à afirmação afetada. Distinga linguagem de programação de idioma do conteúdo. Não traduza identificadores da API nem prometa resultados de busca não medidos.",
+    "terms": {
+      "note": "nota",
+      "card": "cartão",
+      "deck": "baralho",
+      "noteType": "tipo de nota",
+      "namespace": "namespace",
+      "stableKey": "chave estável da nota",
+      "originalApkg": "APKG original distribuído",
+      "imageOcclusion": "oclusão de imagem"
+    },
+    "protected": [
+      "Anki Forge",
+      "ankiforge",
+      "genanki",
+      "APKG",
+      "API",
+      "JSON",
+      "Rust",
+      "Node.js",
+      "Python",
+      "Basic",
+      "Cloze"
+    ],
+    "avoid": [
+      "Usar nota e cartão como sinônimos",
+      "Apresentar uma reexportação do Anki como base original válida para atualização",
+      "Atribuir ao pacote publicado recursos disponíveis apenas no código-fonte",
+      "Prometer que IDs estáveis preservam todo o histórico ou substituem edições locais independentemente das opções de importação",
+      "Traduzir o trocadilho Notes on making notes de forma literal"
+    ],
+    "ownership": "Explique quem mantém os bytes e controla a vida útil dos valores e arquivos. Propriedade em Rust não significa direitos autorais nem permissões do usuário do Anki."
+  },
+  "prompts": {
+    "pt-BR": "Ajude-me a usar Anki Forge {version} em uma aplicação {language}.\nRequisito de execução: {runtime}\n\nUse o pacote publicado `ankiforge` e somente a API pública documentada para\nesta versão. Não use dependências git/path, ferramentas internas, APIs\nexclusivas do código-fonte, métodos não publicados ou métodos inventados.\n\nMinha tarefa:\n{request}\n\nPor favor:\n1. Examine o projeto existente antes de alterar arquivos.\n2. Informe a configuração necessária e o comando exato de instalação: {install}\n3. Crie o menor programa completo e executável e indique cada arquivo a criar ou editar.\n4. Gere um arquivo `.apkg` persistente e use namespace e chaves de nota estáveis.\n5. Inclua o comando de execução, a saída esperada e uma etapa de verificação.\n6. Se a tarefa precisar de mídia, modelos personalizados, oclusão de imagem ou\n   atualizações, siga o fluxo documentado em vez de presumir a API. Para atualizar,\n   guarde o APKG original distribuído da versão anterior como base; não use\n   uma reexportação do Anki.\n7. Faça somente as perguntas necessárias para esclarecer a linguagem, o formato\n   da entrada, o caminho de saída ou a regra de identidade.\n\nReferência de início rápido: {quickstart}"
+  },
+  "requestPlaceholders": {
+    "pt-BR": "<descreva sua tarefa>"
+  },
+  "promptContracts": {
+    "pt-BR": {
+      "required": [
+        "pacote publicado",
+        "API pública",
+        "persistente",
+        "namespace e chaves de nota estáveis",
+        "comando de execução",
+        "verificação",
+        "APKG original distribuído"
+      ],
+      "maxWords": 500
+    }
+  },
+  "searchTerms": {
+    "docs": [
+      "visão geral da documentação",
+      "fluxo de criação de notas",
+      "navegação dos guias",
+      "guia para começar",
+      "conteúdo de estudo estruturado",
+      "publicação repetível de baralhos",
+      "campos de nota e modelos de cartão",
+      "biblioteca para gerar baralhos do Anki"
+    ],
+    "languages": [
+      "escolher linguagem de programação",
+      "escolha do SDK",
+      "interfaces por linguagem",
+      "crate Rust ou wheel Python",
+      "Node.js ou Python",
+      "pacotes públicos para começar",
+      "requisitos do ambiente nativo",
+      "exportar APKG sem instalar Anki"
+    ],
+    "quickstart": [
+      "início rápido com Rust",
+      "primeiro baralho do Anki em Rust",
+      "gerador de cartões Rust",
+      "tutorial Rust para iniciantes",
+      "cargo new anki-deck",
+      "cargo run",
+      "exportar APKG com Rust",
+      "src/main.rs",
+      "baralho Spanish persistente",
+      "chave estável es:hola"
+    ],
+    "json-to-anki": [
+      "JSON para Anki",
+      "gerar cartões a partir de JSON",
+      "JSON para APKG",
+      "dados estruturados em cartões",
+      "JSON.parse",
+      "json.loads",
+      "serde_json",
+      "baralho JSON com TypeScript",
+      "JavaScript e JSON no Node.js",
+      "criar notas em lote",
+      "JSON com imagem e áudio",
+      "atualizar somente a resposta",
+      "comparison.json e review.json",
+      "IDs de negócio duráveis"
+    ],
+    "csv-to-anki": [
+      "CSV para Anki",
+      "CSV para APKG",
+      "planilha de vocabulário em cartões",
+      "gerar cartões com Python e planilha",
+      "criação em lote de cartões Basic",
+      "importar CSV UTF-8",
+      "exportar Excel como CSV",
+      "colunas id front back",
+      "csv_to_anki.py",
+      "IDs de nota únicos",
+      "cabeçalho e aspas CSV",
+      "vocabulary-v1.apkg"
+    ],
+    "ai-anki-cards": [
+      "gerar cartões do Anki com IA",
+      "cartões com apoio de inteligência artificial",
+      "anotações em cartões",
+      "rascunho de perguntas e respostas",
+      "assistente de programação",
+      "revisar respostas da IA",
+      "conferir com o material de origem",
+      "CSV revisado para APKG",
+      "IDs únicos para novas notas",
+      "geração local em Python Node e Rust",
+      "texto de PDF extraído antes",
+      "Skill opcional do Anki Forge"
+    ],
+    "anki-forge-vs-genanki": [
+      "Anki Forge ou genanki",
+      "alternativa ao genanki",
+      "comparação de bibliotecas Anki",
+      "escolher biblioteca APKG",
+      "bibliotecas de cartões em Python",
+      "comparar fluxos de publicação",
+      "custos de dependências nativas",
+      "custo de migrar do genanki",
+      "comparação de identidade GUID",
+      "benchmark histórico de exportação Rust",
+      "tempo de exportação e pico de memória"
+    ],
+    "development": [
+      "compilar SDK a partir do código-fonte",
+      "cópia do repositório",
+      "desenvolvimento do repositório",
+      "addon nativo local",
+      "npm run pack:local",
+      "tarballs da interface e do código nativo",
+      "instalação npm local sem rede",
+      "extensão nativa com Maturin",
+      "maturin develop",
+      "dependência path do Cargo",
+      "toolchain Rust fixada",
+      "recompilar wrapper e binário nativo"
+    ],
+    "rust-guide": [
+      "criar notas com Rust",
+      "ciclo de vida de Project em Rust",
+      "adição atômica de notas",
+      "reutilizar modelo com propriedade independente",
+      "Content::sequence",
+      "erros estruturados em Rust",
+      "AddError::context",
+      "chaves estáveis dos registros de origem",
+      "propriedade do artefato temporário",
+      "atualizar com update_from em Rust",
+      "AddTarget e AddDetail",
+      "ankiforge-project-v2"
+    ],
+    "api": [
+      "visão geral da API pública",
+      "navegação das APIs dos SDKs",
+      "interfaces Rust Python e Node",
+      "API para gerar APKG do Anki",
+      "operações de criação e geração",
+      "entradas da API de mídia",
+      "entradas da API de diagnóstico",
+      "API de comparação e publicação"
+    ],
+    "installation": [
+      "instalação em Rust",
+      "adicionar ankiforge ao Cargo",
+      "cargo add ankiforge",
+      "dependência no Cargo.toml",
+      "integrar em aplicação Rust",
+      "versão mínima de Rust",
+      "requisitos do vinculador Rust",
+      "features padrão vazias",
+      "dependência serde derive",
+      "dependência serde_json",
+      "instalar crate público"
+    ],
+    "concepts": [
+      "diferença entre nota cartão e baralho",
+      "relação entre Project e baralho",
+      "namespace da publicação",
+      "modelo de tipo de nota",
+      "chaves estáveis e nomes de exibição",
+      "chaves de campo e modelo de cartão",
+      "Text e HTML",
+      "escape de HTML",
+      "conteúdo tipado e dependências de mídia",
+      "cópias independentes de mídia",
+      "relatório e artefato",
+      "evidências de identidade nas atualizações"
+    ],
+    "cards": [
+      "Basic pergunta e resposta",
+      "cartões de frente e verso",
+      "omissão Cloze",
+      "cartões de preencher lacunas",
+      "sintaxe de dicas Cloze",
+      "vários números Cloze",
+      "{{c1::answer}}",
+      "{{c1::answer::hint}}",
+      "back_extra",
+      "duas notas três cartões",
+      "Note::basic",
+      "Note::cloze",
+      "identidade dos cartões Cloze"
+    ],
+    "custom-notetypes": [
+      "tipos de nota personalizados",
+      "modelo personalizado do Anki",
+      "definir campos da nota",
+      "modelos de cartão personalizados",
+      "NoteType::builder",
+      "Field::required",
+      "Field::sort",
+      "GenerationRule::all",
+      "GenerationRule::any",
+      "geração condicional de cartões",
+      "campo Cloze personalizado",
+      "chaves e nomes de exibição dos campos",
+      "{{FrontSide}}",
+      "conflito na definição do modelo"
+    ],
+    "media": [
+      "adicionar imagens aos cartões",
+      "incluir áudio nos cartões",
+      "empacotar arquivos de som",
+      "conteúdo tipado de imagem e som",
+      "Media::file",
+      "Media::bytes",
+      "Content::sequence",
+      "with_export_name",
+      "validação do tipo MIME",
+      "conflitos de nomes na exportação",
+      "arquivos de fontes CSS",
+      "limites de importação de mídia",
+      "importação de mídia em lote",
+      "Media::files",
+      "cópias independentes de mídia",
+      "limite de memória das cópias de mídia"
+    ],
+    "image-occlusion": [
+      "oclusão de imagem",
+      "cartões com máscaras em imagens",
+      "perguntas sobre regiões de diagramas",
+      "ocultar rótulos em uma imagem",
+      "máscaras retangulares",
+      "Mask::rect",
+      "HideAllGuessOne",
+      "HideOneGuessOne",
+      "chaves estáveis das máscaras",
+      "coordenadas em pixels",
+      "orientação EXIF",
+      "limite da imagem decodificada",
+      "ordinais dos cartões das máscaras",
+      "Note::image_occlusion"
+    ],
+    "updates": [
+      "atualizar baralho distribuído",
+      "atualizar notas existentes",
+      "alterar somente a resposta",
+      "APKG original distribuído",
+      "comparar antes de publicar",
+      "CompareOptions::against",
+      "BuildOptions::update_from",
+      "UpdatePolicy",
+      "RISK.NOTE_REMOVED",
+      "GUIDs estáveis das notas",
+      "evidências de revisão",
+      "reexportação do Anki como base",
+      "edições locais e agendamento",
+      "prepare_publication",
+      "revisar antes de publicar",
+      "omissão de notas não exclui dados"
+    ],
+    "build-guarantees": [
+      "garantias dos arquivos de saída",
+      "vida útil do APKG temporário",
+      "artefato persistente",
+      "último proprietário do artefato",
+      "artifact.persist_to",
+      "substituição atômica do APKG",
+      "etapa de publicação",
+      "confirmação de durabilidade",
+      "falha após publicar o arquivo",
+      "relatório e representação da saída",
+      "serialização de caminhos nativos",
+      "limites de inspeção",
+      "vida útil do candidato preparado",
+      "publicação consome o proprietário",
+      "caminhos relativos do artefato"
+    ],
+    "troubleshooting": [
+      "solução de problemas",
+      "diagnosticar erros",
+      "falha ao carregar pacote nativo",
+      "divergência de versão entre wrapper e binário",
+      "tags de sistema e CPU do wheel",
+      "NOTE.KEY_DUPLICATE",
+      "NOTE.FIELD_UNKNOWN",
+      "NOTE.FIELD_REQUIRED",
+      "NOTE.MODEL_CONFLICT",
+      "HTML aparece como texto literal",
+      "cartões Cloze ausentes",
+      "tipo MIME diferente do conteúdo",
+      "conflito de nomes de exportação",
+      "recurso CSS ausente",
+      "falha ao carregar pacote de modelos",
+      "limite de inspeção excedido",
+      "APKG temporário desapareceu",
+      "base de atualização inválida",
+      "chave de nota duplicada"
+    ],
+    "compatibility": [
+      "plataformas compatíveis",
+      "ambientes de execução verificados",
+      "versão mínima de Rust",
+      "versões de Node.js compatíveis",
+      "wheels de CPython",
+      "macOS arm64 x64",
+      "Linux GNU glibc",
+      "Windows x64",
+      "escopo de verificação Alpine musl",
+      "Bun navegador Electron fora da verificação",
+      "compatibilidade com clientes Anki",
+      "importação e reprodução de codecs",
+      "evidências de lançamento",
+      "condições do histórico de revisão no cliente"
+    ],
+    "rust-api": [
+      "referência da API Rust",
+      "módulos públicos de domínio Rust",
+      "Project::new",
+      "Project::add",
+      "BuildOptions::temporary",
+      "InspectLimits",
+      "FieldKey e TemplateKey",
+      "BuildOutput::artifact",
+      "BuildReport::snapshot",
+      "PathSnapshot::into_path_buf",
+      "std::error::Error",
+      "AddError::context",
+      "AddTarget e AddDetail",
+      "UpdatePolicy::fail_on",
+      "Project::prepare_publication"
+    ],
+    "node-quickstart": [
+      "início rápido com Node.js",
+      "gerar baralho do Anki com JavaScript",
+      "gerador de cartões Node",
+      "começar com TypeScript",
+      "npm install ankiforge",
+      "dependência nativa opcional",
+      "main.mjs",
+      "node main.mjs",
+      "módulos ES e ESM",
+      "CommonJS require",
+      "primeira exportação APKG com Node",
+      "fechar artefato persistente"
+    ],
+    "node-api": [
+      "referência da API Node.js",
+      "API do SDK JavaScript",
+      "declarações de tipos TypeScript",
+      "tsconfig.json NodeNext",
+      "npx tsc",
+      "geração e comparação assíncronas",
+      "tarefas Promise e workers",
+      "representações imutáveis de Project",
+      "bytes de mídia Uint8Array",
+      "Content.sequence",
+      "NoteType.fromBundle",
+      "BuildOptions.updateFrom",
+      "preparePublication",
+      "ArtifactClosedError",
+      "NativeLoadError",
+      "PreparedPublicationStateError",
+      "relatórios camelCase e representações snake_case",
+      "artifact.persistTo"
+    ],
+    "python-quickstart": [
+      "início rápido com Python",
+      "gerador de cartões Python",
+      "script Python para baralho do Anki",
+      "pip install ankiforge",
+      "python -m venv",
+      "ativar ambiente virtual",
+      "Windows Activate.ps1",
+      "wheel de CPython para a plataforma",
+      "main.py",
+      "python main.py",
+      "primeiro APKG com Python",
+      "from ankiforge import",
+      "cartões de pergunta e resposta em Python"
+    ],
+    "python-api": [
+      "referência do SDK Python",
+      "anotações de tipos py.typed",
+      "valores imutáveis de nota",
+      "NoteType.builder",
+      "Content.sequence",
+      "Media.bytes",
+      "MediaLimits",
+      "max_identity_bytes",
+      "gerenciador de contexto ApkgArtifact",
+      "copy.copy e proprietário do artefato",
+      "liberação do GIL",
+      "BINDING.PROJECT_BUSY",
+      "BINDING.FORKED_OBJECT",
+      "project.prepare_publication",
+      "PreparedPublicationStateError",
+      "encadeamento de exceções nativas Python"
+    ],
+    "python-diagnostics": [
+      "diagnóstico de erros Python",
+      "BuildError.snapshot",
+      "CompareError.report",
+      "source_details",
+      "causes e __cause__",
+      "details limit_exceeded",
+      "comparison.allows_publication",
+      "política de risco nas atualizações Python",
+      "RISK.NOTE_REMOVED",
+      "informações de publicação em PersistError",
+      "caminhos nativos surrogateescape",
+      "BINDING.EXTENSION_UNAVAILABLE",
+      "BINDING.VERSION_MISMATCH",
+      "limites de inspeção Python"
+    ],
+    "python-migration": [
+      "migração da API Python",
+      "nova API Python sem compatibilidade antiga",
+      "mudança da distribuição anki-forge",
+      "mudança da importação anki_forge",
+      "API Deck removida",
+      "add_note para add com chave estável",
+      "registro de modelos removido",
+      "SDK com propriedade dos valores",
+      "migração do HTML implícito",
+      "fluxo antigo de lockfile removido",
+      "substituição do subprocesso de execução",
+      "binding nativo PyO3",
+      "limite de compatibilidade com API anterior"
+    ],
+    "genanki-migration": [
+      "migrar do genanki",
+      "genanki Model para NoteType",
+      "genanki Deck para Project",
+      "substituir gravação de Package",
+      "correspondência dos IDs numéricos de modelo",
+      "limite da migração de GUID",
+      "chaves de negócio persistentes",
+      "nomes e chaves dos campos",
+      "caminhos de mídia do genanki",
+      "texto simples e Content.html",
+      "migração para mídia com propriedade independente",
+      "primeira distribuição no novo modelo"
+    ],
+    "blog:your-first-anki-deck": [
+      "primeiro cartão com Rust passo a passo",
+      "baralho de vocabulário com uma palavra",
+      "exemplo de saudação em espanhol",
+      "criação repetível no Git",
+      "frente e verso de uma nota Basic",
+      "Project::new spanish",
+      "ID estável da entrada de vocabulário",
+      "propagação de erros tipados",
+      "ampliar a partir de uma nota"
+    ],
+    "blog:stable-ids-and-deck-updates": [
+      "identidade independente do texto",
+      "por que usar ID estável na nota",
+      "editar resposta mantendo o ID",
+      "namespace entre versões",
+      "por que usar uma base de atualização",
+      "arquivar APKG original distribuído",
+      "caminhos separados para base e candidato",
+      "evidências de identidade e revisão",
+      "condições de importação e edições locais",
+      "ID estável e estado de revisão"
+    ],
+    "templates": [
+      "importar pacote de modelos",
+      "modelos reutilizáveis do Anki",
+      "anki-template.yaml",
+      "template-bundle-v2",
+      "NoteType::from_bundle",
+      "manifesto YAML do tipo de nota",
+      "front.html e back.html",
+      "arquivo CSS e fontes",
+      "modelos de cartão no navegador",
+      "referências a chaves nos modelos",
+      "escape do diretório do pacote",
+      "export_as explícito nos recursos",
+      "limite de texto dos modelos",
+      "pacote Cloze personalizado"
+    ]
+  },
+  "searchConcepts": {
+    "__language": {
+      "stopWords": [
+        "a",
+        "o",
+        "as",
+        "os",
+        "um",
+        "uma",
+        "uns",
+        "umas",
+        "e",
+        "ou",
+        "de",
+        "do",
+        "da",
+        "dos",
+        "das",
+        "para",
+        "em",
+        "no",
+        "na",
+        "nos",
+        "nas",
+        "com",
+        "por",
+        "pelo",
+        "pela",
+        "ao",
+        "à",
+        "aos",
+        "às",
+        "é",
+        "são",
+        "como",
+        "qual",
+        "quais",
+        "posso",
+        "eu",
+        "meu",
+        "minha",
+        "meus",
+        "minhas",
+        "me",
+        "favor",
+        "quero",
+        "preciso",
+        "usando",
+        "usar",
+        "use",
+        "sdk",
+        "entre",
+        "sobre",
+        "ser",
+        "isso",
+        "isto",
+        "esse",
+        "essa",
+        "este",
+        "esta",
+        "esses",
+        "essas",
+        "estes",
+        "estas",
+        "devo",
+        "vou",
+        "também",
+        "cada"
+      ]
+    },
+    "python": {
+      "terms": [
+        "Python",
+        "CPython",
+        "pip"
+      ],
+      "sdk": "python"
+    },
+    "node": {
+      "terms": [
+        "Node.js",
+        "Node",
+        "JavaScript",
+        "TypeScript",
+        "npm"
+      ],
+      "sdk": "node"
+    },
+    "rust": {
+      "terms": [
+        "Rust",
+        "Cargo",
+        "crate"
+      ],
+      "sdk": "rust"
+    },
+    "quickstart": {
+      "terms": [
+        "início rápido",
+        "primeiros passos",
+        "começar",
+        "iniciante",
+        "iniciantes",
+        "tutorial",
+        "primeiro baralho",
+        "primeiro baralho do Anki",
+        "primeiro cartão"
+      ],
+      "roles": [
+        "quickstart"
+      ],
+      "intent": true
+    },
+    "reference": {
+      "terms": [
+        "API",
+        "referência",
+        "anotações de tipos",
+        "declarações",
+        "métodos",
+        "funções"
+      ],
+      "roles": [
+        "api"
+      ],
+      "intent": true
+    },
+    "installation": {
+      "terms": [
+        "instalação",
+        "instalar",
+        "configuração inicial",
+        "dependência",
+        "dependências"
+      ],
+      "roles": [
+        "installation",
+        "quickstart"
+      ],
+      "intent": true
+    },
+    "development": {
+      "terms": [
+        "compilação do código-fonte",
+        "compilar a partir do código-fonte",
+        "cópia do repositório",
+        "addon local",
+        "recompilar wrapper"
+      ],
+      "roles": [
+        "development"
+      ],
+      "intent": true
+    },
+    "comparison": {
+      "terms": [
+        "versus",
+        "vs",
+        "alternativa",
+        "alternativas",
+        "vantagens e desvantagens",
+        "comparação de bibliotecas",
+        "escolher biblioteca",
+        "qual biblioteca"
+      ],
+      "roles": [
+        "comparison"
+      ],
+      "intent": true
+    },
+    "migration": {
+      "terms": [
+        "migração",
+        "migrar",
+        "migrando",
+        "mudar de",
+        "trocar de",
+        "substituir genanki",
+        "portar de"
+      ],
+      "roles": [
+        "migration"
+      ],
+      "intent": true
+    },
+    "updates": {
+      "terms": [
+        "atualizar",
+        "atualização",
+        "atualizações",
+        "baralho distribuído",
+        "notas existentes",
+        "alterar uma resposta",
+        "histórico de revisão",
+        "agendamento",
+        "publicar novamente"
+      ],
+      "roles": [
+        "updates"
+      ],
+      "intent": true,
+      "requiresAny": [
+        "atualizar",
+        "atualização",
+        "atualizações",
+        "publicar",
+        "publicação",
+        "distribuído",
+        "distribuição",
+        "base de atualização",
+        "versão",
+        "notas existentes",
+        "alterar uma resposta"
+      ]
+    },
+    "baseline": {
+      "terms": [
+        "base de atualização",
+        "APKG original distribuído",
+        "distribuição original",
+        "APKG original",
+        "reexportação do Anki",
+        "reexportar",
+        "pacote anterior",
+        "evidências de identidade"
+      ],
+      "roles": [
+        "updates"
+      ],
+      "intent": true
+    },
+    "identity": {
+      "terms": [
+        "ID estável",
+        "IDs estáveis",
+        "chave estável",
+        "chaves estáveis",
+        "GUID",
+        "namespace",
+        "chave de negócio",
+        "identidade da nota"
+      ]
+    },
+    "diagnostics": {
+      "terms": [
+        "solução de problemas",
+        "diagnóstico",
+        "diagnósticos",
+        "erro",
+        "erros",
+        "falha",
+        "falhou",
+        "não funciona",
+        "ausente",
+        "desapareceu",
+        "não carrega",
+        "não consegue carregar"
+      ],
+      "roles": [
+        "diagnostics"
+      ],
+      "intent": true
+    },
+    "media": {
+      "terms": [
+        "mídia",
+        "arquivos de mídia",
+        "recursos",
+        "anexos"
+      ],
+      "roles": [
+        "media"
+      ]
+    },
+    "images": {
+      "terms": [
+        "imagem",
+        "imagens",
+        "figura",
+        "figuras",
+        "foto",
+        "fotos",
+        "ilustração"
+      ],
+      "roles": [
+        "media"
+      ]
+    },
+    "audio": {
+      "terms": [
+        "áudio",
+        "som",
+        "sons",
+        "voz",
+        "pronúncia",
+        "mp3",
+        "wav"
+      ],
+      "roles": [
+        "media"
+      ]
+    },
+    "occlusion": {
+      "terms": [
+        "oclusão de imagem",
+        "oclusão",
+        "máscaras em imagens",
+        "ocultar rótulos",
+        "máscaras retangulares",
+        "mascaramento",
+        "regiões de diagramas"
+      ],
+      "roles": [
+        "occlusion"
+      ]
+    },
+    "cloze": {
+      "terms": [
+        "Cloze",
+        "preencher lacunas",
+        "preenchimento de lacunas",
+        "número da omissão",
+        "omissão Cloze",
+        "cartões com lacunas"
+      ],
+      "roles": [
+        "cards"
+      ]
+    },
+    "templates": {
+      "terms": [
+        "modelo de cartão",
+        "modelos de cartão",
+        "template",
+        "templates",
+        "pacote de modelos",
+        "CSS",
+        "fonte",
+        "fontes"
+      ],
+      "roles": [
+        "templates"
+      ]
+    },
+    "note-types": {
+      "terms": [
+        "tipo de nota",
+        "tipos de nota",
+        "modelo personalizado",
+        "modelos personalizados",
+        "campos personalizados",
+        "geração condicional de cartões"
+      ],
+      "roles": [
+        "note-types"
+      ]
+    },
+    "compatibility": {
+      "terms": [
+        "compatibilidade",
+        "plataformas compatíveis",
+        "ambientes compatíveis",
+        "versão mínima",
+        "sistema operacional",
+        "Alpine",
+        "musl",
+        "Electron",
+        "Bun"
+      ],
+      "roles": [
+        "compatibility"
+      ]
+    },
+    "csv": {
+      "terms": [
+        "CSV",
+        "planilha",
+        "planilhas",
+        "Excel",
+        "tabela de vocabulário"
+      ]
+    },
+    "json": {
+      "terms": [
+        "JSON",
+        "dados estruturados",
+        "criação de notas em lote"
+      ]
+    },
+    "ai": {
+      "terms": [
+        "IA",
+        "inteligência artificial",
+        "assistente de programação",
+        "apoio de IA",
+        "gerado por IA",
+        "anotações para Anki"
+      ]
+    },
+    "text": {
+      "terms": [
+        "texto simples",
+        "HTML",
+        "escape",
+        "texto escapado"
+      ]
+    },
+    "fundamentals": {
+      "terms": [
+        "definição",
+        "definições",
+        "conceito",
+        "conceitos",
+        "o que é",
+        "o que são",
+        "significado",
+        "relação",
+        "relações",
+        "agrupamento",
+        "agrupados",
+        "diferença entre",
+        "distinção"
+      ],
+      "requiresAny": [
+        "nota",
+        "notas",
+        "cartão",
+        "cartões",
+        "baralho",
+        "baralhos",
+        "projeto",
+        "APKG",
+        "namespace",
+        "campo",
+        "campos",
+        "modelo de cartão",
+        "modelos de cartão",
+        "modelo"
+      ],
+      "roles": [
+        "concepts"
+      ],
+      "intent": true,
+      "consumeContext": true
+    },
+    "package-structure": {
+      "terms": [
+        "conteúdo",
+        "contém",
+        "contêm",
+        "dentro",
+        "estrutura",
+        "componentes",
+        "composto por"
+      ],
+      "requiresAny": [
+        "APKG",
+        "pacote",
+        "pacotes",
+        "exportação",
+        "exportado"
+      ],
+      "roles": [
+        "concepts"
+      ],
+      "intent": true,
+      "consumeContext": true
+    },
+    "learning": {
+      "terms": [
+        "revisar",
+        "estudar",
+        "estudando",
+        "praticar",
+        "aprendizado",
+        "perguntas",
+        "questionário"
+      ],
+      "weight": 0.25
+    },
+    "customization": {
+      "terms": [
+        "personalizar",
+        "personalização",
+        "adaptar",
+        "design",
+        "projetar"
+      ],
+      "requiresAny": [
+        "campo",
+        "campos",
+        "frente",
+        "verso",
+        "modelo de cartão",
+        "modelos de cartão",
+        "modelo",
+        "tipo de nota"
+      ],
+      "roles": [
+        "note-types"
+      ],
+      "intent": true
+    },
+    "cardinality": {
+      "terms": [
+        "vários",
+        "muitos",
+        "quantos",
+        "uma para muitos",
+        "número de",
+        "quantidade de",
+        "cardinalidade"
+      ],
+      "requiresAll": [
+        [
+          "nota",
+          "notas"
+        ],
+        [
+          "cartão",
+          "cartões"
+        ]
+      ],
+      "roles": [
+        "concepts"
+      ],
+      "intent": true,
+      "consumeContext": true
+    },
+    "occlusion-action": {
+      "terms": [
+        "ocultar",
+        "cobrir",
+        "esconder",
+        "mascarar"
+      ],
+      "requiresAny": [
+        "imagem",
+        "imagens",
+        "figura",
+        "figuras",
+        "diagrama",
+        "diagramas",
+        "ilustração",
+        "foto",
+        "fotos"
+      ],
+      "roles": [
+        "occlusion"
+      ],
+      "consumeContext": true
+    }
+  }
+}

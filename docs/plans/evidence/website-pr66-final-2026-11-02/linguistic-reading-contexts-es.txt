@@ -1,0 +1,151 @@
+
+FILE docs/es/anki-forge-vs-genanki.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Anki Forge frente a genanki
+2:
+3: Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas conservar los datos multimedia sin depender de los archivos originales, obtener diagnósticos estructurados y revisar las comparaciones y la política de riesgos antes de publicar actualizaciones. Conserva un flujo de genanki ya probado si sus scripts de Python, plantillas y recursos multimedia cubren tus necesidades y migrar supone más coste que beneficio.
+4:
+5: | Criterio | Anki Forge | genanki |
+6: | --- | --- | --- |
+7: | Lenguaje de creación | Núcleo en Rust; interfaces de Rust, Python y Node / TypeScript | Python |
+8: | Funciones básicas compartidas | Basic, Cloze, plantillas personalizadas, recursos multimedia y generación de APKG sin conexión | Basic, Cloze, plantillas personalizadas, recursos multimedia y generación de APKG sin conexión |
+9: | Identidad | Espacio de nombres y claves de nota explícitos; conserva el APKG original para actualizar | GUID configurables e ID numéricos de modelo y mazo; admite actualizaciones al volver a importar |
+10: | Antes de publicar | Resultados de comparación, política de riesgos y candidato preparado e inspeccionado | Tu script y tus pruebas definen la revisión previa a la publicación |
+11: | Gestión de recursos multimedia | Las imágenes y los sonidos tipados conservan una copia de sus datos | El script proporciona los archivos multimedia del paquete y sus referencias |
+12: | Oclusión de imágenes por código | Máscaras rectangulares con claves mediante la API pública | Evalúa un modelo o una extensión adecuados para tu flujo |
+13: | Coste de ejecución | Dependencias nativas; requiere una plataforma y un intérprete compatibles | Puede resultar más económico conservar una instalación de Python existente |
+14: | Coste de migración | Valida explícitamente la correspondencia con la identidad anterior, las plantillas y las importaciones | No hay coste de migración si el flujo de genanki ya funciona |
+15:
+16: <!-- section: the-same-small-task -->
+17: ## La misma tarea sencilla
+18:
+19: Para convertir tres preguntas JSON en un mazo con una imagen y un sonido, ambas bibliotecas permiten que Python analice el JSON y cree las notas. Con genanki, elige los ID del modelo y del mazo, asigna valores a los campos y reglas de GUID, añade los archivos multimedia al paquete y escribe el APKG. Con Anki Forge, elige un espacio de nombres y claves de negocio persistentes, incorpora a las notas recursos multimedia cuyos datos conserva el proyecto, genera v1 y después compara y prepara v2 usando el APKG original v1 antes de publicarla. El [tutorial completo de JSON](/docs/json-to-anki/) incluye las implementaciones de Rust, Python y TypeScript y sus comandos de ejecución.
+20:
+21: <!-- section: existing-genanki-decks -->
+22: ## Mazos de genanki existentes
+23:
+24: [genanki admite GUID personalizados](https://github.com/kerrickstaley/genanki#note-guids), recursos multimedia y actualizaciones al volver a importar. No es correcto presentar la identidad estable como una función exclusiva de Anki Forge. La regla predeterminada de GUID puede depender de los campos; elige una regla deliberada si estos van a cambiar.
+25:
+26: Anki Forge no recupera automáticamente ID numéricos ni GUID arbitrarios de genanki. Sin una correspondencia validada por separado, trata tu primera distribución de Anki Forge como el comienzo de una nueva identidad. Ni esta comparación ni la generación correcta de un APKG prometen una migración sin pérdidas ni la conservación de todo el historial de repaso. Lee la [guía de migración](/docs/genanki-migration/) antes de trasladar un mazo existente.
+27:
+28: <!-- section: historical-performance-evidence -->
+29: ## Datos históricos de rendimiento
+30:
+31: La comparación del 2026-10-08 midió la API Project de Rust frente a genanki 0.13.1 en un Apple M1 Pro. Con 1.000 notas Basic, las cinco cargas de trabajo de Rust medidas emplearon entre un 45,7 y un 53,9 % menos de tiempo de exportación; algunas cargas con recursos multimedia usaron más memoria máxima. Consulta el [método, los resultados originales y las limitaciones](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md). La prueba no midió el rendimiento actual de los procesos de Python o Node y no ofrece una garantía equivalente de velocidad para esos SDK ni para otras cargas de trabajo.
+32:
+33: Responsables de Anki Forge · revisión del 2026-10-25 según las API públicas de Anki Forge 0.3.1, la [documentación de genanki](https://github.com/kerrickstaley/genanki) y la medición archivada. Consulta la [compatibilidad del entorno de ejecución](/docs/compatibility/) y [elige un lenguaje](/docs/languages/) para empezar una tarea nueva.
+
+FILE docs/es/build-guarantees.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Garantías de generación y de los archivos de salida
+2:
+3: `Project::build` solo devuelve `BuildOutput` después de una operación correcta, con un archivo APKG garantizado. Una operación fallida devuelve `BuildError` con tipo y código estructurados, observaciones, causas subyacentes y los datos reales sobre la publicación.
+4:
+5: <!-- section: temporary-and-persistent-artifacts -->
+6: ## Archivos temporales y persistentes
+23: ## Bases de actualización y publicación
+34: ## Límites de inspección
+39: ## Trabajo concurrente
+46: ## Publicación preparada
+47:
+48: La publicación preparada está incluida en los paquetes públicos `0.3.1`.
+49:
+50: `prepare_publication` genera, inspecciona y compara una única versión candidata privada; `publish` usa ese mismo archivo. Las opciones y los destinos relativos quedan fijados durante la preparación. Las ediciones del proyecto no pueden cambiar la versión candidata. La preparación por sí sola no reemplaza el destino; liberar o cerrar un objeto de una versión no publicada elimina su archivo.
+51:
+52: Cada intento de publicación consume el objeto que mantiene la versión candidata, incluso si falla la política o la E/S. Vuelve a preparar para reintentar o para cambiar la política o el destino. Los informes siguen siendo legibles y no conservan archivos. Node y Python ofrecen `close()` idempotente y un error de indisponibilidad con motivo `closed` o `consumed`; cerrar después de que empiece la publicación no la cancela. La duración no incluye la espera de revisión. Un fallo tardío de durabilidad puede producirse después de un reemplazo correcto, por lo que debes comprobar los datos reales de la publicación.
+53:
+54: Sigue [el ejemplo completo](/docs/updates/#build-once-review-then-publish-from-source) y las referencias de las API de cada lenguaje para conocer los errores tipados y el funcionamiento de los hilos de trabajo.
+
+FILE docs/es/updates.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Actualiza y distribuye un mazo
+2:
+3: Publica correcciones o tarjetas nuevas para un mazo de Anki que ya hayas distribuido. Los ID de nota estables ayudan a Anki Forge y a Anki a reconocer las notas existentes en lugar de tratarlas como nuevas; las opciones de importación de Anki y los cambios locales más recientes también influyen en lo que se actualiza.
+4:
+5: Mantén estables el espacio de nombres del proyecto y las claves de notas, modelos, campos y plantillas. Genera cada versión nueva a partir del **APKG original de distribución** anterior, que contiene pruebas completas de identidad con su versión de formato. Guarda ese paquete junto con la revisión de su código fuente.
+6:
+7: <!-- section: run-two-versions-and-compare -->
+8: ## Genera dos versiones y compáralas
+9:
+13:
+14: Este comando escribe `spanish-v1.apkg` y `spanish-v2.apkg`, compara la respuesta modificada y comprueba los recuentos del paquete actualizado. El código ejecutable es:
+15:
+16: <!-- source: anki_forge/examples/docs_workflow.rs#updates -->
+37: <!-- /source -->
+38:
+39: `compare` termina correctamente incluso cuando sus hallazgos impedirían publicar. Consulta `comparison.policy().allows_publication()` por separado del nivel de riesgo original y de las pruebas. `build(...update_from(...))` ejecuta el mismo análisis y devuelve `BuildError` antes de publicar si su política bloquea la versión candidata.
+40:
+41: <!-- section: policy-and-inspection-limits -->
+42: ## Política y límites de inspección
+43:
+44: Este programa completo elige un umbral más estricto y utiliza la misma configuración para la comparación y la actualización:
+45:
+68:
+69: La política predeterminada bloquea los hallazgos High y Critical. Tras revisar una categoría concreta, puedes elegir de forma deliberada `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. Esta opción acepta **todos los hallazgos de esa categoría**, conservando su nivel original y sus pruebas. No significa que se hayan aprobado notas concretas de forma individual. Una excepción sin hallazgos coincidentes produce una advertencia; se rechazan los códigos de riesgo desconocidos. No autorices automáticamente todos los códigos que devuelva una comparación.
+70:
+71: La ausencia o corrupción de las pruebas de identidad, un espacio de nombres distinto, los datos no válidos de la versión candidata y la superación de los límites de inspección son errores, no categorías de riesgo que se puedan autorizar. Si el análisis no puede terminar, la comparación devuelve un error con las observaciones que haya completado. Establecer una política explícita en una solicitud de creación sin `update_from` es un error de configuración, independientemente del orden de las llamadas a los métodos de configuración.
+72:
+73: <!-- section: evidence-and-identity -->
+74: ## Pruebas e identidad
+75:
+76: El paquete incluye `ankiforge-identity.json` con el formato `ankiforge-identity-v1`. Vincula los ID de modelos y configuraciones, los GUID de notas, las posiciones históricas de campos y plantillas, los números ordinales de tarjetas y máscaras, las revisiones y los recursos multimedia con la colección y los datos reales. La reexportación desde Anki no conserva estas pruebas y no sirve como base de una actualización. Las pruebas ausentes nunca se reconstruyen de forma silenciosa.
+77:
+78: Las ediciones de nombres visibles y contenido conservan las claves de identidad. El contenido que no cambia mantiene la revisión de su base; el contenido modificado avanza de revisión. Reordenar campos o plantillas conserva sus correspondencias históricas. Las identidades retiradas permanecen reservadas para poder reutilizarlas al restaurar la misma clave. Una clave de nota no se puede trasladar a otro modelo, y una clave de modelo no puede cambiar entre los tipos normal y Cloze.
+79:
+80: <!-- section: client-import-behavior-and-release-review -->
+81: ## Importación en el cliente y revisión de versiones
+82:
+83: Un APKG es un paquete de distribución; no sincroniza eliminaciones. Omitir notas, campos, plantillas o máscaras no elimina los datos existentes de quienes estudian. Los cambios de esquema de campos o plantillas y los cambios del campo de ordenación tienen riesgo alto porque su comportamiento depende de cómo Anki combine e importe los datos. Los cambios de esquema pueden copiar modelos o actualizar las marcas de tiempo de las notas de destino antes de comparar su contenido.
+84:
+85: Prueba la primera importación y las actualizaciones de una colección existente en los clientes que admitas. Comprueba los campos, los GUID, los conjuntos de tarjetas, las ediciones locales y la programación de repaso existente con la configuración de combinación y actualización de notas prevista. La identidad estable, por sí sola, no garantiza que se sobrescriban ediciones locales más recientes ni que se restaure un historial eliminado.
+86:
+87: Escribe las versiones candidatas en una ruta distinta de la base archivada. Tras la revisión, distribuye el paquete aceptado y consérvalo como prueba para la siguiente versión. Consulta [las garantías de generación](/docs/build-guarantees/) para conocer cómo se conservan los archivos y cómo se publican.
+88:
+89: <a id="build-once-review-then-publish-from-source"></a>
+90:
+91: <!-- section: build-once-review-then-publish -->
+92: ## Genera una vez, revisa y publica
+93:
+94: Esta API está incluida en el paquete público `0.3.1`.
+95:
+96: Genera una vez, inspecciona el informe y publica después el mismo archivo candidato. Revisar y ejecutar una segunda generación normal crea otra versión candidata; la publicación preparada mantiene el APKG real vinculado al informe revisado.
+97:
+98: <!-- source: anki_forge/examples/docs_publication.rs -->
+124: <!-- /source -->
+125:
+126: En el repositorio descargado y fijado a una revisión, guarda el programa completo anterior como `anki_forge/examples/docs_publication.rs` (esta guía añade el ejemplo; no está incluido en `1199196`). Después ejecuta:
+127:
+131:
+132: El ejemplo escribe `spanish-original.apkg` y, cuando la política permite publicar, `spanish-reviewed.apkg` en la raíz del repositorio. La preparación no publica el archivo de destino. Revisa los hallazgos y prueba la importación en tu cliente antes de aprobar la distribución; el ejemplo solo publica automáticamente esta sencilla edición de contenido cuando su política lo permite. El benchmark no mide este flujo de trabajo.
+133:
+134: Consulta [el ciclo de generación](/docs/build-guarantees/#prepared-publication-from-source), [la API de Rust](/docs/rust-api/#review-once-publish-once), [la API de Node](/docs/node-api/#prepare-review-and-publish) y [la API de Python](/docs/python-api/#prepare-review-and-publish).
+
+FILE website/src/content/blog/es/stable-ids-and-deck-updates.mdx (all headings; entire changed prose sections; unchanged code omitted)
+1: ---
+2: locale: es
+3: translationKey: stable-ids-and-deck-updates
+4: title: Identidades estables para actualizar mazos de Anki
+5: description: Cómo combinar ID estables y un paquete de referencia al actualizar un mazo de Anki generado.
+6: date: 2026-09-22
+29: ## Separar la identidad del contenido
+30:
+31: Un ID estable explícito proporciona a la nota una clave duradera. Conserva ese ID cuando edites la nota y elige uno nuevo cuando crees una nota lógica diferente.
+32:
+33: La identidad también tiene un contexto de proyecto. Mantén el mismo espacio de nombres del proyecto entre las versiones de un mazo. Un ID de nota por sí solo es únicamente una parte de un flujo de actualización repetible.
+34:
+35: <span id="give-the-next-build-a-baseline" data-section-alias="give-the-next-build-a-baseline"></span>
+36: <span id="dar-un-paquete-de-referencia-a-la-siguiente-generación" data-section-alias="give-the-next-build-a-baseline"></span>
+37:
+38: {/* section: give-the-next-build-a-baseline */}
+39: ## Usar el paquete anterior como referencia
+40:
+41: Un paquete anterior indica a Anki Forge qué se exportó antes. Utilízalo al generar el proyecto revisado:
+42:
+43: <CodeBlock code={updateExample.source} />
+44:
+45: En este fragmento, `project` contiene la nota revisada, `previous` apunta a la versión 1 y `next` es una ruta distinta para la versión 2. El <a href={sitePath('/generated/website_showcase.rs')}>ejemplo completo</a> incluye ambas definiciones del proyecto y verifica que se conserva la identidad de una nota.
+46:
+47: Mantén el paquete de entrada y el de salida en rutas diferentes. Sobrescribir el paquete de referencia elimina las pruebas que necesitas para entender y verificar la publicación.
+48:
+49: <span id="keep-the-original-distributed-package" data-section-alias="keep-the-original-distributed-package"></span>
+50:
+51: {/* section: keep-the-original-distributed-package */}
+52: ## Conservar el paquete original distribuido
+61: ## Revisar la generación y la importación

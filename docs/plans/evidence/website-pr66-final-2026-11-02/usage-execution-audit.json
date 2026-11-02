@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/spec_review/pr66-final-usage-2026-11-02",
+  "scope": "Fresh executions performed by the coordinating agent in this batch; independent reviewer read the runner, actual logs, exact retained basic programs, public installation receipts, policy JSON, and independently decoded every retained APKG. No old batch SDK execution is rebound. SDK examples were not executed again by this reviewer.",
+  "actualBasicInputRecord": {
+    "path": "docs/plans/evidence/website-pr66-final-2026-11-02/executions/basic/execution-inputs.json",
+    "sha256": "0d6320d58e0bc38509aec6adc54760a1a3d8915b619b213b2588bd7c8a4024c0"
+  },
+  "allRecordedBasicInputsMatchCurrent": true,
+  "basicProgramCopiesMatchCurrent": true,
+  "publicRecipeInputsMatchImmutableCommit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+  "sourceBindings": [
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/inspection.rs",
+      "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+      "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+      "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v1.json",
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v2.json",
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/cell.png",
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/tone.wav",
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+    },
+    {
+      "path": "docs/zh-cn/troubleshooting.md",
+      "sha256": "99e54b3bfe63fe4014cdfb7f501b9ded114baee3fca48e7f81e887ef777fb9ed"
+    },
+    {
+      "path": "website/scripts/verify-public-recipe.mjs",
+      "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+    }
+  ],
+  "dependencyBindings": [
+    {
+      "path": "docs/ai-quickstart.json",
+      "sha256": "624c774313fc949da3aa744b0742c5aa43f5e81c46ae6aa6491a25b7d5a35980"
+    },
+    {
+      "path": "bindings/python/pyproject.toml",
+      "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+    },
+    {
+      "path": "bindings/node/package.json",
+      "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+    },
+    {
+      "path": "website/package.json",
+      "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+    },
+    {
+      "path": "website/package-lock.json",
+      "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+    }
+  ],
+  "receipts": [
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/executions/public-json/rust/installation.json",
+      "sha256": "1811f720da25228abb30caed6dc3e7c5d69d5111e472b0ed375cc68d0676bc40",
+      "description": "Fresh public-package installation receipt, read and checked for version 0.3.1 and official registry provenance."
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/executions/public-json/python/installation.json",
+      "sha256": "dd7658f085869bb9e5276bd8133bfafff9e4043cecda3a8a2c8a93833c917742",
+      "description": "Fresh public-package installation receipt, read and checked for version 0.3.1 and official registry provenance."
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/executions/public-json/node/installation.json",
+      "sha256": "2a85299875acbcf8684b5bc0ce5a98f4e6bae020e3b9d166cd3f81e3a0a92494",
+      "description": "Fresh public-package installation receipt, read and checked for version 0.3.1 and official registry provenance."
+    }
+  ],
+  "locksAndInstallReports": [
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/executions/basic/rust/Cargo.lock",
+      "sha256": "812a186cd8c2f8d48c9751d60af86c43877901aeabd84fb64629e1ad115e7dd8"
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/executions/basic/python/pip-report.json",
+      "sha256": "288bd16bd60ad6806c558b71d7c9d492e0fe2f28f460d33db8d8d8abc0b2c50a"
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/executions/basic/node/package-lock.json",
+      "sha256": "eeae72f76f5128348b47857a892268152608517087613c91c791b6e0865e01fb"
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/executions/public-json/rust/Cargo.lock",
+      "sha256": "c92a42e69646813c20b6a17df0fe166badf3ad92041f490e61625fe9bd9f2cbf"
+    }
+  ],
+  "independentInspection": [
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/usage-apkg-inspection.log",
+      "sha256": "b8220b1fe8d830ac8ba857e57821f07cba1aba4a4bbae975da4d3ffbc7fcaae6",
+      "description": "Independently reran existing ZIP/protobuf/SQLite decoder on all 10 actual APKG files: basic 1/1/0; duplicate-key recovery 2/2/0; all six JSON packages 3/3/2."
+    },
+    {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/usage-json-inspection.log",
+      "sha256": "d9a98ad9b721642a06fe9ba95229dabbb67c7d2c4667100d99a406ae22e4fc5d",
+      "description": "Independently compiled the current JSON inspector offline with the retained public execution lockfile and decoded all three SDK v1/v2 pairs. Verified two exact fixture media files, stable GUID/model/note mappings, exactly one changed answer and compare/review policy allowed."
+    }
+  ],
+  "limits": "No new native Anki client import or cross-platform SDK execution is claimed."
+}

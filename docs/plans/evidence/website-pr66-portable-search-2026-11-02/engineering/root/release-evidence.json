@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-engineering",
+  "status": "passed",
+  "engineeringStatus": "passed",
+  "engineeringOnly": false,
+  "startedAt": "2026-11-02T09:21:10.933Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "checks": [
+    {
+      "name": "check:content",
+      "command": [
+        "npm",
+        "run",
+        "check:content"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 3447,
+      "log": {
+        "file": "01-check-content.log",
+        "sha256": "a1389801725ed2ad44fc0ec79d1d44e234e28bcf301c29f2188742fc483de3a3",
+        "bytes": 327
+      }
+    },
+    {
+      "name": "check:site",
+      "command": [
+        "npm",
+        "run",
+        "check:site"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 4663,
+      "log": {
+        "file": "02-check-site.log",
+        "sha256": "acd2e2e4f1bf55c50ba08454e040d111cb3d160b26cc649864e1e2b36e353fc0",
+        "bytes": 330
+      }
+    },
+    {
+      "name": "check:surface",
+      "command": [
+        "npm",
+        "run",
+        "check:surface"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 4591,
+      "log": {
+        "file": "03-check-surface.log",
+        "sha256": "febf2f7ae37f96802c889f241badad1711898d86e0c4ab5b7f23adf20c5f07ad",
+        "bytes": 591
+      }
+    },
+    {
+      "name": "check:machine",
+      "command": [
+        "npm",
+        "run",
+        "check:machine"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 2992,
+      "log": {
+        "file": "04-check-machine.log",
+        "sha256": "c73b8ccfeef9d101b0bf2a3ac50c288f52a3391f87d58d4ab41c7058351494a5",
+        "bytes": 297
+      }
+    },
+    {
+      "name": "check:schema",
+      "command": [
+        "npm",
+        "run",
+        "check:schema"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 1135,
+      "log": {
+        "file": "05-check-schema.log",
+        "sha256": "7a51823d8a7c7be2df112e3215fad56167de4acf4d5fa16868d681d777c412cc",
+        "bytes": 283
+      }
+    },
+    {
+      "name": "check:gates",
+      "command": [
+        "npm",
+        "run",
+        "check:gates"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 42685,
+      "log": {
+        "file": "06-check-gates.log",
+        "sha256": "0c0324ceb14c8c737425eaed1117f3b519a38d893d70d244fc810f5c5d529099",
+        "bytes": 1513
+      }
+    },
+    {
+      "name": "test:browser",
+      "command": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 41816,
+      "log": {
+        "file": "07-test-browser.log",
+        "sha256": "2f5929b7899894fffacbefadb5dac91cce733e303224018a51a7a87bd1eb13db",
+        "bytes": 4744
+      }
+    },
+    {
+      "name": "check:search",
+      "command": [
+        "npm",
+        "run",
+        "check:search"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 4203,
+      "log": {
+        "file": "08-check-search.log",
+        "sha256": "30e817cc68d7f391798c478bae8e3407a6637de7dc5e259bd60098ef7ccb14d5",
+        "bytes": 1074
+      }
+    }
+  ],
+  "identity": {
+    "commit": "e9fbc7b4a31dbad934455b0ec1b58695be4dc54e",
+    "inputSha256": "381b5c782abc460fc0612430a2122334f94e42e0b174cdeb8334517acae500eb",
+    "configuration": {
+      "site": "https://ankiforge.dev",
+      "base": "/",
+      "customDomain": "ankiforge.dev"
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es",
+      "pt-BR",
+      "ja",
+      "de"
+    ]
+  },
+  "manifestSha256": "66eff750ce5db8cf12e3d3844e8dc42b8f598a844eb2e8788b39f2ec9487958a",
+  "artifactSha256": "e6289b5033b69bd509d75fc71dcef5c5de3d193a9534e1569897a2fe950611e5",
+  "fileCount": 706,
+  "attachments": [
+    {
+      "file": "search-results.json",
+      "sha256": "417092d4a6af5cae576b58d7f98a2a5991fe8292496a35c0ef59b8ec2e369a24",
+      "bytes": 307269
+    }
+  ],
+  "artifactUnchanged": true,
+  "finishedAt": "2026-11-02T09:23:53.121Z",
+  "postBuildReviews": {
+    "schemaVersion": 1,
+    "status": "passed",
+    "environment": "root",
+    "inputSha256": "381b5c782abc460fc0612430a2122334f94e42e0b174cdeb8334517acae500eb",
+    "configuration": {
+      "site": "https://ankiforge.dev",
+      "base": "/",
+      "customDomain": "ankiforge.dev"
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es",
+      "pt-BR",
+      "ja",
+      "de"
+    ],
+    "currentManifestSha256": "66eff750ce5db8cf12e3d3844e8dc42b8f598a844eb2e8788b39f2ec9487958a",
+    "configSha256": "489ca960ac1c0744b02b48cc9af66a938eb60695af0fddc08c1f9ab02d777267",
+    "reports": [
+      {
+        "kind": "usage-tasks",
+        "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/usage-tasks-root.json",
+        "sha256": "ee9894feccb9cf24849c94b1a67c91fa0f872615eecec0302b98d5c224607732",
+        "bytes": 1668046,
+        "reviewerRun": "/root/spec_review/pr66-portable-search-usage-root-2026-11-02",
+        "originManifestSha256": "66eff750ce5db8cf12e3d3844e8dc42b8f598a844eb2e8788b39f2ec9487958a",
+        "originCommit": "e9fbc7b4a31dbad934455b0ec1b58695be4dc54e",
+        "currentManifestSha256": "66eff750ce5db8cf12e3d3844e8dc42b8f598a844eb2e8788b39f2ec9487958a",
+        "reused": false,
+        "resourceScopeSha256": "f8c041acb6d4eac575948c6ddf4e86b8739b6cb0f95da3da65eb7ca4bb311907"
+      },
+      {
+        "kind": "machine-read",
+        "path": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/machine-read-root.json",
+        "sha256": "97b6043bda9eb8d701d97b7aa53aea32d3e5a3e60ed3308028dbdb8bc8f0b4ef",
+        "bytes": 124469,
+        "reviewerRun": "/root/standards_review/pr66-portable-search-independent-machine-root-2026-11-02",
+        "originManifestSha256": "66eff750ce5db8cf12e3d3844e8dc42b8f598a844eb2e8788b39f2ec9487958a",
+        "originCommit": "e9fbc7b4a31dbad934455b0ec1b58695be4dc54e",
+        "currentManifestSha256": "66eff750ce5db8cf12e3d3844e8dc42b8f598a844eb2e8788b39f2ec9487958a",
+        "reused": false,
+        "resourceScopeSha256": "5cb5349e7e883945e2e3c8a1748070434db213818b5145d1071359479293959f"
+      }
+    ]
+  },
+  "reviewAttachedAt": "2026-11-02T09:23:53.121Z"
+}

@@ -1,0 +1,284 @@
+{
+  "schemaVersion": 1,
+  "rubricVersion": "anki-forge-language-quality-v1",
+  "glossaryVersion": "anki-forge-technical-terms-v1",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/ja_full_author/independent-de-MIME-formatting-language-delta-2026-11-01",
+  "reviewMethod": {
+    "axis": "linguistic source",
+    "scope": "Two German source-entry deltas only (python-api and node-api); the other 202 source/target/technical signatures are exactly unchanged.",
+    "snapshot": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/source-candidates-mime-fixed.json",
+      "sha256": "719ea15495149279836888f3687d262351c0e63ec3560fe6db61b68da25cd4b3"
+    },
+    "priorFull204EntryReport": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/linguistic-source-review-final.json",
+      "sha256": "8ed3c869e135e1978d4fb9251dcb480fcb832a7535a650215d9ad1a75d9a9bec"
+    },
+    "actualDeltaChecks": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/mime-formatting-source-delta-checks.json",
+      "sha256": "adb132251e4e6203709210c389c353288a7ee2f9b30f371ce40cb1a19d16c389"
+    },
+    "method": "Read both complete modified German paragraphs and adjacent addition-context paragraphs; compare entire current files to immutable 8f2c77e and confirm only backticks around the three MIME patterns were added in each file. Recompute every current candidate signature and input-file list. Preserve each entry’s previous complete independent reading evidence, scores and issue state, and append the focused current delta. Keep the original 204-entry report and old prefix artifact reports unchanged.",
+    "independence": "Reviewer did not author the German paragraphs or apply this formatting fix. Unchanged Japanese content retains its separate independent original review lineage; no Japanese source self-approval is added.",
+    "exclusions": "No claim of a fresh full-document reread, machine-read pass or final usage/browser pass. Those need the newly built artifact and actual captures."
+  },
+  "entries": {
+    "python-api": {
+      "de": {
+        "sourceHash": "305b7437d1507a7c847f90df4ac6df75efc40747a87afcd6e2333e4f068a8d2b",
+        "targetHash": "a9b08bbea8c4d8ab748669a8b8e8f8bbb2eec90e10ded96234d1563800be114f",
+        "technicalDependencyHash": "2a1e416ff267527c95652d3703151e1be162235fa6b976c3b801a7a35f6b743c",
+        "inputFiles": [
+          "anki_forge/examples/docs_workflow.rs",
+          "anki_forge/examples/json_to_anki.rs",
+          "anki_forge/examples/website_showcase.rs",
+          "bindings/node/examples/json_to_anki.mts",
+          "bindings/python/examples/json_to_anki.py",
+          "docs/ai-quickstart.json",
+          "docs/de/python-api.md",
+          "docs/python/api.md",
+          "website/language-briefs.json",
+          "website/legacy-sections.json",
+          "website/locale-model.mjs",
+          "website/release-locales.json",
+          "website/scripts/search-documents.mjs",
+          "website/search-concepts.json",
+          "website/search-terms.json",
+          "website/search.config.mjs",
+          "website/section-contracts.json",
+          "website/site-model.mjs",
+          "website/src/components/BrandMark.astro",
+          "website/src/components/CodeBlock.astro",
+          "website/src/components/CopyBlock.astro",
+          "website/src/components/DocsFooter.astro",
+          "website/src/components/DocsHeader.astro",
+          "website/src/components/DocsSearch.astro",
+          "website/src/components/Footer.astro",
+          "website/src/components/Header.astro",
+          "website/src/components/Icon.astro",
+          "website/src/components/LanguageSwitcher.astro",
+          "website/src/components/ThemeControl.astro",
+          "website/src/content/i18n/de.json",
+          "website/src/content/i18n/en.json",
+          "website/src/i18n/client-messages.mjs",
+          "website/src/i18n/de.json",
+          "website/src/i18n/en.json",
+          "website/src/i18n/format-message.mjs",
+          "website/src/i18n/messages.mjs",
+          "website/src/layouts/SiteLayout.astro",
+          "website/src/lib/ai-quickstart.mjs",
+          "website/src/lib/examples.ts",
+          "website/src/lib/search-terms.mjs",
+          "website/src/lib/search.mjs",
+          "website/src/route-middleware.ts",
+          "website/src/scripts/docs-search.ts",
+          "website/src/scripts/site.ts"
+        ],
+        "technical": {
+          "status": "pending",
+          "evidence": [],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 4,
+            "syntax": 4,
+            "register": 4,
+            "usability": 4
+          },
+          "evidence": [
+            {
+              "criterion": "full-german-topic-language-read",
+              "file": "docs/de/python-api.md",
+              "line": 3,
+              "span": "Das SDK ruft die reguläre öffentliche Rust-API über eine native Erweiterung auf. Es enthält `py.typed` und geprüfte öffentliche Signaturen. Beginne mit dem [Schnellstart](/docs/python-quickstart/).",
+              "targetFileSha256": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771",
+              "judgement": "Dense API tables remain readable. Ownership, GIL/fork limits and prepare/publish sequence have clear referents; sample fixes remain present.",
+              "readEvidence": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/linguistic-blind-read.json",
+                "sha256": "066c6fa56ce4a98c1c97bcf18832f853e0a548bb53db50e35eafef946efd1443"
+              },
+              "reviewMethod": "Full independent German prose/table or UI reading in isolated staging, followed by exact production-byte mapping and independent rereading of all subsequent changes. Protected code was not rewritten or treated as linguistic approval."
+            },
+            {
+              "criterion": "complete-german-shared-language-surface",
+              "files": [
+                "website/src/i18n/de.json",
+                "website/src/content/i18n/de.json",
+                "website/site-model.mjs",
+                "website/language-briefs.json",
+                "docs/ai-quickstart.json",
+                "website/search-terms.json",
+                "website/search-concepts.json"
+              ],
+              "judgement": "Read all 210 business messages, 11 framework messages, 29 document title/description pairs, five sidebar groups, three navigation labels, full terminology/ownership brief, parameterized prompt and production vocabulary. Notiz/Karte/Stapel remain distinct. Du register, singular/plural forms, copy/search recovery, original distribution APKG and source-only boundaries are consistent. The final search-only additions were separately read against their German body sections; no search-ranking conclusion is claimed.",
+              "originalFullRead": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/linguistic-blind-read.json",
+                "sha256": "066c6fa56ce4a98c1c97bcf18832f853e0a548bb53db50e35eafef946efd1443"
+              },
+              "finalVocabularyDelta": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/search-vocabulary-linguistic-delta.json",
+                "sha256": "3325378e8f67aeae364ca870f9fc4424b1035165bce4f03c2df5950ff4b0f5f9"
+              }
+            },
+            {
+              "criterion": "independent-MIME-literal-formatting-delta-read",
+              "file": "docs/de/python-api.md",
+              "line": 74,
+              "span": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus `image/*`. Tonreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+              "targetFileSha256": "3f9c8ef43cbe56ef2c51530d19d0005f558008590168c4e5025408642f4acfb2",
+              "priorFullRead": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/linguistic-source-review-final.json",
+                "sha256": "8ed3c869e135e1978d4fb9251dcb480fcb832a7535a650215d9ad1a75d9a9bec"
+              },
+              "deltaVerification": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/mime-formatting-source-delta-checks.json",
+                "sha256": "adb132251e4e6203709210c389c353288a7ee2f9b30f371ce40cb1a19d16c389"
+              },
+              "judgement": "Actually reread this complete modified German paragraph and its surrounding addition-context section. Marking image/*, audio/* and video/* as inline code accurately presents literal MIME families, preserves the star for Markdown rendering and does not change sentence grammar, register or technical scope. Images remain restricted to image/*; sound references accept audio/* or video/*. The paragraph still distinguishes recorded MIME validation from playback support and the separate build-time extension check. No language problem introduced. Only these six backtick delimiters differ from the independently read prior source; this is a focused formatting delta, not a claim of a new complete document read or final rendered-artifact acceptance."
+            }
+          ],
+          "openIssues": []
+        }
+      }
+    },
+    "node-api": {
+      "de": {
+        "sourceHash": "04940140cfe8bdcb96f3fbc692ee7e70d068ca6ea78a22e170f03160d28be711",
+        "targetHash": "91400261c9d6579e26cd4a0b2270eec08a6816fa5910026d59faf2708e95fe33",
+        "technicalDependencyHash": "ea381d6f0883a017c0dfd760e23b69adf0d0421d5fbf49c3d370c2d3cabd93c2",
+        "inputFiles": [
+          "anki_forge/examples/docs_workflow.rs",
+          "anki_forge/examples/json_to_anki.rs",
+          "anki_forge/examples/website_showcase.rs",
+          "bindings/node/examples/json_to_anki.mts",
+          "bindings/python/examples/json_to_anki.py",
+          "docs/ai-quickstart.json",
+          "docs/de/node-api.md",
+          "docs/node/api.md",
+          "website/language-briefs.json",
+          "website/legacy-sections.json",
+          "website/locale-model.mjs",
+          "website/release-locales.json",
+          "website/scripts/search-documents.mjs",
+          "website/search-concepts.json",
+          "website/search-terms.json",
+          "website/search.config.mjs",
+          "website/section-contracts.json",
+          "website/site-model.mjs",
+          "website/src/components/BrandMark.astro",
+          "website/src/components/CodeBlock.astro",
+          "website/src/components/CopyBlock.astro",
+          "website/src/components/DocsFooter.astro",
+          "website/src/components/DocsHeader.astro",
+          "website/src/components/DocsSearch.astro",
+          "website/src/components/Footer.astro",
+          "website/src/components/Header.astro",
+          "website/src/components/Icon.astro",
+          "website/src/components/LanguageSwitcher.astro",
+          "website/src/components/ThemeControl.astro",
+          "website/src/content/i18n/de.json",
+          "website/src/content/i18n/en.json",
+          "website/src/i18n/client-messages.mjs",
+          "website/src/i18n/de.json",
+          "website/src/i18n/en.json",
+          "website/src/i18n/format-message.mjs",
+          "website/src/i18n/messages.mjs",
+          "website/src/layouts/SiteLayout.astro",
+          "website/src/lib/ai-quickstart.mjs",
+          "website/src/lib/examples.ts",
+          "website/src/lib/search-terms.mjs",
+          "website/src/lib/search.mjs",
+          "website/src/route-middleware.ts",
+          "website/src/scripts/docs-search.ts",
+          "website/src/scripts/site.ts"
+        ],
+        "technical": {
+          "status": "pending",
+          "evidence": [],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 4,
+            "syntax": 4,
+            "register": 4,
+            "usability": 4
+          },
+          "evidence": [
+            {
+              "criterion": "full-german-topic-language-read",
+              "file": "docs/de/node-api.md",
+              "line": 3,
+              "span": "Der Einstiegspunkt `ankiforge` stellt das einzige Modell zur Inhaltserstellung über Project bereit. Die Typen sind im [öffentlichen Quellcode](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts), in den [Berichtsklassen](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts) und in den [JSON-Snapshot-Deklarationen](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts) definiert. Beginne mit dem [Schnellstart](/docs/node-quickstart/).",
+              "targetFileSha256": "4ec0367f34a6249bea09de1e5657ed681cd1f8a6fac607e9c00631cee95ae0c6",
+              "judgement": "Report versus JSON field naming and asynchronous ownership are clear. The changed numeric-limit paragraph now uses literal 0 and cannot be mistaken for the JavaScript null value.",
+              "readEvidence": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/linguistic-blind-read.json",
+                "sha256": "066c6fa56ce4a98c1c97bcf18832f853e0a548bb53db50e35eafef946efd1443"
+              },
+              "reviewMethod": "Full independent German prose/table or UI reading in isolated staging, followed by exact production-byte mapping and independent rereading of all subsequent changes. Protected code was not rewritten or treated as linguistic approval."
+            },
+            {
+              "criterion": "complete-german-shared-language-surface",
+              "files": [
+                "website/src/i18n/de.json",
+                "website/src/content/i18n/de.json",
+                "website/site-model.mjs",
+                "website/language-briefs.json",
+                "docs/ai-quickstart.json",
+                "website/search-terms.json",
+                "website/search-concepts.json"
+              ],
+              "judgement": "Read all 210 business messages, 11 framework messages, 29 document title/description pairs, five sidebar groups, three navigation labels, full terminology/ownership brief, parameterized prompt and production vocabulary. Notiz/Karte/Stapel remain distinct. Du register, singular/plural forms, copy/search recovery, original distribution APKG and source-only boundaries are consistent. The final search-only additions were separately read against their German body sections; no search-ranking conclusion is claimed.",
+              "originalFullRead": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/linguistic-blind-read.json",
+                "sha256": "066c6fa56ce4a98c1c97bcf18832f853e0a548bb53db50e35eafef946efd1443"
+              },
+              "finalVocabularyDelta": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/search-vocabulary-linguistic-delta.json",
+                "sha256": "3325378e8f67aeae364ca870f9fc4424b1035165bce4f03c2df5950ff4b0f5f9"
+              }
+            },
+            {
+              "criterion": "independent-reread-of-integrator-corrections",
+              "evidence": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/linguistic-blind-read.json",
+                "sha256": "066c6fa56ce4a98c1c97bcf18832f853e0a548bb53db50e35eafef946efd1443"
+              },
+              "judgement": "The closed-findings records and subsequentClarification contain the exact reread hashes and judgments for the corrected grammar, numeric zero and precise whitespace-key wording. Production bytes match those independently reread inputs."
+            },
+            {
+              "criterion": "independent-MIME-literal-formatting-delta-read",
+              "file": "docs/de/node-api.md",
+              "line": 106,
+              "span": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+              "targetFileSha256": "9eb661fae21ce15f7c9f25010e6642c52338cf2ffd9f925f81f5c6ed2a8d3fae",
+              "priorFullRead": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/linguistic-source-review-final.json",
+                "sha256": "8ed3c869e135e1978d4fb9251dcb480fcb832a7535a650215d9ad1a75d9a9bec"
+              },
+              "deltaVerification": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/mime-formatting-source-delta-checks.json",
+                "sha256": "adb132251e4e6203709210c389c353288a7ee2f9b30f371ce40cb1a19d16c389"
+              },
+              "judgement": "Actually reread this complete modified German paragraph and its surrounding addition-context section. Marking image/*, audio/* and video/* as inline code accurately presents literal MIME families, preserves the star for Markdown rendering and does not change sentence grammar, register or technical scope. Images remain restricted to image/*; sound references accept audio/* or video/*. The paragraph still distinguishes recorded MIME validation from playback support and the separate build-time extension check. No language problem introduced. Only these six backtick delimiters differ from the independently read prior source; this is a focused formatting delta, not a claim of a new complete document read or final rendered-artifact acceptance."
+            }
+          ],
+          "openIssues": []
+        }
+      }
+    }
+  },
+  "summary": {
+    "reviewedDeltas": 2,
+    "unchangedCandidateEntries": 202,
+    "currentSignatureBindingsChecked": 204,
+    "openLanguageIssues": 0,
+    "majorIssues": 0,
+    "criticalIssues": 0
+  }
+}

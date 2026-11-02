@@ -1,0 +1,75 @@
+{
+  "scope": "Actual manifest-bound German API HTML and Markdown MIME-literal regression observations.",
+  "manifestSha256": "d3d623086c148437e699076b66c529a0db16fe36cb7500f06344215f4a8013e6",
+  "inputSha256": "2ee0c811508f03431dcfd1d2bb683004ef558fb8d0c8311bbb5cd8393b2090ef",
+  "configuration": {
+    "site": "https://morehardy.github.io",
+    "base": "/anki-forge",
+    "customDomain": ""
+  },
+  "status": "failed",
+  "records": [
+    {
+      "id": "python-api",
+      "route": "/anki-forge/de/docs/python-api/",
+      "htmlSha256": "6a383f82a1bd170efa197fc02990755fdac212b9b88e595e916e4a32bec7725b",
+      "markdownSha256": "c80a5b2cfc5c52d1916e9539df7ed082ef49b953bcc883b2036105783783ad22",
+      "text": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus image/. Tonreferenzen akzeptieren audio/ oder video/*. Andere Kategorien führen zu NOTE.MEDIA_USAGE_INVALID. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im Entwurfsdokument.",
+      "code": [
+        "NOTE.MEDIA_USAGE_INVALID"
+      ],
+      "markdown": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus image/_. Tonreferenzen akzeptieren audio/_ oder video/\\*. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": false,
+          "htmlCode": false,
+          "markdownCode": false
+        },
+        {
+          "value": "audio/*",
+          "htmlText": false,
+          "htmlCode": false,
+          "markdownCode": false
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": false,
+          "markdownCode": false
+        }
+      ]
+    },
+    {
+      "id": "node-api",
+      "route": "/anki-forge/de/docs/node-api/",
+      "htmlSha256": "3a9835556f433cc988070a402b383bf4b076ffe89c92506411a41f152f26e722",
+      "markdownSha256": "55fb89742922e946f28ca9c71d3dea7e92a73ff6a0943e8be76fbdf88cd558c7",
+      "text": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/; Audioreferenzen akzeptieren audio/ oder video/*. Andere Kategorien lösen NOTE.MEDIA_USAGE_INVALID aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im Entwurf.",
+      "code": [
+        "NOTE.MEDIA_USAGE_INVALID"
+      ],
+      "markdown": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/_; Audioreferenzen akzeptieren audio/_ oder video/\\*. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": false,
+          "htmlCode": false,
+          "markdownCode": false
+        },
+        {
+          "value": "audio/*",
+          "htmlText": false,
+          "htmlCode": false,
+          "markdownCode": false
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": false,
+          "markdownCode": false
+        }
+      ]
+    }
+  ]
+}

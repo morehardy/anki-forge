@@ -1,0 +1,34 @@
+✖ pt-BR: header controls stay reachable at narrow 200% text zoom (983.002875ms)
+
+Interrupted while running:
+
+⚠ scripts/browser.test.mjs (scripts/browser.test.mjs:1:1)
+✖ scripts/browser.test.mjs (200770.219666ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 1
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 200774.671208
+
+✖ failing tests:
+
+test at scripts/browser.test.mjs:328:3
+✖ pt-BR: header controls stay reachable at narrow 200% text zoom (983.002875ms)
+  AssertionError [ERR_ASSERTION]: pt-BR/home clips a header control at 320px with 200% text
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:337:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/browser.test.mjs:1:1
+✖ scripts/browser.test.mjs (200770.219666ms)
+  'Promise resolution is still pending but the event loop has already resolved'

@@ -1,0 +1,1251 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "/root/baseline_acceptance",
+  "scope": "Fresh source/dependency equality audit and independent ZIP/Zstandard/SQLite inspection of retained actual SDK outputs; execution is explicitly reused, not claimed as rerun.",
+  "status": "passed",
+  "currentBindings": [
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/inspection.rs",
+      "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+      "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "sha256": "53f6f0b9b1471fde4083f772594674f588bb690da20b7d87d8fb1967b6b23678"
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+    },
+    {
+      "path": "docs/zh-cn/troubleshooting.md",
+      "sha256": "85210468671e72190fadc1232554db3c1e5cf39a1110c2402cc5526ff9fba05f"
+    },
+    {
+      "path": "bindings/python/pyproject.toml",
+      "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+    },
+    {
+      "path": "bindings/node/package.json",
+      "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v1.json",
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v2.json",
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/cell.png",
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/tone.wav",
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+      "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+    },
+    {
+      "path": "website/scripts/verify-public-recipe.mjs",
+      "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+    },
+    {
+      "path": "website/package.json",
+      "sha256": "f0a2088b451b0d553de45025b48e5a5f759d3f3d504ff88947d5917001fec4e4"
+    },
+    {
+      "path": "website/package-lock.json",
+      "sha256": "846037f973d7db41f6632ed904df828bb432e758e3ca397b3b6a395f3cb4ec79"
+    }
+  ],
+  "executionSources": {
+    "rust": {
+      "current": {
+        "path": "anki_forge/examples/target_api_basic.rs",
+        "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+      },
+      "executed": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/src/main.rs",
+        "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+      }
+    },
+    "python": {
+      "current": {
+        "path": "bindings/python/examples/quickstart.py",
+        "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+      },
+      "executed": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/main.py",
+        "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+      }
+    },
+    "node": {
+      "current": {
+        "path": "bindings/node/examples/quickstart.mjs",
+        "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+      },
+      "executed": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/main.mjs",
+        "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+      }
+    }
+  },
+  "outputs": [
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/rust/spanish.apkg",
+        "sha256": "1db741938adb9c1681ff7f77662e34ccd14007829e0ea0f3ef67b29773eb038d"
+      },
+      "notes": [
+        [
+          "aaf05442c6721ba14cf48d7802f35de0",
+          "hola\u001fhello"
+        ]
+      ],
+      "cardOrdinals": [
+        0
+      ],
+      "mediaSha256": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "30f11dac9f33a9f76ee102e78bdc497b4cf67aa98804c896517e2d5325bd14f8",
+        "identity_blake3": "470239a63dcbf6b4428639613e0cfee9d82ca4aeaaa3802ab18f62f909cc9490",
+        "media": {},
+        "identity": {
+          "namespace": "spanish",
+          "models": {
+            "basic": {
+              "id": 4446440072942514,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505184,
+              "content_hash": "de52262149b1d0084ee5eb0f549ec1e3d6d4464114634605a6d88e03fee6f961",
+              "fields": {
+                "back": {
+                  "id": 2086052983137506,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 1446251127562207,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 2049222423285953,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "es:hola": {
+              "guid": "aaf05442c6721ba14cf48d7802f35de0",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505184,
+              "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {}
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/spanish.apkg",
+        "sha256": "144ccaf1c0885cc0d22bec401de1bf8eb4f5994901a54624a121c076e3f4962f"
+      },
+      "notes": [
+        [
+          "aaf05442c6721ba14cf48d7802f35de0",
+          "hola\u001fhello"
+        ]
+      ],
+      "cardOrdinals": [
+        0
+      ],
+      "mediaSha256": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "5cadf1968e33fcc3372cd80d8afe8a5279ace5c9f30cb5b212001f3dbc7d32a4",
+        "identity_blake3": "609ad21335e1b82720fd5cfaf7f7f997add587fdcda17dc0298bc448e382a398",
+        "media": {},
+        "identity": {
+          "namespace": "spanish",
+          "models": {
+            "basic": {
+              "id": 4446440072942514,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "de52262149b1d0084ee5eb0f549ec1e3d6d4464114634605a6d88e03fee6f961",
+              "fields": {
+                "back": {
+                  "id": 2086052983137506,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 1446251127562207,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 2049222423285953,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "es:hola": {
+              "guid": "aaf05442c6721ba14cf48d7802f35de0",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {}
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/node/spanish.apkg",
+        "sha256": "8e3266decbe71ef5a1ed69fdc0c4297f9fcb85d3c7b6fd8f94eebb06345ae9d2"
+      },
+      "notes": [
+        [
+          "aaf05442c6721ba14cf48d7802f35de0",
+          "hola\u001fhello"
+        ]
+      ],
+      "cardOrdinals": [
+        0
+      ],
+      "mediaSha256": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "429cd5494221055c770d77ff6509f6b20eb66fd5f00452749ce2cb460372b181",
+        "identity_blake3": "e1be0d6b2141547e51e14b4fdaeb0b59620dfd60b1a7cb30ef588d20c3b5d465",
+        "media": {},
+        "identity": {
+          "namespace": "spanish",
+          "models": {
+            "basic": {
+              "id": 4446440072942514,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505195,
+              "content_hash": "de52262149b1d0084ee5eb0f549ec1e3d6d4464114634605a6d88e03fee6f961",
+              "fields": {
+                "back": {
+                  "id": 2086052983137506,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 1446251127562207,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 2049222423285953,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "es:hola": {
+              "guid": "aaf05442c6721ba14cf48d7802f35de0",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505195,
+              "content_hash": "08ba464ecd3645d8a66fb417624b918e037884d85d9756cb7ecc0340b36bc7fe",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {}
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/v1.apkg",
+        "sha256": "a80084bf0ea3413b7cb7e5bef811580e6e20c694767dda079df26d1f948e3297"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fA unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "de5251dfc33bd95dcf7450b8daa9ab892e14e9607146d95155a71fcbf14ee81a",
+        "identity_blake3": "ab9e345e404c5d61b266519e79a7deac483a66df15c288986068b8c1eeeef466",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/v2.apkg",
+        "sha256": "575e56dd32abea1fed021b74314716c5abb5f0c75fe48a9818977020fc6eb337"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe basic structural and functional unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "ee3822e7ef7680e36020afdc5ce4d0e940b0dfef7d5658bf55b05beb8cd6e4d1",
+        "identity_blake3": "5daadd68633096d5cb0f6279283ac22cd9634d82cab137aff2cb663b76b66102",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505187,
+              "content_hash": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505186,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/v1.apkg",
+        "sha256": "0872e011ce6646d0ae18883487616939a8efd67587f12741de37fd603e6ba4dd"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fA unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "d30622ae328258cc0529ce479acaa7a8cd67662adf736929c6ed184b577f6951",
+        "identity_blake3": "9a1277e71928f06d726e9314adecc0791de1c4de8c6b81a6c7ff041d737ccf88",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/v2.apkg",
+        "sha256": "c7a1cf1409a9962d709804e8c1dd3aee9071b539bd5323e4e860970c770de424"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe basic structural and functional unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "e766c889115cee4ec2dc5b2d5823f57611e81839713fd77339259b7d8df5501d",
+        "identity_blake3": "d42415fa7977629c9dc9a56a889f2b7a130f801f772ed1ef468cef217798aff2",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505192,
+              "content_hash": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/v1.apkg",
+        "sha256": "4b59e26cd2aa4f8ab3e83fd4ee763f0e68ac288fb8650d6ca1293308e9a5d630"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fA unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "eed9a56ce5dd39950f1f02ee95f9791b136f322002108579f0e5e0944315d997",
+        "identity_blake3": "acc55f18a1867f936d2372f5b4783c8ab5be277fc083ed55c7553a84ec0569c5",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "9ed844cdcb45476a7dbd6e5e2ad562f9c97d021766b8fb866269a8ee58626215",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/v2.apkg",
+        "sha256": "5db7aa990fbfaccaa2a76630e7439c596356ee28aa9c4f8751459c5cb53f4a2d"
+      },
+      "notes": [
+        [
+          "49dff2fadd29b11ef4c022e534bf5858",
+          "What surrounds a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe cell membrane"
+        ],
+        [
+          "a26bc1122d44b5d560ff4a16e5505b66",
+          "What stores genetic information?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe nucleus"
+        ],
+        [
+          "ce55b46e801a1e8fdf4a5a632610cc4e",
+          "What is a cell?<img src=\"4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png\">[sound:4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav]\u001fThe basic structural and functional unit of life"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0,
+        0
+      ],
+      "mediaSha256": [
+        "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      ],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "a19604d38bf404c8d9ec36b636b1a6924c9386220411b79b626254d5b0ab38ce",
+        "identity_blake3": "b041aeb5282ba8dc6871c62a6b34323f74cd21d51ea6a70148d60d20e80715e8",
+        "media": {
+          "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+            "size": 16044,
+            "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+          },
+          "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+            "size": 178597,
+            "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+          }
+        },
+        "identity": {
+          "namespace": "biology-json",
+          "models": {
+            "basic": {
+              "id": 3325229597682173,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "c38e7b52c74fc085b7e4cd7c44c8293fd725bd9331fa17927e5e9c123bb5ee04",
+              "fields": {
+                "back": {
+                  "id": 1844878553191590,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 383008850911271,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 3933880707448519,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "bio:cell": {
+              "guid": "ce55b46e801a1e8fdf4a5a632610cc4e",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505198,
+              "content_hash": "3b599685c84ba86bbb13d272c81b381e59e9bfefb1d8c134629c35ca433b2cd6",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:membrane": {
+              "guid": "49dff2fadd29b11ef4c022e534bf5858",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "dee62c93d3c206e46d2a36d701c5c0d045e6a8c489cae7b005423d7d0584c944",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "bio:nucleus": {
+              "guid": "a26bc1122d44b5d560ff4a16e5505b66",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505197,
+              "content_hash": "350fd742b017b53b4bef6187500d54677d448852e69c5671619439d3a6dd662c",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {
+            "4a6d2fb06c24306af961d660aeb9f7fa015864523e57e6d8818d0d043c486da0.wav": {
+              "size": 16044,
+              "sha1": "7198d4ab09e11fb97e771d7dbf7aeb9e19dc25cd"
+            },
+            "4dd3532263bb1417402589a5cedd623155d37734a92350f7cc53669c39919473.png": {
+              "size": 178597,
+              "sha1": "5659ae2e12577f317fc3cad383cd737955d4905d"
+            }
+          }
+        }
+      },
+      "sqliteIntegrity": "ok"
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/basic/python/recovered.apkg",
+        "sha256": "38408fdc693813a2285434ddf967fdb98fea6b5b1ff359ace2ac315964c74d23"
+      },
+      "notes": [
+        [
+          "0f8f9139b04ecc21e3276eaa8e80c28b",
+          "two\u001fsecond"
+        ],
+        [
+          "8e363c025de858cc34527c3f94565e5a",
+          "one\u001ffirst"
+        ]
+      ],
+      "cardOrdinals": [
+        0,
+        0
+      ],
+      "mediaSha256": [],
+      "identity": {
+        "format_version": "ankiforge-identity-v1",
+        "collection_blake3": "6267d0fd44483e8971668e4f51e76d8549de2cab5e906cfbdbd5fa93adcde03c",
+        "identity_blake3": "8ec78dd7aa632f94c2aec0342dffb0802528e9a0acbb900c5ff4a26eb03d50d0",
+        "media": {},
+        "identity": {
+          "namespace": "controlled-duplicate",
+          "models": {
+            "basic": {
+              "id": 1093654850400892,
+              "kind": "normal",
+              "sort_field": "front",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "9188fa54145696d981e1fb702d1a8ca8a367398e94bfac381de5db59d8ff6d74",
+              "fields": {
+                "back": {
+                  "id": 3780656541465536,
+                  "slot": 1,
+                  "ordinal": 1
+                },
+                "front": {
+                  "id": 1388142190283835,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "field_high_water": 2,
+              "templates": {
+                "card": {
+                  "id": 1870128588540125,
+                  "slot": 0,
+                  "ordinal": 0
+                }
+              },
+              "template_high_water": 1
+            }
+          },
+          "notes": {
+            "source:1": {
+              "guid": "8e363c025de858cc34527c3f94565e5a",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "f19564ba73bb897ccd3a88aaa87abc5affe2e247d0a33833b14f21383e41fb95",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            },
+            "source:2": {
+              "guid": "0f8f9139b04ecc21e3276eaa8e80c28b",
+              "model": "basic",
+              "active": true,
+              "mtime_secs": 1793505191,
+              "content_hash": "de11172b57fd8946b877a12405e61afe7b749725d9fc3cec73e8e7af8304f5ab",
+              "masks": {},
+              "mask_high_water": 0,
+              "cards": {
+                "template:card": 0
+              }
+            }
+          },
+          "media_history": {}
+        }
+      },
+      "sqliteIntegrity": "ok"
+    }
+  ],
+  "comparisonReports": [
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/comparison.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/rust/review.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/comparison.json",
+        "sha256": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/python/review.json",
+        "sha256": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/comparison.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true
+    },
+    {
+      "file": {
+        "path": "docs/plans/evidence/multilingual-es-integration-2026-10-31/executions/public-json/node/review.json",
+        "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      },
+      "highestRisk": "low",
+      "policyAllowsPublication": true
+    }
+  ]
+}

@@ -1,0 +1,4927 @@
+{
+  "schemaVersion": 1,
+  "commit": "5a50666dbc15e9aa7342de1d3d6587d1a9f147bd",
+  "inputSha256": "85f5276a59a50143053000a91fe702d76521e13fb9232db86a2498016a029d1f",
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es",
+    "pt-BR",
+    "ja"
+  ],
+  "pages": [
+    {
+      "route": "/404.html",
+      "sha256": "d348f37ce57ab7d11c12be0f4de25d291207a13bd57f65d85587c79eebacbe51",
+      "bytes": 45870,
+      "id": "404",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/blog/",
+      "sha256": "e86544a8b691b0e22e6ec65f0df4b61313954ce3f8333728ec5706a9f4674ef0",
+      "bytes": 14817,
+      "id": "blog",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/blog/stable-ids-and-deck-updates/",
+      "sha256": "6798d5fb9a07d6d76d334d1120e9ac6903ddc2dd7c975854c625537009baf2d1",
+      "bytes": 25246,
+      "id": "blog:stable-ids-and-deck-updates",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/blog/your-first-anki-deck/",
+      "sha256": "4d5c3fa3b5b76f3eb6cc21a2b09fcbf3676a9506ea3d7ba2e989e8fd1a7266db",
+      "bytes": 26590,
+      "id": "blog:your-first-anki-deck",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/ai-anki-cards/",
+      "sha256": "639a7d69c024931fa72caff42be1426fcbb1bfaa5a875c2891319b3cc646f389",
+      "bytes": 57162,
+      "id": "ai-anki-cards",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/anki-forge-vs-genanki/",
+      "sha256": "503d7fa1749035397299dc4ab7ee610d1b16b4b0872b3d938a3384d92fb53f5a",
+      "bytes": 52117,
+      "id": "anki-forge-vs-genanki",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/api/",
+      "sha256": "ee02f9f54b28b76c5917add0e92484b8e03fd6e9a2e350e6b341c53e439bd6cc",
+      "bytes": 45861,
+      "id": "api",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/build-guarantees/",
+      "sha256": "0499fdbbd428970d3ae3d205a11faf248750f775d37f4ade5752da641c738101",
+      "bytes": 58529,
+      "id": "build-guarantees",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/cards/",
+      "sha256": "d22084f552dfd76b834b060abdaa45be5ae0d5231ed58174d3eb88d26c2abb74",
+      "bytes": 56541,
+      "id": "cards",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/compatibility/",
+      "sha256": "5b0b6dd49ee39ededa29e95ea638cd3e32d9878e0ad74b13220ba2e89c30192d",
+      "bytes": 48477,
+      "id": "compatibility",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/concepts/",
+      "sha256": "dd69a3799cb3692b134d2b07a00d61db49946ea4103329b39ba7977ee2e1ab14",
+      "bytes": 54201,
+      "id": "concepts",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/csv-to-anki/",
+      "sha256": "556b93696e07f695fdfb19e0eab347da6cbd16d91d558fe06c2f9e2da8e643c4",
+      "bytes": 79955,
+      "id": "csv-to-anki",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/custom-notetypes/",
+      "sha256": "4a2b8691d4df978c80113dd01ae57ea0312fd0172a059f4cdb20ed7f3bc6b60a",
+      "bytes": 63119,
+      "id": "custom-notetypes",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/development/",
+      "sha256": "ddaadd31cde51456e607a91d16f23c6faad9a08753b06df96420d8f221d530e8",
+      "bytes": 46845,
+      "id": "development",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/genanki-migration/",
+      "sha256": "ab4954d368c914d641d4f86c3d5dfba8fae494625564128a540d707f5f7d26b1",
+      "bytes": 52129,
+      "id": "genanki-migration",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/image-occlusion/",
+      "sha256": "c6b0c2cf037ad7e169854757070bc463bcbe393c0421d992a9982c2bd3e2881a",
+      "bytes": 67689,
+      "id": "image-occlusion",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/",
+      "sha256": "18c052bb0cbb04bf4640a55e72de3d7d5a3a2f98fc14c4672711cc01beacf352",
+      "bytes": 51397,
+      "id": "docs",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/installation/",
+      "sha256": "67b0602e8ec421ad986077d8e2bbb8bd72c3a7ecf01e41462622a7a406052699",
+      "bytes": 47976,
+      "id": "installation",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/json-to-anki/",
+      "sha256": "61696ee2030eb27493162eb87a5c6f33897d3c23ab5cb6a9ac8ca85280a2930b",
+      "bytes": 159983,
+      "id": "json-to-anki",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 10,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/languages/",
+      "sha256": "f7e6f87b572537cb4cbaa6d49771c49cacac0836a3dc9c1129d06f7bf4cc4ab8",
+      "bytes": 43691,
+      "id": "languages",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/media/",
+      "sha256": "d20ddb45379f0bffefeb8143225e1e9f227fe5c1df543b773445de1eefa8ba93",
+      "bytes": 92509,
+      "id": "media",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/node-api/",
+      "sha256": "c4129ec164fd6d755664390e00d7868951c8076d5eb472500bd1b6f93df75abc",
+      "bytes": 106238,
+      "id": "node-api",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/node-quickstart/",
+      "sha256": "f57b1ca84aa9ea29023b0dc2739d00ba08186e4b7f3bc3a92ac4a1a4f47b570b",
+      "bytes": 53649,
+      "id": "node-quickstart",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/python-api/",
+      "sha256": "4c317dd0c126261c8896c4dd16d93eb7c2e303fc67a3f6ab705f7e5b4c044206",
+      "bytes": 78194,
+      "id": "python-api",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/python-diagnostics/",
+      "sha256": "2977dfdbb5b5399839a95b9e8b51f5fa424a2dbe2ea670d7167394d96c82f2ae",
+      "bytes": 64064,
+      "id": "python-diagnostics",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/python-migration/",
+      "sha256": "dee9dab5cac1fd8588db7d9307f3702f29312f899afd73f18c03ddbc05fec2de",
+      "bytes": 42530,
+      "id": "python-migration",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/python-quickstart/",
+      "sha256": "c95eb6c421acc373d87001308b114e77d71caea9965ed5ab305a5899f001c1da",
+      "bytes": 52120,
+      "id": "python-quickstart",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/quickstart/",
+      "sha256": "ad51546d8a2dde68fc6a8fe137a769ef6ddf2f6c136071d5cc7123813de6ce0f",
+      "bytes": 55782,
+      "id": "quickstart",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/rust-api/",
+      "sha256": "3cc5161b709225b2bfb7c1e0ceb68b4720bc75e9f1d6399c4c411176cb80279e",
+      "bytes": 76999,
+      "id": "rust-api",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/rust-guide/",
+      "sha256": "9446fa0123dd3da79aa2476f5d23bd9f5ca6b81c3b5a46205a33d66ade8ba216",
+      "bytes": 71123,
+      "id": "rust-guide",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/templates/",
+      "sha256": "660911b0a920af20ec1b9bf861e80ec813bfa91c524bc668e0397f2ac1ec5552",
+      "bytes": 78656,
+      "id": "templates",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/troubleshooting/",
+      "sha256": "061a98d7a01bb851b21d76cd33046bc859b390a75f0d45b64310cee21d401481",
+      "bytes": 53964,
+      "id": "troubleshooting",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/docs/updates/",
+      "sha256": "809a159981a1a6f493b744da076ef19117ce0bf95b22935f5d275de802fd45b8",
+      "bytes": 102087,
+      "id": "updates",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/blog/",
+      "sha256": "fefc9cdfaa50c894f2ec52ddd3ffca18229ca54c95a70ebd77adbc2909fdef85",
+      "bytes": 15113,
+      "id": "blog",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/blog/stable-ids-and-deck-updates/",
+      "sha256": "b50d5c2c374f22af54fb8d0a1edc30ee57f8509fe1dafbc0b56574c4318b7dde",
+      "bytes": 26894,
+      "id": "blog:stable-ids-and-deck-updates",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/blog/your-first-anki-deck/",
+      "sha256": "043fcbf8528c503b2577e4664b7f080ef512e51eabe2eb8059e31f363563d93a",
+      "bytes": 27785,
+      "id": "blog:your-first-anki-deck",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/ai-anki-cards/",
+      "sha256": "d05582b5ae9106fbde5c90fab8566c0f9a84cd7801d78b2c097888d90edabf19",
+      "bytes": 59137,
+      "id": "ai-anki-cards",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/anki-forge-vs-genanki/",
+      "sha256": "760691f8d09022fa68fc3b8b7827b01f7c68df8f08be623d175cf51c557dd7e3",
+      "bytes": 54514,
+      "id": "anki-forge-vs-genanki",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/api/",
+      "sha256": "77cd99d2cc1481f3a1633f5c676453b2c8b94a836a1416cebb4e0774f3452779",
+      "bytes": 47681,
+      "id": "api",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/build-guarantees/",
+      "sha256": "87c49686b323b3ef93440724a08998f2a122e516260417e3ced759a9bd628b01",
+      "bytes": 61977,
+      "id": "build-guarantees",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/cards/",
+      "sha256": "1e59904531a53ec92a108f9688eaf12b554f6e5400c248bbf0f66323fc26c9e7",
+      "bytes": 58157,
+      "id": "cards",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/compatibility/",
+      "sha256": "0636ed7d81599e2639a45f97b1433b11db7b2bb385b9cb229554b7dc76798b92",
+      "bytes": 50662,
+      "id": "compatibility",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/concepts/",
+      "sha256": "1146b1fb42d66d41f0cf1e68be5f11a08af87b59be8547d2664fbfc2e890d571",
+      "bytes": 57423,
+      "id": "concepts",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/csv-to-anki/",
+      "sha256": "6a4370e1d8193ce7a72b716922780dbd11a4f3e36bee17e20ef1650db7e7b8d9",
+      "bytes": 81353,
+      "id": "csv-to-anki",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/custom-notetypes/",
+      "sha256": "2002ee428621b4350835f5720fcaa8c749739b061cc6c3fad1ceb4edb40e0f73",
+      "bytes": 65205,
+      "id": "custom-notetypes",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/development/",
+      "sha256": "859ee4e50a9b70c8d0ca63309bf5520c47e5a01774ed34d634d26727e063342d",
+      "bytes": 48720,
+      "id": "development",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/genanki-migration/",
+      "sha256": "41e6166301610f49ff93219a5d4c3918f6125e1e8400de40153bef808963b92f",
+      "bytes": 53825,
+      "id": "genanki-migration",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/image-occlusion/",
+      "sha256": "77f0ed59e2ad3938ab768edb24c887a90cda3737f66abd1d1f48e089be2c7a31",
+      "bytes": 69500,
+      "id": "image-occlusion",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/",
+      "sha256": "0ea65f9cc3a36b8215fadc9f1c9b00a207373aa141761439839f55530c964021",
+      "bytes": 53401,
+      "id": "docs",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/installation/",
+      "sha256": "4b9977041ca7f0634e165c4e723c751aefa31a0554b40410d4ae8abb2349f008",
+      "bytes": 49829,
+      "id": "installation",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/json-to-anki/",
+      "sha256": "99b64db5428a4ad7388c5b527463ca10cb5966369e35e49f053d3c69127f70b0",
+      "bytes": 162255,
+      "id": "json-to-anki",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 10,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/languages/",
+      "sha256": "ad4aeeba8d413ef39206fe5b4653722f052fd6dfa1b0d674c7ba6b5f618f714a",
+      "bytes": 44974,
+      "id": "languages",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/media/",
+      "sha256": "8a766fc39ce1f7dd73b89a01b9ebdb07077b89a7d28fc3c7a50e9d32b23aba5d",
+      "bytes": 96880,
+      "id": "media",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/node-api/",
+      "sha256": "47e4fc2dc708ffd127737d2661de4495875d6282a43c7a74fdccedcf131cfa4a",
+      "bytes": 112113,
+      "id": "node-api",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/node-quickstart/",
+      "sha256": "95833ae5ed97a5d9448d0030398a0eb35efd99f3a19e60c4112bd3ef08fee6df",
+      "bytes": 55032,
+      "id": "node-quickstart",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/python-api/",
+      "sha256": "5038550f40d90de8392efb48784fb0146595bc22036b50e693dc0824d717df0a",
+      "bytes": 82895,
+      "id": "python-api",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/python-diagnostics/",
+      "sha256": "57be9fbb3cce5eb2cb58aa3b7ddcc5cf2224d1dbcf2816f273f4a7b9bc8dd558",
+      "bytes": 66583,
+      "id": "python-diagnostics",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/python-migration/",
+      "sha256": "0fe0c207f89b12e0fd1a760e8c31e7cb7098d70bf16a89e85eb6013008958f55",
+      "bytes": 43831,
+      "id": "python-migration",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/python-quickstart/",
+      "sha256": "3f440c4872a67143daa7ba415ae67d0e85b70189439160d59f9b39c78594a4f8",
+      "bytes": 53340,
+      "id": "python-quickstart",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/quickstart/",
+      "sha256": "1d827f8cbc27bb0cb30ea9851f0e19ad4dfb67bc6573f03bcd19ed63c0d1055a",
+      "bytes": 56920,
+      "id": "quickstart",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/rust-api/",
+      "sha256": "6fde3608691b2500d1b8a725b2cae656e9b886ed3eb393c306d99f3e774ec430",
+      "bytes": 81491,
+      "id": "rust-api",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/rust-guide/",
+      "sha256": "358fcf365a186acdf051bdf8c096290652942c293485c3e5fc6f996dc628c2d8",
+      "bytes": 74822,
+      "id": "rust-guide",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/templates/",
+      "sha256": "71a4388e45314161e191163e541272eb1d5ac06c2734785d1aca3a98e825005a",
+      "bytes": 81653,
+      "id": "templates",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/troubleshooting/",
+      "sha256": "e040a63f6981e8bcc77c257078c4830328abcd4a9e0e61aa3a7f337c5a486a9e",
+      "bytes": 57092,
+      "id": "troubleshooting",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/docs/updates/",
+      "sha256": "884afec788c90e1a5ec7b799516698e8a694420b68c82f7e773da9686f2f4398",
+      "bytes": 105370,
+      "id": "updates",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/es/examples/",
+      "sha256": "78080c258dfe2515c2b15a16d31eff5b8e74e9ff5ade0115fbd0715be1874a20",
+      "bytes": 53533,
+      "id": "examples",
+      "locale": "es",
+      "modules": [],
+      "capabilities": {
+        "downloads": 9,
+        "search": 0,
+        "codeCopy": 5,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      }
+    },
+    {
+      "route": "/es/",
+      "sha256": "910974582bfb36e9baa734ef5245494989f2e3e3fffe8a815f5b15db9f63e19b",
+      "bytes": 99435,
+      "id": "home",
+      "locale": "es",
+      "modules": [
+        "hero",
+        "install",
+        "ai-quickstart",
+        "performance",
+        "examples",
+        "updates",
+        "features",
+        "next"
+      ],
+      "capabilities": {
+        "downloads": 6,
+        "search": 0,
+        "codeCopy": 13,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      }
+    },
+    {
+      "route": "/examples/",
+      "sha256": "34fa4f524e9b74bcb88a5bc6fe8d2d106abb02c42a6d6001b44b1b4ca9cd29eb",
+      "bytes": 52701,
+      "id": "examples",
+      "locale": "en",
+      "modules": [],
+      "capabilities": {
+        "downloads": 9,
+        "search": 0,
+        "codeCopy": 5,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      }
+    },
+    {
+      "route": "/",
+      "sha256": "cd73e9c00a848b832900bc029767fdbffe8b054ad35305f83d0222a815a6aced",
+      "bytes": 95672,
+      "id": "home",
+      "locale": "en",
+      "modules": [
+        "hero",
+        "install",
+        "ai-quickstart",
+        "performance",
+        "examples",
+        "updates",
+        "features",
+        "next"
+      ],
+      "capabilities": {
+        "downloads": 6,
+        "search": 0,
+        "codeCopy": 13,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      }
+    },
+    {
+      "route": "/ja/blog/",
+      "sha256": "e4ad729fc917444c73d30eab724b9c53302f9bc9f771748f38d36ff1ad37d96f",
+      "bytes": 15499,
+      "id": "blog",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/blog/stable-ids-and-deck-updates/",
+      "sha256": "2651bc04f823edee3a61fb1c38ad9fa36685ec085931acadea3ec5275a01e008",
+      "bytes": 27406,
+      "id": "blog:stable-ids-and-deck-updates",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/blog/your-first-anki-deck/",
+      "sha256": "14a872c59d209b04e4c7243c19f4ec45ab5566584c2242beb83dc99489bb6c0d",
+      "bytes": 28455,
+      "id": "blog:your-first-anki-deck",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/ai-anki-cards/",
+      "sha256": "65bd18aad8158f850a5e338c0936cacfbd6927bb5bf1d4610931565ecce12ecf",
+      "bytes": 60342,
+      "id": "ai-anki-cards",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/anki-forge-vs-genanki/",
+      "sha256": "448f5e6b2bda4558673695730a4d339fd6ca6d1ec79debf33a8229509fe9e704",
+      "bytes": 54989,
+      "id": "anki-forge-vs-genanki",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/api/",
+      "sha256": "70ca2057882547f40d7b688e39f8839145896cee70cc3a08ac0d5770007f00fc",
+      "bytes": 48052,
+      "id": "api",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/build-guarantees/",
+      "sha256": "b28da86791d5e387ce4019af96f108543b846ba04b05dbf53639e70f1930b784",
+      "bytes": 62457,
+      "id": "build-guarantees",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/cards/",
+      "sha256": "0814b9634cdff0bf29bb8af57a1e4aaa9d97ecb0dabf9328000a4beb8c2ee3cd",
+      "bytes": 59385,
+      "id": "cards",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/compatibility/",
+      "sha256": "6fcb53e7f154f80ccee3357c3ea0a515f64c1a97c3ef398bac7c759c16689dcd",
+      "bytes": 51316,
+      "id": "compatibility",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/concepts/",
+      "sha256": "a90820bbb70c9556c5e81749ffd549bd42c398a1749ccadb324e3a166df02c13",
+      "bytes": 58293,
+      "id": "concepts",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/csv-to-anki/",
+      "sha256": "856cd28f7fb5ca6610db5a5c8ed2693995cbb6e5045e2f30031ae7bf331f54b8",
+      "bytes": 83250,
+      "id": "csv-to-anki",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/custom-notetypes/",
+      "sha256": "7d2d2fb0bbac13af6cf9031a8a36e9ccbb5fdd15648e4f75206fbaa0aff84a26",
+      "bytes": 65974,
+      "id": "custom-notetypes",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/development/",
+      "sha256": "df6b003dd8c123d07f884103f830bf17fb145dec2a442ab830331b0cd7a317e7",
+      "bytes": 49595,
+      "id": "development",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/genanki-migration/",
+      "sha256": "a1e2f738a3b5c8d0a6b41ef3c8830f462f389f15bad6e4bb750097bf73cfc54d",
+      "bytes": 54611,
+      "id": "genanki-migration",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/image-occlusion/",
+      "sha256": "4fff4c9cb0525da66572a7f4b5bee15a3c215434aa5c91d2c6e282664b2941a3",
+      "bytes": 70329,
+      "id": "image-occlusion",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/",
+      "sha256": "c10df153c9139a4764c3abcd6cde0f8bae073f2c67819d47700127d78dfc1c9f",
+      "bytes": 54916,
+      "id": "docs",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/installation/",
+      "sha256": "16f1295e660a148f3bcde57a0c57c7037709c638fd8d33f8f3c0d4b4f7640742",
+      "bytes": 50422,
+      "id": "installation",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/json-to-anki/",
+      "sha256": "e6e47412d66496133b6d95dba05b91d1e84bf8abf165f48c9f2a9d9829b8bb1a",
+      "bytes": 164153,
+      "id": "json-to-anki",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 10,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/languages/",
+      "sha256": "e4ea5599639a031a45a024a32c58a280aef87ea35a63d512fffb71a80b60ce90",
+      "bytes": 45850,
+      "id": "languages",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/media/",
+      "sha256": "e952d716159216e3471cc9d95f631ca1e4b6987a4fcd39d8f57d1a0ce8ee3ace",
+      "bytes": 98979,
+      "id": "media",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/node-api/",
+      "sha256": "4d472f703af0244a5c1370ea864143ab1a149381c3d2cff90bff58c478332b60",
+      "bytes": 113661,
+      "id": "node-api",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/node-quickstart/",
+      "sha256": "c8d69f45068826620a4534f1df99ce77f6f199934a2d112de9cbc1d3720307b1",
+      "bytes": 56184,
+      "id": "node-quickstart",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/python-api/",
+      "sha256": "ce8ba304b9a52a1a467223816abc04f167a5cbd77c947a9561e758767216b7dd",
+      "bytes": 85457,
+      "id": "python-api",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/python-diagnostics/",
+      "sha256": "8e8157127dcdce1f6e7e9a4684eade03b8272300202124841cba29ff7e3ea0bb",
+      "bytes": 67368,
+      "id": "python-diagnostics",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/python-migration/",
+      "sha256": "7adfef835b97dfcb84ccb5c5339940fc3952e02c0f36c455eff96df558765df7",
+      "bytes": 44458,
+      "id": "python-migration",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/python-quickstart/",
+      "sha256": "db08e6dd10ac6b4489fe7c938106cdd826e93a7bb62179232eae8cd4f9a0e45e",
+      "bytes": 54649,
+      "id": "python-quickstart",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/quickstart/",
+      "sha256": "691bdf8e78d27c4a9287aa4eea349af1d591f4ff295c923338be0ffc5e367120",
+      "bytes": 58388,
+      "id": "quickstart",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/rust-api/",
+      "sha256": "aa9468314871bfc2ef7d6b2d741cf73384e8a1a5362180bb970f4b70a663727d",
+      "bytes": 83233,
+      "id": "rust-api",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/rust-guide/",
+      "sha256": "82231416e0a7018861393ba8cef6cd2c150b5b2064864cd36cb245a33cfa2af9",
+      "bytes": 76108,
+      "id": "rust-guide",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/templates/",
+      "sha256": "b315519d5b8d89561341ce57a5da92b247b55fd8e1d6e90689999355a7b88a31",
+      "bytes": 83186,
+      "id": "templates",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/troubleshooting/",
+      "sha256": "ba4cfc5983bcaf56ea7ee649c60c853618d3904b6f56efc6b3f5a591504c080b",
+      "bytes": 57926,
+      "id": "troubleshooting",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/docs/updates/",
+      "sha256": "0521e819ff96b4e4c8642696690b12e60863ac1286de2261a8f03d66f5d8d6a4",
+      "bytes": 107424,
+      "id": "updates",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/ja/examples/",
+      "sha256": "145dbcf3857568dd0f54e4e7add3549e852a43dd111ec5b22076fb5a1a7ea7bd",
+      "bytes": 54699,
+      "id": "examples",
+      "locale": "ja",
+      "modules": [],
+      "capabilities": {
+        "downloads": 9,
+        "search": 0,
+        "codeCopy": 5,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      }
+    },
+    {
+      "route": "/ja/",
+      "sha256": "3fed8784540b3dc69449757c6084457c370257ca7c2038e91b98e2fffe535e55",
+      "bytes": 103583,
+      "id": "home",
+      "locale": "ja",
+      "modules": [
+        "hero",
+        "install",
+        "ai-quickstart",
+        "performance",
+        "examples",
+        "updates",
+        "features",
+        "next"
+      ],
+      "capabilities": {
+        "downloads": 6,
+        "search": 0,
+        "codeCopy": 13,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      }
+    },
+    {
+      "route": "/pt-br/blog/",
+      "sha256": "2bc4ce4d7c763123c40c8dbbfd295da58e0ebe8446f0118bcf545003050a8b92",
+      "bytes": 15155,
+      "id": "blog",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/blog/stable-ids-and-deck-updates/",
+      "sha256": "c6810570588486586f2832fe8221594932d79f8d9a9335ffb42b739fb1767cff",
+      "bytes": 26631,
+      "id": "blog:stable-ids-and-deck-updates",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/blog/your-first-anki-deck/",
+      "sha256": "6f414258fe7c163fcf17e5f8b771c85643b3f9fd84a696e8277c69851cb2f3f7",
+      "bytes": 27813,
+      "id": "blog:your-first-anki-deck",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/ai-anki-cards/",
+      "sha256": "de6de9a272f0befc06d854540321d7be7e180a9455cde5cec7dfa79618ca566b",
+      "bytes": 59184,
+      "id": "ai-anki-cards",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/anki-forge-vs-genanki/",
+      "sha256": "008b272c664dc3c54aca10cb4eeda76cbb59efbb920d1173c5eb9345083a4ba6",
+      "bytes": 54530,
+      "id": "anki-forge-vs-genanki",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/api/",
+      "sha256": "d4acfdb715c5bffcf71ecc4bed9d1b02be9cc47088fd6e838e8b12f10535cbef",
+      "bytes": 47717,
+      "id": "api",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/build-guarantees/",
+      "sha256": "a588bca51af7e4c993c850734d85d4ccf6b0ef70be92f578730e2f5411e43df5",
+      "bytes": 61737,
+      "id": "build-guarantees",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/cards/",
+      "sha256": "974718ebf9cd12ba5d4bd2337ef399894583eed1d0dbb0e73da9ba293759b287",
+      "bytes": 58101,
+      "id": "cards",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/compatibility/",
+      "sha256": "8da6b98cea044a96c6fa32757fa672e64d34cbd52cecdf4dd92e01cf424274ef",
+      "bytes": 50792,
+      "id": "compatibility",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/concepts/",
+      "sha256": "8608f62eaf57a808a0196b556c2ec1b0f50d31566a1883742d263bd2cd884ae4",
+      "bytes": 56943,
+      "id": "concepts",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/csv-to-anki/",
+      "sha256": "ccb9211ef143551ce0e7e096e3480674b3ac9188e60e463258edec92eacead99",
+      "bytes": 81432,
+      "id": "csv-to-anki",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/custom-notetypes/",
+      "sha256": "a17b5a788896005f70d94c31201395bd9eeaaad52858e09ed6ee4254d083ae20",
+      "bytes": 65255,
+      "id": "custom-notetypes",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/development/",
+      "sha256": "086c0de1be197ea999d38f6c708f26e891203e235c2dfb1b86570ec7803ea8a5",
+      "bytes": 48749,
+      "id": "development",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/genanki-migration/",
+      "sha256": "50c0de723d70a90b3da4e6e6b78047a6b7a6fa596a385510f70c0788ee19e885",
+      "bytes": 53892,
+      "id": "genanki-migration",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/image-occlusion/",
+      "sha256": "435a9349459beffd7b5f38957570f1f2a38f3978bbf710952efe2a7aa3aac8a5",
+      "bytes": 69341,
+      "id": "image-occlusion",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/",
+      "sha256": "98a047e8911c148fd6ac86362c2cc821fd537cec3f9eb4118f27f430e98fe08a",
+      "bytes": 53531,
+      "id": "docs",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/installation/",
+      "sha256": "51119cf108bd9de642830f5b5cab7a705b2065e015f4ba17973f3277091c6513",
+      "bytes": 49707,
+      "id": "installation",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/json-to-anki/",
+      "sha256": "45a09fda61a117f46aa8c83e57640c060051afcbcf69541ce7be310ec9e342d6",
+      "bytes": 162519,
+      "id": "json-to-anki",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 10,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/languages/",
+      "sha256": "aa61ded85ac919b902b4b3c21d84d7c6489f47b7d22ce0c4156f7b04ec1514ad",
+      "bytes": 45161,
+      "id": "languages",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/media/",
+      "sha256": "5441cd79f17dc476f1e47631fefdb9057eb09892f26b5c51913780b9af8d9bc2",
+      "bytes": 95934,
+      "id": "media",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/node-api/",
+      "sha256": "bd02dee4d59be7e2283ff94ac7785678bddc956e5581846d1d71f4ca4ee73e97",
+      "bytes": 110784,
+      "id": "node-api",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/node-quickstart/",
+      "sha256": "e8fcb47dd9d9d9149ac26358e7bcdd3026c09547780845a54ee83d69e829912c",
+      "bytes": 55187,
+      "id": "node-quickstart",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/python-api/",
+      "sha256": "e87cd539b78a1a22653de2782c25e4d65c6ec7e4305a4232c816d5374cf48a20",
+      "bytes": 81709,
+      "id": "python-api",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/python-diagnostics/",
+      "sha256": "b27c173abb3b578de9db1b30c7c05d24ad8c70358ed260ed9f691f3e671d2e3e",
+      "bytes": 66294,
+      "id": "python-diagnostics",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/python-migration/",
+      "sha256": "2417e96acbdcdd978dc965559cd767d39e17ae649a201982f7f970702784ceba",
+      "bytes": 44121,
+      "id": "python-migration",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/python-quickstart/",
+      "sha256": "af00a482f2a5dd205490036f12f0015d7490312ed3f1a34c47320134161bfaf3",
+      "bytes": 53614,
+      "id": "python-quickstart",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/quickstart/",
+      "sha256": "3386f9a693e0b30606fd25a0a6abe5fda473b8d0ca91c9425f47f37315e8166c",
+      "bytes": 57166,
+      "id": "quickstart",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/rust-api/",
+      "sha256": "cdbf8cd002ac4bf15d5d47485275f3f688e30492508816cc420b53aa5a872114",
+      "bytes": 80803,
+      "id": "rust-api",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/rust-guide/",
+      "sha256": "5ab2e7ca87b42db79c640257625d92cfd0650dd823c11a215a7a53c1cde142c3",
+      "bytes": 74392,
+      "id": "rust-guide",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/templates/",
+      "sha256": "312fb654fb35e0ff2618aacde7feac5dbddc84b53ba73018d725068ef4d9934f",
+      "bytes": 81380,
+      "id": "templates",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/troubleshooting/",
+      "sha256": "070efc7ef5ab91c1e7d1538495993f5a053b5c203b9890ea4efcc39765e0df40",
+      "bytes": 56837,
+      "id": "troubleshooting",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/docs/updates/",
+      "sha256": "c7f5cab74180acaa5e5c0d579a58cb9e6ee42c400699e67de46d6f77558886f1",
+      "bytes": 105367,
+      "id": "updates",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/pt-br/examples/",
+      "sha256": "56a807d65cddfbbddbe245d032d8642db3c6df03ef61661fbd75ec90750b07b7",
+      "bytes": 53438,
+      "id": "examples",
+      "locale": "pt-BR",
+      "modules": [],
+      "capabilities": {
+        "downloads": 9,
+        "search": 0,
+        "codeCopy": 5,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      }
+    },
+    {
+      "route": "/pt-br/",
+      "sha256": "b82b60d5054d3665211c429ce075d2c9addeaa108f4b7de2c4b4f64bd1d0759f",
+      "bytes": 98733,
+      "id": "home",
+      "locale": "pt-BR",
+      "modules": [
+        "hero",
+        "install",
+        "ai-quickstart",
+        "performance",
+        "examples",
+        "updates",
+        "features",
+        "next"
+      ],
+      "capabilities": {
+        "downloads": 6,
+        "search": 0,
+        "codeCopy": 13,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      }
+    },
+    {
+      "route": "/zh-cn/blog/",
+      "sha256": "782216d6fc6fbd9b4a0a707027b1f631dec022aa61dcce117621b530434f7bf5",
+      "bytes": 14906,
+      "id": "blog",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/",
+      "sha256": "d9dc6996168c80acece99b3d5d91564d95e5f94a17d020ddb4bf9de6b1c4bd45",
+      "bytes": 25256,
+      "id": "blog:stable-ids-and-deck-updates",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/blog/your-first-anki-deck/",
+      "sha256": "d0af143ff70c7bd49445fc377bf7bd5d1565d1d02e2320c559a99433fcac9beb",
+      "bytes": 26854,
+      "id": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/ai-anki-cards/",
+      "sha256": "59c4c3fd53a12ee0ab879a31be77a490fa2fb34f04c9cbff242640650d85a5ac",
+      "bytes": 57180,
+      "id": "ai-anki-cards",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/",
+      "sha256": "9a3ce369c5ef74d76fb712d3fbcd8c6b9c25623e36ba687b517f5f2ab426dee9",
+      "bytes": 53746,
+      "id": "anki-forge-vs-genanki",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/api/",
+      "sha256": "d21c3d332bf0edfc394a563976d62bdfbd896c4488efdce019e0bcd4e68b6fe2",
+      "bytes": 46370,
+      "id": "api",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/build-guarantees/",
+      "sha256": "0aafe5206e4b2c8d42e590c0ffc20c11d1010e982b0feb59f8a888e7d6ce4279",
+      "bytes": 57997,
+      "id": "build-guarantees",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/cards/",
+      "sha256": "38f805530a31089d5343b49c0920a644fcdc4311ea0cd2f36e703d4bc13450c4",
+      "bytes": 57038,
+      "id": "cards",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/compatibility/",
+      "sha256": "8d2cf4d2a73e1c6211f7386c2344bd8d40476fb4df510060f2c18685130b119f",
+      "bytes": 48709,
+      "id": "compatibility",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/concepts/",
+      "sha256": "59636bc33fe13e9405fa8cf515ffb44950acd720b8dd54a86790f5ea6680f758",
+      "bytes": 54742,
+      "id": "concepts",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/csv-to-anki/",
+      "sha256": "01e3cb6a859bf82ea38f1fd6bfe8477028157880ce0d7a6524dc86dcd019f277",
+      "bytes": 79924,
+      "id": "csv-to-anki",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/custom-notetypes/",
+      "sha256": "b3454e21cc5e598fe59411437c1f1588a484e72c625458229b7726fc1f4a6925",
+      "bytes": 63380,
+      "id": "custom-notetypes",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/development/",
+      "sha256": "8eff9f3e65ee6887f12c81a6a9a0214cd0bb4087935af37ea80d35ef0994a1e6",
+      "bytes": 47298,
+      "id": "development",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/genanki-migration/",
+      "sha256": "1a2bd2760919b75997da1f42699c252f457622e0a6882d7941409d7b40c4b575",
+      "bytes": 52268,
+      "id": "genanki-migration",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/image-occlusion/",
+      "sha256": "e63df94dfae9d32bf053d240fdc0ac3786ac086e722e750b1399fd50f1c18427",
+      "bytes": 67930,
+      "id": "image-occlusion",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/",
+      "sha256": "ed44d79f9ea38c67c2168de085580339365fd611d9b8174713de19056580823d",
+      "bytes": 51817,
+      "id": "docs",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/installation/",
+      "sha256": "d1b6001dc81df8f27c9bc3d80e2df1ee00e5893b5e147f84962b776854f9b270",
+      "bytes": 48197,
+      "id": "installation",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/json-to-anki/",
+      "sha256": "899897504e3a0335d71c2582b4dd2039c65457fe07a4c39f5b65f3a081b039e5",
+      "bytes": 161303,
+      "id": "json-to-anki",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 10,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/languages/",
+      "sha256": "f46cc14c04d35ac9b4423a94d42dabf715a73125598eca3550b0debaa915a617",
+      "bytes": 44421,
+      "id": "languages",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/media/",
+      "sha256": "d6cd0d50a3c31ae35694e461446e6af219b5520bafb4575fdc85f78cba6b621e",
+      "bytes": 92985,
+      "id": "media",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/node-api/",
+      "sha256": "b474b0caa2ef367f580ba6e1cdb8c11a105d5b1da3cc273a83f3491ac308a5fb",
+      "bytes": 105941,
+      "id": "node-api",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/node-quickstart/",
+      "sha256": "28afb4d9d063fc23a013d51d066b2b46b08a8c6f307d01a16101b5ac06f95e7a",
+      "bytes": 55351,
+      "id": "node-quickstart",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/python-api/",
+      "sha256": "fb0aacc58644c4fb51b0ada0180da2098dfe454b060afdf6296b40f9242b06ef",
+      "bytes": 78069,
+      "id": "python-api",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/python-diagnostics/",
+      "sha256": "95a2c055e155561b6a50b7b58b72bda403bf0cbada91d30d2dcc4e0adb92232d",
+      "bytes": 63780,
+      "id": "python-diagnostics",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/python-migration/",
+      "sha256": "a507a96751aab3d5ae2561530587f520cb98db735afba9365a5fcd9c6b3d6800",
+      "bytes": 42700,
+      "id": "python-migration",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/python-quickstart/",
+      "sha256": "df072d01dc2e0d4c576978dc1f61e7a3e07f16ec1941a8bf7de976103c8d0060",
+      "bytes": 53697,
+      "id": "python-quickstart",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/quickstart/",
+      "sha256": "e8521ebdbcc7c495a2fce1831d1405e9b8ea3677335b13f8f82be9ec868e160e",
+      "bytes": 56831,
+      "id": "quickstart",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/rust-api/",
+      "sha256": "65d6e15818100e225ed3e84cd87ec2318bd79d3b4ee90bf9433550261e1ade53",
+      "bytes": 77144,
+      "id": "rust-api",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/rust-guide/",
+      "sha256": "fa2a40643fa65c942c95afd938e0cd27751370a9bce95bfb31fc0155ef973801",
+      "bytes": 71301,
+      "id": "rust-guide",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/templates/",
+      "sha256": "e0acd8267d3e03a6f3382255c8949c767c02e0407d2fce23689bc1ed67a62acf",
+      "bytes": 79113,
+      "id": "templates",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/troubleshooting/",
+      "sha256": "b51a933da3abbb9a9760b95a51be745cb08ade28cfbf774860badc74ebea63a3",
+      "bytes": 53928,
+      "id": "troubleshooting",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/docs/updates/",
+      "sha256": "96c33cc99535a18800cfdc18da9776a7a95d832737ce5c84ecb0688a2f03f125",
+      "bytes": 102054,
+      "id": "updates",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      }
+    },
+    {
+      "route": "/zh-cn/examples/",
+      "sha256": "9df52f948b4f76dba58559455ec937efe85b522d95877487073ba8a3cda62744",
+      "bytes": 52741,
+      "id": "examples",
+      "locale": "zh-CN",
+      "modules": [],
+      "capabilities": {
+        "downloads": 9,
+        "search": 0,
+        "codeCopy": 5,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      }
+    },
+    {
+      "route": "/zh-cn/",
+      "sha256": "3285a13c331778550c00808386a394673957718a6502e5ab53dec2b3894f9993",
+      "bytes": 95408,
+      "id": "home",
+      "locale": "zh-CN",
+      "modules": [
+        "hero",
+        "install",
+        "ai-quickstart",
+        "performance",
+        "examples",
+        "updates",
+        "features",
+        "next"
+      ],
+      "capabilities": {
+        "downloads": 6,
+        "search": 0,
+        "codeCopy": 13,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      }
+    }
+  ],
+  "resources": [
+    {
+      "route": "/_astro/DocsHeader.astro_astro_type_script_index_0_lang.CZ_9LtbK.js",
+      "sha256": "ff082ab82d8e01e88286f1037251a74f337e89929a640d31ef04e0243ca7bba3",
+      "bytes": 27
+    },
+    {
+      "route": "/_astro/DocsSearch.astro_astro_type_script_index_0_lang.BYmppSZJ.js",
+      "sha256": "e87c9398c3f70485ec6ca105e6ae2d3785aff9bc17697fa13312a49205af5c50",
+      "bytes": 6137
+    },
+    {
+      "route": "/_astro/HomePage.BEBiQZ9F.css",
+      "sha256": "4a08c199a74a65c920a35f43117303946cc66d58ccc4c4b6ca3cf733e287221f",
+      "bytes": 14407
+    },
+    {
+      "route": "/_astro/HomeShowcase.astro_astro_type_script_index_0_lang.DOE8maZx.js",
+      "sha256": "42600e37035e40bf5add017869328d441f2ac1f06dc5e944055f422959d72f6a",
+      "bytes": 4164
+    },
+    {
+      "route": "/_astro/MobileTableOfContents.astro_astro_type_script_index_0_lang.BcSo_yiZ.js",
+      "sha256": "dd7cc171c64ce739999d62aae6c7052ae2b45ce190713b35cf8919dde04abfd8",
+      "bytes": 622
+    },
+    {
+      "route": "/_astro/SiteLayout.astro_astro_type_script_index_0_lang.CZ_9LtbK.js",
+      "sha256": "ff082ab82d8e01e88286f1037251a74f337e89929a640d31ef04e0243ca7bba3",
+      "bytes": 27
+    },
+    {
+      "route": "/_astro/TableOfContents.astro_astro_type_script_index_0_lang.Csloo1VZ.js",
+      "sha256": "f1c9743eceea19c4cada60524019ee9214c22a257a35bdfd184e85f9006264c0",
+      "bytes": 36
+    },
+    {
+      "route": "/_astro/ai-quickstart.DNTU8CZQ.css",
+      "sha256": "b4f41c46ec97ebdfa77f4222fffe55708c5d672197469ca48aa8bbfdea742e06",
+      "bytes": 20711
+    },
+    {
+      "route": "/_astro/ankiforge-dark.En7Meef3.svg",
+      "sha256": "a10a05685a8ac59b153b3e30b920ad2a52349dec1a5f30fca6458cc721d9fd2b",
+      "bytes": 797
+    },
+    {
+      "route": "/_astro/ankiforge.Bh6cxZyj.svg",
+      "sha256": "805a592cc1f7b3e9f51a41218a43e0b87f6003ae9a7cc2e030f356c1a55b845c",
+      "bytes": 797
+    },
+    {
+      "route": "/_astro/ec.0vx5m.js",
+      "sha256": "182e98b9acfcfd358ea486967bd17dcaddd5930b8d092bc0653fd26ddbb11e37",
+      "bytes": 2523
+    },
+    {
+      "route": "/_astro/ec.w36nc.css",
+      "sha256": "1db272cd2e2bc5dfbc63c332f5d5f04bb4ba104065e894f951405e7bdddf5dcb",
+      "bytes": 18292
+    },
+    {
+      "route": "/_astro/index.Dt3apJiZ.css",
+      "sha256": "eacab43eb7ef02f954bb2081e2eea2337b86d021efe709de2d0cb48b5f88f806",
+      "bytes": 57929
+    },
+    {
+      "route": "/_astro/page.Dwipeu-R.js",
+      "sha256": "c99ac0eaf0068f03b4abe3a28b0a7bf0f28524b9dad3b23d77d54dfd453a62ae",
+      "bytes": 2486
+    },
+    {
+      "route": "/_astro/print.ehPL0gv-.css",
+      "sha256": "4d7d25c3d697e6d36e64afb9edef136e6d2e4c50f70a48000ca90f9b059e3622",
+      "bytes": 3318
+    },
+    {
+      "route": "/_astro/site.Bc-Cz4fL.js",
+      "sha256": "04dba854d7ca329482fdc5faf9be68f71f0cf66a50172ee426e3b07ff443ab50",
+      "bytes": 6786
+    },
+    {
+      "route": "/_astro/starlight-toc.CTCQXEge.js",
+      "sha256": "2a08da9f380dd1395e0072dbd1b35e1e2b0af6072f0e40417865318271f9b342",
+      "bytes": 1981
+    },
+    {
+      "route": "/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "4e5216863390dda212498929bc8d85a8f3db2b6994aa7cb6a7a14549b00f9e64",
+      "bytes": 3081
+    },
+    {
+      "route": "/blog/your-first-anki-deck/index.md",
+      "sha256": "43bd3ceb5cf6b4fefb1d504386374b53379a630e0eb6a6ec548d20b1f72d2e5b",
+      "bytes": 3148
+    },
+    {
+      "route": "/docs/ai-anki-cards/index.md",
+      "sha256": "9745b22b1eef834acd7824a662f24b0bd2a83ba2fa41ea1ee606fbee6e21fa3a",
+      "bytes": 4359
+    },
+    {
+      "route": "/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "d3fa07417f3752acc3f105b95f2dd49fab31a78cb3828ac022688a971d281e4e",
+      "bytes": 3974
+    },
+    {
+      "route": "/docs/api/index.md",
+      "sha256": "78633f690be8373213053679b29209d7b17bc1ad85585d87eca45e4aec1f5e19",
+      "bytes": 1981
+    },
+    {
+      "route": "/docs/build-guarantees/index.md",
+      "sha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d",
+      "bytes": 5557
+    },
+    {
+      "route": "/docs/cards/index.md",
+      "sha256": "582cc9aa34838f85ab2b7098d606331c28274b8dc47c87efc7dc3bc835244677",
+      "bytes": 2843
+    },
+    {
+      "route": "/docs/compatibility/index.md",
+      "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+      "bytes": 3238
+    },
+    {
+      "route": "/docs/concepts/index.md",
+      "sha256": "2b07722c9bfbdb2e8fefe578ab6fdc7fe38812d684f3474eb015c17493ba73d6",
+      "bytes": 3230
+    },
+    {
+      "route": "/docs/csv-to-anki/index.md",
+      "sha256": "0428ebe47ff80585c636b10f362bd6c90ba95e44b7c0c567d7c073a31b97d662",
+      "bytes": 5704
+    },
+    {
+      "route": "/docs/custom-notetypes/index.md",
+      "sha256": "1ec524ad2e9100e94a376e6e672c79a177bc9b32bc7d3d3bd48a6b66e985f2cf",
+      "bytes": 3330
+    },
+    {
+      "route": "/docs/development/index.md",
+      "sha256": "38e8514202721f6a59b3e955089238eeb0cd0a2da40f84e687781674930fa07f",
+      "bytes": 1848
+    },
+    {
+      "route": "/docs/genanki-migration/index.md",
+      "sha256": "fb1788925c8e1ac5141dee8594d55f797bf7949b16d97c592c329eaacdf3e1ba",
+      "bytes": 3482
+    },
+    {
+      "route": "/docs/image-occlusion/index.md",
+      "sha256": "0bfe48487e90d7ef0701a6fc4a2ac02e36ccb1990adf8009782879aa59c8bd69",
+      "bytes": 3797
+    },
+    {
+      "route": "/docs/index.md",
+      "sha256": "2589240ac602a461fcd26375953f959f50610b1efc34301771fb5b9a612062ff",
+      "bytes": 3270
+    },
+    {
+      "route": "/docs/installation/index.md",
+      "sha256": "d8e5e1b617b5319efec59c50eace336bbfae67ead940b8d00a423c0614e3ed60",
+      "bytes": 1895
+    },
+    {
+      "route": "/docs/json-to-anki/index.md",
+      "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+      "bytes": 11160
+    },
+    {
+      "route": "/docs/languages/index.md",
+      "sha256": "20118dbc34eaf14ef16f924a52e471a432b913b4aeca09d9139d271075197d04",
+      "bytes": 2043
+    },
+    {
+      "route": "/docs/media/index.md",
+      "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+      "bytes": 8154
+    },
+    {
+      "route": "/docs/node-api/index.md",
+      "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+      "bytes": 13145
+    },
+    {
+      "route": "/docs/node-quickstart/index.md",
+      "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+      "bytes": 2251
+    },
+    {
+      "route": "/docs/python-api/index.md",
+      "sha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af",
+      "bytes": 9269
+    },
+    {
+      "route": "/docs/python-diagnostics/index.md",
+      "sha256": "7c55655214b864f9bf4de14874b933a99f842399f7a0c632e71ad32d0373bb5b",
+      "bytes": 5339
+    },
+    {
+      "route": "/docs/python-migration/index.md",
+      "sha256": "e048cc0d961bdded62c1d3184d901e4cf0e0d315fe291c47049a59928117af72",
+      "bytes": 2041
+    },
+    {
+      "route": "/docs/python-quickstart/index.md",
+      "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+      "bytes": 2287
+    },
+    {
+      "route": "/docs/quickstart/index.md",
+      "sha256": "e8786297738d765f984fb3f55f853eda49528930303d165a3f4ed036ec6f903c",
+      "bytes": 1849
+    },
+    {
+      "route": "/docs/rust-api/index.md",
+      "sha256": "98d57a4e45b11113366315510c596444dd94dc264105db2a8a5e9d9f0a747296",
+      "bytes": 9327
+    },
+    {
+      "route": "/docs/rust-guide/index.md",
+      "sha256": "58d18a4d00adc8aee9778b48db2d54822326b06921b65987a4109ddc840f3194",
+      "bytes": 5539
+    },
+    {
+      "route": "/docs/templates/index.md",
+      "sha256": "c76ff0654af9c938570e2534a57fbd875d9b8a896373067d239ffbedfb0b95a2",
+      "bytes": 5696
+    },
+    {
+      "route": "/docs/troubleshooting/index.md",
+      "sha256": "ed47bd814c901d4a4c69001b91d5e00c89deaef5c5ecfb77ccea8b54cc6d2286",
+      "bytes": 4380
+    },
+    {
+      "route": "/docs/updates/index.md",
+      "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+      "bytes": 8070
+    },
+    {
+      "route": "/es/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "17f7f5408b3cefcc1dc8d5cff2d95a64b245e6d993c5c0a0e5640a934416002f",
+      "bytes": 3715
+    },
+    {
+      "route": "/es/blog/your-first-anki-deck/index.md",
+      "sha256": "811e0eeb6867bd23a928e9087268ed17d24164c05ccd997c3ad8878110bd495c",
+      "bytes": 3529
+    },
+    {
+      "route": "/es/docs/ai-anki-cards/index.md",
+      "sha256": "99743cb1706d0b12b1ecb2ace07456115532e55fccfe49e98ef701593f967c70",
+      "bytes": 5045
+    },
+    {
+      "route": "/es/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "1751babf393a61988a9f057ce42511b4a931922c6c7688098a85c9cd36e371c6",
+      "bytes": 4942
+    },
+    {
+      "route": "/es/docs/api/index.md",
+      "sha256": "d6a2df886ad2d8d95711a031f995bbd9ed717d50c2333b2f536123fa089989ca",
+      "bytes": 2407
+    },
+    {
+      "route": "/es/docs/build-guarantees/index.md",
+      "sha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe",
+      "bytes": 7106
+    },
+    {
+      "route": "/es/docs/cards/index.md",
+      "sha256": "a725e95db861f7275481cbcbe2f4d93a756f9504beaa95efcb9f91b833b50c21",
+      "bytes": 3222
+    },
+    {
+      "route": "/es/docs/compatibility/index.md",
+      "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+      "bytes": 4040
+    },
+    {
+      "route": "/es/docs/concepts/index.md",
+      "sha256": "f2d42f3acc058095a096bfcd47263e275e1837c62e29401f42bcc282e8839757",
+      "bytes": 4368
+    },
+    {
+      "route": "/es/docs/csv-to-anki/index.md",
+      "sha256": "c0636dd2ac60d9b20c62ede43d226f43de4e43bee6982146670fc0ac05623b02",
+      "bytes": 6215
+    },
+    {
+      "route": "/es/docs/custom-notetypes/index.md",
+      "sha256": "cd79fd039a0bc5444f14fda465ef813231ee14c296184668ff0fbe5d66e0d5cf",
+      "bytes": 4042
+    },
+    {
+      "route": "/es/docs/development/index.md",
+      "sha256": "4ba123d0ebdd9c92084656cad77d701230ee4b32cda03ebc0bbc34774863ae96",
+      "bytes": 2264
+    },
+    {
+      "route": "/es/docs/genanki-migration/index.md",
+      "sha256": "725f3857424a3acc6aca08f222685a0548b65293ea7b1e99ccbbd4bbfb6edc56",
+      "bytes": 4260
+    },
+    {
+      "route": "/es/docs/image-occlusion/index.md",
+      "sha256": "32dc813fb179accd309e7029424cb03587112bea4db10761b359627882f038f6",
+      "bytes": 4351
+    },
+    {
+      "route": "/es/docs/index.md",
+      "sha256": "cc78c766b4da6e90411988938c404247f4561f076f9b825c334acef94a6bf5c1",
+      "bytes": 3834
+    },
+    {
+      "route": "/es/docs/installation/index.md",
+      "sha256": "c2684786f4b65987f50ffbad71514f588156472cbcaf6801a35ccc55b3acd70a",
+      "bytes": 2435
+    },
+    {
+      "route": "/es/docs/json-to-anki/index.md",
+      "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+      "bytes": 11911
+    },
+    {
+      "route": "/es/docs/languages/index.md",
+      "sha256": "4bc4d5ac42b66a76bb63c300af3b6c373a25bd8c572ece54e2bb27509cab1c63",
+      "bytes": 2339
+    },
+    {
+      "route": "/es/docs/media/index.md",
+      "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+      "bytes": 9814
+    },
+    {
+      "route": "/es/docs/node-api/index.md",
+      "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+      "bytes": 15825
+    },
+    {
+      "route": "/es/docs/node-quickstart/index.md",
+      "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+      "bytes": 2574
+    },
+    {
+      "route": "/es/docs/python-api/index.md",
+      "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+      "bytes": 11256
+    },
+    {
+      "route": "/es/docs/python-diagnostics/index.md",
+      "sha256": "71a0a087d4474e98868848e0dcefedd32067b8a01ab7cd49b1774a0ae5532f83",
+      "bytes": 6483
+    },
+    {
+      "route": "/es/docs/python-migration/index.md",
+      "sha256": "ee0155e3d170643f6e8204354f9ab3152a8b91256dfeeb8b5e32c664afb490e5",
+      "bytes": 2497
+    },
+    {
+      "route": "/es/docs/python-quickstart/index.md",
+      "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+      "bytes": 2601
+    },
+    {
+      "route": "/es/docs/quickstart/index.md",
+      "sha256": "42f01fa3284bb45f1f1b2c2d677092554bb6b41083b66964ed23567128ac419e",
+      "bytes": 2046
+    },
+    {
+      "route": "/es/docs/rust-api/index.md",
+      "sha256": "da277a083aa616be09ba8696c522f8cced4d7b613619d521fd301acedce5a03c",
+      "bytes": 11244
+    },
+    {
+      "route": "/es/docs/rust-guide/index.md",
+      "sha256": "205b0d8e65cc17f0e56755dc0e178d5e38bcdc52d2520f28795a78c2fdaa76be",
+      "bytes": 6911
+    },
+    {
+      "route": "/es/docs/templates/index.md",
+      "sha256": "6659e01328ade2f67b2fae0b87eb79b13445647efd5b3a27f80e7f556e39c8be",
+      "bytes": 6702
+    },
+    {
+      "route": "/es/docs/troubleshooting/index.md",
+      "sha256": "092ff59b379d229faf9f469a549b19db43b3662cfe0590e170262ab70ea44a69",
+      "bytes": 5616
+    },
+    {
+      "route": "/es/docs/updates/index.md",
+      "sha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391",
+      "bytes": 9323
+    },
+    {
+      "route": "/es/llms.txt",
+      "sha256": "5a76a5183d124c7b8337dfd8f366d3cf8dee49d13034e928ac9e65df930b9c5c",
+      "bytes": 7189
+    },
+    {
+      "route": "/es/rss.xml",
+      "sha256": "cb3f3effafff9c60e38f09196852149c9cf540c938911a8eac2db53033d09c71",
+      "bytes": 1054
+    },
+    {
+      "route": "/favicon.svg",
+      "sha256": "48a797df77333cf70a1d91ee8494ef48905e118f9e64aff04b9b74e7f9797c78",
+      "bytes": 950
+    },
+    {
+      "route": "/generated/cell-anatomy.apkg",
+      "sha256": "dc4e8d0bd42f5caea2ae16d02e851fef7d9be5acdc3db1094d9ec3b50b54edb0",
+      "bytes": 237196
+    },
+    {
+      "route": "/generated/cell-anatomy.png",
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+      "bytes": 178597
+    },
+    {
+      "route": "/generated/cell-diagram.png",
+      "sha256": "b1394443a81d177f73bfe824118d2ecfafbc38d9086ff280b75aaf719367e44f",
+      "bytes": 5848
+    },
+    {
+      "route": "/generated/concert-a.wav",
+      "sha256": "7cba91cd55453cf2b9cdd40e72597441020c3a35ce68c1f1900f89268312a51e",
+      "bytes": 16044
+    },
+    {
+      "route": "/generated/ear-training.apkg",
+      "sha256": "0bc81c9166bd9b43f6a7992f4e1f8dddba15cf8236957a666acde5508d51ed8b",
+      "bytes": 61998
+    },
+    {
+      "route": "/generated/og-es.png",
+      "sha256": "7fb285e143f35639a3322cd0abb7a266a50184c2b100b9343d233719d8dc5ea4",
+      "bytes": 57748
+    },
+    {
+      "route": "/generated/og-ja.png",
+      "sha256": "835a96aa886cea23e0ee4a2fc23369a862019ff2391bf6fdf8c3f5788b050b73",
+      "bytes": 54629
+    },
+    {
+      "route": "/generated/og-pt-br.png",
+      "sha256": "0049095016877aa75acc9b429f8bdc3b644397a1da2ead7c2123bcff9da42892",
+      "bytes": 59778
+    },
+    {
+      "route": "/generated/og-zh-cn.png",
+      "sha256": "72da6fe6803f2d1366d891763046d40f906039df3a54106739ed0096770d236f",
+      "bytes": 51350
+    },
+    {
+      "route": "/generated/og.png",
+      "sha256": "3e6ed748aa674959ce1bbdf83056ef629631e1a4cecf406e9302862e1a4145a1",
+      "bytes": 52667
+    },
+    {
+      "route": "/generated/phosphor-license.txt",
+      "sha256": "ddbe6082ec3cf979db47e5af549d2849c5d6182b3e005ef91ce1dbb9eb122f11",
+      "bytes": 1092
+    },
+    {
+      "route": "/generated/recipes/csv-to-anki/cards.csv",
+      "sha256": "216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64",
+      "bytes": 86
+    },
+    {
+      "route": "/generated/recipes/csv-to-anki/csv_to_anki.py",
+      "sha256": "5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc",
+      "bytes": 1786
+    },
+    {
+      "route": "/generated/recipes/json-to-anki/cell.png",
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+      "bytes": 178597
+    },
+    {
+      "route": "/generated/recipes/json-to-anki/json_to_anki.mts",
+      "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a",
+      "bytes": 2402
+    },
+    {
+      "route": "/generated/recipes/json-to-anki/json_to_anki.py",
+      "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962",
+      "bytes": 1960
+    },
+    {
+      "route": "/generated/recipes/json-to-anki/json_to_anki.rs",
+      "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287",
+      "bytes": 2468
+    },
+    {
+      "route": "/generated/recipes/json-to-anki/tone.wav",
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+      "bytes": 16044
+    },
+    {
+      "route": "/generated/recipes/json-to-anki/v1.json",
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87",
+      "bytes": 409
+    },
+    {
+      "route": "/generated/recipes/json-to-anki/v2.json",
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0",
+      "bytes": 443
+    },
+    {
+      "route": "/generated/search-en.json",
+      "sha256": "fa53b37b68f26160510a4b20dab0c1b213aa0eb1ab68e99a1ae6d233cf22354a",
+      "bytes": 24437
+    },
+    {
+      "route": "/generated/search-engine.js",
+      "sha256": "8a563577b68a548799a5b0988d78bff41adc63a7eee4644c7ad8986f34bc0fdf",
+      "bytes": 12447
+    },
+    {
+      "route": "/generated/search-es.json",
+      "sha256": "72505b0ad57df7a5a8da3ce8dedfc3ea670d795cd7d8bc0878dd3c1bd94775e2",
+      "bytes": 31184
+    },
+    {
+      "route": "/generated/search-ja.json",
+      "sha256": "3ff26e9c4a24ba059b2bf6b7118a99ab665fef1a06f25994146c06a06f7efabe",
+      "bytes": 27326
+    },
+    {
+      "route": "/generated/search-pt-br.json",
+      "sha256": "691168eaf2cb75c5ca8f83f278b585a69a2f86e319194c512ea3bb3238854224",
+      "bytes": 29210
+    },
+    {
+      "route": "/generated/search-zh-cn.json",
+      "sha256": "9bb5ca6b116a2ab2e9d495b4858dab71332c8fb642880fa3d5b3bbabd444c33b",
+      "bytes": 23814
+    },
+    {
+      "route": "/generated/showcase.apkg",
+      "sha256": "fb0925aed34e9270743cc4b24680dfea06925ba5f43f53394f75987cda16a0ea",
+      "bytes": 245030
+    },
+    {
+      "route": "/generated/showcase.json",
+      "sha256": "4d853848ab4ab7d48453a2dc802217aefd9262e748d821c75bfd3e17b0d61303",
+      "bytes": 4141
+    },
+    {
+      "route": "/generated/sound.apkg",
+      "sha256": "9926ecb80fa6466a7a60ec172a3ebab2a277d72ceb97b6674ac71965fd5010da",
+      "bytes": 57428
+    },
+    {
+      "route": "/generated/spanish-update-report.json",
+      "sha256": "6c953ed3ca8f808653db83e9dec3ccbd4a03fe14d527725641bafdfcf187c5dd",
+      "bytes": 904
+    },
+    {
+      "route": "/generated/spanish-v1.apkg",
+      "sha256": "abc25eec0f415e5be6015c94b1c01fa10004985f8f6b828f1d41e8f94049ad4e",
+      "bytes": 57323
+    },
+    {
+      "route": "/generated/spanish-v2.apkg",
+      "sha256": "7c1a01174a226db1e76038494970e9d3c8827491509340cc9307aa6b9949fcaa",
+      "bytes": 57329
+    },
+    {
+      "route": "/generated/spanish.apkg",
+      "sha256": "abc25eec0f415e5be6015c94b1c01fa10004985f8f6b828f1d41e8f94049ad4e",
+      "bytes": 57323
+    },
+    {
+      "route": "/generated/waveform.svg",
+      "sha256": "c123272ca84ac2365d0f4e7c88f99defa1c9dcbdf178d59c8150570ae0e2cecf",
+      "bytes": 3373
+    },
+    {
+      "route": "/generated/website_showcase.rs",
+      "sha256": "458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3",
+      "bytes": 10161
+    },
+    {
+      "route": "/ja/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "c284b5d2ca5d730a3cb4ef0823fcd9ba41ee2220483a2b226a6816dcde4691fd",
+      "bytes": 4241
+    },
+    {
+      "route": "/ja/blog/your-first-anki-deck/index.md",
+      "sha256": "233ed098db8f49eda8c1de204b3dbe5ecc4482f239e86ceeb3125df1303eceda",
+      "bytes": 4002
+    },
+    {
+      "route": "/ja/docs/ai-anki-cards/index.md",
+      "sha256": "a332335461cfca2b750f06097a027de647b917bb76884a5dffd39aa77127570e",
+      "bytes": 5546
+    },
+    {
+      "route": "/ja/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "08138f738270414c83b5f84855b712b05256f7f4978cd068b09bd88f457b02c2",
+      "bytes": 5144
+    },
+    {
+      "route": "/ja/docs/api/index.md",
+      "sha256": "5a1df645c38d4726f0dd42fc214adfa7466596a82fcea3e48255a483c2413240",
+      "bytes": 2456
+    },
+    {
+      "route": "/ja/docs/build-guarantees/index.md",
+      "sha256": "1ec193978555d167ed33cf51acabe2c766bbc845eddd60e4a24ac819165239df",
+      "bytes": 7709
+    },
+    {
+      "route": "/ja/docs/cards/index.md",
+      "sha256": "9a165ffe136ca4b48efde0ddf0d98e032aacd6de40b87a2671b185e4d344fd98",
+      "bytes": 3589
+    },
+    {
+      "route": "/ja/docs/compatibility/index.md",
+      "sha256": "f0b20be5b8fa0d92d3bddc9e5ac4151c26c3aef76e29ec6fe31e2b0f3797753a",
+      "bytes": 4196
+    },
+    {
+      "route": "/ja/docs/concepts/index.md",
+      "sha256": "138ed421c4c307d615b9a99f2837cb479300e518b5ea916c5a28e1776aee7b74",
+      "bytes": 4808
+    },
+    {
+      "route": "/ja/docs/csv-to-anki/index.md",
+      "sha256": "ca6f99906e33d492a396ea36a7583ddc989ee17e076d8300953954286a8da965",
+      "bytes": 6939
+    },
+    {
+      "route": "/ja/docs/custom-notetypes/index.md",
+      "sha256": "951f34f55743ef8c447cd08e34c6962d71e63b2a3bafadc5cb796f58ecee84b2",
+      "bytes": 4475
+    },
+    {
+      "route": "/ja/docs/development/index.md",
+      "sha256": "ffd9a695ade9532f08df3347351d3cfb33ef068a186f40f02cd38114e10e51ee",
+      "bytes": 2609
+    },
+    {
+      "route": "/ja/docs/genanki-migration/index.md",
+      "sha256": "da49c391ba6b6d46e1a491e969009f51b9ccbcf51d9f418e5c592ac3937c6665",
+      "bytes": 4509
+    },
+    {
+      "route": "/ja/docs/image-occlusion/index.md",
+      "sha256": "285bc9c4fb94d4e0cbf3c87fd497be73e3326cd3954c96e401b65dab7c0362a8",
+      "bytes": 4538
+    },
+    {
+      "route": "/ja/docs/index.md",
+      "sha256": "5e8316d9aeaa36378e4646bb00883b7a1ab9c18d3a3eecf311250f900f0bc087",
+      "bytes": 4360
+    },
+    {
+      "route": "/ja/docs/installation/index.md",
+      "sha256": "e5ccefea0c053ef1d9fcfff76799bb13484bee21adc6f5dcbcf412628e00da79",
+      "bytes": 2584
+    },
+    {
+      "route": "/ja/docs/json-to-anki/index.md",
+      "sha256": "ee8ff705d6daeb1cd4c33dd876500c8c62803c650d8df0952805597698b13a85",
+      "bytes": 12890
+    },
+    {
+      "route": "/ja/docs/languages/index.md",
+      "sha256": "717d18efc700ee52ebe222e275fdc4851cdf09cd5f9fdf21006d15a26adf37f0",
+      "bytes": 2677
+    },
+    {
+      "route": "/ja/docs/media/index.md",
+      "sha256": "a7bd520695674de521f87dddcddbf412041dfab5b702937d89b2c7428968821e",
+      "bytes": 11262
+    },
+    {
+      "route": "/ja/docs/node-api/index.md",
+      "sha256": "eee60e6c3f13dd1fd655017cdd58bd54d9159fd78c561558dcda452dc6c0a546",
+      "bytes": 17195
+    },
+    {
+      "route": "/ja/docs/node-quickstart/index.md",
+      "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6",
+      "bytes": 2860
+    },
+    {
+      "route": "/ja/docs/python-api/index.md",
+      "sha256": "79ac029749ef1f2f0489447a85f1b61d969a76e619c760df478c2ea60772ab0d",
+      "bytes": 12930
+    },
+    {
+      "route": "/ja/docs/python-diagnostics/index.md",
+      "sha256": "d6df1f9e58a2ca63149e935e4e77447e642860894446a80ccf10914b7bf65038",
+      "bytes": 6836
+    },
+    {
+      "route": "/ja/docs/python-migration/index.md",
+      "sha256": "32c6100954fb72b8e9fb51eb6d28f22fd52746c780a42acb0698f00ebac31787",
+      "bytes": 2631
+    },
+    {
+      "route": "/ja/docs/python-quickstart/index.md",
+      "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+      "bytes": 2867
+    },
+    {
+      "route": "/ja/docs/quickstart/index.md",
+      "sha256": "0f8a8a7b2573e65a2cca84486b97ca39265b9110ff01cff5ac9aeee15c4d769b",
+      "bytes": 2390
+    },
+    {
+      "route": "/ja/docs/rust-api/index.md",
+      "sha256": "19020cb9a96d5299ae332e54d0b396cd8e967159d0af254a5db5eb3ba2f0535f",
+      "bytes": 12232
+    },
+    {
+      "route": "/ja/docs/rust-guide/index.md",
+      "sha256": "44c4b12aedda29bafc831a0769b3665afcaf1e508d9e69debacd0abc40c013df",
+      "bytes": 7607
+    },
+    {
+      "route": "/ja/docs/templates/index.md",
+      "sha256": "7f0a1091236256bb74c9896008a38b91ff0f2fa242fcba9cc9d65d45e407b585",
+      "bytes": 7414
+    },
+    {
+      "route": "/ja/docs/troubleshooting/index.md",
+      "sha256": "b3a4689f138cda1a0761d132f23054b97f3f76d54dc40adc43748cfc6358166c",
+      "bytes": 6161
+    },
+    {
+      "route": "/ja/docs/updates/index.md",
+      "sha256": "3b49f7aec157c4441c1a464e85af297756406b11556bd2a23973efd28955e550",
+      "bytes": 10336
+    },
+    {
+      "route": "/ja/llms.txt",
+      "sha256": "0e517914e43187494cf6780d8afaabef54e4a5ee46db8e39d125f1a453f55cff",
+      "bytes": 7589
+    },
+    {
+      "route": "/ja/rss.xml",
+      "sha256": "2c5e7263f4bc1b696c92d21bdd7ccf2f5d1828845e2fd031279f18a661e0301f",
+      "bytes": 1110
+    },
+    {
+      "route": "/llms.txt",
+      "sha256": "d28a11bc8b89bde941d1789e129c1e00c858867ce51ac574ecb80a33d702e452",
+      "bytes": 5984
+    },
+    {
+      "route": "/pagefind/fragment/en_1030742.pf_fragment",
+      "sha256": "aedda6139da448853e1f0c7bd5d34b716336f9a4c760282c0c9a30153435a9de",
+      "bytes": 992
+    },
+    {
+      "route": "/pagefind/fragment/en_23dcb0e.pf_fragment",
+      "sha256": "8a072c0339747d4cba744c69f7c826dbad8c9b2b2bdabfcb7a1f187017e2e254",
+      "bytes": 369
+    },
+    {
+      "route": "/pagefind/fragment/en_2773f2b.pf_fragment",
+      "sha256": "fc45ff785d4068fa09707e531c757e8954f42d2870f3e7ae860afa8fcf939904",
+      "bytes": 851
+    },
+    {
+      "route": "/pagefind/fragment/en_301f20a.pf_fragment",
+      "sha256": "a58492a706609e0ad665eabe9cebadd70aabe5ceaa5cc628fc6090a76395f2af",
+      "bytes": 4069
+    },
+    {
+      "route": "/pagefind/fragment/en_36ab406.pf_fragment",
+      "sha256": "511d26545ed32a07ea8f4fc84eb0b4cce43f8b6ebf33007c4d43672d09ce6379",
+      "bytes": 1329
+    },
+    {
+      "route": "/pagefind/fragment/en_3e4ce16.pf_fragment",
+      "sha256": "3886bf4ad848acfe64486b265c7c97c165bc4fb55662556e3146bfa57a1f827b",
+      "bytes": 998
+    },
+    {
+      "route": "/pagefind/fragment/en_438ffab.pf_fragment",
+      "sha256": "7293665709d871b8ee0c2aa12c12d59e930c37a6c5019d890ea8ae8dc2fbb08f",
+      "bytes": 2091
+    },
+    {
+      "route": "/pagefind/fragment/en_45833a9.pf_fragment",
+      "sha256": "4590b8a52d0352176e704f30066d38eb98d98a9ec338ae58e77a5d1eaaaa5ab9",
+      "bytes": 2512
+    },
+    {
+      "route": "/pagefind/fragment/en_4a51cba.pf_fragment",
+      "sha256": "3d60eed316ce6001f415aa26aa1609473ed605ecf42ad9398c9b84535fb8d551",
+      "bytes": 2752
+    },
+    {
+      "route": "/pagefind/fragment/en_4afd1fa.pf_fragment",
+      "sha256": "ddad363c6715beca811ffeddd691cf3b57129c4f787133fe9cd58859297947ea",
+      "bytes": 1665
+    },
+    {
+      "route": "/pagefind/fragment/en_50bb7d6.pf_fragment",
+      "sha256": "401d514247935d9e8b9b7a5e8c95c0d9c87aae68c9a110a2aa90fcda9a24ac0d",
+      "bytes": 3605
+    },
+    {
+      "route": "/pagefind/fragment/en_52391f5.pf_fragment",
+      "sha256": "cccec57502ac2d6d8c7becd87aa5a8dbe2604c9239ba283fa5e50efe9e49fe36",
+      "bytes": 809
+    },
+    {
+      "route": "/pagefind/fragment/en_55f4af4.pf_fragment",
+      "sha256": "1da6976f53857fc961516febeb9649f984e92f4909cfab38ffdeefcb781b6bfa",
+      "bytes": 2204
+    },
+    {
+      "route": "/pagefind/fragment/en_5f9ee75.pf_fragment",
+      "sha256": "614e364291c7e21abf4efb26e5e3d2950c999711c3190d70ad7b272675a2ec6a",
+      "bytes": 1879
+    },
+    {
+      "route": "/pagefind/fragment/en_608df5a.pf_fragment",
+      "sha256": "b3617b332eed85c9003d58ec3a158bc96b2a8d7d898fca278ae503669eada1c6",
+      "bytes": 3755
+    },
+    {
+      "route": "/pagefind/fragment/en_616a299.pf_fragment",
+      "sha256": "31b570025390ae054664a768983f548fa4fb04af3139485ea78bffd7c723ec91",
+      "bytes": 1030
+    },
+    {
+      "route": "/pagefind/fragment/en_62dbdc9.pf_fragment",
+      "sha256": "6e99ce91b098df2e6e779ba7b64a0cbf24121464d434d368273067e1090836a4",
+      "bytes": 2445
+    },
+    {
+      "route": "/pagefind/fragment/en_73e5423.pf_fragment",
+      "sha256": "693959e907f37d7285e49ae13cab01c94bdb55bd0ac16e7dd3595f683afdecc1",
+      "bytes": 1687
+    },
+    {
+      "route": "/pagefind/fragment/en_7afb525.pf_fragment",
+      "sha256": "c18ef8c3e34563fb15c1d615a3baae3e32e052841c6fe03a3566003962c9f23a",
+      "bytes": 5581
+    },
+    {
+      "route": "/pagefind/fragment/en_80c3f2e.pf_fragment",
+      "sha256": "101d79f098c6728ccd121519c0a0c6a6833704e2eed193f540eabcf65eba6848",
+      "bytes": 1709
+    },
+    {
+      "route": "/pagefind/fragment/en_87c947d.pf_fragment",
+      "sha256": "0945a5dcb94bd81f12474a4791d8175c0da17fb2323a525a4009ee0235ead4c8",
+      "bytes": 1002
+    },
+    {
+      "route": "/pagefind/fragment/en_91c9394.pf_fragment",
+      "sha256": "60bf5bb48c401e0215ea130715b1a7cc6d7c73336723d89a8897a66fa48f1648",
+      "bytes": 2603
+    },
+    {
+      "route": "/pagefind/fragment/en_946bdc7.pf_fragment",
+      "sha256": "06ec69449ffdcc516ca693aecdad1ec795c240017c06622da80aa28558d35a94",
+      "bytes": 1808
+    },
+    {
+      "route": "/pagefind/fragment/en_a4597cc.pf_fragment",
+      "sha256": "0c46c93c9274014df131c9cbbea105fb65f36be964998f6a005ecb5dcc84e583",
+      "bytes": 2499
+    },
+    {
+      "route": "/pagefind/fragment/en_aa7becf.pf_fragment",
+      "sha256": "6c08a3dad010bfcfa67b02448aca4dfa0b5456ce8bc4f2358b03decc2388542a",
+      "bytes": 1958
+    },
+    {
+      "route": "/pagefind/fragment/en_ac91827.pf_fragment",
+      "sha256": "5963b4495007eb38bc26c6cf6322e7c2cf2163d9a76f0f0555ff4bbcdde550dc",
+      "bytes": 1169
+    },
+    {
+      "route": "/pagefind/fragment/en_b51c65f.pf_fragment",
+      "sha256": "7055d9dd058ace0ce5abee1093c1863de882ac1eee51b4d62e9205f64ace9b39",
+      "bytes": 3982
+    },
+    {
+      "route": "/pagefind/fragment/en_b7ba201.pf_fragment",
+      "sha256": "62714c3b96dc4d905d3b97991ba9972fb7d05cbebad467889ab8ffe80a541fcd",
+      "bytes": 1799
+    },
+    {
+      "route": "/pagefind/fragment/en_bb876ff.pf_fragment",
+      "sha256": "6a53db0790bed6361a3d764299d81c6a1b3ddbb85cce655c825d203bceda4d03",
+      "bytes": 1393
+    },
+    {
+      "route": "/pagefind/fragment/en_c9c3809.pf_fragment",
+      "sha256": "a3d6debe965c833a107067909cb840312411e233d7f6a08f6168d8fddac967b2",
+      "bytes": 1019
+    },
+    {
+      "route": "/pagefind/fragment/en_cb1b52c.pf_fragment",
+      "sha256": "aaf5057d9cff25970c8b449ea04e6a47f25a67d1144bc35417a709217a41f781",
+      "bytes": 1662
+    },
+    {
+      "route": "/pagefind/fragment/en_d1b25dc.pf_fragment",
+      "sha256": "a602359b3073438a080e837e48decc2850d23e9cde116088bda8169be977cab7",
+      "bytes": 3222
+    },
+    {
+      "route": "/pagefind/fragment/en_ea288a6.pf_fragment",
+      "sha256": "0d93feec84770e5ef0970c7a62196030eb545c8b1ee01255f0138417790ad2fb",
+      "bytes": 1301
+    },
+    {
+      "route": "/pagefind/fragment/en_ec37a7d.pf_fragment",
+      "sha256": "d08da0d68d99e2d4168eeb4564e798b6ad9b62b4b1b2b28df44c11b7125a73ae",
+      "bytes": 4180
+    },
+    {
+      "route": "/pagefind/fragment/es_128cb6e.pf_fragment",
+      "sha256": "fab27c2e2fd088b6bdc00f79d307cdfc9255c00708a376135e41be507dc9a126",
+      "bytes": 2212
+    },
+    {
+      "route": "/pagefind/fragment/es_1c3a72c.pf_fragment",
+      "sha256": "c977e3a90b1fd798d85365471685bcf189b5f3fd5c325496bb95ed543ecdef5e",
+      "bytes": 2754
+    },
+    {
+      "route": "/pagefind/fragment/es_28233ed.pf_fragment",
+      "sha256": "a8d1b9732151a66299eaa6fe77dc69fc22355533b4fac391bfe2f04ed1daba85",
+      "bytes": 4368
+    },
+    {
+      "route": "/pagefind/fragment/es_34c0557.pf_fragment",
+      "sha256": "a12427e8ae5b8e5d4782c1f144ce9461c45859ed59ac94f3e6d07dccaa4781cc",
+      "bytes": 1016
+    },
+    {
+      "route": "/pagefind/fragment/es_42b9afb.pf_fragment",
+      "sha256": "af92ff00c920fc79444a9fbcf810046331b89969c37f1894c40fb51acfef2d03",
+      "bytes": 3992
+    },
+    {
+      "route": "/pagefind/fragment/es_46ec893.pf_fragment",
+      "sha256": "a6a1d6449e22b722fc7f9944bd0cf31a51a9219935624ecc700069dfd21da6c4",
+      "bytes": 393
+    },
+    {
+      "route": "/pagefind/fragment/es_474d7d3.pf_fragment",
+      "sha256": "8589a143241f774ad4e3dcdef71a2ecdf2c7c565273db1dbca6630fc622ff695",
+      "bytes": 1603
+    },
+    {
+      "route": "/pagefind/fragment/es_49eacda.pf_fragment",
+      "sha256": "7ff7ab5c9050fc8181f0baaa803d57bf9973155842768556dec5483eed678691",
+      "bytes": 1973
+    },
+    {
+      "route": "/pagefind/fragment/es_54c217f.pf_fragment",
+      "sha256": "ceef033c0e63e05045d4a3acc1e823762038a997e78a824fdfc64635f07ce2a3",
+      "bytes": 3401
+    },
+    {
+      "route": "/pagefind/fragment/es_55be7d2.pf_fragment",
+      "sha256": "94a8d597f9884ad7edc840b0e280ecc2092b46abcde9b0e2c68d88078b9e4eb2",
+      "bytes": 986
+    },
+    {
+      "route": "/pagefind/fragment/es_63dcd77.pf_fragment",
+      "sha256": "fc3e55ec20cec6430616b085fc0a7cdc13cb66b6e0fd6a3814068ddbc5396600",
+      "bytes": 1601
+    },
+    {
+      "route": "/pagefind/fragment/es_67a1771.pf_fragment",
+      "sha256": "796e1bd1985ce4810d25148943dd1be0ac56baa21b463c56c716ccc269ad076d",
+      "bytes": 2278
+    },
+    {
+      "route": "/pagefind/fragment/es_6ea12a8.pf_fragment",
+      "sha256": "a6dbba84cff4767d09c0c92b2f69e624e5946bd0cc297277e3c90c5bc3036bdd",
+      "bytes": 2982
+    },
+    {
+      "route": "/pagefind/fragment/es_6edac4f.pf_fragment",
+      "sha256": "b4e8ffd20b69b00e4b2441097ffa46d97b8e52d25abd0c210d36417acefe385d",
+      "bytes": 2034
+    },
+    {
+      "route": "/pagefind/fragment/es_8356358.pf_fragment",
+      "sha256": "11c29aaf3724719681a8f2ec54dc5d0afffaf447ff53f640409477844f369d7a",
+      "bytes": 2085
+    },
+    {
+      "route": "/pagefind/fragment/es_873dbb2.pf_fragment",
+      "sha256": "81f176ad23192dd6ba19310d1a96048b162f4193b2f449f6b7a37237b0416329",
+      "bytes": 1201
+    },
+    {
+      "route": "/pagefind/fragment/es_8f3afc7.pf_fragment",
+      "sha256": "e64c8ff1b43b995c052ba2a102c22c1aacc394907f2bbe2c942132a53ffc8bd9",
+      "bytes": 2153
+    },
+    {
+      "route": "/pagefind/fragment/es_915d9d3.pf_fragment",
+      "sha256": "b25665d9fb9a5b1034b8621f15154b18875dc564100ab99e3ce152d539273706",
+      "bytes": 4392
+    },
+    {
+      "route": "/pagefind/fragment/es_93a35eb.pf_fragment",
+      "sha256": "168124eaed463dfc9630e3e1854ad4ab4b86a323dcf6b33826477535a8ea4831",
+      "bytes": 3165
+    },
+    {
+      "route": "/pagefind/fragment/es_94e51cf.pf_fragment",
+      "sha256": "ef12d9f3798f8874a231d245861327b70e6b6f4ee3c8cbcbce3eb8cbb236cc75",
+      "bytes": 1374
+    },
+    {
+      "route": "/pagefind/fragment/es_a0c26f8.pf_fragment",
+      "sha256": "bbd3f5981db01c6fcde2aa2e198347bb7e0d1e723ad5ea4538722b0f00c32412",
+      "bytes": 4876
+    },
+    {
+      "route": "/pagefind/fragment/es_a15b6e7.pf_fragment",
+      "sha256": "0103b341ce63cc93778f905d6ad8a507098e94f366cdeba842133aed0b4df9d8",
+      "bytes": 1132
+    },
+    {
+      "route": "/pagefind/fragment/es_a58ad87.pf_fragment",
+      "sha256": "09c5a01769b8cc0424d06f998e39ca76e85c5a4c461f0a8871daa27d03893b8a",
+      "bytes": 1611
+    },
+    {
+      "route": "/pagefind/fragment/es_b04d428.pf_fragment",
+      "sha256": "2dc538e99b02e946375fa198142d1fc3ff2c05515f119ef0a51fec1187881652",
+      "bytes": 2712
+    },
+    {
+      "route": "/pagefind/fragment/es_b0de1e1.pf_fragment",
+      "sha256": "c3cf71b9cf0718022bbecc5550bbfcb29c438fd48a59723a8a16961d51fc4d2c",
+      "bytes": 2439
+    },
+    {
+      "route": "/pagefind/fragment/es_b5eeef3.pf_fragment",
+      "sha256": "05bab3b5916cf59734a7f090faefb97f3dbfbca68ea5d0b15196669c1d98fe70",
+      "bytes": 2904
+    },
+    {
+      "route": "/pagefind/fragment/es_bf899aa.pf_fragment",
+      "sha256": "930c4ea8dd8513fe163931c23ee7dec506a51bb3caee8b49bef591bf0812fd0c",
+      "bytes": 3791
+    },
+    {
+      "route": "/pagefind/fragment/es_bfc031f.pf_fragment",
+      "sha256": "60bce8dc750df13d33e5a58555800fe8ee43b5b3a10635eeebc8bd07e7ee90bf",
+      "bytes": 1914
+    },
+    {
+      "route": "/pagefind/fragment/es_ca3ba24.pf_fragment",
+      "sha256": "b9c7f734cc79724f9dff5ee1074ef2d0b60a8f8a9b1e79a8ab51c0f31d8a8428",
+      "bytes": 1203
+    },
+    {
+      "route": "/pagefind/fragment/es_cc98367.pf_fragment",
+      "sha256": "1499a1461739729cca32ecfa755df5f6e11d72b3faac7eeaa92bab4b8def5edb",
+      "bytes": 1197
+    },
+    {
+      "route": "/pagefind/fragment/es_e96e22b.pf_fragment",
+      "sha256": "0534ec9869e38674faa7d6061d7dffdb3c241481065831a6aa6f5df4d2aa29fd",
+      "bytes": 4948
+    },
+    {
+      "route": "/pagefind/fragment/es_e9b3c33.pf_fragment",
+      "sha256": "4e6d255292500f724dac41000a9b1c8969931c514e52122a7099a8595f187269",
+      "bytes": 1948
+    },
+    {
+      "route": "/pagefind/fragment/es_f26653f.pf_fragment",
+      "sha256": "c9ecd8548ffed434753b95fbbfc0200a542fbfba99a3e7f4dfccded27a666e0d",
+      "bytes": 1166
+    },
+    {
+      "route": "/pagefind/fragment/es_ffd34b0.pf_fragment",
+      "sha256": "ea5244cd737e208bec5f2feae42e836c356e72b38ccf9aa5d35883e29ffc3180",
+      "bytes": 6504
+    },
+    {
+      "route": "/pagefind/fragment/ja_122e90d.pf_fragment",
+      "sha256": "f92965bc0f614744df1e583cd4954954f201a5ccf1e25c6fba1ae136c333da32",
+      "bytes": 3619
+    },
+    {
+      "route": "/pagefind/fragment/ja_15e37e2.pf_fragment",
+      "sha256": "793494d58ce7db2f30d5e8e2043ff694c6ccb803a25757fc5f6606a266d3dbd2",
+      "bytes": 4134
+    },
+    {
+      "route": "/pagefind/fragment/ja_20a638f.pf_fragment",
+      "sha256": "466f495562c7de497515eaca60699da77cf4c80910964f3af89454c8391b2996",
+      "bytes": 1993
+    },
+    {
+      "route": "/pagefind/fragment/ja_2445b26.pf_fragment",
+      "sha256": "8198b86b86399a0b8880e1bc3a9b0ef9afc5c34e019d1ba69f5c97c36936b5cd",
+      "bytes": 1278
+    },
+    {
+      "route": "/pagefind/fragment/ja_24f5b1a.pf_fragment",
+      "sha256": "c9b8d328726051fb69cba070b21c235042efc203f4acd1f72d2b372ccc513a2c",
+      "bytes": 2576
+    },
+    {
+      "route": "/pagefind/fragment/ja_2692330.pf_fragment",
+      "sha256": "adada00f4f8200bc2f55566e2adbbbe7840feaa8349de26abed6e8d16f8c68e3",
+      "bytes": 5069
+    },
+    {
+      "route": "/pagefind/fragment/ja_34ec27e.pf_fragment",
+      "sha256": "72e2816189a76a91c92a1ee79b407fbb5b96d3e264aa2adda80de98071add52b",
+      "bytes": 7751
+    },
+    {
+      "route": "/pagefind/fragment/ja_396ff6a.pf_fragment",
+      "sha256": "0d91dd4fa82237eb68c85bd11b1042ed3ae12d3eea2a94a928eec41926e03b3b",
+      "bytes": 2746
+    },
+    {
+      "route": "/pagefind/fragment/ja_3f13e66.pf_fragment",
+      "sha256": "24b2f0f617b09edb2c61cab937a2a2f9a330d234d07b8fab73bb515b691d9b51",
+      "bytes": 5497
+    },
+    {
+      "route": "/pagefind/fragment/ja_428bf4c.pf_fragment",
+      "sha256": "b4f524f31e23dbc2cf9281eba7da973461f52571191da11a7ce8c4810e340999",
+      "bytes": 2740
+    },
+    {
+      "route": "/pagefind/fragment/ja_558bfc3.pf_fragment",
+      "sha256": "f43ecbc73927df19b0614b5322fa0293f346f1789c3ed580115f14801c897e92",
+      "bytes": 1941
+    },
+    {
+      "route": "/pagefind/fragment/ja_5788eca.pf_fragment",
+      "sha256": "002f99d46793195a09569d8b43f8fb58f0d06810260ef62721735ea4b660ea12",
+      "bytes": 3607
+    },
+    {
+      "route": "/pagefind/fragment/ja_5af40d5.pf_fragment",
+      "sha256": "3a3e8ee27257f37c808618a6d45ab613238dd9515c4b4896018e82de6002ee2b",
+      "bytes": 2464
+    },
+    {
+      "route": "/pagefind/fragment/ja_5b394db.pf_fragment",
+      "sha256": "a834749fa74d29fb77bc2f574705765dc2c7fada55bc861391274ef17df93678",
+      "bytes": 1517
+    },
+    {
+      "route": "/pagefind/fragment/ja_69159db.pf_fragment",
+      "sha256": "23f7efb3d2da141c6516d1fc2cc3d900cf17bf83ba91b3771745e213e79a2491",
+      "bytes": 5615
+    },
+    {
+      "route": "/pagefind/fragment/ja_86275ff.pf_fragment",
+      "sha256": "418d15faf3ac24be762d82858d5e99ef4815252ed59334adbdbbe034c8a6ccff",
+      "bytes": 1561
+    },
+    {
+      "route": "/pagefind/fragment/ja_988d441.pf_fragment",
+      "sha256": "3fad6b209853ef4c5bb98803e45f6001273b43d0c5f94c509e1ea8febbab0332",
+      "bytes": 1520
+    },
+    {
+      "route": "/pagefind/fragment/ja_9e9f8b9.pf_fragment",
+      "sha256": "208b4495edc7054e74567f067d4ffc8d43e3666af950923351de54a675eeb0a5",
+      "bytes": 577
+    },
+    {
+      "route": "/pagefind/fragment/ja_a1db307.pf_fragment",
+      "sha256": "40bb4a54a2ef33b1a6598087fd87f4f3e0d91e57d18d15e97604fff11dec0805",
+      "bytes": 2412
+    },
+    {
+      "route": "/pagefind/fragment/ja_a39475b.pf_fragment",
+      "sha256": "9c6e1539a40d6d04bd737c41e8bc060389e4c054893ca9abaa747dbbdb8d07ed",
+      "bytes": 2749
+    },
+    {
+      "route": "/pagefind/fragment/ja_a7597f3.pf_fragment",
+      "sha256": "f30544a024c71e389e9c8e5863b0d17d814e1eef98dee7effd2d02c56614e928",
+      "bytes": 3017
+    },
+    {
+      "route": "/pagefind/fragment/ja_a782885.pf_fragment",
+      "sha256": "29a973b43814ca9515dd3126d16e71af5857edbd2afccfdea097f7d981d1ed23",
+      "bytes": 6113
+    },
+    {
+      "route": "/pagefind/fragment/ja_a914e2a.pf_fragment",
+      "sha256": "027a7b7c1dee5e4065eb85c15bf3fba9f642613dce8a5f85de9bc13da2587163",
+      "bytes": 1543
+    },
+    {
+      "route": "/pagefind/fragment/ja_ad44e48.pf_fragment",
+      "sha256": "968af987bf220dabe7c16fc45ca9d3814cb69d4d53a8164d1964731e8c3e9688",
+      "bytes": 4729
+    },
+    {
+      "route": "/pagefind/fragment/ja_b17d4fd.pf_fragment",
+      "sha256": "2e9d862d72e31345beb78af9503e6235f2f632393a148eac17e312481c94283f",
+      "bytes": 3848
+    },
+    {
+      "route": "/pagefind/fragment/ja_bbfaa56.pf_fragment",
+      "sha256": "975f1d4810955f678460e50ee556c6b3afa6ce3bfcddf71ec45246a43cdaa227",
+      "bytes": 3601
+    },
+    {
+      "route": "/pagefind/fragment/ja_c343924.pf_fragment",
+      "sha256": "4d5a4367a7fb28a2aef639b00e4653fde8db3f647b01ee4d15df67691e7323d6",
+      "bytes": 1248
+    },
+    {
+      "route": "/pagefind/fragment/ja_d2ae522.pf_fragment",
+      "sha256": "a1588c70ddbc77a8b688e7f898d541e045d2c2fe01a3c0bddb67763c9bea79e2",
+      "bytes": 2603
+    },
+    {
+      "route": "/pagefind/fragment/ja_d9cc8d1.pf_fragment",
+      "sha256": "ada817a6574839489519cef948112484998ad231fe7a719f267c1fe1c5293a65",
+      "bytes": 1570
+    },
+    {
+      "route": "/pagefind/fragment/ja_dd119f0.pf_fragment",
+      "sha256": "307888a83beea3b5f4448e62f24dda55fdd931747a12ca2cfce57753a6da9830",
+      "bytes": 2056
+    },
+    {
+      "route": "/pagefind/fragment/ja_e78bcd8.pf_fragment",
+      "sha256": "47a1e02343e4d9494e6331a39e695139686c512cf07835ec00aefee979c0f20b",
+      "bytes": 6146
+    },
+    {
+      "route": "/pagefind/fragment/ja_ea36bba.pf_fragment",
+      "sha256": "cdf1e2113b37b38e4425ae7f9b73b16dc0da527bfdb371869432d6b7456612a3",
+      "bytes": 3306
+    },
+    {
+      "route": "/pagefind/fragment/ja_ec393fd.pf_fragment",
+      "sha256": "5d55df2b8379fdc5b0ce7ea6fcefeb646fac3918ae4f6ea73f1bc294ba123601",
+      "bytes": 2432
+    },
+    {
+      "route": "/pagefind/fragment/ja_ee4f12d.pf_fragment",
+      "sha256": "b98c28e4668eef97212a9c69006e531f1c23b26f5a6005a5bac2cb2fb7c90b50",
+      "bytes": 1751
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_1619f08.pf_fragment",
+      "sha256": "9f88da435ef1e8148a148c5466e61362dbf65ef19665f9b0f755efbc107d961a",
+      "bytes": 1030
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_2792588.pf_fragment",
+      "sha256": "a42dd4e1e82558585dc2f5a6b7c38a87496fee885a1600e493b4b3a59d5e3f60",
+      "bytes": 4385
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_2995e13.pf_fragment",
+      "sha256": "af4e31472f1557f61d22cf7a84db169a637592762c50ad50aa6cd36cda7268f9",
+      "bytes": 1187
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_2f5ef10.pf_fragment",
+      "sha256": "5b3f0f04f409479bfca76ca187d7ea4c820357a3ef1f6b4ba0eebf92275230ea",
+      "bytes": 4815
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_32a43e8.pf_fragment",
+      "sha256": "4dfc1d654ddc354c5ac0f62cf8feabf2ec3ad8b705934b6efc0384e812d89eb1",
+      "bytes": 2363
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_405de7c.pf_fragment",
+      "sha256": "cef8b5102fe65bd2b4ce3c8348d4467829d6a58b9b8d9d766b51638e1c40f224",
+      "bytes": 1582
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_41b741b.pf_fragment",
+      "sha256": "edd759739e6e64d9194e290baeea9c7418ded2132d00c8de282d7e8032c8056e",
+      "bytes": 408
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_4231f2e.pf_fragment",
+      "sha256": "788c5ef60ab0027f898db23f2aba2e66de4a632886d77b0ed79d2cb07921693c",
+      "bytes": 2837
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_4354d15.pf_fragment",
+      "sha256": "92ed32c906cc38f8096894df16ff9bceb464a549567714b52967cd21c1375d58",
+      "bytes": 2752
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_4cc51bf.pf_fragment",
+      "sha256": "c68cd1d30f5be65446a38bc31c9b222d67d7a9b5e354294a39103efbfc29fedc",
+      "bytes": 1170
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_63685ec.pf_fragment",
+      "sha256": "3c2299b92ce460e74768086ca3283e892e1b812c7f04827e4b2d61db14fbd4b4",
+      "bytes": 4748
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_7292844.pf_fragment",
+      "sha256": "522632425391caf1555b5d7fd571a1190aa53a1e66aef01c1cde0a207d2280e6",
+      "bytes": 3703
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_74464e7.pf_fragment",
+      "sha256": "ba224985b2a4435c5591db6f833d099416150657f4077cac6e9857ac0a82f00e",
+      "bytes": 2215
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_786dfc3.pf_fragment",
+      "sha256": "a6eecc1810d6149674fa798cebedadc5b10f5847f39a1f5065b2799d85d059fb",
+      "bytes": 1914
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_78e456c.pf_fragment",
+      "sha256": "4ab734458fb55a0addd898fbbfb02ef483cf141618c10bf0c9e66e2373c6ca29",
+      "bytes": 1226
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_80ac265.pf_fragment",
+      "sha256": "8495c8b61aef520814e0253dec4331cbf73516f52508d6344752e7501645c9df",
+      "bytes": 1882
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_836893d.pf_fragment",
+      "sha256": "5b32af1324a04af29d6bf33df6fae5e53068c9f31e1b04267157ed8ab3fc86b3",
+      "bytes": 3939
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_86d4f51.pf_fragment",
+      "sha256": "537ddde4eaca207d3bca9e4229c38b094d7e79cddea8db7707bb44698d77c6c2",
+      "bytes": 4345
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_8c2d486.pf_fragment",
+      "sha256": "02c0269664675a0d5da4fa1e7ae9fa8c23ceba21391e2fadff09249cf2ac1d1a",
+      "bytes": 2846
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_98e68c3.pf_fragment",
+      "sha256": "395b7a9ed745e20b52e1db58f93da1222b30396ec766e82f04983570f4eae6e6",
+      "bytes": 6395
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_a0e0819.pf_fragment",
+      "sha256": "8d81aaefad152b82510167401b912d81ae51d992d7b5117d663037520527c827",
+      "bytes": 986
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_a43513c.pf_fragment",
+      "sha256": "45feae27eeb91346d1cdb65a4fb9aed734240b98c152d64186152d5be4c93be7",
+      "bytes": 2673
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_a653e61.pf_fragment",
+      "sha256": "273d4ab82316e3f20b14df1df4ff6f093535c5c1129eef3a5e3fcb5cc79f6bae",
+      "bytes": 1190
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_acf756d.pf_fragment",
+      "sha256": "aa22ded5a8aaf11f2da1da97db8eeafbde4423de344fb97bebad24c6da2646b0",
+      "bytes": 1127
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_b6c3267.pf_fragment",
+      "sha256": "bd240bf5b3d79a2c053fb5db25ce6339f2e727856601dd010d1a64e0e5da4ce6",
+      "bytes": 1562
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_b81c2cf.pf_fragment",
+      "sha256": "8d72be3e2649b75b89c132209ba4a56be156391ae74c88048477ac6d40966ecf",
+      "bytes": 2022
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_c0eedc2.pf_fragment",
+      "sha256": "00d6245cc23f2253764b35c9d582c8b7d1fe4bc1811459c37e16c61155e422e6",
+      "bytes": 2038
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_c34fc08.pf_fragment",
+      "sha256": "4a57dafae34a57641f6be26e66437c665d6b667d7bbdb5d86e45ba842ca1a879",
+      "bytes": 1925
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_c36aebe.pf_fragment",
+      "sha256": "a498fe97b8a6c87d1ec7b3bbebe12cde9a7c70c03f9b64b09c140a17682292f6",
+      "bytes": 2149
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_cd5d763.pf_fragment",
+      "sha256": "40488fb389ad9f0d1a2081455b5b112ed383e227b4aaf1f30e0618c69d7ec258",
+      "bytes": 3303
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_d6d624a.pf_fragment",
+      "sha256": "155f285377419688cb69b2ff32a05cc38749f1039b01083a7358e59239f88ae4",
+      "bytes": 2182
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_d76b991.pf_fragment",
+      "sha256": "e262895222ce5a1a4f3292d636f725615f4d87c51780833aa75affe22eb89cf7",
+      "bytes": 3050
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_dbe6fda.pf_fragment",
+      "sha256": "b911776031da90fab49de004f78d1a1898bd37de03a786bac9fcd1575c3a0eb2",
+      "bytes": 1357
+    },
+    {
+      "route": "/pagefind/fragment/pt-br_e116378.pf_fragment",
+      "sha256": "e6944cb8a3a6d1b5a0d145ec6038cf606400321fc2e9ace920a2904f41b801b6",
+      "bytes": 1618
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_11a68d3.pf_fragment",
+      "sha256": "cc9608b64ed4e015ce85e7fe94fe1bab704abf56bcc6a382e42e05d520960d01",
+      "bytes": 1288
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_151e899.pf_fragment",
+      "sha256": "3e2a3f8bace9b6b71aefa664415b5fc68f8df3e34a696fc1057ce22cee06de71",
+      "bytes": 2164
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_19f26e1.pf_fragment",
+      "sha256": "715e9b9cecd28d9577b1c0f84ff7350bc59f954b55389dae1bac64500ebea6d0",
+      "bytes": 3194
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_23c1867.pf_fragment",
+      "sha256": "0ee336e0126742f15870d8a506691f71863f1f500cd79fa8ea91f79a8a8237a6",
+      "bytes": 1676
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_2f57b16.pf_fragment",
+      "sha256": "da784b55ca2430fb348062d736c076e2f8e263edf6a933a419318468502eb34d",
+      "bytes": 2229
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_36835ea.pf_fragment",
+      "sha256": "c84d70c5ffec280aa0be8ce1efc4e09853009479dfa7c155d483f09822679f3d",
+      "bytes": 515
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_38ab74e.pf_fragment",
+      "sha256": "c5e84c207b751a434d1473e9a113931d7b4dc2a69922745aa10c0ad3b92bd1a7",
+      "bytes": 1404
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_3bf8af6.pf_fragment",
+      "sha256": "f25bc8c5e379bbdbc05acc86e63cfd02c177ad633b7a67c66adc9c67542f7add",
+      "bytes": 2376
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_47155ea.pf_fragment",
+      "sha256": "48316bffc335e0d209bca7341c08c103e8d08a9a3283217bb974be11f6a318e1",
+      "bytes": 1472
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_48eeda5.pf_fragment",
+      "sha256": "e60c07b3a34186a96721c44fdcf21ca82293e6de1c6b57c0f7ac814814918284",
+      "bytes": 1388
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_5d1197e.pf_fragment",
+      "sha256": "74cc9aaeb3505d76ac9ef286863097a56bd4688aebe882622ebcd9a302f2f31f",
+      "bytes": 5382
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_6b8c77f.pf_fragment",
+      "sha256": "3e3a2f49d418850619c9ec9487358139bbcf7291a69d239caa6114c814e71072",
+      "bytes": 1365
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_76d3835.pf_fragment",
+      "sha256": "0859a31385e9b7b588884f94745a59ad01d6d693cc652a2479a078916eac43af",
+      "bytes": 1902
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_7c62e24.pf_fragment",
+      "sha256": "d3e698d84b50d4fb73606075a09bd9b7e91344e4943d4ff6e523429628a934f3",
+      "bytes": 2361
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_7d2d9a7.pf_fragment",
+      "sha256": "06fe37c1e886fe381babd082ec0d2d2beb300d79b68ffa33a070c73a75eae22c",
+      "bytes": 3137
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_872d487.pf_fragment",
+      "sha256": "ad971d4c474c6ba8c7d8025439ffee6901e3b57e26137af354683088e59564d6",
+      "bytes": 3576
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_88b0a08.pf_fragment",
+      "sha256": "875524527a33c3a96af9da17b3e7838757635f573090ea99d42ce44c98b2afb0",
+      "bytes": 2781
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_917050b.pf_fragment",
+      "sha256": "6f1673a3f72e6fd087548ecba2a836f0a2c614de5e61d45f2dad4bab5d0a6e49",
+      "bytes": 4637
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_9276fe5.pf_fragment",
+      "sha256": "c585c38844db129b2942deec4292e3bcbdbec3d020a7942aae994991f61baab1",
+      "bytes": 6918
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_93db1be.pf_fragment",
+      "sha256": "6a5de9651ba031a94d0c8c90e244a66b3cd79fc125f86aa879365caf70564726",
+      "bytes": 3217
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_9784e5c.pf_fragment",
+      "sha256": "04bfe6b36201f1c851786e2611000da68304ffaa40429f29fc76c575488e14b1",
+      "bytes": 1054
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_a47a6ac.pf_fragment",
+      "sha256": "f5f8ebc387dcaece3699a92ac7f57f471190d207721795d77b6141bd48cf2dca",
+      "bytes": 2360
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_ab9ee09.pf_fragment",
+      "sha256": "e7e9d4c3ee25ac3fcd4a204d6cb13aeb957b4387ef5973ff817d6e4fa697752d",
+      "bytes": 2159
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_b19918c.pf_fragment",
+      "sha256": "1306ce3ff48638906b1c1f7dbdd6a0e9b592a1646cffa3b29627140e1f960349",
+      "bytes": 1523
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_b325a67.pf_fragment",
+      "sha256": "d9f263465dd002ba3786276043ee9dadf2d4e15897bd0b8a063ad866d5717143",
+      "bytes": 4143
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_b4a861e.pf_fragment",
+      "sha256": "470681602d58eb69a52cfccbcebbdd0b72b10e15531621d95b3dfc4efcff469d",
+      "bytes": 3268
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_b816a2e.pf_fragment",
+      "sha256": "de557f54291d479451b96366d95c12a1cf6ea5febdda5b73561edac6ab55861a",
+      "bytes": 2532
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_bace2e2.pf_fragment",
+      "sha256": "8ac8a6e736ae588224df52a50590246ce237f5d71d9f0900dadea2a16927658b",
+      "bytes": 1118
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_cb24923.pf_fragment",
+      "sha256": "687209a33a3667d5fc327733f70d98a1f3ec4d1362d2522bf813d2b32eec19a3",
+      "bytes": 1764
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_d257e82.pf_fragment",
+      "sha256": "5531f53a41b10173f58c429e8e7c151fe4f6fbfb8c29a325cb7ea86fd1d42a26",
+      "bytes": 4868
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_dadbc1b.pf_fragment",
+      "sha256": "5b13cd4869edf5ded790d3968e21e925727b8f789e27b51085d0ba6b0cb2c03c",
+      "bytes": 2189
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_db7205a.pf_fragment",
+      "sha256": "2d8233c3ea0f3d785dafa40ed89521adb3ac3120f0b4a9b96a2d3eb6707f5b87",
+      "bytes": 5164
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_de4bee6.pf_fragment",
+      "sha256": "4f25d2be37f7d154e76111a8d1f13f1ec84e4a5862953abdc4cb266dc74e3503",
+      "bytes": 2663
+    },
+    {
+      "route": "/pagefind/fragment/zh-cn_f5352d5.pf_fragment",
+      "sha256": "58def3a39c07eac71caed378a43bc01fbd391c86f21257720e2445befb251673",
+      "bytes": 5176
+    },
+    {
+      "route": "/pagefind/index/en_6258d2e.pf_index",
+      "sha256": "2d4c3b9ea89b32ef7b05b80608c744341cefd8f3a4eee11cb095d2290492ea82",
+      "bytes": 31569
+    },
+    {
+      "route": "/pagefind/index/en_6313c49.pf_index",
+      "sha256": "dc224fb0ffc0a0f1d14b47008fc5a57b458ee24524de261ce98f1f58dbd169b2",
+      "bytes": 11274
+    },
+    {
+      "route": "/pagefind/index/en_a227e5c.pf_index",
+      "sha256": "bc11e95c0e2ebeb6d352bee1f596d6a04737721eb183f2d41cd982adb460cf75",
+      "bytes": 32769
+    },
+    {
+      "route": "/pagefind/index/es_17a2e93.pf_index",
+      "sha256": "2be6cfb919080a8439065e92a32f77d51efca086caacc62f2ca6863eb9bcae8b",
+      "bytes": 36361
+    },
+    {
+      "route": "/pagefind/index/es_532b353.pf_index",
+      "sha256": "2527eaa81761b58db4dca760a3c40ef8da900a7b1a6168be6ce0d7b52f82abce",
+      "bytes": 16306
+    },
+    {
+      "route": "/pagefind/index/es_7eaeb55.pf_index",
+      "sha256": "1e5bf7a19fd5ae3370f9c6cd5b1c153e89a06165ecc9c7faef56b08527e704b8",
+      "bytes": 34446
+    },
+    {
+      "route": "/pagefind/index/ja_5eefdc4.pf_index",
+      "sha256": "ac5b1b0cc3894a632cec42c515833b5eb85e502071c62990dfa14c8a4cf21a1d",
+      "bytes": 13288
+    },
+    {
+      "route": "/pagefind/index/ja_833d3f1.pf_index",
+      "sha256": "51cea8207950b038360014585ec5d20bcac6f18409ebf407cbfa473a44b803e3",
+      "bytes": 35221
+    },
+    {
+      "route": "/pagefind/index/ja_95bd4cf.pf_index",
+      "sha256": "d63f59946f83f59eb14f9861abbbb373ddd72ae7e126487c8adc5c9630aacca4",
+      "bytes": 40899
+    },
+    {
+      "route": "/pagefind/index/pt-br_57a0eff.pf_index",
+      "sha256": "3de34b7380c3bcb80f06cb7bf653b55e2298e5cad347a965f7c119262c0187ab",
+      "bytes": 39861
+    },
+    {
+      "route": "/pagefind/index/pt-br_c7a1bed.pf_index",
+      "sha256": "97c50992378bb317989443f32537a7aeadd631b1252b06e5e3c73e17bce896de",
+      "bytes": 11525
+    },
+    {
+      "route": "/pagefind/index/pt-br_e3b3af9.pf_index",
+      "sha256": "4af138b7f01523e679be05c0f7bc57044d343df3ebeddd651fd2945e56fbeabc",
+      "bytes": 37217
+    },
+    {
+      "route": "/pagefind/index/zh-cn_ea42dbf.pf_index",
+      "sha256": "529b4f0b3fcb9d9535416ca8262a489ff4a6775a606758fb9cad818e5346aa06",
+      "bytes": 9022
+    },
+    {
+      "route": "/pagefind/index/zh-cn_f34d354.pf_index",
+      "sha256": "77fa60f55e32ecc865d79b9af2618240340ba00dfc41b4a232cbfa1b82f553d2",
+      "bytes": 31993
+    },
+    {
+      "route": "/pagefind/index/zh-cn_f6b0cbc.pf_index",
+      "sha256": "a65d93a48ffd986623e08e056dd5fd470d6db537eda345c269c6af99777c9b36",
+      "bytes": 32029
+    },
+    {
+      "route": "/pagefind/pagefind-component-ui.css",
+      "sha256": "de389c7e5d87d6e2b10d65fb1e36e8989a12a2ad8dd6239b7e070d81fb5d8b0d",
+      "bytes": 41830
+    },
+    {
+      "route": "/pagefind/pagefind-component-ui.js",
+      "sha256": "958620129dd14bd851805daeb12ce708bd63b9287325d1d5ae6f73a04d1723f8",
+      "bytes": 175488
+    },
+    {
+      "route": "/pagefind/pagefind-entry.json",
+      "sha256": "418cfdf631bd6f6d27b2070877dd1186490bba7bd9396c201e0cfb7945235040",
+      "bytes": 425
+    },
+    {
+      "route": "/pagefind/pagefind-highlight.js",
+      "sha256": "04741266a86911636cefc41c8b407e380dda99b7d208724f700f94cdf57e37b5",
+      "bytes": 44352
+    },
+    {
+      "route": "/pagefind/pagefind-modular-ui.css",
+      "sha256": "653ab29e4de5629f6ddf5f6fcdf5d2b3eb539a8c07fff8a56b8ce2156a570788",
+      "bytes": 7336
+    },
+    {
+      "route": "/pagefind/pagefind-modular-ui.js",
+      "sha256": "f3efa0f74b305ccab0bc9edc7c09ab69867180b4c43093d84bb9b508ac4ec32c",
+      "bytes": 14634
+    },
+    {
+      "route": "/pagefind/pagefind-ui.css",
+      "sha256": "e113b816110ed07b017613e901addfe635350f2a5b84990aa76c91a74b158084",
+      "bytes": 14482
+    },
+    {
+      "route": "/pagefind/pagefind-ui.js",
+      "sha256": "2efa93f2e80a199ca742a69bd4cfffabc5c591ebe7763f64f7c655fd00d2209f",
+      "bytes": 119987
+    },
+    {
+      "route": "/pagefind/pagefind-worker.js",
+      "sha256": "4ca50d25bcab9e1c3afbc00ab5f7761114e83c8fc1b83d38655af1558b650c2a",
+      "bytes": 41255
+    },
+    {
+      "route": "/pagefind/pagefind.en_e63128fa81.pf_meta",
+      "sha256": "c33e7a07d365510bdb361e454887f1479afc254920e7d6ab7a456efee743e49e",
+      "bytes": 434
+    },
+    {
+      "route": "/pagefind/pagefind.es_7b31166f6d.pf_meta",
+      "sha256": "51a9045276fcbac53a6a83823a975528cc8cfde75bc14b12e3104b7c931873de",
+      "bytes": 436
+    },
+    {
+      "route": "/pagefind/pagefind.ja_e287b1c7bd.pf_meta",
+      "sha256": "9ca2926e41fdb9890c62c38c7d78146b92a3275826b824c39801eb357f1d425b",
+      "bytes": 445
+    },
+    {
+      "route": "/pagefind/pagefind.js",
+      "sha256": "252d272bd34d483d19a752060f6a065114d15ab12c42d8f905ca565e2768a009",
+      "bytes": 45555
+    },
+    {
+      "route": "/pagefind/pagefind.pt-br_e6bf203835549.pf_meta",
+      "sha256": "f2a3a0901b313bf31bf39af82af6a2e6787625d96ee5624b4e6c6ab5cf04636c",
+      "bytes": 443
+    },
+    {
+      "route": "/pagefind/pagefind.zh-cn_a6f9f3978228a.pf_meta",
+      "sha256": "5663bb95f5ade1f76025cf7cc5ad8884b6621b5f55faa83c3f57a47b47c36703",
+      "bytes": 450
+    },
+    {
+      "route": "/pagefind/wasm.en.pagefind",
+      "sha256": "6c8406154b5d460fc8b6cdbf2c99c008c43c465efdb1f9c15c192f5cf30dcd85",
+      "bytes": 72740
+    },
+    {
+      "route": "/pagefind/wasm.es.pagefind",
+      "sha256": "d1d08e3f822c8f2e6489ea27eb0880e261b4be19fae230a32251f173ea34d9a1",
+      "bytes": 72349
+    },
+    {
+      "route": "/pagefind/wasm.pt-br.pagefind",
+      "sha256": "7fc005a23d79d120debb8bf7d2489b3e21fd97ed4927420513b314c7c4e85907",
+      "bytes": 72100
+    },
+    {
+      "route": "/pagefind/wasm.unknown.pagefind",
+      "sha256": "2533da887ac06de36813d031310af0f737daadacc931775e342aa5a3857a4959",
+      "bytes": 68199
+    },
+    {
+      "route": "/pt-br/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "157bf6058438b9e6781e6c6c97103cae55145c270f61d628380980f7a0bfe09a",
+      "bytes": 3508
+    },
+    {
+      "route": "/pt-br/blog/your-first-anki-deck/index.md",
+      "sha256": "539f03df2a9742030bc99fb07ee48880d573668212f14b19f3e0a1356a6e30b0",
+      "bytes": 3467
+    },
+    {
+      "route": "/pt-br/docs/ai-anki-cards/index.md",
+      "sha256": "befedb5ad91afd444191a8637da2d6fcd68f2c38fe9f66f4cb1f4ecb3c5872f2",
+      "bytes": 4870
+    },
+    {
+      "route": "/pt-br/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "c98ec976915b43039d579d36ac1c7a23ec2804a1bd8aa7a11f164755826c9d8a",
+      "bytes": 4827
+    },
+    {
+      "route": "/pt-br/docs/api/index.md",
+      "sha256": "eea15016df138379457402afc4cb5eb552914634d7b00e4ad4874827c1f5d893",
+      "bytes": 2371
+    },
+    {
+      "route": "/pt-br/docs/build-guarantees/index.md",
+      "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa",
+      "bytes": 6678
+    },
+    {
+      "route": "/pt-br/docs/cards/index.md",
+      "sha256": "fbec8e6e531a78944a2a248b3e08f89a929d9e57013947f50c9d90654051d055",
+      "bytes": 3151
+    },
+    {
+      "route": "/pt-br/docs/compatibility/index.md",
+      "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+      "bytes": 4003
+    },
+    {
+      "route": "/pt-br/docs/concepts/index.md",
+      "sha256": "466336d94d0e35ea6ecc8b1a7f88d54a41908ea15b8d71e9b3990d8c6d809553",
+      "bytes": 4126
+    },
+    {
+      "route": "/pt-br/docs/csv-to-anki/index.md",
+      "sha256": "99c31d0a161dc92ab8a84506c46ae7186c2dc4e1c1b6487461f531d892588a5a",
+      "bytes": 6113
+    },
+    {
+      "route": "/pt-br/docs/custom-notetypes/index.md",
+      "sha256": "8112b3683338b2ea4407197cb42d92058aab757b098a9fee1c2a290da65ab085",
+      "bytes": 3921
+    },
+    {
+      "route": "/pt-br/docs/development/index.md",
+      "sha256": "256264e9e0723f07ef493842e2dc0570c239dd7a4862aee5b7e6c2e9e7fff1c1",
+      "bytes": 2178
+    },
+    {
+      "route": "/pt-br/docs/genanki-migration/index.md",
+      "sha256": "e2561e93b9fe7b2fe5b65d557070bd8461058631d1714da1493da59190871ab5",
+      "bytes": 4088
+    },
+    {
+      "route": "/pt-br/docs/image-occlusion/index.md",
+      "sha256": "52c32f7ae04e20fbc1ce364d923f88720b3fdd428746e9a572f70f1fd53be07d",
+      "bytes": 4155
+    },
+    {
+      "route": "/pt-br/docs/index.md",
+      "sha256": "8eb6e083e2825d58ba7f45c0535a5d39e5ce879f6760f03a82a2e1597734ec24",
+      "bytes": 3863
+    },
+    {
+      "route": "/pt-br/docs/installation/index.md",
+      "sha256": "a4e048e711cc2b6b627830fef6a114586abbab0c3974ccd11309873e5ae205be",
+      "bytes": 2286
+    },
+    {
+      "route": "/pt-br/docs/json-to-anki/index.md",
+      "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+      "bytes": 11905
+    },
+    {
+      "route": "/pt-br/docs/languages/index.md",
+      "sha256": "5ae18762cb7c406ef648adbc31777a223e129727499d3083c8dae127cadf49f7",
+      "bytes": 2423
+    },
+    {
+      "route": "/pt-br/docs/media/index.md",
+      "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992",
+      "bytes": 9379
+    },
+    {
+      "route": "/pt-br/docs/node-api/index.md",
+      "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+      "bytes": 14985
+    },
+    {
+      "route": "/pt-br/docs/node-quickstart/index.md",
+      "sha256": "39be759ea766c72ed9cefaa0de126ac6143a9c4f166031516a15cce7ef7f11b8",
+      "bytes": 2541
+    },
+    {
+      "route": "/pt-br/docs/python-api/index.md",
+      "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328",
+      "bytes": 10520
+    },
+    {
+      "route": "/pt-br/docs/python-diagnostics/index.md",
+      "sha256": "6fabf0647bbffeb9be03f960b842e24fd41c9e5f191b62b1c75d54b69e41314f",
+      "bytes": 6012
+    },
+    {
+      "route": "/pt-br/docs/python-migration/index.md",
+      "sha256": "8bf727800d7731622011849010832598f44efdf7ccc6f1cbb88d3bbeb80225ca",
+      "bytes": 2488
+    },
+    {
+      "route": "/pt-br/docs/python-quickstart/index.md",
+      "sha256": "1af1aa375d9b8921627b6bf6244e4af65f2f9e91b07ab7ad47a1b6a528df9a48",
+      "bytes": 2602
+    },
+    {
+      "route": "/pt-br/docs/quickstart/index.md",
+      "sha256": "2218cb33224bfbe1c126b9ff625b717efd67a836dbae439ba46d422ff9ff609c",
+      "bytes": 2049
+    },
+    {
+      "route": "/pt-br/docs/rust-api/index.md",
+      "sha256": "519e42693a5323ae999fc3404afdc99160b044c5891a8265b2daae2724f6694d",
+      "bytes": 10681
+    },
+    {
+      "route": "/pt-br/docs/rust-guide/index.md",
+      "sha256": "34ae80ef14e2f28fe44eb369fca33ae4fd6e9e560e17d08ec99a19491fc1cec6",
+      "bytes": 6448
+    },
+    {
+      "route": "/pt-br/docs/templates/index.md",
+      "sha256": "3b1c1ce70b969eccb92a067ffc852d66309668c1e07260c36848957acc16daa9",
+      "bytes": 6401
+    },
+    {
+      "route": "/pt-br/docs/troubleshooting/index.md",
+      "sha256": "e9963adc2af3fe64e74d7d799905d4d0a6864a9c7a99d2bbd81ddad4c6de5caf",
+      "bytes": 5491
+    },
+    {
+      "route": "/pt-br/docs/updates/index.md",
+      "sha256": "9dcb9de8b4c7af06f7faf76293c7d7bdbd9de98c7f7ceb3d2decbaedfca30fc7",
+      "bytes": 9125
+    },
+    {
+      "route": "/pt-br/llms.txt",
+      "sha256": "36bdca3990654a6b9825501c8189efcd9cf14f5f84552e7445e753d8a6813c52",
+      "bytes": 7117
+    },
+    {
+      "route": "/pt-br/rss.xml",
+      "sha256": "7de5d6cc448b733d377a4568373066462884b929145a57d7809e05e7cc891419",
+      "bytes": 1084
+    },
+    {
+      "route": "/robots.txt",
+      "sha256": "e417e293f6ca15c28a5530a70bd12f00306cce1aa3c3c1a6d61e67ffcef67ee0",
+      "bytes": 73
+    },
+    {
+      "route": "/rss.xml",
+      "sha256": "993dc07f6dc101e3f2c7ed53e726c19373a0e97bb2bcf4721ced043d444d1229",
+      "bytes": 1000
+    },
+    {
+      "route": "/sitemap-0.xml",
+      "sha256": "cdf2e3904b5fb59eb806391559f2648a6b9c5c100df5813ad01bb16cb7336ed4",
+      "bytes": 91836
+    },
+    {
+      "route": "/sitemap-index.xml",
+      "sha256": "9f0c2f6900a2cb53fc7da071d58cba8f92c3c35fcf11fc02c3ea9abd82fe6e57",
+      "bytes": 184
+    },
+    {
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "50cd652ceef20a48a4c74610a19398b231959ffb9d4dd4076b7337ff7e315161",
+      "bytes": 2733
+    },
+    {
+      "route": "/zh-cn/blog/your-first-anki-deck/index.md",
+      "sha256": "e82bf53033a3cd2a15d4e2c92dcc936b0be2fb575b83f8e12e78f9e40ef28291",
+      "bytes": 2912
+    },
+    {
+      "route": "/zh-cn/docs/ai-anki-cards/index.md",
+      "sha256": "d41495f72cf015aaa880eb9d85b41be3002512d9997c148bee6da0b4b3086ac6",
+      "bytes": 4093
+    },
+    {
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "461f89203af0dc34a83d059cb9d4d3903ad5d3e163a502cfe2dd5b5566a685fd",
+      "bytes": 3607
+    },
+    {
+      "route": "/zh-cn/docs/api/index.md",
+      "sha256": "22b2a28e881312cdf227c8b23bb9fc7c451c06890980ff47cc0979c40ed0a0bd",
+      "bytes": 1995
+    },
+    {
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "sha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22",
+      "bytes": 4851
+    },
+    {
+      "route": "/zh-cn/docs/cards/index.md",
+      "sha256": "46ceeb701e734b6f104492c2eef7678596fcfa768407346cc53aa00094dac378",
+      "bytes": 2839
+    },
+    {
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "sha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+      "bytes": 3114
+    },
+    {
+      "route": "/zh-cn/docs/concepts/index.md",
+      "sha256": "b964d090bf2700988229952e67365f4a3f4948328b925ba0f50a54783df89778",
+      "bytes": 3065
+    },
+    {
+      "route": "/zh-cn/docs/csv-to-anki/index.md",
+      "sha256": "be2d5b64a5df7d603129517e460cad11fbac5c6a4e7037b94381fd94e0041428",
+      "bytes": 5493
+    },
+    {
+      "route": "/zh-cn/docs/custom-notetypes/index.md",
+      "sha256": "f34dd1c38da4a42edbdceff9116ea9da2b09fb734a65a41fb317cd656741d682",
+      "bytes": 3186
+    },
+    {
+      "route": "/zh-cn/docs/development/index.md",
+      "sha256": "956050812e0c79f55142ea8365b5950c92200361fc213083eb4e8deadbf7f07a",
+      "bytes": 1813
+    },
+    {
+      "route": "/zh-cn/docs/genanki-migration/index.md",
+      "sha256": "91dd3c944180673b82f7fcd52b7bb4f24426e859398de6c6b98ca9c83bfbca10",
+      "bytes": 3280
+    },
+    {
+      "route": "/zh-cn/docs/image-occlusion/index.md",
+      "sha256": "9e799305a38afa3142a800041f4305b28234ef92c606f7cf1490e7aade238e88",
+      "bytes": 3628
+    },
+    {
+      "route": "/zh-cn/docs/index.md",
+      "sha256": "30ee017d9f493d9ac91cb82a4c61c05001d36c96fb57819394134b9151636a98",
+      "bytes": 3156
+    },
+    {
+      "route": "/zh-cn/docs/installation/index.md",
+      "sha256": "c92a6acb0d2d7763e39d59b1d6e6cb9b75b9f0ba2342c94ca417a9737b69fb98",
+      "bytes": 1762
+    },
+    {
+      "route": "/zh-cn/docs/json-to-anki/index.md",
+      "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+      "bytes": 11012
+    },
+    {
+      "route": "/zh-cn/docs/languages/index.md",
+      "sha256": "bd745fd45a07f2e3cbc7a3c326ce0f4af98466ba7dd96384e298d75e206ce504",
+      "bytes": 2049
+    },
+    {
+      "route": "/zh-cn/docs/media/index.md",
+      "sha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c",
+      "bytes": 7853
+    },
+    {
+      "route": "/zh-cn/docs/node-api/index.md",
+      "sha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9",
+      "bytes": 12167
+    },
+    {
+      "route": "/zh-cn/docs/node-quickstart/index.md",
+      "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+      "bytes": 2260
+    },
+    {
+      "route": "/zh-cn/docs/python-api/index.md",
+      "sha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0",
+      "bytes": 8567
+    },
+    {
+      "route": "/zh-cn/docs/python-diagnostics/index.md",
+      "sha256": "f2cf9f19e3820a65520b68f835f24ee2c7216f191393eb7496e2b25ba49a43ee",
+      "bytes": 4729
+    },
+    {
+      "route": "/zh-cn/docs/python-migration/index.md",
+      "sha256": "b974fffe335a99894d210100f0171c21e7299ae013265eec61cd085b4344a890",
+      "bytes": 1863
+    },
+    {
+      "route": "/zh-cn/docs/python-quickstart/index.md",
+      "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+      "bytes": 2302
+    },
+    {
+      "route": "/zh-cn/docs/quickstart/index.md",
+      "sha256": "e8771b9e3b9b0e70e7ca09cbebc74fc6a80489d113f8d696521502beb0ceed23",
+      "bytes": 1828
+    },
+    {
+      "route": "/zh-cn/docs/rust-api/index.md",
+      "sha256": "5f7cb36f50163e1ab80da13727d6808a8acc92f7b309155883a61d264eeec572",
+      "bytes": 8689
+    },
+    {
+      "route": "/zh-cn/docs/rust-guide/index.md",
+      "sha256": "f1ecb13c0ba1c9c8468daccbc20caf7a19e6eed9e0a6ac91dc04bd52bfc994f7",
+      "bytes": 5126
+    },
+    {
+      "route": "/zh-cn/docs/templates/index.md",
+      "sha256": "31d7234cdf081f6a508a2247e7c06232ceb83c8ccaceb4a8640e4149f72e6157",
+      "bytes": 5533
+    },
+    {
+      "route": "/zh-cn/docs/troubleshooting/index.md",
+      "sha256": "c161530b7a94a4f5cc66f8e4a7077a0e8301d5fbe904951ac7ed395e3161fabf",
+      "bytes": 3939
+    },
+    {
+      "route": "/zh-cn/docs/updates/index.md",
+      "sha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408",
+      "bytes": 7506
+    },
+    {
+      "route": "/zh-cn/llms.txt",
+      "sha256": "e8e73326e686238dd3adbfbf311362762bfd5aa0a54a6b3f936b13aaa576dbf1",
+      "bytes": 5885
+    },
+    {
+      "route": "/zh-cn/rss.xml",
+      "sha256": "9255bb5c8482604f551b2a5c0acaf58be39de364d0e159057b9d5b79bfea3ac0",
+      "bytes": 1019
+    }
+  ]
+}

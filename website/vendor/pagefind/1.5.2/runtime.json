@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "version": "1.5.2",
+  "sourcePackage": "@pagefind/linux-x64",
+  "sourceTarball": "https://registry.npmjs.org/@pagefind/linux-x64/-/linux-x64-1.5.2.tgz",
+  "sourceIntegrity": "sha512-V+tFqHKXhQKq/WqPBD67AFy7scn1/aZID00ws4fSDd+1daSi5UHR9VVlRrOUYKxn3VuFQYRD7lYXdZK1WED1YA==",
+  "binarySha256": "70cb6d23d6508bb18e77fd5403e99d7ede0ae9d2eef1ab9f049411e0c12ec380",
+  "license": "MIT; see LICENSE",
+  "purpose": "Use one exact official browser runtime on every build host. Pagefind platform packages embed different code/data bytes despite the same version. No WebAssembly instructions are modified.",
+  "regenerate": [
+    "Verify the locked @pagefind/linux-x64 package tarball integrity.",
+    "Run its pagefind_extended binary against HTML fixtures for all released languages.",
+    "Copy the resulting wasm.*.pagefind files unchanged, update this inventory, and independently review actual browser search on root/prefix."
+  ],
+  "files": {
+    "wasm.de.pagefind": {
+      "sha256": "f1e251bdaf42bd2ded77e7dd41460ebe237cba885ec8f3094f4be995c1ebbc57",
+      "bytes": 70562
+    },
+    "wasm.en.pagefind": {
+      "sha256": "bb16c9e6d3d214d4d05cccca51df7b487b86b3657318da767f6ca9e0a2e7259d",
+      "bytes": 72209
+    },
+    "wasm.es.pagefind": {
+      "sha256": "c00d45e7242a60fc25bea534ddacea609cff5fd6138fb9f84194f7b68ed3ecfa",
+      "bytes": 71934
+    },
+    "wasm.pt-br.pagefind": {
+      "sha256": "274994577df8da8d1945043b05eb3708abbaff717a00219a2f87e66f8705e6d5",
+      "bytes": 71693
+    },
+    "wasm.unknown.pagefind": {
+      "sha256": "3a74cefceacd066e8d3bc8c52e7bc1c869544ca3d9031b44a9b7136356d5d7f4",
+      "bytes": 68024
+    }
+  }
+}

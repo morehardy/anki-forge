@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/pt_br_technical/search-vocabulary-delta-2026-11-01",
+  "status": "reviewed",
+  "scope": "Independent technical review of the actual Portuguese dictionary delta only; not a claim that final ranking, browser tests or release gates passed.",
+  "bindings": [
+    {
+      "path": "website/search-concepts.json",
+      "sha256": "0ee82384535b45c3f9e46367f62482eb09b9330f3b45255c572b07da185b7a1a"
+    },
+    {
+      "path": "website/search-terms.json",
+      "sha256": "38b69f1f0b58a187b017668cda36ca2edf2c71496dfeb7d1bf6fbb2e93e9eb8a"
+    },
+    {
+      "path": "docs/pt-br/rust-guide.md",
+      "sha256": "6313f3d0d98e69642d0c5095c598a46d3dd9399000c0109ecd5c587487d0b0c4"
+    }
+  ],
+  "previousArtifactDictionary": {
+    "path": "target/remaining-locales/pt-br/prefix-artifact/generated/search-pt-br.json",
+    "sha256": "e63c0ae89fae800ccf369c7c87802334b7fa18d937b3945599c255f03a41d885"
+  },
+  "findings": [
+    "The only concept delta is project-schema with ankiforge-project-v1, ankiforge-project-v2, schema de projeto and formato de projeto. It has no forced page route, intent/role override or score weight. Grouping schema versions as a search topic does not imply acceptance of the old format.",
+    "The only page-term delta is three rust-guide phrases. Explicit v1 rejeitado and v2 sem name no nível superior preserve the actual tool recipe requirement in docs/pt-br/rust-guide.md:66. The caller-parsed generic JSON recipe is not recast as consuming this schema.",
+    "The frozen negative-old-schema boundary is valid after its earlier correction to tool recipes. No query, intent ID, expected page set or threshold was changed by this vocabulary repair."
+  ],
+  "evidenceClarification": "The search-diagnosis original result uses a complete ankiforge-project-v1 matched feature despite that concept being absent from the original artifact. Asked the parent to label this as concept-only intermediate output or add an actual old-concepts/old-terms replay; do not describe it as the full original-before-fix ranking.",
+  "openTechnicalContentIssues": []
+}

@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/spec_review/independent-usage-review-fixes-2026-11-01",
+  "verifier": "website/scripts/post-build-reviews.mjs:verifyPostBuildReviews",
+  "scope": "Independent shape, artifact identity, all evidence and source/dependency binding verification; content conclusions remain in the two reports.",
+  "results": {
+    "prefix": {
+      "schemaVersion": 1,
+      "status": "passed",
+      "environment": "prefix",
+      "inputSha256": "a2618b25656a1b4adfafb3add60ad85b5699b32a3217e01c8e5b125c53a8f833",
+      "configuration": {
+        "site": "https://morehardy.github.io",
+        "base": "/anki-forge",
+        "customDomain": ""
+      },
+      "releaseLocales": [
+        "en",
+        "zh-CN",
+        "es",
+        "pt-BR",
+        "ja",
+        "de"
+      ],
+      "currentManifestSha256": "1067fdcf3d4c9e43c058628d0ad9557a91055c6c0764a1970623072c94097612",
+      "configSha256": "6ef91c607a9898bb651f08c20ad0b09022ed37a16a2f8156ec5e28a4b35e4551",
+      "reports": [
+        {
+          "kind": "usage-tasks",
+          "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-tasks-prefix.json",
+          "sha256": "39180b4bc27f81b8e6db07e06595d5c5b285c6f88b15590a49013a10c8d2c422",
+          "bytes": 560714,
+          "reviewerRun": "/root/spec_review/independent-usage-review-fixes-2026-11-01/prefix",
+          "originManifestSha256": "1067fdcf3d4c9e43c058628d0ad9557a91055c6c0764a1970623072c94097612",
+          "originCommit": "6d4625639fc1477222b41880d29724c162baa3be",
+          "currentManifestSha256": "1067fdcf3d4c9e43c058628d0ad9557a91055c6c0764a1970623072c94097612",
+          "reused": false,
+          "resourceScopeSha256": "5c1045a7b2c7de5f4cdc2907a4745d0ebd275c13c06c18d5f442614513800e64"
+        },
+        {
+          "kind": "machine-read",
+          "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-read-prefix.json",
+          "sha256": "ec4839f1097e38f5265949bafc6d791e4f53bba45779715ccacf8991118f16ed",
+          "bytes": 129147,
+          "reviewerRun": "/root/standards_review/independent-machine-prefix-2026-11-01",
+          "originManifestSha256": "1067fdcf3d4c9e43c058628d0ad9557a91055c6c0764a1970623072c94097612",
+          "originCommit": "6d4625639fc1477222b41880d29724c162baa3be",
+          "currentManifestSha256": "1067fdcf3d4c9e43c058628d0ad9557a91055c6c0764a1970623072c94097612",
+          "reused": false,
+          "resourceScopeSha256": "958353ebc04cbee100115c9a9a60d7aada2d76549ccc890cfa186c79ec993d29"
+        }
+      ]
+    },
+    "root": {
+      "schemaVersion": 1,
+      "status": "passed",
+      "environment": "root",
+      "inputSha256": "a2618b25656a1b4adfafb3add60ad85b5699b32a3217e01c8e5b125c53a8f833",
+      "configuration": {
+        "site": "https://ankiforge.dev",
+        "base": "/",
+        "customDomain": "ankiforge.dev"
+      },
+      "releaseLocales": [
+        "en",
+        "zh-CN",
+        "es",
+        "pt-BR",
+        "ja",
+        "de"
+      ],
+      "currentManifestSha256": "1e2169d3ba2143da73de90a147821aeaea9b6f1e97730e46a2bb83cbf98770b4",
+      "configSha256": "6ef91c607a9898bb651f08c20ad0b09022ed37a16a2f8156ec5e28a4b35e4551",
+      "reports": [
+        {
+          "kind": "usage-tasks",
+          "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/usage-tasks-root.json",
+          "sha256": "5901bfa6871fb48abf620f1b0dbbb32f269f2c8a33566532ccfb1d1437c9bb04",
+          "bytes": 561463,
+          "reviewerRun": "/root/spec_review/independent-usage-review-fixes-2026-11-01/root",
+          "originManifestSha256": "1e2169d3ba2143da73de90a147821aeaea9b6f1e97730e46a2bb83cbf98770b4",
+          "originCommit": "6d4625639fc1477222b41880d29724c162baa3be",
+          "currentManifestSha256": "1e2169d3ba2143da73de90a147821aeaea9b6f1e97730e46a2bb83cbf98770b4",
+          "reused": false,
+          "resourceScopeSha256": "1ca5bb06b704767b3ce1ac0292c558a6f3bbf8c80cba1d33cec60616c6ca2ebd"
+        },
+        {
+          "kind": "machine-read",
+          "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-read-root.json",
+          "sha256": "82cc238a49097fde24fa8468b0c88bed336f41abf1c0c508f7875708edb27374",
+          "bytes": 124331,
+          "reviewerRun": "/root/standards_review/independent-machine-root-2026-11-01",
+          "originManifestSha256": "1e2169d3ba2143da73de90a147821aeaea9b6f1e97730e46a2bb83cbf98770b4",
+          "originCommit": "6d4625639fc1477222b41880d29724c162baa3be",
+          "currentManifestSha256": "1e2169d3ba2143da73de90a147821aeaea9b6f1e97730e46a2bb83cbf98770b4",
+          "reused": false,
+          "resourceScopeSha256": "bb62a2cdd6ec7359ad5c3b2fc4795224ac357664160c261b05e3276c7e22de49"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,70 @@
+✔ current release: a further locale needs only catalogs, model data and prompt data (70.086541ms)
+file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:17
+  if (new Set(snapshot.locales).size !== snapshot.locales.length) throw new Error('Duplicate release locale');
+                                                                        ^
+
+Error: Duplicate release locale
+    at validateReleaseLocales (file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:17:73)
+    at file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:23:31
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:643:26
+    at async file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/[eval1]:2:46
+
+Node.js v24.19.0
+✖ all configured languages released: a further locale needs only catalogs, model data and prompt data (57.937416ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 196.348084
+
+✖ failing tests:
+
+test at website/scripts/third-locale.test.mjs:66:143
+✖ all configured languages released: a further locale needs only catalogs, model data and prompt data (57.937416ms)
+  Error: Command failed: /Users/hp/.nvm/versions/node/v24.19.0/bin/node --input-type=module -e 
+      const { pages, docGroups, navigation } = await import("file:///var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/site-model.mjs");
+      const { catalogs } = await import("file:///var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/src/i18n/messages.mjs");
+      const { renderPrompt } = await import("file:///var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/src/lib/ai-quickstart.mjs");
+      const { readFile } = await import('node:fs/promises');
+      const data = JSON.parse(await readFile(new URL("file:///var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/docs/ai-quickstart.json"), 'utf8'));
+      const locale = "pt-BR";
+      console.log(JSON.stringify({
+        catalogs: Object.keys(catalogs),
+        pages: pages.filter(page => page.type !== 'article').map(page => ({ id: page.id, type: page.type, title: page.title[locale], description: page.description[locale], metadata: page.metadata[locale] })),
+        compatibility: pages.filter(page => Object.hasOwn(page, 'en') || Object.hasOwn(page, 'zh')).map(page => page.id),
+        groups: docGroups.map(group => group.labels[locale]),
+        navigation: navigation.map(item => item.label[locale]),
+        prompt: renderPrompt(data, 'rust', '', locale),
+      }));
+  file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:17
+    if (new Set(snapshot.locales).size !== snapshot.locales.length) throw new Error('Duplicate release locale');
+                                                                          ^
+  
+  Error: Duplicate release locale
+      at validateReleaseLocales (file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:17:73)
+      at file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:23:31
+      at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+      at async node:internal/modules/esm/loader:643:26
+      at async file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/[eval1]:2:46
+  
+  Node.js v24.19.0
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:942:11)
+      at execFileSync (node:child_process:978:15)
+      at probe (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/third-locale.test.mjs:63:21)
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/third-locale.test.mjs:67:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    status: 1,
+    signal: null,
+    output: [ null, '', "file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:17\n  if (new Set(snapshot.locales).size !== snapshot.locales.length) throw new Error('Duplicate release locale');\n                                                                        ^\n\nError: Duplicate release locale\n    at validateReleaseLocales (file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:17:73)\n    at file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:23:31\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/[eval1]:2:46\n\nNode.js v24.19.0\n" ],
+    pid: 17928,
+    stdout: '',
+    stderr: "file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:17\n  if (new Set(snapshot.locales).size !== snapshot.locales.length) throw new Error('Duplicate release locale');\n                                                                        ^\n\nError: Duplicate release locale\n    at validateReleaseLocales (file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:17:73)\n    at file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/website/locale-model.mjs:23:31\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async file:///private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/anki-forge-third-locale-YrKVLW/[eval1]:2:46\n\nNode.js v24.19.0\n"
+  }

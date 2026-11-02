@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "scope": "Complete PR #66 candidate including six-language copy edits, renewed independent source reviews and source-bound historic heading migrations. Local root and prefix release-candidate artifacts; no deployment claim.",
+  "sourceCommit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+  "inputSha256": "fd6716207f6f5557895553e95f710a27cc66cee6d4bbd1cacf0ddc56b7aceebf",
+  "originalFailure": "https://github.com/morehardy/anki-forge/actions/runs/41394738474/job/125113520550",
+  "sourceReviewEntries": 204,
+  "sourceInputFiles": 259,
+  "changedSourceInputsIndependentlyRead": 65,
+  "retainedNonblockingLinguisticIssues": 32,
+  "headingMigrations": 12,
+  "unitTests": {
+    "passed": 154,
+    "failed": 0,
+    "log": "docs/plans/evidence/website-pr66-final-2026-11-02/unit-tests.log"
+  },
+  "sourceBeforeLog": "docs/plans/evidence/website-pr66-final-2026-11-02/source-before.log",
+  "sourceReports": [
+    "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+    "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json"
+  ],
+  "headingReports": [
+    "docs/plans/evidence/website-pr66-final-2026-11-02/technical-heading-review.json",
+    "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-heading-review.json"
+  ],
+  "freshSdkExecutionEvidence": "docs/plans/evidence/website-pr66-final-2026-11-02/usage-execution-audit.json",
+  "environments": {
+    "prefix": {
+      "status": "passed",
+      "manifestSha256": "2568825da22b987d21c323442d57882b17626f1dfc51a2e33f4d9cc86aad88ec",
+      "engineeringChecks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "browserTests": 52,
+      "rebuildFiles": 397,
+      "usageTasks": 36,
+      "machineTasks": 24,
+      "actualMachineHttpResponses": 96,
+      "reviewedMachineResources": 192,
+      "reviewedUsageResources": 397,
+      "releaseEvidence": "docs/plans/evidence/website-pr66-final-2026-11-02/engineering/prefix/release-evidence.json",
+      "checkReleaseLog": "docs/plans/evidence/website-pr66-final-2026-11-02/engineering/prefix/check-release.log"
+    },
+    "root": {
+      "status": "passed",
+      "manifestSha256": "84f934bc3b63ea20ce0ba994d42f94e6827d2a1488d575d0cb33aa4791011642",
+      "engineeringChecks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "browserTests": 52,
+      "rebuildFiles": 397,
+      "usageTasks": 36,
+      "machineTasks": 24,
+      "actualMachineHttpResponses": 96,
+      "reviewedMachineResources": 192,
+      "reviewedUsageResources": 397,
+      "releaseEvidence": "docs/plans/evidence/website-pr66-final-2026-11-02/engineering/root/release-evidence.json",
+      "checkReleaseLog": "docs/plans/evidence/website-pr66-final-2026-11-02/engineering/root/check-release.log"
+    }
+  },
+  "limitations": [
+    "Independent source work is an explicit delta review with verified prior input/report lineage; unchanged long-form prose is not claimed as newly reread.",
+    "The 32 retained minor/preference language observations are nonblocking; no unresolved major or critical issue was accepted.",
+    "Loopback HTTP and local browser evidence does not establish production hosting behavior.",
+    "The original reviewed manifest is preserved; CI must independently recheck the new commit with the exact same inputs and reviewed resource bytes."
+  ]
+}

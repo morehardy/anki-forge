@@ -1,0 +1,16 @@
+FAIL: six MIME literals in two German API pages, HTML text/code and machine Markdown checked.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: MIME wildcard literals must survive actual HTML and machine rendering
+    at file:///Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-ja-de-2026-11-01/de/verify-mime-literals.mjs:31:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

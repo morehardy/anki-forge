@@ -1,0 +1,23 @@
+{
+  "status": "reproduced",
+  "oldSha256": "febd0e56a509584dd0e97d5a0617ddb300175219a91bee41244de4760138cee5",
+  "newSha256": "41587ad11c9c157d81c4701140a22e1ece54116a645702da60bac3389f6a494e",
+  "parsedEqual": true,
+  "oldLanguageOrder": [
+    "pt-br",
+    "zh-cn",
+    "de",
+    "es",
+    "en",
+    "ja"
+  ],
+  "newLanguageOrder": [
+    "pt-br",
+    "en",
+    "ja",
+    "es",
+    "de",
+    "zh-cn"
+  ],
+  "cause": "Pagefind serializes the languages object in nondeterministic key order. Actual search metadata is identical, but strict reviewed-resource bytes changed."
+}

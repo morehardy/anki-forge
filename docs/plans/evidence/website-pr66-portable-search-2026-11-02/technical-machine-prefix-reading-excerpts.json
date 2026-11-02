@@ -1,0 +1,472 @@
+{
+  "scope": "Exact excerpts selected from actual current HTTP response bodies for independent scoped rereading; no automatic pass.",
+  "records": [
+    {
+      "locale": "en",
+      "task": "llms-entry",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__llms.txt",
+      "excerpt": "# Anki Forge\n\n> Anki Forge generates Anki APKG decks from code using Rust, Node / TypeScript or Python.\n\nCurrent public package version: 0.3.1. Exporting a deck does not require Anki. The APIs available in published packages differ from those in source builds. For updates, keep the original APKG from the previous release; Anki import settings and newer local edits can affect the result.\n\n- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)\n- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)\n- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)\n"
+    },
+    {
+      "locale": "en",
+      "task": "python-install",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__docs__python-quickstart__index.md",
+      "header": [
+        "# Generate Anki flashcards with Python",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/docs/python-quickstart/",
+        "Language: en",
+        "Description: Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki."
+      ],
+      "paragraphs": [
+        "\nOn Windows, activate with `.venv\\Scripts\\Activate.ps1`. Use ordinary CPython 3.11 or later and a matching platform wheel; CPython 3.11–3.14 is covered by recorded release checks; see [verified environments](https://morehardy.github.io/anki-forge/docs/compatibility/).",
+        "Open the persistent `spanish.apkg` in Anki. It contains **hola → hello** in **Spanish**. Keep namespace `spanish` and note key `es:hola` stable for later edits. Exporting does not require Anki to be installed."
+      ]
+    },
+    {
+      "locale": "en",
+      "task": "node-api",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__docs__node-api__index.md",
+      "header": [
+        "# Node and TypeScript API",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/docs/node-api/",
+        "Language: en",
+        "Description: Public methods, async behavior, build options and reports."
+      ],
+      "paragraphs": [
+        "| API | Result |\n| --- | --- |\n| `await project.build(BuildOptions.to(path))` | BuildOutput owning persistent artifact |\n| `await project.build(BuildOptions.temporary())` | BuildOutput owning temporary artifact |\n| `await project.compare(CompareOptions.against(path))` | Completed ComparisonReport, including blocked policy |\n| `options.updateFrom(path)` | Configure update from complete original distribution evidence |\n| `options.inspectLimits(limits)` | Override independent inspection counters |\n| `options.updatePolicy(policy)` | Configure update/compare risk policy |",
+        "A successful output exposes `.artifact`, `.report` and `.snapshot()`. The `BuildReport` exposes `.counts`, `.baselineCounts`, `.durationMs`, `.diagnostics`, `.comparison`, and `.snapshot()`; it has no outcome or file ownership. `.comparison` is a `ComparisonReport` or `null`, using the same class as `project.compare()`. Comparisons expose `.findings`, `.highestRisk`, `.policy`, `.diagnostics`, and `.snapshot()`. Snapshot field names mirror Rust JSON, including `allows_publication` and `schema_version`; they are not camel-cased copies of the native report. Use `report.comparison.highestRisk` on a comparison object, or `report.snapshot().comparison.highest_risk` in its JSON snapshot, after checking for `null`.",
+        "Relative media and bundle paths are anchored when the read is invoked; build destinations and baselines are anchored when options are constructed. On POSIX, symbolic links followed by `..` retain filesystem traversal semantics. `persistTo` anchors relative destinations to the working directory captured by the original build, including on cloned and persisted handles. Later working directory changes do not redirect these paths.",
+        "Keep an artifact owner alive while consuming `.path`. `.clone()` creates an independent owner; `await .close()` releases that owner. The last temporary owner deletes its file. `await .persistTo(path)` returns a persistent artifact and leaves the original usable even on failure. Standard Node file streams can read an artifact while you retain its owner.",
+        "Snapshots are frozen JSON data and retain no native files. A persistent file survives owner cleanup. `BuildOutput` cannot be constructed by the caller; it is created only by successful builds.",
+        "`BuildError.snapshot()` preserves failure and publication facts; `BuildError.report` and `CompareError.report` return `BuildReport`, just like `BuildOutput.report`. Use `.baselineCounts` and `.comparison` on these reports; use `.snapshot()` for the snake\\_case JSON fields. A failed comparison can have partial observations and a `null` comparison. `PersistError.publication` records whether the target was already published and whether durability was confirmed. Media/inspection errors retain limit details. Use these machine fields instead of parsing error messages. `ArtifactClosedError` reports use of a closed owner; `NativeLoadError` reports missing, incompatible or stale native packages."
+      ]
+    },
+    {
+      "locale": "en",
+      "task": "json-update",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__docs__json-to-anki__index.md",
+      "header": [
+        "# Generate and update Anki decks from JSON",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/docs/json-to-anki/",
+        "Language: en",
+        "Description: Read JSON with Rust, Python or TypeScript, package images and audio, then review an answer-only APKG update."
+      ],
+      "paragraphs": [
+        "Canonical page: https://morehardy.github.io/anki-forge/docs/json-to-anki/\nLanguage: en\nDescription: Read JSON with Rust, Python or TypeScript, package images and audio, then review an answer-only APKG update.",
+        "Read three biology questions from JSON, add a shared image and audio clip, and export an original APKG plus a reviewed answer-only update. Each release should contain **3 notes, 3 cards and 2 media files**. Choose one SDK below; each is a complete program. Normal export needs no Anki installation.",
+        "\nBoth JSON files contain `namespace`, `deck` and three `notes` with durable `id`, `front` and `back` values. v2 changes only the first answer. The caller parses JSON; Anki Forge handles authoring and APKG generation. For untrusted inputs, validate your application’s schema before constructing notes.",
+        "The selected program prints `output/<language>/v2.apkg`. Keep `v1.apkg` alongside it; `comparison.json` and `review.json` record `RISK.NOTE_CHANGED`, no added or removed notes, and `policy.allows_publication: true` for this answer-only edit. The program checks the policy again on the prepared candidate before publishing. It refuses to reuse an output directory containing either release.",
+        "Use the **original distribution** v1 APKG as the update baseline, never an Anki re-export. Client import matching, local edits and scheduling depend on Anki version, note types and import settings; validate your target client before a release. Importing a package does not remove notes omitted from a later package. A successful compare/build is not a guarantee about every learner’s review state."
+      ]
+    },
+    {
+      "locale": "en",
+      "task": "compatibility-constraints",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__docs__compatibility__index.md",
+      "header": [
+        "# Compatibility and releases",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/docs/compatibility/",
+        "Language: en",
+        "Description: Published packages, verified environments and Anki client conditions."
+      ],
+      "paragraphs": [
+        "| Interface | Package | Runtime and verification |\n| --- | --- | --- |\n| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | Rust 1.92.0 and current stable; packaged consumers on all four supported platforms, plus a fresh public crates.io consumer |\n| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | Node 22.13.0, current 22, 24 and 26; 16 public npm installation, ESM/CJS and TypeScript checks |\n| Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | Ordinary CPython 3.11–3.14; 16 isolated public PyPI wheel installation checks |",
+        "Published native packages cover macOS arm64/x64, Linux x64 GNU/glibc and Windows x64. Package availability alone is not a successful runtime test on every host. The [Node coverage](https://github.com/morehardy/anki-forge/blob/main/bindings/node/COVERAGE.md), [Python coverage](https://github.com/morehardy/anki-forge/blob/main/bindings/python/COVERAGE.md) and release evidence record the exact checks. The successful `0.3.1` release runs are [Rust](https://github.com/morehardy/anki-forge/actions/runs/38371221696), [npm](https://github.com/morehardy/anki-forge/actions/runs/38371222114) and [PyPI](https://github.com/morehardy/anki-forge/actions/runs/38371222047). Other Python implementations, free-threaded interpreters and subinterpreters need separate validation. Browser, Electron, Bun, Alpine/musl and ARM64 Linux/Windows are outside the recorded Node verification scope.",
+        "For updates, retain the previous original distribution APKG. Anki re-exports do not retain the required identity evidence. Omitting a note from a package does not delete it from a learner’s collection. Field/template changes, sort fields, local edits and review history require client-specific testing."
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "task": "llms-entry",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__zh-cn__llms.txt",
+      "excerpt": "# Anki Forge\n\n> Anki Forge 使用 Rust、Node / TypeScript 或 Python 从代码生成 Anki APKG 牌组。\n\n当前公开包版本：0.3.1。 正常导出无需安装 Anki。公开包 API 与源码构建不同。更新时保留上一份原始分发 APKG；Anki 导入设置和较新的本地修改可能影响结果。\n\n- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)\n- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)\n- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)\n"
+    },
+    {
+      "locale": "zh-CN",
+      "task": "python-install",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__zh-cn__docs__python-quickstart__index.md",
+      "header": [
+        "# 用 Python 生成 Anki 卡片",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/zh-cn/docs/python-quickstart/",
+        "Language: zh-CN",
+        "Description: 从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。"
+      ],
+      "paragraphs": [
+        "\nWindows 使用 `.venv\\Scripts\\Activate.ps1` 激活。使用普通 CPython 3.11 或更高版本及匹配的平台 wheel；已有发布检查覆盖 CPython 3.11–3.14，参见[已验证环境](https://morehardy.github.io/anki-forge/zh-cn/docs/compatibility/)。",
+        "在 Anki 中打开持久保存的 `spanish.apkg`，其中 **Spanish** 牌组包含 **hola → hello**。后续编辑时保持命名空间 `spanish` 和笔记键 `es:hola` 不变。导出不需要安装 Anki。"
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "task": "node-api",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__zh-cn__docs__node-api__index.md",
+      "header": [
+        "# Node 与 TypeScript API",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/zh-cn/docs/node-api/",
+        "Language: zh-CN",
+        "Description: 公开方法、异步行为、构建选项和报告。"
+      ],
+      "paragraphs": [
+        "| API | 结果 |\n| --- | --- |\n| `await project.build(BuildOptions.to(path))` | 拥有持久产物的 BuildOutput |\n| `await project.build(BuildOptions.temporary())` | 拥有临时产物的 BuildOutput |\n| `await project.compare(CompareOptions.against(path))` | 完成的 ComparisonReport，包括被阻止的策略 |\n| `options.updateFrom(path)` | 配置基于完整原始分发证据的更新 |\n| `options.inspectLimits(limits)` | 覆盖独立检查计数器 |\n| `options.updatePolicy(policy)` | 配置更新/比较风险策略 |",
+        "成功输出提供 `.artifact`、`.report` 与 `.snapshot()`。`BuildReport` 提供 `.counts`、`.baselineCounts`、`.durationMs`、`.diagnostics`、`.comparison` 和 `.snapshot()`；没有结果或文件所有权。`.comparison` 是 `ComparisonReport` 或 `null`，与 `project.compare()` 使用同一类。比较对象提供 `.findings`、`.highestRisk`、`.policy`、`.diagnostics` 和 `.snapshot()`。快照字段名对应 Rust JSON，包括 `allows_publication` 与 `schema_version`，并非原生报告的 camelCase 副本。检查非 `null` 后，在比较对象上使用 `report.comparison.highestRisk`，在 JSON 快照中使用 `report.snapshot().comparison.highest_risk`。",
+        "相对媒体和模板包路径在调用读取时锚定；构建目标和基线在构建选项时锚定。POSIX 中，符号链接后接 `..` 保留文件系统遍历语义。`persistTo` 将相对目标锚定到原构建捕获的工作目录，包括克隆和持久化句柄。之后的工作目录变化不会重定向这些路径。",
+        "消费 `.path` 时保持产物所有者存活。`.clone()` 创建独立所有者；`await .close()` 释放该所有者。最后一个临时所有者删除文件。`await .persistTo(path)` 返回持久产物，失败时原所有者也仍可用。保留所有者期间，标准 Node 文件流可以读取产物。",
+        "快照是冻结的 JSON 数据，不保留原生文件。持久文件在所有者清理后仍存在。调用方不能构造 `BuildOutput`；它只由成功构建创建。",
+        "`BuildError.snapshot()` 保留失败与发布事实。`BuildError.report` 和 `CompareError.report` 与 `BuildOutput.report` 一样返回 `BuildReport`。报告使用 `.baselineCounts` 和 `.comparison`；snake\\_case JSON 字段通过 `.snapshot()` 访问。失败比较可能只有部分观察结果，且 comparison 为 `null`。`PersistError.publication` 记录目标是否已发布、持久性是否确认。媒体或检查错误保留限制详情。请使用机器字段，不解析错误消息。`ArtifactClosedError` 表示使用已关闭所有者；`NativeLoadError` 表示原生包缺失、不兼容或陈旧。"
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "task": "json-update",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__zh-cn__docs__json-to-anki__index.md",
+      "header": [
+        "# 用 JSON 数据生成并更新 Anki 牌组",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/zh-cn/docs/json-to-anki/",
+        "Language: zh-CN",
+        "Description: 用 Rust、Node 或 Python 读取 JSON，打包图片和音频，再检查仅修改答案的更新。"
+      ],
+      "paragraphs": [
+        "从 JSON 读取三个生物学问题，添加共享图片与音频，导出原始 APKG 和经过检查的仅修改答案的更新。每个版本应包含 **3 条笔记、3 张卡片和 2 个媒体文件**。选择下方任一 SDK，每份都是完整程序。普通导出不需要安装 Anki。",
+        "\n两份 JSON 都包含 `namespace`、`deck` 和三条 `notes`，每条有持久 `id`、`front` 与 `back`。v2 只改变第一个答案。JSON 由调用方解析；Anki Forge 负责内容编写和 APKG 生成。对于不可信输入，创建笔记前应校验应用自己的 schema。",
+        "所选程序输出 `output/<language>/v2.apkg`。将 `v1.apkg` 保留在旁边；`comparison.json` 和 `review.json` 记录 `RISK.NOTE_CHANGED`，没有新增或移除笔记，且对这次仅修改答案的编辑给出 `policy.allows_publication: true`。发布前，程序在预备候选包上再次检查策略。它拒绝复用已包含任一版本的输出目录。",
+        "更新基线必须是**原始分发** v1 APKG，不能使用 Anki 重新导出的文件。客户端导入匹配、本地编辑和调度取决于 Anki 版本、笔记类型与导入设置；发布前验证目标客户端。导入包不会删除后续包中省略的笔记。比较或构建成功不保证每位学习者的复习状态。"
+      ]
+    },
+    {
+      "locale": "zh-CN",
+      "task": "compatibility-constraints",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__zh-cn__docs__compatibility__index.md",
+      "header": [
+        "# 兼容性与发布",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/zh-cn/docs/compatibility/",
+        "Language: zh-CN",
+        "Description: 查看公开包、已验证运行环境和 Anki 客户端条件。"
+      ],
+      "paragraphs": [
+        "| 接口 | 包 | 运行环境与验证 |\n| --- | --- | --- |\n| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | Rust 1.92.0 与当前稳定版；四个支持平台的打包消费者，以及全新的公开 crates.io 消费者 |\n| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | Node 22.13.0、当前 22、24 和 26；16 项公开 npm 安装、ESM/CJS 和 TypeScript 检查 |\n| Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | 普通 CPython 3.11–3.14；16 项隔离的公开 PyPI wheel 安装检查 |",
+        "已发布的原生包覆盖 macOS arm64/x64、Linux x64 GNU/glibc 和 Windows x64。存在安装包并不等于在每台主机上都通过了运行测试。[Node 覆盖记录](https://github.com/morehardy/anki-forge/blob/main/bindings/node/COVERAGE.md)、[Python 覆盖记录](https://github.com/morehardy/anki-forge/blob/main/bindings/python/COVERAGE.md)和发布证据列出具体检查。成功的 `0.3.1` 发布运行分别为 [Rust](https://github.com/morehardy/anki-forge/actions/runs/38371221696)、[npm](https://github.com/morehardy/anki-forge/actions/runs/38371222114) 和 [PyPI](https://github.com/morehardy/anki-forge/actions/runs/38371222047)。其他 Python 实现、自由线程解释器与子解释器需要单独验证。浏览器、Electron、Bun、Alpine/musl 以及 ARM64 Linux/Windows 不在现有 Node 验证范围内。",
+        "更新时保留之前的原始分发 APKG。Anki 重新导出的文件不保留所需标识映射与修订信息。包中不再包含某条笔记，并不会将其从学习者的集合中删除。字段或模板变化、排序字段、本地编辑和复习历史需要针对客户端测试。"
+      ]
+    },
+    {
+      "locale": "es",
+      "task": "llms-entry",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__es__llms.txt",
+      "excerpt": "# Anki Forge\n\n> Anki Forge genera mazos APKG de Anki a partir de código en Rust, Node.js/TypeScript o Python.\n\nVersión actual del paquete público: 0.3.1. La exportación normal no requiere Anki. Las API de los paquetes públicos difieren de las versiones compiladas desde el código fuente. Conserva el APKG original de la distribución anterior para las actualizaciones; las opciones de importación de Anki y los cambios locales más recientes pueden afectar al resultado.\n\n- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)\n- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)\n- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)\n"
+    },
+    {
+      "locale": "es",
+      "task": "python-install",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__es__docs__python-quickstart__index.md",
+      "header": [
+        "# Genera un APKG de Anki con Python",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/es/docs/python-quickstart/",
+        "Language: es",
+        "Description: Instala el wheel publicado de Python y crea tu primer archivo APKG de Anki con un programa completo y claves de nota estables."
+      ],
+      "paragraphs": [
+        "\nEn Windows, actívalo con `.venv\\Scripts\\Activate.ps1`. Usa CPython estándar 3.11 o posterior y un wheel que corresponda a tu plataforma; las comprobaciones de publicación registradas cubren CPython 3.11–3.14. Consulta los [entornos verificados](https://morehardy.github.io/anki-forge/es/docs/compatibility/).",
+        "Abre el archivo persistente `spanish.apkg` en Anki. Contiene **hola → hello** en el mazo **Spanish**. Conserva el espacio de nombres `spanish` y la clave de nota `es:hola` cuando edites el contenido. No necesitas instalar Anki para exportarlo."
+      ]
+    },
+    {
+      "locale": "es",
+      "task": "node-api",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__es__docs__node-api__index.md",
+      "header": [
+        "# API de Node y TypeScript",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/es/docs/node-api/",
+        "Language: es",
+        "Description: Métodos públicos de Node, operaciones asíncronas, opciones de generación, gestión de archivos de salida e informes."
+      ],
+      "paragraphs": [
+        "| API | Resultado |\n| --- | --- |\n| `await project.build(BuildOptions.to(path))` | BuildOutput que mantiene la propiedad de un archivo persistente |\n| `await project.build(BuildOptions.temporary())` | BuildOutput que mantiene la propiedad de un archivo temporal |\n| `await project.compare(CompareOptions.against(path))` | ComparisonReport completado, incluso si la política bloquea la publicación |\n| `options.updateFrom(path)` | Configurar la actualización a partir de las pruebas completas del APKG original de distribución |\n| `options.inspectLimits(limits)` | Modificar los contadores de inspección independientes |\n| `options.updatePolicy(policy)` | Configurar la política de riesgo de actualización y comparación |",
+        "Una salida correcta expone `.artifact`, `.report` y `.snapshot()`. `BuildReport` expone `.counts`, `.baselineCounts`, `.durationMs`, `.diagnostics`, `.comparison` y `.snapshot()`; no contiene el resultado de éxito o fallo ni mantiene vivos archivos. `.comparison` es un `ComparisonReport` o `null`, y utiliza la misma clase que `project.compare()`. Las comparaciones exponen `.findings`, `.highestRisk`, `.policy`, `.diagnostics` y `.snapshot()`. Los nombres de los campos de las instantáneas coinciden con el JSON de Rust, incluidos `allows_publication` y `schema_version`; no son copias en camelCase del informe nativo. Utiliza `report.comparison.highestRisk` en el objeto de comparación, o `report.snapshot().comparison.highest_risk` en su instantánea JSON, después de comprobar que no sea `null`.",
+        "Las rutas relativas de recursos multimedia y paquetes de plantillas se fijan cuando se invoca la lectura; los destinos y los paquetes de referencia de la generación se fijan cuando se construyen las opciones. En POSIX, los enlaces simbólicos seguidos de `..` conservan la semántica de recorrido del sistema de archivos. `persistTo` fija los destinos relativos al directorio de trabajo capturado por la generación original, incluso en identificadores clonados o persistidos. Los cambios posteriores del directorio de trabajo no redirigen esas rutas.",
+        "Mantén vivo un propietario del archivo mientras utilizas `.path`. `.clone()` crea un propietario independiente; `await .close()` libera ese propietario. El último propietario temporal elimina su archivo. `await .persistTo(path)` devuelve un archivo persistente y deja utilizable el original, incluso si falla. Los flujos estándar de archivos de Node pueden leer el archivo mientras conservas su propietario.",
+        "Las instantáneas son datos JSON inmutables y no mantienen vivos archivos nativos. Un archivo persistente sobrevive a la limpieza de su propietario. Quien llama a la API no puede construir `BuildOutput`; solo lo crean las generaciones correctas.",
+        "`BuildError.snapshot()` conserva los datos del fallo y de la publicación; `BuildError.report` y `CompareError.report` devuelven `BuildReport`, como `BuildOutput.report`. Utiliza `.baselineCounts` y `.comparison` en estos informes; usa `.snapshot()` para los campos JSON en snake\\_case. Una comparación fallida puede tener observaciones parciales y una comparación `null`. `PersistError.publication` registra si el destino ya se había publicado y si se confirmó la durabilidad. Los errores multimedia y de inspección conservan detalles de los límites. Utiliza estos campos procesables por máquina en lugar de analizar mensajes de error. `ArtifactClosedError` informa del uso de un propietario cerrado; `NativeLoadError` informa de paquetes nativos ausentes, incompatibles o desactualizados."
+      ]
+    },
+    {
+      "locale": "es",
+      "task": "json-update",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__es__docs__json-to-anki__index.md",
+      "header": [
+        "# Genera y actualiza mazos de Anki desde JSON",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/es/docs/json-to-anki/",
+        "Language: es",
+        "Description: Lee JSON con Rust, Python o TypeScript, incluye imágenes y audio y revisa una actualización de APKG que solo cambia una respuesta."
+      ],
+      "paragraphs": [
+        "Canonical page: https://morehardy.github.io/anki-forge/es/docs/json-to-anki/\nLanguage: es\nDescription: Lee JSON con Rust, Python o TypeScript, incluye imágenes y audio y revisa una actualización de APKG que solo cambia una respuesta.",
+        "Lee tres preguntas de biología desde JSON, añade una imagen y un fragmento de audio compartidos y exporta un APKG original junto con una actualización revisada que solo cambia una respuesta. Cada versión debe contener **3 notas, 3 tarjetas y 2 archivos multimedia**. Elige uno de los SDK siguientes; cada ejemplo es un programa completo. La exportación habitual no requiere instalar Anki.",
+        "\nAmbos archivos JSON contienen `namespace`, `deck` y tres `notes` con valores persistentes de `id`, `front` y `back`. v2 solo cambia la primera respuesta. Tu aplicación analiza el JSON; Anki Forge se encarga de crear el contenido y generar el APKG. Si los datos no son de confianza, valida el esquema de tu aplicación antes de crear las notas.",
+        "El programa elegido muestra la ruta `output/<language>/v2.apkg`. Conserva `v1.apkg` junto a ese archivo; `comparison.json` y `review.json` registran `RISK.NOTE_CHANGED`, ninguna nota añadida ni eliminada y `policy.allows_publication: true` para este cambio de respuesta. El programa vuelve a comprobar la política sobre el candidato preparado antes de publicarlo. Rechaza reutilizar un directorio de salida que ya contenga cualquiera de las dos versiones.",
+        "Usa el APKG v1 **original de distribución** como base de la actualización, nunca un paquete vuelto a exportar desde Anki. La coincidencia de notas al importar, las modificaciones locales y la programación de repasos dependen de la versión de Anki, los tipos de nota y las opciones de importación; valida el cliente de destino antes de publicar una versión. Importar un paquete no elimina las notas que se hayan omitido en un paquete posterior. Comparar o generar correctamente un paquete no garantiza el estado de repaso de cada estudiante."
+      ]
+    },
+    {
+      "locale": "es",
+      "task": "compatibility-constraints",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__es__docs__compatibility__index.md",
+      "header": [
+        "# Compatibilidad de Anki Forge y entornos verificados",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/es/docs/compatibility/",
+        "Language: es",
+        "Description: Consulta los paquetes públicos, los entornos probados y las condiciones de importación y reproducción en Anki."
+      ],
+      "paragraphs": [
+        "| Interfaz | Paquete | Entorno de ejecución y verificación |\n| --- | --- | --- |\n| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | Rust 1.92.0 y la versión estable actual; aplicaciones consumidoras del paquete en las cuatro plataformas admitidas, además de una aplicación nueva que usa el paquete público de crates.io |\n| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | Node 22.13.0, las versiones actuales de las ramas 22, 24 y 26; 16 comprobaciones de instalación pública desde npm, ESM/CJS y TypeScript |\n| Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | CPython convencional 3.11–3.14; 16 comprobaciones aisladas de instalación de wheels públicos de PyPI |",
+        "Los paquetes nativos publicados cubren macOS arm64/x64, Linux x64 GNU/glibc y Windows x64. Que un paquete esté disponible no significa que se haya probado correctamente su ejecución en todos los equipos. La [cobertura de Node](https://github.com/morehardy/anki-forge/blob/main/bindings/node/COVERAGE.md), la [cobertura de Python](https://github.com/morehardy/anki-forge/blob/main/bindings/python/COVERAGE.md) y las pruebas de publicación detallan las comprobaciones exactas. Las ejecuciones correctas de la publicación `0.3.1` son [Rust](https://github.com/morehardy/anki-forge/actions/runs/38371221696), [npm](https://github.com/morehardy/anki-forge/actions/runs/38371222114) y [PyPI](https://github.com/morehardy/anki-forge/actions/runs/38371222047). Otras implementaciones de Python, los intérpretes sin GIL y los subintérpretes necesitan validación por separado. Los navegadores, Electron, Bun, Alpine/musl y Linux/Windows ARM64 quedan fuera de la verificación registrada de Node.",
+        "Para las actualizaciones, conserva el APKG original de distribución anterior. Las reexportaciones de Anki no mantienen las pruebas de identidad necesarias. Omitir una nota de un paquete no la elimina de la colección de quien estudia. Los cambios de campos o plantillas, los campos de ordenación, las ediciones locales y el historial de repaso requieren pruebas específicas de cada cliente."
+      ]
+    },
+    {
+      "locale": "pt-BR",
+      "task": "llms-entry",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__pt-br__llms.txt",
+      "excerpt": "# Anki Forge\n\n> O Anki Forge gera baralhos APKG do Anki a partir de código em Rust, Node / TypeScript ou Python.\n\nVersão atual dos pacotes públicos: 0.3.1. A exportação normal não exige o Anki. As APIs dos pacotes publicados diferem das compilações do código-fonte. Guarde o APKG original distribuído da versão anterior para atualizações; as opções de importação do Anki e as edições locais mais recentes podem afetar o resultado.\n\n- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)\n- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)\n- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)\n"
+    },
+    {
+      "locale": "pt-BR",
+      "task": "python-install",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__pt-br__docs__python-quickstart__index.md",
+      "header": [
+        "# Gere cartões do Anki com Python",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/pt-br/docs/python-quickstart/",
+        "Language: pt-BR",
+        "Description: Instale ankiforge pelo PyPI, crie cartões de pergunta e resposta com um script Python curto e exporte um baralho APKG para importar no Anki."
+      ],
+      "paragraphs": [
+        "\nNo Windows, ative o ambiente com `.venv\\Scripts\\Activate.ps1`. Use CPython convencional 3.11 ou posterior e um wheel correspondente à plataforma; as verificações registradas de lançamento abrangem CPython 3.11–3.14. Consulte os [ambientes verificados](https://morehardy.github.io/anki-forge/pt-br/docs/compatibility/).",
+        "Abra o arquivo persistente `spanish.apkg` no Anki. Ele contém **hola → hello** no baralho **Spanish**. Mantenha o namespace `spanish` e a chave da nota `es:hola` estáveis nas próximas edições. A exportação não exige que o Anki esteja instalado."
+      ]
+    },
+    {
+      "locale": "pt-BR",
+      "task": "node-api",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__pt-br__docs__node-api__index.md",
+      "header": [
+        "# API de Node e TypeScript",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/pt-br/docs/node-api/",
+        "Language: pt-BR",
+        "Description: Métodos públicos, comportamento assíncrono, opções de geração, arquivos de saída e relatórios do SDK de Node."
+      ],
+      "paragraphs": [
+        "| API | Resultado |\n| --- | --- |\n| `await project.build(BuildOptions.to(path))` | BuildOutput que mantém um artefato persistente |\n| `await project.build(BuildOptions.temporary())` | BuildOutput que mantém um artefato temporário |\n| `await project.compare(CompareOptions.against(path))` | ComparisonReport concluído, inclusive quando a política bloqueia a publicação |\n| `options.updateFrom(path)` | Configurar a atualização a partir das evidências completas da distribuição original |\n| `options.inspectLimits(limits)` | Substituir os limites independentes de inspeção |\n| `options.updatePolicy(policy)` | Configurar a política de risco de atualização/comparação |",
+        "Uma saída bem-sucedida oferece `.artifact`, `.report` e `.snapshot()`. O `BuildReport` oferece `.counts`, `.baselineCounts`, `.durationMs`, `.diagnostics`, `.comparison` e `.snapshot()`; ele não informa o resultado da operação nem mantém arquivos. `.comparison` é um `ComparisonReport` ou `null`, usando a mesma classe de `project.compare()`. Comparações oferecem `.findings`, `.highestRisk`, `.policy`, `.diagnostics` e `.snapshot()`. Os nomes dos campos de snapshot refletem o JSON de Rust, incluindo `allows_publication` e `schema_version`; não são cópias em camelCase do relatório nativo. Use `report.comparison.highestRisk` em um objeto de comparação ou `report.snapshot().comparison.highest_risk` em seu snapshot JSON, depois de verificar se não é `null`.",
+        "Caminhos relativos de mídia e pacotes são fixados quando a leitura é chamada; destinos de geração e bases de atualização são fixados quando as opções são construídas. Em POSIX, links simbólicos seguidos de `..` preservam a semântica de navegação do sistema de arquivos. `persistTo` resolve destinos relativos em relação ao diretório de trabalho capturado pela geração original, inclusive em handles clonados e persistidos. Mudanças posteriores no diretório de trabalho não redirecionam esses caminhos.",
+        "Mantenha um proprietário do artefato vivo enquanto consome `.path`. `.clone()` cria um proprietário independente; `await .close()` libera esse proprietário. O último proprietário temporário exclui o arquivo. `await .persistTo(path)` retorna um artefato persistente e mantém o original utilizável mesmo em caso de falha. Streams de arquivo comuns de Node podem ler um artefato enquanto seu proprietário é mantido.",
+        "Snapshots são dados JSON congelados e não mantêm arquivos nativos. Um arquivo persistente permanece após a liberação dos proprietários. `BuildOutput` não pode ser construído pelo chamador; ele é criado somente por gerações bem-sucedidas.",
+        "`BuildError.snapshot()` preserva a falha e os fatos da publicação; `BuildError.report` e `CompareError.report` retornam `BuildReport`, assim como `BuildOutput.report`. Use `.baselineCounts` e `.comparison` nesses relatórios; use `.snapshot()` para os campos JSON em snake\\_case. Uma comparação que falha pode ter observações parciais e uma comparação `null`. `PersistError.publication` registra se o destino já foi publicado e se a durabilidade foi confirmada. Erros de mídia/inspeção preservam os detalhes dos limites. Use esses campos para processamento, em vez de analisar mensagens de erro. `ArtifactClosedError` informa o uso de um proprietário fechado; `NativeLoadError` informa pacotes nativos ausentes, incompatíveis ou desatualizados."
+      ]
+    },
+    {
+      "locale": "pt-BR",
+      "task": "json-update",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__pt-br__docs__json-to-anki__index.md",
+      "header": [
+        "# Gere e atualize baralhos do Anki a partir de JSON",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/pt-br/docs/json-to-anki/",
+        "Language: pt-BR",
+        "Description: Leia JSON com Rust, Python ou TypeScript, inclua imagens e áudio e revise uma atualização de APKG que altera apenas uma resposta."
+      ],
+      "paragraphs": [
+        "Canonical page: https://morehardy.github.io/anki-forge/pt-br/docs/json-to-anki/\nLanguage: pt-BR\nDescription: Leia JSON com Rust, Python ou TypeScript, inclua imagens e áudio e revise uma atualização de APKG que altera apenas uma resposta.",
+        "Leia três perguntas de biologia em JSON, adicione uma imagem e um áudio compartilhados e exporte um APKG original seguido de uma atualização revisada que altera apenas uma resposta. Cada versão deve conter **3 notas, 3 cartões e 2 arquivos de mídia**. Escolha um dos SDKs abaixo; cada exemplo é um programa completo. A exportação normal não exige que o Anki esteja instalado.",
+        "\nOs dois arquivos JSON contêm `namespace`, `deck` e três `notes`, cada uma com um `id` durável e os campos `front` e `back`. A versão 2 altera somente a primeira resposta. A aplicação lê o JSON; o Anki Forge cuida da criação das notas e da geração do APKG. Para entradas não confiáveis, valide o esquema da sua aplicação antes de construir as notas.",
+        "O programa escolhido imprime `output/<language>/v2.apkg`. Guarde `v1.apkg` no mesmo diretório; `comparison.json` e `review.json` registram `RISK.NOTE_CHANGED`, nenhuma nota adicionada ou removida e `policy.allows_publication: true` para essa alteração restrita à resposta. Antes de publicar, o programa verifica novamente a política no candidato preparado. Ele se recusa a reutilizar um diretório de saída que já contenha qualquer uma das versões.",
+        "Use o APKG da versão 1 **originalmente distribuído** como base de atualização, nunca um pacote reexportado pelo Anki. A correspondência durante a importação, as edições locais e o agendamento dependem da versão do Anki, dos tipos de nota e das opções de importação; valide o cliente de destino antes de publicar. Importar um pacote não remove notas omitidas de um pacote posterior. Uma comparação ou geração bem-sucedida não garante o comportamento de todo o histórico de revisão de cada pessoa."
+      ]
+    },
+    {
+      "locale": "pt-BR",
+      "task": "compatibility-constraints",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__pt-br__docs__compatibility__index.md",
+      "header": [
+        "# Compatibilidade e ambientes verificados",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/pt-br/docs/compatibility/",
+        "Language: pt-BR",
+        "Description: Consulte os pacotes públicos, os ambientes testados e as condições de importação e reprodução nos clientes Anki."
+      ],
+      "paragraphs": [
+        "| Interface | Pacote | Ambiente de execução e verificações |\n| --- | --- | --- |\n| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | Rust 1.92.0 e a versão estável atual; aplicações consumidoras do pacote nas quatro plataformas compatíveis, além de uma aplicação nova usando o pacote público do crates.io |\n| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | Node 22.13.0 e versões atuais das séries 22, 24 e 26; 16 verificações de instalação pelo npm público, ESM/CJS e TypeScript |\n| Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | CPython convencional 3.11–3.14; 16 verificações isoladas de instalação de wheels do PyPI público |",
+        "Outras implementações de Python, interpretadores sem GIL e subinterpretadores exigem validação separada. Navegadores, Electron, Bun, Alpine/musl e Linux/Windows ARM64 estão fora do escopo registrado de verificação de Node.",
+        "Para atualizar um baralho, guarde o APKG original distribuído da versão anterior. Pacotes reexportados pelo Anki não preservam as evidências de identidade necessárias. Omitir uma nota de um pacote não a exclui da coleção de quem estuda. Alterações de campos, modelos e campos de ordenação, edições locais e histórico de revisão exigem testes específicos para cada cliente."
+      ]
+    },
+    {
+      "locale": "ja",
+      "task": "llms-entry",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__ja__llms.txt",
+      "excerpt": "# Anki Forge\n\n> Anki Forge は Rust、Node / TypeScript、Python のコードから Anki APKG デッキを生成します。\n\n現在の公開パッケージのバージョン: 0.3.1。 通常のエクスポートに Anki は必要ありません。公開パッケージの API とソースビルドは異なります。更新には前回配布時のオリジナル APKG を保持してください。Anki のインポート設定と新しいローカル編集が結果に影響する場合があります。\n\n- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)\n- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)\n- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)\n"
+    },
+    {
+      "locale": "ja",
+      "task": "python-install",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__ja__docs__python-quickstart__index.md",
+      "header": [
+        "# Python で Anki カードを生成する",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/ja/docs/python-quickstart/",
+        "Language: ja",
+        "Description: 仮想環境に公開 Python パッケージをインストールし、短い完全なプログラムで永続 APKG を作成します。"
+      ],
+      "paragraphs": [
+        "\nWindows では `.venv\\Scripts\\Activate.ps1` で有効にします。通常の CPython 3.11 以降と、プラットフォームに一致する wheel を使用してください。記録済みのリリース検証では CPython 3.11〜3.14 を確認しています。[検証済みの環境](https://morehardy.github.io/anki-forge/ja/docs/compatibility/)を参照してください。",
+        "永続ファイル `spanish.apkg` を Anki で開きます。**Spanish** デッキに **hola → hello** が含まれています。後で編集する際も、名前空間 `spanish` とノートキー `es:hola` を維持してください。エクスポートに Anki のインストールは必要ありません。"
+      ]
+    },
+    {
+      "locale": "ja",
+      "task": "node-api",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__ja__docs__node-api__index.md",
+      "header": [
+        "# Node と TypeScript API",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/ja/docs/node-api/",
+        "Language: ja",
+        "Description: Node SDK の作成メソッド、非同期処理、メディア、所有権、型付きレポート、TypeScript の設定を確認できます。"
+      ],
+      "paragraphs": [
+        "| API | 結果 |\n| --- | --- |\n| `await project.build(BuildOptions.to(path))` | 永続成果物を所有する BuildOutput |\n| `await project.build(BuildOptions.temporary())` | 一時成果物を所有する BuildOutput |\n| `await project.compare(CompareOptions.against(path))` | ポリシーによる公開拒否も含む、完了した ComparisonReport |\n| `options.updateFrom(path)` | 配布時のオリジナルパッケージの完全な証拠を使った更新を設定 |\n| `options.inspectLimits(limits)` | 独立した検査カウンターを上書き |\n| `options.updatePolicy(policy)` | 更新・比較のリスクポリシーを設定 |",
+        "成功した出力は `.artifact`、`.report`、`.snapshot()` を公開します。`BuildReport` は `.counts`、`.baselineCounts`、`.durationMs`、`.diagnostics`、`.comparison`、`.snapshot()` を公開します。成功・失敗の結果やファイルの所有権は持ちません。`.comparison` は `ComparisonReport` または `null` で、`project.compare()` と同じクラスを使います。比較は `.findings`、`.highestRisk`、`.policy`、`.diagnostics`、`.snapshot()` を公開します。スナップショットのフィールド名は、`allows_publication` や `schema_version` を含めて Rust の JSON と一致します。ネイティブレポートを camelCase にしたコピーではありません。`null` でないことを確認した後、比較オブジェクトでは `report.comparison.highestRisk`、JSON スナップショットでは `report.snapshot().comparison.highest_risk` を使います。",
+        "相対的なメディア・バンドルのパスは読み取りの呼び出し時に、ビルド先と基準パッケージはオプション作成時に基準ディレクトリが確定します。POSIX では、シンボリックリンクの後の `..` はファイルシステムでのパス走査の意味を保持します。`persistTo` は、クローン済み・永続化済みハンドルも含め、元のビルドが記録した作業ディレクトリを相対保存先の基準にします。後から作業ディレクトリを変えても、これらのパスは変わりません。",
+        "`.path` を利用している間は成果物の所有者を保持します。`.clone()` は独立した所有者を作り、`await .close()` はその所有者を解放します。最後の一時所有者が解放されるとファイルが削除されます。`await .persistTo(path)` は永続成果物を返し、失敗しても元の成果物は使用できます。所有者を保持していれば、標準の Node ファイルストリームで成果物を読み取れます。",
+        "スナップショットは凍結済みの JSON データで、ネイティブファイルを保持しません。永続ファイルは所有者の解放後も残ります。`BuildOutput` は呼び出し側で構築できず、成功したビルドによってのみ作成されます。",
+        "`BuildError.snapshot()` は失敗と公開状況を保持します。`BuildError.report` と `CompareError.report` は `BuildOutput.report` と同じ BuildReport を返します。これらのレポートでは `.baselineCounts` と `.comparison` を使い、snake\\_case の JSON フィールドには `.snapshot()` を使います。失敗した比較では、一部の観測結果と `null` の比較が含まれる場合があります。`PersistError.publication` は、保存先がすでに公開されたか、耐久性が確認されたかを記録します。メディア・検査エラーは上限の詳細を保持します。エラーメッセージの解析ではなく、これらの機械処理用フィールドを使ってください。`ArtifactClosedError` は閉じた所有者の使用、`NativeLoadError` はネイティブパッケージの欠落・非互換・古いバージョンを報告します。"
+      ]
+    },
+    {
+      "locale": "ja",
+      "task": "json-update",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__ja__docs__json-to-anki__index.md",
+      "header": [
+        "# JSON から Anki デッキを生成・更新する",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/ja/docs/json-to-anki/",
+        "Language: ja",
+        "Description: Rust、Python、TypeScript で JSON を読み取り、画像と音声を同梱し、解答だけを変更する APKG 更新を確認します。"
+      ],
+      "paragraphs": [
+        "Canonical page: https://morehardy.github.io/anki-forge/ja/docs/json-to-anki/\nLanguage: ja\nDescription: Rust、Python、TypeScript で JSON を読み取り、画像と音声を同梱し、解答だけを変更する APKG 更新を確認します。",
+        "JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、初回配布用の APKG と、解答だけを変更した検証済みの更新版を出力します。どちらの版も **ノート3件、カード3枚、メディアファイル2個**になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。",
+        "\n両方の JSON ファイルには `namespace`、`deck` と3件の `notes` があり、各ノートに継続して使う `id`、`front`、`back` が含まれます。v2 で変わるのは最初の回答だけです。JSON の解析は呼び出し側で行い、Anki Forge はノートの作成と APKG の生成を担当します。信頼できない入力を扱う場合は、ノートを作る前にアプリケーション側のスキーマで検証してください。",
+        "選んだプログラムは `output/<language>/v2.apkg` のパスを表示します。`v1.apkg` も一緒に保管してください。回答だけを変えた今回の編集では、`comparison.json` と `review.json` に `RISK.NOTE_CHANGED` が記録され、追加・削除されたノートはなく、`policy.allows_publication: true` になります。プログラムは公開前に、準備済み候補についてもポリシーを確認します。どちらかの版が出力先ディレクトリに存在する場合、そのディレクトリは再利用しません。",
+        "更新の基準には、**配布時のオリジナル**の v1 APKG を使います。Anki から再エクスポートしたファイルは使えません。クライアント側のインポート時の照合、ローカルでの編集、学習スケジュールへの影響は、Anki のバージョン、ノートタイプ、インポート設定によって変わります。リリース前に対象クライアントで検証してください。後のパッケージで省かれたノートも、インポートだけでは削除されません。compare／build の成功は、すべての学習者の復習状態を保証するものではありません。"
+      ]
+    },
+    {
+      "locale": "ja",
+      "task": "compatibility-constraints",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__ja__docs__compatibility__index.md",
+      "header": [
+        "# 互換性と検証済みの環境",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/ja/docs/compatibility/",
+        "Language: ja",
+        "Description: 公開パッケージ、検証した実行環境、Anki クライアントでのインポートと再生の条件を確認します。"
+      ],
+      "paragraphs": [
+        "| インターフェース | パッケージ | 実行環境と検証 |\n| --- | --- | --- |\n| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | Rust 1.92.0 と検証時の stable。対応する4プラットフォームすべてでパッケージ利用側を検査し、公開 crates.io パッケージの新規利用側も確認 |\n| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | Node 22.13.0、検証時の22・24・26。公開 npm からのインストール、ESM/CJS、TypeScript の16件の検査 |\n| Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | 通常の CPython 3.11〜3.14。隔離環境で公開 PyPI wheel をインストールする16件の検査 |",
+        "公開ネイティブパッケージは macOS arm64/x64、Linux x64 GNU/glibc、Windows x64 に対応します。パッケージが存在するだけで、すべてのホストで実行テストが成功したことにはなりません。[Node の検証範囲](https://github.com/morehardy/anki-forge/blob/main/bindings/node/COVERAGE.md)、[Python の検証範囲](https://github.com/morehardy/anki-forge/blob/main/bindings/python/COVERAGE.md)、リリースの証拠に、実施した検査を記録しています。`0.3.1` の成功したリリース実行は [Rust](https://github.com/morehardy/anki-forge/actions/runs/38371221696)、[npm](https://github.com/morehardy/anki-forge/actions/runs/38371222114)、[PyPI](https://github.com/morehardy/anki-forge/actions/runs/38371222047) です。他の Python 実装、free-threaded インタープリター、サブインタープリターは別途検証が必要です。ブラウザー、Electron、Bun、Alpine/musl、ARM64 Linux/Windows は、記録済みの Node 検証範囲外です。",
+        "更新用に、前回配布時のオリジナル APKG を保持してください。Anki から再エクスポートしたファイルには、必要な識別情報の証拠が残りません。パッケージからノートを省いても、学習者のコレクションからは削除されません。フィールド・テンプレートの変更、並べ替え用フィールド、ローカルの編集、復習履歴は、クライアントごとのテストが必要です。"
+      ]
+    },
+    {
+      "locale": "de",
+      "task": "llms-entry",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__de__llms.txt",
+      "excerpt": "# Anki Forge\n\n> Anki Forge erzeugt Anki-APKG-Stapel aus Code mit Rust, Node / TypeScript oder Python.\n\nAktuelle Version des veröffentlichten Pakets: 0.3.1. Für einen gewöhnlichen Export muss Anki nicht installiert sein. Die APIs veröffentlichter Pakete unterscheiden sich von Builds aus dem Quellcode. Bewahre für Aktualisierungen das ursprünglich verteilte APKG der Vorgängerversion auf; Ankis Importeinstellungen und neuere lokale Änderungen können das Ergebnis beeinflussen.\n\n- Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)\n- Node / TypeScript: `npm install --include=optional ankiforge@0.3.1` (Node.js 22.13+)\n- Python: `python -m pip install ankiforge==0.3.1` (CPython 3.11+)\n"
+    },
+    {
+      "locale": "de",
+      "task": "python-install",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__de__docs__python-quickstart__index.md",
+      "header": [
+        "# Anki-Karten mit Python erzeugen",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/de/docs/python-quickstart/",
+        "Language: de",
+        "Description: Installiere ankiforge über PyPI, erzeuge Karten mit einem kurzen Python-Skript und exportiere einen APKG-Stapel zum Import in Anki."
+      ],
+      "paragraphs": [
+        "\nUnter Windows aktivierst du die Umgebung mit `.venv\\Scripts\\Activate.ps1`. Verwende gewöhnliches CPython ab Version 3.11 und ein passendes Wheel für deine Plattform. CPython 3.11–3.14 sind durch dokumentierte Release-Prüfungen abgedeckt; siehe [geprüfte Umgebungen](https://morehardy.github.io/anki-forge/de/docs/compatibility/).",
+        "Öffne die dauerhaft gespeicherte Datei `spanish.apkg` in Anki. Sie enthält **hola → hello** im Stapel **Spanish**. Behalte den Namensraum `spanish` und den Notizschlüssel `es:hola` für spätere Änderungen bei. Für den Export muss Anki nicht installiert sein."
+      ]
+    },
+    {
+      "locale": "de",
+      "task": "node-api",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__de__docs__node-api__index.md",
+      "header": [
+        "# Node- und TypeScript-API",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/de/docs/node-api/",
+        "Language: de",
+        "Description: Öffentliche Methoden, asynchrones Verhalten, Build-Optionen, Ausgabedateien und Berichte des Node-SDK."
+      ],
+      "paragraphs": [
+        "| API | Ergebnis |\n| --- | --- |\n| `await project.build(BuildOptions.to(path))` | BuildOutput, das ein persistentes Artefakt besitzt |\n| `await project.build(BuildOptions.temporary())` | BuildOutput, das ein temporäres Artefakt besitzt |\n| `await project.compare(CompareOptions.against(path))` | Abgeschlossener ComparisonReport, auch bei blockierender Richtlinie |\n| `options.updateFrom(path)` | Aktualisierung anhand vollständiger Nachweise der ursprünglichen Verteilung konfigurieren |\n| `options.inspectLimits(limits)` | Unabhängige Inspektionszähler überschreiben |\n| `options.updatePolicy(policy)` | Risikorichtlinie für Aktualisierung oder Vergleich konfigurieren |",
+        "Eine erfolgreiche Ausgabe bietet `.artifact`, `.report` und `.snapshot()`. `BuildReport` bietet `.counts`, `.baselineCounts`, `.durationMs`, `.diagnostics`, `.comparison` und `.snapshot()`; er enthält weder ein Erfolgs- oder Fehlerergebnis noch Dateibesitz. `.comparison` ist ein `ComparisonReport` oder `null` und verwendet dieselbe Klasse wie `project.compare()`. Vergleiche bieten `.findings`, `.highestRisk`, `.policy`, `.diagnostics` und `.snapshot()`. Snapshot-Feldnamen entsprechen dem Rust-JSON, einschließlich `allows_publication` und `schema_version`; sie sind keine camelCase-Kopien des nativen Berichts. Verwende nach einer Prüfung auf `null` am Vergleichsobjekt `report.comparison.highestRisk` oder im JSON-Snapshot `report.snapshot().comparison.highest_risk`.",
+        "Relative Medien- und Paketpfade werden beim Aufruf des Lesens verankert; Build-Ziele und Basisversionen beim Erstellen der Optionen. Unter POSIX behalten symbolische Links mit nachfolgendem `..` die Traversierungssemantik des Dateisystems. `persistTo` verankert relative Ziele im beim ursprünglichen Build erfassten Arbeitsverzeichnis, auch bei geklonten und persistent gespeicherten Handles. Spätere Änderungen des Arbeitsverzeichnisses leiten diese Pfade nicht um.",
+        "Halte einen Artefaktbesitzer, solange du `.path` verwendest. `.clone()` erzeugt einen unabhängigen Besitzer; `await .close()` gibt diesen Besitzer frei. Der letzte temporäre Besitzer löscht seine Datei. `await .persistTo(path)` liefert ein persistentes Artefakt und lässt das Original auch bei einem Fehler nutzbar. Gewöhnliche Node-Dateistreams können ein Artefakt lesen, solange du seinen Besitzer hältst.",
+        "Snapshots sind eingefrorene JSON-Daten und halten keine nativen Dateien. Eine persistente Datei bleibt nach Freigabe des Besitzers erhalten. `BuildOutput` kann nicht vom Aufrufer konstruiert werden; es entsteht nur durch erfolgreiche Builds.",
+        "`BuildError.snapshot()` erhält Fehler- und Veröffentlichungsfakten. `BuildError.report` und `CompareError.report` liefern wie `BuildOutput.report` einen `BuildReport`. Verwende an diesen Berichten `.baselineCounts` und `.comparison`; verwende `.snapshot()` für JSON-Felder in snake\\_case. Ein fehlgeschlagener Vergleich kann Teilbeobachtungen und einen `null`\\-Vergleich haben. `PersistError.publication` erfasst, ob das Ziel bereits veröffentlicht wurde und ob die Dauerhaftigkeit bestätigt wurde. Medien- und Inspektionsfehler erhalten Limitdetails. Verwende diese maschinenlesbaren Felder, statt Fehlermeldungen zu parsen. `ArtifactClosedError` meldet die Verwendung eines geschlossenen Besitzers; `NativeLoadError` meldet fehlende, inkompatible oder veraltete native Pakete."
+      ]
+    },
+    {
+      "locale": "de",
+      "task": "json-update",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__de__docs__json-to-anki__index.md",
+      "header": [
+        "# Anki-Stapel aus JSON erzeugen und aktualisieren",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/de/docs/json-to-anki/",
+        "Language: de",
+        "Description: Lies JSON mit Rust, Python oder TypeScript ein, bündle Bilder und Audio und prüfe eine APKG-Aktualisierung, die nur eine Antwort ändert."
+      ],
+      "paragraphs": [
+        "Canonical page: https://morehardy.github.io/anki-forge/de/docs/json-to-anki/\nLanguage: de\nDescription: Lies JSON mit Rust, Python oder TypeScript ein, bündle Bilder und Audio und prüfe eine APKG-Aktualisierung, die nur eine Antwort ändert.",
+        "Lies drei Biologiefragen aus JSON ein, ergänze ein gemeinsames Bild und einen Audioclip und exportiere ein ursprüngliches APKG sowie eine geprüfte Aktualisierung, die nur eine Antwort ändert. Jede Version soll **3 Notizen, 3 Karten und 2 Mediendateien** enthalten. Wähle unten ein SDK; jedes Beispiel ist ein vollständiges Programm. Für den normalen Export muss Anki nicht installiert sein.",
+        "\nBeide JSON-Dateien enthalten `namespace`, `deck` und drei `notes` mit dauerhaft verwendeten Werten für `id`, `front` und `back`. v2 ändert ausschließlich die erste Antwort. Die aufrufende Anwendung liest das JSON ein; Anki Forge übernimmt die Erstellung der Notizen und des APKG. Prüfe nicht vertrauenswürdige Eingaben gegen das Schema deiner Anwendung, bevor du daraus Notizen erstellst.",
+        "Das gewählte Programm gibt `output/<language>/v2.apkg` aus. Bewahre `v1.apkg` daneben auf. Für diese reine Antwortänderung dokumentieren `comparison.json` und `review.json` den Befund `RISK.NOTE_CHANGED`, keine hinzugefügten oder entfernten Notizen und `policy.allows_publication: true`. Vor der Veröffentlichung prüft das Programm die Richtlinie erneut am vorbereiteten Kandidaten. Ein Ausgabeverzeichnis, das bereits eine der beiden Versionen enthält, wird nicht wiederverwendet.",
+        "Verwende als Aktualisierungsbasis das **ursprünglich verteilte** v1-APKG, niemals einen erneuten Export aus Anki. Wie der Client Einträge beim Import zuordnet und mit lokalen Änderungen sowie der Lernplanung umgeht, hängt von der Anki-Version, den Notiztypen und den Importeinstellungen ab. Prüfe den vorgesehenen Client vor einer Veröffentlichung. Beim Import eines Pakets werden Notizen, die in einem späteren Paket fehlen, nicht gelöscht. Ein erfolgreicher Vergleich oder Build garantiert nicht den Erhalt jedes individuellen Lernstands."
+      ]
+    },
+    {
+      "locale": "de",
+      "task": "compatibility-constraints",
+      "bodyPath": "docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-machine-prefix/bodies/anki-forge__de__docs__compatibility__index.md",
+      "header": [
+        "# Kompatibilität und geprüfte Umgebungen",
+        "",
+        "Canonical page: https://morehardy.github.io/anki-forge/de/docs/compatibility/",
+        "Language: de",
+        "Description: Prüfe veröffentlichte Pakete, verifizierte Laufzeitumgebungen und Bedingungen für Import und Wiedergabe in Anki-Clients."
+      ],
+      "paragraphs": [
+        "| Schnittstelle | Paket | Laufzeit und Prüfung |\n| --- | --- | --- |\n| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | Rust 1.92.0 und die aktuelle stabile Version; Paketnutzer auf allen vier unterstützten Plattformen sowie eine neue Anwendung mit dem öffentlichen crates.io-Paket |\n| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | Node 22.13.0 sowie aktuelle Versionen von 22, 24 und 26; 16 Prüfungen der öffentlichen npm-Installation, von ESM/CJS und TypeScript |\n| Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | Gewöhnliches CPython 3.11–3.14; 16 isolierte Installationsprüfungen der öffentlichen PyPI-Wheels |",
+        "Die veröffentlichten nativen Pakete decken macOS arm64/x64, Linux x64 GNU/glibc und Windows x64 ab. Allein die Verfügbarkeit eines Pakets bedeutet keinen erfolgreichen Laufzeittest auf jedem System. Die [Node-Abdeckung](https://github.com/morehardy/anki-forge/blob/main/bindings/node/COVERAGE.md), die [Python-Abdeckung](https://github.com/morehardy/anki-forge/blob/main/bindings/python/COVERAGE.md) und die Release-Nachweise dokumentieren die genauen Prüfungen. Die erfolgreichen Release-Läufe für `0.3.1` sind [Rust](https://github.com/morehardy/anki-forge/actions/runs/38371221696), [npm](https://github.com/morehardy/anki-forge/actions/runs/38371222114) und [PyPI](https://github.com/morehardy/anki-forge/actions/runs/38371222047). Andere Python-Implementierungen, Interpreter ohne globalen Interpreter-Lock und Subinterpreter benötigen eine separate Validierung. Browser, Electron, Bun, Alpine/musl und ARM64 Linux/Windows liegen außerhalb der dokumentierten Node-Prüfabdeckung.",
+        "Bewahre für Aktualisierungen das ursprünglich verteilte APKG der Vorgängerversion auf. Erneute Exporte aus Anki erhalten die erforderlichen Identitätsnachweise nicht. Das Weglassen einer Notiz in einem Paket löscht sie nicht aus der Sammlung eines Lernenden. Feld- und Vorlagenänderungen, Sortierfelder, lokale Änderungen und Wiederholungsverlauf erfordern Tests für den jeweiligen Client."
+      ]
+    }
+  ]
+}

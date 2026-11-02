@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-engineering",
+  "status": "failed",
+  "engineeringStatus": "passed",
+  "engineeringOnly": false,
+  "startedAt": "2026-11-02T08:47:01.514Z",
+  "runtime": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "checks": [
+    {
+      "name": "check:content",
+      "command": [
+        "npm",
+        "run",
+        "check:content"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 3528,
+      "log": {
+        "file": "01-check-content.log",
+        "sha256": "56484869279ef4d442ea6c845fc984184bcf54afcd0dfb96d441b8207235fe5b",
+        "bytes": 182
+      }
+    },
+    {
+      "name": "check:site",
+      "command": [
+        "npm",
+        "run",
+        "check:site"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 4130,
+      "log": {
+        "file": "02-check-site.log",
+        "sha256": "0bf6476a0e0cc5e71128b0d07372510ac7b072f1cee453794f2b4454b21f6a86",
+        "bytes": 195
+      }
+    },
+    {
+      "name": "check:surface",
+      "command": [
+        "npm",
+        "run",
+        "check:surface"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 4439,
+      "log": {
+        "file": "03-check-surface.log",
+        "sha256": "f6ad604b5b8fc13c3ad14b82ea78a4c445dee0a5cb915a2f6c2a8f55e5703634",
+        "bytes": 444
+      }
+    },
+    {
+      "name": "check:machine",
+      "command": [
+        "npm",
+        "run",
+        "check:machine"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 3133,
+      "log": {
+        "file": "04-check-machine.log",
+        "sha256": "dc7eefa07eed190e5ac2762dc90707b90a5f9fbb2001c2dceb41551ea815fc81",
+        "bytes": 152
+      }
+    },
+    {
+      "name": "check:schema",
+      "command": [
+        "npm",
+        "run",
+        "check:schema"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 1178,
+      "log": {
+        "file": "05-check-schema.log",
+        "sha256": "568ffa652473548c287551c776ea7690047ad4c255230bcf447219b325ce3ecf",
+        "bytes": 138
+      }
+    },
+    {
+      "name": "check:gates",
+      "command": [
+        "npm",
+        "run",
+        "check:gates"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 37391,
+      "log": {
+        "file": "06-check-gates.log",
+        "sha256": "7f8c6ebea8423667e214e3d0b49fa9b9d202f6764d21546c56ca92d61ca8e476",
+        "bytes": 1369
+      }
+    },
+    {
+      "name": "test:browser",
+      "command": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 42867,
+      "log": {
+        "file": "07-test-browser.log",
+        "sha256": "d1feecefb4f48f31e96d78cbe5b9e35f347c20327daa8b4053e9fa49b66886c3",
+        "bytes": 4613
+      }
+    },
+    {
+      "name": "check:search",
+      "command": [
+        "npm",
+        "run",
+        "check:search"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 4013,
+      "log": {
+        "file": "08-check-search.log",
+        "sha256": "77d743ce8fd264e19828b1a2c597b18b7da874f70b77c38da10e1504e0fe68e4",
+        "bytes": 929
+      }
+    }
+  ],
+  "identity": {
+    "commit": "311b8b3decd9c73a2fef91808d84205822741bfc",
+    "inputSha256": "d002c1a1d04b2fad447d233557f235733eeeb4484ad362af03c2d7a4e984098e",
+    "configuration": {
+      "site": "https://morehardy.github.io",
+      "base": "/anki-forge",
+      "customDomain": ""
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es",
+      "pt-BR",
+      "ja",
+      "de"
+    ]
+  },
+  "manifestSha256": "8a56faea37d033160bdcd308bcff096c5b8c7a9aaa8a3a726a95313150e8d114",
+  "artifactSha256": "6eaa6b70169d0732b22c65e10cc10a012dd76d88aea69dcf81551578a3f45d37",
+  "fileCount": 704,
+  "attachments": [
+    {
+      "file": "search-results.json",
+      "sha256": "4f3cd6b42733d6436e99183773e166ae2e5b8ea14a1764fcf37bc352457ca0b9",
+      "bytes": 312728
+    }
+  ],
+  "artifactUnchanged": true,
+  "finishedAt": "2026-11-02T08:48:42.622Z",
+  "error": "docs/plans/evidence/website-pr66-rebuild-2026-11-02/usage-tasks-prefix.json: reviewed resource changed: /anki-forge/pagefind/index/de_55be762.pf_index\n+ actual - expected\n\n+ undefined\n- '27613f73c6444615652ac065ce3c4c6a3c319e385636ae14a9875f9e601dd433'\n"
+}

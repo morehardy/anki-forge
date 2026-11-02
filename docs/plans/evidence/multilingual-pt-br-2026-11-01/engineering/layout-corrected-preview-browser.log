@@ -1,0 +1,101 @@
+✔ all built content URLs and assets are reachable over HTTP (819.10125ms)
+✔ machine links and structured data work without JavaScript (2439.574292ms)
+✔ all configured language choices stay visible when focused on a short screen without scripts (863.350709ms)
+✔ en: card tabs, keyboard, flip, audio, updates and downloads (1695.625458ms)
+✔ en: real clipboard, denial fallback, AI task and localized guides (1168.23975ms)
+✔ en: docs search, section navigation, copy and theme continuity (1845.574375ms)
+✔ en: native documentation code-copy denial and recovery (816.704417ms)
+✔ en: mobile navigation, native sidebar, system theme and legacy sections (1291.558666ms)
+✔ en: search loading failure has localized feedback and a close action (552.240417ms)
+✖ en: header controls stay reachable at narrow 200% text zoom (642.292916ms)
+✔ en: narrow layouts, no script content and real missing-page recovery (3191.82675ms)
+✔ zh-CN: card tabs, keyboard, flip, audio, updates and downloads (702.71775ms)
+✔ zh-CN: real clipboard, denial fallback, AI task and localized guides (1182.795417ms)
+✔ zh-CN: docs search, section navigation, copy and theme continuity (1381.796083ms)
+✔ zh-CN: native documentation code-copy denial and recovery (699.380583ms)
+✔ zh-CN: mobile navigation, native sidebar, system theme and legacy sections (1192.049834ms)
+✔ zh-CN: search loading failure has localized feedback and a close action (549.181834ms)
+✖ zh-CN: header controls stay reachable at narrow 200% text zoom (638.297625ms)
+✔ zh-CN: narrow layouts, no script content and real missing-page recovery (2880.640375ms)
+✔ es: card tabs, keyboard, flip, audio, updates and downloads (664.578459ms)
+✔ es: real clipboard, denial fallback, AI task and localized guides (1184.299875ms)
+✔ es: docs search, section navigation, copy and theme continuity (1384.351667ms)
+✔ es: native documentation code-copy denial and recovery (699.379042ms)
+✔ es: mobile navigation, native sidebar, system theme and legacy sections (1218.290667ms)
+✔ es: search loading failure has localized feedback and a close action (515.897584ms)
+✖ es: header controls stay reachable at narrow 200% text zoom (606.746084ms)
+✔ es: narrow layouts, no script content and real missing-page recovery (2731.068875ms)
+✔ pt-BR: card tabs, keyboard, flip, audio, updates and downloads (667.171ms)
+✔ pt-BR: real clipboard, denial fallback, AI task and localized guides (1163.007417ms)
+✔ pt-BR: docs search, section navigation, copy and theme continuity (1434.662042ms)
+✔ pt-BR: native documentation code-copy denial and recovery (678.44ms)
+✔ pt-BR: mobile navigation, native sidebar, system theme and legacy sections (1189.900916ms)
+✔ pt-BR: search loading failure has localized feedback and a close action (533.176125ms)
+✖ pt-BR: header controls stay reachable at narrow 200% text zoom (597.872917ms)
+✔ pt-BR: narrow layouts, no script content and real missing-page recovery (2979.672583ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 31
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44031.319417
+
+✖ failing tests:
+
+test at scripts/browser.test.mjs:366:3
+✖ en: header controls stay reachable at narrow 200% text zoom (642.292916ms)
+  AssertionError [ERR_ASSERTION]: Opened navigation must stay inside the narrow viewport
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:387:16)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/browser.test.mjs:366:3
+✖ zh-CN: header controls stay reachable at narrow 200% text zoom (638.297625ms)
+  AssertionError [ERR_ASSERTION]: Opened navigation must stay inside the narrow viewport
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:387:16)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/browser.test.mjs:366:3
+✖ es: header controls stay reachable at narrow 200% text zoom (606.746084ms)
+  AssertionError [ERR_ASSERTION]: Opened navigation must stay inside the narrow viewport
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:387:16)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/browser.test.mjs:366:3
+✖ pt-BR: header controls stay reachable at narrow 200% text zoom (597.872917ms)
+  AssertionError [ERR_ASSERTION]: Opened navigation must stay inside the narrow viewport
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/browser.test.mjs:387:16)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

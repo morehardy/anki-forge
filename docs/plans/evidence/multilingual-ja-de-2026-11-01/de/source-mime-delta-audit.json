@@ -1,0 +1,853 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/de_technical_review/de-mime-source-delta-2026-11-01",
+  "originalCommit": "8f2c77e331147961dce5c0d929a9f5097270a5f8",
+  "previousReview": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/technical-source-review-final.json",
+    "sha256": "6c9714b97a551ee28a82415bf361b5427663e6dd26a3d602071ddaa7f817c42b"
+  },
+  "sourceCandidate": {
+    "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/source-candidates-mime-fixed.json",
+    "sha256": "719ea15495149279836888f3687d262351c0e63ec3560fe6db61b68da25cd4b3"
+  },
+  "fileChanges": [
+    {
+      "path": "docs/de/node-api.md",
+      "beforeSha256": "4ec0367f34a6249bea09de1e5657ed681cd1f8a6fac607e9c00631cee95ae0c6",
+      "afterSha256": "9eb661fae21ce15f7c9f25010e6642c52338cf2ffd9f925f81f5c6ed2a8d3fae",
+      "beforeParagraph": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/*; Audioreferenzen akzeptieren audio/* oder video/*. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "afterParagraph": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)."
+    },
+    {
+      "path": "docs/de/python-api.md",
+      "beforeSha256": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771",
+      "afterSha256": "3f9c8ef43cbe56ef2c51530d19d0005f558008590168c4e5025408642f4acfb2",
+      "beforeParagraph": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus image/*. Tonreferenzen akzeptieren audio/* oder video/*. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "afterParagraph": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus `image/*`. Tonreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)."
+    }
+  ],
+  "unchangedInputFiles": 257,
+  "checkedEntryContracts": [
+    {
+      "entry": "home/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "home/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "home/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "home/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "home/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "home/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "examples/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "docs/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "languages/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "quickstart/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "json-to-anki/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "csv-to-anki/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "ai-anki-cards/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "anki-forge-vs-genanki/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "development/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-guide/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "templates/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "api/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "installation/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "concepts/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "cards/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "custom-notetypes/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "media/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "image-occlusion/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "updates/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "build-guarantees/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "troubleshooting/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "compatibility/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "rust-api/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-quickstart/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "node-api/de",
+      "changedHashes": [
+        "targetHash"
+      ]
+    },
+    {
+      "entry": "python-quickstart/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-quickstart/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-api/de",
+      "changedHashes": [
+        "targetHash"
+      ]
+    },
+    {
+      "entry": "python-diagnostics/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-diagnostics/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "python-migration/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "genanki-migration/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:your-first-anki-deck/de",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/en",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/zh-CN",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/es",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/pt-BR",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/ja",
+      "changedHashes": []
+    },
+    {
+      "entry": "blog:stable-ids-and-deck-updates/de",
+      "changedHashes": []
+    }
+  ],
+  "scope": "Exact two-paragraph MIME formatting delta and 204 contract comparison. Actual new artifact validation remains pending."
+}

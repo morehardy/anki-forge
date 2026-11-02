@@ -28,7 +28,7 @@ SDK 通过原生扩展调用默认 Rust 公开 API，包含 `py.typed` 和经过
 
 | 入口 | 行为 |
 | --- | --- |
-| `Media.file(path, *, limits=MediaLimits())` | 立即读取拥有所有权的快照 |
+| `Media.file(path, *, limits=MediaLimits())` | 读取媒体数据并返回持有快照的 `Media` 对象 |
 | `Media.bytes(data, media_type, *, limits=MediaLimits())` | 拥有带显式 MIME 类型的字节 |
 | `media.with_export_name(name)` | 返回共享快照的新文件名值；之前的引用保留原名 |
 | `media.filename`, `media.media_type`, `len(media)` | 只读快照元数据 |
@@ -67,7 +67,8 @@ ApkgArtifact 提供 `.path`、`.persist_to(path)` 和 `.close()`。使用 `copy.
 
 添加时，类型化图片要求 image/* MIME，声音引用接受 audio/* 或 video/*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](../plans/2026-09-28-rust-api-validation-and-errors-design.md)。
 
-## 源码 API 详情
+<!-- section: source-api-details -->
+## 批量媒体处理与预备发布
 
 批量媒体与预备发布已包含在公开 `0.3.1` 包中。
 

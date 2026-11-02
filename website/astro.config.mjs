@@ -3,7 +3,6 @@ import starlight from '@astrojs/starlight';
 import { docGroups, docPages } from './site-model.mjs';
 import { repository, siteConfig, withBase } from './site.config.mjs';
 import { publishedPages } from './scripts/published-pages.mjs';
-import { searchOptions } from './search.config.mjs';
 import { starlightLocales, localeIds } from './locale-model.mjs';
 
 const publicTopics = new Set((await publishedPages()).map(page => page.id));
@@ -19,7 +18,8 @@ export default defineConfig({
       title: 'Anki Forge',
       locales: starlightLocales,
       defaultLocale: 'root',
-      pagefind: searchOptions,
+      // scripts/search-documents.mjs indexes sorted HTML with a portable browser runtime.
+      pagefind: false,
       routeMiddleware: './src/route-middleware.ts',
       components: { Header: './src/components/DocsHeader.astro', Footer: './src/components/DocsFooter.astro', LanguageSelect: './src/components/LanguageSwitcher.astro', ThemeSelect: './src/components/ThemeControl.astro' },
       logo: { light: '../docs/assets/brand/ankiforge.svg', dark: '../docs/assets/brand/ankiforge-dark.svg', alt: '', replacesTitle: false },

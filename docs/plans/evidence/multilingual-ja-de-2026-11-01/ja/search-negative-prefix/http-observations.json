@@ -1,0 +1,859 @@
+{
+  "schemaVersion": 1,
+  "observerRun": "/root/ja-de-negative-observer",
+  "scope": "actual-html-response-observations-only",
+  "manifestSha256": "afb99163be210ec5a8b27226faf0ce0cb91193662c73240d0757259cc8f95feb",
+  "resultPath": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/engineering/prefix/search-results.json",
+  "resultSha256": "0fafb6e564dcc0b58d1afb3440242e9bb3980d94095d980d2ae793b2b3adbdea",
+  "querySetSha256": "7658c069baf2f5babc626c1b81ed8a85a77cde36f7510264e7f3b706b95159a9",
+  "configuration": {
+    "site": "https://morehardy.github.io",
+    "base": "/anki-forge",
+    "customDomain": ""
+  },
+  "readOrigin": "http://127.0.0.1:54231",
+  "cases": [
+    {
+      "id": "ja-negative-01",
+      "query": "zxqvnj 847261 qqqrzz",
+      "top3": [],
+      "kind": "negative",
+      "intentId": "negative-gibberish",
+      "expectedPageIds": [],
+      "passed": true,
+      "expectedBoundary": "無意味な入力に対応する作業やページはない。空の結果でよいが、検索の操作と入力の修正ができること。",
+      "boundaryReviewRequired": false,
+      "reads": []
+    },
+    {
+      "id": "ja-negative-02",
+      "query": "ankiforge-project-v1を変更せずそのまま使う",
+      "top3": [
+        {
+          "url": "/anki-forge/ja/",
+          "title": "手元のデータからAnki カードを生成。",
+          "excerpt": "install ankiforge==0.3.1 Python で作る AI と Anki Forge を使う。 言語を選び、作りたいものを記入して、依頼文",
+          "score": 12.357836935899773,
+          "matchedTerms": [
+            "ankiforge",
+            "project",
+            "v1",
+            "変更",
+            "せ",
+            "ず"
+          ],
+          "pageId": "home"
+        },
+        {
+          "url": "/anki-forge/ja/docs/rust-guide/",
+          "title": "Rust での作成ガイド",
+          "excerpt": "サポートされる Rust API でプロジェクトを作成し、検証、メディア処理、更新を行います。",
+          "score": 5.618925788404807,
+          "matchedTerms": [
+            "ankiforge",
+            "project",
+            "v1"
+          ],
+          "pageId": "rust-guide"
+        },
+        {
+          "url": "/anki-forge/ja/docs/api/",
+          "title": "公開 API の概要",
+          "excerpt": "作成、メディア、診断、更新に使う Rust、Python、Node の API を探せます。",
+          "score": 1.4338081908244322,
+          "matchedTerms": [
+            "せ"
+          ],
+          "pageId": "api"
+        }
+      ],
+      "kind": "negative",
+      "intentId": "negative-old-schema",
+      "expectedPageIds": [
+        "json-to-anki",
+        "troubleshooting",
+        "rust-guide"
+      ],
+      "passed": true,
+      "expectedBoundary": "ツールのレシピはankiforge-project-v2を要求し、v1を拒否する。結果がある場合は変換が必要であることを説明し、変更していないv1を受理すると案内しない。空の結果でもよい。",
+      "boundaryReviewRequired": true,
+      "reads": [
+        {
+          "url": "/anki-forge/ja/",
+          "title": "手元のデータからAnki カードを生成。",
+          "excerpt": "install ankiforge==0.3.1 Python で作る AI と Anki Forge を使う。 言語を選び、作りたいものを記入して、依頼文",
+          "score": 12.357836935899773,
+          "matchedTerms": [
+            "ankiforge",
+            "project",
+            "v1",
+            "変更",
+            "せ",
+            "ず"
+          ],
+          "pageId": "home",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:42 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "bf145f6cefc2e445d50bdb1d6bfd3016c02a6506743d1c613e1a3331a43a8f07",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/01-home.html",
+          "mainText": "手元のデータからAnki カードを生成。Anki Forge は、Rust コアと Rust、Python、Node.js のインターフェースを備えた、オープンソースの Anki APKG 生成ライブラリです。メディアをまとめ、独自のテンプレートを使い、配布前に更新内容を確認できます。最初のデッキを作る JSON から作る Basic表面holaスペイン語Basic裏面hello英語Cloze表面A sound's pitch depends on its [...].空欄を埋めてください。Cloze裏面A sound's pitch depends on its frequency.More cycles per second, higher pitch.メディア表面Name this pitch.画像＋音声メディア裏面A4, 440 Hz画像＋音声画像穴埋め表面?Which structure is hidden?画像穴埋め裏面NucleusAnki デッキshowcase.apkgカード4枚 / メディア3個4つのカードタイプ。1つの Anki デッキ。プログラミング言語を選択。公開パッケージ 0.3.1 で spanish.apkg を出力します。通常のエクスポートに Anki のインストールは不要です。RustRust 1.92+インストールコマンドをコピーcargo add ankiforge@0.3.1Rust で作る Node / TypeScriptNode.js 22.13+インストールコマンドをコピーnpm install --include=optional ankiforge@0.3.1Node / TypeScript で作る PythonCPython 3.11+インストールコマンドをコピーpython -m pip install ankiforge==0.3.1Python で作る {\"rust\":{\"before\":\"Rust アプリケーションで Anki Forge 0.3.1 を使う作業を手伝ってください。\\n実行環境の要件: Rust 1.92+\\n\\n公開パッケージ `ankiforge` と、このバージョンの文書に記載された公開 API だけを使ってください。\\ngit/path 依存関係、内部ツール、ソース専用 API、未公開のメソッド、推測したメソッドは使わないでください。\\n\\n作りたいもの:\\n\",\"after\":\"\\n\\n次の要件に従ってください。\\n1. ファイルを変更する前に、既存プロジェクトを確認します。\\n2. 必要な設定と正確なインストールコマンドを示します: cargo add ankiforge@0.3.1\\n3. 最小限かつ完全に実行できるプログラムを作り、追加・編集するすべてのファイル名を示します。\\n4. 永続的な `.apkg` ファイルを生成し、安定した名前空間とノートキーを使います。\\n5. 実行コマンド、想定される出力、検証手順を含めます。\\n6. メディア、独自テンプレート、画像穴埋め、更新が必要な場合は API を推測せず、文書化された手順に従います。\\n 更新では、前回配布時のオリジナル APKG を基準として保持します。Anki から再エクスポートしたファイルは使いません。\\n7. 言語、入力形式、出力パス、識別情報のルールが不明な場合に、その解消に必要な質問だけをします。\\n\\nクイックスタート: https://ankiforge.dev/ja/docs/quickstart/\",\"empty\":\"Rust アプリケーションで Anki Forge 0.3.1 を使う作業を手伝ってください。\\n実行環境の要件: Rust 1.92+\\n\\n公開パッケージ `ankiforge` と、このバージョンの文書に記載された公開 API だけを使ってください。\\ngit/path 依存関係、内部ツール、ソース専用 API、未公開のメソッド、推測したメソッドは使わないでください。\\n\\n作りたいもの:\\n\\u003c作りたいものを記入してください>\\n\\n次の要件に従ってください。\\n1. ファイルを変更する前に、既存プロジェクトを確認します。\\n2. 必要な設定と正確なインストールコマンドを示します: cargo add ankiforge@0.3.1\\n3. 最小限かつ完全に実行できるプログラムを作り、追加・編集するすべてのファイル名を示します。\\n4. 永続的な `.apkg` ファイルを生成し、安定した名前空間とノートキーを使います。\\n5. 実行コマンド、想定される出力、検証手順を含めます。\\n6. メディア、独自テンプレート、画像穴埋め、更新が必要な場合は API を推測せず、文書化された手順に従います。\\n 更新では、前回配布時のオリジナル APKG を基準として保持します。Anki から再エクスポートしたファイルは使いません。\\n7. 言語、入力形式、出力パス、識別情報のルールが不明な場合に、その解消に必要な質問だけをします。\\n\\nクイックスタート: https://ankiforge.dev/ja/docs/quickstart/\"},\"node\":{\"before\":\"Node / TypeScript アプリケーションで Anki Forge 0.3.1 を使う作業を手伝ってください。\\n実行環境の要件: Node.js 22.13+\\n\\n公開パッケージ `ankiforge` と、このバージョンの文書に記載された公開 API だけを使ってください。\\ngit/path 依存関係、内部ツール、ソース専用 API、未公開のメソッド、推測したメソッドは使わないでください。\\n\\n作りたいもの:\\n\",\"after\":\"\\n\\n次の要件に従ってください。\\n1. ファイルを変更する前に、既存プロジェクトを確認します。\\n2. 必要な設定と正確なインストールコマンドを示します: npm install --include=optional ankiforge@0.3.1\\n3. 最小限かつ完全に実行できるプログラムを作り、追加・編集するすべてのファイル名を示します。\\n4. 永続的な `.apkg` ファイルを生成し、安定した名前空間とノートキーを使います。\\n5. 実行コマンド、想定される出力、検証手順を含めます。\\n6. メディア、独自テンプレート、画像穴埋め、更新が必要な場合は API を推測せず、文書化された手順に従います。\\n 更新では、前回配布時のオリジナル APKG を基準として保持します。Anki から再エクスポートしたファイルは使いません。\\n7. 言語、入力形式、出力パス、識別情報のルールが不明な場合に、その解消に必要な質問だけをします。\\n\\nクイックスタート: https://ankiforge.dev/ja/docs/node-quickstart/\",\"empty\":\"Node / TypeScript アプリケーションで Anki Forge 0.3.1 を使う作業を手伝ってください。\\n実行環境の要件: Node.js 22.13+\\n\\n公開パッケージ `ankiforge` と、このバージョンの文書に記載された公開 API だけを使ってください。\\ngit/path 依存関係、内部ツール、ソース専用 API、未公開のメソッド、推測したメソッドは使わないでください。\\n\\n作りたいもの:\\n\\u003c作りたいものを記入してください>\\n\\n次の要件に従ってください。\\n1. ファイルを変更する前に、既存プロジェクトを確認します。\\n2. 必要な設定と正確なインストールコマンドを示します: npm install --include=optional ankiforge@0.3.1\\n3. 最小限かつ完全に実行できるプログラムを作り、追加・編集するすべてのファイル名を示します。\\n4. 永続的な `.apkg` ファイルを生成し、安定した名前空間とノートキーを使います。\\n5. 実行コマンド、想定される出力、検証手順を含めます。\\n6. メディア、独自テンプレート、画像穴埋め、更新が必要な場合は API を推測せず、文書化された手順に従います。\\n 更新では、前回配布時のオリジナル APKG を基準として保持します。Anki から再エクスポートしたファイルは使いません。\\n7. 言語、入力形式、出力パス、識別情報のルールが不明な場合に、その解消に必要な質問だけをします。\\n\\nクイックスタート: https://ankiforge.dev/ja/docs/node-quickstart/\"},\"python\":{\"before\":\"Python アプリケーションで Anki Forge 0.3.1 を使う作業を手伝ってください。\\n実行環境の要件: CPython 3.11+\\n\\n公開パッケージ `ankiforge` と、このバージョンの文書に記載された公開 API だけを使ってください。\\ngit/path 依存関係、内部ツール、ソース専用 API、未公開のメソッド、推測したメソッドは使わないでください。\\n\\n作りたいもの:\\n\",\"after\":\"\\n\\n次の要件に従ってください。\\n1. ファイルを変更する前に、既存プロジェクトを確認します。\\n2. 必要な設定と正確なインストールコマンドを示します: python -m pip install ankiforge==0.3.1\\n3. 最小限かつ完全に実行できるプログラムを作り、追加・編集するすべてのファイル名を示します。\\n4. 永続的な `.apkg` ファイルを生成し、安定した名前空間とノートキーを使います。\\n5. 実行コマンド、想定される出力、検証手順を含めます。\\n6. メディア、独自テンプレート、画像穴埋め、更新が必要な場合は API を推測せず、文書化された手順に従います。\\n 更新では、前回配布時のオリジナル APKG を基準として保持します。Anki から再エクスポートしたファイルは使いません。\\n7. 言語、入力形式、出力パス、識別情報のルールが不明な場合に、その解消に必要な質問だけをします。\\n\\nクイックスタート: https://ankiforge.dev/ja/docs/python-quickstart/\",\"empty\":\"Python アプリケーションで Anki Forge 0.3.1 を使う作業を手伝ってください。\\n実行環境の要件: CPython 3.11+\\n\\n公開パッケージ `ankiforge` と、このバージョンの文書に記載された公開 API だけを使ってください。\\ngit/path 依存関係、内部ツール、ソース専用 API、未公開のメソッド、推測したメソッドは使わないでください。\\n\\n作りたいもの:\\n\\u003c作りたいものを記入してください>\\n\\n次の要件に従ってください。\\n1. ファイルを変更する前に、既存プロジェクトを確認します。\\n2. 必要な設定と正確なインストールコマンドを示します: python -m pip install ankiforge==0.3.1\\n3. 最小限かつ完全に実行できるプログラムを作り、追加・編集するすべてのファイル名を示します。\\n4. 永続的な `.apkg` ファイルを生成し、安定した名前空間とノートキーを使います。\\n5. 実行コマンド、想定される出力、検証手順を含めます。\\n6. メディア、独自テンプレート、画像穴埋め、更新が必要な場合は API を推測せず、文書化された手順に従います。\\n 更新では、前回配布時のオリジナル APKG を基準として保持します。Anki から再エクスポートしたファイルは使いません。\\n7. 言語、入力形式、出力パス、識別情報のルールが不明な場合に、その解消に必要な質問だけをします。\\n\\nクイックスタート: https://ankiforge.dev/ja/docs/python-quickstart/\"}}AI と Anki Forge を使う。言語を選び、作りたいものを記入して、依頼文を AI コーディングアシスタントに貼り付けます。どんなデッキを作りますか？任意入力です。依頼内容はこのページ内だけに保持されます。アシスタントは Skill に対応していますか？Anki Forge Skill を開く <p class=\"ai-noscript\">下の言語別テンプレートをコピーし、作業内容のプレースホルダーを置き換えてください。インストールコマンドと Skill は JavaScript なしでも使えます。</p>RustNode / TypeScriptPythonRustAI への依頼文 · Anki Forge 0.3.1AI 用プロンプトをコピーRust アプリケーションで Anki Forge 0.3.1 を使う作業を手伝ってください。 実行環境の要件: Rust 1.92+ 公開パッケージ `ankiforge` と、このバージョンの文書に記載された公開 API だけを使ってください。 git/path 依存関係、内部ツール、ソース専用 API、未公開のメソッド、推測したメソッドは使わないでください。 作りたいもの: <作りたいものを記入してください> 次の要件に従ってください。 1. ファイルを変更する前に、既存プロジェクトを確認します。 2. 必要な設定と正確なインストールコマンドを示します: cargo add ankiforge@0.3.1 3. 最小限かつ完全に実行できるプログラムを作り、追加・編集するすべてのファイル名を示します。 4. 永続的な `.apkg` ファイルを生成し、安定した名前空間とノートキーを使います。 5. 実行コマンド、想定される出力、検証手順を含めます。 6. メディア、独自テンプレート、画像穴埋め、更新が必要な場合は API を推測せず、文書化された手順に従います。 更新では、前回配布時のオリジナル APKG を基準として保持します。Anki から再エクスポートしたファイルは使いません。 7. 言語、入力形式、出力パス、識別情報のルールが不明な場合に、その解消に必要な質問だけをします。 クイックスタート: https://ankiforge.dev/ja/docs/quickstart/Rust 1.92+インストールコマンドをコピーcargo add ankiforge@0.3.1Node / TypeScriptAI への依頼文 · Anki Forge 0.3.1AI 用プロンプトをコピーNode / TypeScript アプリケーションで Anki Forge 0.3.1 を使う作業を手伝ってください。 実行環境の要件: Node.js 22.13+ 公開パッケージ `ankiforge` と、このバージョンの文書に記載された公開 API だけを使ってください。 git/path 依存関係、内部ツール、ソース専用 API、未公開のメソッド、推測したメソッドは使わないでください。 作りたいもの: <作りたいものを記入してください> 次の要件に従ってください。 1. ファイルを変更する前に、既存プロジェクトを確認します。 2. 必要な設定と正確なインストールコマンドを示します: npm install --include=optional ankiforge@0.3.1 3. 最小限かつ完全に実行できるプログラムを作り、追加・編集するすべてのファイル名を示します。 4. 永続的な `.apkg` ファイルを生成し、安定した名前空間とノートキーを使います。 5. 実行コマンド、想定される出力、検証手順を含めます。 6. メディア、独自テンプレート、画像穴埋め、更新が必要な場合は API を推測せず、文書化された手順に従います。 更新では、前回配布時のオリジナル APKG を基準として保持します。Anki から再エクスポートしたファイルは使いません。 7. 言語、入力形式、出力パス、識別情報のルールが不明な場合に、その解消に必要な質問だけをします。 クイックスタート: https://ankiforge.dev/ja/docs/node-quickstart/Node.js 22.13+インストールコマンドをコピーnpm install --include=optional ankiforge@0.3.1PythonAI への依頼文 · Anki Forge 0.3.1AI 用プロンプトをコピーPython アプリケーションで Anki Forge 0.3.1 を使う作業を手伝ってください。 実行環境の要件: CPython 3.11+ 公開パッケージ `ankiforge` と、このバージョンの文書に記載された公開 API だけを使ってください。 git/path 依存関係、内部ツール、ソース専用 API、未公開のメソッド、推測したメソッドは使わないでください。 作りたいもの: <作りたいものを記入してください> 次の要件に従ってください。 1. ファイルを変更する前に、既存プロジェクトを確認します。 2. 必要な設定と正確なインストールコマンドを示します: python -m pip install ankiforge==0.3.1 3. 最小限かつ完全に実行できるプログラムを作り、追加・編集するすべてのファイル名を示します。 4. 永続的な `.apkg` ファイルを生成し、安定した名前空間とノートキーを使います。 5. 実行コマンド、想定される出力、検証手順を含めます。 6. メディア、独自テンプレート、画像穴埋め、更新が必要な場合は API を推測せず、文書化された手順に従います。 更新では、前回配布時のオリジナル APKG を基準として保持します。Anki から再エクスポートしたファイルは使いません。 7. 言語、入力形式、出力パス、識別情報のルールが不明な場合に、その解消に必要な質問だけをします。 クイックスタート: https://ankiforge.dev/ja/docs/python-quickstart/CPython 3.11+インストールコマンドをコピーpython -m pip install ankiforge==0.3.1エクスポートを実測。Rust Project API / genanki 0.13.1 · 処理ごとに Basic ノート1,000件52.7 msテキストのみのノート1,000件をエクスポート45.7–53.9%測定した5種類の処理でエクスポート時間を短縮Rust Project API · Apple M1 Pro · 10回実行の中央値テキスト、画像、音声。5つのテストすべてで高速。各処理には Basic ノートが1,000件あり、テキストのみ、個別のメディア、共有する複数種類のメディアを扱います。Rust は genanki よりエクスポート時間が45.7〜53.9%短くなりました。Anki Forge Rustgenankiテキストのみ時間が49.8%短縮52.7 ms / 105.0 ms個別の画像時間が52.9%短縮150.7 ms / 320.2 ms個別の音声時間が53.3%短縮128.7 ms / 275.4 ms複数種類の個別メディア時間が53.9%短縮110.5 ms / 239.5 ms複数種類の共有メディア時間が45.7%短縮61.4 ms / 112.9 msこの結果はデッキの生成時間を測ったもので、Anki へのインポートや復習の速さではありません。ハードウェアや処理内容によって異なる場合があります。 測定方法と元データコードを読んで、カードを試す。実行できる Rust の例を切り替え、プレビューのカードを裏返し、生成されるデッキをダウンロードできます。BasicClozeメディア画像穴埋めRust ソース → ブラウザープレビューbasic.rs完全なソース ↗コードをコピーlet (front, back) = (\"hola\", \"hello\"); let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\"); project.add(\"es:hola\", Note::basic(front, back))?; let built = project.build(BuildOptions::to(output.join(\"spanish.apkg\")))?;出力spanish.apkg ↓Spanishスペイン語 → 英語holaどんな意味ですか？holahelloスペイン語の挨拶。解答を表示質問を表示しました。<style>[data-flip] { display: none; }</style><p class=\"no-script-note\">解答: hello</p>cloze.rs完全なソース ↗コードをコピーlet text = \"A sound's pitch depends on its {{c1::frequency}}.\"; let extra = \"More cycles per second, higher pitch.\"; let mut project = Project::new(\"website-sound\")?.default_deck(\"Sound\"); project.add(\"sound:pitch\", Note::cloze(text).field(\"back_extra\", extra))?; let built = project.build(BuildOptions::to(output.join(\"sound.apkg\")))?;出力sound.apkg ↓Sound文を完成させてくださいA sound's pitch depends on its […].文を完成させてくださいA sound's pitch depends on its frequency.More cycles per second, higher pitch.解答を表示質問を表示しました。<style>[data-flip] { display: none; }</style><p class=\"no-script-note\">解答: frequency</p>media.rs完全なソース ↗コードをコピーlet (prompt, answer) = (\"Name this pitch.\", \"A4, 440 Hz\"); let picture = Media::file(output.join(\"waveform.svg\"))?.with_export_name(\"waveform.svg\")?; let audio = Media::file(output.join(\"concert-a.wav\"))?.with_export_name(\"concert-a.wav\")?; project.add( \"sound:a4\", model .note() .field(\"prompt\", prompt) .field(\"answer\", answer) .field(\"picture\", picture.image()) .field(\"audio\", audio.sound()), )?; let built = project.build(BuildOptions::to(output.join(\"ear-training.apkg\")))?;出力ear-training.apkg ↓Ear Training聴音練習Name this pitch.合成した正弦波の音A4, 440 Hz基準音 A を1秒間。お使いのブラウザーは音声に対応していません。 音声をダウンロード。解答を表示質問を表示しました。<style>[data-flip] { display: none; }</style><p class=\"no-script-note\">解答: A4, 440 Hz</p>occlusion.rs完全なソース ↗コードをコピーlet image = Media::file(output.join(\"cell-anatomy.png\"))?.with_export_name(\"cell-anatomy.png\")?; Ok(Note::image_occlusion(image) .mask(Mask::rect(\"nucleus\", 296, 106, 240, 232)) .build()? .field(\"header\", \"Cell anatomy\") .field(\"back_extra\", \"Nucleus\"))出力cell-anatomy.apkg ↓Cell Anatomy細胞の構造Which structure is hidden??細胞の構造Nucleus解答を表示質問を表示しました。<style>[data-flip] { display: none; }</style><p class=\"no-script-note\">解答: Nucleus</p>エクスポート内容のブラウザープレビューです。Anki で確認するには APKG をインポートしてください。<style>[data-workbench] [data-example][hidden] { display: grid !important; } [data-workbench] [role=\"tablist\"] { display: none; }</style><p class=\"no-script-note\"><a href=\"/anki-forge/ja/examples/\">Basic のサンプルです。すべてのカードサンプルを見て、デッキをダウンロードできます。</a></p>さらに使いこなす独自のテンプレート 画像穴埋めのモード メディアと動画 ノートの内容を更新しても、同じノートとして識別。定義を訂正したり例を追加したりできます。安定した ID と以前のビルドを使い、Anki Forge は再エクスポート時に既存のノートを照合します。デッキ更新の仕組み ノートの安定 IDes:hola表面hola裏面hello内容の変更を試す。解答を更新実際の比較結果: RISK.NOTE_CHANGED (low). 公開ポリシー: この変更を許可します.v1 をダウンロードv2 をダウンロード比較レポート配布時のオリジナル APKG を保持してください。インポート設定と新しいローカル編集が更新に影響します。 更新ガイド<style>[data-update] { display: none; }</style>エクスポート前に問題を見つける。未入力のフィールド、メディア、テンプレートの問題を診断結果で確認します。検証をビルドの手順に組み込めます。検証について読む 自分のカードを、自分のテンプレートで。Basic と Cloze から始めることも、独自のノートタイプを定義することもできます。HTML、CSS、メディアを再利用できるテンプレートバンドルにまとめられます。テンプレートについて読む 最初のデッキから次の更新までCSV の表、JSON データ、AI アシスタントが下書きしたカードから始めます。完全なエクスポート手順を試してから、メディアを加え、更新を確認しましょう。JSON から作る CSV を Anki に変換 AI を使ってカードを作る genanki と比較する",
+          "paragraphs": [
+            "Anki Forge は、Rust コアと Rust、Python、Node.js のインターフェースを備えた、オープンソースの Anki APKG 生成ライブラリです。メディアをまとめ、独自のテンプレートを使い、配布前に更新内容を確認できます。",
+            "A sound's pitch depends on its [...].",
+            "A sound's pitch depends on its frequency.",
+            "Name this pitch.",
+            "A4, 440 Hz",
+            "Which structure is hidden?",
+            "Nucleus",
+            "4つのカードタイプ。1つの Anki デッキ。",
+            "公開パッケージ 0.3.1 で spanish.apkg を出力します。通常のエクスポートに Anki のインストールは不要です。",
+            "",
+            "",
+            "",
+            "言語を選び、作りたいものを記入して、依頼文を AI コーディングアシスタントに貼り付けます。",
+            "任意入力です。依頼内容はこのページ内だけに保持されます。",
+            "アシスタントは Skill に対応していますか？Anki Forge Skill を開く",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Rust Project API / genanki 0.13.1 · 処理ごとに Basic ノート1,000件",
+            "Rust Project API · Apple M1 Pro · 10回実行の中央値",
+            "各処理には Basic ノートが1,000件あり、テキストのみ、個別のメディア、共有する複数種類のメディアを扱います。Rust は genanki よりエクスポート時間が45.7〜53.9%短くなりました。",
+            "52.7 ms / 105.0 ms",
+            "150.7 ms / 320.2 ms",
+            "128.7 ms / 275.4 ms",
+            "110.5 ms / 239.5 ms",
+            "61.4 ms / 112.9 ms",
+            "この結果はデッキの生成時間を測ったもので、Anki へのインポートや復習の速さではありません。ハードウェアや処理内容によって異なる場合があります。 測定方法と元データ",
+            "実行できる Rust の例を切り替え、プレビューのカードを裏返し、生成されるデッキをダウンロードできます。",
+            "",
+            "hola",
+            "hello",
+            "質問を表示しました。",
+            "",
+            "A sound's pitch depends on its […].",
+            "A sound's pitch depends on its frequency.",
+            "質問を表示しました。",
+            "",
+            "Name this pitch.",
+            "A4, 440 Hz",
+            "質問を表示しました。",
+            "",
+            "Which structure is hidden?",
+            "Nucleus",
+            "質問を表示しました。",
+            "エクスポート内容のブラウザープレビューです。Anki で確認するには APKG をインポートしてください。",
+            "定義を訂正したり例を追加したりできます。安定した ID と以前のビルドを使い、Anki Forge は再エクスポート時に既存のノートを照合します。",
+            "hola",
+            "hello",
+            "内容の変更を試す。",
+            "実際の比較結果: RISK.NOTE_CHANGED (low). 公開ポリシー: この変更を許可します.",
+            "配布時のオリジナル APKG を保持してください。インポート設定と新しいローカル編集が更新に影響します。 更新ガイド",
+            "未入力のフィールド、メディア、テンプレートの問題を診断結果で確認します。検証をビルドの手順に組み込めます。",
+            "Basic と Cloze から始めることも、独自のノートタイプを定義することもできます。HTML、CSS、メディアを再利用できるテンプレートバンドルにまとめられます。",
+            "CSV の表、JSON データ、AI アシスタントが下書きしたカードから始めます。完全なエクスポート手順を試してから、メディアを加え、更新を確認しましょう。"
+          ]
+        },
+        {
+          "url": "/anki-forge/ja/docs/rust-guide/",
+          "title": "Rust での作成ガイド",
+          "excerpt": "サポートされる Rust API でプロジェクトを作成し、検証、メディア処理、更新を行います。",
+          "score": 5.618925788404807,
+          "matchedTerms": [
+            "ankiforge",
+            "project",
+            "v1"
+          ],
+          "pageId": "rust-guide",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/rust-guide/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:42 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "773810626fbb4079c48f8f3faa4d11539831c725885f56cf005ab18e00588536",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/02-rust-guide.html",
+          "mainText": "Rust での作成ガイド1つの Project は1つの配布物を表します。安定した名前空間で作成し、安定キーでノートを追加して APKG をビルドします。よく使う型は ankiforge から直接インポートできます。詳細なオプションは公開されている機能別モジュールにあります。 プロジェクトと診断「プロジェクトと診断」のセクション use ankiforge::{BuildOptions, Content, Note, Project}; fn main() -> anyhow::Result<()> { let mut project = Project::new(\"jp-core\")? .default_deck(\"Japanese::Core\"); project.add(\"taberu\", Note::basic(\"食べる\", Content::html(\"<b>to eat</b>\")))?; let output = project.build(BuildOptions::to(\"jp-core.apkg\"))?; println!(\"{} notes\", output.report().counts().notes); println!(\"{}\", serde_json::to_string_pretty(&output.snapshot())?); Ok(())} ビルドに成功すると、成果物の存在が保証された BuildOutput を返します。BuildReport は件数、診断、経過時間、完了した比較などの観測結果を保持します。成功・失敗の結果や成果物の所有権は保持しません。警告があっても、成功した出力が失敗に変わることはありません。 スキーマのエラーはモデルの完成時に検査されます。Project::add は、ノートのキー、フィールド参照、必須フィールド、デッキ、タグ、依存関係の競合をアトミックに検査します。失敗してもプロジェクトは変わりません。残りのカード・パッケージ・更新の検査はビルド時に行います。別途変更可能なレジストリや、必須の検証チェックポイントはありません。 エラーには固有の kind() と code() メソッドがあり、std::error::Error を実装しています。表示メッセージを解析せず、機械処理用コードを使ってください。BuildError::snapshot() には実際の失敗、観測結果、原因チェーンのテキスト、公開についての事実が含まれます。標準的なエラーラッパーでは、元のエラーを source として保持できます。 モデルとアセット「モデルとアセット」のセクション 完成した NoteType は不変で共有可能です。model.note() を呼び出し、安定キーでフィールドを設定して、結果をプロジェクトに追加します。ノートはモデルを保持し、追加時にモデルとメディアを自動収集します。宣言とテンプレートのルールは独自のノートタイプを参照してください。 Media::file と Media::bytes はデータを所有するスナップショットを取得します。インポートに成功した後は、元ファイルを残しておく必要はありません。image.image() と audio.sound() は構造化コンテンツを生成し、Content::sequence はそれらをテキストや HTML と組み合わせます。直接記述した HTML・CSS・スクリプトのアセットは、builder.asset または project.add_asset で明示的に追加する必要があります。メディアとテンプレートバンドルを参照してください。 出力の所有権「出力の所有権」のセクション 永続出力には BuildOptions::to(path)、所有権によって寿命を管理する一時ファイルには BuildOptions::temporary() を選びます。一時パスにアクセスしている間は、出力または output.artifact() のクローンを保持してください。最後の所有者が解放されるとファイルが削除されます。persist_to(path) は永続成果物を返します。失敗した場合も元の所有者は使えます。JSON スナップショットにはパスが含まれますが、ファイルは所有しません。 ノートの安定した識別情報「ノートの安定した識別情報」のセクション project.add(key, note) には永続的なソースレコードのキーを使います。プロジェクトの名前空間、モデルキー、フィールドキー、テンプレートキーは表示名から独立しています。内容の変更によって新しい論理ノートが作られることはありません。キーが重複すると、上書きせず失敗します。ソースレコードの並べ替えや編集後も、選んだキーを保存・再使用してください。 配布済みデッキを更新する「配布済みデッキを更新する」のセクション update_from に前回配布時のオリジナル APKG を渡します。内部の完全な証拠によって、識別情報とリビジョンの対応を保持します。独立した project.compare(CompareOptions::against(path)) は候補を解析し、ポリシーが公開を許可するかどうかを報告します。高リスクの変更、クライアントでのインポートの制約、明示的な許可は、2つのバージョンを使う手順を参照してください。 チェックアウトしたリポジトリでは、次の例で同じ公開 API を実行できます。 ターミナルウィンドウcargo run --locked -p ankiforge --example target_api_basiccargo run --locked -p ankiforge --example target_api_custom_notetypecargo run --locked -p ankiforge --example target_api_mediacargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples 追加時のエラーとメディアの種類「追加時のエラーとメディアの種類」のセクション Project は安定した名前空間と任意の既定デッキを使い、表示タイトルは持ちません。NoteType、Field、Template は引き続き表示名をサポートします。Project::add はアトミックです。ノート・モデルのキーは AddError::context()、元の位置は note::AddTarget で確認します。detail() は競合や互換性のないメディア用途に対する note::AddDetail を返します。これらの非網羅的な列挙型をマッチする際は、データ付きバリアントに .. を使い、フォールバックの分岐を用意してください。フィールドの content_path は、フィールド自体なら None、ルートなら Some([])、入れ子のノードならシーケンスのインデックスになります。区切り文字のバイト範囲は元の UTF-8 Text/Html リーフを指します。 Media::image() と sound() 自体は引き続き失敗しません。ノートへの追加では、画像に image/*、音声参照に audio/* または video/* が必要です。それ以外の種類は NOTE.MEDIA_USAGE_INVALID になります。これは保持された MIME の検査であり、デコードや再生の確認ではありません。直接記述した HTML と明示的アセットの動作は変わりません。エクスポート名を変更しても MIME は変わりません。PNG を wrong.mp3 に改名しても画像としての追加は通りますが、ビルド時の独立した内容判定・拡張子検査で MEDIA.DECLARED_MIME_MISMATCH になることがあります。 ツール用レシピにはトップレベルの name を持たない ankiforge-project-v2 が必要です。v1 は拒否されます。契約バンドルは 2.1.0 です。パッケージの識別情報は引き続き ankiforge-identity-v1 です。 Markdown を表示ページを編集前へ安定したノート ID で Anki デッキを更新する次へNode.js で Anki カードを生成する<p class=\"container\">JavaScript が無効な場合は、コードやコマンドを選択してキーボードでコピーしてください。</p>Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。記事RSSMIT ライセンス AI 向けドキュメント索引",
+          "paragraphs": [
+            "1つの Project は1つの配布物を表します。安定した名前空間で作成し、安定キーでノートを追加して APKG をビルドします。よく使う型は ankiforge から直接インポートできます。詳細なオプションは公開されている機能別モジュールにあります。",
+            "",
+            "ビルドに成功すると、成果物の存在が保証された BuildOutput を返します。BuildReport は件数、診断、経過時間、完了した比較などの観測結果を保持します。成功・失敗の結果や成果物の所有権は保持しません。警告があっても、成功した出力が失敗に変わることはありません。",
+            "スキーマのエラーはモデルの完成時に検査されます。Project::add は、ノートのキー、フィールド参照、必須フィールド、デッキ、タグ、依存関係の競合をアトミックに検査します。失敗してもプロジェクトは変わりません。残りのカード・パッケージ・更新の検査はビルド時に行います。別途変更可能なレジストリや、必須の検証チェックポイントはありません。",
+            "エラーには固有の kind() と code() メソッドがあり、std::error::Error を実装しています。表示メッセージを解析せず、機械処理用コードを使ってください。BuildError::snapshot() には実際の失敗、観測結果、原因チェーンのテキスト、公開についての事実が含まれます。標準的なエラーラッパーでは、元のエラーを source として保持できます。",
+            "",
+            "完成した NoteType は不変で共有可能です。model.note() を呼び出し、安定キーでフィールドを設定して、結果をプロジェクトに追加します。ノートはモデルを保持し、追加時にモデルとメディアを自動収集します。宣言とテンプレートのルールは独自のノートタイプを参照してください。",
+            "Media::file と Media::bytes はデータを所有するスナップショットを取得します。インポートに成功した後は、元ファイルを残しておく必要はありません。image.image() と audio.sound() は構造化コンテンツを生成し、Content::sequence はそれらをテキストや HTML と組み合わせます。直接記述した HTML・CSS・スクリプトのアセットは、builder.asset または project.add_asset で明示的に追加する必要があります。メディアとテンプレートバンドルを参照してください。",
+            "",
+            "永続出力には BuildOptions::to(path)、所有権によって寿命を管理する一時ファイルには BuildOptions::temporary() を選びます。一時パスにアクセスしている間は、出力または output.artifact() のクローンを保持してください。最後の所有者が解放されるとファイルが削除されます。persist_to(path) は永続成果物を返します。失敗した場合も元の所有者は使えます。JSON スナップショットにはパスが含まれますが、ファイルは所有しません。",
+            "",
+            "project.add(key, note) には永続的なソースレコードのキーを使います。プロジェクトの名前空間、モデルキー、フィールドキー、テンプレートキーは表示名から独立しています。内容の変更によって新しい論理ノートが作られることはありません。キーが重複すると、上書きせず失敗します。ソースレコードの並べ替えや編集後も、選んだキーを保存・再使用してください。",
+            "",
+            "update_from に前回配布時のオリジナル APKG を渡します。内部の完全な証拠によって、識別情報とリビジョンの対応を保持します。独立した project.compare(CompareOptions::against(path)) は候補を解析し、ポリシーが公開を許可するかどうかを報告します。高リスクの変更、クライアントでのインポートの制約、明示的な許可は、2つのバージョンを使う手順を参照してください。",
+            "チェックアウトしたリポジトリでは、次の例で同じ公開 API を実行できます。",
+            "",
+            "Project は安定した名前空間と任意の既定デッキを使い、表示タイトルは持ちません。NoteType、Field、Template は引き続き表示名をサポートします。Project::add はアトミックです。ノート・モデルのキーは AddError::context()、元の位置は note::AddTarget で確認します。detail() は競合や互換性のないメディア用途に対する note::AddDetail を返します。これらの非網羅的な列挙型をマッチする際は、データ付きバリアントに .. を使い、フォールバックの分岐を用意してください。フィールドの content_path は、フィールド自体なら None、ルートなら Some([])、入れ子のノードならシーケンスのインデックスになります。区切り文字のバイト範囲は元の UTF-8 Text/Html リーフを指します。",
+            "Media::image() と sound() 自体は引き続き失敗しません。ノートへの追加では、画像に image/*、音声参照に audio/* または video/* が必要です。それ以外の種類は NOTE.MEDIA_USAGE_INVALID になります。これは保持された MIME の検査であり、デコードや再生の確認ではありません。直接記述した HTML と明示的アセットの動作は変わりません。エクスポート名を変更しても MIME は変わりません。PNG を wrong.mp3 に改名しても画像としての追加は通りますが、ビルド時の独立した内容判定・拡張子検査で MEDIA.DECLARED_MIME_MISMATCH になることがあります。",
+            "ツール用レシピにはトップレベルの name を持たない ankiforge-project-v2 が必要です。v1 は拒否されます。契約バンドルは 2.1.0 です。パッケージの識別情報は引き続き ankiforge-identity-v1 です。",
+            "Markdown を表示",
+            "Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。"
+          ]
+        },
+        {
+          "url": "/anki-forge/ja/docs/api/",
+          "title": "公開 API の概要",
+          "excerpt": "作成、メディア、診断、更新に使う Rust、Python、Node の API を探せます。",
+          "score": 1.4338081908244322,
+          "matchedTerms": [
+            "せ"
+          ],
+          "pageId": "api",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/api/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:42 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "f47603daf80cd90508c87ae3f7d2681f1a5061a9be089b8badd1b5aae5462466",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/03-api.html",
+          "mainText": "公開 API の概要Anki Forge は Rust コアと Rust・Python・Node.js のインターフェースを持つ、オープンソースの Anki APKG 生成ライブラリです。公開 ankiforge パッケージでノートを作成し、メディアを同梱して、新しいデッキを配布する前に更新内容を確認できます。MIT ライセンスで公開されています。 作業 Rust Python Node / TypeScript ノートとモデルの作成 Rust API Python API Node API 画像、音声、画像穴埋め メディア メディアの所有 メディアの所有 エラーの診断 トラブルシューティング 診断 エラー 比較と公開 更新の手順 ビルドと比較 ビルドと比較 ノートの安定した識別情報「ノートの安定した識別情報」のセクション 各論理ノートについて、プロジェクトの名前空間とノートキーを安定して維持します。既存リリースを更新するには、配布時のオリジナル APKG も必要です。Anki から再エクスポートしたファイルは、オリジナルに含まれる完全な識別情報の証拠の代わりにはなりません。 作業から始める「作業から始める」のセクション 使用する言語を選ぶか、JSON から生成・更新する完全なレシピに沿って進めてください。公開パッケージの実行環境は互換性、ファイルの所有権は出力の保証を参照してください。 Markdown を表示ページを編集前へgenanki からの移行次へRust API ガイド<p class=\"container\">JavaScript が無効な場合は、コードやコマンドを選択してキーボードでコピーしてください。</p>Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。記事RSSMIT ライセンス AI 向けドキュメント索引",
+          "paragraphs": [
+            "Anki Forge は Rust コアと Rust・Python・Node.js のインターフェースを持つ、オープンソースの Anki APKG 生成ライブラリです。公開 ankiforge パッケージでノートを作成し、メディアを同梱して、新しいデッキを配布する前に更新内容を確認できます。MIT ライセンスで公開されています。",
+            "作業 Rust Python Node / TypeScript",
+            "ノートとモデルの作成 Rust API Python API Node API",
+            "画像、音声、画像穴埋め メディア メディアの所有 メディアの所有",
+            "エラーの診断 トラブルシューティング 診断 エラー",
+            "比較と公開 更新の手順 ビルドと比較 ビルドと比較",
+            "",
+            "各論理ノートについて、プロジェクトの名前空間とノートキーを安定して維持します。既存リリースを更新するには、配布時のオリジナル APKG も必要です。Anki から再エクスポートしたファイルは、オリジナルに含まれる完全な識別情報の証拠の代わりにはなりません。",
+            "",
+            "使用する言語を選ぶか、JSON から生成・更新する完全なレシピに沿って進めてください。公開パッケージの実行環境は互換性、ファイルの所有権は出力の保証を参照してください。",
+            "Markdown を表示",
+            "Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ja-negative-03",
+      "query": "Ankiで再エクスポートしたAPKGを更新の基準にする",
+      "top3": [
+        {
+          "url": "/anki-forge/ja/docs/updates/",
+          "title": "安定したノート ID で Anki デッキを更新する",
+          "excerpt": "安定したノート ID で Anki デッキを更新する. すでに配布した Anki デッキに訂正や新しいカードを届けます。ノートの ID",
+          "score": 55.76586309557034,
+          "matchedTerms": [
+            "基準パッケージ",
+            "更新",
+            "anki",
+            "apkg",
+            "基準"
+          ],
+          "pageId": "updates"
+        },
+        {
+          "url": "/anki-forge/ja/blog/stable-ids-and-deck-updates/",
+          "title": "表現を変えても、ノートの識別情報は保つ",
+          "excerpt": "生成した Anki デッキの更新で、安定 ID とビルドの基準パッケージがどう連携するかを説明します。",
+          "score": 27.67642694361157,
+          "matchedTerms": [
+            "基準パッケージ",
+            "更新",
+            "anki",
+            "基準"
+          ],
+          "pageId": "blog:stable-ids-and-deck-updates"
+        },
+        {
+          "url": "/anki-forge/ja/docs/json-to-anki/",
+          "title": "JSON から Anki デッキを生成・更新する",
+          "excerpt": "から Anki デッキを生成・更新する. JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して",
+          "score": 15.122157060655823,
+          "matchedTerms": [
+            "基準パッケージ",
+            "更新",
+            "anki",
+            "apkg",
+            "基準"
+          ],
+          "pageId": "json-to-anki"
+        }
+      ],
+      "kind": "negative",
+      "intentId": "negative-reexport-baseline",
+      "expectedPageIds": [
+        "updates",
+        "compatibility",
+        "troubleshooting"
+      ],
+      "passed": true,
+      "expectedBoundary": "更新には前回配布したオリジナルAPKGが必要。Ankiから再エクスポートしたAPKGを代わりの基準パッケージとして推奨しない。空の結果でもよい。",
+      "boundaryReviewRequired": true,
+      "reads": [
+        {
+          "url": "/anki-forge/ja/docs/updates/",
+          "title": "安定したノート ID で Anki デッキを更新する",
+          "excerpt": "安定したノート ID で Anki デッキを更新する. すでに配布した Anki デッキに訂正や新しいカードを届けます。ノートの ID",
+          "score": 55.76586309557034,
+          "matchedTerms": [
+            "基準パッケージ",
+            "更新",
+            "anki",
+            "apkg",
+            "基準"
+          ],
+          "pageId": "updates",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/updates/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:42 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "6909513affa7bbd796b16d5e4d0f67bc7b9c080c5b9adbd3b7eb1e35a2bdd33f",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/04-updates.html",
+          "mainText": "安定したノート ID で Anki デッキを更新するすでに配布した Anki デッキに訂正や新しいカードを届けます。ノートの ID を安定させると、Anki Forge と Anki は既存のノートを新規ノートとして扱わずに識別できます。ただし、実際に何が更新されるかには、Anki のインポート設定や、それより新しいローカルでの編集も影響します。 プロジェクトの名前空間と、ノート・モデル・フィールド・テンプレートのキーは変更しないでください。新しいリリースは、完全なバージョン付き識別情報を含む、前回の配布時のオリジナル APKGを基準に作成します。そのパッケージを対応するソースのリビジョンと一緒に保管してください。 2つの版を生成して比較する「2つの版を生成して比較する」のセクション ターミナルウィンドウcargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples このコマンドは spanish-v1.apkg と spanish-v2.apkg を書き出し、変更した回答を比較して、更新版のパッケージ内の件数を確認します。実行されるソースコードは次のとおりです。 fn vocabulary(answer: &str) -> anyhow::Result<Project> { let mut project = Project::new(\"docs-spanish-updates\")?.default_deck(\"Spanish\"); project.add(\"hola\", Note::basic(\"hola\", answer))?; Ok(project)} fn updates(output: &Path) -> anyhow::Result<()> { let previous = output.join(\"spanish-v1.apkg\"); let next = output.join(\"spanish-v2.apkg\"); vocabulary(\"hello\")?.build(BuildOptions::to(&previous))?; let project = vocabulary(\"hello; hi\")?; let comparison = project.compare(CompareOptions::against(&previous))?; ensure!(comparison.policy().allows_publication()); let built = project.build(BuildOptions::to(&next).update_from(&previous))?; verify(&built, 1, 1, 0)?; ensure!(built.report().comparison().is_some()); Ok(())} compare は、公開を妨げる検出事項があっても正常に完了します。元のリスクレベルとその根拠に加えて、comparison.policy().allows_publication() を別途確認してください。build(...update_from(...)) も同じ分析を行い、ポリシーが候補の公開を認めない場合は、公開前に BuildError を返します。 ポリシーと検査の上限「ポリシーと検査の上限」のセクション 次の完全なプログラムでは、より厳しいしきい値を選び、比較と更新に同じ設定を使います。 use ankiforge::{BuildOptions, Note, Project};use ankiforge::build::InspectLimits;use ankiforge::update::{CompareOptions, RiskLevel, UpdatePolicy}; fn main() -> anyhow::Result<()> { let mut first = Project::new(\"policy-example\")?; first.add(\"cell\", Note::basic(\"Cell?\", \"Unit of life\"))?; first.build(BuildOptions::to(\"policy-v1.apkg\"))?; let mut next = Project::new(\"policy-example\")?; next.add(\"cell\", Note::basic(\"Cell?\", \"The basic unit of life\"))?; let mut limits = InspectLimits::default(); limits.max_collection_bytes = 1 << 30; let policy = UpdatePolicy::default().fail_on(RiskLevel::Medium); let comparison = next.compare(CompareOptions::against(\"policy-v1.apkg\") .inspect_limits(limits.clone()).update_policy(policy.clone()))?; assert!(comparison.policy().allows_publication()); next.build(BuildOptions::to(\"policy-v2.apkg\").update_from(\"policy-v1.apkg\") .inspect_limits(limits).update_policy(policy))?; Ok(())} デフォルトのポリシーは High と Critical の検出事項がある場合に公開を止めます。特定のカテゴリを確認したうえで、呼び出し側が意図的に UpdatePolicy::default().allow(RiskCode::NoteRemoved) を選ぶこともできます。この指定は、元のレベルと根拠を保持したまま、そのカテゴリの検出事項をすべて許容します。特定のノートだけを個別に承認する指定ではありません。該当する検出事項のない許容指定には警告が出ます。不明なリスクコードは拒否されます。比較で返されたコードをすべて自動的に許容しないでください。 識別情報の欠落や破損、名前空間の不一致、不正な候補データ、検査上限への抵触はエラーであり、許容指定できるリスクカテゴリではありません。分析を完了できない場合、比較はそれまでに得られた検査結果を含むエラーを返します。update_from のない新規作成に明示的なポリシーを指定すると、setter の呼び出し順にかかわらず設定エラーになります。 識別情報とその根拠「識別情報とその根拠」のセクション パッケージには ankiforge-identity-v1 形式の ankiforge-identity.json が含まれます。モデル／設定の ID、ノートの GUID、過去のフィールド／テンプレートのスロット、カード／マスクの通し番号、リビジョン、メディアを、実際のコレクションと格納データに結び付けます。Anki からの再エクスポートではこの情報が保持されないため、更新の基準には使えません。欠落した情報が暗黙に再構築されることもありません。 表示名や内容を編集しても、識別用のキーは保持されます。内容が変わらない場合は基準パッケージのリビジョンを維持し、変更した場合はリビジョンを進めます。フィールドやテンプレートを並べ替えても、過去の対応関係は保持されます。使われなくなった識別子も予約されたままなので、同じキーを復元すると再利用できます。ノートキーを別のモデルへ移すことはできず、モデルキーの種類を通常型と Cloze 型の間で変更することもできません。 クライアントのインポート動作と公開前の確認「クライアントのインポート動作と公開前の確認」のセクション APKG は配布用パッケージであり、削除を同期する仕組みではありません。ノート、フィールド、テンプレート、マスクを省いても、学習者の既存データは削除されません。フィールド／テンプレートのスキーマ変更と並べ替えフィールドの変更は、Anki のマージやインポートの設定が動作に影響するため、高リスクです。スキーマ変更によって、ノート内容の比較より先にモデルが複製されたり、対象ノートのタイムスタンプが更新されたりする場合があります。 サポートするクライアントで、初回インポートと既存コレクションへの更新をテストしてください。予定しているマージ設定とノート更新設定を使い、フィールド、GUID、カードの集合、ローカルでの編集、既存の学習スケジュールを確認します。識別情報が安定しているだけでは、新しいローカル編集の上書きや、削除された履歴の復元は保証されません。 候補は、保存済みの基準パッケージとは別のパスに書き出してください。確認を終えたら承認したパッケージを配布し、次回のリリースの根拠として保管します。ファイルの所有権と公開時の保証についてはビルドの保証を参照してください。 一度だけビルドし、確認してから公開する「一度だけビルドし、確認してから公開する」のセクション この API は公開パッケージ 0.3.1 に含まれています。 一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。準備済み公開では、実際の APKG と確認対象のレポートの対応を保てます。 use ankiforge::{BuildOptions, Note, Project}; fn main() -> Result<(), Box<dyn std::error::Error>> { let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\"); project.add(\"es:hola\", Note::basic(\"hola\", \"hello\"))?; project.build(BuildOptions::to(\"spanish-original.apkg\"))?; let mut next = Project::new(\"spanish\")?.default_deck(\"Spanish\"); next.add(\"es:hola\", Note::basic(\"hola\", \"hello; hi\"))?; let prepared = next.prepare_publication( BuildOptions::to(\"spanish-reviewed.apkg\").update_from(\"spanish-original.apkg\"), )?; println!(\"{:?}\", prepared.report().comparison()); if prepared .report() .comparison() .is_some_and(|report| report.policy().allows_publication()) { let output = prepared.publish()?; println!(\"{}\", output.artifact().path().display()); } Ok(())} 固定したソースのチェックアウトで、上の完全なプログラムを anki_forge/examples/docs_publication.rs に保存します。この例は本ガイドで追加するもので、1199196 には含まれていません。その後、次を実行します。 ターミナルウィンドウcargo run --locked -p ankiforge --example docs_publication この例はリポジトリのルートに spanish-original.apkg を書き出し、ポリシーが公開を認めた場合は spanish-reviewed.apkg も書き出します。準備の段階では公開先は変更されません。配布を承認する前に検出事項を確認し、クライアントへのインポートをテストしてください。この例が自動的に公開するのは、ポリシーが許容する単純な内容変更だけです。ベンチマークはこのワークフローを測定していません。 ビルドのライフサイクル、Rust API、Node API、Python APIも参照してください。 Markdown を表示ページを編集前へAnki の画像穴埋めカードを生成する次へRust での作成ガイド<p class=\"container\">JavaScript が無効な場合は、コードやコマンドを選択してキーボードでコピーしてください。</p>Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。記事RSSMIT ライセンス AI 向けドキュメント索引",
+          "paragraphs": [
+            "すでに配布した Anki デッキに訂正や新しいカードを届けます。ノートの ID を安定させると、Anki Forge と Anki は既存のノートを新規ノートとして扱わずに識別できます。ただし、実際に何が更新されるかには、Anki のインポート設定や、それより新しいローカルでの編集も影響します。",
+            "プロジェクトの名前空間と、ノート・モデル・フィールド・テンプレートのキーは変更しないでください。新しいリリースは、完全なバージョン付き識別情報を含む、前回の配布時のオリジナル APKGを基準に作成します。そのパッケージを対応するソースのリビジョンと一緒に保管してください。",
+            "",
+            "このコマンドは spanish-v1.apkg と spanish-v2.apkg を書き出し、変更した回答を比較して、更新版のパッケージ内の件数を確認します。実行されるソースコードは次のとおりです。",
+            "compare は、公開を妨げる検出事項があっても正常に完了します。元のリスクレベルとその根拠に加えて、comparison.policy().allows_publication() を別途確認してください。build(...update_from(...)) も同じ分析を行い、ポリシーが候補の公開を認めない場合は、公開前に BuildError を返します。",
+            "",
+            "次の完全なプログラムでは、より厳しいしきい値を選び、比較と更新に同じ設定を使います。",
+            "デフォルトのポリシーは High と Critical の検出事項がある場合に公開を止めます。特定のカテゴリを確認したうえで、呼び出し側が意図的に UpdatePolicy::default().allow(RiskCode::NoteRemoved) を選ぶこともできます。この指定は、元のレベルと根拠を保持したまま、そのカテゴリの検出事項をすべて許容します。特定のノートだけを個別に承認する指定ではありません。該当する検出事項のない許容指定には警告が出ます。不明なリスクコードは拒否されます。比較で返されたコードをすべて自動的に許容しないでください。",
+            "識別情報の欠落や破損、名前空間の不一致、不正な候補データ、検査上限への抵触はエラーであり、許容指定できるリスクカテゴリではありません。分析を完了できない場合、比較はそれまでに得られた検査結果を含むエラーを返します。update_from のない新規作成に明示的なポリシーを指定すると、setter の呼び出し順にかかわらず設定エラーになります。",
+            "",
+            "パッケージには ankiforge-identity-v1 形式の ankiforge-identity.json が含まれます。モデル／設定の ID、ノートの GUID、過去のフィールド／テンプレートのスロット、カード／マスクの通し番号、リビジョン、メディアを、実際のコレクションと格納データに結び付けます。Anki からの再エクスポートではこの情報が保持されないため、更新の基準には使えません。欠落した情報が暗黙に再構築されることもありません。",
+            "表示名や内容を編集しても、識別用のキーは保持されます。内容が変わらない場合は基準パッケージのリビジョンを維持し、変更した場合はリビジョンを進めます。フィールドやテンプレートを並べ替えても、過去の対応関係は保持されます。使われなくなった識別子も予約されたままなので、同じキーを復元すると再利用できます。ノートキーを別のモデルへ移すことはできず、モデルキーの種類を通常型と Cloze 型の間で変更することもできません。",
+            "",
+            "APKG は配布用パッケージであり、削除を同期する仕組みではありません。ノート、フィールド、テンプレート、マスクを省いても、学習者の既存データは削除されません。フィールド／テンプレートのスキーマ変更と並べ替えフィールドの変更は、Anki のマージやインポートの設定が動作に影響するため、高リスクです。スキーマ変更によって、ノート内容の比較より先にモデルが複製されたり、対象ノートのタイムスタンプが更新されたりする場合があります。",
+            "サポートするクライアントで、初回インポートと既存コレクションへの更新をテストしてください。予定しているマージ設定とノート更新設定を使い、フィールド、GUID、カードの集合、ローカルでの編集、既存の学習スケジュールを確認します。識別情報が安定しているだけでは、新しいローカル編集の上書きや、削除された履歴の復元は保証されません。",
+            "候補は、保存済みの基準パッケージとは別のパスに書き出してください。確認を終えたら承認したパッケージを配布し、次回のリリースの根拠として保管します。ファイルの所有権と公開時の保証についてはビルドの保証を参照してください。",
+            "",
+            "この API は公開パッケージ 0.3.1 に含まれています。",
+            "一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。準備済み公開では、実際の APKG と確認対象のレポートの対応を保てます。",
+            "固定したソースのチェックアウトで、上の完全なプログラムを anki_forge/examples/docs_publication.rs に保存します。この例は本ガイドで追加するもので、1199196 には含まれていません。その後、次を実行します。",
+            "この例はリポジトリのルートに spanish-original.apkg を書き出し、ポリシーが公開を認めた場合は spanish-reviewed.apkg も書き出します。準備の段階では公開先は変更されません。配布を承認する前に検出事項を確認し、クライアントへのインポートをテストしてください。この例が自動的に公開するのは、ポリシーが許容する単純な内容変更だけです。ベンチマークはこのワークフローを測定していません。",
+            "ビルドのライフサイクル、Rust API、Node API、Python APIも参照してください。",
+            "Markdown を表示",
+            "Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。"
+          ]
+        },
+        {
+          "url": "/anki-forge/ja/blog/stable-ids-and-deck-updates/",
+          "title": "表現を変えても、ノートの識別情報は保つ",
+          "excerpt": "生成した Anki デッキの更新で、安定 ID とビルドの基準パッケージがどう連携するかを説明します。",
+          "score": 27.67642694361157,
+          "matchedTerms": [
+            "基準パッケージ",
+            "更新",
+            "anki",
+            "基準"
+          ],
+          "pageId": "blog:stable-ids-and-deck-updates",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/blog/stable-ids-and-deck-updates/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:42 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "ea929070e03969850fa2aa3d1204c0ae079615d6306c8e04efd9b1d545a59631",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/05-blog_stable-ids-and-deck-updates.html",
+          "mainText": "← すべての記事表現を変えても、ノートの識別情報は保つ生成した Anki デッキの更新で、安定 ID とビルドの基準パッケージがどう連携するかを説明します。技術解説2026年9月22日 生成したデッキが、最初のエクスポートで完成することはあまりありません。定義を改善し、例を分かりやすくし、誤りを修正していきます。次のビルドでは、どのノートが内容を改善した同じノートなのかを識別する必要があります。 次の小さな編集を考えてみます。 フィールド 最初のバージョン 次のバージョン 表面 hola hola 裏面 hello hello; hi 安定 ID es:hola es:hola 意味の説明は広がりましたが、論理的なノートは同じです。 識別情報を内容から分離する 明示的な安定 ID は、ノートに永続的なキーを与えます。ノートを編集するときは ID を保ち、別の論理ノートを作るときは新しい ID を選びます。 識別情報にはプロジェクトの文脈もあります。同じデッキのリリース間では、プロジェクトの名前空間を揃えてください。ノート ID 単体は、繰り返し実行できる更新手順の一部にすぎません。 次のビルドに基準パッケージを渡す 前回のパッケージは、以前に何をエクスポートしたかを Anki Forge に伝えます。修正したプロジェクトをビルドするときに使います。 let comparison = project.compare(CompareOptions::against(&previous))?;ensure!(comparison.policy().allows_publication());let built = project.build(BuildOptions::to(&next).update_from(&previous))?; この抜粋では、project に修正済みのノートが入り、previous がバージョン1を指し、next はバージョン2の別のパスです。完全な例には両方のプロジェクト定義があり、1件のノートの識別情報が保持されたことを検証します。 入力と出力のパッケージは別のパスに保存してください。基準パッケージを上書きすると、リリースを理解・検証するために必要な証拠を失います。 配布時のオリジナルパッケージを保持する 生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、対応する基準パッケージではありません。 更新ガイドでは、厳密な更新、リスクポリシー、クライアントでのインポートの制約を説明します。 ビルドとインポートを確認する パッケージを配布する前に、ビルドレポートと更新の安全性に関する診断を確認します。ビルドがノートの識別情報を整合させられない場合は、出力ファイルを更新の正しさの証拠とせず、ソースと基準パッケージを調べてください。 その後、Anki 独自のインポート動作が適用されます。インポート設定、既存ノートの内容、ローカル編集、Anki のバージョンが結果に影響する場合があります。安定した識別情報はノートの照合に役立ちますが、それらの選択を上書きしたり、すべてのインポートでローカル状態のあらゆる側面が保持されると約束したりするものではありません。 2つのバージョンのサンプルには両方のパッケージがあります。自分のリリース手順を設計する前に、小さく確認しやすい更新を試せます。Markdown を表示 ガイドで続きを読む →",
+          "paragraphs": [
+            "生成した Anki デッキの更新で、安定 ID とビルドの基準パッケージがどう連携するかを説明します。",
+            "生成したデッキが、最初のエクスポートで完成することはあまりありません。定義を改善し、例を分かりやすくし、誤りを修正していきます。次のビルドでは、どのノートが内容を改善した同じノートなのかを識別する必要があります。",
+            "次の小さな編集を考えてみます。",
+            "フィールド 最初のバージョン 次のバージョン",
+            "表面 hola hola",
+            "裏面 hello hello; hi",
+            "安定 ID es:hola es:hola",
+            "意味の説明は広がりましたが、論理的なノートは同じです。",
+            "明示的な安定 ID は、ノートに永続的なキーを与えます。ノートを編集するときは ID を保ち、別の論理ノートを作るときは新しい ID を選びます。",
+            "識別情報にはプロジェクトの文脈もあります。同じデッキのリリース間では、プロジェクトの名前空間を揃えてください。ノート ID 単体は、繰り返し実行できる更新手順の一部にすぎません。",
+            "前回のパッケージは、以前に何をエクスポートしたかを Anki Forge に伝えます。修正したプロジェクトをビルドするときに使います。",
+            "この抜粋では、project に修正済みのノートが入り、previous がバージョン1を指し、next はバージョン2の別のパスです。完全な例には両方のプロジェクト定義があり、1件のノートの識別情報が保持されたことを検証します。",
+            "入力と出力のパッケージは別のパスに保存してください。基準パッケージを上書きすると、リリースを理解・検証するために必要な証拠を失います。",
+            "生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、対応する基準パッケージではありません。",
+            "更新ガイドでは、厳密な更新、リスクポリシー、クライアントでのインポートの制約を説明します。",
+            "パッケージを配布する前に、ビルドレポートと更新の安全性に関する診断を確認します。ビルドがノートの識別情報を整合させられない場合は、出力ファイルを更新の正しさの証拠とせず、ソースと基準パッケージを調べてください。",
+            "その後、Anki 独自のインポート動作が適用されます。インポート設定、既存ノートの内容、ローカル編集、Anki のバージョンが結果に影響する場合があります。安定した識別情報はノートの照合に役立ちますが、それらの選択を上書きしたり、すべてのインポートでローカル状態のあらゆる側面が保持されると約束したりするものではありません。",
+            "2つのバージョンのサンプルには両方のパッケージがあります。自分のリリース手順を設計する前に、小さく確認しやすい更新を試せます。"
+          ]
+        },
+        {
+          "url": "/anki-forge/ja/docs/json-to-anki/",
+          "title": "JSON から Anki デッキを生成・更新する",
+          "excerpt": "から Anki デッキを生成・更新する. JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して",
+          "score": 15.122157060655823,
+          "matchedTerms": [
+            "基準パッケージ",
+            "更新",
+            "anki",
+            "apkg",
+            "基準"
+          ],
+          "pageId": "json-to-anki",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/json-to-anki/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:42 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "82fbbada5afd32cc166d7d72eca547671d192175813e6884877459970a19af1b",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/06-json-to-anki.html",
+          "mainText": "JSON から Anki デッキを生成・更新するJSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、配布元の APKG と、回答だけを変更して確認済みの更新版を出力します。どちらの版も ノート3件、カード3枚、メディアファイル2個になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。 管理：Anki Forge メンテナー · 英語原文の確認日：2026-10-25。 共通の入力ファイル「共通の入力ファイル」のセクション v1.json、v2.json、cell.png、tone.wavをダウンロードします。画像は細胞の模式図です。音声は短い合成音で、単語の読み上げではありません。新しく作るアプリケーションのディレクトリごとに、次の4ファイルを recipe/ に置きます。 json-deck/ recipe/ v1.json v2.json cell.png tone.wav 両方の JSON ファイルには namespace、deck と3件の notes があり、各ノートに継続して使う id、front、back が含まれます。v2 で変わるのは最初の回答だけです。JSON の解析は呼び出し側で行い、Anki Forge はノートの作成と APKG の生成を担当します。信頼できない入力を扱う場合は、ノートを作る前にアプリケーション側のスキーマで検証してください。 Rust「Rust」のセクション Rust 1.92 以降を使います。JSON の解析には serde と serde_json を使用します。Anki Forge は公開パッケージ 0.3.1 を使います。 ターミナルウィンドウcargo new json-deckcd json-deckcargo add ankiforge@0.3.1cargo add serde --features derivecargo add serde_json 次のコードを src/main.rs に保存します。recipe/ は Cargo.toml と同じディレクトリに作成してください。 use ankiforge::update::CompareOptions;use ankiforge::{BuildOptions, Content, Media, Note, Project};use serde::Deserialize;use std::{fs, path::Path}; #[derive(Deserialize)]struct Dataset { namespace: String, deck: String, notes: Vec<Row>,} #[derive(Deserialize)]struct Row { id: String, front: String, back: String,} fn project(input: &Path, version: &str) -> Result<Project, Box<dyn std::error::Error>> { let data: Dataset = serde_json::from_slice(&fs::read(input.join(version))?)?; let image = Media::file(input.join(\"cell.png\"))?; let audio = Media::file(input.join(\"tone.wav\"))?; let mut project = Project::new(data.namespace)?.default_deck(data.deck); for row in data.notes { let front = Content::sequence([Content::text(row.front), image.image(), audio.sound()]); project.add(row.id, Note::basic(front, row.back))?; } Ok(project)} fn main() -> Result<(), Box<dyn std::error::Error>> { let args: Vec<_> = std::env::args().collect(); let input = Path::new(args.get(1).map(String::as_str).unwrap_or(\"recipe\")); let output = Path::new(args.get(2).map(String::as_str).unwrap_or(\"output/rust\")); fs::create_dir_all(output)?; let baseline = output.join(\"v1.apkg\"); let candidate = output.join(\"v2.apkg\"); if baseline.exists() || candidate.exists() { return Err(\"Choose a fresh output directory; keep original releases\".into()); } project(input, \"v1.json\")?.build(BuildOptions::to(&baseline))?; let next = project(input, \"v2.json\")?; let comparison = next.compare(CompareOptions::against(&baseline))?; fs::write( output.join(\"comparison.json\"), serde_json::to_vec_pretty(&comparison.snapshot())?, )?; if !comparison.policy().allows_publication() { return Err(\"Comparison policy blocked publication; inspect comparison.json\".into()); } let prepared = next.prepare_publication(BuildOptions::to(&candidate).update_from(&baseline))?; let review = prepared .report() .comparison() .ok_or(\"Missing update comparison\")?; fs::write( output.join(\"review.json\"), serde_json::to_vec_pretty(&review.snapshot())?, )?; if !review.policy().allows_publication() { return Err(\"Prepared candidate blocked; inspect review.json\".into()); } let result = prepared.publish()?; println!(\"{}\", result.artifact().path().display()); Ok(())} ターミナルウィンドウcargo run -- recipe output/rust Python「Python」のセクション 対応プラットフォームの wheel がある通常の CPython 3.11 以降を使います。リリースチェックの対象は 3.11–3.14 です。Windows では .venv\\Scripts\\Activate.ps1 で仮想環境を有効にします。Anki Forge は公開パッケージ 0.3.1 を使います。 ターミナルウィンドウmkdir json-deckcd json-deckpython -m venv .venv. .venv/bin/activatepython -m pip install ankiforge==0.3.1 次のコードを main.py に保存し、同じディレクトリに recipe/ を作成します。 \"\"\"Generate and review an answer-only update from caller-parsed JSON.\"\"\"import jsonfrom pathlib import Pathimport sysfrom ankiforge import BuildOptions, CompareOptions, Content, Media, Note, Project def project(source: Path, version: str) -> Project: data = json.loads((source / version).read_text(encoding='utf-8')) image = Media.file(source / 'cell.png') audio = Media.file(source / 'tone.wav') result = Project(data['namespace'], default_deck=data['deck']) for row in data['notes']: front = Content.sequence([row['front'], image.image(), audio.sound()]) result.add(row['id'], Note.basic(front, row['back'])) return result source = Path(sys.argv[1] if len(sys.argv) > 1 else 'recipe')output = Path(sys.argv[2] if len(sys.argv) > 2 else 'output/python')output.mkdir(parents=True, exist_ok=True)baseline, candidate = output / 'v1.apkg', output / 'v2.apkg'if baseline.exists() or candidate.exists(): raise RuntimeError('Choose a fresh output directory; keep original releases')project(source, 'v1.json').build(BuildOptions.to(baseline))next_project = project(source, 'v2.json')comparison = next_project.compare(CompareOptions.against(baseline))(output / 'comparison.json').write_text(json.dumps(comparison.snapshot(), indent=2), encoding='utf-8')if not comparison.allows_publication: raise RuntimeError('Comparison policy blocked publication; inspect comparison.json')prepared = next_project.prepare_publication(BuildOptions.to(candidate).update_from(baseline))try: review = prepared.report.comparison if review is None: raise RuntimeError('Missing update comparison') (output / 'review.json').write_text(json.dumps(review.snapshot(), indent=2), encoding='utf-8') if not review.allows_publication: raise RuntimeError('Prepared candidate blocked; inspect review.json') result = prepared.publish() print(result.artifact.path)finally: prepared.close() ターミナルウィンドウpython main.py recipe output/python Node「Node」のセクション Node.js 22.13 以降と、実行環境に合うネイティブの optional dependency が必要です。この例は TypeScript を JavaScript にコンパイルして Node.js で実行します。Anki Forge は公開パッケージ 0.3.1 を使います。 ターミナルウィンドウmkdir json-deckcd json-decknpm init -ynpm install --include=optional ankiforge@0.3.1npm install --save-dev typescript@6.0.3 @types/node@24.13.6 次のコードを main.mts に保存し、同じディレクトリに recipe/ を作成します。 import { readFile, mkdir, access, writeFile } from 'node:fs/promises';import path from 'node:path';import { Project, Note, Content, Media, BuildOptions, CompareOptions } from 'ankiforge'; interface Dataset { namespace: string; deck: string; notes: { id: string; front: string; back: string }[];} async function project(source: string, version: string): Promise<Project> { const data: Dataset = JSON.parse(await readFile(path.join(source, version), 'utf8')); const image = await Media.file(path.join(source, 'cell.png')); const audio = await Media.file(path.join(source, 'tone.wav')); const result = new Project(data.namespace).defaultDeck(data.deck); for (const row of data.notes) { const front = Content.sequence([row.front, image.image(), audio.sound()]); result.add(row.id, Note.basic(front, row.back)); } return result;} const source = process.argv[2] ?? 'recipe';const output = process.argv[3] ?? 'output/node';await mkdir(output, { recursive: true });const baseline = path.join(output, 'v1.apkg');const candidate = path.join(output, 'v2.apkg');for (const file of [baseline, candidate]) { const exists = await access(file).then(() => true, error => { if (error.code === 'ENOENT') return false; throw error; }); if (exists) throw new Error('Choose a fresh output directory; keep original releases');}const first = await (await project(source, 'v1.json')).build(BuildOptions.to(baseline));await first.artifact.close();const next = await project(source, 'v2.json');const comparison = await next.compare(CompareOptions.against(baseline));await writeFile(path.join(output, 'comparison.json'), JSON.stringify(comparison.snapshot(), null, 2));if (!comparison.policy.allows_publication) { throw new Error('Comparison policy blocked publication; inspect comparison.json');}const prepared = await next.preparePublication(BuildOptions.to(candidate).updateFrom(baseline));try { const review = prepared.report.comparison; if (!review) throw new Error('Missing update comparison'); await writeFile(path.join(output, 'review.json'), JSON.stringify(review.snapshot(), null, 2)); if (!review.policy.allows_publication) throw new Error('Prepared candidate blocked; inspect review.json'); const result = await prepared.publish(); console.log(result.artifact.path); await result.artifact.close();} finally { await prepared.close();} ターミナルウィンドウnpx tsc main.mts --target ES2022 --module NodeNext --moduleResolution NodeNext --strict --outDir dist --types nodenode dist/main.mjs recipe output/node 出力を確認してインポートする「出力を確認してインポートする」のセクション 選んだプログラムは output/<language>/v2.apkg のパスを表示します。v1.apkg も一緒に保管してください。回答だけを変えた今回の編集では、comparison.json と review.json に RISK.NOTE_CHANGED が記録され、追加・削除されたノートはなく、policy.allows_publication: true になります。プログラムは公開前に、準備済み候補についてもポリシーを確認します。どちらかの版が出力先ディレクトリに存在する場合、そのディレクトリは再利用しません。 まず v1.apkg を Anki にインポートします。Biology デッキに Basic カードが3枚あり、細胞の画像と合成音が含まれていることを確認します。次に v2.apkg をインポートし、最初の回答が「The basic structural and functional unit of life」になり、ノート数は3件のままであることを確認します。biology-json という名前空間がこの配布プロジェクトを識別します。各業務 ID がノートの安定キーとなり、Anki Forge はその識別情報から Anki 用の GUID を生成します。名前空間と3つのキーは変更しないでください。 更新の基準には、配布時のオリジナルの v1 APKG を使います。Anki から再エクスポートしたファイルは使えません。クライアント側のインポート時の照合、ローカルでの編集、学習スケジュールへの影響は、Anki のバージョン、ノートタイプ、インポート設定によって変わります。リリース前に対象クライアントで検証してください。後のパッケージで省かれたノートも、インポートだけでは削除されません。compare／build の成功は、すべての学習者の復習状態を保証するものではありません。 詳しくは更新の条件、メディア、API 一覧、ライブラリの選択を参照してください。 Markdown を表示ページを編集前へPython で CSV を Anki カードに変換する次へAI を使った Anki カード作成：学習メモから APKG へ<p class=\"container\">JavaScript が無効な場合は、コードやコマンドを選択してキーボードでコピーしてください。</p>Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。記事RSSMIT ライセンス AI 向けドキュメント索引",
+          "paragraphs": [
+            "JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、配布元の APKG と、回答だけを変更して確認済みの更新版を出力します。どちらの版も ノート3件、カード3枚、メディアファイル2個になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。",
+            "管理：Anki Forge メンテナー · 英語原文の確認日：2026-10-25。",
+            "",
+            "v1.json、v2.json、cell.png、tone.wavをダウンロードします。画像は細胞の模式図です。音声は短い合成音で、単語の読み上げではありません。新しく作るアプリケーションのディレクトリごとに、次の4ファイルを recipe/ に置きます。",
+            "両方の JSON ファイルには namespace、deck と3件の notes があり、各ノートに継続して使う id、front、back が含まれます。v2 で変わるのは最初の回答だけです。JSON の解析は呼び出し側で行い、Anki Forge はノートの作成と APKG の生成を担当します。信頼できない入力を扱う場合は、ノートを作る前にアプリケーション側のスキーマで検証してください。",
+            "Rust 1.92 以降を使います。JSON の解析には serde と serde_json を使用します。Anki Forge は公開パッケージ 0.3.1 を使います。",
+            "次のコードを src/main.rs に保存します。recipe/ は Cargo.toml と同じディレクトリに作成してください。",
+            "対応プラットフォームの wheel がある通常の CPython 3.11 以降を使います。リリースチェックの対象は 3.11–3.14 です。Windows では .venv\\Scripts\\Activate.ps1 で仮想環境を有効にします。Anki Forge は公開パッケージ 0.3.1 を使います。",
+            "次のコードを main.py に保存し、同じディレクトリに recipe/ を作成します。",
+            "Node.js 22.13 以降と、実行環境に合うネイティブの optional dependency が必要です。この例は TypeScript を JavaScript にコンパイルして Node.js で実行します。Anki Forge は公開パッケージ 0.3.1 を使います。",
+            "次のコードを main.mts に保存し、同じディレクトリに recipe/ を作成します。",
+            "",
+            "選んだプログラムは output/<language>/v2.apkg のパスを表示します。v1.apkg も一緒に保管してください。回答だけを変えた今回の編集では、comparison.json と review.json に RISK.NOTE_CHANGED が記録され、追加・削除されたノートはなく、policy.allows_publication: true になります。プログラムは公開前に、準備済み候補についてもポリシーを確認します。どちらかの版が出力先ディレクトリに存在する場合、そのディレクトリは再利用しません。",
+            "まず v1.apkg を Anki にインポートします。Biology デッキに Basic カードが3枚あり、細胞の画像と合成音が含まれていることを確認します。次に v2.apkg をインポートし、最初の回答が「The basic structural and functional unit of life」になり、ノート数は3件のままであることを確認します。biology-json という名前空間がこの配布プロジェクトを識別します。各業務 ID がノートの安定キーとなり、Anki Forge はその識別情報から Anki 用の GUID を生成します。名前空間と3つのキーは変更しないでください。",
+            "更新の基準には、配布時のオリジナルの v1 APKG を使います。Anki から再エクスポートしたファイルは使えません。クライアント側のインポート時の照合、ローカルでの編集、学習スケジュールへの影響は、Anki のバージョン、ノートタイプ、インポート設定によって変わります。リリース前に対象クライアントで検証してください。後のパッケージで省かれたノートも、インポートだけでは削除されません。compare／build の成功は、すべての学習者の復習状態を保証するものではありません。",
+            "詳しくは更新の条件、メディア、API 一覧、ライブラリの選択を参照してください。",
+            "Markdown を表示",
+            "Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ja-negative-04",
+      "query": "PNGをwrong.mp3に名前変更して音声として使う",
+      "top3": [
+        {
+          "url": "/anki-forge/ja/docs/media/",
+          "title": "Anki カードに画像と音声を追加する",
+          "excerpt": "カードに画像と音声を追加する. 発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と",
+          "score": 55.094223841047075,
+          "matchedTerms": [
+            "音声",
+            "png",
+            "wrong",
+            "名前",
+            "変更",
+            "し",
+            "て",
+            "として"
+          ],
+          "pageId": "media"
+        },
+        {
+          "url": "/anki-forge/ja/docs/rust-guide/",
+          "title": "Rust での作成ガイド",
+          "excerpt": "Rust での作成ガイド. 1つの Project は1つの配布物を表します。安定した名前空間で作成し、安定",
+          "score": 17.46100489481611,
+          "matchedTerms": [
+            "音声",
+            "png",
+            "wrong",
+            "名前",
+            "変更",
+            "し",
+            "て",
+            "として"
+          ],
+          "pageId": "rust-guide"
+        },
+        {
+          "url": "/anki-forge/ja/docs/json-to-anki/",
+          "title": "JSON から Anki デッキを生成・更新する",
+          "excerpt": "Rust、Python、TypeScript で JSON を読み取り、画像と音声を同梱し、解答だけを変更する APKG 更新を確認します。",
+          "score": 3.7794023875323384,
+          "matchedTerms": [
+            "音声",
+            "変更",
+            "し"
+          ],
+          "pageId": "json-to-anki"
+        }
+      ],
+      "kind": "negative",
+      "intentId": "negative-mime-rename",
+      "expectedPageIds": [
+        "media",
+        "troubleshooting"
+      ],
+      "passed": true,
+      "expectedBoundary": "名前変更ではファイルのバイト列や保持されたMIMEは変わらない。wrong.mp3と名付けたPNGは独立した内容検査や拡張子検査で失敗し得る。正しい入力または実際の変換を案内し、名前変更を変換と説明しない。空の結果でもよい。",
+      "boundaryReviewRequired": true,
+      "reads": [
+        {
+          "url": "/anki-forge/ja/docs/media/",
+          "title": "Anki カードに画像と音声を追加する",
+          "excerpt": "カードに画像と音声を追加する. 発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と",
+          "score": 55.094223841047075,
+          "matchedTerms": [
+            "音声",
+            "png",
+            "wrong",
+            "名前",
+            "変更",
+            "し",
+            "て",
+            "として"
+          ],
+          "pageId": "media",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/media/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:42 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "48a67483869f156525ad9eb0c74a61c33a2ccbc9941f46a9e01170bc947c1a98",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/07-media.html",
+          "mainText": "Anki カードに画像と音声を追加する発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と音声を同梱します。Anki Forge は、指定されたファイルを APKG にコピーします。音声合成などによる音声・画像の作成には別のツールが必要です。例では Rust を使います。後半の一括インポートでは Python と Node.js の呼び出しも示します。 Media の値は不変のスナップショットを所有します。ファイルは Media::file、ネイティブのバイト列は MIME タイプを明示した Media::bytes でインポートします。インポート成功後に元ファイルを変更・削除してもアセットは変わりません。クローンはストレージを共有し、複数のプロジェクトで使えます。 メディアの作成手順を実行する「メディアの作成手順を実行する」のセクション リポジトリのルートから実行します。 ターミナルウィンドウcargo run --locked -p ankiforge --example docs_workflow -- target/docs-examplescargo run --locked -p ankiforge --example target_api_media この手順はリポジトリの PNG・WAV フィクスチャーを使い、ノート1件、カード1枚、アセット3個を含む media.apkg を書き出します。2つ目の例は小さな画像と音声を自ら生成し、CSS から参照するメディアと明示的なメディアを含めた spanish-media.apkg を書き出します。 fn media(output: &Path, image: &Path, sound: &Path) -> anyhow::Result<()> { let image = Media::file(image)?.with_export_name(\"cell.png\")?; let sound = Media::file(sound)?; let mut project = Project::new(\"docs-media\")?; project.add(\"cell\", Note::basic(image.image(), sound.sound()))?; let css = Media::bytes(b\".card { color: navy; }\".to_vec(), \"text/css\")? .with_export_name(\"course.css\")?; project.add_asset(css)?; let built = project.build(BuildOptions::to(output.join(\"media.apkg\")))?; verify(&built, 1, 1, 3)?; Ok(())} コンテンツと明示的なアセットを組み合わせる「コンテンツと明示的なアセットを組み合わせる」のセクション 次の完全なプログラムは fixtures/pixel.png、fixtures/silence.wav、fixtures/labels.woff を使います。自分のアプリケーションでは使用するファイルのパスを渡してください。フィクスチャーのフォントは、リポジトリの再配布可能なテスト用フォントです。 use ankiforge::{BuildOptions, Content, Field, Media, NoteType, Project, Template}; fn main() -> anyhow::Result<()> { let image = Media::file(\"fixtures/pixel.png\")?.with_export_name(\"badge.png\")?; let sound = Media::file(\"fixtures/silence.wav\")?; let font = Media::file(\"fixtures/labels.woff\")?.with_export_name(\"labels.woff\")?; let model = NoteType::builder(\"media-card\") .field(Field::new(\"front\")) .field(Field::new(\"back\")) .template(Template::new(\"card\") .front(r#\"{{front}}<img src=\"badge.png\">\"#) .back(\"{{FrontSide}}<hr>{{back}}\")) .css(\"@font-face { font-family: labels; src: url('labels.woff'); } .card { font-family: labels; }\") .asset(font) .asset(image.clone()) .build()?; let mut project = Project::new(\"media-guide\")?; project.add(\"cell\", model.note() .field(\"front\", Content::sequence([Content::text(\"Cell \"), image.image()])) .field(\"back\", sound.sound()))?; let output = project.build(BuildOptions::to(\"media-guide.apkg\"))?; assert_eq!(output.report().counts().media, 3); Ok(())} 型付きの image() と sound() の値は、エクスポートまで依存関係を保持します。手書きの HTML・CSS・スクリプトで参照する場合は、builder.asset(media) または project.add_asset(media) が必要です。ライブラリは任意の文字列からファイルの内容を推測しません。明示的なアセットは、静的に検出可能な参照がなくても含まれます。 with_export_name には実際のファイル名をそのまま渡してください。型付き音声参照は描画時に HTML エンティティをエスケープするため、tone&copy;.mp3 のような名前も、その名前のアセットを正確に参照します。ファイル名を事前にエスケープしないでください。音声ファイル名のパーセント記号やフラグメント記号は文字どおり扱い、URL パスとは解釈しません。 名前、MIME、上限「名前、MIME、上限」のセクション 既定のエクスポート名は内容から導かれ、元のパスには依存しません。固定のファイル名が必要なら、参照を作成する前に with_export_name を使います。クローンの名前を変えても、それ以前のクローンやコンテンツノードの名前は変わりません。 名前にパス、制御文字、移植性のない予約名を含めることはできません。競合検査は Unicode NFC と大文字・小文字の正規化を使います。そのため、大文字・小文字または正規化形式だけが異なる名前も競合します。名前と内容が完全に一致する組み合わせの登録は冪等です。同じ名前で異なる内容を登録すると、部分的に登録せず失敗します。 拡張子を含めたエクスポート名全体の上限は UTF-8 で255バイトです。プロジェクトとテンプレートバンドルの JSON Schema は、ファイル名の構文と文字数を検査します。ローダーはバイト数も検査します。たとえば é を128回繰り返すとスキーマの文字数上限は通りますが、256バイトになるため、読み込み時に MEDIA.EXPORT_NAME_INVALID を返します。ビルド前に tools::load_project または NoteType::from_bundle で入力全体を検証してください。 tools::load_project は internal-tools feature が必要なリポジトリ内部向けの API であり、利用側アプリケーション向けのサポート対象 API には含まれません。 MIME の構文と、判別可能な内容は一致する必要があります。ネイティブのバイト列には64 KiBのインライン上限はありません。インポートの既定上限はアセットごとに256 MiBです。file_with_limits と bytes_with_limits は、読み取り前に MediaLimits { max_bytes } を受け取ります。大きなスナップショットは一時ストレージに退避される場合があり、最後の所有者が解放されると削除されます。スナップショットを所有していても、インポート中に同時変更される元ファイルについて、ファイルシステムのアトミックな読み取り像を保証するものではありません。 プロジェクト JSON では、インラインの bytes 配列をデコードするときにも同じ既定のアセット単位の上限を適用します。最初の超過バイトで停止し、配列の残りは収集しません。エラーには上限と観測バイト数を持つ MediaError が保持されます。拒否時のバイト数は下限であり、未読部分を含む配列全体のサイズではありません。 有効なメディアパッケージであっても、すべての Anki クライアントでコーデックが再生できるとは限りません。対象クライアントで画像、音声、フォントをテストしてください。トラブルシューティングを参照してください。 型付きの画像・音声としての使用「型付きの画像・音声としての使用」のセクション コンストラクター自体は引き続き失敗しません。Project::add はインポート時に保持した MIME を検査します。画像には image/*、音声参照には audio/* と video/* を受け付けます。application/octet-stream、テキスト、フォント、PDF の型付き使用は NOTE.MEDIA_USAGE_INVALID になります。直接記述した HTML・CSS 用の明示的アセットとして登録してください。正しい形式で明示した未知の画像・動画 MIME は種類の検査を通りますが、デコーダーやプレーヤーがそのバイト列に対応することを保証するものではありません。改名によって保持済みの MIME が変わることはありません。ビルドでは配置済みのバイト列を判別し、エクスポート拡張子を独立して検証します。wrong.mp3 という名前の PNG は画像としての追加に成功しても、ビルドで MEDIA.DECLARED_MIME_MISMATCH になることがあります。 メディアの一括インポート「メディアの一括インポート」のセクション これらのメソッドは公開 0.3.1 パッケージに含まれています。 同時実行数を制限して複数のファイルをインポートし、入力順を保ちながら、後のエクスポートに使うメディアスナップショットを所有します。 use ankiforge::Media;let images = Media::files([\"first.png\", \"second.png\"])?; Node では await Media.files(['first.png', 'second.png'])、Python では Media.files(['first.png', 'second.png']) を使います。 一括処理の動作と上限「一括処理の動作と上限」のセクション Rust では Media::files(paths)、Node では await Media.files(paths)、Python では Media.files(paths) を使います。呼び出しごとに最大4ワーカーで、入力順にファイルをインポートします。16ファイル未満のバッチは逐次実行します。Rust には files_with_limits もあります。Node と Python は file と同じ上限指定を受け付けます。上限はアセットごとに適用します。インポートに失敗すると、開始済みの処理を待ってからバッチのスナップショットを破棄し、入力順で最初のエラーを返します。既存のメディア所有者は引き続き有効です。Python はインポート中に GIL を解放し、Node はイベントループの外で処理します。単一ファイルのインポートは、従来どおりその場でデータを所有するスナップショットを取得します。同時実行を使うには、一括メソッドを明示的に選んでください。 生存中のスナップショットは、プロセス全体で 64 MiB のメモリ枠を共有します。1 MiBを超える個々のアセットは、引き続き一時ファイルへストリーミングします。エンコード済みメディアは、準備処理ごとに遅延確保する 16 MiB のバッファープールを共有し、いっぱいになると一時ストレージへ退避します。これらの上限は他の作業用メモリを含まず、RSS の上限ではありません。同時ビルドはそれぞれ独自のエンコード用プールを所有できます。 Markdown を表示ページを編集前へAnki の Basic と Cloze カードを生成する次へ独自のノートタイプ<p class=\"container\">JavaScript が無効な場合は、コードやコマンドを選択してキーボードでコピーしてください。</p>Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。記事RSSMIT ライセンス AI 向けドキュメント索引",
+          "paragraphs": [
+            "発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と音声を同梱します。Anki Forge は、指定されたファイルを APKG にコピーします。音声合成などによる音声・画像の作成には別のツールが必要です。例では Rust を使います。後半の一括インポートでは Python と Node.js の呼び出しも示します。",
+            "Media の値は不変のスナップショットを所有します。ファイルは Media::file、ネイティブのバイト列は MIME タイプを明示した Media::bytes でインポートします。インポート成功後に元ファイルを変更・削除してもアセットは変わりません。クローンはストレージを共有し、複数のプロジェクトで使えます。",
+            "",
+            "リポジトリのルートから実行します。",
+            "この手順はリポジトリの PNG・WAV フィクスチャーを使い、ノート1件、カード1枚、アセット3個を含む media.apkg を書き出します。2つ目の例は小さな画像と音声を自ら生成し、CSS から参照するメディアと明示的なメディアを含めた spanish-media.apkg を書き出します。",
+            "",
+            "次の完全なプログラムは fixtures/pixel.png、fixtures/silence.wav、fixtures/labels.woff を使います。自分のアプリケーションでは使用するファイルのパスを渡してください。フィクスチャーのフォントは、リポジトリの再配布可能なテスト用フォントです。",
+            "型付きの image() と sound() の値は、エクスポートまで依存関係を保持します。手書きの HTML・CSS・スクリプトで参照する場合は、builder.asset(media) または project.add_asset(media) が必要です。ライブラリは任意の文字列からファイルの内容を推測しません。明示的なアセットは、静的に検出可能な参照がなくても含まれます。",
+            "with_export_name には実際のファイル名をそのまま渡してください。型付き音声参照は描画時に HTML エンティティをエスケープするため、tone&copy;.mp3 のような名前も、その名前のアセットを正確に参照します。ファイル名を事前にエスケープしないでください。音声ファイル名のパーセント記号やフラグメント記号は文字どおり扱い、URL パスとは解釈しません。",
+            "",
+            "既定のエクスポート名は内容から導かれ、元のパスには依存しません。固定のファイル名が必要なら、参照を作成する前に with_export_name を使います。クローンの名前を変えても、それ以前のクローンやコンテンツノードの名前は変わりません。",
+            "名前にパス、制御文字、移植性のない予約名を含めることはできません。競合検査は Unicode NFC と大文字・小文字の正規化を使います。そのため、大文字・小文字または正規化形式だけが異なる名前も競合します。名前と内容が完全に一致する組み合わせの登録は冪等です。同じ名前で異なる内容を登録すると、部分的に登録せず失敗します。",
+            "拡張子を含めたエクスポート名全体の上限は UTF-8 で255バイトです。プロジェクトとテンプレートバンドルの JSON Schema は、ファイル名の構文と文字数を検査します。ローダーはバイト数も検査します。たとえば é を128回繰り返すとスキーマの文字数上限は通りますが、256バイトになるため、読み込み時に MEDIA.EXPORT_NAME_INVALID を返します。ビルド前に tools::load_project または NoteType::from_bundle で入力全体を検証してください。 tools::load_project は internal-tools feature が必要なリポジトリ内部向けの API であり、利用側アプリケーション向けのサポート対象 API には含まれません。",
+            "MIME の構文と、判別可能な内容は一致する必要があります。ネイティブのバイト列には64 KiBのインライン上限はありません。インポートの既定上限はアセットごとに256 MiBです。file_with_limits と bytes_with_limits は、読み取り前に MediaLimits { max_bytes } を受け取ります。大きなスナップショットは一時ストレージに退避される場合があり、最後の所有者が解放されると削除されます。スナップショットを所有していても、インポート中に同時変更される元ファイルについて、ファイルシステムのアトミックな読み取り像を保証するものではありません。",
+            "プロジェクト JSON では、インラインの bytes 配列をデコードするときにも同じ既定のアセット単位の上限を適用します。最初の超過バイトで停止し、配列の残りは収集しません。エラーには上限と観測バイト数を持つ MediaError が保持されます。拒否時のバイト数は下限であり、未読部分を含む配列全体のサイズではありません。",
+            "有効なメディアパッケージであっても、すべての Anki クライアントでコーデックが再生できるとは限りません。対象クライアントで画像、音声、フォントをテストしてください。トラブルシューティングを参照してください。",
+            "",
+            "コンストラクター自体は引き続き失敗しません。Project::add はインポート時に保持した MIME を検査します。画像には image/*、音声参照には audio/* と video/* を受け付けます。application/octet-stream、テキスト、フォント、PDF の型付き使用は NOTE.MEDIA_USAGE_INVALID になります。直接記述した HTML・CSS 用の明示的アセットとして登録してください。正しい形式で明示した未知の画像・動画 MIME は種類の検査を通りますが、デコーダーやプレーヤーがそのバイト列に対応することを保証するものではありません。改名によって保持済みの MIME が変わることはありません。ビルドでは配置済みのバイト列を判別し、エクスポート拡張子を独立して検証します。wrong.mp3 という名前の PNG は画像としての追加に成功しても、ビルドで MEDIA.DECLARED_MIME_MISMATCH になることがあります。",
+            "",
+            "",
+            "これらのメソッドは公開 0.3.1 パッケージに含まれています。",
+            "同時実行数を制限して複数のファイルをインポートし、入力順を保ちながら、後のエクスポートに使うメディアスナップショットを所有します。",
+            "Node では await Media.files(['first.png', 'second.png'])、Python では Media.files(['first.png', 'second.png']) を使います。",
+            "",
+            "Rust では Media::files(paths)、Node では await Media.files(paths)、Python では Media.files(paths) を使います。呼び出しごとに最大4ワーカーで、入力順にファイルをインポートします。16ファイル未満のバッチは逐次実行します。Rust には files_with_limits もあります。Node と Python は file と同じ上限指定を受け付けます。上限はアセットごとに適用します。インポートに失敗すると、開始済みの処理を待ってからバッチのスナップショットを破棄し、入力順で最初のエラーを返します。既存のメディア所有者は引き続き有効です。Python はインポート中に GIL を解放し、Node はイベントループの外で処理します。単一ファイルのインポートは、従来どおりその場でデータを所有するスナップショットを取得します。同時実行を使うには、一括メソッドを明示的に選んでください。",
+            "生存中のスナップショットは、プロセス全体で 64 MiB のメモリ枠を共有します。1 MiBを超える個々のアセットは、引き続き一時ファイルへストリーミングします。エンコード済みメディアは、準備処理ごとに遅延確保する 16 MiB のバッファープールを共有し、いっぱいになると一時ストレージへ退避します。これらの上限は他の作業用メモリを含まず、RSS の上限ではありません。同時ビルドはそれぞれ独自のエンコード用プールを所有できます。",
+            "Markdown を表示",
+            "Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。"
+          ]
+        },
+        {
+          "url": "/anki-forge/ja/docs/rust-guide/",
+          "title": "Rust での作成ガイド",
+          "excerpt": "Rust での作成ガイド. 1つの Project は1つの配布物を表します。安定した名前空間で作成し、安定",
+          "score": 17.46100489481611,
+          "matchedTerms": [
+            "音声",
+            "png",
+            "wrong",
+            "名前",
+            "変更",
+            "し",
+            "て",
+            "として"
+          ],
+          "pageId": "rust-guide",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/rust-guide/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:42 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "773810626fbb4079c48f8f3faa4d11539831c725885f56cf005ab18e00588536",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/08-rust-guide.html",
+          "mainText": "Rust での作成ガイド1つの Project は1つの配布物を表します。安定した名前空間で作成し、安定キーでノートを追加して APKG をビルドします。よく使う型は ankiforge から直接インポートできます。詳細なオプションは公開されている機能別モジュールにあります。 プロジェクトと診断「プロジェクトと診断」のセクション use ankiforge::{BuildOptions, Content, Note, Project}; fn main() -> anyhow::Result<()> { let mut project = Project::new(\"jp-core\")? .default_deck(\"Japanese::Core\"); project.add(\"taberu\", Note::basic(\"食べる\", Content::html(\"<b>to eat</b>\")))?; let output = project.build(BuildOptions::to(\"jp-core.apkg\"))?; println!(\"{} notes\", output.report().counts().notes); println!(\"{}\", serde_json::to_string_pretty(&output.snapshot())?); Ok(())} ビルドに成功すると、成果物の存在が保証された BuildOutput を返します。BuildReport は件数、診断、経過時間、完了した比較などの観測結果を保持します。成功・失敗の結果や成果物の所有権は保持しません。警告があっても、成功した出力が失敗に変わることはありません。 スキーマのエラーはモデルの完成時に検査されます。Project::add は、ノートのキー、フィールド参照、必須フィールド、デッキ、タグ、依存関係の競合をアトミックに検査します。失敗してもプロジェクトは変わりません。残りのカード・パッケージ・更新の検査はビルド時に行います。別途変更可能なレジストリや、必須の検証チェックポイントはありません。 エラーには固有の kind() と code() メソッドがあり、std::error::Error を実装しています。表示メッセージを解析せず、機械処理用コードを使ってください。BuildError::snapshot() には実際の失敗、観測結果、原因チェーンのテキスト、公開についての事実が含まれます。標準的なエラーラッパーでは、元のエラーを source として保持できます。 モデルとアセット「モデルとアセット」のセクション 完成した NoteType は不変で共有可能です。model.note() を呼び出し、安定キーでフィールドを設定して、結果をプロジェクトに追加します。ノートはモデルを保持し、追加時にモデルとメディアを自動収集します。宣言とテンプレートのルールは独自のノートタイプを参照してください。 Media::file と Media::bytes はデータを所有するスナップショットを取得します。インポートに成功した後は、元ファイルを残しておく必要はありません。image.image() と audio.sound() は構造化コンテンツを生成し、Content::sequence はそれらをテキストや HTML と組み合わせます。直接記述した HTML・CSS・スクリプトのアセットは、builder.asset または project.add_asset で明示的に追加する必要があります。メディアとテンプレートバンドルを参照してください。 出力の所有権「出力の所有権」のセクション 永続出力には BuildOptions::to(path)、所有権によって寿命を管理する一時ファイルには BuildOptions::temporary() を選びます。一時パスにアクセスしている間は、出力または output.artifact() のクローンを保持してください。最後の所有者が解放されるとファイルが削除されます。persist_to(path) は永続成果物を返します。失敗した場合も元の所有者は使えます。JSON スナップショットにはパスが含まれますが、ファイルは所有しません。 ノートの安定した識別情報「ノートの安定した識別情報」のセクション project.add(key, note) には永続的なソースレコードのキーを使います。プロジェクトの名前空間、モデルキー、フィールドキー、テンプレートキーは表示名から独立しています。内容の変更によって新しい論理ノートが作られることはありません。キーが重複すると、上書きせず失敗します。ソースレコードの並べ替えや編集後も、選んだキーを保存・再使用してください。 配布済みデッキを更新する「配布済みデッキを更新する」のセクション update_from に前回配布時のオリジナル APKG を渡します。内部の完全な証拠によって、識別情報とリビジョンの対応を保持します。独立した project.compare(CompareOptions::against(path)) は候補を解析し、ポリシーが公開を許可するかどうかを報告します。高リスクの変更、クライアントでのインポートの制約、明示的な許可は、2つのバージョンを使う手順を参照してください。 チェックアウトしたリポジトリでは、次の例で同じ公開 API を実行できます。 ターミナルウィンドウcargo run --locked -p ankiforge --example target_api_basiccargo run --locked -p ankiforge --example target_api_custom_notetypecargo run --locked -p ankiforge --example target_api_mediacargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples 追加時のエラーとメディアの種類「追加時のエラーとメディアの種類」のセクション Project は安定した名前空間と任意の既定デッキを使い、表示タイトルは持ちません。NoteType、Field、Template は引き続き表示名をサポートします。Project::add はアトミックです。ノート・モデルのキーは AddError::context()、元の位置は note::AddTarget で確認します。detail() は競合や互換性のないメディア用途に対する note::AddDetail を返します。これらの非網羅的な列挙型をマッチする際は、データ付きバリアントに .. を使い、フォールバックの分岐を用意してください。フィールドの content_path は、フィールド自体なら None、ルートなら Some([])、入れ子のノードならシーケンスのインデックスになります。区切り文字のバイト範囲は元の UTF-8 Text/Html リーフを指します。 Media::image() と sound() 自体は引き続き失敗しません。ノートへの追加では、画像に image/*、音声参照に audio/* または video/* が必要です。それ以外の種類は NOTE.MEDIA_USAGE_INVALID になります。これは保持された MIME の検査であり、デコードや再生の確認ではありません。直接記述した HTML と明示的アセットの動作は変わりません。エクスポート名を変更しても MIME は変わりません。PNG を wrong.mp3 に改名しても画像としての追加は通りますが、ビルド時の独立した内容判定・拡張子検査で MEDIA.DECLARED_MIME_MISMATCH になることがあります。 ツール用レシピにはトップレベルの name を持たない ankiforge-project-v2 が必要です。v1 は拒否されます。契約バンドルは 2.1.0 です。パッケージの識別情報は引き続き ankiforge-identity-v1 です。 Markdown を表示ページを編集前へ安定したノート ID で Anki デッキを更新する次へNode.js で Anki カードを生成する<p class=\"container\">JavaScript が無効な場合は、コードやコマンドを選択してキーボードでコピーしてください。</p>Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。記事RSSMIT ライセンス AI 向けドキュメント索引",
+          "paragraphs": [
+            "1つの Project は1つの配布物を表します。安定した名前空間で作成し、安定キーでノートを追加して APKG をビルドします。よく使う型は ankiforge から直接インポートできます。詳細なオプションは公開されている機能別モジュールにあります。",
+            "",
+            "ビルドに成功すると、成果物の存在が保証された BuildOutput を返します。BuildReport は件数、診断、経過時間、完了した比較などの観測結果を保持します。成功・失敗の結果や成果物の所有権は保持しません。警告があっても、成功した出力が失敗に変わることはありません。",
+            "スキーマのエラーはモデルの完成時に検査されます。Project::add は、ノートのキー、フィールド参照、必須フィールド、デッキ、タグ、依存関係の競合をアトミックに検査します。失敗してもプロジェクトは変わりません。残りのカード・パッケージ・更新の検査はビルド時に行います。別途変更可能なレジストリや、必須の検証チェックポイントはありません。",
+            "エラーには固有の kind() と code() メソッドがあり、std::error::Error を実装しています。表示メッセージを解析せず、機械処理用コードを使ってください。BuildError::snapshot() には実際の失敗、観測結果、原因チェーンのテキスト、公開についての事実が含まれます。標準的なエラーラッパーでは、元のエラーを source として保持できます。",
+            "",
+            "完成した NoteType は不変で共有可能です。model.note() を呼び出し、安定キーでフィールドを設定して、結果をプロジェクトに追加します。ノートはモデルを保持し、追加時にモデルとメディアを自動収集します。宣言とテンプレートのルールは独自のノートタイプを参照してください。",
+            "Media::file と Media::bytes はデータを所有するスナップショットを取得します。インポートに成功した後は、元ファイルを残しておく必要はありません。image.image() と audio.sound() は構造化コンテンツを生成し、Content::sequence はそれらをテキストや HTML と組み合わせます。直接記述した HTML・CSS・スクリプトのアセットは、builder.asset または project.add_asset で明示的に追加する必要があります。メディアとテンプレートバンドルを参照してください。",
+            "",
+            "永続出力には BuildOptions::to(path)、所有権によって寿命を管理する一時ファイルには BuildOptions::temporary() を選びます。一時パスにアクセスしている間は、出力または output.artifact() のクローンを保持してください。最後の所有者が解放されるとファイルが削除されます。persist_to(path) は永続成果物を返します。失敗した場合も元の所有者は使えます。JSON スナップショットにはパスが含まれますが、ファイルは所有しません。",
+            "",
+            "project.add(key, note) には永続的なソースレコードのキーを使います。プロジェクトの名前空間、モデルキー、フィールドキー、テンプレートキーは表示名から独立しています。内容の変更によって新しい論理ノートが作られることはありません。キーが重複すると、上書きせず失敗します。ソースレコードの並べ替えや編集後も、選んだキーを保存・再使用してください。",
+            "",
+            "update_from に前回配布時のオリジナル APKG を渡します。内部の完全な証拠によって、識別情報とリビジョンの対応を保持します。独立した project.compare(CompareOptions::against(path)) は候補を解析し、ポリシーが公開を許可するかどうかを報告します。高リスクの変更、クライアントでのインポートの制約、明示的な許可は、2つのバージョンを使う手順を参照してください。",
+            "チェックアウトしたリポジトリでは、次の例で同じ公開 API を実行できます。",
+            "",
+            "Project は安定した名前空間と任意の既定デッキを使い、表示タイトルは持ちません。NoteType、Field、Template は引き続き表示名をサポートします。Project::add はアトミックです。ノート・モデルのキーは AddError::context()、元の位置は note::AddTarget で確認します。detail() は競合や互換性のないメディア用途に対する note::AddDetail を返します。これらの非網羅的な列挙型をマッチする際は、データ付きバリアントに .. を使い、フォールバックの分岐を用意してください。フィールドの content_path は、フィールド自体なら None、ルートなら Some([])、入れ子のノードならシーケンスのインデックスになります。区切り文字のバイト範囲は元の UTF-8 Text/Html リーフを指します。",
+            "Media::image() と sound() 自体は引き続き失敗しません。ノートへの追加では、画像に image/*、音声参照に audio/* または video/* が必要です。それ以外の種類は NOTE.MEDIA_USAGE_INVALID になります。これは保持された MIME の検査であり、デコードや再生の確認ではありません。直接記述した HTML と明示的アセットの動作は変わりません。エクスポート名を変更しても MIME は変わりません。PNG を wrong.mp3 に改名しても画像としての追加は通りますが、ビルド時の独立した内容判定・拡張子検査で MEDIA.DECLARED_MIME_MISMATCH になることがあります。",
+            "ツール用レシピにはトップレベルの name を持たない ankiforge-project-v2 が必要です。v1 は拒否されます。契約バンドルは 2.1.0 です。パッケージの識別情報は引き続き ankiforge-identity-v1 です。",
+            "Markdown を表示",
+            "Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。"
+          ]
+        },
+        {
+          "url": "/anki-forge/ja/docs/json-to-anki/",
+          "title": "JSON から Anki デッキを生成・更新する",
+          "excerpt": "Rust、Python、TypeScript で JSON を読み取り、画像と音声を同梱し、解答だけを変更する APKG 更新を確認します。",
+          "score": 3.7794023875323384,
+          "matchedTerms": [
+            "音声",
+            "変更",
+            "し"
+          ],
+          "pageId": "json-to-anki",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/json-to-anki/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:42 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "82fbbada5afd32cc166d7d72eca547671d192175813e6884877459970a19af1b",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/09-json-to-anki.html",
+          "mainText": "JSON から Anki デッキを生成・更新するJSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、配布元の APKG と、回答だけを変更して確認済みの更新版を出力します。どちらの版も ノート3件、カード3枚、メディアファイル2個になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。 管理：Anki Forge メンテナー · 英語原文の確認日：2026-10-25。 共通の入力ファイル「共通の入力ファイル」のセクション v1.json、v2.json、cell.png、tone.wavをダウンロードします。画像は細胞の模式図です。音声は短い合成音で、単語の読み上げではありません。新しく作るアプリケーションのディレクトリごとに、次の4ファイルを recipe/ に置きます。 json-deck/ recipe/ v1.json v2.json cell.png tone.wav 両方の JSON ファイルには namespace、deck と3件の notes があり、各ノートに継続して使う id、front、back が含まれます。v2 で変わるのは最初の回答だけです。JSON の解析は呼び出し側で行い、Anki Forge はノートの作成と APKG の生成を担当します。信頼できない入力を扱う場合は、ノートを作る前にアプリケーション側のスキーマで検証してください。 Rust「Rust」のセクション Rust 1.92 以降を使います。JSON の解析には serde と serde_json を使用します。Anki Forge は公開パッケージ 0.3.1 を使います。 ターミナルウィンドウcargo new json-deckcd json-deckcargo add ankiforge@0.3.1cargo add serde --features derivecargo add serde_json 次のコードを src/main.rs に保存します。recipe/ は Cargo.toml と同じディレクトリに作成してください。 use ankiforge::update::CompareOptions;use ankiforge::{BuildOptions, Content, Media, Note, Project};use serde::Deserialize;use std::{fs, path::Path}; #[derive(Deserialize)]struct Dataset { namespace: String, deck: String, notes: Vec<Row>,} #[derive(Deserialize)]struct Row { id: String, front: String, back: String,} fn project(input: &Path, version: &str) -> Result<Project, Box<dyn std::error::Error>> { let data: Dataset = serde_json::from_slice(&fs::read(input.join(version))?)?; let image = Media::file(input.join(\"cell.png\"))?; let audio = Media::file(input.join(\"tone.wav\"))?; let mut project = Project::new(data.namespace)?.default_deck(data.deck); for row in data.notes { let front = Content::sequence([Content::text(row.front), image.image(), audio.sound()]); project.add(row.id, Note::basic(front, row.back))?; } Ok(project)} fn main() -> Result<(), Box<dyn std::error::Error>> { let args: Vec<_> = std::env::args().collect(); let input = Path::new(args.get(1).map(String::as_str).unwrap_or(\"recipe\")); let output = Path::new(args.get(2).map(String::as_str).unwrap_or(\"output/rust\")); fs::create_dir_all(output)?; let baseline = output.join(\"v1.apkg\"); let candidate = output.join(\"v2.apkg\"); if baseline.exists() || candidate.exists() { return Err(\"Choose a fresh output directory; keep original releases\".into()); } project(input, \"v1.json\")?.build(BuildOptions::to(&baseline))?; let next = project(input, \"v2.json\")?; let comparison = next.compare(CompareOptions::against(&baseline))?; fs::write( output.join(\"comparison.json\"), serde_json::to_vec_pretty(&comparison.snapshot())?, )?; if !comparison.policy().allows_publication() { return Err(\"Comparison policy blocked publication; inspect comparison.json\".into()); } let prepared = next.prepare_publication(BuildOptions::to(&candidate).update_from(&baseline))?; let review = prepared .report() .comparison() .ok_or(\"Missing update comparison\")?; fs::write( output.join(\"review.json\"), serde_json::to_vec_pretty(&review.snapshot())?, )?; if !review.policy().allows_publication() { return Err(\"Prepared candidate blocked; inspect review.json\".into()); } let result = prepared.publish()?; println!(\"{}\", result.artifact().path().display()); Ok(())} ターミナルウィンドウcargo run -- recipe output/rust Python「Python」のセクション 対応プラットフォームの wheel がある通常の CPython 3.11 以降を使います。リリースチェックの対象は 3.11–3.14 です。Windows では .venv\\Scripts\\Activate.ps1 で仮想環境を有効にします。Anki Forge は公開パッケージ 0.3.1 を使います。 ターミナルウィンドウmkdir json-deckcd json-deckpython -m venv .venv. .venv/bin/activatepython -m pip install ankiforge==0.3.1 次のコードを main.py に保存し、同じディレクトリに recipe/ を作成します。 \"\"\"Generate and review an answer-only update from caller-parsed JSON.\"\"\"import jsonfrom pathlib import Pathimport sysfrom ankiforge import BuildOptions, CompareOptions, Content, Media, Note, Project def project(source: Path, version: str) -> Project: data = json.loads((source / version).read_text(encoding='utf-8')) image = Media.file(source / 'cell.png') audio = Media.file(source / 'tone.wav') result = Project(data['namespace'], default_deck=data['deck']) for row in data['notes']: front = Content.sequence([row['front'], image.image(), audio.sound()]) result.add(row['id'], Note.basic(front, row['back'])) return result source = Path(sys.argv[1] if len(sys.argv) > 1 else 'recipe')output = Path(sys.argv[2] if len(sys.argv) > 2 else 'output/python')output.mkdir(parents=True, exist_ok=True)baseline, candidate = output / 'v1.apkg', output / 'v2.apkg'if baseline.exists() or candidate.exists(): raise RuntimeError('Choose a fresh output directory; keep original releases')project(source, 'v1.json').build(BuildOptions.to(baseline))next_project = project(source, 'v2.json')comparison = next_project.compare(CompareOptions.against(baseline))(output / 'comparison.json').write_text(json.dumps(comparison.snapshot(), indent=2), encoding='utf-8')if not comparison.allows_publication: raise RuntimeError('Comparison policy blocked publication; inspect comparison.json')prepared = next_project.prepare_publication(BuildOptions.to(candidate).update_from(baseline))try: review = prepared.report.comparison if review is None: raise RuntimeError('Missing update comparison') (output / 'review.json').write_text(json.dumps(review.snapshot(), indent=2), encoding='utf-8') if not review.allows_publication: raise RuntimeError('Prepared candidate blocked; inspect review.json') result = prepared.publish() print(result.artifact.path)finally: prepared.close() ターミナルウィンドウpython main.py recipe output/python Node「Node」のセクション Node.js 22.13 以降と、実行環境に合うネイティブの optional dependency が必要です。この例は TypeScript を JavaScript にコンパイルして Node.js で実行します。Anki Forge は公開パッケージ 0.3.1 を使います。 ターミナルウィンドウmkdir json-deckcd json-decknpm init -ynpm install --include=optional ankiforge@0.3.1npm install --save-dev typescript@6.0.3 @types/node@24.13.6 次のコードを main.mts に保存し、同じディレクトリに recipe/ を作成します。 import { readFile, mkdir, access, writeFile } from 'node:fs/promises';import path from 'node:path';import { Project, Note, Content, Media, BuildOptions, CompareOptions } from 'ankiforge'; interface Dataset { namespace: string; deck: string; notes: { id: string; front: string; back: string }[];} async function project(source: string, version: string): Promise<Project> { const data: Dataset = JSON.parse(await readFile(path.join(source, version), 'utf8')); const image = await Media.file(path.join(source, 'cell.png')); const audio = await Media.file(path.join(source, 'tone.wav')); const result = new Project(data.namespace).defaultDeck(data.deck); for (const row of data.notes) { const front = Content.sequence([row.front, image.image(), audio.sound()]); result.add(row.id, Note.basic(front, row.back)); } return result;} const source = process.argv[2] ?? 'recipe';const output = process.argv[3] ?? 'output/node';await mkdir(output, { recursive: true });const baseline = path.join(output, 'v1.apkg');const candidate = path.join(output, 'v2.apkg');for (const file of [baseline, candidate]) { const exists = await access(file).then(() => true, error => { if (error.code === 'ENOENT') return false; throw error; }); if (exists) throw new Error('Choose a fresh output directory; keep original releases');}const first = await (await project(source, 'v1.json')).build(BuildOptions.to(baseline));await first.artifact.close();const next = await project(source, 'v2.json');const comparison = await next.compare(CompareOptions.against(baseline));await writeFile(path.join(output, 'comparison.json'), JSON.stringify(comparison.snapshot(), null, 2));if (!comparison.policy.allows_publication) { throw new Error('Comparison policy blocked publication; inspect comparison.json');}const prepared = await next.preparePublication(BuildOptions.to(candidate).updateFrom(baseline));try { const review = prepared.report.comparison; if (!review) throw new Error('Missing update comparison'); await writeFile(path.join(output, 'review.json'), JSON.stringify(review.snapshot(), null, 2)); if (!review.policy.allows_publication) throw new Error('Prepared candidate blocked; inspect review.json'); const result = await prepared.publish(); console.log(result.artifact.path); await result.artifact.close();} finally { await prepared.close();} ターミナルウィンドウnpx tsc main.mts --target ES2022 --module NodeNext --moduleResolution NodeNext --strict --outDir dist --types nodenode dist/main.mjs recipe output/node 出力を確認してインポートする「出力を確認してインポートする」のセクション 選んだプログラムは output/<language>/v2.apkg のパスを表示します。v1.apkg も一緒に保管してください。回答だけを変えた今回の編集では、comparison.json と review.json に RISK.NOTE_CHANGED が記録され、追加・削除されたノートはなく、policy.allows_publication: true になります。プログラムは公開前に、準備済み候補についてもポリシーを確認します。どちらかの版が出力先ディレクトリに存在する場合、そのディレクトリは再利用しません。 まず v1.apkg を Anki にインポートします。Biology デッキに Basic カードが3枚あり、細胞の画像と合成音が含まれていることを確認します。次に v2.apkg をインポートし、最初の回答が「The basic structural and functional unit of life」になり、ノート数は3件のままであることを確認します。biology-json という名前空間がこの配布プロジェクトを識別します。各業務 ID がノートの安定キーとなり、Anki Forge はその識別情報から Anki 用の GUID を生成します。名前空間と3つのキーは変更しないでください。 更新の基準には、配布時のオリジナルの v1 APKG を使います。Anki から再エクスポートしたファイルは使えません。クライアント側のインポート時の照合、ローカルでの編集、学習スケジュールへの影響は、Anki のバージョン、ノートタイプ、インポート設定によって変わります。リリース前に対象クライアントで検証してください。後のパッケージで省かれたノートも、インポートだけでは削除されません。compare／build の成功は、すべての学習者の復習状態を保証するものではありません。 詳しくは更新の条件、メディア、API 一覧、ライブラリの選択を参照してください。 Markdown を表示ページを編集前へPython で CSV を Anki カードに変換する次へAI を使った Anki カード作成：学習メモから APKG へ<p class=\"container\">JavaScript が無効な場合は、コードやコマンドを選択してキーボードでコピーしてください。</p>Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。記事RSSMIT ライセンス AI 向けドキュメント索引",
+          "paragraphs": [
+            "JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、配布元の APKG と、回答だけを変更して確認済みの更新版を出力します。どちらの版も ノート3件、カード3枚、メディアファイル2個になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。",
+            "管理：Anki Forge メンテナー · 英語原文の確認日：2026-10-25。",
+            "",
+            "v1.json、v2.json、cell.png、tone.wavをダウンロードします。画像は細胞の模式図です。音声は短い合成音で、単語の読み上げではありません。新しく作るアプリケーションのディレクトリごとに、次の4ファイルを recipe/ に置きます。",
+            "両方の JSON ファイルには namespace、deck と3件の notes があり、各ノートに継続して使う id、front、back が含まれます。v2 で変わるのは最初の回答だけです。JSON の解析は呼び出し側で行い、Anki Forge はノートの作成と APKG の生成を担当します。信頼できない入力を扱う場合は、ノートを作る前にアプリケーション側のスキーマで検証してください。",
+            "Rust 1.92 以降を使います。JSON の解析には serde と serde_json を使用します。Anki Forge は公開パッケージ 0.3.1 を使います。",
+            "次のコードを src/main.rs に保存します。recipe/ は Cargo.toml と同じディレクトリに作成してください。",
+            "対応プラットフォームの wheel がある通常の CPython 3.11 以降を使います。リリースチェックの対象は 3.11–3.14 です。Windows では .venv\\Scripts\\Activate.ps1 で仮想環境を有効にします。Anki Forge は公開パッケージ 0.3.1 を使います。",
+            "次のコードを main.py に保存し、同じディレクトリに recipe/ を作成します。",
+            "Node.js 22.13 以降と、実行環境に合うネイティブの optional dependency が必要です。この例は TypeScript を JavaScript にコンパイルして Node.js で実行します。Anki Forge は公開パッケージ 0.3.1 を使います。",
+            "次のコードを main.mts に保存し、同じディレクトリに recipe/ を作成します。",
+            "",
+            "選んだプログラムは output/<language>/v2.apkg のパスを表示します。v1.apkg も一緒に保管してください。回答だけを変えた今回の編集では、comparison.json と review.json に RISK.NOTE_CHANGED が記録され、追加・削除されたノートはなく、policy.allows_publication: true になります。プログラムは公開前に、準備済み候補についてもポリシーを確認します。どちらかの版が出力先ディレクトリに存在する場合、そのディレクトリは再利用しません。",
+            "まず v1.apkg を Anki にインポートします。Biology デッキに Basic カードが3枚あり、細胞の画像と合成音が含まれていることを確認します。次に v2.apkg をインポートし、最初の回答が「The basic structural and functional unit of life」になり、ノート数は3件のままであることを確認します。biology-json という名前空間がこの配布プロジェクトを識別します。各業務 ID がノートの安定キーとなり、Anki Forge はその識別情報から Anki 用の GUID を生成します。名前空間と3つのキーは変更しないでください。",
+            "更新の基準には、配布時のオリジナルの v1 APKG を使います。Anki から再エクスポートしたファイルは使えません。クライアント側のインポート時の照合、ローカルでの編集、学習スケジュールへの影響は、Anki のバージョン、ノートタイプ、インポート設定によって変わります。リリース前に対象クライアントで検証してください。後のパッケージで省かれたノートも、インポートだけでは削除されません。compare／build の成功は、すべての学習者の復習状態を保証するものではありません。",
+            "詳しくは更新の条件、メディア、API 一覧、ライブラリの選択を参照してください。",
+            "Markdown を表示",
+            "Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ja-negative-05",
+      "query": "Ankiの復習履歴を直接リセットする",
+      "top3": [
+        {
+          "url": "/anki-forge/ja/docs/updates/",
+          "title": "安定したノート ID で Anki デッキを更新する",
+          "excerpt": "ノート ID を維持し、前回配布時のオリジナル APKG を基準にビルドして、比較を確認してから新バージョンを配布します。",
+          "score": 11.4306446768821,
+          "matchedTerms": [
+            "学習",
+            "anki",
+            "履歴"
+          ],
+          "pageId": "updates"
+        },
+        {
+          "url": "/anki-forge/ja/docs/compatibility/",
+          "title": "互換性と検証済みの環境",
+          "excerpt": "公開パッケージ、検証した実行環境、Anki クライアントでのインポートと再生の条件を確認します。",
+          "score": 10.029909819815236,
+          "matchedTerms": [
+            "学習",
+            "anki",
+            "履歴"
+          ],
+          "pageId": "compatibility"
+        },
+        {
+          "url": "/anki-forge/ja/docs/ai-anki-cards/",
+          "title": "AI を使った Anki カード作成：学習メモから APKG へ",
+          "excerpt": "AI アシスタントでカードの下書きを作り、解答を確認して Anki Forge で APKG を生成。CSV の手順とコーディングアシスタント向け依頼文を用意しています。",
+          "score": 1.584464173323545,
+          "matchedTerms": [
+            "学習",
+            "anki"
+          ],
+          "pageId": "ai-anki-cards"
+        }
+      ],
+      "kind": "negative",
+      "intentId": "negative-edit-study-progress",
+      "expectedPageIds": [
+        "compatibility",
+        "updates"
+      ],
+      "passed": true,
+      "expectedBoundary": "ライブラリはAPKGを生成し、インストール済みAnkiのコレクションや学習進捗を直接編集しない。結果はパッケージ生成とクライアントのインポートの境界を守り、復習履歴の直接編集を約束しない。空の結果でもよい。",
+      "boundaryReviewRequired": true,
+      "reads": [
+        {
+          "url": "/anki-forge/ja/docs/updates/",
+          "title": "安定したノート ID で Anki デッキを更新する",
+          "excerpt": "ノート ID を維持し、前回配布時のオリジナル APKG を基準にビルドして、比較を確認してから新バージョンを配布します。",
+          "score": 11.4306446768821,
+          "matchedTerms": [
+            "学習",
+            "anki",
+            "履歴"
+          ],
+          "pageId": "updates",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/updates/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:43 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "6909513affa7bbd796b16d5e4d0f67bc7b9c080c5b9adbd3b7eb1e35a2bdd33f",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/10-updates.html",
+          "mainText": "安定したノート ID で Anki デッキを更新するすでに配布した Anki デッキに訂正や新しいカードを届けます。ノートの ID を安定させると、Anki Forge と Anki は既存のノートを新規ノートとして扱わずに識別できます。ただし、実際に何が更新されるかには、Anki のインポート設定や、それより新しいローカルでの編集も影響します。 プロジェクトの名前空間と、ノート・モデル・フィールド・テンプレートのキーは変更しないでください。新しいリリースは、完全なバージョン付き識別情報を含む、前回の配布時のオリジナル APKGを基準に作成します。そのパッケージを対応するソースのリビジョンと一緒に保管してください。 2つの版を生成して比較する「2つの版を生成して比較する」のセクション ターミナルウィンドウcargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples このコマンドは spanish-v1.apkg と spanish-v2.apkg を書き出し、変更した回答を比較して、更新版のパッケージ内の件数を確認します。実行されるソースコードは次のとおりです。 fn vocabulary(answer: &str) -> anyhow::Result<Project> { let mut project = Project::new(\"docs-spanish-updates\")?.default_deck(\"Spanish\"); project.add(\"hola\", Note::basic(\"hola\", answer))?; Ok(project)} fn updates(output: &Path) -> anyhow::Result<()> { let previous = output.join(\"spanish-v1.apkg\"); let next = output.join(\"spanish-v2.apkg\"); vocabulary(\"hello\")?.build(BuildOptions::to(&previous))?; let project = vocabulary(\"hello; hi\")?; let comparison = project.compare(CompareOptions::against(&previous))?; ensure!(comparison.policy().allows_publication()); let built = project.build(BuildOptions::to(&next).update_from(&previous))?; verify(&built, 1, 1, 0)?; ensure!(built.report().comparison().is_some()); Ok(())} compare は、公開を妨げる検出事項があっても正常に完了します。元のリスクレベルとその根拠に加えて、comparison.policy().allows_publication() を別途確認してください。build(...update_from(...)) も同じ分析を行い、ポリシーが候補の公開を認めない場合は、公開前に BuildError を返します。 ポリシーと検査の上限「ポリシーと検査の上限」のセクション 次の完全なプログラムでは、より厳しいしきい値を選び、比較と更新に同じ設定を使います。 use ankiforge::{BuildOptions, Note, Project};use ankiforge::build::InspectLimits;use ankiforge::update::{CompareOptions, RiskLevel, UpdatePolicy}; fn main() -> anyhow::Result<()> { let mut first = Project::new(\"policy-example\")?; first.add(\"cell\", Note::basic(\"Cell?\", \"Unit of life\"))?; first.build(BuildOptions::to(\"policy-v1.apkg\"))?; let mut next = Project::new(\"policy-example\")?; next.add(\"cell\", Note::basic(\"Cell?\", \"The basic unit of life\"))?; let mut limits = InspectLimits::default(); limits.max_collection_bytes = 1 << 30; let policy = UpdatePolicy::default().fail_on(RiskLevel::Medium); let comparison = next.compare(CompareOptions::against(\"policy-v1.apkg\") .inspect_limits(limits.clone()).update_policy(policy.clone()))?; assert!(comparison.policy().allows_publication()); next.build(BuildOptions::to(\"policy-v2.apkg\").update_from(\"policy-v1.apkg\") .inspect_limits(limits).update_policy(policy))?; Ok(())} デフォルトのポリシーは High と Critical の検出事項がある場合に公開を止めます。特定のカテゴリを確認したうえで、呼び出し側が意図的に UpdatePolicy::default().allow(RiskCode::NoteRemoved) を選ぶこともできます。この指定は、元のレベルと根拠を保持したまま、そのカテゴリの検出事項をすべて許容します。特定のノートだけを個別に承認する指定ではありません。該当する検出事項のない許容指定には警告が出ます。不明なリスクコードは拒否されます。比較で返されたコードをすべて自動的に許容しないでください。 識別情報の欠落や破損、名前空間の不一致、不正な候補データ、検査上限への抵触はエラーであり、許容指定できるリスクカテゴリではありません。分析を完了できない場合、比較はそれまでに得られた検査結果を含むエラーを返します。update_from のない新規作成に明示的なポリシーを指定すると、setter の呼び出し順にかかわらず設定エラーになります。 識別情報とその根拠「識別情報とその根拠」のセクション パッケージには ankiforge-identity-v1 形式の ankiforge-identity.json が含まれます。モデル／設定の ID、ノートの GUID、過去のフィールド／テンプレートのスロット、カード／マスクの通し番号、リビジョン、メディアを、実際のコレクションと格納データに結び付けます。Anki からの再エクスポートではこの情報が保持されないため、更新の基準には使えません。欠落した情報が暗黙に再構築されることもありません。 表示名や内容を編集しても、識別用のキーは保持されます。内容が変わらない場合は基準パッケージのリビジョンを維持し、変更した場合はリビジョンを進めます。フィールドやテンプレートを並べ替えても、過去の対応関係は保持されます。使われなくなった識別子も予約されたままなので、同じキーを復元すると再利用できます。ノートキーを別のモデルへ移すことはできず、モデルキーの種類を通常型と Cloze 型の間で変更することもできません。 クライアントのインポート動作と公開前の確認「クライアントのインポート動作と公開前の確認」のセクション APKG は配布用パッケージであり、削除を同期する仕組みではありません。ノート、フィールド、テンプレート、マスクを省いても、学習者の既存データは削除されません。フィールド／テンプレートのスキーマ変更と並べ替えフィールドの変更は、Anki のマージやインポートの設定が動作に影響するため、高リスクです。スキーマ変更によって、ノート内容の比較より先にモデルが複製されたり、対象ノートのタイムスタンプが更新されたりする場合があります。 サポートするクライアントで、初回インポートと既存コレクションへの更新をテストしてください。予定しているマージ設定とノート更新設定を使い、フィールド、GUID、カードの集合、ローカルでの編集、既存の学習スケジュールを確認します。識別情報が安定しているだけでは、新しいローカル編集の上書きや、削除された履歴の復元は保証されません。 候補は、保存済みの基準パッケージとは別のパスに書き出してください。確認を終えたら承認したパッケージを配布し、次回のリリースの根拠として保管します。ファイルの所有権と公開時の保証についてはビルドの保証を参照してください。 一度だけビルドし、確認してから公開する「一度だけビルドし、確認してから公開する」のセクション この API は公開パッケージ 0.3.1 に含まれています。 一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。準備済み公開では、実際の APKG と確認対象のレポートの対応を保てます。 use ankiforge::{BuildOptions, Note, Project}; fn main() -> Result<(), Box<dyn std::error::Error>> { let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\"); project.add(\"es:hola\", Note::basic(\"hola\", \"hello\"))?; project.build(BuildOptions::to(\"spanish-original.apkg\"))?; let mut next = Project::new(\"spanish\")?.default_deck(\"Spanish\"); next.add(\"es:hola\", Note::basic(\"hola\", \"hello; hi\"))?; let prepared = next.prepare_publication( BuildOptions::to(\"spanish-reviewed.apkg\").update_from(\"spanish-original.apkg\"), )?; println!(\"{:?}\", prepared.report().comparison()); if prepared .report() .comparison() .is_some_and(|report| report.policy().allows_publication()) { let output = prepared.publish()?; println!(\"{}\", output.artifact().path().display()); } Ok(())} 固定したソースのチェックアウトで、上の完全なプログラムを anki_forge/examples/docs_publication.rs に保存します。この例は本ガイドで追加するもので、1199196 には含まれていません。その後、次を実行します。 ターミナルウィンドウcargo run --locked -p ankiforge --example docs_publication この例はリポジトリのルートに spanish-original.apkg を書き出し、ポリシーが公開を認めた場合は spanish-reviewed.apkg も書き出します。準備の段階では公開先は変更されません。配布を承認する前に検出事項を確認し、クライアントへのインポートをテストしてください。この例が自動的に公開するのは、ポリシーが許容する単純な内容変更だけです。ベンチマークはこのワークフローを測定していません。 ビルドのライフサイクル、Rust API、Node API、Python APIも参照してください。 Markdown を表示ページを編集前へAnki の画像穴埋めカードを生成する次へRust での作成ガイド<p class=\"container\">JavaScript が無効な場合は、コードやコマンドを選択してキーボードでコピーしてください。</p>Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。記事RSSMIT ライセンス AI 向けドキュメント索引",
+          "paragraphs": [
+            "すでに配布した Anki デッキに訂正や新しいカードを届けます。ノートの ID を安定させると、Anki Forge と Anki は既存のノートを新規ノートとして扱わずに識別できます。ただし、実際に何が更新されるかには、Anki のインポート設定や、それより新しいローカルでの編集も影響します。",
+            "プロジェクトの名前空間と、ノート・モデル・フィールド・テンプレートのキーは変更しないでください。新しいリリースは、完全なバージョン付き識別情報を含む、前回の配布時のオリジナル APKGを基準に作成します。そのパッケージを対応するソースのリビジョンと一緒に保管してください。",
+            "",
+            "このコマンドは spanish-v1.apkg と spanish-v2.apkg を書き出し、変更した回答を比較して、更新版のパッケージ内の件数を確認します。実行されるソースコードは次のとおりです。",
+            "compare は、公開を妨げる検出事項があっても正常に完了します。元のリスクレベルとその根拠に加えて、comparison.policy().allows_publication() を別途確認してください。build(...update_from(...)) も同じ分析を行い、ポリシーが候補の公開を認めない場合は、公開前に BuildError を返します。",
+            "",
+            "次の完全なプログラムでは、より厳しいしきい値を選び、比較と更新に同じ設定を使います。",
+            "デフォルトのポリシーは High と Critical の検出事項がある場合に公開を止めます。特定のカテゴリを確認したうえで、呼び出し側が意図的に UpdatePolicy::default().allow(RiskCode::NoteRemoved) を選ぶこともできます。この指定は、元のレベルと根拠を保持したまま、そのカテゴリの検出事項をすべて許容します。特定のノートだけを個別に承認する指定ではありません。該当する検出事項のない許容指定には警告が出ます。不明なリスクコードは拒否されます。比較で返されたコードをすべて自動的に許容しないでください。",
+            "識別情報の欠落や破損、名前空間の不一致、不正な候補データ、検査上限への抵触はエラーであり、許容指定できるリスクカテゴリではありません。分析を完了できない場合、比較はそれまでに得られた検査結果を含むエラーを返します。update_from のない新規作成に明示的なポリシーを指定すると、setter の呼び出し順にかかわらず設定エラーになります。",
+            "",
+            "パッケージには ankiforge-identity-v1 形式の ankiforge-identity.json が含まれます。モデル／設定の ID、ノートの GUID、過去のフィールド／テンプレートのスロット、カード／マスクの通し番号、リビジョン、メディアを、実際のコレクションと格納データに結び付けます。Anki からの再エクスポートではこの情報が保持されないため、更新の基準には使えません。欠落した情報が暗黙に再構築されることもありません。",
+            "表示名や内容を編集しても、識別用のキーは保持されます。内容が変わらない場合は基準パッケージのリビジョンを維持し、変更した場合はリビジョンを進めます。フィールドやテンプレートを並べ替えても、過去の対応関係は保持されます。使われなくなった識別子も予約されたままなので、同じキーを復元すると再利用できます。ノートキーを別のモデルへ移すことはできず、モデルキーの種類を通常型と Cloze 型の間で変更することもできません。",
+            "",
+            "APKG は配布用パッケージであり、削除を同期する仕組みではありません。ノート、フィールド、テンプレート、マスクを省いても、学習者の既存データは削除されません。フィールド／テンプレートのスキーマ変更と並べ替えフィールドの変更は、Anki のマージやインポートの設定が動作に影響するため、高リスクです。スキーマ変更によって、ノート内容の比較より先にモデルが複製されたり、対象ノートのタイムスタンプが更新されたりする場合があります。",
+            "サポートするクライアントで、初回インポートと既存コレクションへの更新をテストしてください。予定しているマージ設定とノート更新設定を使い、フィールド、GUID、カードの集合、ローカルでの編集、既存の学習スケジュールを確認します。識別情報が安定しているだけでは、新しいローカル編集の上書きや、削除された履歴の復元は保証されません。",
+            "候補は、保存済みの基準パッケージとは別のパスに書き出してください。確認を終えたら承認したパッケージを配布し、次回のリリースの根拠として保管します。ファイルの所有権と公開時の保証についてはビルドの保証を参照してください。",
+            "",
+            "この API は公開パッケージ 0.3.1 に含まれています。",
+            "一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。準備済み公開では、実際の APKG と確認対象のレポートの対応を保てます。",
+            "固定したソースのチェックアウトで、上の完全なプログラムを anki_forge/examples/docs_publication.rs に保存します。この例は本ガイドで追加するもので、1199196 には含まれていません。その後、次を実行します。",
+            "この例はリポジトリのルートに spanish-original.apkg を書き出し、ポリシーが公開を認めた場合は spanish-reviewed.apkg も書き出します。準備の段階では公開先は変更されません。配布を承認する前に検出事項を確認し、クライアントへのインポートをテストしてください。この例が自動的に公開するのは、ポリシーが許容する単純な内容変更だけです。ベンチマークはこのワークフローを測定していません。",
+            "ビルドのライフサイクル、Rust API、Node API、Python APIも参照してください。",
+            "Markdown を表示",
+            "Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。"
+          ]
+        },
+        {
+          "url": "/anki-forge/ja/docs/compatibility/",
+          "title": "互換性と検証済みの環境",
+          "excerpt": "公開パッケージ、検証した実行環境、Anki クライアントでのインポートと再生の条件を確認します。",
+          "score": 10.029909819815236,
+          "matchedTerms": [
+            "学習",
+            "anki",
+            "履歴"
+          ],
+          "pageId": "compatibility",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/compatibility/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:43 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "b8bbe4fc3c5ad9b5b15260b103e79ee6814818325daad46131d1967b096a46c2",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/11-compatibility.html",
+          "mainText": "互換性と検証済みの環境 パッケージと検証済みの環境「パッケージと検証済みの環境」のセクション 2026-10-13の確認時点で、Rust・npm・PyPI の公開パッケージは 0.3.1 です。Rust、Node / TypeScript、Python から始めてください。 インターフェース パッケージ 実行環境と検証 Rust ankiforge 0.3.1 Rust 1.92.0 と検証時の stable。対応する4プラットフォームすべてでパッケージ利用側を検査し、公開 crates.io パッケージの新規利用側も確認 Node / TypeScript ankiforge 0.3.1 Node 22.13.0、検証時の22・24・26。公開 npm からのインストール、ESM/CJS、TypeScript の16件の検査 Python ankiforge 0.3.1 通常の CPython 3.11〜3.14。隔離環境で公開 PyPI wheel をインストールする16件の検査 公開ネイティブパッケージは macOS arm64/x64、Linux x64 GNU/glibc、Windows x64 に対応します。パッケージが存在するだけで、すべてのホストで実行テストが成功したことにはなりません。Node の検証範囲、Python の検証範囲、リリースの証拠に、実施した検査を記録しています。0.3.1 の成功したリリース実行は Rust、npm、PyPI です。他の Python 実装、free-threaded インタープリター、サブインタープリターは別途検証が必要です。ブラウザー、Electron、Bun、Alpine/musl、ARM64 Linux/Windows は、記録済みの Node 検証範囲外です。 メディアの一括インポートと準備済み公開のガイドで扱う機能は、公開 0.3.1 パッケージで使用できます。 Anki でのインポートと再生「Anki でのインポートと再生」のセクション 通常のエクスポートに Anki のインストールは必要ありません。インポート、描画、メディアの再生は、対象クライアントのバージョン、コーデック、インポート設定に依存します。2026-10-08のベンチマークでは、Anki へのインポート・内容・代表的な描画の検査40件（各実装20件）が成功しました。すべてのクライアントや GUI・音声動作を検証したものではありません。 更新用に、前回配布時のオリジナル APKG を保持してください。Anki から再エクスポートしたファイルには、必要な識別情報の証拠が残りません。パッケージからノートを省いても、学習者のコレクションからは削除されません。フィールド・テンプレートの変更、並べ替え用フィールド、ローカルの編集、復習履歴は、クライアントごとのテストが必要です。 自分の配布物は、手動クライアント検証シナリオと、それぞれの参照検証で指定した正確な Anki のバージョン・設定で評価してください。クライアント側の条件とファイル単位の公開動作は、更新とビルドの保証を参照してください。 Markdown を表示ページを編集前へビルドと出力の保証次へトラブルシューティング<p class=\"container\">JavaScript が無効な場合は、コードやコマンドを選択してキーボードでコピーしてください。</p>Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。記事RSSMIT ライセンス AI 向けドキュメント索引",
+          "paragraphs": [
+            "",
+            "2026-10-13の確認時点で、Rust・npm・PyPI の公開パッケージは 0.3.1 です。Rust、Node / TypeScript、Python から始めてください。",
+            "インターフェース パッケージ 実行環境と検証",
+            "Rust ankiforge 0.3.1 Rust 1.92.0 と検証時の stable。対応する4プラットフォームすべてでパッケージ利用側を検査し、公開 crates.io パッケージの新規利用側も確認",
+            "Node / TypeScript ankiforge 0.3.1 Node 22.13.0、検証時の22・24・26。公開 npm からのインストール、ESM/CJS、TypeScript の16件の検査",
+            "Python ankiforge 0.3.1 通常の CPython 3.11〜3.14。隔離環境で公開 PyPI wheel をインストールする16件の検査",
+            "公開ネイティブパッケージは macOS arm64/x64、Linux x64 GNU/glibc、Windows x64 に対応します。パッケージが存在するだけで、すべてのホストで実行テストが成功したことにはなりません。Node の検証範囲、Python の検証範囲、リリースの証拠に、実施した検査を記録しています。0.3.1 の成功したリリース実行は Rust、npm、PyPI です。他の Python 実装、free-threaded インタープリター、サブインタープリターは別途検証が必要です。ブラウザー、Electron、Bun、Alpine/musl、ARM64 Linux/Windows は、記録済みの Node 検証範囲外です。",
+            "メディアの一括インポートと準備済み公開のガイドで扱う機能は、公開 0.3.1 パッケージで使用できます。",
+            "",
+            "通常のエクスポートに Anki のインストールは必要ありません。インポート、描画、メディアの再生は、対象クライアントのバージョン、コーデック、インポート設定に依存します。2026-10-08のベンチマークでは、Anki へのインポート・内容・代表的な描画の検査40件（各実装20件）が成功しました。すべてのクライアントや GUI・音声動作を検証したものではありません。",
+            "更新用に、前回配布時のオリジナル APKG を保持してください。Anki から再エクスポートしたファイルには、必要な識別情報の証拠が残りません。パッケージからノートを省いても、学習者のコレクションからは削除されません。フィールド・テンプレートの変更、並べ替え用フィールド、ローカルの編集、復習履歴は、クライアントごとのテストが必要です。",
+            "自分の配布物は、手動クライアント検証シナリオと、それぞれの参照検証で指定した正確な Anki のバージョン・設定で評価してください。クライアント側の条件とファイル単位の公開動作は、更新とビルドの保証を参照してください。",
+            "Markdown を表示",
+            "Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。"
+          ]
+        },
+        {
+          "url": "/anki-forge/ja/docs/ai-anki-cards/",
+          "title": "AI を使った Anki カード作成：学習メモから APKG へ",
+          "excerpt": "AI アシスタントでカードの下書きを作り、解答を確認して Anki Forge で APKG を生成。CSV の手順とコーディングアシスタント向け依頼文を用意しています。",
+          "score": 1.584464173323545,
+          "matchedTerms": [
+            "学習",
+            "anki"
+          ],
+          "pageId": "ai-anki-cards",
+          "actualUrl": "http://127.0.0.1:54231/anki-forge/ja/docs/ai-anki-cards/",
+          "status": 200,
+          "headers": {
+            "connection": "keep-alive",
+            "content-type": "text/html",
+            "date": "Sun, 01 Nov 2026 23:43:43 GMT",
+            "keep-alive": "timeout=5",
+            "transfer-encoding": "chunked"
+          },
+          "sha256": "f06084e02c069edc87a52e7b9b99a66026b7cc79f816479cbec94b1d19599348",
+          "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/ja/search-negative-prefix/12-ai-anki-cards.html",
+          "mainText": "AI を使った Anki カード作成：学習メモから APKG へAI アシスタントに学習メモから質問と解答の組を下書きしてもらい、原文と照合してから、Anki Forge で Anki の .apkg デッキをエクスポートします。Anki Forge は、この作業でカード生成を担うオープンソースライブラリです。アシスタントが内容の下書きやスクリプトを書き、ローカルの Python、Node.js、Rust のプログラムがカードを生成します。 プログラミング言語を使って始めるにはコーディングアシスタント向けの依頼文をコピーします。または、以下の CSV の手順に沿って進められます。サイトの依頼文作成機能はローカルで文章を組み立てるだけで、AI モデルを呼び出したり、学習メモをアップロードしたりしません。 確認できる資料から始める「確認できる資料から始める」のセクション 自分の講義ノートや語彙リストなど、主題が明確な短い文章を使います。PDF、スキャン画像、講義スライドは、先に別のツールでテキストを抽出・確認してください。Anki Forge は API を通じて渡された内容を受け取ります。PDF の抽出や OCR はこのライブラリの範囲外です。 各質問は1つの事実に絞ります。元の文書を離れてカードだけが表示されたときにも解答が理解できるよう、必要な文脈を含めてください。 CSV のカードを依頼する「CSV のカードを依頼する」のセクション 次の例をアシスタントに貼り付けます。自分のデッキを作る際は元の文章を差し替え、新規ノートの件数と ID を調整してください。 Turn the source below into exactly three Basic Anki notes.Use only facts stated in the source. Do not add facts from memory.Each question must test one fact and be understandable on its own.Return only UTF-8 CSV with the header id,front,back, with no Markdown fence.Use the IDs es:hola, es:gracias and es:adios for these three vocabulary items.Quote any CSV field containing a comma, quote or newline correctly. Source:In Spanish, hola means hello, gracias means thank you, and adiós means goodbye. 想定される内容は、次と同等です。 id,front,backes:hola,hola,helloes:gracias,gracias,thank youes:adios,adiós,goodbye アシスタントは表面の質問を別の言い方にするかもしれません。各行を原文と照合し、曖昧な解答や根拠のない解答を除いて、確認済みの結果を cards.csv に保存します。新規ノートごとに一意の ID を割り当て、後の編集でも維持します。既存デッキの ID を作り直すようアシスタントに依頼しないでください。 確認済みのカードを APKG にする「確認済みのカードを APKG にする」のセクション 完全なプログラム、インストールコマンド、サンプル入力は Python で CSV を Anki に変換するを参照してください。そのスクリプトは CSV の構造を検査し、ID の一意性を確認して、永続パッケージを書き出します。サンプルはメディアなしの Basic カード3枚を作成します。 データがすでに JSON の場合や、画像・音声が必要な場合は、Python、Node / TypeScript、Rust の完全なプログラムがある JSON から Anki を生成するレシピを使ってください。CSV と JSON は、アプリケーションでパースしてからノートとして Anki Forge に渡します。 独自のプログラムを書く支援が必要な場合は、コーディングアシスタント向けの依頼文で、入力フィールド、必要なカードタイプ、出力ファイル名を指定します。任意で使える Anki Forge Skill は、Skill を読み込むアシスタント向けに公開 API リファレンスと作業手順を提供します。 学習前にカードを確認する「学習前にカードを確認する」のセクション 生成した APKG を Anki で開き、カード数、質問、解答、書式を確認します。CSV の例では、Spanish デッキにノート3件、カード3枚があるはずです。エクスポートの成功が示すのはパッケージが生成されたことです。AI の解答が正しいことや、学習に役立つことを証明するものではありません。 穴埋め問題には Cloze カードを使います。図のラベルには、指定した画像とマスク座標を使う画像穴埋めを利用できます。画像中のラベルを自動検出する機能ではありません。 次回リリースのために配布時のオリジナル APKG を保持し、更新の手順に従います。名前空間とノート ID を維持し、比較を確認して、Anki のインポート設定と新しいローカル編集を考慮してください。 Markdown を表示ページを編集前へJSON から Anki デッキを生成・更新する次へAnki の Basic と Cloze カードを生成する<p class=\"container\">JavaScript が無効な場合は、コードやコマンドを選択してキーボードでコピーしてください。</p>Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。記事RSSMIT ライセンス AI 向けドキュメント索引",
+          "paragraphs": [
+            "AI アシスタントに学習メモから質問と解答の組を下書きしてもらい、原文と照合してから、Anki Forge で Anki の .apkg デッキをエクスポートします。Anki Forge は、この作業でカード生成を担うオープンソースライブラリです。アシスタントが内容の下書きやスクリプトを書き、ローカルの Python、Node.js、Rust のプログラムがカードを生成します。",
+            "プログラミング言語を使って始めるにはコーディングアシスタント向けの依頼文をコピーします。または、以下の CSV の手順に沿って進められます。サイトの依頼文作成機能はローカルで文章を組み立てるだけで、AI モデルを呼び出したり、学習メモをアップロードしたりしません。",
+            "",
+            "自分の講義ノートや語彙リストなど、主題が明確な短い文章を使います。PDF、スキャン画像、講義スライドは、先に別のツールでテキストを抽出・確認してください。Anki Forge は API を通じて渡された内容を受け取ります。PDF の抽出や OCR はこのライブラリの範囲外です。",
+            "各質問は1つの事実に絞ります。元の文書を離れてカードだけが表示されたときにも解答が理解できるよう、必要な文脈を含めてください。",
+            "",
+            "次の例をアシスタントに貼り付けます。自分のデッキを作る際は元の文章を差し替え、新規ノートの件数と ID を調整してください。",
+            "想定される内容は、次と同等です。",
+            "アシスタントは表面の質問を別の言い方にするかもしれません。各行を原文と照合し、曖昧な解答や根拠のない解答を除いて、確認済みの結果を cards.csv に保存します。新規ノートごとに一意の ID を割り当て、後の編集でも維持します。既存デッキの ID を作り直すようアシスタントに依頼しないでください。",
+            "",
+            "完全なプログラム、インストールコマンド、サンプル入力は Python で CSV を Anki に変換するを参照してください。そのスクリプトは CSV の構造を検査し、ID の一意性を確認して、永続パッケージを書き出します。サンプルはメディアなしの Basic カード3枚を作成します。",
+            "データがすでに JSON の場合や、画像・音声が必要な場合は、Python、Node / TypeScript、Rust の完全なプログラムがある JSON から Anki を生成するレシピを使ってください。CSV と JSON は、アプリケーションでパースしてからノートとして Anki Forge に渡します。",
+            "独自のプログラムを書く支援が必要な場合は、コーディングアシスタント向けの依頼文で、入力フィールド、必要なカードタイプ、出力ファイル名を指定します。任意で使える Anki Forge Skill は、Skill を読み込むアシスタント向けに公開 API リファレンスと作業手順を提供します。",
+            "",
+            "生成した APKG を Anki で開き、カード数、質問、解答、書式を確認します。CSV の例では、Spanish デッキにノート3件、カード3枚があるはずです。エクスポートの成功が示すのはパッケージが生成されたことです。AI の解答が正しいことや、学習に役立つことを証明するものではありません。",
+            "穴埋め問題には Cloze カードを使います。図のラベルには、指定した画像とマスク座標を使う画像穴埋めを利用できます。画像中のラベルを自動検出する機能ではありません。",
+            "次回リリースのために配布時のオリジナル APKG を保持し、更新の手順に従います。名前空間とノート ID を維持し、比較を確認して、Anki のインポート設定と新しいローカル編集を考慮してください。",
+            "Markdown を表示",
+            "Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。"
+          ]
+        }
+      ]
+    }
+  ]
+}

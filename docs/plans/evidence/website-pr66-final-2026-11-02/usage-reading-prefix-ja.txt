@@ -1,0 +1,376 @@
+
+rust-basic http://127.0.0.1:63533/anki-forge/ja/docs/quickstart/
+Rust で Anki カードを生成する
+
+Rust 1.92 以降を使用します。別のプログラミング言語を使う場合は、Node／TypeScript または Pythonを選んでください。
+
+インストール
+「インストール」のセクション
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+最初のデッキをエクスポートする
+「最初のデッキをエクスポートする」のセクション
+
+次の完全なプログラムを src/main.rs に保存します。
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+プログラムは永続ファイル spanish.apkg を書き出します。Anki で開いてインポートすると、Spanish デッキの hola → hello を学習できます。エクスポート時に Anki のインストールは必要ありません。
+
+名前空間 spanish と安定キー es:hola がノートを識別するため、後で内容を変更しても同じノートとして扱えます。サイトの Basic サンプルをダウンロードすることもできます。
+
+次のステップ
+「次のステップ」のセクション
+
+メディアと更新を含む一連の手順は、JSON から Anki を生成する例で確認できます。
+
+画像と音声、独自のノートタイプ、画像穴埋めを追加できます。更新を比較して公開する前に、配布時のオリジナル APKG を保存しておいてください。詳しくは Rust API または検証済みの環境を参照してください。
+
+Markdown を表示
+
+ページを編集
+前へ
+プログラミング言語を選ぶ
+次へ
+Rust アプリケーションに組み込む
+
+Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。
+
+記事
+RSS
+MIT ライセンス
+AI 向けドキュメント索引
+
+python-basic http://127.0.0.1:63533/anki-forge/ja/docs/python-quickstart/
+Python で Anki カードを生成する
+
+仮想環境を作成して有効にし、PyPI の公開パッケージをインストールします。
+
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Windows では .venv\Scripts\Activate.ps1 で有効にします。通常の CPython 3.11 以降と、プラットフォームに一致する wheel を使用してください。記録済みのリリース検証では CPython 3.11〜3.14 を確認しています。検証済みの環境を参照してください。
+
+デッキをエクスポートする
+「デッキをエクスポートする」のセクション
+
+次を main.py に保存します。
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+永続ファイル spanish.apkg を Anki で開きます。Spanish デッキに hola → hello が含まれています。後で編集する際も、名前空間 spanish とノートキー es:hola を維持してください。エクスポートに Anki のインストールは必要ありません。
+
+次のステップ
+「次のステップ」のセクション
+
+語彙の表を使う場合は CSV から Anki を生成するを参照してください。学習メモからカードの下書きを作る場合は、AI を使ったカード作成から始められます。
+
+メディアと更新を含む一連の作業は、JSON から Anki を生成するで確認できます。
+
+画像と音声と Python のメディア API
+独自のノートタイプとテンプレートバンドル
+画像穴埋め
+比較と更新
+Python API と診断
+genanki からの移行
+
+ネイティブ拡張をソースからビルドするには、ソースからのビルドを参照してください。
+
+Markdown を表示
+
+ページを編集
+前へ
+Node.js で Anki カードを生成する
+次へ
+Python API の移行
+
+Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。
+
+記事
+RSS
+MIT ライセンス
+AI 向けドキュメント索引
+
+node-basic http://127.0.0.1:63533/anki-forge/ja/docs/node-quickstart/
+Node.js で Anki カードを生成する
+
+Node.js 22.13 以降を使います。新しいアプリケーションのディレクトリで実行します。
+
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+npm の公開パッケージと、環境に一致するネイティブのオプション依存パッケージをインストールします。対応プラットフォームは検証済みの環境を参照してください。
+
+デッキをエクスポートする
+「デッキをエクスポートする」のセクション
+
+次を main.mjs に保存します。
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+永続ファイル spanish.apkg を Anki で開きます。Spanish デッキに hola → hello が含まれています。後で編集する際も、名前空間 spanish とキー es:hola を維持してください。永続成果物を閉じてもファイルはディスクに残ります。エクスポートに Anki のインストールは必要ありません。
+
+TypeScript と次の作業
+「TypeScript と次の作業」のセクション
+
+JSON から Anki を生成するレシピには、TypeScript のコンパイルから実行までの完全な手順があります。
+
+ESM には .mjs、CommonJS には require('ankiforge') を使います。パッケージには TypeScript の型宣言が同梱されています。TypeScript の設定を参照してください。
+
+画像と音声と Node のメディア API
+独自のノートタイプとテンプレートバンドル
+画像穴埋め
+比較と更新
+Node API とトラブルシューティング
+
+ソースからのビルドとローカルパッケージの作成は、ソースからのビルドを参照してください。
+
+Markdown を表示
+
+ページを編集
+前へ
+Rust での作成ガイド
+次へ
+Python で Anki カードを生成する
+
+Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。
+
+記事
+RSS
+MIT ライセンス
+AI 向けドキュメント索引
+
+json-media http://127.0.0.1:63533/anki-forge/ja/docs/json-to-anki/
+JSON から Anki デッキを生成・更新する
+
+JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、初回配布用の APKG と、解答だけを変更した検証済みの更新版を出力します。どちらの版も ノート3件、カード3枚、メディアファイル2個になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。
+
+管理：Anki Forge メンテナー · 英語原文の確認日：2026-10-25。
+
+共通の入力ファイル
+「共通の入力ファイル」のセクション
+
+v1.json、v2.json、cell.png、tone.wavをダウンロードします。画像は細胞の模式図です。音声は短い合成音で、単語の読み上げではありません。新しく作るアプリケーションのディレクトリごとに、次の4ファイルを recipe/ に置きます。
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+両方の JSON ファイルには namespace、deck と3件の notes があり、各ノートに継続して使う id、front、back が含まれます。v2 で変わるのは最初の回答だけです。JSON の解析は呼び出し側で行い、Anki Forge はノートの作成と APKG の生成を担当します。信頼できない入力を扱う場合は、ノートを作る前にアプリケーション側のスキーマで検証してください。
+
+Rust
+「Rust」のセクション
+
+Rust 1.92 以降を使います。JSON の解析には serde と serde_json を使用します。Anki Forge は公開パッケージ 0.3.1 を使います。
+
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+次のコードを src/main.rs に保存します。recipe/ は Cargo.toml と同じディレクトリに作成してください。
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Python
+「Python」のセクション
+
+対応プラットフォームの wheel がある通常の CPython 3.11 以降を使います。リリースチェックの対象は 3.11–3.14 です。Windows では .venv\Scripts\Activate.ps1 で仮想環境を有効にします。Anki Forge は公開パッケージ 0.3.1 を使います。
+
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+次のコードを main.py に保存し、同じディレクトリに recipe/ を作成します。
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Node
+「Node」のセクション
+
+Node.js 22.13 以降と、実行環境に合うネイティブの optional dependency が必要です。この例は TypeScript を JavaScript にコンパイルして Node.js で実行します。Anki Forge は公開パッケージ 0.3.1 を使います。
+
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+次のコードを main.mts に保存し、同じディレクトリに recipe/ を作成します。
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+出力を確認してインポートする
+「出力を確認してインポートする」のセクション
+
+選んだプログラムは output/<language>/v2.apkg のパスを表示します。v1.apkg も一緒に保管してください。回答だけを変えた今回の編集では、comparison.json と review.json に RISK.NOTE_CHANGED が記録され、追加・削除されたノートはなく、policy.allows_publication: true になります。プログラムは公開前に、準備済み候補についてもポリシーを確認します。どちらかの版が出力先ディレクトリに存在する場合、そのディレクトリは再利用しません。
+
+まず v1.apkg を Anki にインポートします。Biology デッキに Basic カードが3枚あり、細胞の画像と合成音が含まれていることを確認します。次に v2.apkg をインポートし、最初の回答が「The basic structural and functional unit of life」になり、ノート数は3件のままであることを確認します。biology-json という名前空間がこの配布プロジェクトを識別します。各業務 ID がノートの安定キーとなり、Anki Forge はその識別情報から Anki 用の GUID を生成します。名前空間と3つのキーは変更しないでください。
+
+更新の基準には、配布時のオリジナルの v1 APKG を使います。Anki から再エクスポートしたファイルは使えません。クライアント側のインポート時の照合、ローカルでの編集、学習スケジュールへの影響は、Anki のバージョン、ノートタイプ、インポート設定によって変わります。リリース前に対象クライアントで検証してください。後のパッケージで省かれたノートも、インポートだけでは削除されません。compare／build の成功は、すべての学習者の復習状態を保証するものではありません。
+
+詳しくは更新の条件、メディア、API 一覧、ライブラリの選択を参照してください。
+
+Markdown を表示
+
+ページを編集
+前へ
+Python で CSV を Anki カードに変換する
+次へ
+AI を使った Anki カード作成：学習メモから APKG へ
+
+Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。
+
+記事
+RSS
+MIT ライセンス
+AI 向けドキュメント索引
+
+original-baseline-update http://127.0.0.1:63533/anki-forge/ja/docs/updates/
+安定したノート ID で Anki デッキを更新する
+
+すでに配布した Anki デッキに訂正や新しいカードを届けます。ノートの ID を安定させると、Anki Forge と Anki は既存のノートを新規ノートとして扱わずに識別できます。ただし、実際に何が更新されるかには、Anki のインポート設定や、それより新しいローカルでの編集も影響します。
+
+プロジェクトの名前空間と、ノート・モデル・フィールド・テンプレートのキーは変更しないでください。新しいリリースは、完全なバージョン付き識別情報を含む、前回の配布時のオリジナル APKGを基準に作成します。そのパッケージを対応するソースのリビジョンと一緒に保管してください。
+
+2つの版を生成して比較する
+「2つの版を生成して比較する」のセクション
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+このコマンドは spanish-v1.apkg と spanish-v2.apkg を書き出し、変更した回答を比較して、更新版のパッケージ内の件数を確認します。実行されるソースコードは次のとおりです。
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+compare は、公開を妨げる検出事項があっても正常に完了します。元のリスクレベルとその根拠に加えて、comparison.policy().allows_publication() を別途確認してください。build(...update_from(...)) も同じ分析を行い、ポリシーが候補の公開を認めない場合は、公開前に BuildError を返します。
+
+ポリシーと検査の上限
+「ポリシーと検査の上限」のセクション
+
+次の完全なプログラムでは、より厳しいしきい値を選び、比較と更新に同じ設定を使います。
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+デフォルトのポリシーは High と Critical の検出事項がある場合に公開を止めます。特定のカテゴリを確認したうえで、呼び出し側が意図的に UpdatePolicy::default().allow(RiskCode::NoteRemoved) を選ぶこともできます。この指定は、元のレベルと根拠を保持したまま、そのカテゴリの検出事項をすべて許容します。特定のノートだけを個別に承認する指定ではありません。該当する検出事項のない許容指定には警告が出ます。不明なリスクコードは拒否されます。比較で返されたコードをすべて自動的に許容しないでください。
+
+識別情報の欠落や破損、名前空間の不一致、不正な候補データ、検査上限への抵触はエラーであり、許容指定できるリスクカテゴリではありません。分析を完了できない場合、比較はそれまでに得られた検査結果を含むエラーを返します。update_from のない新規作成に明示的なポリシーを指定すると、setter の呼び出し順にかかわらず設定エラーになります。
+
+識別情報とその根拠
+「識別情報とその根拠」のセクション
+
+パッケージには ankiforge-identity-v1 形式の ankiforge-identity.json が含まれます。モデル／設定の ID、ノートの GUID、過去のフィールド／テンプレートのスロット、カード／マスクの通し番号、リビジョン、メディアを、実際のコレクションと格納データに結び付けます。Anki からの再エクスポートではこの情報が保持されないため、更新の基準には使えません。欠落した情報が暗黙に再構築されることもありません。
+
+表示名や内容を編集しても、識別用のキーは保持されます。内容が変わらない場合は基準パッケージのリビジョンを維持し、変更した場合はリビジョンを進めます。フィールドやテンプレートを並べ替えても、過去の対応関係は保持されます。使われなくなった識別子も予約されたままなので、同じキーを復元すると再利用できます。ノートキーを別のモデルへ移すことはできず、モデルキーの種類を通常型と Cloze 型の間で変更することもできません。
+
+クライアントのインポート動作と公開前の確認
+「クライアントのインポート動作と公開前の確認」のセクション
+
+APKG は配布用パッケージであり、削除を同期する仕組みではありません。ノート、フィールド、テンプレート、マスクを省いても、学習者の既存データは削除されません。フィールド／テンプレートのスキーマ変更と並べ替えフィールドの変更は、Anki のマージやインポートの設定が動作に影響するため、高リスクです。スキーマ変更によって、ノート内容の比較より先にモデルが複製されたり、対象ノートのタイムスタンプが更新されたりする場合があります。
+
+サポートするクライアントで、初回インポートと既存コレクションへの更新をテストしてください。予定しているマージ設定とノート更新設定を使い、フィールド、GUID、カードの集合、ローカルでの編集、既存の学習スケジュールを確認します。識別情報が安定しているだけでは、新しいローカル編集の上書きや、削除された履歴の復元は保証されません。
+
+候補は、保存済みの基準パッケージとは別のパスに書き出してください。確認を終えたら承認したパッケージを配布し、次回のリリースの根拠として保管します。ファイルの所有権と公開時の保証についてはビルドの保証を参照してください。
+
+一度だけビルドし、確認してから公開する
+「一度だけビルドし、確認してから公開する」のセクション
+
+この API は公開パッケージ 0.3.1 に含まれています。
+
+一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。prepare_publication で候補を準備し、確認後に publish で保存すると、レポートで確認したものと同じ APKG を書き出せます。
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+固定したソースのチェックアウトで、上の完全なプログラムを anki_forge/examples/docs_publication.rs に保存します。この例は本ガイドで追加するもので、1199196 には含まれていません。その後、次を実行します。
+
+ターミナルウィンドウ
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+この例はリポジトリのルートに spanish-original.apkg を書き出し、ポリシーが公開を認めた場合は spanish-reviewed.apkg も書き出します。準備の段階では公開先は変更されません。配布を承認する前に検出事項を確認し、クライアントへのインポートをテストしてください。この例が自動的に公開するのは、ポリシーが許容する単純な内容変更だけです。ベンチマークはこのワークフローを測定していません。
+
+ビルドのライフサイクル、Rust API、Node API、Python APIも参照してください。
+
+Markdown を表示
+
+ページを編集
+前へ
+Anki の画像穴埋めカードを生成する
+次へ
+Rust での作成ガイド
+
+Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。
+
+記事
+RSS
+MIT ライセンス
+AI 向けドキュメント索引
+
+troubleshooting http://127.0.0.1:63533/anki-forge/ja/docs/troubleshooting/
+トラブルシューティング
+
+失敗した操作の構造化された kind と code、原因チェーン、観測結果を使います。表示テキストは人向けであり、変わる可能性があります。操作そのものの失敗と、比較は完了したもののポリシーが公開を阻止した場合は、異なる結果です。
+
+インストール
+「インストール」のセクション
+症状	確認すること
+Rust がツールチェーンを拒否する	rustc --version を実行し、Rust 1.92 以降を使用します。cargo tree -i ankiforge でインストール済みのバージョンを確認します
+Node がネイティブパッケージを読み込めない	node -p "process.platform + '/' + process.arch" と npm ls ankiforge を実行し、npm install --include=optional ankiforge@0.3.1 で再インストールします
+Node がネイティブ側とラッパーの不一致を報告する	バージョンを揃えます。同じレジストリ版から再インストールするか、同じチェックアウトから両方を再ビルドします
+Python が拡張を読み込めない	python -m pip show ankiforge と python -m pip debug --verbose を実行し、インタープリターと wheel の OS/CPU タグを確認します
+Python がソース配布物を選択する	対応する wheel・インタープリターを選ぶか、コンパイラーを用意してソースからのビルドに従います
+
+検証済みの環境、Node のセットアップ、Python のセットアップを参照してください。
+
+モデルとノート
+「モデルとノート」のセクション
+症状	修正方法
+無効または空のキー	安定キーを明示的に指定します。表示名は別です
+NOTE.KEY_DUPLICATE	論理的なソースレコードごとに一意のキーを1つ割り当てます
+NOTE.FIELD_UNKNOWN	表示名ではなくフィールドキーで代入します
+NOTE.FIELD_REQUIRED	追加前に required() を指定したフィールドを埋めます
+NOTE.MODEL_CONFLICT	同じモデルキーには同じ完成済みモデルを再使用します
+テンプレート参照エラー	宣言済みキーをテンプレートで使い、元のソースのバイト範囲を確認します
+HTML が文字として表示される	意図したマークアップに限って Content::html を使います
+Cloze カードが生成されない	対応範囲1〜500の番号で {{c1::answer}} 構文を指定します
+
+追加の失敗はアトミックです。ノート・モデルを修正して再試行してください。部分的に登録されたモデルやメディアを取り消す必要はありません。モデルビルダーは .build() で完成させてから独自のノートを作成します。
+
+メディアとテンプレート
+「メディアとテンプレート」のセクション
+症状	修正方法
+ファイルのインポートに失敗する	Media::file の時点で元ファイルを確認します。成功後の元ファイル削除は可能です
+MIME と内容が一致しない	バイト列のコンストラクターに実際の MIME タイプを渡します
+エクスポート名が競合する	一意で移植可能な名前を選びます。大文字小文字・Unicode 正規化だけの違いも競合します
+直接記述した HTML・CSS・スクリプトのリソースが見つからない	モデルの asset またはプロジェクトの add_asset で宣言します
+メディアのインポートが上限を超える	インポート前に MediaLimits.max_bytes を明示的に増やします
+ビルド時の検査が上限を超える	その操作の該当する InspectLimits カウンターを調整します
+バンドルの読み込みに失敗する	bundle-v2、明示的なキー、キーを参照するテンプレート、バンドル内のパスを使います
+画像穴埋めの矩形が失敗する	デコード後の表示サイズ、有限の座標、一意のマスクキーを確認します
+
+すべてのノートタイプで文字列の既定の扱いは同じです。メディアノードは依存関係を収集しますが、ファイル名を手書きしただけではバイト列はインポートされません。有効なパッケージでも、使用するコーデック・フォントについてクライアントでの再生確認が必要です。
+
+更新と出力
+「更新と出力」のセクション
+
+完全な識別情報の証拠を含む、配布時のオリジナル APKG を基準に使います。Anki から再エクスポートしたパッケージにはその証拠が残りません。名前空間の不一致や証拠の破損は、更新ポリシーで許可できません。
+
+完了した比較で allows_publication == false となる場合があります。特定のリスク分類を明示的に許可する前に、元の検出事項と証拠を確認してください。すべての結果を一括で許可しないでください。同じ判断を適用するには、実際の更新ビルドにも同じポリシーを渡します。新規作成だけの要求にポリシーを指定するとエラーになります。
+
+一時パスが消えた場合は、すべての読み取り側が終わるまで出力・成果物の所有者を保持してください。レポートと JSON スナップショットは所有者ではありません。永続化に失敗した場合は、エラーの公開段階と耐久性を確認してください。保存先に公開した後でエラーが返ることがあります。出力の保証を参照してください。
+
+Markdown を表示
+
+ページを編集
+前へ
+互換性と検証済みの環境
+次へ
+Python の診断と更新ポリシー
+
+Anki Forge。Rust を基盤とする、オープンソースの Anki APKG 生成ライブラリ。
+
+記事
+RSS
+MIT ライセンス
+AI 向けドキュメント索引

@@ -1,0 +1,896 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/de_technical_review/staging-2026-11-01",
+  "recordedAt": "2026-11-01T23:41:04.110414+00:00",
+  "status": "staging-read-complete-pending-formal-freeze",
+  "scope": "Independent complete 29 DE doc and 2 DE blog semantic readings against English; all 210 UI and 11 framework values; metadata, brief, prompt and search vocabulary; targeted actual three-SDK source contract review. Hashes support these readings; they do not replace them. No queries file read, no browser/ranking/machine/artifact acceptance.",
+  "files": [
+    {
+      "path": "anki_forge/Cargo.toml",
+      "sha256": "9aeaa3dcd1da3c9b8f381cd5a85ae581288e3f7e2cfb1c5d3ef44198de2343e9",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/examples/docs_publication.rs",
+      "sha256": "65e6404ee7381d73709dca0ada96cdb7923650ddd1cc330447884864d552a85b",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "anki_forge/examples/docs_workflow.rs",
+      "sha256": "2ab71f370ca174b256d1ba56e8b8cccc34fda5918a1fe25fe29626b061d25d86",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "anki_forge/examples/target_api_custom_notetype.rs",
+      "sha256": "2951c058e9c3376fbe115b199a010830445c5765c923f9f66f6406a724d9cd13",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "anki_forge/examples/website_showcase.rs",
+      "sha256": "458909b87f001fdd76ae4e398f25b0dfe58ed60e11112c8e43e3844032bd8bf3",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/build_api/artifact.rs",
+      "sha256": "c5811814729d6dc03fe3180ed1e7c05164d2e3e07224a78bd7dfdcf18697ab0d",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "anki_forge/src/build_api/identity.rs",
+      "sha256": "80f1591507e39b89d070d8ea2bd12ac92e59886ef6945da4662d2ccca1e944b0",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "anki_forge/src/build_api/identity/reconcile.rs",
+      "sha256": "7eac89637c97ac08ba1dc58756b57f6fb41f4a52d9931982f1cec88be0d5e7c4",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "anki_forge/src/build_api/identity/validation.rs",
+      "sha256": "cd4e66b98c823dff71e8f12d8267982c3c9569f876d1f5d92a31345d6c979be3",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "anki_forge/src/build_api/limits.rs",
+      "sha256": "f821350e7371628480bdb36bbb887ad34658c4fa4b9aede632d3dfb12441f8ba",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/build_api/mod.rs",
+      "sha256": "8623fe86f2d23703d262cfafc67b9559c5d4482303de5db149218152b2b41e34",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/build_api/prepared.rs",
+      "sha256": "71b9108632502c6df67388228e049feebb4abf3c0c95210381648ef57dd641b5",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/lib.rs",
+      "sha256": "46b719c1d75dea7c5c792a4fa4bd607a1ed1339940345207f944a36dea1cdc5f",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/media/batch.rs",
+      "sha256": "bbd9ddcc742adfbcbe8c74d66bf2cbee9f6aa1c2cf696347522d62d4d3064bf7",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/media/mod.rs",
+      "sha256": "acb55d73bd8dcf75686cff254711178f037e708de1daa72d404515053104ee8d",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/media/snapshot.rs",
+      "sha256": "e68309dfec313842eac6a0ab65896947445aed92d0499bd60223b7a09bc1dfa7",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "anki_forge/src/note/occlusion.rs",
+      "sha256": "ee8a2699c2f6f29b739337da142b5603269a4abced2034871ccd6bc3992cb279",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "anki_forge/src/parallel_io.rs",
+      "sha256": "3409922f8e487b663240d44f32a2fa0479c6da5db34773f04a772595809c71d7",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/prepared_media.rs",
+      "sha256": "eefa54ca3d9feb71b1503e17ea8e3ea7a45e9a2712f83c873fdca7634ec84e31",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "anki_forge/src/prepared_media/payload.rs",
+      "sha256": "e3af34b5b2bddea961b8458584443787d01e1986afb97e79fb18756477f64931",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "anki_forge/src/project.rs",
+      "sha256": "0fb5d4f23a6c18293b249b305ec9abd4b8d6746f6b2a5a58f860e7b028d650ca",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/schema/bundle.rs",
+      "sha256": "9a9a1b4705879f4c0a07c3d94506deb8fcfd3c66c31b9daf6f4106fe6e014cb0",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "anki_forge/src/schema/bundle_manifest.rs",
+      "sha256": "3ec0b156f1ff13347686fb0d8863598877a349f813e3dba831cd7b363c920c34",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/schema/validation.rs",
+      "sha256": "640426ff9cf39f191662cccedee80c5e2e1ee7668c6112a7e86eb52260824abf",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/tools/project_input.rs",
+      "sha256": "b744a15e6c6100ca03536ee3411d2f53d7119bce3bade00392af0dab01d588b4",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "anki_forge/src/update/mod.rs",
+      "sha256": "2c40e01ecc9f95053e18986c1543d11c63891b7d32be6b674d3ac0076248b3a1",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "anki_forge/src/update/policy.rs",
+      "sha256": "e0de391703980bca8d377ff80b638ea5c9ecd1a38ac23d5a466bc1b5aedb8ed8",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "bindings/node/native/src/lib.rs",
+      "sha256": "a0c78bb436ca8abda59a17fc10e4df98d0b75cc1ea0e8ab1ebf1d3b28ab294d4",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "bindings/node/native/src/prepared.rs",
+      "sha256": "74dbe531ec80347911e8af3d39c1b34194f7cef75f84a9c36bd4394fc027d710",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/node/package.json",
+      "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/node/src/artifact.ts",
+      "sha256": "8d002cf53829f3b703d70e2e6f51193668af898566b5af90c22c15eba2d59298",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/node/src/index.ts",
+      "sha256": "f4e3d26bf820709c4804c4550006cd11c999b9984d3d17df025f8fef47111ed5",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "bindings/node/src/internal/native.ts",
+      "sha256": "a343ba31352c011a97aa8e48999e296f4f09c1aef9758cdbdeb8c4d2e1b1526b",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "bindings/node/src/report.ts",
+      "sha256": "d2fe2cbf41a72a303ae99e44d894a1f7761cfc132413a72ce3654686234598c6",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/python/MIGRATION.md",
+      "sha256": "ea9ce69a3187e5ed37dae4b0be43b493f1fc80f9033a4f3818af0c73dd5892d2",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "bindings/python/examples/csv_to_anki.py",
+      "sha256": "5d5444fbec2d77d69a9a03d75a24f85d6c65e30c9bfe84fa27f30ef9857f93fc",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "bindings/python/native/src/lib.rs",
+      "sha256": "32a4615ab337c4390a3d39349fdbe1e80de9199658b057106ec9e1846e60438c",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "bindings/python/native/src/prepared.rs",
+      "sha256": "f1ceaf4d3e82c70918aac2574a95d1d5a0a056c552886f9529d91837fe668c44",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/python/native/src/state.rs",
+      "sha256": "44a079e8c9c297bdc02088849fee3892b0ef13e9ba42a337c30bb657368203cb",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/python/pyproject.toml",
+      "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/python/src/ankiforge/artifact.py",
+      "sha256": "5bd7b29f83aeda358515ac805dfd335584aa05177afae78c22833130a57b834b",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/python/src/ankiforge/media.py",
+      "sha256": "28d4812a1942037b3acc562397273cc48f2805aee6703775a4aa2f8c50bc82b5",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/python/src/ankiforge/prepared.py",
+      "sha256": "c79e92565efdd7274e042078385d9539c957d39bdda5e7a097abc092bd39ed7c",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/python/src/ankiforge/project.py",
+      "sha256": "42016056ba812dd4245f8baa28ca66d0f338f8c925a293e75b860bf711e105f0",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "bindings/python/src/ankiforge/report.py",
+      "sha256": "7b421a38dc2ff3bf0c18803bcb38bbd60e49784151f49e9a1047b61ceabc96da",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+      "sha256": "842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "contracts/manifest.yaml",
+      "sha256": "3bd3de5836834c034a7139f7cc7085677e64ccdce19742eec656d6bcb0b0620d",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "contracts/schema/project-input.schema.json",
+      "sha256": "fca83b2c22bdfe90db20b5da99aee0bd34a9a5654d8e9a832b49d8d0d6b50d34",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "contracts/schema/template-bundle.schema.json",
+      "sha256": "3feacb3abaac07f4a65ef562d8b1fe0c935ed1e30232f72155955cb5bb2933b4",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "contracts/versioning/changes/2.1.0.yaml",
+      "sha256": "af9efbeea5f5c894ebbfc6bbf0ab486d624e1dedf5e570ab8ff5de53d133dd34",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "docs/ai-anki-cards.md",
+      "sha256": "10161558c27a4bf29cc44326f57d8305497698418ee717e3f62244ddf2049da5",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/ai-quickstart.json",
+      "sha256": "507dc89cf2915ba9240c7c036788b9b15b93ec812d03d1d43ab929a2eaf4f5c8",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "docs/anki-forge-vs-genanki.md",
+      "sha256": "0d97281df06cfaec7f5950cf0968215482528119a6ed4d5d827880c31b9ab5f4",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/api-overview.md",
+      "sha256": "a14ec346256274a5c4d67f4974ab56fac83c36c95388cb07a0e30ca41eb4288b",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/benchmark-presentation.json",
+      "sha256": "487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "docs/build-guarantees.md",
+      "sha256": "8088975b035de82934153782b081eb8ea4472bce35dc306b7e90970fcb2efa83",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/cards.md",
+      "sha256": "8de0e93bf4a3b94d18d8214687d78b70a32b53e16b2369692da7c624f028d5f8",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/compatibility.md",
+      "sha256": "30d15b0a9729ad0446273cbfd7c50e7d3836fa1532ed6bae814e64686c4e243c",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/concepts.md",
+      "sha256": "1e98671a8cde2328fc9e5c246b54d8bd0dab9fd0b608fce62d01614cfef43279",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/csv-to-anki.md",
+      "sha256": "5afaeba590285e074b3cbf8efdfe4cfbcb36da78a4c46464f30ac16c7d207486",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/custom-notetypes.md",
+      "sha256": "6e9098c60d7f2c546a63d4f559d42338bd8e565a71392696f24449e700818be1",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/image-occlusion.md",
+      "sha256": "3e54b44010c3420fff223ce8a4bf0a1bb095dd27a6fd3d4b1517d6a05a7f85a5",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/installation.md",
+      "sha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/json-to-anki.md",
+      "sha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/media.md",
+      "sha256": "c2d0a5d292d6b320d47892926767ef782355935e8f9cefade9b930e2f6b62c02",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/node/api.md",
+      "sha256": "fd8051a9609dbbac9e6418d7b25ca326f93d0442ded3fceec55af25ff66ab726",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/node/quick-start.md",
+      "sha256": "084c9c550e430907e7c77de653458fdc11a393136b8c4a24f1e64e8c03e2113e",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/performance/20261008/comparison.csv",
+      "sha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/authoring/de-data-patch.json",
+      "sha256": "692e5ecc12c5fc11d342e1a012a2298012ef7d586efc2fef91ab65d5c8128992",
+      "readMode": "full-metadata-brief-prompt-vocabulary-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/authoring/sources.json",
+      "sha256": "a3e8425d0f911a454c58aa5a34bc5aa4cd07866723d802dad75da984dc88a2df",
+      "readMode": "mapping"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/ai-anki-cards.md",
+      "sha256": "74b4c461be6950511147ff0f1e97d08626d0267b418906f010e9874406169ad2",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/anki-forge-vs-genanki.md",
+      "sha256": "451e1d2e6d0ab45ad152c1f88bb06e51acc21372cc11e808de5cc3493583dd2b",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/api.md",
+      "sha256": "581d8eb78991bb1c522ff5b2525eb35223cb3e0c17ce66a88c3f41617f801e6c",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/build-guarantees.md",
+      "sha256": "966f32043bbf829a52ef54321ea87767a5af589948cf228747662da7bf612f1e",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/cards.md",
+      "sha256": "e49009a745155a906eaf8954affded89d2f627de26f8260197243b9a6d5cff5c",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/compatibility.md",
+      "sha256": "a1092208ce0c5631a45a5c0d98fa811ea858ade4bec4f3f9840acbc25d32ee3b",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/concepts.md",
+      "sha256": "ca7c65832736756c6e00332a886a0e83ccada81916d1a7bb458b3b69b3908a56",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/csv-to-anki.md",
+      "sha256": "ed8138ad29306fb0c8cee62b66dc9c06cb8e665240650adccfe7bd76967e3853",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/custom-notetypes.md",
+      "sha256": "9dbd706e48dfe60d445eef3ffd303271e2d7df0b7aa4e2a57d1dda973e4cdf3a",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/development.md",
+      "sha256": "53ff98772b29690bd60a2935fb32f022236bf2f6fc42d63324ab5b40ffdc6aa7",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/genanki-migration.md",
+      "sha256": "6035390753fef09d1b00801f9bba7887e0ba0b36571e73b7b635d1bde214eef9",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/image-occlusion.md",
+      "sha256": "bddaa38be40223ebaad0f0aa093759b70a8ad8e19fc9b6f56c48007b38bb1494",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/index.md",
+      "sha256": "dc985f5b231888a3806870ee2b72852718c22e50693159d67e913da9e7d39be4",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/installation.md",
+      "sha256": "a01cc3816070dc01c5aea450fc1b9ed1a3c6dc27172f6a216e17c1d8319d5292",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/json-to-anki.md",
+      "sha256": "c9d69a877371fc780181db29480f59c1681b201970ecbe737ddb2cc1d319de44",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/languages.md",
+      "sha256": "9f4bc430ca275986e082e4bf7df3c02d1c25e09a11db9e338cf165bf9b5abaa3",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/media.md",
+      "sha256": "cba638b0700073d214d98011cfeb0691cbb043cc2d95bb664ac6a57d29ec6971",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/node-api.md",
+      "sha256": "4ec0367f34a6249bea09de1e5657ed681cd1f8a6fac607e9c00631cee95ae0c6",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/node-quickstart.md",
+      "sha256": "01ed82b8aaf02ca0c933f64ddcaab876a64b3ffd3807e5aff714854ca08eb919",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-api.md",
+      "sha256": "7d5f1e5c5c716a86c0df167b0a27c17117969c344968ce9302a78bd82c052771",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-diagnostics.md",
+      "sha256": "4a3a01708e859d432091a737ea29fdb113a042f3ed4defb741800457ee8ef1c3",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-migration.md",
+      "sha256": "34f8ff3453c341b961044bf632b1e68c1717c562598e2bc8672200701faab8da",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/python-quickstart.md",
+      "sha256": "1201cbd37bf1a97bed0a6f9939964df21657474bcc5d85669e6b7c5275a68748",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/quickstart.md",
+      "sha256": "aedcddd82f1da4432f75f46aafc29926b5b3a3035c1fbd73965abe4f41c80e9d",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/rust-api.md",
+      "sha256": "efca7596145a1e4034e988254b9b23e3701eada9b25aa255a2b5927f3f850a62",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/rust-guide.md",
+      "sha256": "6bc9bb87dc13447e16e3e8b9fb6668c316c354de06ed8c44bad2ea956e9481bb",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/templates.md",
+      "sha256": "7d9971a3563001a7df954a51a0d56ddefdd0ff103de10b8f41a9a6122f60d5f7",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/troubleshooting.md",
+      "sha256": "63c51366d7d70037aa253cf599c6b97c9f02f33310e00f599b3f1fdf6f9ca7ec",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/updates.md",
+      "sha256": "78ba118cee9fd765ab0c1b7b6d519be3ec34aa0afdc976621cae996c5d196d01",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/website/src/content/blog/de/stable-ids-and-deck-updates.mdx",
+      "sha256": "400f51cae1cab8f6e2519d113151dfa4ceb7a7b656e52ef4ef11a597b1b6d9a6",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/website/src/content/blog/de/your-first-anki-deck.mdx",
+      "sha256": "57f4ae6bf9745a1ec58c358f4eba2eebea72813f9b49de15beed7bbabade39f5",
+      "readMode": "full-de-semantic-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/website/src/content/i18n/de.json",
+      "sha256": "b371f3eeb53c8e6ae305d44f552282ea44c55bfe5b751d87a13b089dd22b1918",
+      "readMode": "full-de-catalog-read"
+    },
+    {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/website/src/i18n/de.json",
+      "sha256": "a5eca8cec3584cc6ee73bbdcde9688fee6d3ca61c23927da745ce91e6580d915",
+      "readMode": "full-de-catalog-read"
+    },
+    {
+      "path": "docs/python/api.md",
+      "sha256": "95e882472db174e247682c64a656a716ca5c289637b746d4e99d4c3fbaf87004",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/python/diagnostics.md",
+      "sha256": "b4f2c30dfe2e8786b302c0eed8a919c6c17b839bbe8b2d900e2d47ff82953b28",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/python/genanki-migration.md",
+      "sha256": "3ef8c0b8d2e56fb6a194d40053f0936fcef6660193294ab3d7a61281c85dfd3f",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/python/quick-start.md",
+      "sha256": "394405423e6036cf8a11725eae7fb25adf1ba927df4fe68f690baee409258b42",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/recipes/csv-to-anki/cards.csv",
+      "sha256": "216ddeb875b23bfc109bccbd1935cee7baed7e0a9672f739c986372b4e7c0f64",
+      "readMode": "read-in-doc-and-exact-source-fence-verified"
+    },
+    {
+      "path": "docs/rust-api.md",
+      "sha256": "1aaef5f015b3b01553a0f86b1ec019c7bd9241ab0d00b4983eb1b6566bb2e27a",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/rust-guide.md",
+      "sha256": "5ae31487b276f578717776170bbd00c21045b51994242c8d4358af0a53f00dcf",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/source-builds.md",
+      "sha256": "a4d1bf88390dbd6566dc828a28f8f845302e9539f535e32ee9a75d88325f12ac",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/template-bundles.md",
+      "sha256": "8695e7f6f40d19911dd072a16bd5d07f43e2a250618eb6c0aefc06a39451f53f",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "docs/updates.md",
+      "sha256": "26b6bd608bb16df94b0f20466face0f0c44af1599674166b38881ee06d5a5e9f",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "website/scripts/content-review-candidates.mjs",
+      "sha256": "437f454a227a20b35e954a2547004034f1b95a8418f1445b6b49bdae6cdbd2d4",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/scripts/content-review-inputs.mjs",
+      "sha256": "bbebf13ae6759e186225c47ea7b112ae422d61204a1b04c0aee0624c2498dda0",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/scripts/record-content-review.mjs",
+      "sha256": "254907af912c61c7dc7f995fc2d02b872dcbcc5edfbbc73584e199994c96cd32",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/src/components/AiQuickstart.astro",
+      "sha256": "755e96c650604d7949125b9967f25992b3f5fd62e9d18debdfd27671ef3a7a84",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/src/components/BlogPage.astro",
+      "sha256": "a3b1b7f73d75c98b9b7aafb64c4a714b01cba099fd225b0f0316d7fb778269ac",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/src/components/ExamplesPage.astro",
+      "sha256": "8b10e1280635172c69029b94cbc8765fa95593f221772af1bd338c0373d95649",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/src/components/HomePage.astro",
+      "sha256": "46f66ffb3201899217c078c993438e7d66af627053e122081599a07ad721d439",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/src/components/PerformanceEvidence.astro",
+      "sha256": "ed9c4b797037499fe36c1553cfcfc94dd489086b883d8d77ff60dc94ac72e2ef",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+      "sha256": "77e2a04feaec5959d73f2aa008412203cc598bcdbfbffb6823ced93c03cfb0c7",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "website/src/content/blog/your-first-anki-deck.mdx",
+      "sha256": "957379c92c61b6d5f3569da4b41be4d6f593aa0374f0fc97576d3630b4a2e7a0",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "website/src/content/docs/docs/index.mdx",
+      "sha256": "d4efef2d4e226281f2c1a0338b9e36ac25acb8feca29c9e5cc6b35b9f592fb1c",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "website/src/content/docs/docs/languages.mdx",
+      "sha256": "43216c0f81d86b7ee75c217e0e682f171701d70e08694645eecb49c3c415aa24",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "website/src/content/docs/docs/quickstart.mdx",
+      "sha256": "274439a4424dd2deeadfbc38cb315ec4bd2163485691e9ff8be79b00901632e9",
+      "readMode": "full-en-comparison-read"
+    },
+    {
+      "path": "website/src/i18n/en.json",
+      "sha256": "1d2d066c0ba73071e92caede3f8997f4864e1c33a40ce4a2ac6307dee9669848",
+      "readMode": "targeted-contract-read"
+    },
+    {
+      "path": "website/src/i18n/format-message.mjs",
+      "sha256": "8d0c482c34a744ccc4add7e6087c68a36e4cce433f97825e82be3bd03b0d3c76",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/src/i18n/messages.mjs",
+      "sha256": "b420861d215ef2880416667b604ad90fe25096e71473c1a96fecd501956e8f3f",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/src/lib/ai-quickstart.mjs",
+      "sha256": "2dc9cb28633282a7ef93778d9250505e87044bbcbab38387b58b24fcf7dea600",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/src/lib/examples.ts",
+      "sha256": "aa92e39a4ba31c22bc9e11dd5c6ec7a5ebfb93081f001da29e465c8ebd11d457",
+      "readMode": "full-source-read"
+    },
+    {
+      "path": "website/src/lib/search-terms.mjs",
+      "sha256": "c6f10080708189333263efcd40971231207fa5686a4bc45803db738633f7e93c",
+      "readMode": "full-source-read"
+    }
+  ],
+  "checks": {
+    "documents": [
+      {
+        "id": "docs",
+        "deFences": 0,
+        "englishFences": 0,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "languages",
+        "deFences": 0,
+        "englishFences": 0,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "quickstart",
+        "deFences": 3,
+        "englishFences": 2,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "json-to-anki",
+        "deFences": 10,
+        "englishFences": 10,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "csv-to-anki",
+        "deFences": 5,
+        "englishFences": 5,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "ai-anki-cards",
+        "deFences": 2,
+        "englishFences": 2,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "anki-forge-vs-genanki",
+        "deFences": 0,
+        "englishFences": 0,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "development",
+        "deFences": 3,
+        "englishFences": 3,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "rust-guide",
+        "deFences": 2,
+        "englishFences": 2,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "templates",
+        "deFences": 5,
+        "englishFences": 5,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "api",
+        "deFences": 0,
+        "englishFences": 0,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "installation",
+        "deFences": 2,
+        "englishFences": 2,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "concepts",
+        "deFences": 0,
+        "englishFences": 0,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "cards",
+        "deFences": 2,
+        "englishFences": 2,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "custom-notetypes",
+        "deFences": 1,
+        "englishFences": 1,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "media",
+        "deFences": 4,
+        "englishFences": 4,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "image-occlusion",
+        "deFences": 3,
+        "englishFences": 3,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "updates",
+        "deFences": 5,
+        "englishFences": 5,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "build-guarantees",
+        "deFences": 0,
+        "englishFences": 0,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "troubleshooting",
+        "deFences": 0,
+        "englishFences": 0,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "compatibility",
+        "deFences": 0,
+        "englishFences": 0,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "rust-api",
+        "deFences": 1,
+        "englishFences": 1,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "node-quickstart",
+        "deFences": 3,
+        "englishFences": 3,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "node-api",
+        "deFences": 4,
+        "englishFences": 4,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "python-quickstart",
+        "deFences": 3,
+        "englishFences": 3,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "python-api",
+        "deFences": 1,
+        "englishFences": 1,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "python-diagnostics",
+        "deFences": 4,
+        "englishFences": 4,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "python-migration",
+        "deFences": 0,
+        "englishFences": 0,
+        "exactFencesOrJsxExample": true
+      },
+      {
+        "id": "genanki-migration",
+        "deFences": 1,
+        "englishFences": 1,
+        "exactFencesOrJsxExample": true
+      }
+    ],
+    "uiKeys": 210,
+    "frameworkKeys": 11,
+    "metadataEntries": 29,
+    "readingRecords": 34
+  },
+  "resolvedFindings": [
+    {
+      "id": "DE-TECH-001",
+      "severity": "minor",
+      "scope": "inherited EN ambiguity clarified in DE",
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/staging/docs/de/media.md",
+      "resolution": "Root added explicit internal-tools feature and unsupported-consumer-surface boundary for tools::load_project. Re-read complete paragraph and verified lib.rs cfg/documented contract."
+    }
+  ],
+  "openIssues": []
+}

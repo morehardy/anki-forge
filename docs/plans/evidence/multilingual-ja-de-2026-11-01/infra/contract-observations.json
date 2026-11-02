@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "scope": "Synthetic six-locale routing/count/index boundary fixtures, not authored locale acceptance; actual German source sentence is used only to isolate sharp-s lexical behavior.",
+  "node": "v24.19.0",
+  "routes": [
+    {
+      "locale": "en",
+      "route": "/docs/quickstart/",
+      "image": "/generated/og.png"
+    },
+    {
+      "locale": "zh-CN",
+      "route": "/zh-cn/docs/quickstart/",
+      "image": "/generated/og-zh-cn.png"
+    },
+    {
+      "locale": "es",
+      "route": "/es/docs/quickstart/",
+      "image": "/generated/og-es.png"
+    },
+    {
+      "locale": "pt-BR",
+      "route": "/pt-br/docs/quickstart/",
+      "image": "/generated/og-pt-br.png"
+    },
+    {
+      "locale": "ja",
+      "route": "/ja/docs/quickstart/",
+      "image": "/generated/og-ja.png"
+    },
+    {
+      "locale": "de",
+      "route": "/de/docs/quickstart/",
+      "image": "/generated/og-de.png"
+    }
+  ],
+  "plural": [
+    {
+      "locale": "en",
+      "categories": [
+        "one",
+        "other"
+      ],
+      "formatted": [
+        {
+          "count": 0,
+          "text": "0 notes"
+        },
+        {
+          "count": 1,
+          "text": "1 note"
+        },
+        {
+          "count": 2,
+          "text": "2 notes"
+        },
+        {
+          "count": 21,
+          "text": "21 notes"
+        },
+        {
+          "count": 1000,
+          "text": "1,000 notes"
+        },
+        {
+          "count": 1.5,
+          "text": "1.5 notes"
+        }
+      ]
+    },
+    {
+      "locale": "ja",
+      "categories": [
+        "other"
+      ],
+      "formatted": [
+        {
+          "count": 0,
+          "text": "ノート0件"
+        },
+        {
+          "count": 1,
+          "text": "ノート1件"
+        },
+        {
+          "count": 2,
+          "text": "ノート2件"
+        },
+        {
+          "count": 21,
+          "text": "ノート21件"
+        },
+        {
+          "count": 1000,
+          "text": "ノート1,000件"
+        },
+        {
+          "count": 1.5,
+          "text": "ノート1.5件"
+        }
+      ]
+    },
+    {
+      "locale": "de",
+      "categories": [
+        "one",
+        "other"
+      ],
+      "formatted": [
+        {
+          "count": 0,
+          "text": "0 Notizen"
+        },
+        {
+          "count": 1,
+          "text": "1 Notiz"
+        },
+        {
+          "count": 2,
+          "text": "2 Notizen"
+        },
+        {
+          "count": 21,
+          "text": "21 Notizen"
+        },
+        {
+          "count": 1000,
+          "text": "1.000 Notizen"
+        },
+        {
+          "count": 1.5,
+          "text": "1,5 Notizen"
+        }
+      ]
+    }
+  ],
+  "parameterControls": [
+    {
+      "text": "Section titled “{{title}}”",
+      "parameters": [
+        "title"
+      ]
+    },
+    {
+      "text": "No results for [SEARCH_TERM]. Showing [DIFFERENT_TERM]",
+      "parameters": [
+        "DIFFERENT_TERM",
+        "SEARCH_TERM"
+      ]
+    },
+    {
+      "text": "{language} {version} [COUNT]",
+      "parameters": [
+        "COUNT",
+        "language",
+        "version"
+      ]
+    }
+  ],
+  "indexControls": [
+    {
+      "locale": "ja",
+      "sixLocaleFixtureBytes": 816,
+      "exactBoundaryBytes": 24576,
+      "rejectedOneByteOver": true
+    },
+    {
+      "locale": "de",
+      "sixLocaleFixtureBytes": 820,
+      "exactBoundaryBytes": 24576,
+      "rejectedOneByteOver": true
+    }
+  ],
+  "germanExactLine": {
+    "sourceSentence": "`MediaLimits(max_bytes=256 << 20)` begrenzt jeden Import, bevor ein Snapshot entsteht. Große Medien können in temporären Speicher ausgelagert werden, dessen Lebensdauer über Besitzverhältnisse verwaltet wird. Namenskonflikte werden über alle expliziten und automatisch gesammelten Dateien hinweg geprüft.",
+    "observations": [
+      {
+        "query": "Große",
+        "matches": [
+          {
+            "id": "python-api",
+            "matchedTerms": [
+              "große"
+            ]
+          }
+        ]
+      },
+      {
+        "query": "große",
+        "matches": [
+          {
+            "id": "python-api",
+            "matchedTerms": [
+              "große"
+            ]
+          }
+        ]
+      },
+      {
+        "query": "GROẞE",
+        "matches": [
+          {
+            "id": "python-api",
+            "matchedTerms": [
+              "große"
+            ]
+          }
+        ]
+      },
+      {
+        "query": "Grosse",
+        "matches": []
+      },
+      {
+        "query": "grosse",
+        "matches": []
+      }
+    ]
+  }
+}

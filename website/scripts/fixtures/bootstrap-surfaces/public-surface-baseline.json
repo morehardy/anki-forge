@@ -1,0 +1,3350 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "kind": "verified-publication",
+    "workflowRun": 40506577765,
+    "workflowUrl": "https://github.com/morehardy/anki-forge/actions/runs/40506577765",
+    "manifestArtifact": 12735666568,
+    "manifestArchiveSha256": "9b11a3a6bf4a3b9e1cd49186a8e8141def19d87c90f599682e4c5b11574b9f07",
+    "pagesArtifact": 12735975579,
+    "pagesArchiveSha256": "fe3ac1d63219fd1914b7841c27c5a2c9db0430ff0f005927be801cf6160e15a1",
+    "commit": "732a40f0e6f3e534233330dac7898fdca1593a27",
+    "inputSha256": "43f851f1d9c5ed6e5b8e795823824826bfb36760993f7296d5a6e90925803402",
+    "manifestSha256": "4f07b277d0ccd329117b52caaf501c46f44eafd307e6dd375c2383200c7e8ebd"
+  },
+  "locales": [
+    "en",
+    "zh-CN"
+  ],
+  "pages": [
+    {
+      "route": "/blog/",
+      "pageId": "blog",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "main"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/blog/stable-ids-and-deck-updates/",
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "separate-identity-from-content",
+          "heading": "Separate identity from content",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "give-the-next-build-a-baseline",
+          "heading": "Give the next build a baseline",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "keep-the-original-distributed-package",
+          "heading": "Keep the original distributed package",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "inspect-the-build-and-the-import",
+          "heading": "Inspect the build and the import",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/blog/your-first-anki-deck/",
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "a-complete-program",
+          "heading": "A complete program",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "install-and-run",
+          "heading": "Install and run",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "give-the-note-an-identity",
+          "heading": "Give the note an identity",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "grow-from-one-note",
+          "heading": "Grow from one note",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/anki-forge-vs-genanki/",
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Anki Forge vs genanki: choose for your workflow",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "the-same-small-task",
+          "heading": "The same small task",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "existing-genanki-decks",
+          "heading": "Existing genanki decks",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "historical-performance-evidence",
+          "heading": "Historical performance evidence",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/api/",
+      "pageId": "api",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Public API overview",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "stable-note-identity",
+          "heading": "Stable note identity",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "start-with-a-task",
+          "heading": "Start with a task",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/build-guarantees/",
+      "pageId": "build-guarantees",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Build and output guarantees",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "temporary-and-persistent-artifacts",
+          "heading": "Temporary and persistent artifacts",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "baselines-and-publication",
+          "heading": "Baselines and publication",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "inspection-limits",
+          "heading": "Inspection limits",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "concurrent-work",
+          "heading": "Concurrent work",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "prepared-publication-from-source",
+          "heading": "Prepared publication from source",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/cards/",
+      "pageId": "cards",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Basic and Cloze cards",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "author-the-notes",
+          "heading": "Author the notes",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "text-fields-and-card-identity",
+          "heading": "Text, fields and card identity",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/compatibility/",
+      "pageId": "compatibility",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Compatibility and releases",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "packages-and-verified-environments",
+          "heading": "Packages and verified environments",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "anki-import-and-playback",
+          "heading": "Anki import and playback",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/concepts/",
+      "pageId": "concepts",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Core concepts",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "project-and-note",
+          "heading": "Project and note",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-fields-and-templates",
+          "heading": "Models, fields and templates",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "text-and-html",
+          "heading": "Text and HTML",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-ownership",
+          "heading": "Media ownership",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-and-update",
+          "heading": "Build and update",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/custom-notetypes/",
+      "pageId": "custom-notetypes",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Custom note types",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "executable-example",
+          "heading": "Executable example",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "keys-and-names",
+          "heading": "Keys and names",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "validation-and-generation",
+          "heading": "Validation and generation",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/development/",
+      "pageId": "development",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Build SDKs from source",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "source-builds",
+          "heading": "Source builds",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/genanki-migration/",
+      "pageId": "genanki-migration",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Move from genanki",
+          "headingLevel": "h1"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/image-occlusion/",
+      "pageId": "image-occlusion",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Image Occlusion",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "run-the-example",
+          "heading": "Run the example",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "multiple-masks-and-modes",
+          "heading": "Multiple masks and modes",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/",
+      "pageId": "docs",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Build Anki decks from code",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "start-with-your-language",
+          "heading": "Start with your language",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "understand-the-pieces",
+          "heading": "Understand the pieces",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-your-next-feature",
+          "heading": "Build your next feature",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "find-answers-and-contribute",
+          "heading": "Find answers and contribute",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/installation/",
+      "pageId": "installation",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Add to your application",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "cargo-dependencies",
+          "heading": "Cargo dependencies",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "choose-the-next-guide",
+          "heading": "Choose the next guide",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/json-to-anki/",
+      "pageId": "json-to-anki",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Generate and update Anki decks from JSON",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "shared-inputs",
+          "heading": "Shared inputs",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "rust",
+          "heading": "Rust",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "python",
+          "heading": "Python",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "node",
+          "heading": "Node",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "check-and-import-the-result",
+          "heading": "Check and import the result",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 10,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/languages/",
+      "pageId": "languages",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Choose your language",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "next-tasks",
+          "heading": "Next tasks",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/media/",
+      "pageId": "media",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Images and audio",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "execute-the-media-workflow",
+          "heading": "Execute the media workflow",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "compose-content-and-explicit-assets",
+          "heading": "Compose content and explicit assets",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "names-mime-and-budgets",
+          "heading": "Names, MIME and budgets",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "typed-image-and-sound-usage",
+          "heading": "Typed image and sound usage",
+          "headingLevel": "h3"
+        },
+        {
+          "id": "batch-import-from-source"
+        },
+        {
+          "id": "batch-media-import",
+          "heading": "Batch media import",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "batch-behavior-and-budgets",
+          "heading": "Batch behavior and budgets",
+          "headingLevel": "h3"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/node-api/",
+      "pageId": "node-api",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Node and TypeScript API",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "project-and-notes",
+          "heading": "Project and notes",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "immutable-models",
+          "heading": "Immutable models",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-and-image-occlusion",
+          "heading": "Media and Image Occlusion",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-compare-and-output",
+          "heading": "Build, compare and output",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "artifact-lifetime-and-concurrency",
+          "heading": "Artifact lifetime and concurrency",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "errors",
+          "heading": "Errors",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-context",
+          "heading": "Addition context",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "source-api-details"
+        },
+        {
+          "id": "batch-media-and-prepared-publication",
+          "heading": "Batch media and prepared publication",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "prepare-review-and-publish",
+          "heading": "Prepare, review and publish",
+          "headingLevel": "h3"
+        },
+        {
+          "id": "typescript",
+          "heading": "TypeScript",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/node-quickstart/",
+      "pageId": "node-quickstart",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Generate an Anki APKG with Node.js",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "export-a-deck",
+          "heading": "Export a deck",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "typescript-and-next-tasks",
+          "heading": "TypeScript and next tasks",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/python-api/",
+      "pageId": "python-api",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Python API",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "project-and-note-values",
+          "heading": "Project and note values",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-and-templates",
+          "heading": "Models and templates",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-and-occlusion",
+          "heading": "Media and occlusion",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "operations-and-results",
+          "heading": "Operations and results",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "errors-and-concurrency",
+          "heading": "Errors and concurrency",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-context",
+          "heading": "Addition context",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "source-api-details",
+          "heading": "Source API details",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "prepare-review-and-publish",
+          "heading": "Prepare, review and publish",
+          "headingLevel": "h3"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/python-diagnostics/",
+      "pageId": "python-diagnostics",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Python diagnostics",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "compare-before-publication",
+          "heading": "Compare before publication",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "budgets-and-artifact-ownership",
+          "heading": "Budgets and artifact ownership",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/python-migration/",
+      "pageId": "python-migration",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Python API transition",
+          "headingLevel": "h1"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/python-quickstart/",
+      "pageId": "python-quickstart",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Generate an Anki APKG with Python",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "export-a-deck",
+          "heading": "Export a deck",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "continue",
+          "heading": "Continue",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/quickstart/",
+      "pageId": "quickstart",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Generate an Anki APKG with Rust",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "install",
+          "heading": "Install",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "export-your-first-deck",
+          "heading": "Export your first deck",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "continue",
+          "heading": "Continue",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/rust-api/",
+      "pageId": "rust-api",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Rust API guide",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "authoring",
+          "heading": "Authoring",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "content-and-media",
+          "heading": "Content and media",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-options",
+          "heading": "Build options",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-compare-and-output",
+          "heading": "Build, compare and output",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "reports-and-errors",
+          "heading": "Reports and errors",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-context",
+          "heading": "Addition context",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "review-once-publish-once",
+          "heading": "Review once, publish once",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/rust-guide/",
+      "pageId": "rust-guide",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Rust authoring guide",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "projects-and-diagnostics",
+          "heading": "Projects and diagnostics",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-and-assets",
+          "heading": "Models and assets",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "output-ownership",
+          "heading": "Output ownership",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "stable-note-identity",
+          "heading": "Stable note identity",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "updating-distributed-decks",
+          "heading": "Updating distributed decks",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-errors-and-media-categories",
+          "heading": "Addition errors and media categories",
+          "headingLevel": "h3"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/templates/",
+      "pageId": "templates",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Template bundles",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "run-the-bundled-example",
+          "heading": "Run the bundled example",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "manifest-and-template-references",
+          "heading": "Manifest and template references",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "load-and-reuse-a-model",
+          "heading": "Load and reuse a model",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "assets-and-budgets",
+          "heading": "Assets and budgets",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/troubleshooting/",
+      "pageId": "troubleshooting",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Troubleshooting",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "installation",
+          "heading": "Installation",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-and-notes",
+          "heading": "Models and notes",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-and-templates",
+          "heading": "Media and templates",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "updates-and-outputs",
+          "heading": "Updates and outputs",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/docs/updates/",
+      "pageId": "updates",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Update and distribute",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "run-two-versions-and-compare",
+          "heading": "Run two versions and compare",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "policy-and-inspection-limits",
+          "heading": "Policy and inspection limits",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "evidence-and-identity",
+          "heading": "Evidence and identity",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "client-import-behavior-and-release-review",
+          "heading": "Client import behavior and release review",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-once-review-then-publish-from-source"
+        },
+        {
+          "id": "build-once-review-then-publish",
+          "heading": "Build once, review then publish",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/examples/",
+      "pageId": "examples",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "basic"
+        },
+        {
+          "id": "basic-heading",
+          "heading": "Basic",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-basic-card-status"
+        },
+        {
+          "id": "cloze"
+        },
+        {
+          "id": "cloze-heading",
+          "heading": "Cloze",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-cloze-card-status"
+        },
+        {
+          "id": "media"
+        },
+        {
+          "id": "media-heading",
+          "heading": "Media",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-media-card-status"
+        },
+        {
+          "id": "occlusion"
+        },
+        {
+          "id": "occlusion-heading",
+          "heading": "Image Occlusion",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-occlusion-card-status"
+        },
+        {
+          "id": "updates"
+        },
+        {
+          "id": "updates-heading",
+          "heading": "One note, two versions.",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 9,
+        "search": 0,
+        "codeCopy": 5,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      },
+      "entities": []
+    },
+    {
+      "route": "/",
+      "pageId": "home",
+      "locale": "en",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "hero-title",
+          "heading": "Turn your datainto Anki decks.",
+          "headingLevel": "h1",
+          "containerModule": "hero"
+        },
+        {
+          "id": "install-heading",
+          "heading": "Choose your language.",
+          "headingLevel": "h2",
+          "containerModule": "install"
+        },
+        {
+          "id": "ai-quickstart",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-heading",
+          "heading": "Use Anki Forge with AI.",
+          "headingLevel": "h2",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-request",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-request-hint",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-tab-rust",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-tab-node",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-tab-python",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-panel-rust",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-panel-node",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-panel-python",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "performance-heading",
+          "heading": "The export, measured.",
+          "headingLevel": "h2",
+          "containerModule": "performance"
+        },
+        {
+          "id": "examples-heading",
+          "heading": "See the code. Try the card.",
+          "headingLevel": "h2",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-basic",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-cloze",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-media",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-occlusion",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-basic",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-basic-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-cloze",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-cloze-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-media",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-media-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-occlusion",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-occlusion-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "identity-heading",
+          "heading": "Let your notes evolve.Keep their identity.",
+          "headingLevel": "h2",
+          "containerModule": "updates"
+        },
+        {
+          "id": "workflow-heading",
+          "task": "next-heading",
+          "heading": "From your first deck to the next update",
+          "containerModule": "next"
+        },
+        {
+          "id": "next-heading",
+          "heading": "From your first deck to the next update",
+          "headingLevel": "h2",
+          "containerModule": "next"
+        }
+      ],
+      "capabilities": {
+        "downloads": 6,
+        "search": 0,
+        "codeCopy": 13,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/blog/",
+      "pageId": "blog",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "main"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/",
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "separate-identity-from-content",
+          "task": "separate-identity-from-content",
+          "heading": "将身份与内容分开"
+        },
+        {
+          "id": "将身份与内容分开",
+          "heading": "将身份与内容分开",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "give-the-next-build-a-baseline",
+          "task": "give-the-next-build-a-baseline",
+          "heading": "为下一次构建提供基线"
+        },
+        {
+          "id": "为下一次构建提供基线",
+          "heading": "为下一次构建提供基线",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "keep-the-original-distributed-package",
+          "task": "keep-the-original-distributed-package",
+          "heading": "保留原始分发包"
+        },
+        {
+          "id": "保留原始分发包",
+          "heading": "保留原始分发包",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "inspect-the-build-and-the-import",
+          "task": "inspect-the-build-and-the-import",
+          "heading": "检查构建与导入"
+        },
+        {
+          "id": "检查构建与导入",
+          "heading": "检查构建与导入",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/blog/your-first-anki-deck/",
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "a-complete-program",
+          "task": "a-complete-program",
+          "heading": "完整程序"
+        },
+        {
+          "id": "完整程序",
+          "heading": "完整程序",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "install-and-run",
+          "task": "install-and-run",
+          "heading": "安装与运行"
+        },
+        {
+          "id": "安装与运行",
+          "heading": "安装与运行",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "give-the-note-an-identity",
+          "task": "give-the-note-an-identity",
+          "heading": "为笔记指定身份"
+        },
+        {
+          "id": "为笔记指定身份",
+          "heading": "为笔记指定身份",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "grow-from-one-note",
+          "task": "grow-from-one-note",
+          "heading": "从一条笔记扩展"
+        },
+        {
+          "id": "从一条笔记扩展",
+          "heading": "从一条笔记扩展",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 0,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/",
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Anki Forge 与 genanki：如何选择",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "the-same-small-task",
+          "task": "the-same-small-task",
+          "heading": "同一个小任务"
+        },
+        {
+          "id": "同一任务两种流程",
+          "task": "the-same-small-task",
+          "heading": "同一个小任务"
+        },
+        {
+          "id": "同一个小任务",
+          "heading": "同一个小任务",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "existing-genanki-decks",
+          "task": "existing-genanki-decks",
+          "heading": "已有 genanki 牌组"
+        },
+        {
+          "id": "已有-genanki-牌组怎么处理",
+          "task": "existing-genanki-decks",
+          "heading": "已有 genanki 牌组"
+        },
+        {
+          "id": "已有-genanki-牌组",
+          "heading": "已有 genanki 牌组",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "historical-performance-evidence",
+          "task": "historical-performance-evidence",
+          "heading": "历史性能证据"
+        },
+        {
+          "id": "怎样看待性能数据",
+          "task": "historical-performance-evidence",
+          "heading": "历史性能证据"
+        },
+        {
+          "id": "历史性能证据",
+          "heading": "历史性能证据",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/api/",
+      "pageId": "api",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "公开 API 总览",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "stable-note-identity",
+          "task": "stable-note-identity",
+          "heading": "稳定笔记身份"
+        },
+        {
+          "id": "稳定笔记身份",
+          "heading": "稳定笔记身份",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "start-with-a-task",
+          "task": "start-with-a-task",
+          "heading": "从一个任务开始"
+        },
+        {
+          "id": "从一个任务开始",
+          "heading": "从一个任务开始",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/build-guarantees/",
+      "pageId": "build-guarantees",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "构建与输出保证",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "temporary-and-persistent-artifacts",
+          "task": "temporary-and-persistent-artifacts",
+          "heading": "临时与持久产物"
+        },
+        {
+          "id": "临时与持久产物",
+          "heading": "临时与持久产物",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "baselines-and-publication",
+          "task": "baselines-and-publication",
+          "heading": "基线与发布"
+        },
+        {
+          "id": "基线与发布",
+          "heading": "基线与发布",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "inspection-limits",
+          "task": "inspection-limits",
+          "heading": "检查限制"
+        },
+        {
+          "id": "检查限制",
+          "heading": "检查限制",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "concurrent-work",
+          "task": "concurrent-work",
+          "heading": "并发工作"
+        },
+        {
+          "id": "并发工作",
+          "heading": "并发工作",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "prepared-publication-from-source",
+          "task": "prepared-publication-from-source",
+          "heading": "源码中的预备发布"
+        },
+        {
+          "id": "源码中的预备发布",
+          "heading": "源码中的预备发布",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/cards/",
+      "pageId": "cards",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Basic 与 Cloze 卡片",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "author-the-notes",
+          "task": "author-the-notes",
+          "heading": "编写笔记"
+        },
+        {
+          "id": "编写笔记",
+          "heading": "编写笔记",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "text-fields-and-card-identity",
+          "task": "text-fields-and-card-identity",
+          "heading": "文本、字段与卡片身份"
+        },
+        {
+          "id": "文本字段与卡片身份",
+          "heading": "文本、字段与卡片身份",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/compatibility/",
+      "pageId": "compatibility",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "兼容性与发布",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "packages-and-verified-environments",
+          "task": "packages-and-verified-environments",
+          "heading": "公开包与已验证环境"
+        },
+        {
+          "id": "公开包与已验证环境",
+          "heading": "公开包与已验证环境",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "anki-import-and-playback",
+          "task": "anki-import-and-playback",
+          "heading": "Anki 导入与播放"
+        },
+        {
+          "id": "anki-导入与播放",
+          "heading": "Anki 导入与播放",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/concepts/",
+      "pageId": "concepts",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "核心概念",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "project-and-note",
+          "task": "project-and-note",
+          "heading": "Project 与笔记"
+        },
+        {
+          "id": "project-与笔记",
+          "heading": "Project 与笔记",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-fields-and-templates",
+          "task": "models-fields-and-templates",
+          "heading": "模型、字段与模板"
+        },
+        {
+          "id": "模型字段与模板",
+          "heading": "模型、字段与模板",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "text-and-html",
+          "task": "text-and-html",
+          "heading": "文本与 HTML"
+        },
+        {
+          "id": "文本与-html",
+          "heading": "文本与 HTML",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-ownership",
+          "task": "media-ownership",
+          "heading": "媒体所有权"
+        },
+        {
+          "id": "媒体所有权",
+          "heading": "媒体所有权",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-and-update",
+          "task": "build-and-update",
+          "heading": "构建与更新"
+        },
+        {
+          "id": "构建与更新",
+          "heading": "构建与更新",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/custom-notetypes/",
+      "pageId": "custom-notetypes",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "自定义笔记类型",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "executable-example",
+          "task": "executable-example",
+          "heading": "可执行示例"
+        },
+        {
+          "id": "可执行示例",
+          "heading": "可执行示例",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "keys-and-names",
+          "task": "keys-and-names",
+          "heading": "键与名称"
+        },
+        {
+          "id": "键与名称",
+          "heading": "键与名称",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "validation-and-generation",
+          "task": "validation-and-generation",
+          "heading": "校验与生成"
+        },
+        {
+          "id": "校验与生成",
+          "heading": "校验与生成",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/development/",
+      "pageId": "development",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "从源码构建 SDK",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "source-builds",
+          "task": "source-builds",
+          "heading": "源码构建"
+        },
+        {
+          "id": "源码构建",
+          "heading": "源码构建",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/genanki-migration/",
+      "pageId": "genanki-migration",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "从 genanki 迁移",
+          "headingLevel": "h1"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/image-occlusion/",
+      "pageId": "image-occlusion",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "图片遮挡",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "run-the-example",
+          "task": "run-the-example",
+          "heading": "运行示例"
+        },
+        {
+          "id": "运行示例",
+          "heading": "运行示例",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "multiple-masks-and-modes",
+          "task": "multiple-masks-and-modes",
+          "heading": "多个遮罩与模式"
+        },
+        {
+          "id": "多个遮罩与模式",
+          "heading": "多个遮罩与模式",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/",
+      "pageId": "docs",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "用代码生成 Anki 牌组",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "start-with-your-language",
+          "task": "start-with-your-language",
+          "heading": "从你的开发语言开始"
+        },
+        {
+          "id": "从你的开发语言开始",
+          "heading": "从你的开发语言开始",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "understand-the-pieces",
+          "task": "understand-the-pieces",
+          "heading": "理解各个部分"
+        },
+        {
+          "id": "理解各个部分",
+          "heading": "理解各个部分",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-your-next-feature",
+          "task": "build-your-next-feature",
+          "heading": "构建下一项功能"
+        },
+        {
+          "id": "构建下一项功能",
+          "heading": "构建下一项功能",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "find-answers-and-contribute",
+          "task": "find-answers-and-contribute",
+          "heading": "查找答案与参与贡献"
+        },
+        {
+          "id": "查找答案与参与贡献",
+          "heading": "查找答案与参与贡献",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/installation/",
+      "pageId": "installation",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "集成到应用",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "cargo-dependencies",
+          "task": "cargo-dependencies",
+          "heading": "Cargo 依赖"
+        },
+        {
+          "id": "cargo-依赖",
+          "heading": "Cargo 依赖",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "choose-the-next-guide",
+          "task": "choose-the-next-guide",
+          "heading": "选择下一篇指南"
+        },
+        {
+          "id": "选择下一篇指南",
+          "heading": "选择下一篇指南",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/json-to-anki/",
+      "pageId": "json-to-anki",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "用 JSON 数据生成并更新 Anki 牌组",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "shared-inputs",
+          "task": "shared-inputs",
+          "heading": "共享输入"
+        },
+        {
+          "id": "准备共同输入",
+          "task": "shared-inputs",
+          "heading": "共享输入"
+        },
+        {
+          "id": "共享输入",
+          "heading": "共享输入",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "rust",
+          "heading": "Rust",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "python",
+          "heading": "Python",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "node",
+          "heading": "Node",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "check-and-import-the-result",
+          "task": "check-and-import-the-result",
+          "heading": "检查并导入结果"
+        },
+        {
+          "id": "检查结果并导入-anki",
+          "task": "check-and-import-the-result",
+          "heading": "检查并导入结果"
+        },
+        {
+          "id": "检查并导入结果",
+          "heading": "检查并导入结果",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 10,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/languages/",
+      "pageId": "languages",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "选择开发语言",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "next-tasks",
+          "task": "next-tasks",
+          "heading": "下一步任务"
+        },
+        {
+          "id": "下一步",
+          "task": "next-tasks",
+          "heading": "下一步任务"
+        },
+        {
+          "id": "下一步任务",
+          "heading": "下一步任务",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/media/",
+      "pageId": "media",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "图片与音频",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "execute-the-media-workflow",
+          "task": "execute-the-media-workflow",
+          "heading": "运行媒体流程"
+        },
+        {
+          "id": "运行媒体流程",
+          "heading": "运行媒体流程",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "compose-content-and-explicit-assets",
+          "task": "compose-content-and-explicit-assets",
+          "heading": "组合内容与显式资源"
+        },
+        {
+          "id": "组合内容与显式资源",
+          "heading": "组合内容与显式资源",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "names-mime-and-budgets",
+          "task": "names-mime-and-budgets",
+          "heading": "名称、MIME 与预算"
+        },
+        {
+          "id": "名称mime-与预算",
+          "heading": "名称、MIME 与预算",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "typed-image-and-sound-usage",
+          "task": "typed-image-and-sound-usage",
+          "heading": "类型化图片与声音的使用"
+        },
+        {
+          "id": "类型化图片与声音的使用",
+          "heading": "类型化图片与声音的使用",
+          "headingLevel": "h3"
+        },
+        {
+          "id": "batch-import-from-source"
+        },
+        {
+          "id": "batch-media-import",
+          "task": "batch-media-import",
+          "heading": "批量媒体导入"
+        },
+        {
+          "id": "批量媒体导入",
+          "heading": "批量媒体导入",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "batch-behavior-and-budgets",
+          "task": "batch-behavior-and-budgets",
+          "heading": "批量行为与预算"
+        },
+        {
+          "id": "批量行为与预算",
+          "heading": "批量行为与预算",
+          "headingLevel": "h3"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/node-api/",
+      "pageId": "node-api",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Node 与 TypeScript API",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "project-and-notes",
+          "task": "project-and-notes",
+          "heading": "Project 与笔记"
+        },
+        {
+          "id": "project-与笔记",
+          "heading": "Project 与笔记",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "immutable-models",
+          "task": "immutable-models",
+          "heading": "不可变模型"
+        },
+        {
+          "id": "不可变模型",
+          "heading": "不可变模型",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-and-image-occlusion",
+          "task": "media-and-image-occlusion",
+          "heading": "媒体与图片遮挡"
+        },
+        {
+          "id": "媒体与图片遮挡",
+          "heading": "媒体与图片遮挡",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-compare-and-output",
+          "task": "build-compare-and-output",
+          "heading": "构建、比较与输出"
+        },
+        {
+          "id": "构建比较与输出",
+          "heading": "构建、比较与输出",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "artifact-lifetime-and-concurrency",
+          "task": "artifact-lifetime-and-concurrency",
+          "heading": "产物寿命与并发"
+        },
+        {
+          "id": "产物寿命与并发",
+          "heading": "产物寿命与并发",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "errors",
+          "task": "errors",
+          "heading": "错误"
+        },
+        {
+          "id": "错误",
+          "heading": "错误",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-context",
+          "task": "addition-context",
+          "heading": "添加上下文"
+        },
+        {
+          "id": "添加上下文",
+          "heading": "添加上下文",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "source-api-details"
+        },
+        {
+          "id": "batch-media-and-prepared-publication",
+          "task": "batch-media-and-prepared-publication",
+          "heading": "批量媒体与预备发布"
+        },
+        {
+          "id": "批量媒体与预备发布",
+          "heading": "批量媒体与预备发布",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "prepare-review-and-publish",
+          "task": "prepare-review-and-publish",
+          "heading": "预备、审阅与发布"
+        },
+        {
+          "id": "预备审阅与发布",
+          "heading": "预备、审阅与发布",
+          "headingLevel": "h3"
+        },
+        {
+          "id": "typescript",
+          "heading": "TypeScript",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/node-quickstart/",
+      "pageId": "node-quickstart",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "用 Node.js 生成 Anki APKG",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "安装",
+          "task": "_top",
+          "heading": null
+        },
+        {
+          "id": "export-a-deck",
+          "task": "export-a-deck",
+          "heading": "导出牌组"
+        },
+        {
+          "id": "生成-apkg",
+          "task": "export-a-deck",
+          "heading": "导出牌组"
+        },
+        {
+          "id": "导出牌组",
+          "heading": "导出牌组",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "typescript-and-next-tasks",
+          "task": "typescript-and-next-tasks",
+          "heading": "TypeScript 与下一步任务"
+        },
+        {
+          "id": "继续完成实际任务",
+          "task": "typescript-and-next-tasks",
+          "heading": "TypeScript 与下一步任务"
+        },
+        {
+          "id": "typescript-与下一步任务",
+          "heading": "TypeScript 与下一步任务",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/python-api/",
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Python API",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "project-and-note-values",
+          "task": "project-and-note-values",
+          "heading": "Project 与笔记值"
+        },
+        {
+          "id": "project-与笔记值",
+          "heading": "Project 与笔记值",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-and-templates",
+          "task": "models-and-templates",
+          "heading": "模型与模板"
+        },
+        {
+          "id": "模型与模板",
+          "heading": "模型与模板",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-and-occlusion",
+          "task": "media-and-occlusion",
+          "heading": "媒体与遮挡"
+        },
+        {
+          "id": "媒体与遮挡",
+          "heading": "媒体与遮挡",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "operations-and-results",
+          "task": "operations-and-results",
+          "heading": "操作与结果"
+        },
+        {
+          "id": "操作与结果",
+          "heading": "操作与结果",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "errors-and-concurrency",
+          "task": "errors-and-concurrency",
+          "heading": "错误与并发"
+        },
+        {
+          "id": "错误与并发",
+          "heading": "错误与并发",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-context",
+          "task": "addition-context",
+          "heading": "添加上下文"
+        },
+        {
+          "id": "添加上下文",
+          "heading": "添加上下文",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "source-api-details",
+          "task": "source-api-details",
+          "heading": "源码 API 详情"
+        },
+        {
+          "id": "源码-api-详情",
+          "heading": "源码 API 详情",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "prepare-review-and-publish",
+          "task": "prepare-review-and-publish",
+          "heading": "预备、审阅与发布"
+        },
+        {
+          "id": "预备审阅与发布",
+          "heading": "预备、审阅与发布",
+          "headingLevel": "h3"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/python-diagnostics/",
+      "pageId": "python-diagnostics",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Python 诊断",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "compare-before-publication",
+          "task": "compare-before-publication",
+          "heading": "发布前比较"
+        },
+        {
+          "id": "发布前比较",
+          "heading": "发布前比较",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "budgets-and-artifact-ownership",
+          "task": "budgets-and-artifact-ownership",
+          "heading": "预算与产物所有权"
+        },
+        {
+          "id": "预算与产物所有权",
+          "heading": "预算与产物所有权",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 4,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/python-migration/",
+      "pageId": "python-migration",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Python API 迁移",
+          "headingLevel": "h1"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/python-quickstart/",
+      "pageId": "python-quickstart",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "用 Python 生成 Anki APKG",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "安装",
+          "task": "_top",
+          "heading": null
+        },
+        {
+          "id": "export-a-deck",
+          "task": "export-a-deck",
+          "heading": "导出牌组"
+        },
+        {
+          "id": "生成-apkg",
+          "task": "export-a-deck",
+          "heading": "导出牌组"
+        },
+        {
+          "id": "导出牌组",
+          "heading": "导出牌组",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "continue",
+          "task": "continue",
+          "heading": "继续学习"
+        },
+        {
+          "id": "继续完成实际任务",
+          "task": "continue",
+          "heading": "继续学习"
+        },
+        {
+          "id": "继续学习",
+          "heading": "继续学习",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/quickstart/",
+      "pageId": "quickstart",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "用 Rust 生成 Anki APKG",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "install",
+          "task": "install",
+          "heading": "安装"
+        },
+        {
+          "id": "安装",
+          "heading": "安装",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "export-your-first-deck",
+          "task": "export-your-first-deck",
+          "heading": "导出第一个牌组"
+        },
+        {
+          "id": "生成-apkg",
+          "task": "export-your-first-deck",
+          "heading": "导出第一个牌组"
+        },
+        {
+          "id": "导出第一个牌组",
+          "heading": "导出第一个牌组",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "continue",
+          "task": "continue",
+          "heading": "继续学习"
+        },
+        {
+          "id": "继续完成实际任务",
+          "task": "continue",
+          "heading": "继续学习"
+        },
+        {
+          "id": "继续学习",
+          "heading": "继续学习",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 3,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/rust-api/",
+      "pageId": "rust-api",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Rust API 指南",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "authoring",
+          "task": "authoring",
+          "heading": "内容编写"
+        },
+        {
+          "id": "内容编写",
+          "heading": "内容编写",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "content-and-media",
+          "task": "content-and-media",
+          "heading": "内容与媒体"
+        },
+        {
+          "id": "内容与媒体",
+          "heading": "内容与媒体",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-options",
+          "task": "build-options",
+          "heading": "构建选项"
+        },
+        {
+          "id": "构建选项",
+          "heading": "构建选项",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-compare-and-output",
+          "task": "build-compare-and-output",
+          "heading": "构建、比较与输出"
+        },
+        {
+          "id": "构建比较与输出",
+          "heading": "构建、比较与输出",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "reports-and-errors",
+          "task": "reports-and-errors",
+          "heading": "报告与错误"
+        },
+        {
+          "id": "报告与错误",
+          "heading": "报告与错误",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-context",
+          "task": "addition-context",
+          "heading": "添加上下文"
+        },
+        {
+          "id": "添加上下文",
+          "heading": "添加上下文",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "review-once-publish-once",
+          "task": "review-once-publish-once",
+          "heading": "审阅一次，发布一次"
+        },
+        {
+          "id": "审阅一次发布一次",
+          "heading": "审阅一次，发布一次",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 1,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/rust-guide/",
+      "pageId": "rust-guide",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "Rust 编写指南",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "projects-and-diagnostics",
+          "task": "projects-and-diagnostics",
+          "heading": "项目与诊断"
+        },
+        {
+          "id": "项目与诊断",
+          "heading": "项目与诊断",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-and-assets",
+          "task": "models-and-assets",
+          "heading": "模型与资源"
+        },
+        {
+          "id": "模型与资源",
+          "heading": "模型与资源",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "output-ownership",
+          "task": "output-ownership",
+          "heading": "输出所有权"
+        },
+        {
+          "id": "输出所有权",
+          "heading": "输出所有权",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "stable-note-identity",
+          "task": "stable-note-identity",
+          "heading": "稳定笔记身份"
+        },
+        {
+          "id": "稳定笔记身份",
+          "heading": "稳定笔记身份",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "updating-distributed-decks",
+          "task": "updating-distributed-decks",
+          "heading": "更新已分发的牌组"
+        },
+        {
+          "id": "更新已分发的牌组",
+          "heading": "更新已分发的牌组",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "addition-errors-and-media-categories",
+          "task": "addition-errors-and-media-categories",
+          "heading": "添加错误与媒体类别"
+        },
+        {
+          "id": "添加错误与媒体类别",
+          "heading": "添加错误与媒体类别",
+          "headingLevel": "h3"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 2,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/templates/",
+      "pageId": "templates",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "模板包",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "run-the-bundled-example",
+          "task": "run-the-bundled-example",
+          "heading": "运行模板包示例"
+        },
+        {
+          "id": "运行模板包示例",
+          "heading": "运行模板包示例",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "manifest-and-template-references",
+          "task": "manifest-and-template-references",
+          "heading": "Manifest 与模板引用"
+        },
+        {
+          "id": "manifest-与模板引用",
+          "heading": "Manifest 与模板引用",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "load-and-reuse-a-model",
+          "task": "load-and-reuse-a-model",
+          "heading": "加载与复用模型"
+        },
+        {
+          "id": "加载与复用模型",
+          "heading": "加载与复用模型",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "assets-and-budgets",
+          "task": "assets-and-budgets",
+          "heading": "资源与预算"
+        },
+        {
+          "id": "资源与预算",
+          "heading": "资源与预算",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/troubleshooting/",
+      "pageId": "troubleshooting",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "排查问题",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "installation",
+          "task": "installation",
+          "heading": "安装"
+        },
+        {
+          "id": "安装",
+          "heading": "安装",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "models-and-notes",
+          "task": "models-and-notes",
+          "heading": "模型与笔记"
+        },
+        {
+          "id": "模型与笔记",
+          "heading": "模型与笔记",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "media-and-templates",
+          "task": "media-and-templates",
+          "heading": "媒体与模板"
+        },
+        {
+          "id": "媒体与模板",
+          "heading": "媒体与模板",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "updates-and-outputs",
+          "task": "updates-and-outputs",
+          "heading": "更新与输出"
+        },
+        {
+          "id": "更新与输出",
+          "heading": "更新与输出",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 0,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/docs/updates/",
+      "pageId": "updates",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "_top",
+          "heading": "更新与分发",
+          "headingLevel": "h1"
+        },
+        {
+          "id": "run-two-versions-and-compare",
+          "task": "run-two-versions-and-compare",
+          "heading": "运行两个版本并比较"
+        },
+        {
+          "id": "运行两个版本并比较",
+          "heading": "运行两个版本并比较",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "policy-and-inspection-limits",
+          "task": "policy-and-inspection-limits",
+          "heading": "策略与检查限制"
+        },
+        {
+          "id": "策略与检查限制",
+          "heading": "策略与检查限制",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "evidence-and-identity",
+          "task": "evidence-and-identity",
+          "heading": "证据与身份"
+        },
+        {
+          "id": "证据与身份",
+          "heading": "证据与身份",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "client-import-behavior-and-release-review",
+          "task": "client-import-behavior-and-release-review",
+          "heading": "客户端导入行为与发布检查"
+        },
+        {
+          "id": "客户端导入行为与发布检查",
+          "heading": "客户端导入行为与发布检查",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "build-once-review-then-publish-from-source"
+        },
+        {
+          "id": "build-once-review-then-publish",
+          "task": "build-once-review-then-publish",
+          "heading": "构建一次，审阅后发布"
+        },
+        {
+          "id": "构建一次审阅后发布",
+          "heading": "构建一次，审阅后发布",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 0,
+        "search": 1,
+        "codeCopy": 5,
+        "flips": 0,
+        "audio": 0,
+        "updates": 0
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/examples/",
+      "pageId": "examples",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "basic"
+        },
+        {
+          "id": "basic-heading",
+          "heading": "基础问答",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-basic-card-status"
+        },
+        {
+          "id": "cloze"
+        },
+        {
+          "id": "cloze-heading",
+          "heading": "填空",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-cloze-card-status"
+        },
+        {
+          "id": "media"
+        },
+        {
+          "id": "media-heading",
+          "heading": "媒体",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-media-card-status"
+        },
+        {
+          "id": "occlusion"
+        },
+        {
+          "id": "occlusion-heading",
+          "heading": "图片遮挡",
+          "headingLevel": "h2"
+        },
+        {
+          "id": "gallery-occlusion-card-status"
+        },
+        {
+          "id": "updates"
+        },
+        {
+          "id": "updates-heading",
+          "heading": "一条笔记，两个版本。",
+          "headingLevel": "h2"
+        }
+      ],
+      "capabilities": {
+        "downloads": 9,
+        "search": 0,
+        "codeCopy": 5,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      },
+      "entities": []
+    },
+    {
+      "route": "/zh-cn/",
+      "pageId": "home",
+      "locale": "zh-CN",
+      "anchors": [
+        {
+          "id": "main"
+        },
+        {
+          "id": "hero-title",
+          "heading": "把你的数据变成 Anki 牌组。",
+          "headingLevel": "h1",
+          "containerModule": "hero"
+        },
+        {
+          "id": "install-heading",
+          "heading": "选择开发语言",
+          "headingLevel": "h2",
+          "containerModule": "install"
+        },
+        {
+          "id": "ai-quickstart",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-heading",
+          "heading": "让 AI 帮你编写牌组程序",
+          "headingLevel": "h2",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-request",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-request-hint",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-tab-rust",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-tab-node",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-tab-python",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-panel-rust",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-panel-node",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "ai-panel-python",
+          "containerModule": "ai-quickstart"
+        },
+        {
+          "id": "performance-heading",
+          "heading": "导出耗时实测",
+          "headingLevel": "h2",
+          "containerModule": "performance"
+        },
+        {
+          "id": "examples-heading",
+          "heading": "阅读代码，试用卡片。",
+          "headingLevel": "h2",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-basic",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-cloze",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-media",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-tab-occlusion",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-basic",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-basic-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-cloze",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-cloze-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-media",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-media-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-panel-occlusion",
+          "containerModule": "examples"
+        },
+        {
+          "id": "examples-occlusion-card-status",
+          "containerModule": "examples"
+        },
+        {
+          "id": "identity-heading",
+          "heading": "让笔记持续完善，保留原有身份。",
+          "headingLevel": "h2",
+          "containerModule": "updates"
+        },
+        {
+          "id": "workflow-heading",
+          "task": "next-heading",
+          "heading": "从第一个牌组到下一次更新",
+          "containerModule": "next"
+        },
+        {
+          "id": "next-heading",
+          "heading": "从第一个牌组到下一次更新",
+          "headingLevel": "h2",
+          "containerModule": "next"
+        }
+      ],
+      "capabilities": {
+        "downloads": 6,
+        "search": 0,
+        "codeCopy": 13,
+        "flips": 4,
+        "audio": 1,
+        "updates": 1
+      },
+      "entities": []
+    }
+  ],
+  "machineResources": []
+}
