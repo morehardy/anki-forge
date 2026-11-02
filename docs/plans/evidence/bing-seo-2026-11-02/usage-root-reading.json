@@ -1,0 +1,290 @@
+[
+  {
+    "locale": "en",
+    "id": "rust-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Generate Anki flashcards with Rust Use Rust 1.92 or later. For another language, choose Node / TypeScript or Python. Install Section titled “Install” Terminal window cargo new anki-deck cd anki-deck cargo add ankiforge@0.3.1 Export your first deck Section titled “Export your first deck” Save this complete program as src/main.rs: Copy code use ankiforge::{BuildOptions, Note, Project}; fn main() -> Result<(), Box<dyn std::error::Error>> { let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\"); project.add(\"es:hola\", Note::basic(\"hola\", \"hello\"))?; let output = project.build(BuildOptions::to(\"spanish.apkg\"))?; println!(\"{}\", output.artifact().path().display()); Ok(()) } Terminal window cargo run The program writes a persistent span"
+  },
+  {
+    "locale": "en",
+    "id": "python-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Generate Anki flashcards with Python Create and activate a virtual environment, then install the public PyPI package: Terminal window python -m venv .venv . .venv/bin/activate python -m pip install ankiforge==0.3.1 On Windows, activate with .venv\\Scripts\\Activate.ps1. Use ordinary CPython 3.11 or later and a matching platform wheel; CPython 3.11–3.14 is covered by recorded release checks; see verified environments. Export a deck Section titled “Export a deck” Save this as main.py: from ankiforge import Project, Note, BuildOptions project = Project('spanish', default_deck='Spanish') project.add('es:hola', Note.basic('hola', 'hello')) output = project.build(BuildOptions.to('spanish.apkg')) print(output.artifact.path) Terminal window python ma"
+  },
+  {
+    "locale": "en",
+    "id": "node-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Generate Anki flashcards with Node.js Use Node.js 22.13 or later. In a new application directory: Terminal window mkdir anki-deck cd anki-deck npm install --include=optional ankiforge@0.3.1 This installs the public npm package and the matching native optional dependency. See verified environments for platform coverage. Export a deck Section titled “Export a deck” Save this as main.mjs: import { Project, Note, BuildOptions } from 'ankiforge'; const project = new Project('spanish').defaultDeck('Spanish'); project.add('es:hola', Note.basic('hola', 'hello')); const output = await project.build(BuildOptions.to('spanish.apkg')); console.log(output.artifact.path); await output.artifact.close(); Terminal window node main.mjs Open the persistent spa"
+  },
+  {
+    "locale": "en",
+    "id": "json-media",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Generate and update Anki decks from JSON Read three biology questions from JSON, add a shared image and audio clip, and export an original APKG plus a reviewed answer-only update. Each release should contain 3 notes, 3 cards and 2 media files. Choose one SDK below; each is a complete program. Normal export needs no Anki installation. Maintained by Anki Forge maintainers · reviewed 2026-10-25. Shared inputs Section titled “Shared inputs” Download v1.json, v2.json, cell.png and tone.wav. The image is a cell diagram; the audio is a short generated tone, not spoken vocabulary. In each new application directory, put these four files in recipe/: json-deck/ recipe/ v1.json v2.json cell.png tone.wav Both JSON files contain namespace, deck and three"
+  },
+  {
+    "locale": "en",
+    "id": "original-baseline-update",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Update Anki decks with stable note IDs Publish corrections or new cards for an Anki deck you have already distributed. Stable note IDs help Anki Forge and Anki recognize existing notes instead of treating them as new ones; Anki’s import settings and newer local edits still affect what changes. Keep the project namespace and note/model/field/template keys stable. Build each new release from the previous original distribution APKG, which carries complete versioned identity evidence. Save that package with its source revision. Run two versions and compare Section titled “Run two versions and compare” Terminal window cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples This writes spanish-v1.apkg and spanish-v2.apkg, "
+  },
+  {
+    "locale": "en",
+    "id": "troubleshooting",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Troubleshooting Use the structured kind and code from the failing operation, plus its source chain and observations. Display text is for humans and may change. A failed operation and a completed comparison whose policy blocks publication are different results. Installation Section titled “Installation” Symptom\tCheck Rust rejects the toolchain\tRun rustc --version; use Rust 1.92+ and check cargo tree -i ankiforge for the installed version Node cannot load its native package\tRun node -p \"process.platform + '/' + process.arch\" and npm ls ankiforge; reinstall with npm install --include=optional ankiforge@0.3.1 Node reports a native/wrapper mismatch\tUse matching package versions; reinstall from the same registry version, or rebuild both from the "
+  },
+  {
+    "locale": "zh-CN",
+    "id": "rust-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "用 Rust 生成 Anki 卡片 使用 Rust 1.92 或更高版本。其他语言可选择 Node / TypeScript 或 Python。 安装 章节：安装 终端窗口 cargo new anki-deck cd anki-deck cargo add ankiforge@0.3.1 导出第一个牌组 章节：导出第一个牌组 将这份完整程序保存为 src/main.rs： use ankiforge::{BuildOptions, Note, Project}; fn main() -> Result<(), Box<dyn std::error::Error>> { let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\"); project.add(\"es:hola\", Note::basic(\"hola\", \"hello\"))?; let output = project.build(BuildOptions::to(\"spanish.apkg\"))?; println!(\"{}\", output.artifact().path().display()); Ok(()) } 终端窗口 cargo run 程序写出持久保存的 spanish.apkg。在 Anki 中打开并导入后，可在 Spanish 牌组中学习 hola → hello。导出不需要安装 Anki。 命名空间 spanish 和稳定键 es:hola 在之后的内容修改中标识这条笔记。也可以下载本站 Basic 示例。 继续学习 章节：继续学习 JSON 到 Anki 示例提供完整的媒体与更新任务。 添加图片与音频、自定义笔记类型或"
+  },
+  {
+    "locale": "zh-CN",
+    "id": "python-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "用 Python 生成 Anki 卡片 创建并激活虚拟环境，然后安装公开 PyPI 包： 终端窗口 python -m venv .venv . .venv/bin/activate python -m pip install ankiforge==0.3.1 Windows 使用 .venv\\Scripts\\Activate.ps1 激活。使用普通 CPython 3.11 或更高版本及匹配的平台 wheel；已有发布检查覆盖 CPython 3.11–3.14，参见已验证环境。 导出牌组 章节：导出牌组 将以下程序保存为 main.py： from ankiforge import Project, Note, BuildOptions project = Project('spanish', default_deck='Spanish') project.add('es:hola', Note.basic('hola', 'hello')) output = project.build(BuildOptions.to('spanish.apkg')) print(output.artifact.path) 终端窗口 python main.py 在 Anki 中打开持久保存的 spanish.apkg，其中 Spanish 牌组包含 hola → hello。后续编辑时保持命名空间 spanish 和笔记键 es:hola 不变。导出不需要安装 Anki。 继续学习 章节：继续学习 已有词汇表时，参考 CSV 转 Anki。需要根据原始笔记起草卡片时， 可从 AI 辅助制卡开始。 完整媒体与更新任务见 JSON 到 Anki。 图片与音频及 Python 媒体 API "
+  },
+  {
+    "locale": "zh-CN",
+    "id": "node-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "用 Node.js 生成 Anki 卡片 使用 Node.js 22.13 或更高版本。在新的应用目录中运行： 终端窗口 mkdir anki-deck cd anki-deck npm install --include=optional ankiforge@0.3.1 这会安装公开 npm 包及匹配的原生可选依赖。平台覆盖范围见已验证环境。 导出牌组 章节：导出牌组 将以下程序保存为 main.mjs： import { Project, Note, BuildOptions } from 'ankiforge'; const project = new Project('spanish').defaultDeck('Spanish'); project.add('es:hola', Note.basic('hola', 'hello')); const output = await project.build(BuildOptions.to('spanish.apkg')); console.log(output.artifact.path); await output.artifact.close(); 终端窗口 node main.mjs 在 Anki 中打开持久保存的 spanish.apkg，其中 Spanish 牌组包含 hola → hello。后续编辑时保持命名空间 spanish 和键 es:hola 不变。关闭持久产物对象后，文件仍留在磁盘上。导出不需要安装 Anki。 TypeScript 与下一步任务 章节：TypeScript 与下一步任务 JSON 到 Anki 示例包含完整的 TypeScript 编译与运行流程。 ESM 使用 .mjs，C"
+  },
+  {
+    "locale": "zh-CN",
+    "id": "json-media",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "用 JSON 数据生成并更新 Anki 牌组 从 JSON 读取三个生物学问题，添加共享图片与音频，导出原始 APKG 和经过检查的仅修改答案的更新。每个版本应包含 3 条笔记、3 张卡片和 2 个媒体文件。选择下方任一 SDK，每份都是完整程序。普通导出不需要安装 Anki。 由 Anki Forge 维护者维护 · 2026-10-25 复核。 共享输入 章节：共享输入 下载 v1.json、v2.json、cell.png 和 tone.wav。图片是细胞示意图；音频是短合成音，并非词汇朗读。在每个新应用目录中，将这四个文件放入 recipe/： json-deck/ recipe/ v1.json v2.json cell.png tone.wav 两份 JSON 都包含 namespace、deck 和三条 notes，每条有持久 id、front 与 back。v2 只改变第一个答案。JSON 由调用方解析；Anki Forge 负责内容编写和 APKG 生成。对于不可信输入，创建笔记前应校验应用自己的 schema。 Rust 章节：Rust Rust 1.92+。JSON 解析使用 serde 与 serde_json。使用公开 Anki Forge 0.3.1。 终端窗口 cargo new json-deck cd json-deck cargo add ankiforge@0.3.1 cargo add serde --features derive cargo add serde_json 保存为 src/main.rs（在 Cargo.toml 同级创建 recipe/）： use ankiforge::update::CompareOptions;"
+  },
+  {
+    "locale": "zh-CN",
+    "id": "original-baseline-update",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "用稳定笔记 ID 更新 Anki 牌组 为已经分发的 Anki 牌组发布修正或新增卡片。稳定笔记 ID 帮助 Anki Forge 和 Anki 识别已有笔记，而不是把它们当成新笔记；Anki 导入设置与较新的本地编辑仍会影响最终变化。 保持项目命名空间和笔记、模型、字段、模板键稳定。每个新版本都以上一版分发时的原始 APKG 为基准构建。包内包含完整的标识映射和修订信息，且这些信息采用带版本号的格式。请将原始包与对应的源码版本一起保存。 运行两个版本并比较 章节：运行两个版本并比较 终端窗口 cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples 这会写出 spanish-v1.apkg 和 spanish-v2.apkg，比较修改后的答案，并检查更新包的数量。可执行源码如下： fn vocabulary(answer: &str) -> anyhow::Result<Project> { let mut project = Project::new(\"docs-spanish-updates\")?.default_deck(\"Spanish\"); project.add(\"hola\", Note::basic(\"hola\", answer))?; Ok(project) } fn updates(output: &Path) -> anyhow::Result<()> { let previous = output.join(\"spanish-v1.apkg\"); let next = output.join(\"spanish-v2.apkg\"); vocabulary"
+  },
+  {
+    "locale": "zh-CN",
+    "id": "troubleshooting",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "排查问题 使用失败操作的结构化 kind 和 code，结合来源链与观察结果进行排查。显示文本面向人类，可能变化。操作失败与比较已完成但策略阻止发布，是不同的结果。 安装 章节：安装 现象\t检查 Rust 拒绝工具链\t运行 rustc --version；使用 Rust 1.92+，并以 cargo tree -i ankiforge 检查安装版本 Node 无法加载原生包\t运行 node -p \"process.platform + '/' + process.arch\" 和 npm ls ankiforge；用 npm install --include=optional ankiforge@0.3.1 重装 Node 报告原生层与包装层不匹配\t使用匹配版本；从相同 registry 版本重装，或从同一源码目录重建两者 Python 无法加载扩展\t运行 python -m pip show ankiforge 和 python -m pip debug --verbose；检查解释器以及 wheel 的 OS/CPU 标签 Python 选择源码发行包\t选择匹配 wheel/解释器，或按源码构建配置编译器 参见已验证环境、Node 安装和 Python 安装。 模型与笔记 章节：模型与笔记 现象\t修正 无效或空键\t显式提供稳定键；显示名称另行设置 NOTE.KEY_DUPLICATE\t每条逻辑源记录使用唯一键 NOTE.FIELD_UNKNOWN\t按字段键赋值，不使用显示名称 NOTE.FIELD_REQUIRED\t添加前填写声明了 required() 的字段 NOTE.MODEL_CONFLICT\t同一模型键复用相同的已完成模型 模板引用错误\t使用已声明键；检查原始源"
+  },
+  {
+    "locale": "es",
+    "id": "rust-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Genera un APKG de Anki con Rust Usa Rust 1.92 o posterior. Si prefieres otro lenguaje, elige Node / TypeScript o Python. Instalación Sección titulada «Instalación» Ventana de terminal cargo new anki-deck cd anki-deck cargo add ankiforge@0.3.1 Exporta tu primer mazo Sección titulada «Exporta tu primer mazo» Guarda este programa completo como src/main.rs: use ankiforge::{BuildOptions, Note, Project}; fn main() -> Result<(), Box<dyn std::error::Error>> { let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\"); project.add(\"es:hola\", Note::basic(\"hola\", \"hello\"))?; let output = project.build(BuildOptions::to(\"spanish.apkg\"))?; println!(\"{}\", output.artifact().path().display()); Ok(()) } Ventana de terminal cargo run El programa escri"
+  },
+  {
+    "locale": "es",
+    "id": "python-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Genera un APKG de Anki con Python Crea y activa un entorno virtual e instala el paquete publicado en PyPI: Ventana de terminal python -m venv .venv . .venv/bin/activate python -m pip install ankiforge==0.3.1 En Windows, actívalo con .venv\\Scripts\\Activate.ps1. Usa CPython estándar 3.11 o posterior y un wheel que corresponda a tu plataforma; las comprobaciones de publicación registradas cubren CPython 3.11–3.14. Consulta los entornos verificados. Exporta un mazo Sección titulada «Exporta un mazo» Guarda lo siguiente como main.py: from ankiforge import Project, Note, BuildOptions project = Project('spanish', default_deck='Spanish') project.add('es:hola', Note.basic('hola', 'hello')) output = project.build(BuildOptions.to('spanish.apkg')) prin"
+  },
+  {
+    "locale": "es",
+    "id": "node-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Genera un APKG de Anki con Node.js Usa Node.js 22.13 o posterior. En un directorio nuevo de aplicación: Ventana de terminal mkdir anki-deck cd anki-deck npm install --include=optional ankiforge@0.3.1 Este comando instala el paquete publicado en npm y la dependencia nativa opcional correspondiente. Consulta los entornos verificados para conocer las plataformas cubiertas. Exporta un mazo Sección titulada «Exporta un mazo» Guarda lo siguiente como main.mjs: import { Project, Note, BuildOptions } from 'ankiforge'; const project = new Project('spanish').defaultDeck('Spanish'); project.add('es:hola', Note.basic('hola', 'hello')); const output = await project.build(BuildOptions.to('spanish.apkg')); console.log(output.artifact.path); await output.a"
+  },
+  {
+    "locale": "es",
+    "id": "json-media",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Genera y actualiza mazos de Anki desde JSON Lee tres preguntas de biología desde JSON, añade una imagen y un fragmento de audio compartidos y exporta un APKG original junto con una actualización revisada que solo cambia una respuesta. Cada versión debe contener 3 notas, 3 tarjetas y 2 archivos multimedia. Elige uno de los SDK siguientes; cada ejemplo es un programa completo. La exportación habitual no requiere instalar Anki. Mantenimiento: responsables de Anki Forge · revisión del 2026-10-25. Archivos de entrada compartidos Sección titulada «Archivos de entrada compartidos» Descarga v1.json, v2.json, cell.png y tone.wav. La imagen es un diagrama de una célula; el audio es un tono breve generado, no una palabra pronunciada. En cada directori"
+  },
+  {
+    "locale": "es",
+    "id": "original-baseline-update",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Actualiza mazos de Anki con ID de nota estables Publica correcciones o tarjetas nuevas para un mazo de Anki que ya hayas distribuido. Los ID de nota estables ayudan a Anki Forge y a Anki a reconocer las notas existentes en lugar de tratarlas como nuevas; las opciones de importación de Anki y los cambios locales más recientes también influyen en lo que se actualiza. Mantén estables el espacio de nombres del proyecto y las claves de notas, modelos, campos y plantillas. Genera cada versión nueva a partir del APKG original de distribución anterior, que contiene pruebas completas de identidad con su versión de formato. Guarda ese paquete junto con la revisión de su código fuente. Genera dos versiones y compáralas Sección titulada «Genera dos ver"
+  },
+  {
+    "locale": "es",
+    "id": "troubleshooting",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Soluciona errores de Anki Forge Usa los valores estructurados kind y code de la operación fallida, junto con su cadena de causas y sus observaciones. El texto visible está pensado para las personas y puede cambiar. Una operación fallida y una comparación completada cuya política bloquea la publicación son resultados distintos. Instalación Sección titulada «Instalación» Síntoma\tComprobación Rust rechaza la versión de las herramientas\tEjecuta rustc --version; usa Rust 1.92+ y comprueba la versión instalada con cargo tree -i ankiforge Node no puede cargar su paquete nativo\tEjecuta node -p \"process.platform + '/' + process.arch\" y npm ls ankiforge; reinstala con npm install --include=optional ankiforge@0.3.1 Node indica que las versiones del co"
+  },
+  {
+    "locale": "pt-BR",
+    "id": "rust-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Gere cartões do Anki com Rust Use Rust 1.92 ou posterior. Se preferir outra linguagem, escolha Node / TypeScript ou Python. Instale a biblioteca Seção intitulada “Instale a biblioteca” Janela do terminal cargo new anki-deck cd anki-deck cargo add ankiforge@0.3.1 Exporte seu primeiro baralho Seção intitulada “Exporte seu primeiro baralho” Salve este programa completo como src/main.rs: use ankiforge::{BuildOptions, Note, Project}; fn main() -> Result<(), Box<dyn std::error::Error>> { let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\"); project.add(\"es:hola\", Note::basic(\"hola\", \"hello\"))?; let output = project.build(BuildOptions::to(\"spanish.apkg\"))?; println!(\"{}\", output.artifact().path().display()); Ok(()) } Janela do termin"
+  },
+  {
+    "locale": "pt-BR",
+    "id": "python-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Gere cartões do Anki com Python Crie e ative um ambiente virtual e instale o pacote publicado no PyPI: Janela do terminal python -m venv .venv . .venv/bin/activate python -m pip install ankiforge==0.3.1 No Windows, ative o ambiente com .venv\\Scripts\\Activate.ps1. Use CPython convencional 3.11 ou posterior e um wheel correspondente à plataforma; as verificações registradas de lançamento abrangem CPython 3.11–3.14. Consulte os ambientes verificados. Exporte um baralho Seção intitulada “Exporte um baralho” Salve o programa como main.py: from ankiforge import Project, Note, BuildOptions project = Project('spanish', default_deck='Spanish') project.add('es:hola', Note.basic('hola', 'hello')) output = project.build(BuildOptions.to('spanish.apkg'))"
+  },
+  {
+    "locale": "pt-BR",
+    "id": "node-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Gere cartões do Anki com Node.js Use Node.js 22.13 ou posterior. Em um novo diretório de aplicação: Janela do terminal mkdir anki-deck cd anki-deck npm install --include=optional ankiforge@0.3.1 O comando instala o pacote publicado no npm e a dependência nativa opcional correspondente. Consulte os ambientes verificados para saber quais plataformas foram testadas. Exporte um baralho Seção intitulada “Exporte um baralho” Salve o programa como main.mjs: import { Project, Note, BuildOptions } from 'ankiforge'; const project = new Project('spanish').defaultDeck('Spanish'); project.add('es:hola', Note.basic('hola', 'hello')); const output = await project.build(BuildOptions.to('spanish.apkg')); console.log(output.artifact.path); await output.artif"
+  },
+  {
+    "locale": "pt-BR",
+    "id": "json-media",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Gere e atualize baralhos do Anki a partir de JSON Leia três perguntas de biologia em JSON, adicione uma imagem e um áudio compartilhados e exporte um APKG original seguido de uma atualização revisada que altera apenas uma resposta. Cada versão deve conter 3 notas, 3 cartões e 2 arquivos de mídia. Escolha um dos SDKs abaixo; cada exemplo é um programa completo. A exportação normal não exige que o Anki esteja instalado. Mantido pelos mantenedores do Anki Forge · conteúdo revisado em 2026-10-25. Arquivos de entrada compartilhados Seção intitulada “Arquivos de entrada compartilhados” Baixe v1.json, v2.json, cell.png e tone.wav. A imagem é um diagrama de célula; o áudio é um tom curto gerado, não uma gravação de vocabulário falado. Em cada novo "
+  },
+  {
+    "locale": "pt-BR",
+    "id": "original-baseline-update",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Atualize baralhos do Anki com IDs de nota estáveis Publique correções ou novos cartões para um baralho do Anki que você já distribuiu. IDs de nota estáveis ajudam o Anki Forge e o Anki a reconhecer notas existentes em vez de tratá-las como novas; as opções de importação do Anki e as edições locais mais recentes também influenciam o que será alterado. Mantenha estáveis o namespace do projeto e as chaves de notas, tipos de nota, campos e templates de cartão. Gere cada nova versão a partir do APKG original distribuído anterior, que contém evidências completas de identidade em um formato versionado. Guarde o pacote junto com a revisão do seu código-fonte. Execute duas versões e compare Seção intitulada “Execute duas versões e compare” Janela do"
+  },
+  {
+    "locale": "pt-BR",
+    "id": "troubleshooting",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Solução de problemas Use os valores estruturados kind e code da operação que falhou, junto com a cadeia de causas e as observações. As mensagens de texto destinam-se a pessoas e podem mudar. Uma operação que falha e uma comparação concluída cuja política bloqueia a publicação são resultados diferentes. Instalação Seção intitulada “Instalação” Sintoma\tO que verificar Rust rejeita a toolchain\tExecute rustc --version; use Rust 1.92+ e consulte a versão instalada com cargo tree -i ankiforge Node não consegue carregar o pacote nativo\tExecute node -p \"process.platform + '/' + process.arch\" e npm ls ankiforge; reinstale com npm install --include=optional ankiforge@0.3.1 Node informa divergência entre o código nativo e o wrapper\tUse versões corresp"
+  },
+  {
+    "locale": "ja",
+    "id": "rust-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Rust で Anki カードを生成する Rust 1.92 以降を使用します。別のプログラミング言語を使う場合は、Node／TypeScript または Pythonを選んでください。 インストール 「インストール」のセクション ターミナルウィンドウ cargo new anki-deck cd anki-deck cargo add ankiforge@0.3.1 最初のデッキをエクスポートする 「最初のデッキをエクスポートする」のセクション 次の完全なプログラムを src/main.rs に保存します。 use ankiforge::{BuildOptions, Note, Project}; fn main() -> Result<(), Box<dyn std::error::Error>> { let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\"); project.add(\"es:hola\", Note::basic(\"hola\", \"hello\"))?; let output = project.build(BuildOptions::to(\"spanish.apkg\"))?; println!(\"{}\", output.artifact().path().display()); Ok(()) } ターミナルウィンドウ cargo run プログラムは永続ファイル spanish.apkg を書き出します。Anki で開いてインポートすると、Spanish デッキの hola → hello を学習できます。エクスポート時に Anki のインストールは必要ありません。 名前空間 sp"
+  },
+  {
+    "locale": "ja",
+    "id": "python-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Python で Anki カードを生成する 仮想環境を作成して有効にし、PyPI の公開パッケージをインストールします。 ターミナルウィンドウ python -m venv .venv . .venv/bin/activate python -m pip install ankiforge==0.3.1 Windows では .venv\\Scripts\\Activate.ps1 で有効にします。通常の CPython 3.11 以降と、プラットフォームに一致する wheel を使用してください。記録済みのリリース検証では CPython 3.11〜3.14 を確認しています。検証済みの環境を参照してください。 デッキをエクスポートする 「デッキをエクスポートする」のセクション 次を main.py に保存します。 from ankiforge import Project, Note, BuildOptions project = Project('spanish', default_deck='Spanish') project.add('es:hola', Note.basic('hola', 'hello')) output = project.build(BuildOptions.to('spanish.apkg')) print(output.artifact.path) ターミナルウィンドウ python main.py 永続ファイル spanish.apkg を Anki で開きます。Spanish デッキに hola → hello が含まれています。後で編集する際も、名前空間 spanish とノートキー es:hola を維持してください。エクスポートに"
+  },
+  {
+    "locale": "ja",
+    "id": "node-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Node.js で Anki カードを生成する Node.js 22.13 以降を使います。新しいアプリケーションのディレクトリで実行します。 ターミナルウィンドウ mkdir anki-deck cd anki-deck npm install --include=optional ankiforge@0.3.1 npm の公開パッケージと、環境に一致するネイティブのオプション依存パッケージをインストールします。対応プラットフォームは検証済みの環境を参照してください。 デッキをエクスポートする 「デッキをエクスポートする」のセクション 次を main.mjs に保存します。 import { Project, Note, BuildOptions } from 'ankiforge'; const project = new Project('spanish').defaultDeck('Spanish'); project.add('es:hola', Note.basic('hola', 'hello')); const output = await project.build(BuildOptions.to('spanish.apkg')); console.log(output.artifact.path); await output.artifact.close(); ターミナルウィンドウ node main.mjs 永続ファイル spanish.apkg を Anki で開きます。Spanish デッキに hola → hello が含まれています。後で編集する際も、名前空間 spanish とキー es:hola を維持してください。永続成果物を閉じてもファイ"
+  },
+  {
+    "locale": "ja",
+    "id": "json-media",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "JSON から Anki デッキを生成・更新する JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、初回配布用の APKG と、解答だけを変更した検証済みの更新版を出力します。どちらの版も ノート3件、カード3枚、メディアファイル2個になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。 管理：Anki Forge メンテナー · 英語原文の確認日：2026-10-25。 共通の入力ファイル 「共通の入力ファイル」のセクション v1.json、v2.json、cell.png、tone.wavをダウンロードします。画像は細胞の模式図です。音声は短い合成音で、単語の読み上げではありません。新しく作るアプリケーションのディレクトリごとに、次の4ファイルを recipe/ に置きます。 json-deck/ recipe/ v1.json v2.json cell.png tone.wav 両方の JSON ファイルには namespace、deck と3件の notes があり、各ノートに継続して使う id、front、back が含まれます。v2 で変わるのは最初の回答だけです。JSON の解析は呼び出し側で行い、Anki Forge はノートの作成と APKG の生成を担当します。信頼できない入力を扱う場合は、ノートを作る前にアプリケーション側のスキーマで検証してください。 Rust 「Rust」のセクション Rust 1.92 以降を使います。JSON の解析には serde と serde_json を使用します。Anki Forge は公開パッケ"
+  },
+  {
+    "locale": "ja",
+    "id": "original-baseline-update",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "安定したノート ID で Anki デッキを更新する すでに配布した Anki デッキに訂正や新しいカードを届けます。ノートの ID を安定させると、Anki Forge と Anki は既存のノートを新規ノートとして扱わずに識別できます。ただし、実際に何が更新されるかには、Anki のインポート設定や、それより新しいローカルでの編集も影響します。 プロジェクトの名前空間と、ノート・モデル・フィールド・テンプレートのキーは変更しないでください。新しいリリースは、完全なバージョン付き識別情報を含む、前回の配布時のオリジナル APKGを基準に作成します。そのパッケージを対応するソースのリビジョンと一緒に保管してください。 2つの版を生成して比較する 「2つの版を生成して比較する」のセクション ターミナルウィンドウ cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples このコマンドは spanish-v1.apkg と spanish-v2.apkg を書き出し、変更した回答を比較して、更新版のパッケージ内の件数を確認します。実行されるソースコードは次のとおりです。 fn vocabulary(answer: &str) -> anyhow::Result<Project> { let mut project = Project::new(\"docs-spanish-updates\")?.default_deck(\"Spanish\"); project.add(\"hola\", Note::basic(\"hola\", answer))?; Ok(project) } fn upd"
+  },
+  {
+    "locale": "ja",
+    "id": "troubleshooting",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "トラブルシューティング 失敗した操作の構造化された kind と code、原因チェーン、観測結果を使います。表示テキストは人向けであり、変わる可能性があります。操作そのものの失敗と、比較は完了したもののポリシーが公開を阻止した場合は、異なる結果です。 インストール 「インストール」のセクション 症状\t確認すること Rust がツールチェーンを拒否する\trustc --version を実行し、Rust 1.92 以降を使用します。cargo tree -i ankiforge でインストール済みのバージョンを確認します Node がネイティブパッケージを読み込めない\tnode -p \"process.platform + '/' + process.arch\" と npm ls ankiforge を実行し、npm install --include=optional ankiforge@0.3.1 で再インストールします Node がネイティブ側とラッパーの不一致を報告する\tバージョンを揃えます。同じレジストリ版から再インストールするか、同じチェックアウトから両方を再ビルドします Python が拡張を読み込めない\tpython -m pip show ankiforge と python -m pip debug --verbose を実行し、インタープリターと wheel の OS/CPU タグを確認します Python がソース配布物を選択する\t対応する wheel・インタープリターを選ぶか、コンパイラーを用意してソースからのビルドに従います 検証済みの環境、Node のセットアップ、Python のセットアップを参照してください。 モデルとノート 「モデルとノート"
+  },
+  {
+    "locale": "de",
+    "id": "rust-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Anki-Karten mit Rust erzeugen Verwende Rust ab Version 1.92. Für eine andere Programmiersprache wähle Node / TypeScript oder Python. Installieren Abschnitt „Installieren“ Terminal-Fenster cargo new anki-deck cd anki-deck cargo add ankiforge@0.3.1 Deinen ersten Stapel exportieren Abschnitt „Deinen ersten Stapel exportieren“ Speichere dieses vollständige Programm als src/main.rs: use ankiforge::{BuildOptions, Note, Project}; fn main() -> Result<(), Box<dyn std::error::Error>> { let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\"); project.add(\"es:hola\", Note::basic(\"hola\", \"hello\"))?; let output = project.build(BuildOptions::to(\"spanish.apkg\"))?; println!(\"{}\", output.artifact().path().display()); Ok(()) } Terminal-Fenster cargo"
+  },
+  {
+    "locale": "de",
+    "id": "python-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Anki-Karten mit Python erzeugen Erstelle und aktiviere eine virtuelle Umgebung und installiere anschließend das veröffentlichte PyPI-Paket: Terminal-Fenster python -m venv .venv . .venv/bin/activate python -m pip install ankiforge==0.3.1 Unter Windows aktivierst du die Umgebung mit .venv\\Scripts\\Activate.ps1. Verwende gewöhnliches CPython ab Version 3.11 und ein passendes Wheel für deine Plattform. CPython 3.11–3.14 sind durch dokumentierte Release-Prüfungen abgedeckt; siehe geprüfte Umgebungen. Einen Stapel exportieren Abschnitt „Einen Stapel exportieren“ Speichere Folgendes als main.py: from ankiforge import Project, Note, BuildOptions project = Project('spanish', default_deck='Spanish') project.add('es:hola', Note.basic('hola', 'hello'))"
+  },
+  {
+    "locale": "de",
+    "id": "node-basic",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Anki-Karten mit Node.js erzeugen Verwende Node.js ab Version 22.13. Führe in einem neuen Anwendungsverzeichnis Folgendes aus: Terminal-Fenster mkdir anki-deck cd anki-deck npm install --include=optional ankiforge@0.3.1 Dadurch werden das veröffentlichte npm-Paket und die passende native optionale Abhängigkeit installiert. Die abgedeckten Plattformen findest du unter geprüfte Umgebungen. Einen Stapel exportieren Abschnitt „Einen Stapel exportieren“ Speichere Folgendes als main.mjs: import { Project, Note, BuildOptions } from 'ankiforge'; const project = new Project('spanish').defaultDeck('Spanish'); project.add('es:hola', Note.basic('hola', 'hello')); const output = await project.build(BuildOptions.to('spanish.apkg')); console.log(output.art"
+  },
+  {
+    "locale": "de",
+    "id": "json-media",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Anki-Stapel aus JSON erzeugen und aktualisieren Lies drei Biologiefragen aus JSON ein, ergänze ein gemeinsames Bild und einen Audioclip und exportiere ein ursprüngliches APKG sowie eine geprüfte Aktualisierung, die nur eine Antwort ändert. Jede Version soll 3 Notizen, 3 Karten und 2 Mediendateien enthalten. Wähle unten ein SDK; jedes Beispiel ist ein vollständiges Programm. Für den normalen Export muss Anki nicht installiert sein. Gepflegt von den Anki-Forge-Maintainern · englische Vorlage geprüft am 2026-10-25. Gemeinsame Eingabedateien Abschnitt „Gemeinsame Eingabedateien“ Lade v1.json, v2.json, cell.png und tone.wav herunter. Das Bild zeigt eine Zelle; die Audiodatei enthält einen kurzen erzeugten Ton, keine gesprochene Vokabel. Lege die"
+  },
+  {
+    "locale": "de",
+    "id": "original-baseline-update",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Anki-Stapel mit stabilen Notiz-IDs aktualisieren Veröffentliche Korrekturen oder neue Karten für einen Anki-Stapel, den du bereits verteilt hast. Stabile Notiz-IDs helfen Anki Forge und Anki dabei, vorhandene Notizen wiederzuerkennen, statt sie als neue Notizen zu behandeln. Was tatsächlich geändert wird, hängt jedoch auch von den Importeinstellungen in Anki und neueren lokalen Bearbeitungen ab. Behalte den Projektnamensraum sowie die Schlüssel für Notizen, Modelle, Felder und Vorlagen unverändert bei. Erzeuge jede neue Version auf Basis des vorherigen ursprünglich verteilten APKG, das vollständige, versionierte Identitätsnachweise enthält. Bewahre das Paket zusammen mit der zugehörigen Quellcoderevision auf. Zwei Versionen erzeugen und ver"
+  },
+  {
+    "locale": "de",
+    "id": "troubleshooting",
+    "fullBodyUnchanged": true,
+    "headingUnchanged": true,
+    "renderedCodeUnchanged": true,
+    "actualQuote": "Fehlersuche Nutze die strukturierten Angaben kind und code des fehlgeschlagenen Vorgangs sowie dessen Ursachenverkettung und Beobachtungen. Anzeigetext ist für Menschen gedacht und kann sich ändern. Ein fehlgeschlagener Vorgang und ein abgeschlossener Vergleich, dessen Richtlinie die Veröffentlichung blockiert, sind unterschiedliche Ergebnisse. Installation Abschnitt „Installation“ Symptom\tPrüfung Rust weist die Toolchain zurück\tFühre rustc --version aus; verwende Rust ab Version 1.92 und prüfe die installierte Version mit cargo tree -i ankiforge Node kann sein natives Paket nicht laden\tFühre node -p \"process.platform + '/' + process.arch\" und npm ls ankiforge aus; installiere mit npm install --include=optional ankiforge@0.3.1 neu Node meld"
+  }
+]
