@@ -1,0 +1,188 @@
+{
+  "scope": "Actual manifest-bound German API HTML and Markdown MIME-literal regression observations.",
+  "manifestSha256": "082cf43f5d9764a7f427d90a52622a29306c2790ab3d8899d1225cd6eb4ab638",
+  "inputSha256": "8ddc663726af00fe55cc9d57130b1b6358465dd4525b1e15f3169f8017c0c15c",
+  "configuration": {
+    "site": "https://morehardy.github.io",
+    "base": "/anki-forge",
+    "customDomain": ""
+  },
+  "status": "failed",
+  "records": [
+    {
+      "id": "python-api",
+      "route": "/anki-forge/de/docs/python-api/",
+      "htmlSha256": "7c73244119a8733c271683aa533a1fa241f87dae83f48310f38af1525f0188a5",
+      "markdownSha256": "1b7533d7199027aa63e4522ca5af484f99c509172baeedca3c5e4f645a480d79",
+      "text": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus image/*. Tonreferenzen akzeptieren audio/* oder video/*. Andere Kategorien führen zu NOTE.MEDIA_USAGE_INVALID. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im Entwurfsdokument.",
+      "code": [
+        "image/*",
+        "audio/*",
+        "video/*",
+        "NOTE.MEDIA_USAGE_INVALID"
+      ],
+      "markdown": "Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus `image/*`. Tonreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "audio/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        }
+      ]
+    },
+    {
+      "id": "node-api",
+      "route": "/anki-forge/de/docs/node-api/",
+      "htmlSha256": "b0b06c80ebed394e3615fffdfae0fbb43b5f653243054a0888530321e4433ba9",
+      "markdownSha256": "dfa8cd51865871b0061784cabb66ece639d7fa9c82c56e19fad417667965d40e",
+      "text": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/*; Audioreferenzen akzeptieren audio/* oder video/*. Andere Kategorien lösen NOTE.MEDIA_USAGE_INVALID aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im Entwurf.",
+      "code": [
+        "image/*",
+        "audio/*",
+        "video/*",
+        "NOTE.MEDIA_USAGE_INVALID"
+      ],
+      "markdown": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "audio/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        }
+      ]
+    },
+    {
+      "id": "rust-api",
+      "route": "/anki-forge/de/docs/rust-api/",
+      "htmlSha256": "426d8c021de2be2e856dee0c6497736b7db6fc84308d696f84f16f3881312435",
+      "markdownSha256": "c55fa5aed868d952ef5d3aca954cf9d1557981d911f5ece706b63a9ebb4673ce",
+      "text": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/; Audioreferenzen akzeptieren audio/ oder video/*. Andere Kategorien lösen NOTE.MEDIA_USAGE_INVALID aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im Entwurf.",
+      "code": [
+        "NOTE.MEDIA_USAGE_INVALID"
+      ],
+      "markdown": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ image/_; Audioreferenzen akzeptieren audio/_ oder video/\\*. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": false,
+          "htmlCode": false,
+          "markdownCode": false
+        },
+        {
+          "value": "audio/*",
+          "htmlText": false,
+          "htmlCode": false,
+          "markdownCode": false
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": false,
+          "markdownCode": false
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "route": "/anki-forge/de/docs/media/",
+      "htmlSha256": "3e6d68fc04d48a3267484b4e76ebc630721a8d59395d151e25cd451d08e4a1d5",
+      "markdownSha256": "c22ca07ea208d6b5104d2dfd8fa6deb5afe31e8986c6fed36ad4d6bc51377808",
+      "text": "Konstruktoren bleiben unfehlbar. Project::add prüft den beim Import gespeicherten MIME-Typ: Bilder benötigen image/*, Audioreferenzen akzeptieren audio/* und video/*. application/octet-stream, Text, Schriftarten und PDF scheitern bei typisierter Verwendung mit NOTE.MEDIA_USAGE_INVALID; registriere sie als ausdrückliche Medien für direktes HTML/CSS. Gültige ausdrückliche Deklarationen unbekannter Bild-/Video-MIME-Typen bestehen die Kategorieprüfung, ohne zu bestätigen, dass ein Decoder oder Player die Bytes unterstützt. Das Umbenennen einer Datei ändert den gespeicherten MIME-Typ niemals. Der Build prüft weiterhin unabhängig die bereitgestellten Bytes und die Exportendung: Ein PNG namens wrong.mp3 kann als Bild hinzugefügt werden und beim Build mit MEDIA.DECLARED_MIME_MISMATCH scheitern.",
+      "code": [
+        "Project::add",
+        "image/*",
+        "audio/*",
+        "video/*",
+        "application/octet-stream",
+        "NOTE.MEDIA_USAGE_INVALID",
+        "wrong.mp3",
+        "MEDIA.DECLARED_MIME_MISMATCH"
+      ],
+      "markdown": "Konstruktoren bleiben unfehlbar. `Project::add` prüft den beim Import gespeicherten MIME-Typ: Bilder benötigen `image/*`, Audioreferenzen akzeptieren `audio/*` und `video/*`. `application/octet-stream`, Text, Schriftarten und PDF scheitern bei typisierter Verwendung mit `NOTE.MEDIA_USAGE_INVALID`; registriere sie als ausdrückliche Medien für direktes HTML/CSS. Gültige ausdrückliche Deklarationen unbekannter Bild-/Video-MIME-Typen bestehen die Kategorieprüfung, ohne zu bestätigen, dass ein Decoder oder Player die Bytes unterstützt. Das Umbenennen einer Datei ändert den gespeicherten MIME-Typ niemals. Der Build prüft weiterhin unabhängig die bereitgestellten Bytes und die Exportendung: Ein PNG namens `wrong.mp3` kann als Bild hinzugefügt werden und beim Build mit `MEDIA.DECLARED_MIME_MISMATCH` scheitern.",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "audio/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        }
+      ]
+    },
+    {
+      "id": "rust-guide",
+      "route": "/anki-forge/de/docs/rust-guide/",
+      "htmlSha256": "df0d5f3077672d69a68355523a4f406b887f9f3f857915522054dd1aaec75fe7",
+      "markdownSha256": "163dec7ca20af2545a3f5b030e65b3ea3ba21b8c2c33e36b9d7ffc02addf66d3",
+      "text": "Media::image() und sound() bleiben unfehlbar. Beim Hinzufügen wird für Bilder image/* verlangt; Audioreferenzen akzeptieren audio/* oder video/*. Andere Kategorien führen zu NOTE.MEDIA_USAGE_INVALID. Geprüft wird der gespeicherte MIME-Typ, nicht die Dekodierung oder Wiedergabe. Direktes HTML und ausdrücklich deklarierte Medien behalten ihr bisheriges Verhalten. Das Umbenennen beim Export ändert den MIME-Typ nicht: Ein PNG mit dem Namen wrong.mp3 kann als Bild hinzugefügt werden, aber bei der unabhängigen Inhalts-/Dateiendungsprüfung des Builds mit MEDIA.DECLARED_MIME_MISMATCH scheitern.",
+      "code": [
+        "Media::image()",
+        "sound()",
+        "image/*",
+        "audio/*",
+        "video/*",
+        "NOTE.MEDIA_USAGE_INVALID",
+        "wrong.mp3",
+        "MEDIA.DECLARED_MIME_MISMATCH"
+      ],
+      "markdown": "`Media::image()` und `sound()` bleiben unfehlbar. Beim Hinzufügen wird für Bilder `image/*` verlangt; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Geprüft wird der gespeicherte MIME-Typ, nicht die Dekodierung oder Wiedergabe. Direktes HTML und ausdrücklich deklarierte Medien behalten ihr bisheriges Verhalten. Das Umbenennen beim Export ändert den MIME-Typ nicht: Ein PNG mit dem Namen `wrong.mp3` kann als Bild hinzugefügt werden, aber bei der unabhängigen Inhalts-/Dateiendungsprüfung des Builds mit `MEDIA.DECLARED_MIME_MISMATCH` scheitern.",
+      "checks": [
+        {
+          "value": "image/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "audio/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        },
+        {
+          "value": "video/*",
+          "htmlText": true,
+          "htmlCode": true,
+          "markdownCode": true
+        }
+      ]
+    }
+  ]
+}

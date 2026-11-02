@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "rubricVersion": "anki-forge-language-quality-v1",
+  "glossaryVersion": "anki-forge-technical-terms-v1",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/ja_full_author/independent-de-Rust-MIME-language-delta-2026-11-01",
+  "reviewMethod": {
+    "axis": "linguistic source",
+    "scope": "Only rust-api/de changed since the previously reviewed two-API MIME candidate; 203 other source/target/technical signatures are unchanged.",
+    "snapshot": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/source-candidates-mime-complete.json",
+      "sha256": "0c7b259de9c93ff5ad940c4fa2728b04b193718300792715cb39381ba52c2640"
+    },
+    "priorReportChain": [
+      {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/linguistic-source-review-final.json",
+        "sha256": "8ed3c869e135e1978d4fb9251dcb480fcb832a7535a650215d9ad1a75d9a9bec"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/linguistic-source-review-mime-fixed.json",
+        "sha256": "3b8db818b157e773a709c136e51feeaf9fc1d20e81dc0dec7b4049c5226c0991"
+      }
+    ],
+    "actualDeltaChecks": {
+      "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/mime-rust-source-delta-checks.json",
+      "sha256": "bf3e7f7112d52dc38d4af3c564e84c45bc30cf7853f5558b37d5fe8350734119"
+    },
+    "method": "Actually reread the complete corrected Rust paragraph and adjacent context, compare the entire file with immutable 6f5f860, and recompute all 204 current candidate signatures/input lists against the composed prior 204+2-entry reports. Independently scan all German documentation: five files contain these patterns and all fifteen occurrences now use inline code. Preserve the original Rust complete-reading evidence and score, then append this specific reread.",
+    "independence": "Reviewer did not author the German paragraph or apply the formatting repair. Existing Japanese source remains covered only by its original separate independent reviewer; no Japanese source self-approval is added.",
+    "exclusions": "No final machine-read, browser or usage approval. The 8f prefix report remains specific to its original artifact; new corrected-source capture and exact-body comparisons are still required."
+  },
+  "entries": {
+    "rust-api": {
+      "de": {
+        "sourceHash": "070e2826b8450a88c9ef3bc3c4d80fdc7d59197f30844a59f1e61149af3e2a47",
+        "targetHash": "d957f38e55352daa2a1f341167cd78e875cf998e2721b96728bb26255b977dad",
+        "technicalDependencyHash": "923d7d2b1ddfb7abcc3423a94b77d3564e6983cf5c97ab68dc3e97b0946b0e17",
+        "inputFiles": [
+          "anki_forge/examples/docs_workflow.rs",
+          "anki_forge/examples/json_to_anki.rs",
+          "anki_forge/examples/website_showcase.rs",
+          "bindings/node/examples/json_to_anki.mts",
+          "bindings/python/examples/json_to_anki.py",
+          "docs/ai-quickstart.json",
+          "docs/de/rust-api.md",
+          "docs/rust-api.md",
+          "website/language-briefs.json",
+          "website/legacy-sections.json",
+          "website/locale-model.mjs",
+          "website/release-locales.json",
+          "website/scripts/search-documents.mjs",
+          "website/search-concepts.json",
+          "website/search-terms.json",
+          "website/search.config.mjs",
+          "website/section-contracts.json",
+          "website/site-model.mjs",
+          "website/src/components/BrandMark.astro",
+          "website/src/components/CodeBlock.astro",
+          "website/src/components/CopyBlock.astro",
+          "website/src/components/DocsFooter.astro",
+          "website/src/components/DocsHeader.astro",
+          "website/src/components/DocsSearch.astro",
+          "website/src/components/Footer.astro",
+          "website/src/components/Header.astro",
+          "website/src/components/Icon.astro",
+          "website/src/components/LanguageSwitcher.astro",
+          "website/src/components/ThemeControl.astro",
+          "website/src/content/i18n/de.json",
+          "website/src/content/i18n/en.json",
+          "website/src/i18n/client-messages.mjs",
+          "website/src/i18n/de.json",
+          "website/src/i18n/en.json",
+          "website/src/i18n/format-message.mjs",
+          "website/src/i18n/messages.mjs",
+          "website/src/layouts/SiteLayout.astro",
+          "website/src/lib/ai-quickstart.mjs",
+          "website/src/lib/examples.ts",
+          "website/src/lib/search-terms.mjs",
+          "website/src/lib/search.mjs",
+          "website/src/route-middleware.ts",
+          "website/src/scripts/docs-search.ts",
+          "website/src/scripts/site.ts"
+        ],
+        "technical": {
+          "status": "pending",
+          "evidence": [],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 4,
+            "syntax": 4,
+            "register": 4,
+            "usability": 4
+          },
+          "evidence": [
+            {
+              "criterion": "full-german-topic-language-read",
+              "file": "docs/de/rust-api.md",
+              "line": 3,
+              "span": "Häufig verwendete Werte sind direkt im Crate verfügbar: `Project`, `Note`, `NoteType`, `Field`, `Template`, `Content`, `Media`, `BuildOptions` und `BuildOutput`. Die öffentlichen Fachmodule heißen `note`, `schema`, `media`, `build`, `update` und `diagnostics`. Repository-Werkzeuge bilden eine separate, durch Features freigeschaltete Schnittstelle; Anwendungen benötigen sie nicht.",
+              "targetFileSha256": "efca7596145a1e4034e988254b9b23e3701eada9b25aa255a2b5927f3f850a62",
+              "judgement": "Method tables and error domains are coherent. The complete numeric-limit paragraph was independently reread after numeric 0 replaced the ambiguous written null.",
+              "readEvidence": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/linguistic-blind-read.json",
+                "sha256": "066c6fa56ce4a98c1c97bcf18832f853e0a548bb53db50e35eafef946efd1443"
+              },
+              "reviewMethod": "Full independent German prose/table or UI reading in isolated staging, followed by exact production-byte mapping and independent rereading of all subsequent changes. Protected code was not rewritten or treated as linguistic approval."
+            },
+            {
+              "criterion": "complete-german-shared-language-surface",
+              "files": [
+                "website/src/i18n/de.json",
+                "website/src/content/i18n/de.json",
+                "website/site-model.mjs",
+                "website/language-briefs.json",
+                "docs/ai-quickstart.json",
+                "website/search-terms.json",
+                "website/search-concepts.json"
+              ],
+              "judgement": "Read all 210 business messages, 11 framework messages, 29 document title/description pairs, five sidebar groups, three navigation labels, full terminology/ownership brief, parameterized prompt and production vocabulary. Notiz/Karte/Stapel remain distinct. Du register, singular/plural forms, copy/search recovery, original distribution APKG and source-only boundaries are consistent. The final search-only additions were separately read against their German body sections; no search-ranking conclusion is claimed.",
+              "originalFullRead": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/linguistic-blind-read.json",
+                "sha256": "066c6fa56ce4a98c1c97bcf18832f853e0a548bb53db50e35eafef946efd1443"
+              },
+              "finalVocabularyDelta": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/search-vocabulary-linguistic-delta.json",
+                "sha256": "3325378e8f67aeae364ca870f9fc4424b1035165bce4f03c2df5950ff4b0f5f9"
+              }
+            },
+            {
+              "criterion": "independent-reread-of-integrator-corrections",
+              "evidence": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/linguistic-blind-read.json",
+                "sha256": "066c6fa56ce4a98c1c97bcf18832f853e0a548bb53db50e35eafef946efd1443"
+              },
+              "judgement": "The closed-findings records and subsequentClarification contain the exact reread hashes and judgments for the corrected grammar, numeric zero and precise whitespace-key wording. Production bytes match those independently reread inputs."
+            },
+            {
+              "criterion": "independent-Rust-MIME-inline-formatting-delta",
+              "file": "docs/de/rust-api.md",
+              "line": 74,
+              "span": "Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).",
+              "targetFileSha256": "ae1f3ddbcc85e27b7cbe55803ec8163eaeb69a13e43e59047a52809ea5405386",
+              "priorFullRead": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/linguistic-source-review-final.json",
+                "sha256": "8ed3c869e135e1978d4fb9251dcb480fcb832a7535a650215d9ad1a75d9a9bec"
+              },
+              "previousTwoApiDelta": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/linguistic-source-review-mime-fixed.json",
+                "sha256": "3b8db818b157e773a709c136e51feeaf9fc1d20e81dc0dec7b4049c5226c0991"
+              },
+              "deltaVerification": {
+                "path": "docs/plans/evidence/multilingual-ja-de-2026-11-01/de/review/mime-rust-source-delta-checks.json",
+                "sha256": "bf3e7f7112d52dc38d4af3c564e84c45bc30cf7853f5558b37d5fe8350734119"
+              },
+              "judgement": "Actually reread the complete modified Rust API German paragraph and its surrounding addition-context section. The three literal MIME family patterns image/*, audio/* and video/* now have inline-code delimiters. This makes their literal scope clear and protects the asterisk in Markdown without changing sentence syntax, terminology, exclusions or playback/build-validation qualifications. The Rust wording aligns with the independently read Node paragraph. The whole file differs from 6f5f860 only by these six delimiter characters. No new linguistic issue. This is a focused paragraph/formatting reread, not a fresh full-document or final-artifact reading."
+            }
+          ],
+          "openIssues": []
+        }
+      }
+    }
+  },
+  "summary": {
+    "reviewedDeltas": 1,
+    "unchangedCandidateEntries": 203,
+    "currentSignatureBindingsChecked": 204,
+    "mimePatternFilesScanned": 5,
+    "allMimePatternsProtected": 15,
+    "openLanguageIssues": 0,
+    "majorIssues": 0,
+    "criticalIssues": 0
+  }
+}

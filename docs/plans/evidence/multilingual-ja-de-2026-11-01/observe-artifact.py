@@ -19,6 +19,8 @@ steps = {
     'machine': ['node', base / 'read-machine-tasks.mjs', artifact, label, locale],
     'negative': ['node', base / 'read-search-negative-results.mjs', artifact, phase / f'engineering/{label}/search-results.json', label, locale],
 }
+if locale == 'de' and revision == 'final':
+    steps['mime'] = ['node', base / 'de/verify-mime-literals.mjs', artifact, phase / f'mime-green-{label}.json', '--http']
 if config == 'prefix':
     steps['layout'] = ['node', base / 'layout-observations.mjs', artifact, phase / f'layout-{label}', locale]
 for name in remaining or steps:

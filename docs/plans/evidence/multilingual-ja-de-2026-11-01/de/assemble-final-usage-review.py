@@ -11,8 +11,8 @@ from urllib.parse import urlparse
 
 root = Path(__file__).resolve().parents[5]
 directory = Path(__file__).resolve().parent
-environment = sys.argv[1]
-assert environment in ('final-prefix', 'final-root')
+assert sys.argv[1] in ('prefix', 'root')
+environment = 'final-' + sys.argv[1]
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
@@ -39,7 +39,7 @@ manifest = json.loads(manifest_bytes)
 assert (directory / f'usage-{environment}/origin-manifest.json').read_bytes() == manifest_bytes
 assert tour['manifestSha256'] == digest(manifest_bytes)
 assert tour['mode'] == 'release-candidate'
-# The independently written conclusion fixes the corrected-source commit below.
+assert tour['commit'] == '6f5f860117f17859d8cbe1fbe0073590e33564b4'
 assert set(manifest['releaseLocales']) == {'en', 'zh-CN', 'es', 'pt-BR', 'ja', 'de'}
 assert not tour['pageErrors'] and not tour['responseReadErrors'] and 'failure' not in tour
 for key in ('inputSha256', 'configuration', 'releaseLocales', 'commit'):
@@ -48,12 +48,15 @@ check_binding(tour['helper'])
 conclusions_path = directory / f'usage-task-conclusions-{environment}.json'
 conclusions = read(conclusions_path)
 assert tour['commit'] == conclusions['sourceCommit']
-assert conclusions['sourceReview']['path'].endswith('/linguistic-source-review-mime-fixed.json')
+assert {Path(item['path']).name for item in conclusions['sourceReviews']} == {
+    'linguistic-source-review-final.json', 'linguistic-source-review-mime-fixed.json'
+}
 review = conclusions['observations'][environment]
 assert review['status'] == 'passed'
 check_issues(review['openIssues'])
 check_issues(conclusions.get('openIssues', []))
-check_binding(conclusions['sourceReview'])
+for source_review in conclusions['sourceReviews']:
+    check_binding(source_review)
 check_binding(review['browserTour'])
 assert review['browserTour']['path'] == str(tour_path.relative_to(root))
 audit_path = directory / 'execution-reuse-audit.json'
@@ -147,7 +150,7 @@ report = {
     'originManifest': {'path': str(manifest_path.relative_to(root)), 'sha256': digest(manifest_bytes), 'commit': manifest['commit']},
     'resourceBindings': [{'route': route, 'sha256': sha} for route, sha in sorted(bindings.items())],
     'resourceScope': f'All {len(machine)} required Markdown/llms resources plus actual task readUrls and downloaded recipe inputs are bound. The current observer separately verifies every archived manifest byte and records actual implicit network resources. Unvisited showcase packages and implicit search/JS/CSS resources are not claimed as independently read semantic task content.',
-    'executionScope': conclusions['scope'], 'sourceReview': conclusions['sourceReview'],
+    'executionScope': conclusions['scope'], 'sourceReviews': conclusions['sourceReviews'],
     'openIssues': conclusions.get('openIssues', []) + review['openIssues'], 'entries': entries
 }
 if 'visualReview' in conclusions:

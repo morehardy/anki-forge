@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-engineering",
+  "status": "engineering-passed-awaiting-review",
+  "engineeringStatus": "passed",
+  "engineeringOnly": true,
+  "startedAt": "2026-11-02T00:13:43.705Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "checks": [
+    {
+      "name": "check:content",
+      "command": [
+        "npm",
+        "run",
+        "check:content"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 5428,
+      "log": {
+        "file": "01-check-content.log",
+        "sha256": "a1389801725ed2ad44fc0ec79d1d44e234e28bcf301c29f2188742fc483de3a3",
+        "bytes": 327
+      }
+    },
+    {
+      "name": "check:site",
+      "command": [
+        "npm",
+        "run",
+        "check:site"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 4493,
+      "log": {
+        "file": "02-check-site.log",
+        "sha256": "b64b11b1add4fcf80d134e67c21803d15603069f9d9f2819c37ada1c2e73b695",
+        "bytes": 340
+      }
+    },
+    {
+      "name": "check:surface",
+      "command": [
+        "npm",
+        "run",
+        "check:surface"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 1378,
+      "log": {
+        "file": "03-check-surface.log",
+        "sha256": "5b45d3a4ccef89709de75a73194030bcbd0fd2655176de2b34cc69e611ea779c",
+        "bytes": 485
+      }
+    },
+    {
+      "name": "check:machine",
+      "command": [
+        "npm",
+        "run",
+        "check:machine"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 3388,
+      "log": {
+        "file": "04-check-machine.log",
+        "sha256": "c73b8ccfeef9d101b0bf2a3ac50c288f52a3391f87d58d4ab41c7058351494a5",
+        "bytes": 297
+      }
+    },
+    {
+      "name": "check:schema",
+      "command": [
+        "npm",
+        "run",
+        "check:schema"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 1340,
+      "log": {
+        "file": "05-check-schema.log",
+        "sha256": "7a51823d8a7c7be2df112e3215fad56167de4acf4d5fa16868d681d777c412cc",
+        "bytes": 283
+      }
+    },
+    {
+      "name": "check:gates",
+      "command": [
+        "npm",
+        "run",
+        "check:gates"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 40376,
+      "log": {
+        "file": "06-check-gates.log",
+        "sha256": "d58fb4364393b351dee16284454be525ad4c87e7cc93619eff1d2f3876543564",
+        "bytes": 1510
+      }
+    },
+    {
+      "name": "test:browser",
+      "command": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 59607,
+      "log": {
+        "file": "07-test-browser.log",
+        "sha256": "96e8301bd39d6bc93b8b23e7ac81759127c566c1786ec7fdbfd5de4acef6fcfa",
+        "bytes": 4660
+      }
+    },
+    {
+      "name": "check:search",
+      "command": [
+        "npm",
+        "run",
+        "check:search"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 7570,
+      "log": {
+        "file": "08-check-search.log",
+        "sha256": "30e817cc68d7f391798c478bae8e3407a6637de7dc5e259bd60098ef7ccb14d5",
+        "bytes": 1074
+      }
+    }
+  ],
+  "identity": {
+    "commit": "6f5f860117f17859d8cbe1fbe0073590e33564b4",
+    "inputSha256": "8ddc663726af00fe55cc9d57130b1b6358465dd4525b1e15f3169f8017c0c15c",
+    "configuration": {
+      "site": "https://morehardy.github.io",
+      "base": "/anki-forge",
+      "customDomain": ""
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es",
+      "pt-BR",
+      "ja",
+      "de"
+    ]
+  },
+  "manifestSha256": "082cf43f5d9764a7f427d90a52622a29306c2790ab3d8899d1225cd6eb4ab638",
+  "artifactSha256": "bc9eef9ed69bb274ade866a24742343244a2eed306d80f14576fcc2597f90af0",
+  "fileCount": 705,
+  "attachments": [
+    {
+      "file": "search-results.json",
+      "sha256": "4fb1122559297d56b7f1bba367d0e40967ce8a9de1f76f7e9ea50c958bd2fe0b",
+      "bytes": 312541
+    }
+  ],
+  "artifactUnchanged": true,
+  "finishedAt": "2026-11-02T00:15:47.866Z"
+}
