@@ -34,6 +34,39 @@ Production preview runs at `http://127.0.0.1:4321/anki-forge/` by default. Starl
 
 Astro runs the preview server in the background. Use `npm run preview:stop` when finished.
 
+## IndexNow notifications
+
+The production workflow captures the previous live page manifest before deploying,
+then notifies IndexNow only after the new artifact passes `check:live`. HTML hashes
+select added, modified and removed page URLs; unchanged URLs and the 404 document
+are excluded. The first deployment of the key initializes notifications for the
+existing pages. This works with GitHub Pages and DNS-only Cloudflare records;
+Cloudflare Crawler Hints requires traffic through Cloudflare to observe changes.
+
+`indexnow.config.json` identifies the production origin and verification key. Its
+matching UTF-8 file under `public/` is deliberately published as domain-ownership
+proof, not an account credential. Changing the key requires publishing a matching
+file. The notifier checks the live manifest and key before making any submission.
+HTTP 200 means received; 202 means received with key validation pending. Neither
+guarantees crawling, indexing or ranking.
+
+Notification failures do not undo a healthy deployment. Check the workflow warning
+and download its `website-indexnow-manifests` artifact. From `website/`, inspect
+or retry the saved pair (Node 24+):
+
+```sh
+node scripts/indexnow.mjs plan site-manifest.json previous-site-manifest.json
+node scripts/indexnow.mjs submit site-manifest.json previous-site-manifest.json
+```
+
+Retry while that artifact is still live; a later deployment is rejected. Do not
+replace a failed baseline download with `null`: only an actual HTTP 404 means no
+previous manifest exists. For HTTP 429, wait before retrying. If notifications are
+skipped or fail, retain the affected URLs for reconciliation; the next deployment
+compares published content, not the last successfully notified content.
+
+Protocol: [IndexNow documentation](https://www.indexnow.org/documentation).
+
 ## Machine-readable content
 
 Each production build creates an `llms.txt` under every released locale's prefix, plus an

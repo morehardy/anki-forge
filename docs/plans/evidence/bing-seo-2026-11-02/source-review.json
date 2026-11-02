@@ -1,0 +1,521 @@
+{
+  "schemaVersion": 1,
+  "rubricVersion": "anki-forge-language-quality-v1",
+  "glossaryVersion": "anki-forge-technical-terms-v1",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/spec_source_review/bing-seo-source-2026-11-02",
+  "scope": "Independent re-review of 18 stale source/locale pairs after three English SEO description changes. Read all 18 prose sources, language briefs, metadata adapters and both directly relevant Rust examples. All other dependency bytes are pinned to the reviewed HEAD snapshot; this source review does not assert artifact or production acceptance.",
+  "dependencySnapshot": "docs/plans/evidence/bing-seo-2026-11-02/source-review-dependencies.json",
+  "entries": {
+    "api": {
+      "en": {
+        "sourceHash": "68fa81ac113e2b3620d16932dfa0ba5fb5023d8bff61a3fb3045662f33a47c69",
+        "targetHash": "338d109295c383832319012023382671a18e44fd9ccf47b73bbca94a876d330b",
+        "technicalDependencyHash": "305590ffa5d22e357f1d4e43972b05160fdcc970460192e7cc9bc8ba1548dfbf",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 158-character English summary maps directly to the four task-table rows in docs/api-overview.md: author notes/models, images/audio, diagnostics, and compare/publish. The body retains the original-distribution-APKG requirement and excludes Anki re-export as an update baseline. It does not promise preservation of scheduling or automatic updates from keys alone.",
+            "Read actual localized source docs/api-overview.md. The only changed target text is the description; article content also shows it as its lede.",
+            "technicalDependencyHash remains 305590ffa5d22e357f1d4e43972b05160fdcc970460192e7cc9bc8ba1548dfbf; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "Action verbs create, package, diagnose and compare form a clear parallel list; Rust, Python and Node.js identify the audience, while notes and deck updates remain distinct.",
+            "Checked docs/api-overview.md against website/language-briefs.json for en; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "zh-CN": {
+        "sourceHash": "68fa81ac113e2b3620d16932dfa0ba5fb5023d8bff61a3fb3045662f33a47c69",
+        "targetHash": "43c13f84db5ebb46299b8f22ee64ae31023424f71e62ee4cc27b51594d9903d3",
+        "technicalDependencyHash": "092c1c38899f3b495b1dd3bfd0292e04e91cfd75b3982f6abe7549712f87bbce",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 158-character English summary maps directly to the four task-table rows in docs/api-overview.md: author notes/models, images/audio, diagnostics, and compare/publish. The body retains the original-distribution-APKG requirement and excludes Anki re-export as an update baseline. It does not promise preservation of scheduling or automatic updates from keys alone.",
+            "Read actual localized source docs/zh-cn/api.md. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains 092c1c38899f3b495b1dd3bfd0292e04e91cfd75b3982f6abe7549712f87bbce; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "读过“公开 API 总览”“稳定笔记身份”和四行任务表；笔记、牌组、命名空间及“原始分发 APKG”保持清楚区分。现有摘要虽简短，仍覆盖 API、媒体、诊断、更新，和英文补充说明一致。",
+            "Checked docs/zh-cn/api.md against website/language-briefs.json for zh-CN; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "es": {
+        "sourceHash": "68fa81ac113e2b3620d16932dfa0ba5fb5023d8bff61a3fb3045662f33a47c69",
+        "targetHash": "0eeef0f2ffcedd59cbbac1bb347a068b2ea15155f536e58847225854f013228b",
+        "technicalDependencyHash": "666df2895cc568607715e4f837923602838c810b0e725eb35db66431aee2c9ac",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 158-character English summary maps directly to the four task-table rows in docs/api-overview.md: author notes/models, images/audio, diagnostics, and compare/publish. The body retains the original-distribution-APKG requirement and excludes Anki re-export as an update baseline. It does not promise preservation of scheduling or automatic updates from keys alone.",
+            "Read actual localized source docs/es/api.md. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains 666df2895cc568607715e4f837923602838c810b0e725eb35db66431aee2c9ac; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "The task table uses crear notas, recursos multimedia, diagnosticar fallos and comparar/publicar. Espacio de nombres and clave de nota preserve the identity model, and the reexportación warning remains explicit. Neutral technical Spanish matches the brief.",
+            "Checked docs/es/api.md against website/language-briefs.json for es; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "pt-BR": {
+        "sourceHash": "68fa81ac113e2b3620d16932dfa0ba5fb5023d8bff61a3fb3045662f33a47c69",
+        "targetHash": "903394559d081f80adf39a1cb539cdc56203487feeb002af3ddb9f7c5919108b",
+        "technicalDependencyHash": "b21997a00b9a86fa3233f7ca25a032481461bbe6d344d51b53baa2c40f134cc4",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 158-character English summary maps directly to the four task-table rows in docs/api-overview.md: author notes/models, images/audio, diagnostics, and compare/publish. The body retains the original-distribution-APKG requirement and excludes Anki re-export as an update baseline. It does not promise preservation of scheduling or automatic updates from keys alone.",
+            "Read actual localized source docs/pt-br/api.md. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains b21997a00b9a86fa3233f7ca25a032481461bbe6d344d51b53baa2c40f134cc4; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "Criar notas, incluir mídia, diagnosticar falhas and comparar/publicar match the expanded English scope. Baralho, nota and namespace follow the Brazilian Portuguese brief; original-distribution and re-export distinctions remain present.",
+            "Checked docs/pt-br/api.md against website/language-briefs.json for pt-BR; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "ja": {
+        "sourceHash": "68fa81ac113e2b3620d16932dfa0ba5fb5023d8bff61a3fb3045662f33a47c69",
+        "targetHash": "48a33cf63259731c3d99830b030dc3b11278665acb66b3a70915bed5d6ffb2a2",
+        "technicalDependencyHash": "10231869a239915a6dd7a05b710279ade95d63cce4ef768ad0d0a7aa57a5ccc9",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 158-character English summary maps directly to the four task-table rows in docs/api-overview.md: author notes/models, images/audio, diagnostics, and compare/publish. The body retains the original-distribution-APKG requirement and excludes Anki re-export as an update baseline. It does not promise preservation of scheduling or automatic updates from keys alone.",
+            "Read actual localized source docs/ja/api.md. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains 10231869a239915a6dd7a05b710279ade95d63cce4ef768ad0d0a7aa57a5ccc9; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "作業表はノートとモデル、画像・音声、エラー診断、比較と公開を区別し、英語の拡充後の要約と同じ範囲を示す。名前空間、ノートキー、配布時のオリジナル APKG の説明を確認した。",
+            "Checked docs/ja/api.md against website/language-briefs.json for ja; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "de": {
+        "sourceHash": "68fa81ac113e2b3620d16932dfa0ba5fb5023d8bff61a3fb3045662f33a47c69",
+        "targetHash": "7c058caa44893cb84a9652dc9aa15dbc37780432a1b68fdd2a43a8d492ee66a9",
+        "technicalDependencyHash": "6d55230d0526c088053ddb5e9a5192c728474deb7c1bf9ace698e44eab7b6773",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 158-character English summary maps directly to the four task-table rows in docs/api-overview.md: author notes/models, images/audio, diagnostics, and compare/publish. The body retains the original-distribution-APKG requirement and excludes Anki re-export as an update baseline. It does not promise preservation of scheduling or automatic updates from keys alone.",
+            "Read actual localized source docs/de/api.md. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains 6d55230d0526c088053ddb5e9a5192c728474deb7c1bf9ace698e44eab7b6773; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "Notizen, Stapel, Projektnamensraum and Notizschlüssel follow the German brief. The task table covers all claims in the English expansion and the explicit warning rejects an Anki re-export as the original baseline.",
+            "Checked docs/de/api.md against website/language-briefs.json for de; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      }
+    },
+    "custom-notetypes": {
+      "en": {
+        "sourceHash": "4f960f8e8bfe2e7e935cd1511af92155a1d12b217d1aa3d2d160a4608371c3de",
+        "targetHash": "debfa62ff3e3e2bd9ff5eede313935a38e8eb57beb4fc81217d46ee012e78002",
+        "technicalDependencyHash": "f20de0ec04fb948c78f5bfee5142c2f5f0f640a25eff1dd438027f35f4ac6005",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English summary describes the Rust example and its surrounding sections: Field/Template declarations, GenerationRule::all, stable keys, immutable NoteType reuse across functions/projects. Read target_api_custom_notetype.rs: jp-vocab/expr/meaning/recognition are stable identifiers distinct from display names; model.note() creates the note and BuildOptions::to writes the APKG. The body still requires update analysis for later model-definition changes.",
+            "Read actual localized source docs/custom-notetypes.md. The only changed target text is the description; article content also shows it as its lede.",
+            "technicalDependencyHash remains f20de0ec04fb948c78f5bfee5142c2f5f0f640a25eff1dd438027f35f4ac6005; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "Fields, card templates, generation rules, stable keys and immutable models use the existing English technical vocabulary; the colon introduces concrete tasks, not keyword padding.",
+            "Checked docs/custom-notetypes.md against website/language-briefs.json for en; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "zh-CN": {
+        "sourceHash": "4f960f8e8bfe2e7e935cd1511af92155a1d12b217d1aa3d2d160a4608371c3de",
+        "targetHash": "c172222f89a56a38544a0b600173c5dd435c5ab34742847e393624df6d45d86d",
+        "technicalDependencyHash": "03c64937dfca8a4506efc9ca0cf1fd4e972baffddbfc3a5e82acf42dcd77f2a2",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English summary describes the Rust example and its surrounding sections: Field/Template declarations, GenerationRule::all, stable keys, immutable NoteType reuse across functions/projects. Read target_api_custom_notetype.rs: jp-vocab/expr/meaning/recognition are stable identifiers distinct from display names; model.note() creates the note and BuildOptions::to writes the APKG. The body still requires update analysis for later model-definition changes.",
+            "Read actual localized source docs/zh-cn/custom-notetypes.md. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains 03c64937dfca8a4506efc9ca0cf1fd4e972baffddbfc3a5e82acf42dcd77f2a2; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "读过“键与名称”“校验与生成”；“不可变”“稳定键”“显示名称”与示例一致，未把所有权误写成权限或版权。“为自己的内容定义字段、卡片模板与生成规则”仍是准确摘要。",
+            "Checked docs/zh-cn/custom-notetypes.md against website/language-briefs.json for zh-CN; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "es": {
+        "sourceHash": "4f960f8e8bfe2e7e935cd1511af92155a1d12b217d1aa3d2d160a4608371c3de",
+        "targetHash": "c092b703cd40894d824fb3334d3520c5401f325ac3d122226f8e9e0063fc4eeb",
+        "technicalDependencyHash": "2d6c59634abee54c6f27edeebecf8b119357fc7d6ddb8dfad222ad713c870de6",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English summary describes the Rust example and its surrounding sections: Field/Template declarations, GenerationRule::all, stable keys, immutable NoteType reuse across functions/projects. Read target_api_custom_notetype.rs: jp-vocab/expr/meaning/recognition are stable identifiers distinct from display names; model.note() creates the note and BuildOptions::to writes the APKG. The body still requires update analysis for later model-definition changes.",
+            "Read actual localized source docs/es/custom-notetypes.md. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains 2d6c59634abee54c6f27edeebecf8b119357fc7d6ddb8dfad222ad713c870de6; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "Claves estables, nombres visibles and tipo de nota stay distinct; inmutable/reutilizar accurately express completed NoteType semantics. Imperatives Finaliza, Ejecuta and Abre support the runnable Rust task without translating identifiers.",
+            "Checked docs/es/custom-notetypes.md against website/language-briefs.json for es; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "pt-BR": {
+        "sourceHash": "4f960f8e8bfe2e7e935cd1511af92155a1d12b217d1aa3d2d160a4608371c3de",
+        "targetHash": "2174a04462dbc87fdf86de182a1348b45bc195fc885801db8ac9997f19bb46ae",
+        "technicalDependencyHash": "8300a9b67b9fc112cc13dadb5bb5582f81a0f95407fefbb549ee9fd07c0d15a0",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English summary describes the Rust example and its surrounding sections: Field/Template declarations, GenerationRule::all, stable keys, immutable NoteType reuse across functions/projects. Read target_api_custom_notetype.rs: jp-vocab/expr/meaning/recognition are stable identifiers distinct from display names; model.note() creates the note and BuildOptions::to writes the APKG. The body still requires update analysis for later model-definition changes.",
+            "Read actual localized source docs/pt-br/custom-notetypes.md. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains 8300a9b67b9fc112cc13dadb5bb5582f81a0f95407fefbb549ee9fd07c0d15a0; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "Chaves estáveis, nomes de exibição, imutável and templates are used consistently. Finalize/Execute/Abra provide natural Brazilian Portuguese instructions; APIs and strings are preserved exactly.",
+            "Checked docs/pt-br/custom-notetypes.md against website/language-briefs.json for pt-BR; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "ja": {
+        "sourceHash": "4f960f8e8bfe2e7e935cd1511af92155a1d12b217d1aa3d2d160a4608371c3de",
+        "targetHash": "5d1445949d63a7b95b4ef5a532b7ec7c0510c55400786252dcbe4e637045c2bf",
+        "technicalDependencyHash": "be24b9dfe11324d771cf7a8de99d3449246486f52c5340c2913ee0a999acb1c0",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English summary describes the Rust example and its surrounding sections: Field/Template declarations, GenerationRule::all, stable keys, immutable NoteType reuse across functions/projects. Read target_api_custom_notetype.rs: jp-vocab/expr/meaning/recognition are stable identifiers distinct from display names; model.note() creates the note and BuildOptions::to writes the APKG. The body still requires update analysis for later model-definition changes.",
+            "Read actual localized source docs/ja/custom-notetypes.md. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains be24b9dfe11324d771cf7a8de99d3449246486f52c5340c2913ee0a999acb1c0; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "安定キーと表示名、不変の NoteType、検証と生成を区別した自然な技術文。再使用と所有の説明は API の意味を保ち、コード文字列を翻訳していない。",
+            "Checked docs/ja/custom-notetypes.md against website/language-briefs.json for ja; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "de": {
+        "sourceHash": "4f960f8e8bfe2e7e935cd1511af92155a1d12b217d1aa3d2d160a4608371c3de",
+        "targetHash": "32bf6b41db712c1a5f3da6bb259e9f81fee9dfd98f4d78e5bec2f8a479e3a472",
+        "technicalDependencyHash": "11d2f656ef93bdf0f76067ab46e469623d41795c5703150b1d792354d4b9791a",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English summary describes the Rust example and its surrounding sections: Field/Template declarations, GenerationRule::all, stable keys, immutable NoteType reuse across functions/projects. Read target_api_custom_notetype.rs: jp-vocab/expr/meaning/recognition are stable identifiers distinct from display names; model.note() creates the note and BuildOptions::to writes the APKG. The body still requires update analysis for later model-definition changes.",
+            "Read actual localized source docs/de/custom-notetypes.md. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains 11d2f656ef93bdf0f76067ab46e469623d41795c5703150b1d792354d4b9791a; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-portable-search-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "Stabile Schlüssel, Anzeigenamen, unveränderlich and Vorlagen consistently express the Rust model. The guide uses direct Du instructions and separates the data-ownership meaning from permissions or copyright.",
+            "Checked docs/de/custom-notetypes.md against website/language-briefs.json for de; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      }
+    },
+    "blog:your-first-anki-deck": {
+      "en": {
+        "sourceHash": "8e7e1e32ae9f02d8b7e91a5ea0a5b8332c18f01024c2706ee7c3fd81b1d505da",
+        "targetHash": "e421b0cf676d09532f3a3d4e1064dd49138faa50b1e8220638427fc4a40bba7c",
+        "technicalDependencyHash": "3879cfad6aaa548cba5db355f0b1d86e5ea633229530530d5a2a2a67b464b8e3",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English description matches the complete program imported from target_api_basic.rs through lib/examples.ts: Spanish namespace, Basic hola/hello note, es:hola key, and persistent spanish.apkg export. The article instructs the reader to import the result and retain the original previous distribution package for updates. ArticlePage.astro uses this same description for the visible lede and SiteLayout metadata; the expanded text remains appropriate in both places.",
+            "Read actual localized source website/src/content/blog/your-first-anki-deck.mdx. The only changed target text is the description; article content also shows it as its lede.",
+            "technicalDependencyHash remains 3879cfad6aaa548cba5db355f0b1d86e5ea633229530530d5a2a2a67b464b8e3; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "The sentence starts with the user outcome, then names the Spanish flashcard, APKG export/import and stable note keys. It does not confuse a card with the underlying note or claim that stable keys alone guarantee safe updates.",
+            "Checked website/src/content/blog/your-first-anki-deck.mdx against website/language-briefs.json for en; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "zh-CN": {
+        "sourceHash": "8e7e1e32ae9f02d8b7e91a5ea0a5b8332c18f01024c2706ee7c3fd81b1d505da",
+        "targetHash": "d764d1aeed9c3af18a6ffc704fa8e20fb9eab6b3511c673c9531081529413493",
+        "technicalDependencyHash": "df6f12b92b5d3f220bd70a2890a55b6ad27c147861d019f332ef1415e9e11458",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English description matches the complete program imported from target_api_basic.rs through lib/examples.ts: Spanish namespace, Basic hola/hello note, es:hola key, and persistent spanish.apkg export. The article instructs the reader to import the result and retain the original previous distribution package for updates. ArticlePage.astro uses this same description for the visible lede and SiteLayout metadata; the expanded text remains appropriate in both places.",
+            "Read actual localized source website/src/content/blog/zh-cn/your-first-anki-deck.mdx. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains df6f12b92b5d3f220bd70a2890a55b6ad27c147861d019f332ef1415e9e11458; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "“西班牙语卡片”与 hola/hello 程序吻合；“笔记”“卡片”“牌组”使用一致，安装与导入的操作顺序明确，更新段落仍要求原始旧包。",
+            "Checked website/src/content/blog/zh-cn/your-first-anki-deck.mdx against website/language-briefs.json for zh-CN; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "es": {
+        "sourceHash": "8e7e1e32ae9f02d8b7e91a5ea0a5b8332c18f01024c2706ee7c3fd81b1d505da",
+        "targetHash": "2a8d9bda9a23a3b713fde6ac952e92756d1252bd4642c231236a5852372857b2",
+        "technicalDependencyHash": "ed7a332d5dba819fed50d5daa327d72e82a28ed6544a8d9c63b0eacf0dade8d5",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English description matches the complete program imported from target_api_basic.rs through lib/examples.ts: Spanish namespace, Basic hola/hello note, es:hola key, and persistent spanish.apkg export. The article instructs the reader to import the result and retain the original previous distribution package for updates. ArticlePage.astro uses this same description for the visible lede and SiteLayout metadata; the expanded text remains appropriate in both places.",
+            "Read actual localized source website/src/content/blog/es/your-first-anki-deck.mdx. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains ed7a332d5dba819fed50d5daa327d72e82a28ed6544a8d9c63b0eacf0dade8d5; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "Mazo, nota and tarjeta remain distinct. The article uses direct tuteo (Sigue, importa, Utiliza), explains es:hola independently of answer text, and preserves the paquete anterior original prerequisite.",
+            "Checked website/src/content/blog/es/your-first-anki-deck.mdx against website/language-briefs.json for es; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "pt-BR": {
+        "sourceHash": "8e7e1e32ae9f02d8b7e91a5ea0a5b8332c18f01024c2706ee7c3fd81b1d505da",
+        "targetHash": "50e694922c39c5bf1ed762985dc2cd15e936ee3af3485417b69625ea3bfae862",
+        "technicalDependencyHash": "9973b4366ec2d9aecbeac1103b0597d44f22d2f3dcf29345593f7dadc5b55230",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English description matches the complete program imported from target_api_basic.rs through lib/examples.ts: Spanish namespace, Basic hola/hello note, es:hola key, and persistent spanish.apkg export. The article instructs the reader to import the result and retain the original previous distribution package for updates. ArticlePage.astro uses this same description for the visible lede and SiteLayout metadata; the expanded text remains appropriate in both places.",
+            "Read actual localized source website/src/content/blog/pt-br/your-first-anki-deck.mdx. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains 9973b4366ec2d9aecbeac1103b0597d44f22d2f3dcf29345593f7dadc5b55230; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "Baralho, cartão and nota remain distinct, with natural imperatives Comece, Siga and Use. The description still identifies a Spanish vocabulary card, and the body preserves stable es:hola plus the original-package prerequisite.",
+            "Checked website/src/content/blog/pt-br/your-first-anki-deck.mdx against website/language-briefs.json for pt-BR; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "ja": {
+        "sourceHash": "8e7e1e32ae9f02d8b7e91a5ea0a5b8332c18f01024c2706ee7c3fd81b1d505da",
+        "targetHash": "5b01100fc67d8bb6b44275d635754c0868fb99ad69a216ef40c45c55bc278a27",
+        "technicalDependencyHash": "f00fa3ddfe88958b7e9ebba28f66fd2c12512c04aee7d43f11c9b8192c4b977c",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English description matches the complete program imported from target_api_basic.rs through lib/examples.ts: Spanish namespace, Basic hola/hello note, es:hola key, and persistent spanish.apkg export. The article instructs the reader to import the result and retain the original previous distribution package for updates. ArticlePage.astro uses this same description for the visible lede and SiteLayout metadata; the expanded text remains appropriate in both places.",
+            "Read actual localized source website/src/content/blog/ja/your-first-anki-deck.mdx. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains f00fa3ddfe88958b7e9ebba28f66fd2c12512c04aee7d43f11c9b8192c4b977c; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "デッキ、ノート、カードを区別し、スペイン語の挨拶と英語の意味を明示。インポート、安定ノートキー、前回配布時のオリジナルパッケージの順に説明し、丁寧体を維持している。",
+            "Checked website/src/content/blog/ja/your-first-anki-deck.mdx against website/language-briefs.json for ja; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      },
+      "de": {
+        "sourceHash": "8e7e1e32ae9f02d8b7e91a5ea0a5b8332c18f01024c2706ee7c3fd81b1d505da",
+        "targetHash": "2ad2cc6e2812335e7d3383a6af70e11f62d65507f32ca08fa9c2f55452fe3f08",
+        "technicalDependencyHash": "dc93f7533c9f84bea5debb9da203acf1cd4b9284d87977a2ad54e98a833d69c3",
+        "technical": {
+          "status": "reviewed",
+          "evidence": [
+            "The 159-character English description matches the complete program imported from target_api_basic.rs through lib/examples.ts: Spanish namespace, Basic hola/hello note, es:hola key, and persistent spanish.apkg export. The article instructs the reader to import the result and retain the original previous distribution package for updates. ArticlePage.astro uses this same description for the visible lede and SiteLayout metadata; the expanded text remains appropriate in both places.",
+            "Read actual localized source website/src/content/blog/de/your-first-anki-deck.mdx. The localized source and metadata bytes are unchanged; this re-review checked their continued consistency with the expanded English scope. No English fallback is introduced.",
+            "technicalDependencyHash remains dc93f7533c9f84bea5debb9da203acf1cd4b9284d87977a2ad54e98a833d69c3; source-review-dependencies.json proves that only website/site-model.mjs and the English blog frontmatter changed among the 73 dependency files. Previous immutable technical evidence remains at docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json; this new review independently validates the changed summary claims."
+          ],
+          "openIssues": []
+        },
+        "linguistic": {
+          "status": "reviewed",
+          "score": {
+            "terminology": 5,
+            "syntax": 5,
+            "register": 5,
+            "usability": 5
+          },
+          "evidence": [
+            "Stapel, Notiz and Karte stay distinct. Beginne, Importiere and Verwende form consistent Du instructions; spanische Vokabelkarte matches the example and the original predecessor package is still required for updates.",
+            "Checked website/src/content/blog/de/your-first-anki-deck.mdx against website/language-briefs.json for de; identifiers, note/card distinction and original-APKG restrictions remain intact. The English additions express existing content, not new untranslated capabilities."
+          ],
+          "openIssues": []
+        }
+      }
+    }
+  }
+}
