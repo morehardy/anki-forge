@@ -1,0 +1,2727 @@
+{
+  "schemaVersion": 1,
+  "status": "captured-awaiting-independent-semantic-review",
+  "captureRun": "/root/pr66-machine-observations-root-2026-11-02",
+  "environment": "root",
+  "readOrigin": "http://127.0.0.1:64269",
+  "manifest": {
+    "path": "docs/plans/evidence/website-pr66-final-2026-11-02/root-site-manifest.json",
+    "sha256": "84f934bc3b63ea20ce0ba994d42f94e6827d2a1488d575d0cb33aa4791011642",
+    "commit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+    "inputSha256": "fd6716207f6f5557895553e95f710a27cc66cee6d4bbd1cacf0ddc56b7aceebf"
+  },
+  "previousManifest": {
+    "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/root-site-manifest.json",
+    "sha256": "1e2169d3ba2143da73de90a147821aeaea9b6f1e97730e46a2bb83cbf98770b4",
+    "commit": "6d4625639fc1477222b41880d29724c162baa3be",
+    "description": "Actual frozen isolated-candidate manifest whose archive files were served and read in this run."
+  },
+  "configuration": {
+    "site": "https://ankiforge.dev",
+    "base": "/",
+    "customDomain": "ankiforge.dev"
+  },
+  "releaseLocales": [
+    "en",
+    "zh-CN",
+    "es",
+    "pt-BR",
+    "ja",
+    "de"
+  ],
+  "inventory": [
+    {
+      "route": "/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "4e5216863390dda212498929bc8d85a8f3db2b6994aa7cb6a7a14549b00f9e64",
+      "bytes": 3081,
+      "previousSha256": "4e5216863390dda212498929bc8d85a8f3db2b6994aa7cb6a7a14549b00f9e64",
+      "changed": false
+    },
+    {
+      "route": "/blog/your-first-anki-deck/index.md",
+      "sha256": "43bd3ceb5cf6b4fefb1d504386374b53379a630e0eb6a6ec548d20b1f72d2e5b",
+      "bytes": 3148,
+      "previousSha256": "43bd3ceb5cf6b4fefb1d504386374b53379a630e0eb6a6ec548d20b1f72d2e5b",
+      "changed": false
+    },
+    {
+      "route": "/de/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "451f0875e77df329b06884e2c02e56e6ec2b7654353f1631080381743dcb0afd",
+      "bytes": 3652,
+      "previousSha256": "451f0875e77df329b06884e2c02e56e6ec2b7654353f1631080381743dcb0afd",
+      "changed": false
+    },
+    {
+      "route": "/de/blog/your-first-anki-deck/index.md",
+      "sha256": "23fb91ddcdedf01f48f9084463e81d0e42f45b839a90217e178bd3cf4ccc94d8",
+      "bytes": 3755,
+      "previousSha256": "23fb91ddcdedf01f48f9084463e81d0e42f45b839a90217e178bd3cf4ccc94d8",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/ai-anki-cards/index.md",
+      "sha256": "81fb723b16ed8e246d75ae6d1183583b95a534cf79c991ec93abaaa6c12b6171",
+      "bytes": 5052,
+      "previousSha256": "81fb723b16ed8e246d75ae6d1183583b95a534cf79c991ec93abaaa6c12b6171",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "9907a06838bc03a792ad3c17429e01441d66766c8c71cc09088ac4d126c02c3c",
+      "bytes": 4806,
+      "previousSha256": "8dcde84e2352ecbdbe9f68b89fb8b4cbf2ff30466a3ea59d03f46d5746e37b37",
+      "changed": true
+    },
+    {
+      "route": "/de/docs/api/index.md",
+      "sha256": "ff7e3cd0a5ceb68012b41beefea4057b60a882cfe705199390bb8d797f7daa63",
+      "bytes": 2460,
+      "previousSha256": "ff7e3cd0a5ceb68012b41beefea4057b60a882cfe705199390bb8d797f7daa63",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/build-guarantees/index.md",
+      "sha256": "0135842bceb327d0e81c75cbf649b59d15c662ea4d2384a67601bebefca2239e",
+      "bytes": 6728,
+      "previousSha256": "5d1a252e7f9e5f51215808ca9fe546058822d27728369c63dd17124f4b8574dc",
+      "changed": true
+    },
+    {
+      "route": "/de/docs/cards/index.md",
+      "sha256": "394b1a9d0793da5205365269756934fc351f8384bf44f376335865aff36aea04",
+      "bytes": 3258,
+      "previousSha256": "394b1a9d0793da5205365269756934fc351f8384bf44f376335865aff36aea04",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/compatibility/index.md",
+      "sha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3",
+      "bytes": 3875,
+      "previousSha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/concepts/index.md",
+      "sha256": "c71b2b650ba5e1ce7468de93d90d8c1bacb99434c89411dfebd68e4bfb188a20",
+      "bytes": 4154,
+      "previousSha256": "717586973852d95336b0f7d86b68940c2dc838ae4deecdbeefdbe8b488775f4d",
+      "changed": true
+    },
+    {
+      "route": "/de/docs/csv-to-anki/index.md",
+      "sha256": "1c2b209668a4332d1a76730e10b10fc4e152a99787a32194be576c48a367369d",
+      "bytes": 6348,
+      "previousSha256": "c96635ee53b32c5e76ab46ebfa87fa3c03d3f8f7b177d64fc9da00a9be6860a6",
+      "changed": true
+    },
+    {
+      "route": "/de/docs/custom-notetypes/index.md",
+      "sha256": "3d0b768b4e40fc281047bf3a0388c0579f38b285ea2b4a30cb45b910b81f5381",
+      "bytes": 4271,
+      "previousSha256": "3d0b768b4e40fc281047bf3a0388c0579f38b285ea2b4a30cb45b910b81f5381",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/development/index.md",
+      "sha256": "167f5f2e0c1b12fe0ac7afb10786a28a810d09d86c6968dac4f7a6e3d92b7cd7",
+      "bytes": 2243,
+      "previousSha256": "167f5f2e0c1b12fe0ac7afb10786a28a810d09d86c6968dac4f7a6e3d92b7cd7",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/genanki-migration/index.md",
+      "sha256": "4ffe3049089579939998e589ef2c4c16a645f4c39108fd2319156ce15b75104a",
+      "bytes": 4183,
+      "previousSha256": "4ffe3049089579939998e589ef2c4c16a645f4c39108fd2319156ce15b75104a",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/image-occlusion/index.md",
+      "sha256": "dbd0201b5c5f6520dd4dbdb83e8aaab0888ea6a09368598edbfb9d857ca984a1",
+      "bytes": 4278,
+      "previousSha256": "dbd0201b5c5f6520dd4dbdb83e8aaab0888ea6a09368598edbfb9d857ca984a1",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/index.md",
+      "sha256": "52e9ad5daa45f9dbd27d770a4a160c41c8642362c7318bfd0117ef4e426f1466",
+      "bytes": 3851,
+      "previousSha256": "52e9ad5daa45f9dbd27d770a4a160c41c8642362c7318bfd0117ef4e426f1466",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/installation/index.md",
+      "sha256": "615a319483a1a14973c95d067a2aa6bbf2a15804bd10e4a6b2811f56a3eb0832",
+      "bytes": 2341,
+      "previousSha256": "6fe3236aa0cb53526e9411e83b56c84cd75c3036cee636f2c7ce87291e4cad13",
+      "changed": true
+    },
+    {
+      "route": "/de/docs/json-to-anki/index.md",
+      "sha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd",
+      "bytes": 12180,
+      "previousSha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/languages/index.md",
+      "sha256": "1e6522be8679dd7374de8ece25ac1947d1270f40b12a7ec9957f4cc298fd5b92",
+      "bytes": 2419,
+      "previousSha256": "1e6522be8679dd7374de8ece25ac1947d1270f40b12a7ec9957f4cc298fd5b92",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/media/index.md",
+      "sha256": "2814f56952a70007a26829fda320412bea55a8a81cbfbe243c6b398da5beb9a2",
+      "bytes": 9685,
+      "previousSha256": "de9a0a051392b99beab0c68d2d73c1cc84a8131e4bd7d55c470762e805230b35",
+      "changed": true
+    },
+    {
+      "route": "/de/docs/node-api/index.md",
+      "sha256": "a362ada18b093cb8ea50489e9ac2ed109a9ff128939cf0b5803fdf06766714a2",
+      "bytes": 15241,
+      "previousSha256": "b3082cdd5a3dac14fb08172780560670588806d94ba4b3c830391b1070ca03ce",
+      "changed": true
+    },
+    {
+      "route": "/de/docs/node-quickstart/index.md",
+      "sha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee",
+      "bytes": 2550,
+      "previousSha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/python-api/index.md",
+      "sha256": "3f56d144fe98f26665574be8e9e26ea626f922b22ca74d7627df31fe9911ce6e",
+      "bytes": 11445,
+      "previousSha256": "99c49a03e85513ebc450f563764ebe7cf1264e0aa6c0abb1fb74271d14924f5b",
+      "changed": true
+    },
+    {
+      "route": "/de/docs/python-diagnostics/index.md",
+      "sha256": "6ed193ee70693d65d4c85af8ab3c2b900d9a1248d5c15d64297fce65a2f87b13",
+      "bytes": 6192,
+      "previousSha256": "6ed193ee70693d65d4c85af8ab3c2b900d9a1248d5c15d64297fce65a2f87b13",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/python-migration/index.md",
+      "sha256": "144ef53ef3f4b8a6af2ae225828f85b56b409a6d4c8757f2549feb303aba998b",
+      "bytes": 2374,
+      "previousSha256": "144ef53ef3f4b8a6af2ae225828f85b56b409a6d4c8757f2549feb303aba998b",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/python-quickstart/index.md",
+      "sha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58",
+      "bytes": 2597,
+      "previousSha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/quickstart/index.md",
+      "sha256": "7cdbb8a987b11b2f6c5f0fe2e9a73c122c1fa5f8378557451bb9fb4ea1268d28",
+      "bytes": 2160,
+      "previousSha256": "7cdbb8a987b11b2f6c5f0fe2e9a73c122c1fa5f8378557451bb9fb4ea1268d28",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/rust-api/index.md",
+      "sha256": "be70ea5f8ec862ced603755b1e4d8a8b638e5aaf6721fa24f5a879acb864a890",
+      "bytes": 10826,
+      "previousSha256": "be70ea5f8ec862ced603755b1e4d8a8b638e5aaf6721fa24f5a879acb864a890",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/rust-guide/index.md",
+      "sha256": "73ca45217299a63224bd225580711d777d4d4f93b770924e4d1ac0203f4cfa44",
+      "bytes": 6669,
+      "previousSha256": "73ca45217299a63224bd225580711d777d4d4f93b770924e4d1ac0203f4cfa44",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/templates/index.md",
+      "sha256": "1069ed8b1486d9027876d3bcd373fb371d4308e3f1d1202210f676690cdb138c",
+      "bytes": 6411,
+      "previousSha256": "1069ed8b1486d9027876d3bcd373fb371d4308e3f1d1202210f676690cdb138c",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/troubleshooting/index.md",
+      "sha256": "b8804830a674f5409f820db1b12ca9c39df9294d21f488bee5974fff51edd9e9",
+      "bytes": 5549,
+      "previousSha256": "b8804830a674f5409f820db1b12ca9c39df9294d21f488bee5974fff51edd9e9",
+      "changed": false
+    },
+    {
+      "route": "/de/docs/updates/index.md",
+      "sha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e",
+      "bytes": 9535,
+      "previousSha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e",
+      "changed": false
+    },
+    {
+      "route": "/de/llms.txt",
+      "sha256": "6a8d6aceb624007413b4a526095efe07f0f125ca13b3ddb8e3b04eb757fe21e2",
+      "bytes": 7150,
+      "previousSha256": "5e9e9ab5b375a2e3318d55a92e5ae218f5063aaeca3e3365620fd23f82d51bc9",
+      "changed": true
+    },
+    {
+      "route": "/docs/ai-anki-cards/index.md",
+      "sha256": "9745b22b1eef834acd7824a662f24b0bd2a83ba2fa41ea1ee606fbee6e21fa3a",
+      "bytes": 4359,
+      "previousSha256": "9745b22b1eef834acd7824a662f24b0bd2a83ba2fa41ea1ee606fbee6e21fa3a",
+      "changed": false
+    },
+    {
+      "route": "/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "d3fa07417f3752acc3f105b95f2dd49fab31a78cb3828ac022688a971d281e4e",
+      "bytes": 3974,
+      "previousSha256": "d3fa07417f3752acc3f105b95f2dd49fab31a78cb3828ac022688a971d281e4e",
+      "changed": false
+    },
+    {
+      "route": "/docs/api/index.md",
+      "sha256": "78633f690be8373213053679b29209d7b17bc1ad85585d87eca45e4aec1f5e19",
+      "bytes": 1981,
+      "previousSha256": "78633f690be8373213053679b29209d7b17bc1ad85585d87eca45e4aec1f5e19",
+      "changed": false
+    },
+    {
+      "route": "/docs/build-guarantees/index.md",
+      "sha256": "94419d340582f5c025883404e249782cdf254a3dab42a80a6f07b950f8aa6c9b",
+      "bytes": 5552,
+      "previousSha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d",
+      "changed": true
+    },
+    {
+      "route": "/docs/cards/index.md",
+      "sha256": "566996cebefbfb5c3381d376164b5a8e2897f0817d33bd22ec114ef3b3b61f28",
+      "bytes": 2915,
+      "previousSha256": "582cc9aa34838f85ab2b7098d606331c28274b8dc47c87efc7dc3bc835244677",
+      "changed": true
+    },
+    {
+      "route": "/docs/compatibility/index.md",
+      "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+      "bytes": 3238,
+      "previousSha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+      "changed": false
+    },
+    {
+      "route": "/docs/concepts/index.md",
+      "sha256": "2b07722c9bfbdb2e8fefe578ab6fdc7fe38812d684f3474eb015c17493ba73d6",
+      "bytes": 3230,
+      "previousSha256": "2b07722c9bfbdb2e8fefe578ab6fdc7fe38812d684f3474eb015c17493ba73d6",
+      "changed": false
+    },
+    {
+      "route": "/docs/csv-to-anki/index.md",
+      "sha256": "0428ebe47ff80585c636b10f362bd6c90ba95e44b7c0c567d7c073a31b97d662",
+      "bytes": 5704,
+      "previousSha256": "0428ebe47ff80585c636b10f362bd6c90ba95e44b7c0c567d7c073a31b97d662",
+      "changed": false
+    },
+    {
+      "route": "/docs/custom-notetypes/index.md",
+      "sha256": "1ec524ad2e9100e94a376e6e672c79a177bc9b32bc7d3d3bd48a6b66e985f2cf",
+      "bytes": 3330,
+      "previousSha256": "1ec524ad2e9100e94a376e6e672c79a177bc9b32bc7d3d3bd48a6b66e985f2cf",
+      "changed": false
+    },
+    {
+      "route": "/docs/development/index.md",
+      "sha256": "38e8514202721f6a59b3e955089238eeb0cd0a2da40f84e687781674930fa07f",
+      "bytes": 1848,
+      "previousSha256": "38e8514202721f6a59b3e955089238eeb0cd0a2da40f84e687781674930fa07f",
+      "changed": false
+    },
+    {
+      "route": "/docs/genanki-migration/index.md",
+      "sha256": "fb1788925c8e1ac5141dee8594d55f797bf7949b16d97c592c329eaacdf3e1ba",
+      "bytes": 3482,
+      "previousSha256": "fb1788925c8e1ac5141dee8594d55f797bf7949b16d97c592c329eaacdf3e1ba",
+      "changed": false
+    },
+    {
+      "route": "/docs/image-occlusion/index.md",
+      "sha256": "0bfe48487e90d7ef0701a6fc4a2ac02e36ccb1990adf8009782879aa59c8bd69",
+      "bytes": 3797,
+      "previousSha256": "0bfe48487e90d7ef0701a6fc4a2ac02e36ccb1990adf8009782879aa59c8bd69",
+      "changed": false
+    },
+    {
+      "route": "/docs/index.md",
+      "sha256": "2589240ac602a461fcd26375953f959f50610b1efc34301771fb5b9a612062ff",
+      "bytes": 3270,
+      "previousSha256": "2589240ac602a461fcd26375953f959f50610b1efc34301771fb5b9a612062ff",
+      "changed": false
+    },
+    {
+      "route": "/docs/installation/index.md",
+      "sha256": "e5f86c8b981d90f7986c901dda300b376d142e8539e0bbf3e6f7f6c5e1f4522b",
+      "bytes": 1908,
+      "previousSha256": "d8e5e1b617b5319efec59c50eace336bbfae67ead940b8d00a423c0614e3ed60",
+      "changed": true
+    },
+    {
+      "route": "/docs/json-to-anki/index.md",
+      "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+      "bytes": 11160,
+      "previousSha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+      "changed": false
+    },
+    {
+      "route": "/docs/languages/index.md",
+      "sha256": "20118dbc34eaf14ef16f924a52e471a432b913b4aeca09d9139d271075197d04",
+      "bytes": 2043,
+      "previousSha256": "20118dbc34eaf14ef16f924a52e471a432b913b4aeca09d9139d271075197d04",
+      "changed": false
+    },
+    {
+      "route": "/docs/media/index.md",
+      "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+      "bytes": 8154,
+      "previousSha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+      "changed": false
+    },
+    {
+      "route": "/docs/node-api/index.md",
+      "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+      "bytes": 13145,
+      "previousSha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+      "changed": false
+    },
+    {
+      "route": "/docs/node-quickstart/index.md",
+      "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+      "bytes": 2251,
+      "previousSha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+      "changed": false
+    },
+    {
+      "route": "/docs/python-api/index.md",
+      "sha256": "858d8f0d0e84acb8e8510cf36d93a72978a2c802fab2ba338cb84927ecf4ebe5",
+      "bytes": 9287,
+      "previousSha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af",
+      "changed": true
+    },
+    {
+      "route": "/docs/python-diagnostics/index.md",
+      "sha256": "7c55655214b864f9bf4de14874b933a99f842399f7a0c632e71ad32d0373bb5b",
+      "bytes": 5339,
+      "previousSha256": "7c55655214b864f9bf4de14874b933a99f842399f7a0c632e71ad32d0373bb5b",
+      "changed": false
+    },
+    {
+      "route": "/docs/python-migration/index.md",
+      "sha256": "e048cc0d961bdded62c1d3184d901e4cf0e0d315fe291c47049a59928117af72",
+      "bytes": 2041,
+      "previousSha256": "e048cc0d961bdded62c1d3184d901e4cf0e0d315fe291c47049a59928117af72",
+      "changed": false
+    },
+    {
+      "route": "/docs/python-quickstart/index.md",
+      "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+      "bytes": 2287,
+      "previousSha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+      "changed": false
+    },
+    {
+      "route": "/docs/quickstart/index.md",
+      "sha256": "e8786297738d765f984fb3f55f853eda49528930303d165a3f4ed036ec6f903c",
+      "bytes": 1849,
+      "previousSha256": "e8786297738d765f984fb3f55f853eda49528930303d165a3f4ed036ec6f903c",
+      "changed": false
+    },
+    {
+      "route": "/docs/rust-api/index.md",
+      "sha256": "98d57a4e45b11113366315510c596444dd94dc264105db2a8a5e9d9f0a747296",
+      "bytes": 9327,
+      "previousSha256": "98d57a4e45b11113366315510c596444dd94dc264105db2a8a5e9d9f0a747296",
+      "changed": false
+    },
+    {
+      "route": "/docs/rust-guide/index.md",
+      "sha256": "58d18a4d00adc8aee9778b48db2d54822326b06921b65987a4109ddc840f3194",
+      "bytes": 5539,
+      "previousSha256": "58d18a4d00adc8aee9778b48db2d54822326b06921b65987a4109ddc840f3194",
+      "changed": false
+    },
+    {
+      "route": "/docs/templates/index.md",
+      "sha256": "d018874e701c5d033a7ca9863ecbd39378f24f1bb1d096fd244993e6d730dbaa",
+      "bytes": 5725,
+      "previousSha256": "c76ff0654af9c938570e2534a57fbd875d9b8a896373067d239ffbedfb0b95a2",
+      "changed": true
+    },
+    {
+      "route": "/docs/troubleshooting/index.md",
+      "sha256": "ed47bd814c901d4a4c69001b91d5e00c89deaef5c5ecfb77ccea8b54cc6d2286",
+      "bytes": 4380,
+      "previousSha256": "ed47bd814c901d4a4c69001b91d5e00c89deaef5c5ecfb77ccea8b54cc6d2286",
+      "changed": false
+    },
+    {
+      "route": "/docs/updates/index.md",
+      "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+      "bytes": 8070,
+      "previousSha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+      "changed": false
+    },
+    {
+      "route": "/es/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "c9f9d4175f9c8b4c1f6ba55b2bc5763faba2b5746bb83c165481aa2b29c1bba1",
+      "bytes": 3700,
+      "previousSha256": "17f7f5408b3cefcc1dc8d5cff2d95a64b245e6d993c5c0a0e5640a934416002f",
+      "changed": true
+    },
+    {
+      "route": "/es/blog/your-first-anki-deck/index.md",
+      "sha256": "811e0eeb6867bd23a928e9087268ed17d24164c05ccd997c3ad8878110bd495c",
+      "bytes": 3529,
+      "previousSha256": "811e0eeb6867bd23a928e9087268ed17d24164c05ccd997c3ad8878110bd495c",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/ai-anki-cards/index.md",
+      "sha256": "99743cb1706d0b12b1ecb2ace07456115532e55fccfe49e98ef701593f967c70",
+      "bytes": 5045,
+      "previousSha256": "99743cb1706d0b12b1ecb2ace07456115532e55fccfe49e98ef701593f967c70",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "685f1b29250d95b56ab233dfb6ce71050f979a6a78b62f711121966cba8b0017",
+      "bytes": 4981,
+      "previousSha256": "1751babf393a61988a9f057ce42511b4a931922c6c7688098a85c9cd36e371c6",
+      "changed": true
+    },
+    {
+      "route": "/es/docs/api/index.md",
+      "sha256": "d6a2df886ad2d8d95711a031f995bbd9ed717d50c2333b2f536123fa089989ca",
+      "bytes": 2407,
+      "previousSha256": "d6a2df886ad2d8d95711a031f995bbd9ed717d50c2333b2f536123fa089989ca",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/build-guarantees/index.md",
+      "sha256": "7684ab5b8c7297cd31bafd5da3a090a81752562f12e2b9d09652fdc1ccea8f82",
+      "bytes": 7110,
+      "previousSha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe",
+      "changed": true
+    },
+    {
+      "route": "/es/docs/cards/index.md",
+      "sha256": "a725e95db861f7275481cbcbe2f4d93a756f9504beaa95efcb9f91b833b50c21",
+      "bytes": 3222,
+      "previousSha256": "a725e95db861f7275481cbcbe2f4d93a756f9504beaa95efcb9f91b833b50c21",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/compatibility/index.md",
+      "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+      "bytes": 4040,
+      "previousSha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/concepts/index.md",
+      "sha256": "f2d42f3acc058095a096bfcd47263e275e1837c62e29401f42bcc282e8839757",
+      "bytes": 4368,
+      "previousSha256": "f2d42f3acc058095a096bfcd47263e275e1837c62e29401f42bcc282e8839757",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/csv-to-anki/index.md",
+      "sha256": "c0636dd2ac60d9b20c62ede43d226f43de4e43bee6982146670fc0ac05623b02",
+      "bytes": 6215,
+      "previousSha256": "c0636dd2ac60d9b20c62ede43d226f43de4e43bee6982146670fc0ac05623b02",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/custom-notetypes/index.md",
+      "sha256": "cd79fd039a0bc5444f14fda465ef813231ee14c296184668ff0fbe5d66e0d5cf",
+      "bytes": 4042,
+      "previousSha256": "cd79fd039a0bc5444f14fda465ef813231ee14c296184668ff0fbe5d66e0d5cf",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/development/index.md",
+      "sha256": "4ba123d0ebdd9c92084656cad77d701230ee4b32cda03ebc0bbc34774863ae96",
+      "bytes": 2264,
+      "previousSha256": "4ba123d0ebdd9c92084656cad77d701230ee4b32cda03ebc0bbc34774863ae96",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/genanki-migration/index.md",
+      "sha256": "725f3857424a3acc6aca08f222685a0548b65293ea7b1e99ccbbd4bbfb6edc56",
+      "bytes": 4260,
+      "previousSha256": "725f3857424a3acc6aca08f222685a0548b65293ea7b1e99ccbbd4bbfb6edc56",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/image-occlusion/index.md",
+      "sha256": "32dc813fb179accd309e7029424cb03587112bea4db10761b359627882f038f6",
+      "bytes": 4351,
+      "previousSha256": "32dc813fb179accd309e7029424cb03587112bea4db10761b359627882f038f6",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/index.md",
+      "sha256": "cc78c766b4da6e90411988938c404247f4561f076f9b825c334acef94a6bf5c1",
+      "bytes": 3834,
+      "previousSha256": "cc78c766b4da6e90411988938c404247f4561f076f9b825c334acef94a6bf5c1",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/installation/index.md",
+      "sha256": "c2684786f4b65987f50ffbad71514f588156472cbcaf6801a35ccc55b3acd70a",
+      "bytes": 2435,
+      "previousSha256": "c2684786f4b65987f50ffbad71514f588156472cbcaf6801a35ccc55b3acd70a",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/json-to-anki/index.md",
+      "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+      "bytes": 11911,
+      "previousSha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/languages/index.md",
+      "sha256": "4bc4d5ac42b66a76bb63c300af3b6c373a25bd8c572ece54e2bb27509cab1c63",
+      "bytes": 2339,
+      "previousSha256": "4bc4d5ac42b66a76bb63c300af3b6c373a25bd8c572ece54e2bb27509cab1c63",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/media/index.md",
+      "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+      "bytes": 9814,
+      "previousSha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/node-api/index.md",
+      "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+      "bytes": 15825,
+      "previousSha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/node-quickstart/index.md",
+      "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+      "bytes": 2574,
+      "previousSha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/python-api/index.md",
+      "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+      "bytes": 11256,
+      "previousSha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/python-diagnostics/index.md",
+      "sha256": "71a0a087d4474e98868848e0dcefedd32067b8a01ab7cd49b1774a0ae5532f83",
+      "bytes": 6483,
+      "previousSha256": "71a0a087d4474e98868848e0dcefedd32067b8a01ab7cd49b1774a0ae5532f83",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/python-migration/index.md",
+      "sha256": "ee0155e3d170643f6e8204354f9ab3152a8b91256dfeeb8b5e32c664afb490e5",
+      "bytes": 2497,
+      "previousSha256": "ee0155e3d170643f6e8204354f9ab3152a8b91256dfeeb8b5e32c664afb490e5",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/python-quickstart/index.md",
+      "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+      "bytes": 2601,
+      "previousSha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/quickstart/index.md",
+      "sha256": "42f01fa3284bb45f1f1b2c2d677092554bb6b41083b66964ed23567128ac419e",
+      "bytes": 2046,
+      "previousSha256": "42f01fa3284bb45f1f1b2c2d677092554bb6b41083b66964ed23567128ac419e",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/rust-api/index.md",
+      "sha256": "da277a083aa616be09ba8696c522f8cced4d7b613619d521fd301acedce5a03c",
+      "bytes": 11244,
+      "previousSha256": "da277a083aa616be09ba8696c522f8cced4d7b613619d521fd301acedce5a03c",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/rust-guide/index.md",
+      "sha256": "205b0d8e65cc17f0e56755dc0e178d5e38bcdc52d2520f28795a78c2fdaa76be",
+      "bytes": 6911,
+      "previousSha256": "205b0d8e65cc17f0e56755dc0e178d5e38bcdc52d2520f28795a78c2fdaa76be",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/templates/index.md",
+      "sha256": "6659e01328ade2f67b2fae0b87eb79b13445647efd5b3a27f80e7f556e39c8be",
+      "bytes": 6702,
+      "previousSha256": "6659e01328ade2f67b2fae0b87eb79b13445647efd5b3a27f80e7f556e39c8be",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/troubleshooting/index.md",
+      "sha256": "092ff59b379d229faf9f469a549b19db43b3662cfe0590e170262ab70ea44a69",
+      "bytes": 5616,
+      "previousSha256": "092ff59b379d229faf9f469a549b19db43b3662cfe0590e170262ab70ea44a69",
+      "changed": false
+    },
+    {
+      "route": "/es/docs/updates/index.md",
+      "sha256": "5cdaee4d0df61bd235a7c3926c2738495fb6dc007c9793da1823edfba550d74d",
+      "bytes": 9341,
+      "previousSha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391",
+      "changed": true
+    },
+    {
+      "route": "/es/llms.txt",
+      "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018",
+      "bytes": 7283,
+      "previousSha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018",
+      "changed": false
+    },
+    {
+      "route": "/ja/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "07deb43b3afd49c654c07808ad09c1d4303c835f7d82eff2fc9d425c4a98c48d",
+      "bytes": 4247,
+      "previousSha256": "c284b5d2ca5d730a3cb4ef0823fcd9ba41ee2220483a2b226a6816dcde4691fd",
+      "changed": true
+    },
+    {
+      "route": "/ja/blog/your-first-anki-deck/index.md",
+      "sha256": "233ed098db8f49eda8c1de204b3dbe5ecc4482f239e86ceeb3125df1303eceda",
+      "bytes": 4002,
+      "previousSha256": "233ed098db8f49eda8c1de204b3dbe5ecc4482f239e86ceeb3125df1303eceda",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/ai-anki-cards/index.md",
+      "sha256": "a332335461cfca2b750f06097a027de647b917bb76884a5dffd39aa77127570e",
+      "bytes": 5546,
+      "previousSha256": "a332335461cfca2b750f06097a027de647b917bb76884a5dffd39aa77127570e",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "08138f738270414c83b5f84855b712b05256f7f4978cd068b09bd88f457b02c2",
+      "bytes": 5144,
+      "previousSha256": "08138f738270414c83b5f84855b712b05256f7f4978cd068b09bd88f457b02c2",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/api/index.md",
+      "sha256": "5a1df645c38d4726f0dd42fc214adfa7466596a82fcea3e48255a483c2413240",
+      "bytes": 2456,
+      "previousSha256": "5a1df645c38d4726f0dd42fc214adfa7466596a82fcea3e48255a483c2413240",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/build-guarantees/index.md",
+      "sha256": "2f37e2cd091003ea06f5c6747241fa4d62f98bead59f64e244ced6aac21dee1e",
+      "bytes": 7790,
+      "previousSha256": "1ec193978555d167ed33cf51acabe2c766bbc845eddd60e4a24ac819165239df",
+      "changed": true
+    },
+    {
+      "route": "/ja/docs/cards/index.md",
+      "sha256": "9a165ffe136ca4b48efde0ddf0d98e032aacd6de40b87a2671b185e4d344fd98",
+      "bytes": 3589,
+      "previousSha256": "9a165ffe136ca4b48efde0ddf0d98e032aacd6de40b87a2671b185e4d344fd98",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/compatibility/index.md",
+      "sha256": "2a518df085892fd262eaf2d262ba09b923f7aa9419be6c9b803150d5b5a4e541",
+      "bytes": 4223,
+      "previousSha256": "f0b20be5b8fa0d92d3bddc9e5ac4151c26c3aef76e29ec6fe31e2b0f3797753a",
+      "changed": true
+    },
+    {
+      "route": "/ja/docs/concepts/index.md",
+      "sha256": "138ed421c4c307d615b9a99f2837cb479300e518b5ea916c5a28e1776aee7b74",
+      "bytes": 4808,
+      "previousSha256": "138ed421c4c307d615b9a99f2837cb479300e518b5ea916c5a28e1776aee7b74",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/csv-to-anki/index.md",
+      "sha256": "ca6f99906e33d492a396ea36a7583ddc989ee17e076d8300953954286a8da965",
+      "bytes": 6939,
+      "previousSha256": "ca6f99906e33d492a396ea36a7583ddc989ee17e076d8300953954286a8da965",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/custom-notetypes/index.md",
+      "sha256": "951f34f55743ef8c447cd08e34c6962d71e63b2a3bafadc5cb796f58ecee84b2",
+      "bytes": 4475,
+      "previousSha256": "951f34f55743ef8c447cd08e34c6962d71e63b2a3bafadc5cb796f58ecee84b2",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/development/index.md",
+      "sha256": "ffd9a695ade9532f08df3347351d3cfb33ef068a186f40f02cd38114e10e51ee",
+      "bytes": 2609,
+      "previousSha256": "ffd9a695ade9532f08df3347351d3cfb33ef068a186f40f02cd38114e10e51ee",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/genanki-migration/index.md",
+      "sha256": "da49c391ba6b6d46e1a491e969009f51b9ccbcf51d9f418e5c592ac3937c6665",
+      "bytes": 4509,
+      "previousSha256": "da49c391ba6b6d46e1a491e969009f51b9ccbcf51d9f418e5c592ac3937c6665",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/image-occlusion/index.md",
+      "sha256": "285bc9c4fb94d4e0cbf3c87fd497be73e3326cd3954c96e401b65dab7c0362a8",
+      "bytes": 4538,
+      "previousSha256": "285bc9c4fb94d4e0cbf3c87fd497be73e3326cd3954c96e401b65dab7c0362a8",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/index.md",
+      "sha256": "5e8316d9aeaa36378e4646bb00883b7a1ab9c18d3a3eecf311250f900f0bc087",
+      "bytes": 4360,
+      "previousSha256": "5e8316d9aeaa36378e4646bb00883b7a1ab9c18d3a3eecf311250f900f0bc087",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/installation/index.md",
+      "sha256": "a845d504d14b9f5fa795ccd492fbb1675f77953d166c443b85f5ccc8736e78b7",
+      "bytes": 2604,
+      "previousSha256": "e5ccefea0c053ef1d9fcfff76799bb13484bee21adc6f5dcbcf412628e00da79",
+      "changed": true
+    },
+    {
+      "route": "/ja/docs/json-to-anki/index.md",
+      "sha256": "1ba2d24ca1b9ed277b5676b4d8229eac98b9ed3ff6bfcae8d4b5bd6a312a665d",
+      "bytes": 12896,
+      "previousSha256": "ee8ff705d6daeb1cd4c33dd876500c8c62803c650d8df0952805597698b13a85",
+      "changed": true
+    },
+    {
+      "route": "/ja/docs/languages/index.md",
+      "sha256": "717d18efc700ee52ebe222e275fdc4851cdf09cd5f9fdf21006d15a26adf37f0",
+      "bytes": 2677,
+      "previousSha256": "717d18efc700ee52ebe222e275fdc4851cdf09cd5f9fdf21006d15a26adf37f0",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/media/index.md",
+      "sha256": "78905d1b18380ef50349d2d7111d7c69838fb0702ae5b29705378d04a2f7fbca",
+      "bytes": 11313,
+      "previousSha256": "a7bd520695674de521f87dddcddbf412041dfab5b702937d89b2c7428968821e",
+      "changed": true
+    },
+    {
+      "route": "/ja/docs/node-api/index.md",
+      "sha256": "1a2dcc809248fc660ae81f50151815b6dbf85f9bb6ac72e5268304b70510f3ae",
+      "bytes": 17222,
+      "previousSha256": "eee60e6c3f13dd1fd655017cdd58bd54d9159fd78c561558dcda452dc6c0a546",
+      "changed": true
+    },
+    {
+      "route": "/ja/docs/node-quickstart/index.md",
+      "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6",
+      "bytes": 2860,
+      "previousSha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/python-api/index.md",
+      "sha256": "b8233fc2436667a20e66f3106061d3017d19ab09c732db47518a1fda76b72096",
+      "bytes": 12978,
+      "previousSha256": "79ac029749ef1f2f0489447a85f1b61d969a76e619c760df478c2ea60772ab0d",
+      "changed": true
+    },
+    {
+      "route": "/ja/docs/python-diagnostics/index.md",
+      "sha256": "d6df1f9e58a2ca63149e935e4e77447e642860894446a80ccf10914b7bf65038",
+      "bytes": 6836,
+      "previousSha256": "d6df1f9e58a2ca63149e935e4e77447e642860894446a80ccf10914b7bf65038",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/python-migration/index.md",
+      "sha256": "3541714fd704afd5a25990680548f43a50a8bba6f0f7df4b9918ffc90b465534",
+      "bytes": 2655,
+      "previousSha256": "32c6100954fb72b8e9fb51eb6d28f22fd52746c780a42acb0698f00ebac31787",
+      "changed": true
+    },
+    {
+      "route": "/ja/docs/python-quickstart/index.md",
+      "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+      "bytes": 2867,
+      "previousSha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/quickstart/index.md",
+      "sha256": "947d442d86cfa882c7ded390c683354088176d692f7e0b23f1db1d79927ea6db",
+      "bytes": 2405,
+      "previousSha256": "0f8a8a7b2573e65a2cca84486b97ca39265b9110ff01cff5ac9aeee15c4d769b",
+      "changed": true
+    },
+    {
+      "route": "/ja/docs/rust-api/index.md",
+      "sha256": "cff005643d66a68633d81d832a0286b39347097da02bac9cae2e5c08443eafad",
+      "bytes": 12253,
+      "previousSha256": "19020cb9a96d5299ae332e54d0b396cd8e967159d0af254a5db5eb3ba2f0535f",
+      "changed": true
+    },
+    {
+      "route": "/ja/docs/rust-guide/index.md",
+      "sha256": "44c4b12aedda29bafc831a0769b3665afcaf1e508d9e69debacd0abc40c013df",
+      "bytes": 7607,
+      "previousSha256": "44c4b12aedda29bafc831a0769b3665afcaf1e508d9e69debacd0abc40c013df",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/templates/index.md",
+      "sha256": "7f0a1091236256bb74c9896008a38b91ff0f2fa242fcba9cc9d65d45e407b585",
+      "bytes": 7414,
+      "previousSha256": "7f0a1091236256bb74c9896008a38b91ff0f2fa242fcba9cc9d65d45e407b585",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/troubleshooting/index.md",
+      "sha256": "b3a4689f138cda1a0761d132f23054b97f3f76d54dc40adc43748cfc6358166c",
+      "bytes": 6161,
+      "previousSha256": "b3a4689f138cda1a0761d132f23054b97f3f76d54dc40adc43748cfc6358166c",
+      "changed": false
+    },
+    {
+      "route": "/ja/docs/updates/index.md",
+      "sha256": "c105253030b4a9570a219cd13b0265fcfff5485bc7f45174664311a867d93f6b",
+      "bytes": 10399,
+      "previousSha256": "3b49f7aec157c4441c1a464e85af297756406b11556bd2a23973efd28955e550",
+      "changed": true
+    },
+    {
+      "route": "/ja/llms.txt",
+      "sha256": "9eaf1d4a8c6c9b855c9df7ed33bac169659f9d461a099b44c3e7a30aba2ac887",
+      "bytes": 7718,
+      "previousSha256": "ae4d3f3686cf14f64b9dfd0971dc7fb47b477a1145dfac5866a58431a20675ae",
+      "changed": true
+    },
+    {
+      "route": "/llms.txt",
+      "sha256": "4600e2649769c6685b9a21f46cf10857f13526763ec33d993f439743ae9a3262",
+      "bytes": 6099,
+      "previousSha256": "86bf5ec22c73ac98c2f908f0a10553556624781216cca7d9b1a58bc94341201a",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "ef4552b9ce61d45d075fc7a98702c3ce5fc30fc50ad175dbb504025075842a17",
+      "bytes": 3503,
+      "previousSha256": "157bf6058438b9e6781e6c6c97103cae55145c270f61d628380980f7a0bfe09a",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/blog/your-first-anki-deck/index.md",
+      "sha256": "539f03df2a9742030bc99fb07ee48880d573668212f14b19f3e0a1356a6e30b0",
+      "bytes": 3467,
+      "previousSha256": "539f03df2a9742030bc99fb07ee48880d573668212f14b19f3e0a1356a6e30b0",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/ai-anki-cards/index.md",
+      "sha256": "befedb5ad91afd444191a8637da2d6fcd68f2c38fe9f66f4cb1f4ecb3c5872f2",
+      "bytes": 4870,
+      "previousSha256": "befedb5ad91afd444191a8637da2d6fcd68f2c38fe9f66f4cb1f4ecb3c5872f2",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "2ec11a06b544ce3008769c15e36e1d9a9a0046fcc8067bc76a1ee4054732edff",
+      "bytes": 4894,
+      "previousSha256": "c98ec976915b43039d579d36ac1c7a23ec2804a1bd8aa7a11f164755826c9d8a",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/docs/api/index.md",
+      "sha256": "eea15016df138379457402afc4cb5eb552914634d7b00e4ad4874827c1f5d893",
+      "bytes": 2371,
+      "previousSha256": "eea15016df138379457402afc4cb5eb552914634d7b00e4ad4874827c1f5d893",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/build-guarantees/index.md",
+      "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa",
+      "bytes": 6678,
+      "previousSha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/cards/index.md",
+      "sha256": "fbec8e6e531a78944a2a248b3e08f89a929d9e57013947f50c9d90654051d055",
+      "bytes": 3151,
+      "previousSha256": "fbec8e6e531a78944a2a248b3e08f89a929d9e57013947f50c9d90654051d055",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/compatibility/index.md",
+      "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+      "bytes": 4003,
+      "previousSha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/concepts/index.md",
+      "sha256": "466336d94d0e35ea6ecc8b1a7f88d54a41908ea15b8d71e9b3990d8c6d809553",
+      "bytes": 4126,
+      "previousSha256": "466336d94d0e35ea6ecc8b1a7f88d54a41908ea15b8d71e9b3990d8c6d809553",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/csv-to-anki/index.md",
+      "sha256": "99c31d0a161dc92ab8a84506c46ae7186c2dc4e1c1b6487461f531d892588a5a",
+      "bytes": 6113,
+      "previousSha256": "99c31d0a161dc92ab8a84506c46ae7186c2dc4e1c1b6487461f531d892588a5a",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/custom-notetypes/index.md",
+      "sha256": "7f2254228555653ee2c603fc13f71ab58dcd59d7620eb3faa50cdb7fb6cdbedd",
+      "bytes": 3923,
+      "previousSha256": "8112b3683338b2ea4407197cb42d92058aab757b098a9fee1c2a290da65ab085",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/docs/development/index.md",
+      "sha256": "256264e9e0723f07ef493842e2dc0570c239dd7a4862aee5b7e6c2e9e7fff1c1",
+      "bytes": 2178,
+      "previousSha256": "256264e9e0723f07ef493842e2dc0570c239dd7a4862aee5b7e6c2e9e7fff1c1",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/genanki-migration/index.md",
+      "sha256": "cd0ff2962e9953e2b9b3cf7fcc75a5534704f2355f880e39ee64befd9235d425",
+      "bytes": 4146,
+      "previousSha256": "e2561e93b9fe7b2fe5b65d557070bd8461058631d1714da1493da59190871ab5",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/docs/image-occlusion/index.md",
+      "sha256": "52c32f7ae04e20fbc1ce364d923f88720b3fdd428746e9a572f70f1fd53be07d",
+      "bytes": 4155,
+      "previousSha256": "52c32f7ae04e20fbc1ce364d923f88720b3fdd428746e9a572f70f1fd53be07d",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/index.md",
+      "sha256": "b98f147a23e0454c96cd95894d1a786338c9685cc83363fed802e14c5de391af",
+      "bytes": 3884,
+      "previousSha256": "8eb6e083e2825d58ba7f45c0535a5d39e5ce879f6760f03a82a2e1597734ec24",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/docs/installation/index.md",
+      "sha256": "0bb2de60760a99080fac163b2025adcac5664d0a3e3d454260e641f7abe3f028",
+      "bytes": 2291,
+      "previousSha256": "a4e048e711cc2b6b627830fef6a114586abbab0c3974ccd11309873e5ae205be",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/docs/json-to-anki/index.md",
+      "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+      "bytes": 11905,
+      "previousSha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/languages/index.md",
+      "sha256": "5ae18762cb7c406ef648adbc31777a223e129727499d3083c8dae127cadf49f7",
+      "bytes": 2423,
+      "previousSha256": "5ae18762cb7c406ef648adbc31777a223e129727499d3083c8dae127cadf49f7",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/media/index.md",
+      "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992",
+      "bytes": 9379,
+      "previousSha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/node-api/index.md",
+      "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+      "bytes": 14985,
+      "previousSha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/node-quickstart/index.md",
+      "sha256": "cfc3e49900f057f24d02d19bf3949a06550fbf2d37bc7d5b64ccb50337a3060e",
+      "bytes": 2543,
+      "previousSha256": "39be759ea766c72ed9cefaa0de126ac6143a9c4f166031516a15cce7ef7f11b8",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/docs/python-api/index.md",
+      "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328",
+      "bytes": 10520,
+      "previousSha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/python-diagnostics/index.md",
+      "sha256": "6fabf0647bbffeb9be03f960b842e24fd41c9e5f191b62b1c75d54b69e41314f",
+      "bytes": 6012,
+      "previousSha256": "6fabf0647bbffeb9be03f960b842e24fd41c9e5f191b62b1c75d54b69e41314f",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/python-migration/index.md",
+      "sha256": "3dda20b1f9364411df0b92799faa9ad4c2393d3299175388d3d2b5d79176a6b6",
+      "bytes": 2519,
+      "previousSha256": "8bf727800d7731622011849010832598f44efdf7ccc6f1cbb88d3bbeb80225ca",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/docs/python-quickstart/index.md",
+      "sha256": "934645ffd2b7bd299886c13d6c683c75587b58b323e787e0859e1c2e60520721",
+      "bytes": 2604,
+      "previousSha256": "1af1aa375d9b8921627b6bf6244e4af65f2f9e91b07ab7ad47a1b6a528df9a48",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/docs/quickstart/index.md",
+      "sha256": "2218cb33224bfbe1c126b9ff625b717efd67a836dbae439ba46d422ff9ff609c",
+      "bytes": 2049,
+      "previousSha256": "2218cb33224bfbe1c126b9ff625b717efd67a836dbae439ba46d422ff9ff609c",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/rust-api/index.md",
+      "sha256": "519e42693a5323ae999fc3404afdc99160b044c5891a8265b2daae2724f6694d",
+      "bytes": 10681,
+      "previousSha256": "519e42693a5323ae999fc3404afdc99160b044c5891a8265b2daae2724f6694d",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/rust-guide/index.md",
+      "sha256": "34ae80ef14e2f28fe44eb369fca33ae4fd6e9e560e17d08ec99a19491fc1cec6",
+      "bytes": 6448,
+      "previousSha256": "34ae80ef14e2f28fe44eb369fca33ae4fd6e9e560e17d08ec99a19491fc1cec6",
+      "changed": false
+    },
+    {
+      "route": "/pt-br/docs/templates/index.md",
+      "sha256": "d20a9a8f6f57d0102f15cd0020009737856a9a135887f211b0cc5031877d82ee",
+      "bytes": 6405,
+      "previousSha256": "3b1c1ce70b969eccb92a067ffc852d66309668c1e07260c36848957acc16daa9",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/docs/troubleshooting/index.md",
+      "sha256": "69007540d7bfd207cceea4cc219475709ba6e224c6211790a9b231efd9ce7cc9",
+      "bytes": 5499,
+      "previousSha256": "e9963adc2af3fe64e74d7d799905d4d0a6864a9c7a99d2bbd81ddad4c6de5caf",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/docs/updates/index.md",
+      "sha256": "c0431d013d92d8e8b94c24001c80c38a5b1a69f3a002e9d4d713ee25fea8826d",
+      "bytes": 9161,
+      "previousSha256": "9dcb9de8b4c7af06f7faf76293c7d7bdbd9de98c7f7ceb3d2decbaedfca30fc7",
+      "changed": true
+    },
+    {
+      "route": "/pt-br/llms.txt",
+      "sha256": "83727724cc57580fa3b64695c20ab86fceb764a749f65053b991205916a1c928",
+      "bytes": 7227,
+      "previousSha256": "d23c055a04657fba00c21cf67e32ee53fbaa73223334821704eab944406325dc",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "096b5e73dba07ac3de05e0e0c5c0556eda6733000c91d1955a55ba544915fd39",
+      "bytes": 2755,
+      "previousSha256": "50cd652ceef20a48a4c74610a19398b231959ffb9d4dd4076b7337ff7e315161",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/blog/your-first-anki-deck/index.md",
+      "sha256": "e82bf53033a3cd2a15d4e2c92dcc936b0be2fb575b83f8e12e78f9e40ef28291",
+      "bytes": 2912,
+      "previousSha256": "e82bf53033a3cd2a15d4e2c92dcc936b0be2fb575b83f8e12e78f9e40ef28291",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/ai-anki-cards/index.md",
+      "sha256": "d41495f72cf015aaa880eb9d85b41be3002512d9997c148bee6da0b4b3086ac6",
+      "bytes": 4093,
+      "previousSha256": "d41495f72cf015aaa880eb9d85b41be3002512d9997c148bee6da0b4b3086ac6",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "4dd2864f6a017f4050296f40525f9d0240594f8f4e613c833f063f5217e8351e",
+      "bytes": 3624,
+      "previousSha256": "461f89203af0dc34a83d059cb9d4d3903ad5d3e163a502cfe2dd5b5566a685fd",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/api/index.md",
+      "sha256": "85b910056bff07406aa95622d2d1fa621c6e26d058b4e43f66509ede662d0b27",
+      "bytes": 2010,
+      "previousSha256": "22b2a28e881312cdf227c8b23bb9fc7c451c06890980ff47cc0979c40ed0a0bd",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "sha256": "7bd8533c81b0deff674e1bb630453308d56f1e2fa11f434c313f4935aa63a410",
+      "bytes": 4875,
+      "previousSha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/cards/index.md",
+      "sha256": "46ceeb701e734b6f104492c2eef7678596fcfa768407346cc53aa00094dac378",
+      "bytes": 2839,
+      "previousSha256": "46ceeb701e734b6f104492c2eef7678596fcfa768407346cc53aa00094dac378",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "sha256": "754f2bcf9e5dd030f568068ef4d527e8184ab10265cc39c9bce614d2e191a79d",
+      "bytes": 3129,
+      "previousSha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/concepts/index.md",
+      "sha256": "6ef6c478b4cf71c9f71e4dffb5f17dc7b9fd51200803450a953e0442b7ae53ee",
+      "bytes": 3119,
+      "previousSha256": "b964d090bf2700988229952e67365f4a3f4948328b925ba0f50a54783df89778",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/csv-to-anki/index.md",
+      "sha256": "be2d5b64a5df7d603129517e460cad11fbac5c6a4e7037b94381fd94e0041428",
+      "bytes": 5493,
+      "previousSha256": "be2d5b64a5df7d603129517e460cad11fbac5c6a4e7037b94381fd94e0041428",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/custom-notetypes/index.md",
+      "sha256": "f34dd1c38da4a42edbdceff9116ea9da2b09fb734a65a41fb317cd656741d682",
+      "bytes": 3186,
+      "previousSha256": "f34dd1c38da4a42edbdceff9116ea9da2b09fb734a65a41fb317cd656741d682",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/development/index.md",
+      "sha256": "956050812e0c79f55142ea8365b5950c92200361fc213083eb4e8deadbf7f07a",
+      "bytes": 1813,
+      "previousSha256": "956050812e0c79f55142ea8365b5950c92200361fc213083eb4e8deadbf7f07a",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/genanki-migration/index.md",
+      "sha256": "5edc72249a4bd8d0426d73495a323909161890811ec107254b4b5184cfaa4e22",
+      "bytes": 3295,
+      "previousSha256": "91dd3c944180673b82f7fcd52b7bb4f24426e859398de6c6b98ca9c83bfbca10",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/image-occlusion/index.md",
+      "sha256": "9e799305a38afa3142a800041f4305b28234ef92c606f7cf1490e7aade238e88",
+      "bytes": 3628,
+      "previousSha256": "9e799305a38afa3142a800041f4305b28234ef92c606f7cf1490e7aade238e88",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/index.md",
+      "sha256": "aa51e5ee475f881619fba6741129da7385033b4ffaf200b716797dbc45d8582f",
+      "bytes": 3165,
+      "previousSha256": "30ee017d9f493d9ac91cb82a4c61c05001d36c96fb57819394134b9151636a98",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/installation/index.md",
+      "sha256": "765e38ed56cb05e700407fc64521b27c3722ed8fa4a0a5ba96f9fc930b167179",
+      "bytes": 1768,
+      "previousSha256": "c92a6acb0d2d7763e39d59b1d6e6cb9b75b9f0ba2342c94ca417a9737b69fb98",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/json-to-anki/index.md",
+      "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+      "bytes": 11012,
+      "previousSha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/languages/index.md",
+      "sha256": "bd745fd45a07f2e3cbc7a3c326ce0f4af98466ba7dd96384e298d75e206ce504",
+      "bytes": 2049,
+      "previousSha256": "bd745fd45a07f2e3cbc7a3c326ce0f4af98466ba7dd96384e298d75e206ce504",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/media/index.md",
+      "sha256": "38ede3dc1c21a7d7f73548b5bc7da8da5a5214e7f283cdfd4b88f2db8c2c00a6",
+      "bytes": 7862,
+      "previousSha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/node-api/index.md",
+      "sha256": "bc69ec3d73a3402dc711c5c2b2d3efb6391d7188999ac5d0018e436c85917707",
+      "bytes": 12221,
+      "previousSha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/node-quickstart/index.md",
+      "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+      "bytes": 2260,
+      "previousSha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/python-api/index.md",
+      "sha256": "2674b401ac8bec3cdfb323e9db7e810217036c8a8c4b70d1e8afacd0db245f71",
+      "bytes": 8604,
+      "previousSha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/python-diagnostics/index.md",
+      "sha256": "46f5f8cbb5940413144a44cdcd7e54707a896b8b5d83f86bddda4ee629a312c0",
+      "bytes": 4744,
+      "previousSha256": "f2cf9f19e3820a65520b68f835f24ee2c7216f191393eb7496e2b25ba49a43ee",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/python-migration/index.md",
+      "sha256": "dee3ce5ae79e738bc309e44a3bed743f99f7bcc23aa228117e06d55349a0a95a",
+      "bytes": 1878,
+      "previousSha256": "b974fffe335a99894d210100f0171c21e7299ae013265eec61cd085b4344a890",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/python-quickstart/index.md",
+      "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+      "bytes": 2302,
+      "previousSha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/quickstart/index.md",
+      "sha256": "e8771b9e3b9b0e70e7ca09cbebc74fc6a80489d113f8d696521502beb0ceed23",
+      "bytes": 1828,
+      "previousSha256": "e8771b9e3b9b0e70e7ca09cbebc74fc6a80489d113f8d696521502beb0ceed23",
+      "changed": false
+    },
+    {
+      "route": "/zh-cn/docs/rust-api/index.md",
+      "sha256": "fe5b4e2084bf2006761490e4d24953947ce1b5ca47d4972acbcbcf7780b61b10",
+      "bytes": 8737,
+      "previousSha256": "5f7cb36f50163e1ab80da13727d6808a8acc92f7b309155883a61d264eeec572",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/rust-guide/index.md",
+      "sha256": "9f1d5eb72f0c176a4a4e2641a8b142155b1ec524deb4302a9932295794e8ea7b",
+      "bytes": 5150,
+      "previousSha256": "f1ecb13c0ba1c9c8468daccbc20caf7a19e6eed9e0a6ac91dc04bd52bfc994f7",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/templates/index.md",
+      "sha256": "54c1ed27fd40ab7f3cba77256cb62f552df1061100f6eebff4d0ed5a2c37ca33",
+      "bytes": 5559,
+      "previousSha256": "31d7234cdf081f6a508a2247e7c06232ceb83c8ccaceb4a8640e4149f72e6157",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/troubleshooting/index.md",
+      "sha256": "98dd59ce04ff08ce201b869477b02181b2acdfb3916dabb9e8595285ed3c094a",
+      "bytes": 3954,
+      "previousSha256": "c161530b7a94a4f5cc66f8e4a7077a0e8301d5fbe904951ac7ed395e3161fabf",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/docs/updates/index.md",
+      "sha256": "fc34d69e7cc123937470cc608900659dd9f1619f81f7f69fca9f392d0fc4fe84",
+      "bytes": 7584,
+      "previousSha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408",
+      "changed": true
+    },
+    {
+      "route": "/zh-cn/llms.txt",
+      "sha256": "ecc97c9e1ecb1a9ee78b0e2503bf948dbf70c2908eeb8de705580cbf1880d346",
+      "bytes": 5964,
+      "previousSha256": "5c607b18eaf6ba236c2f3f1db26008befea37f87f73c2f7fe1e7a219ade5ff73",
+      "changed": true
+    }
+  ],
+  "responses": [
+    {
+      "url": "http://127.0.0.1:64269/llms.txt",
+      "route": "/llms.txt",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "sha256": "4600e2649769c6685b9a21f46cf10857f13526763ec33d993f439743ae9a3262",
+      "bytes": 6099,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/llms.txt"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/python-quickstart/index.md",
+      "route": "/docs/python-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+      "bytes": 2287,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__python-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/python-api/index.md",
+      "route": "/docs/python-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "858d8f0d0e84acb8e8510cf36d93a72978a2c802fab2ba338cb84927ecf4ebe5",
+      "bytes": 9287,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__python-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/compatibility/index.md",
+      "route": "/docs/compatibility/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+      "bytes": 3238,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__compatibility__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/node-api/index.md",
+      "route": "/docs/node-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+      "bytes": 13145,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__node-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/node-quickstart/index.md",
+      "route": "/docs/node-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+      "bytes": 2251,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__node-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/json-to-anki/index.md",
+      "route": "/docs/json-to-anki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+      "bytes": 11160,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__json-to-anki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/updates/index.md",
+      "route": "/docs/updates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+      "bytes": 8070,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__updates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/media/index.md",
+      "route": "/docs/media/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+      "bytes": 8154,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__media__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/build-guarantees/index.md",
+      "route": "/docs/build-guarantees/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "94419d340582f5c025883404e249782cdf254a3dab42a80a6f07b950f8aa6c9b",
+      "bytes": 5552,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__build-guarantees__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/llms.txt",
+      "route": "/zh-cn/llms.txt",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "sha256": "ecc97c9e1ecb1a9ee78b0e2503bf948dbf70c2908eeb8de705580cbf1880d346",
+      "bytes": 5964,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__llms.txt"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/python-quickstart/index.md",
+      "route": "/zh-cn/docs/python-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+      "bytes": 2302,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__python-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/python-api/index.md",
+      "route": "/zh-cn/docs/python-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "2674b401ac8bec3cdfb323e9db7e810217036c8a8c4b70d1e8afacd0db245f71",
+      "bytes": 8604,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__python-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/compatibility/index.md",
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "754f2bcf9e5dd030f568068ef4d527e8184ab10265cc39c9bce614d2e191a79d",
+      "bytes": 3129,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__compatibility__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/node-api/index.md",
+      "route": "/zh-cn/docs/node-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "bc69ec3d73a3402dc711c5c2b2d3efb6391d7188999ac5d0018e436c85917707",
+      "bytes": 12221,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__node-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/node-quickstart/index.md",
+      "route": "/zh-cn/docs/node-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+      "bytes": 2260,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__node-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/json-to-anki/index.md",
+      "route": "/zh-cn/docs/json-to-anki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+      "bytes": 11012,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__json-to-anki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/updates/index.md",
+      "route": "/zh-cn/docs/updates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "fc34d69e7cc123937470cc608900659dd9f1619f81f7f69fca9f392d0fc4fe84",
+      "bytes": 7584,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__updates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/media/index.md",
+      "route": "/zh-cn/docs/media/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "38ede3dc1c21a7d7f73548b5bc7da8da5a5214e7f283cdfd4b88f2db8c2c00a6",
+      "bytes": 7862,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__media__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/build-guarantees/index.md",
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "7bd8533c81b0deff674e1bb630453308d56f1e2fa11f434c313f4935aa63a410",
+      "bytes": 4875,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__build-guarantees__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/llms.txt",
+      "route": "/es/llms.txt",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018",
+      "bytes": 7283,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__llms.txt"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/docs/python-quickstart/index.md",
+      "route": "/es/docs/python-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+      "bytes": 2601,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__python-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/docs/python-api/index.md",
+      "route": "/es/docs/python-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+      "bytes": 11256,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__python-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/docs/compatibility/index.md",
+      "route": "/es/docs/compatibility/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+      "bytes": 4040,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__compatibility__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/docs/node-api/index.md",
+      "route": "/es/docs/node-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+      "bytes": 15825,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__node-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/docs/node-quickstart/index.md",
+      "route": "/es/docs/node-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+      "bytes": 2574,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__node-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/docs/json-to-anki/index.md",
+      "route": "/es/docs/json-to-anki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+      "bytes": 11911,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__json-to-anki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/docs/updates/index.md",
+      "route": "/es/docs/updates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "5cdaee4d0df61bd235a7c3926c2738495fb6dc007c9793da1823edfba550d74d",
+      "bytes": 9341,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__updates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/docs/media/index.md",
+      "route": "/es/docs/media/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+      "bytes": 9814,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__media__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/docs/build-guarantees/index.md",
+      "route": "/es/docs/build-guarantees/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "7684ab5b8c7297cd31bafd5da3a090a81752562f12e2b9d09652fdc1ccea8f82",
+      "bytes": 7110,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__build-guarantees__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/llms.txt",
+      "route": "/pt-br/llms.txt",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "sha256": "83727724cc57580fa3b64695c20ab86fceb764a749f65053b991205916a1c928",
+      "bytes": 7227,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__llms.txt"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/python-quickstart/index.md",
+      "route": "/pt-br/docs/python-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "934645ffd2b7bd299886c13d6c683c75587b58b323e787e0859e1c2e60520721",
+      "bytes": 2604,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__python-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/python-api/index.md",
+      "route": "/pt-br/docs/python-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328",
+      "bytes": 10520,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__python-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/compatibility/index.md",
+      "route": "/pt-br/docs/compatibility/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+      "bytes": 4003,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__compatibility__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/node-api/index.md",
+      "route": "/pt-br/docs/node-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+      "bytes": 14985,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__node-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/node-quickstart/index.md",
+      "route": "/pt-br/docs/node-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "cfc3e49900f057f24d02d19bf3949a06550fbf2d37bc7d5b64ccb50337a3060e",
+      "bytes": 2543,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__node-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/json-to-anki/index.md",
+      "route": "/pt-br/docs/json-to-anki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+      "bytes": 11905,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__json-to-anki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/updates/index.md",
+      "route": "/pt-br/docs/updates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "c0431d013d92d8e8b94c24001c80c38a5b1a69f3a002e9d4d713ee25fea8826d",
+      "bytes": 9161,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__updates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/media/index.md",
+      "route": "/pt-br/docs/media/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992",
+      "bytes": 9379,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__media__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/build-guarantees/index.md",
+      "route": "/pt-br/docs/build-guarantees/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa",
+      "bytes": 6678,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__build-guarantees__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/llms.txt",
+      "route": "/ja/llms.txt",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "sha256": "9eaf1d4a8c6c9b855c9df7ed33bac169659f9d461a099b44c3e7a30aba2ac887",
+      "bytes": 7718,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__llms.txt"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/python-quickstart/index.md",
+      "route": "/ja/docs/python-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+      "bytes": 2867,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__python-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/python-api/index.md",
+      "route": "/ja/docs/python-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "b8233fc2436667a20e66f3106061d3017d19ab09c732db47518a1fda76b72096",
+      "bytes": 12978,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__python-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/compatibility/index.md",
+      "route": "/ja/docs/compatibility/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "2a518df085892fd262eaf2d262ba09b923f7aa9419be6c9b803150d5b5a4e541",
+      "bytes": 4223,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__compatibility__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/node-api/index.md",
+      "route": "/ja/docs/node-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "1a2dcc809248fc660ae81f50151815b6dbf85f9bb6ac72e5268304b70510f3ae",
+      "bytes": 17222,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__node-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/node-quickstart/index.md",
+      "route": "/ja/docs/node-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6",
+      "bytes": 2860,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__node-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/json-to-anki/index.md",
+      "route": "/ja/docs/json-to-anki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "1ba2d24ca1b9ed277b5676b4d8229eac98b9ed3ff6bfcae8d4b5bd6a312a665d",
+      "bytes": 12896,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__json-to-anki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/updates/index.md",
+      "route": "/ja/docs/updates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "c105253030b4a9570a219cd13b0265fcfff5485bc7f45174664311a867d93f6b",
+      "bytes": 10399,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__updates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/media/index.md",
+      "route": "/ja/docs/media/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "78905d1b18380ef50349d2d7111d7c69838fb0702ae5b29705378d04a2f7fbca",
+      "bytes": 11313,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__media__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/build-guarantees/index.md",
+      "route": "/ja/docs/build-guarantees/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "2f37e2cd091003ea06f5c6747241fa4d62f98bead59f64e244ced6aac21dee1e",
+      "bytes": 7790,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__build-guarantees__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/llms.txt",
+      "route": "/de/llms.txt",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "sha256": "6a8d6aceb624007413b4a526095efe07f0f125ca13b3ddb8e3b04eb757fe21e2",
+      "bytes": 7150,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__llms.txt"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/python-quickstart/index.md",
+      "route": "/de/docs/python-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58",
+      "bytes": 2597,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__python-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/python-api/index.md",
+      "route": "/de/docs/python-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "3f56d144fe98f26665574be8e9e26ea626f922b22ca74d7627df31fe9911ce6e",
+      "bytes": 11445,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__python-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/compatibility/index.md",
+      "route": "/de/docs/compatibility/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3",
+      "bytes": 3875,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__compatibility__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/node-api/index.md",
+      "route": "/de/docs/node-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "a362ada18b093cb8ea50489e9ac2ed109a9ff128939cf0b5803fdf06766714a2",
+      "bytes": 15241,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__node-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/node-quickstart/index.md",
+      "route": "/de/docs/node-quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee",
+      "bytes": 2550,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__node-quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/json-to-anki/index.md",
+      "route": "/de/docs/json-to-anki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd",
+      "bytes": 12180,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__json-to-anki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/updates/index.md",
+      "route": "/de/docs/updates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e",
+      "bytes": 9535,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__updates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/media/index.md",
+      "route": "/de/docs/media/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "2814f56952a70007a26829fda320412bea55a8a81cbfbe243c6b398da5beb9a2",
+      "bytes": 9685,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__media__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/build-guarantees/index.md",
+      "route": "/de/docs/build-guarantees/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "0135842bceb327d0e81c75cbf649b59d15c662ea4d2384a67601bebefca2239e",
+      "bytes": 6728,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__build-guarantees__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/anki-forge-vs-genanki/index.md",
+      "route": "/de/docs/anki-forge-vs-genanki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "9907a06838bc03a792ad3c17429e01441d66766c8c71cc09088ac4d126c02c3c",
+      "bytes": 4806,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__anki-forge-vs-genanki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/concepts/index.md",
+      "route": "/de/docs/concepts/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "c71b2b650ba5e1ce7468de93d90d8c1bacb99434c89411dfebd68e4bfb188a20",
+      "bytes": 4154,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__concepts__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/csv-to-anki/index.md",
+      "route": "/de/docs/csv-to-anki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "1c2b209668a4332d1a76730e10b10fc4e152a99787a32194be576c48a367369d",
+      "bytes": 6348,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__csv-to-anki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/de/docs/installation/index.md",
+      "route": "/de/docs/installation/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "615a319483a1a14973c95d067a2aa6bbf2a15804bd10e4a6b2811f56a3eb0832",
+      "bytes": 2341,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__installation__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/cards/index.md",
+      "route": "/docs/cards/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "566996cebefbfb5c3381d376164b5a8e2897f0817d33bd22ec114ef3b3b61f28",
+      "bytes": 2915,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__cards__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/installation/index.md",
+      "route": "/docs/installation/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "e5f86c8b981d90f7986c901dda300b376d142e8539e0bbf3e6f7f6c5e1f4522b",
+      "bytes": 1908,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__installation__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/docs/templates/index.md",
+      "route": "/docs/templates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "d018874e701c5d033a7ca9863ecbd39378f24f1bb1d096fd244993e6d730dbaa",
+      "bytes": 5725,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__templates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/blog/stable-ids-and-deck-updates/index.md",
+      "route": "/es/blog/stable-ids-and-deck-updates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "c9f9d4175f9c8b4c1f6ba55b2bc5763faba2b5746bb83c165481aa2b29c1bba1",
+      "bytes": 3700,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__blog__stable-ids-and-deck-updates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/es/docs/anki-forge-vs-genanki/index.md",
+      "route": "/es/docs/anki-forge-vs-genanki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "685f1b29250d95b56ab233dfb6ce71050f979a6a78b62f711121966cba8b0017",
+      "bytes": 4981,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__anki-forge-vs-genanki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/blog/stable-ids-and-deck-updates/index.md",
+      "route": "/ja/blog/stable-ids-and-deck-updates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "07deb43b3afd49c654c07808ad09c1d4303c835f7d82eff2fc9d425c4a98c48d",
+      "bytes": 4247,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__blog__stable-ids-and-deck-updates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/installation/index.md",
+      "route": "/ja/docs/installation/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "a845d504d14b9f5fa795ccd492fbb1675f77953d166c443b85f5ccc8736e78b7",
+      "bytes": 2604,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__installation__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/python-migration/index.md",
+      "route": "/ja/docs/python-migration/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "3541714fd704afd5a25990680548f43a50a8bba6f0f7df4b9918ffc90b465534",
+      "bytes": 2655,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__python-migration__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/quickstart/index.md",
+      "route": "/ja/docs/quickstart/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "947d442d86cfa882c7ded390c683354088176d692f7e0b23f1db1d79927ea6db",
+      "bytes": 2405,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__quickstart__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/ja/docs/rust-api/index.md",
+      "route": "/ja/docs/rust-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "cff005643d66a68633d81d832a0286b39347097da02bac9cae2e5c08443eafad",
+      "bytes": 12253,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__rust-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/blog/stable-ids-and-deck-updates/index.md",
+      "route": "/pt-br/blog/stable-ids-and-deck-updates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "ef4552b9ce61d45d075fc7a98702c3ce5fc30fc50ad175dbb504025075842a17",
+      "bytes": 3503,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__blog__stable-ids-and-deck-updates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/anki-forge-vs-genanki/index.md",
+      "route": "/pt-br/docs/anki-forge-vs-genanki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "2ec11a06b544ce3008769c15e36e1d9a9a0046fcc8067bc76a1ee4054732edff",
+      "bytes": 4894,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__anki-forge-vs-genanki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/custom-notetypes/index.md",
+      "route": "/pt-br/docs/custom-notetypes/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "7f2254228555653ee2c603fc13f71ab58dcd59d7620eb3faa50cdb7fb6cdbedd",
+      "bytes": 3923,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__custom-notetypes__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/genanki-migration/index.md",
+      "route": "/pt-br/docs/genanki-migration/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "cd0ff2962e9953e2b9b3cf7fcc75a5534704f2355f880e39ee64befd9235d425",
+      "bytes": 4146,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__genanki-migration__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/index.md",
+      "route": "/pt-br/docs/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "b98f147a23e0454c96cd95894d1a786338c9685cc83363fed802e14c5de391af",
+      "bytes": 3884,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/installation/index.md",
+      "route": "/pt-br/docs/installation/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "0bb2de60760a99080fac163b2025adcac5664d0a3e3d454260e641f7abe3f028",
+      "bytes": 2291,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__installation__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/python-migration/index.md",
+      "route": "/pt-br/docs/python-migration/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "3dda20b1f9364411df0b92799faa9ad4c2393d3299175388d3d2b5d79176a6b6",
+      "bytes": 2519,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__python-migration__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/templates/index.md",
+      "route": "/pt-br/docs/templates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "d20a9a8f6f57d0102f15cd0020009737856a9a135887f211b0cc5031877d82ee",
+      "bytes": 6405,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__templates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/pt-br/docs/troubleshooting/index.md",
+      "route": "/pt-br/docs/troubleshooting/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "69007540d7bfd207cceea4cc219475709ba6e224c6211790a9b231efd9ce7cc9",
+      "bytes": 5499,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__troubleshooting__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "096b5e73dba07ac3de05e0e0c5c0556eda6733000c91d1955a55ba544915fd39",
+      "bytes": 2755,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__blog__stable-ids-and-deck-updates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "4dd2864f6a017f4050296f40525f9d0240594f8f4e613c833f063f5217e8351e",
+      "bytes": 3624,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__anki-forge-vs-genanki__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/api/index.md",
+      "route": "/zh-cn/docs/api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "85b910056bff07406aa95622d2d1fa621c6e26d058b4e43f66509ede662d0b27",
+      "bytes": 2010,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/concepts/index.md",
+      "route": "/zh-cn/docs/concepts/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "6ef6c478b4cf71c9f71e4dffb5f17dc7b9fd51200803450a953e0442b7ae53ee",
+      "bytes": 3119,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__concepts__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/genanki-migration/index.md",
+      "route": "/zh-cn/docs/genanki-migration/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "5edc72249a4bd8d0426d73495a323909161890811ec107254b4b5184cfaa4e22",
+      "bytes": 3295,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__genanki-migration__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/index.md",
+      "route": "/zh-cn/docs/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "aa51e5ee475f881619fba6741129da7385033b4ffaf200b716797dbc45d8582f",
+      "bytes": 3165,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/installation/index.md",
+      "route": "/zh-cn/docs/installation/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "765e38ed56cb05e700407fc64521b27c3722ed8fa4a0a5ba96f9fc930b167179",
+      "bytes": 1768,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__installation__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/python-diagnostics/index.md",
+      "route": "/zh-cn/docs/python-diagnostics/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "46f5f8cbb5940413144a44cdcd7e54707a896b8b5d83f86bddda4ee629a312c0",
+      "bytes": 4744,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__python-diagnostics__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/python-migration/index.md",
+      "route": "/zh-cn/docs/python-migration/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "dee3ce5ae79e738bc309e44a3bed743f99f7bcc23aa228117e06d55349a0a95a",
+      "bytes": 1878,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__python-migration__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/rust-api/index.md",
+      "route": "/zh-cn/docs/rust-api/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "fe5b4e2084bf2006761490e4d24953947ce1b5ca47d4972acbcbcf7780b61b10",
+      "bytes": 8737,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__rust-api__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/rust-guide/index.md",
+      "route": "/zh-cn/docs/rust-guide/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "9f1d5eb72f0c176a4a4e2641a8b142155b1ec524deb4302a9932295794e8ea7b",
+      "bytes": 5150,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__rust-guide__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/templates/index.md",
+      "route": "/zh-cn/docs/templates/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "54c1ed27fd40ab7f3cba77256cb62f552df1061100f6eebff4d0ed5a2c37ca33",
+      "bytes": 5559,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__templates__index.md"
+    },
+    {
+      "url": "http://127.0.0.1:64269/zh-cn/docs/troubleshooting/index.md",
+      "route": "/zh-cn/docs/troubleshooting/index.md",
+      "status": 200,
+      "contentType": "text/markdown; charset=utf-8",
+      "sha256": "98dd59ce04ff08ce201b869477b02181b2acdfb3916dabb9e8595285ed3c094a",
+      "bytes": 3954,
+      "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__troubleshooting__index.md"
+    }
+  ],
+  "readings": {
+    "en": {
+      "python-install": [
+        {
+          "url": "http://127.0.0.1:64269/llms.txt",
+          "route": "/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/docs/python-quickstart/index.md",
+          "route": "/docs/python-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__python-quickstart__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/docs/python-api/index.md",
+          "route": "/docs/python-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__python-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/docs/compatibility/index.md",
+          "route": "/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__compatibility__index.md"
+        }
+      ],
+      "node-api": [
+        {
+          "url": "http://127.0.0.1:64269/llms.txt",
+          "route": "/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/docs/node-api/index.md",
+          "route": "/docs/node-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__node-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/docs/node-quickstart/index.md",
+          "route": "/docs/node-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__node-quickstart__index.md"
+        }
+      ],
+      "json-update": [
+        {
+          "url": "http://127.0.0.1:64269/llms.txt",
+          "route": "/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/docs/json-to-anki/index.md",
+          "route": "/docs/json-to-anki/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__json-to-anki__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/docs/updates/index.md",
+          "route": "/docs/updates/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__updates__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/docs/media/index.md",
+          "route": "/docs/media/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__media__index.md"
+        }
+      ],
+      "compatibility-constraints": [
+        {
+          "url": "http://127.0.0.1:64269/llms.txt",
+          "route": "/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/docs/compatibility/index.md",
+          "route": "/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__compatibility__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/docs/build-guarantees/index.md",
+          "route": "/docs/build-guarantees/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__build-guarantees__index.md"
+        }
+      ]
+    },
+    "zh-CN": {
+      "python-install": [
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/llms.txt",
+          "route": "/zh-cn/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/docs/python-quickstart/index.md",
+          "route": "/zh-cn/docs/python-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__python-quickstart__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/docs/python-api/index.md",
+          "route": "/zh-cn/docs/python-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__python-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/docs/compatibility/index.md",
+          "route": "/zh-cn/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__compatibility__index.md"
+        }
+      ],
+      "node-api": [
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/llms.txt",
+          "route": "/zh-cn/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/docs/node-api/index.md",
+          "route": "/zh-cn/docs/node-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__node-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/docs/node-quickstart/index.md",
+          "route": "/zh-cn/docs/node-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__node-quickstart__index.md"
+        }
+      ],
+      "json-update": [
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/llms.txt",
+          "route": "/zh-cn/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/docs/json-to-anki/index.md",
+          "route": "/zh-cn/docs/json-to-anki/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__json-to-anki__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/docs/updates/index.md",
+          "route": "/zh-cn/docs/updates/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__updates__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/docs/media/index.md",
+          "route": "/zh-cn/docs/media/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__media__index.md"
+        }
+      ],
+      "compatibility-constraints": [
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/llms.txt",
+          "route": "/zh-cn/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/docs/compatibility/index.md",
+          "route": "/zh-cn/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__compatibility__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/zh-cn/docs/build-guarantees/index.md",
+          "route": "/zh-cn/docs/build-guarantees/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__build-guarantees__index.md"
+        }
+      ]
+    },
+    "es": {
+      "python-install": [
+        {
+          "url": "http://127.0.0.1:64269/es/llms.txt",
+          "route": "/es/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/es/docs/python-quickstart/index.md",
+          "route": "/es/docs/python-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__python-quickstart__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/es/docs/python-api/index.md",
+          "route": "/es/docs/python-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__python-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/es/docs/compatibility/index.md",
+          "route": "/es/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__compatibility__index.md"
+        }
+      ],
+      "node-api": [
+        {
+          "url": "http://127.0.0.1:64269/es/llms.txt",
+          "route": "/es/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/es/docs/node-api/index.md",
+          "route": "/es/docs/node-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__node-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/es/docs/node-quickstart/index.md",
+          "route": "/es/docs/node-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__node-quickstart__index.md"
+        }
+      ],
+      "json-update": [
+        {
+          "url": "http://127.0.0.1:64269/es/llms.txt",
+          "route": "/es/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/es/docs/json-to-anki/index.md",
+          "route": "/es/docs/json-to-anki/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__json-to-anki__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/es/docs/updates/index.md",
+          "route": "/es/docs/updates/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__updates__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/es/docs/media/index.md",
+          "route": "/es/docs/media/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__media__index.md"
+        }
+      ],
+      "compatibility-constraints": [
+        {
+          "url": "http://127.0.0.1:64269/es/llms.txt",
+          "route": "/es/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/es/docs/compatibility/index.md",
+          "route": "/es/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__compatibility__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/es/docs/build-guarantees/index.md",
+          "route": "/es/docs/build-guarantees/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__build-guarantees__index.md"
+        }
+      ]
+    },
+    "pt-BR": {
+      "python-install": [
+        {
+          "url": "http://127.0.0.1:64269/pt-br/llms.txt",
+          "route": "/pt-br/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/pt-br/docs/python-quickstart/index.md",
+          "route": "/pt-br/docs/python-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__python-quickstart__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/pt-br/docs/python-api/index.md",
+          "route": "/pt-br/docs/python-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__python-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/pt-br/docs/compatibility/index.md",
+          "route": "/pt-br/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__compatibility__index.md"
+        }
+      ],
+      "node-api": [
+        {
+          "url": "http://127.0.0.1:64269/pt-br/llms.txt",
+          "route": "/pt-br/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/pt-br/docs/node-api/index.md",
+          "route": "/pt-br/docs/node-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__node-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/pt-br/docs/node-quickstart/index.md",
+          "route": "/pt-br/docs/node-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__node-quickstart__index.md"
+        }
+      ],
+      "json-update": [
+        {
+          "url": "http://127.0.0.1:64269/pt-br/llms.txt",
+          "route": "/pt-br/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/pt-br/docs/json-to-anki/index.md",
+          "route": "/pt-br/docs/json-to-anki/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__json-to-anki__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/pt-br/docs/updates/index.md",
+          "route": "/pt-br/docs/updates/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__updates__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/pt-br/docs/media/index.md",
+          "route": "/pt-br/docs/media/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__media__index.md"
+        }
+      ],
+      "compatibility-constraints": [
+        {
+          "url": "http://127.0.0.1:64269/pt-br/llms.txt",
+          "route": "/pt-br/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/pt-br/docs/compatibility/index.md",
+          "route": "/pt-br/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__compatibility__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/pt-br/docs/build-guarantees/index.md",
+          "route": "/pt-br/docs/build-guarantees/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__build-guarantees__index.md"
+        }
+      ]
+    },
+    "ja": {
+      "python-install": [
+        {
+          "url": "http://127.0.0.1:64269/ja/llms.txt",
+          "route": "/ja/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/ja/docs/python-quickstart/index.md",
+          "route": "/ja/docs/python-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__python-quickstart__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/ja/docs/python-api/index.md",
+          "route": "/ja/docs/python-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__python-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/ja/docs/compatibility/index.md",
+          "route": "/ja/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__compatibility__index.md"
+        }
+      ],
+      "node-api": [
+        {
+          "url": "http://127.0.0.1:64269/ja/llms.txt",
+          "route": "/ja/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/ja/docs/node-api/index.md",
+          "route": "/ja/docs/node-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__node-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/ja/docs/node-quickstart/index.md",
+          "route": "/ja/docs/node-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__node-quickstart__index.md"
+        }
+      ],
+      "json-update": [
+        {
+          "url": "http://127.0.0.1:64269/ja/llms.txt",
+          "route": "/ja/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/ja/docs/json-to-anki/index.md",
+          "route": "/ja/docs/json-to-anki/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__json-to-anki__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/ja/docs/updates/index.md",
+          "route": "/ja/docs/updates/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__updates__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/ja/docs/media/index.md",
+          "route": "/ja/docs/media/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__media__index.md"
+        }
+      ],
+      "compatibility-constraints": [
+        {
+          "url": "http://127.0.0.1:64269/ja/llms.txt",
+          "route": "/ja/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/ja/docs/compatibility/index.md",
+          "route": "/ja/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__compatibility__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/ja/docs/build-guarantees/index.md",
+          "route": "/ja/docs/build-guarantees/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__build-guarantees__index.md"
+        }
+      ]
+    },
+    "de": {
+      "python-install": [
+        {
+          "url": "http://127.0.0.1:64269/de/llms.txt",
+          "route": "/de/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/de/docs/python-quickstart/index.md",
+          "route": "/de/docs/python-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__python-quickstart__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/de/docs/python-api/index.md",
+          "route": "/de/docs/python-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__python-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/de/docs/compatibility/index.md",
+          "route": "/de/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__compatibility__index.md"
+        }
+      ],
+      "node-api": [
+        {
+          "url": "http://127.0.0.1:64269/de/llms.txt",
+          "route": "/de/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/de/docs/node-api/index.md",
+          "route": "/de/docs/node-api/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__node-api__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/de/docs/node-quickstart/index.md",
+          "route": "/de/docs/node-quickstart/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__node-quickstart__index.md"
+        }
+      ],
+      "json-update": [
+        {
+          "url": "http://127.0.0.1:64269/de/llms.txt",
+          "route": "/de/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/de/docs/json-to-anki/index.md",
+          "route": "/de/docs/json-to-anki/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__json-to-anki__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/de/docs/updates/index.md",
+          "route": "/de/docs/updates/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__updates__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/de/docs/media/index.md",
+          "route": "/de/docs/media/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__media__index.md"
+        }
+      ],
+      "compatibility-constraints": [
+        {
+          "url": "http://127.0.0.1:64269/de/llms.txt",
+          "route": "/de/llms.txt",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__llms.txt"
+        },
+        {
+          "url": "http://127.0.0.1:64269/de/docs/compatibility/index.md",
+          "route": "/de/docs/compatibility/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__compatibility__index.md"
+        },
+        {
+          "url": "http://127.0.0.1:64269/de/docs/build-guarantees/index.md",
+          "route": "/de/docs/build-guarantees/index.md",
+          "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__build-guarantees__index.md"
+        }
+      ]
+    }
+  },
+  "method": "Independently verified all 192 archived machine-resource UTF-8 bytes and manifest digests. Actually fetched each listed same-locale llms index and followed its explicit Markdown links through a loopback HTTP server serving the frozen archive. Saved actual response bodies. The local server MIME values are preview observations, not evidence of hosting MIME or deployment. No semantic pass is generated by this capture script."
+}

@@ -1,0 +1,25 @@
+✔ only validated source-bound entries can authorize a surface migration (2.5055ms)
+✔ missing reviews, failed review axes and stale migration or record hashes fail (2.108084ms)
+✔ migration scope cannot cross locales, overlap anchors or omit protected old destinations (0.387709ms)
+✔ reviewed module migrations are not restricted to homepage identities (0.136875ms)
+✔ historic pages and machine resources remain independent of a mutable registry (21.280166ms)
+✔ historic surface rejects missing anchor (4.1235ms)
+✔ historic surface rejects alias moved to another task (3.804ms)
+✔ historic surface rejects noindex (2.945958ms)
+✔ historic surface rejects lost download (3.723333ms)
+✔ historic machine URLs cannot disappear even if HTML still works (4.800792ms)
+✔ a legacy installation alias for the introduction stays before later tasks (6.931542ms)
+✔ path resolution rejects artifact traversal and a missing deployment base (0.286083ms)
+✔ a reviewed page title can change wording while its historic top anchor remains the H1 (5.892541ms)
+✔ captured native heading anchors cannot move to a page-top span or another heading (8.208833ms)
+✔ a source-reviewed heading rewrite retains its module, aliases and old local destinations (15.9385ms)
+✔ reviewed document heading changes preserve the exact semantic section and native heading (11.312792ms)
+✔ a reviewed module with external evidence keeps the exact HTTPS link inside its module (7.955458ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 302.810959

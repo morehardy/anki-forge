@@ -1,0 +1,2334 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/standards_review/pr66-machine-root-2026-11-02",
+  "status": "verified-bytes-awaiting-semantic-review",
+  "manifest": {
+    "path": "docs/plans/evidence/website-pr66-final-2026-11-02/root-site-manifest.json",
+    "sha256": "84f934bc3b63ea20ce0ba994d42f94e6827d2a1488d575d0cb33aa4791011642",
+    "commit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+    "inputSha256": "fd6716207f6f5557895553e95f710a27cc66cee6d4bbd1cacf0ddc56b7aceebf"
+  },
+  "capture": {
+    "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/observations.json",
+    "sha256": "851fec828385d15d7b96212d47c6a99aa115f953ad49ab29aee14d2007de2e39",
+    "captureRun": "/root/pr66-machine-observations-root-2026-11-02",
+    "readOrigin": "http://127.0.0.1:64269"
+  },
+  "previousReview": {
+    "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-read-root.json",
+    "sha256": "82cc238a49097fde24fa8468b0c88bed336f41abf1c0c508f7875708edb27374",
+    "originManifest": {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/root-site-manifest.json",
+      "sha256": "1e2169d3ba2143da73de90a147821aeaea9b6f1e97730e46a2bb83cbf98770b4",
+      "commit": "6d4625639fc1477222b41880d29724c162baa3be",
+      "description": "Actual frozen isolated-candidate manifest whose archive files were served and read in this run."
+    }
+  },
+  "method": "Reviewer independently re-read all 192 new archive files and the actual previously reviewed archive files as bytes. Current response bodies were captured over HTTP by the coordinator; each saved response was matched to its actual new archive bytes. This audit only verifies byte identity and retains exact changed-text deltas, without asserting semantic pass.",
+  "records": [
+    {
+      "route": "/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "4e5216863390dda212498929bc8d85a8f3db2b6994aa7cb6a7a14549b00f9e64",
+      "previousSha256": "4e5216863390dda212498929bc8d85a8f3db2b6994aa7cb6a7a14549b00f9e64",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/blog/your-first-anki-deck/index.md",
+      "sha256": "43bd3ceb5cf6b4fefb1d504386374b53379a630e0eb6a6ec548d20b1f72d2e5b",
+      "previousSha256": "43bd3ceb5cf6b4fefb1d504386374b53379a630e0eb6a6ec548d20b1f72d2e5b",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "451f0875e77df329b06884e2c02e56e6ec2b7654353f1631080381743dcb0afd",
+      "previousSha256": "451f0875e77df329b06884e2c02e56e6ec2b7654353f1631080381743dcb0afd",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/blog/your-first-anki-deck/index.md",
+      "sha256": "23fb91ddcdedf01f48f9084463e81d0e42f45b839a90217e178bd3cf4ccc94d8",
+      "previousSha256": "23fb91ddcdedf01f48f9084463e81d0e42f45b839a90217e178bd3cf4ccc94d8",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/ai-anki-cards/index.md",
+      "sha256": "81fb723b16ed8e246d75ae6d1183583b95a534cf79c991ec93abaaa6c12b6171",
+      "previousSha256": "81fb723b16ed8e246d75ae6d1183583b95a534cf79c991ec93abaaa6c12b6171",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "9907a06838bc03a792ad3c17429e01441d66766c8c71cc09088ac4d126c02c3c",
+      "previousSha256": "8dcde84e2352ecbdbe9f68b89fb8b4cbf2ff30466a3ea59d03f46d5746e37b37",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/anki-forge-vs-genanki/index.md",
+        "route": "/de/docs/anki-forge-vs-genanki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "9907a06838bc03a792ad3c17429e01441d66766c8c71cc09088ac4d126c02c3c",
+        "bytes": 4806,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__anki-forge-vs-genanki__index.md"
+      },
+      "delta": "--- /de/docs/anki-forge-vs-genanki/index.md (previous reviewed)\n+++ /de/docs/anki-forge-vs-genanki/index.md (current captured)\n@@ -13,5 +13,5 @@\n | Identität | Ausdrücklicher Namensraum und Notizschlüssel; ursprüngliches APKG für Aktualisierungen aufbewahren | Konfigurierbare GUIDs und numerische Modell-/Stapel-IDs; Aktualisierungen beim erneuten Import |\n | Vor der Veröffentlichung | Vergleichsbefunde, Risikorichtlinie und geprüfter vorbereiteter Kandidat | Dein Skript und deine Tests legen die Veröffentlichungsprüfung fest |\n-| Besitz von Mediendaten | Typisierte Bilder und Audio tragen Snapshots mit eigenem Datenbesitz | Das Skript liefert Mediendateien und Referenzen für das Paket |\n+| Besitz von Mediendaten | Typisierte Bild- und Audioobjekte verwalten unveränderliche Snapshots der Mediendaten | Das Skript liefert Mediendateien und Referenzen für das Paket |\n | Bildverdeckung per Code | Rechteckmasken mit Schlüsseln über die öffentliche API | Prüfe ein für deinen Ablauf geeignetes Modell oder eine Erweiterung |\n | Laufzeitaufwand | Native Abhängigkeiten; unterstützte Plattform und Interpreter verwenden | Eine bestehende Python-Bereitstellung beizubehalten kann günstiger sein |\n"
+    },
+    {
+      "route": "/de/docs/api/index.md",
+      "sha256": "ff7e3cd0a5ceb68012b41beefea4057b60a882cfe705199390bb8d797f7daa63",
+      "previousSha256": "ff7e3cd0a5ceb68012b41beefea4057b60a882cfe705199390bb8d797f7daa63",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/build-guarantees/index.md",
+      "sha256": "0135842bceb327d0e81c75cbf649b59d15c662ea4d2384a67601bebefca2239e",
+      "previousSha256": "5d1a252e7f9e5f51215808ca9fe546058822d27728369c63dd17124f4b8574dc",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/build-guarantees/index.md",
+        "route": "/de/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "0135842bceb327d0e81c75cbf649b59d15c662ea4d2384a67601bebefca2239e",
+        "bytes": 6728,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__build-guarantees__index.md"
+      },
+      "delta": "--- /de/docs/build-guarantees/index.md (previous reviewed)\n+++ /de/docs/build-guarantees/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Verstehe temporäre Artefakte, Pfadschutz, Inspektionsgrenzen und die Veröffentlichung geprüfter Kandidaten.\n \n-`Project::build` liefert `BuildOutput` nur nach einem erfolgreichen Vorgang mit einem garantierten APKG-Artefakt. Ein fehlgeschlagener Vorgang liefert `BuildError` mit strukturierter Art und Code, Beobachtungen, zugrunde liegenden Ursachen und tatsächlichen Veröffentlichungsfakten.\n+`Project::build` liefert `BuildOutput` nur nach einem erfolgreichen Vorgang mit einem garantierten APKG-Artefakt. Ein fehlgeschlagener Vorgang liefert `BuildError` mit strukturierten Angaben zu Fehlerart und Fehlercode, Beobachtungen, zugrunde liegenden Ursachen und tatsächlichen Veröffentlichungsfakten.\n \n ## Temporäre und persistente Artefakte\n@@ -37,5 +37,5 @@\n Endliche Budgets für Archive, Eintragsanzahl, Entpackung, dekodierte Sammlung und Medien sowie zstd-Fenster gelten unabhängig für Basisversion und Kandidat. Beginne mit `InspectLimits::default()` und erhöhe bei Bedarf gezielt das passende Limit. Null bedeutet nicht unbegrenzt. Diese Zähler sind keine prozessweite Speicher- oder CPU-Sandbox; Medienimporte haben ein separates, vorgelagertes Budget pro Datei.\n \n-## Parallele Arbeit\n+## Nebenläufige Vorgänge\n \n Rust-Builds leihen unveränderlichen Projektzustand aus. Modelle und Medien mit eigenem Datenbesitz können zwischen Projekten geteilt werden. Das Node-Binding erfasst beim Aufruf von Build oder Vergleich einen Projektsnapshot, sodass später hinzugefügte Inhalte die Anfrage nicht verändern. Halte den Artefaktbesitzer, bis alle Leser fertig sind. Den letzten temporären Besitzer zu schließen, während ein separater Nutzer noch dessen Pfad benötigt, ist ein Fehler der Lebensdauerverwaltung in der Anwendung.\n"
+    },
+    {
+      "route": "/de/docs/cards/index.md",
+      "sha256": "394b1a9d0793da5205365269756934fc351f8384bf44f376335865aff36aea04",
+      "previousSha256": "394b1a9d0793da5205365269756934fc351f8384bf44f376335865aff36aea04",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/compatibility/index.md",
+      "sha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3",
+      "previousSha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/compatibility/index.md",
+        "route": "/de/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "a6e5f956021549b74228621ea2f4f497620a6e45e7e3be424beb556a51fd63c3",
+        "bytes": 3875,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__compatibility__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/concepts/index.md",
+      "sha256": "c71b2b650ba5e1ce7468de93d90d8c1bacb99434c89411dfebd68e4bfb188a20",
+      "previousSha256": "717586973852d95336b0f7d86b68940c2dc838ae4deecdbeefdbe8b488775f4d",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/concepts/index.md",
+        "route": "/de/docs/concepts/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c71b2b650ba5e1ce7468de93d90d8c1bacb99434c89411dfebd68e4bfb188a20",
+        "bytes": 4154,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__concepts__index.md"
+      },
+      "delta": "--- /de/docs/concepts/index.md (previous reviewed)\n+++ /de/docs/concepts/index.md (current captured)\n@@ -9,5 +9,5 @@\n Ein `Project` steht für eine Veröffentlichung mit einem stabilen Namensraum. Es kann Notizen mehreren Anki-Stapeln zuordnen: `default_deck` legt den Standard fest, `Note::deck` überschreibt ihn. Ein Stapel ist ein Ziel für Karten und kein zusätzlicher Container für das Erstellen von Inhalten, Medien oder Builds.\n \n-Eine `Note` enthält ihr Modell und ihre Inhalte. `project.add(key, note)` weist ihr einen erforderlichen stabilen Quellschlüssel zu und sammelt Abhängigkeiten atomar. Doppelte Schlüssel, unbekannte Felder sowie widersprüchliche Modelle oder Medien führen zu einem Fehler, ohne den Zustand teilweise zu verändern. Der Projektnamensraum und die Datensatzschlüssel müssen Änderungen und einer Umordnung der Quelldaten standhalten. Anzeigenamen und Texte sind keine Identitätsschlüssel.\n+Eine `Note` enthält ihr Modell und ihre Inhalte. `project.add(key, note)` weist ihr einen erforderlichen stabilen Quellschlüssel zu und sammelt Abhängigkeiten atomar. Doppelte Schlüssel, unbekannte Felder sowie widersprüchliche Modelle oder Medien führen zu einem Fehler, ohne den Zustand teilweise zu verändern. Behalte den Projektnamensraum und die Datensatzschlüssel bei, wenn du Quelldaten bearbeitest oder neu sortierst. Anzeigenamen und Texte sind keine Identitätsschlüssel.\n \n ## Modelle, Felder und Vorlagen\n"
+    },
+    {
+      "route": "/de/docs/csv-to-anki/index.md",
+      "sha256": "1c2b209668a4332d1a76730e10b10fc4e152a99787a32194be576c48a367369d",
+      "previousSha256": "c96635ee53b32c5e76ab46ebfa87fa3c03d3f8f7b177d64fc9da00a9be6860a6",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/csv-to-anki/index.md",
+        "route": "/de/docs/csv-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "1c2b209668a4332d1a76730e10b10fc4e152a99787a32194be576c48a367369d",
+        "bytes": 6348,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__csv-to-anki__index.md"
+      },
+      "delta": "--- /de/docs/csv-to-anki/index.md (previous reviewed)\n+++ /de/docs/csv-to-anki/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Wandle eine UTF-8-Vokabeltabelle mit einem vollständigen Python-Skript in ein Anki-APKG um – mit CSV-Beispiel, stabilen Notiz-IDs und Importprüfungen.\n \n-Wandle mit Python und Anki Forge eine Vokabeltabelle in eine Anki-Datei im Format `.apkg` um. Dieses Beispiel liest eine UTF-8-CSV-Datei mit den Spalten `id`, `front` und `back`, erstellt Basic-Karten mit Frage und Antwort und exportiert einen teilbaren Stapel. Der CSV-Parser aus Pythons Standardbibliothek liest die Tabelle; Anki Forge erstellt das Paket. Für den Export muss Anki nicht installiert sein.\n+Wandle mit Python und Anki Forge eine Vokabeltabelle in eine Anki-Datei im Format `.apkg` um. Dieses Beispiel liest eine UTF-8-CSV-Datei mit den Spalten `id`, `front` und `back`, erstellt Basic-Karten mit Frage und Antwort und exportiert einen Stapel, den du weitergeben kannst. Der CSV-Parser aus Pythons Standardbibliothek liest die Tabelle; Anki Forge erstellt das Paket. Für den Export muss Anki nicht installiert sein.\n \n Für den einmaligen Import einer Tabelle unterstützt Anki bereits [Textdateien mit Trennzeichen](https://docs.ankiweb.net/manual/importing/text-files). Verwende diese Anleitung, wenn du ein wiederholbar ausführbares Skript, eigene Notiz-IDs und ein verteilbares APKG benötigst. Eine Excel-Datei im Format `.xlsx` musst du zunächst als UTF-8-CSV speichern.\n"
+    },
+    {
+      "route": "/de/docs/custom-notetypes/index.md",
+      "sha256": "3d0b768b4e40fc281047bf3a0388c0579f38b285ea2b4a30cb45b910b81f5381",
+      "previousSha256": "3d0b768b4e40fc281047bf3a0388c0579f38b285ea2b4a30cb45b910b81f5381",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/development/index.md",
+      "sha256": "167f5f2e0c1b12fe0ac7afb10786a28a810d09d86c6968dac4f7a6e3d92b7cd7",
+      "previousSha256": "167f5f2e0c1b12fe0ac7afb10786a28a810d09d86c6968dac4f7a6e3d92b7cd7",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/genanki-migration/index.md",
+      "sha256": "4ffe3049089579939998e589ef2c4c16a645f4c39108fd2319156ce15b75104a",
+      "previousSha256": "4ffe3049089579939998e589ef2c4c16a645f4c39108fd2319156ce15b75104a",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/image-occlusion/index.md",
+      "sha256": "dbd0201b5c5f6520dd4dbdb83e8aaab0888ea6a09368598edbfb9d857ca984a1",
+      "previousSha256": "dbd0201b5c5f6520dd4dbdb83e8aaab0888ea6a09368598edbfb9d857ca984a1",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/index.md",
+      "sha256": "52e9ad5daa45f9dbd27d770a4a160c41c8642362c7318bfd0117ef4e426f1466",
+      "previousSha256": "52e9ad5daa45f9dbd27d770a4a160c41c8642362c7318bfd0117ef4e426f1466",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/installation/index.md",
+      "sha256": "615a319483a1a14973c95d067a2aa6bbf2a15804bd10e4a6b2811f56a3eb0832",
+      "previousSha256": "6fe3236aa0cb53526e9411e83b56c84cd75c3036cee636f2c7ce87291e4cad13",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/installation/index.md",
+        "route": "/de/docs/installation/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "615a319483a1a14973c95d067a2aa6bbf2a15804bd10e4a6b2811f56a3eb0832",
+        "bytes": 2341,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__installation__index.md"
+      },
+      "delta": "--- /de/docs/installation/index.md (previous reviewed)\n+++ /de/docs/installation/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# Anki Forge in deine Anwendung integrieren\n+# Anki Forge in deine Rust-Anwendung integrieren\n \n Canonical page: https://ankiforge.dev/de/docs/installation/\n"
+    },
+    {
+      "route": "/de/docs/json-to-anki/index.md",
+      "sha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd",
+      "previousSha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/json-to-anki/index.md",
+        "route": "/de/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "130c931f1c656dee87d9d61c774ec96e39d183ea73d7684797a315a2db0a59cd",
+        "bytes": 12180,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__json-to-anki__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/languages/index.md",
+      "sha256": "1e6522be8679dd7374de8ece25ac1947d1270f40b12a7ec9957f4cc298fd5b92",
+      "previousSha256": "1e6522be8679dd7374de8ece25ac1947d1270f40b12a7ec9957f4cc298fd5b92",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/media/index.md",
+      "sha256": "2814f56952a70007a26829fda320412bea55a8a81cbfbe243c6b398da5beb9a2",
+      "previousSha256": "de9a0a051392b99beab0c68d2d73c1cc84a8131e4bd7d55c470762e805230b35",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/media/index.md",
+        "route": "/de/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "2814f56952a70007a26829fda320412bea55a8a81cbfbe243c6b398da5beb9a2",
+        "bytes": 9685,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__media__index.md"
+      },
+      "delta": "--- /de/docs/media/index.md (previous reviewed)\n+++ /de/docs/media/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Importiere mit Rust, Python oder Node.js Dateien, kombiniere Karteninhalte und verwalte Exportnamen, MIME-Typen und Medienbudgets.\n \n-Bündle Bilder und Audio in erzeugten Anki-Karten, etwa Vokabelkarten mit Aussprache oder Diagrammfragen. Anki Forge kopiert die bereitgestellten Dateien in das APKG. Zum Erzeugen von Audio oder Bildern, etwa durch Sprachsynthese, benötigst du ein separates Werkzeug. Die Beispiele verwenden Rust; der unten beschriebene Stapelimport zeigt auch die Python- und Node.js-Aufrufe.\n+Bündle Bilder und Audio in erzeugten Anki-Karten, etwa Vokabelkarten mit Aussprache oder Diagrammfragen. Anki Forge kopiert die bereitgestellten Dateien in das APKG. Zum Erzeugen von Audio oder Bildern, etwa durch Sprachsynthese, benötigst du ein separates Werkzeug. Die Beispiele verwenden Rust; der unten beschriebene Import mehrerer Mediendateien zeigt auch die Python- und Node.js-Aufrufe.\n \n Ein `Media`\\-Wert besitzt einen unveränderlichen Snapshot. Importiere Dateien mit `Media::file` oder native Bytes mit einem ausdrücklichen MIME-Typ über `Media::bytes`. Nach erfolgreichem Import können Änderungen oder das Löschen der Quelldatei die Mediendatei nicht mehr verändern. Klone teilen sich den Speicher und können in mehreren Projekten verwendet werden.\n@@ -101,5 +101,5 @@\n Node verwendet `await Media.files(['first.png', 'second.png'])`; Python verwendet `Media.files(['first.png', 'second.png'])`.\n \n-### Verhalten und Budgets des Stapelimports\n+### Verhalten und Limits beim Import mehrerer Mediendateien\n \n Verwende `Media::files(paths)` in Rust, `await Media.files(paths)` in Node oder `Media.files(paths)` in Python, um Dateien in Eingabereihenfolge mit höchstens vier Arbeitern pro Aufruf zu importieren. Gruppen mit weniger als 16 Dateien werden seriell verarbeitet. Rust bietet außerdem `files_with_limits`; Node und Python akzeptieren dieselben Limits wie `file`. Das Limit gilt pro Mediendatei. Schlägt ein Import fehl, wartet der Aufruf auf bereits begonnene Arbeit, gibt die Snapshots der Gruppe frei und liefert den ersten Fehler in Eingabereihenfolge. Bestehende Medienbesitzer bleiben gültig. Python gibt während des Imports den GIL frei; Node führt die Arbeit außerhalb der Ereignisschleife aus. Einzeldateiimporte bleiben sofortige Snapshots mit eigenem Datenbesitz; für parallele Importe müssen Aufrufer ausdrücklich die Stapelmethode wählen.\n"
+    },
+    {
+      "route": "/de/docs/node-api/index.md",
+      "sha256": "a362ada18b093cb8ea50489e9ac2ed109a9ff128939cf0b5803fdf06766714a2",
+      "previousSha256": "b3082cdd5a3dac14fb08172780560670588806d94ba4b3c830391b1070ca03ce",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/node-api/index.md",
+        "route": "/de/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "a362ada18b093cb8ea50489e9ac2ed109a9ff128939cf0b5803fdf06766714a2",
+        "bytes": 15241,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__node-api__index.md"
+      },
+      "delta": "--- /de/docs/node-api/index.md (previous reviewed)\n+++ /de/docs/node-api/index.md (current captured)\n@@ -103,5 +103,5 @@\n Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).\n \n-## Medienimport im Stapel und vorbereitete Veröffentlichung\n+## Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten\n \n Medienimport im Stapel und vorbereitete Veröffentlichung sind im veröffentlichten Paket `0.3.1` enthalten.\n"
+    },
+    {
+      "route": "/de/docs/node-quickstart/index.md",
+      "sha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee",
+      "previousSha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/node-quickstart/index.md",
+        "route": "/de/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c1abde0f6e243fb5f039ce062ed3937dc54a175462d66f88db41f1f44b657aee",
+        "bytes": 2550,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__node-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/python-api/index.md",
+      "sha256": "3f56d144fe98f26665574be8e9e26ea626f922b22ca74d7627df31fe9911ce6e",
+      "previousSha256": "99c49a03e85513ebc450f563764ebe7cf1264e0aa6c0abb1fb74271d14924f5b",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/python-api/index.md",
+        "route": "/de/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "3f56d144fe98f26665574be8e9e26ea626f922b22ca74d7627df31fe9911ce6e",
+        "bytes": 11445,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__python-api__index.md"
+      },
+      "delta": "--- /de/docs/python-api/index.md (previous reviewed)\n+++ /de/docs/python-api/index.md (current captured)\n@@ -72,5 +72,5 @@\n Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus `image/*`. Tonreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).\n \n-## Stapelverarbeitung von Medien und vorbereitete Veröffentlichung\n+## Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten\n \n Die Stapelverarbeitung von Medien und die vorbereitete Veröffentlichung sind im veröffentlichten Paket `0.3.1` enthalten.\n"
+    },
+    {
+      "route": "/de/docs/python-diagnostics/index.md",
+      "sha256": "6ed193ee70693d65d4c85af8ab3c2b900d9a1248d5c15d64297fce65a2f87b13",
+      "previousSha256": "6ed193ee70693d65d4c85af8ab3c2b900d9a1248d5c15d64297fce65a2f87b13",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/python-migration/index.md",
+      "sha256": "144ef53ef3f4b8a6af2ae225828f85b56b409a6d4c8757f2549feb303aba998b",
+      "previousSha256": "144ef53ef3f4b8a6af2ae225828f85b56b409a6d4c8757f2549feb303aba998b",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/python-quickstart/index.md",
+      "sha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58",
+      "previousSha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/python-quickstart/index.md",
+        "route": "/de/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "72f086626b29d2951d75d4fd530b826ad62d2975fd63664a60d02870cb638c58",
+        "bytes": 2597,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__python-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/quickstart/index.md",
+      "sha256": "7cdbb8a987b11b2f6c5f0fe2e9a73c122c1fa5f8378557451bb9fb4ea1268d28",
+      "previousSha256": "7cdbb8a987b11b2f6c5f0fe2e9a73c122c1fa5f8378557451bb9fb4ea1268d28",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/rust-api/index.md",
+      "sha256": "be70ea5f8ec862ced603755b1e4d8a8b638e5aaf6721fa24f5a879acb864a890",
+      "previousSha256": "be70ea5f8ec862ced603755b1e4d8a8b638e5aaf6721fa24f5a879acb864a890",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/rust-guide/index.md",
+      "sha256": "73ca45217299a63224bd225580711d777d4d4f93b770924e4d1ac0203f4cfa44",
+      "previousSha256": "73ca45217299a63224bd225580711d777d4d4f93b770924e4d1ac0203f4cfa44",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/templates/index.md",
+      "sha256": "1069ed8b1486d9027876d3bcd373fb371d4308e3f1d1202210f676690cdb138c",
+      "previousSha256": "1069ed8b1486d9027876d3bcd373fb371d4308e3f1d1202210f676690cdb138c",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/troubleshooting/index.md",
+      "sha256": "b8804830a674f5409f820db1b12ca9c39df9294d21f488bee5974fff51edd9e9",
+      "previousSha256": "b8804830a674f5409f820db1b12ca9c39df9294d21f488bee5974fff51edd9e9",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/de/docs/updates/index.md",
+      "sha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e",
+      "previousSha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/docs/updates/index.md",
+        "route": "/de/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "30ade4e649cf6de7111db9a422d1970be272c683bc041f4d54df614fa9d08f4e",
+        "bytes": 9535,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__docs__updates__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/de/llms.txt",
+      "sha256": "6a8d6aceb624007413b4a526095efe07f0f125ca13b3ddb8e3b04eb757fe21e2",
+      "previousSha256": "5e9e9ab5b375a2e3318d55a92e5ae218f5063aaeca3e3365620fd23f82d51bc9",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/de/llms.txt",
+        "route": "/de/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "6a8d6aceb624007413b4a526095efe07f0f125ca13b3ddb8e3b04eb757fe21e2",
+        "bytes": 7150,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/de__llms.txt"
+      },
+      "delta": "--- /de/llms.txt (previous reviewed)\n+++ /de/llms.txt (current captured)\n@@ -28,5 +28,5 @@\n - [Python-API](https://ankiforge.dev/de/docs/python-api/index.md): Project, Medien, Build-Optionen, Berichte und die Kontrolle über die Lebensdauer temporärer Artefakte in Python.\n \n-## Aufgabenanleitungen\n+## Anleitungen nach Aufgabe\n \n - [CSV zu Anki: Karten mit Python erzeugen](https://ankiforge.dev/de/docs/csv-to-anki/index.md): Wandle eine UTF-8-Vokabeltabelle mit einem vollständigen Python-Skript in ein Anki-APKG um – mit CSV-Beispiel, stabilen Notiz-IDs und Importprüfungen.\n"
+    },
+    {
+      "route": "/docs/ai-anki-cards/index.md",
+      "sha256": "9745b22b1eef834acd7824a662f24b0bd2a83ba2fa41ea1ee606fbee6e21fa3a",
+      "previousSha256": "9745b22b1eef834acd7824a662f24b0bd2a83ba2fa41ea1ee606fbee6e21fa3a",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "d3fa07417f3752acc3f105b95f2dd49fab31a78cb3828ac022688a971d281e4e",
+      "previousSha256": "d3fa07417f3752acc3f105b95f2dd49fab31a78cb3828ac022688a971d281e4e",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/api/index.md",
+      "sha256": "78633f690be8373213053679b29209d7b17bc1ad85585d87eca45e4aec1f5e19",
+      "previousSha256": "78633f690be8373213053679b29209d7b17bc1ad85585d87eca45e4aec1f5e19",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/build-guarantees/index.md",
+      "sha256": "94419d340582f5c025883404e249782cdf254a3dab42a80a6f07b950f8aa6c9b",
+      "previousSha256": "64be58939f3aa54f2f0a6b4cddca1d8ec38fc71f75f86d3c417eeade88adc09d",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/build-guarantees/index.md",
+        "route": "/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "94419d340582f5c025883404e249782cdf254a3dab42a80a6f07b950f8aa6c9b",
+        "bytes": 5552,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__build-guarantees__index.md"
+      },
+      "delta": "--- /docs/build-guarantees/index.md (previous reviewed)\n+++ /docs/build-guarantees/index.md (current captured)\n@@ -43,5 +43,5 @@\n Package inspection cannot establish every client-side behavior. Test rendering, playback and update imports with the intended Anki versions and settings. See [updates](https://ankiforge.dev/docs/updates/) for scheduling and schema-change limits.\n \n-## Prepared publication from source\n+## Prepare, review and publish\n \n Prepared publication is included in the public `0.3.1` packages.\n"
+    },
+    {
+      "route": "/docs/cards/index.md",
+      "sha256": "566996cebefbfb5c3381d376164b5a8e2897f0817d33bd22ec114ef3b3b61f28",
+      "previousSha256": "582cc9aa34838f85ab2b7098d606331c28274b8dc47c87efc7dc3bc835244677",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/cards/index.md",
+        "route": "/docs/cards/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "566996cebefbfb5c3381d376164b5a8e2897f0817d33bd22ec114ef3b3b61f28",
+        "bytes": 2915,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__cards__index.md"
+      },
+      "delta": "--- /docs/cards/index.md (previous reviewed)\n+++ /docs/cards/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Generate Anki Basic question-and-answer and Cloze fill-in-the-blank cards from code. A verified Rust example builds two notes and three cards.\n \n-Generate Anki Basic (question-and-answer) and Cloze (fill-in-the-blank) cards from code instead of adding them one at a time in Anki. A Basic note has a front and back. A Cloze note generates one card for each supported deletion number. This Rust example creates two notes and three cards. Python and Node.js provide the same `Note.basic` and `Note.cloze` constructors; see the [Python API](https://ankiforge.dev/docs/python-api/#project-and-note-values) and [Node API](https://ankiforge.dev/docs/node-api/#project-and-notes).\n+Generate Anki Basic (question-and-answer) and Cloze (fill-in-the-blank) cards from code instead of adding them one at a time in Anki. A Basic note stores front and back fields, which its template uses to generate a question-and-answer card. A Cloze note generates one card for each supported deletion number. This Rust example creates two notes and three cards. Python and Node.js provide the same `Note.basic` and `Note.cloze` constructors; see the [Python API](https://ankiforge.dev/docs/python-api/#project-and-note-values) and [Node API](https://ankiforge.dev/docs/node-api/#project-and-notes).\n \n From the repository root:\n"
+    },
+    {
+      "route": "/docs/compatibility/index.md",
+      "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+      "previousSha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/compatibility/index.md",
+        "route": "/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "abcc3eb1f0040cea10a7abdfb374ac280897edcb8ee9d9c273d5891c13d15b5f",
+        "bytes": 3238,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__compatibility__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/docs/concepts/index.md",
+      "sha256": "2b07722c9bfbdb2e8fefe578ab6fdc7fe38812d684f3474eb015c17493ba73d6",
+      "previousSha256": "2b07722c9bfbdb2e8fefe578ab6fdc7fe38812d684f3474eb015c17493ba73d6",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/csv-to-anki/index.md",
+      "sha256": "0428ebe47ff80585c636b10f362bd6c90ba95e44b7c0c567d7c073a31b97d662",
+      "previousSha256": "0428ebe47ff80585c636b10f362bd6c90ba95e44b7c0c567d7c073a31b97d662",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/custom-notetypes/index.md",
+      "sha256": "1ec524ad2e9100e94a376e6e672c79a177bc9b32bc7d3d3bd48a6b66e985f2cf",
+      "previousSha256": "1ec524ad2e9100e94a376e6e672c79a177bc9b32bc7d3d3bd48a6b66e985f2cf",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/development/index.md",
+      "sha256": "38e8514202721f6a59b3e955089238eeb0cd0a2da40f84e687781674930fa07f",
+      "previousSha256": "38e8514202721f6a59b3e955089238eeb0cd0a2da40f84e687781674930fa07f",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/genanki-migration/index.md",
+      "sha256": "fb1788925c8e1ac5141dee8594d55f797bf7949b16d97c592c329eaacdf3e1ba",
+      "previousSha256": "fb1788925c8e1ac5141dee8594d55f797bf7949b16d97c592c329eaacdf3e1ba",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/image-occlusion/index.md",
+      "sha256": "0bfe48487e90d7ef0701a6fc4a2ac02e36ccb1990adf8009782879aa59c8bd69",
+      "previousSha256": "0bfe48487e90d7ef0701a6fc4a2ac02e36ccb1990adf8009782879aa59c8bd69",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/index.md",
+      "sha256": "2589240ac602a461fcd26375953f959f50610b1efc34301771fb5b9a612062ff",
+      "previousSha256": "2589240ac602a461fcd26375953f959f50610b1efc34301771fb5b9a612062ff",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/installation/index.md",
+      "sha256": "e5f86c8b981d90f7986c901dda300b376d142e8539e0bbf3e6f7f6c5e1f4522b",
+      "previousSha256": "d8e5e1b617b5319efec59c50eace336bbfae67ead940b8d00a423c0614e3ed60",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/installation/index.md",
+        "route": "/docs/installation/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "e5f86c8b981d90f7986c901dda300b376d142e8539e0bbf3e6f7f6c5e1f4522b",
+        "bytes": 1908,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__installation__index.md"
+      },
+      "delta": "--- /docs/installation/index.md (previous reviewed)\n+++ /docs/installation/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# Add to your application\n+# Add Anki Forge to a Rust application\n \n Canonical page: https://ankiforge.dev/docs/installation/\n"
+    },
+    {
+      "route": "/docs/json-to-anki/index.md",
+      "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+      "previousSha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/json-to-anki/index.md",
+        "route": "/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "00fc6dc605cf53cc1f6c41ce4bae4ea79199d6e9d377cbb94f0b55b7940e067e",
+        "bytes": 11160,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__json-to-anki__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/docs/languages/index.md",
+      "sha256": "20118dbc34eaf14ef16f924a52e471a432b913b4aeca09d9139d271075197d04",
+      "previousSha256": "20118dbc34eaf14ef16f924a52e471a432b913b4aeca09d9139d271075197d04",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/media/index.md",
+      "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+      "previousSha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/media/index.md",
+        "route": "/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "69c1f50fd3ebb686c909aded780a31eb8a096c068a69dd7eb8b5c4af456c98a1",
+        "bytes": 8154,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__media__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/docs/node-api/index.md",
+      "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+      "previousSha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/node-api/index.md",
+        "route": "/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "dd826be74f3ed0d4e985ef0960cd0f65a2fe2f6e5575cd9e259963f924e8b810",
+        "bytes": 13145,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__node-api__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/docs/node-quickstart/index.md",
+      "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+      "previousSha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/node-quickstart/index.md",
+        "route": "/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "d714f57b65644299a8df4f66230b6b83f3039ddf9a393fd37d1fb97827639f33",
+        "bytes": 2251,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__node-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/docs/python-api/index.md",
+      "sha256": "858d8f0d0e84acb8e8510cf36d93a72978a2c802fab2ba338cb84927ecf4ebe5",
+      "previousSha256": "760d1bc21e22a24cf9ab620780616ea40905e007caaf9fd5b58fc6fab3bde1af",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/python-api/index.md",
+        "route": "/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "858d8f0d0e84acb8e8510cf36d93a72978a2c802fab2ba338cb84927ecf4ebe5",
+        "bytes": 9287,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__python-api__index.md"
+      },
+      "delta": "--- /docs/python-api/index.md (previous reviewed)\n+++ /docs/python-api/index.md (current captured)\n@@ -72,5 +72,5 @@\n Typed images require image/\\* MIME at addition; sound references accept audio/\\* or video/\\*. Other categories raise `NOTE.MEDIA_USAGE_INVALID`. Constructors stay infallible; explicit assets and raw HTML are unaffected. The check uses retained import MIME, and does not certify playback. Build’s independent MIME/extension validation still applies. See [the design](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md) for the complete target/detail table.\n \n-## Source API details\n+## Batch media and prepared publication\n \n Batch media and prepared publication are included in the public `0.3.1` package.\n"
+    },
+    {
+      "route": "/docs/python-diagnostics/index.md",
+      "sha256": "7c55655214b864f9bf4de14874b933a99f842399f7a0c632e71ad32d0373bb5b",
+      "previousSha256": "7c55655214b864f9bf4de14874b933a99f842399f7a0c632e71ad32d0373bb5b",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/python-migration/index.md",
+      "sha256": "e048cc0d961bdded62c1d3184d901e4cf0e0d315fe291c47049a59928117af72",
+      "previousSha256": "e048cc0d961bdded62c1d3184d901e4cf0e0d315fe291c47049a59928117af72",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/python-quickstart/index.md",
+      "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+      "previousSha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/python-quickstart/index.md",
+        "route": "/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "e0d5c95d765eed80b498de9baf3c0579f54b6668f78bb3f15eb8819606b72af3",
+        "bytes": 2287,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__python-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/docs/quickstart/index.md",
+      "sha256": "e8786297738d765f984fb3f55f853eda49528930303d165a3f4ed036ec6f903c",
+      "previousSha256": "e8786297738d765f984fb3f55f853eda49528930303d165a3f4ed036ec6f903c",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/rust-api/index.md",
+      "sha256": "98d57a4e45b11113366315510c596444dd94dc264105db2a8a5e9d9f0a747296",
+      "previousSha256": "98d57a4e45b11113366315510c596444dd94dc264105db2a8a5e9d9f0a747296",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/rust-guide/index.md",
+      "sha256": "58d18a4d00adc8aee9778b48db2d54822326b06921b65987a4109ddc840f3194",
+      "previousSha256": "58d18a4d00adc8aee9778b48db2d54822326b06921b65987a4109ddc840f3194",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/templates/index.md",
+      "sha256": "d018874e701c5d033a7ca9863ecbd39378f24f1bb1d096fd244993e6d730dbaa",
+      "previousSha256": "c76ff0654af9c938570e2534a57fbd875d9b8a896373067d239ffbedfb0b95a2",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/templates/index.md",
+        "route": "/docs/templates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "d018874e701c5d033a7ca9863ecbd39378f24f1bb1d096fd244993e6d730dbaa",
+        "bytes": 5725,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__templates__index.md"
+      },
+      "delta": "--- /docs/templates/index.md (previous reviewed)\n+++ /docs/templates/index.md (current captured)\n@@ -7,5 +7,5 @@\n Reuse the same Anki card design across decks: keep a note type’s templates, CSS and media in one directory and load it for normal or Cloze cards. The examples use Rust; Python and Node.js load bundles with `NoteType.from_bundle` and `NoteType.fromBundle` (see the [Python API](https://ankiforge.dev/docs/python-api/#models-and-templates) and [Node API](https://ankiforge.dev/docs/node-api/#immutable-models)).\n \n-A bundle is a reusable model declaration, template text, CSS and explicit media closure. `NoteType::from_bundle(directory)` validates the complete bundle and takes owned snapshots before returning the same immutable `NoteType` used by inline authoring. It does not partially modify a project.\n+A bundle contains a reusable note type definition, template text, CSS and all explicitly declared media dependencies. `NoteType::from_bundle(directory)` validates the complete bundle and takes owned snapshots before returning the same immutable `NoteType` used by inline authoring. It does not partially modify a project.\n \n ## Run the bundled example\n"
+    },
+    {
+      "route": "/docs/troubleshooting/index.md",
+      "sha256": "ed47bd814c901d4a4c69001b91d5e00c89deaef5c5ecfb77ccea8b54cc6d2286",
+      "previousSha256": "ed47bd814c901d4a4c69001b91d5e00c89deaef5c5ecfb77ccea8b54cc6d2286",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/docs/updates/index.md",
+      "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+      "previousSha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/docs/updates/index.md",
+        "route": "/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "01948bfaf0f1efdc562a636ee30fb7e7dde4dcfe43027a5f04f1532aac2a66db",
+        "bytes": 8070,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/docs__updates__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/es/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "c9f9d4175f9c8b4c1f6ba55b2bc5763faba2b5746bb83c165481aa2b29c1bba1",
+      "previousSha256": "17f7f5408b3cefcc1dc8d5cff2d95a64b245e6d993c5c0a0e5640a934416002f",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/blog/stable-ids-and-deck-updates/index.md",
+        "route": "/es/blog/stable-ids-and-deck-updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c9f9d4175f9c8b4c1f6ba55b2bc5763faba2b5746bb83c165481aa2b29c1bba1",
+        "bytes": 3700,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__blog__stable-ids-and-deck-updates__index.md"
+      },
+      "delta": "--- /es/blog/stable-ids-and-deck-updates/index.md (previous reviewed)\n+++ /es/blog/stable-ids-and-deck-updates/index.md (current captured)\n@@ -24,5 +24,5 @@\n La identidad también tiene un contexto de proyecto. Mantén el mismo espacio de nombres del proyecto entre las versiones de un mazo. Un ID de nota por sí solo es únicamente una parte de un flujo de actualización repetible.\n \n-## Dar un paquete de referencia a la siguiente generación\n+## Usar el paquete anterior como referencia\n \n Un paquete anterior indica a Anki Forge qué se exportó antes. Utilízalo al generar el proyecto revisado:\n"
+    },
+    {
+      "route": "/es/blog/your-first-anki-deck/index.md",
+      "sha256": "811e0eeb6867bd23a928e9087268ed17d24164c05ccd997c3ad8878110bd495c",
+      "previousSha256": "811e0eeb6867bd23a928e9087268ed17d24164c05ccd997c3ad8878110bd495c",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/ai-anki-cards/index.md",
+      "sha256": "99743cb1706d0b12b1ecb2ace07456115532e55fccfe49e98ef701593f967c70",
+      "previousSha256": "99743cb1706d0b12b1ecb2ace07456115532e55fccfe49e98ef701593f967c70",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "685f1b29250d95b56ab233dfb6ce71050f979a6a78b62f711121966cba8b0017",
+      "previousSha256": "1751babf393a61988a9f057ce42511b4a931922c6c7688098a85c9cd36e371c6",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/docs/anki-forge-vs-genanki/index.md",
+        "route": "/es/docs/anki-forge-vs-genanki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "685f1b29250d95b56ab233dfb6ce71050f979a6a78b62f711121966cba8b0017",
+        "bytes": 4981,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__anki-forge-vs-genanki__index.md"
+      },
+      "delta": "--- /es/docs/anki-forge-vs-genanki/index.md (previous reviewed)\n+++ /es/docs/anki-forge-vs-genanki/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Compara la creación de APKG, los entornos de ejecución, la revisión de actualizaciones y los costes de migración de Anki Forge y genanki.\n \n-Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas que el proyecto conserve los recursos multimedia, diagnósticos estructurados, comparaciones y una revisión de políticas antes de publicar actualizaciones. Conserva un flujo de genanki ya probado si sus scripts de Python, plantillas y recursos multimedia cubren tus necesidades y migrar supone más coste que beneficio.\n+Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas conservar los datos multimedia sin depender de los archivos originales, obtener diagnósticos estructurados y revisar las comparaciones y la política de riesgos antes de publicar actualizaciones. Conserva un flujo de genanki ya probado si sus scripts de Python, plantillas y recursos multimedia cubren tus necesidades y migrar supone más coste que beneficio.\n \n | Criterio | Anki Forge | genanki |\n"
+    },
+    {
+      "route": "/es/docs/api/index.md",
+      "sha256": "d6a2df886ad2d8d95711a031f995bbd9ed717d50c2333b2f536123fa089989ca",
+      "previousSha256": "d6a2df886ad2d8d95711a031f995bbd9ed717d50c2333b2f536123fa089989ca",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/build-guarantees/index.md",
+      "sha256": "7684ab5b8c7297cd31bafd5da3a090a81752562f12e2b9d09652fdc1ccea8f82",
+      "previousSha256": "b868d2d1d88ba6f4d5ebf4fb5650caed0de17706dd8afb1198700491602d66fe",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/docs/build-guarantees/index.md",
+        "route": "/es/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "7684ab5b8c7297cd31bafd5da3a090a81752562f12e2b9d09652fdc1ccea8f82",
+        "bytes": 7110,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__build-guarantees__index.md"
+      },
+      "delta": "--- /es/docs/build-guarantees/index.md (previous reviewed)\n+++ /es/docs/build-guarantees/index.md (current captured)\n@@ -51,3 +51,3 @@\n Cada intento de publicación consume el objeto que mantiene la versión candidata, incluso si falla la política o la E/S. Vuelve a preparar para reintentar o para cambiar la política o el destino. Los informes siguen siendo legibles y no conservan archivos. Node y Python ofrecen `close()` idempotente y un error de indisponibilidad con motivo `closed` o `consumed`; cerrar después de que empiece la publicación no la cancela. La duración no incluye la espera de revisión. Un fallo tardío de durabilidad puede producirse después de un reemplazo correcto, por lo que debes comprobar los datos reales de la publicación.\n \n-Sigue [el ejemplo completo](https://ankiforge.dev/es/docs/updates/#build-once-review-then-publish-from-source) y las referencias de las API de cada lenguaje para conocer los errores tipados y el funcionamiento de los trabajadores.\n+Sigue [el ejemplo completo](https://ankiforge.dev/es/docs/updates/#build-once-review-then-publish-from-source) y las referencias de las API de cada lenguaje para conocer los errores tipados y el funcionamiento de los hilos de trabajo.\n"
+    },
+    {
+      "route": "/es/docs/cards/index.md",
+      "sha256": "a725e95db861f7275481cbcbe2f4d93a756f9504beaa95efcb9f91b833b50c21",
+      "previousSha256": "a725e95db861f7275481cbcbe2f4d93a756f9504beaa95efcb9f91b833b50c21",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/compatibility/index.md",
+      "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+      "previousSha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/docs/compatibility/index.md",
+        "route": "/es/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "667ef06154cc3486fefaf1233f359d37a4b0b75e53122329c17ba31f1409f60a",
+        "bytes": 4040,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__compatibility__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/concepts/index.md",
+      "sha256": "f2d42f3acc058095a096bfcd47263e275e1837c62e29401f42bcc282e8839757",
+      "previousSha256": "f2d42f3acc058095a096bfcd47263e275e1837c62e29401f42bcc282e8839757",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/csv-to-anki/index.md",
+      "sha256": "c0636dd2ac60d9b20c62ede43d226f43de4e43bee6982146670fc0ac05623b02",
+      "previousSha256": "c0636dd2ac60d9b20c62ede43d226f43de4e43bee6982146670fc0ac05623b02",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/custom-notetypes/index.md",
+      "sha256": "cd79fd039a0bc5444f14fda465ef813231ee14c296184668ff0fbe5d66e0d5cf",
+      "previousSha256": "cd79fd039a0bc5444f14fda465ef813231ee14c296184668ff0fbe5d66e0d5cf",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/development/index.md",
+      "sha256": "4ba123d0ebdd9c92084656cad77d701230ee4b32cda03ebc0bbc34774863ae96",
+      "previousSha256": "4ba123d0ebdd9c92084656cad77d701230ee4b32cda03ebc0bbc34774863ae96",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/genanki-migration/index.md",
+      "sha256": "725f3857424a3acc6aca08f222685a0548b65293ea7b1e99ccbbd4bbfb6edc56",
+      "previousSha256": "725f3857424a3acc6aca08f222685a0548b65293ea7b1e99ccbbd4bbfb6edc56",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/image-occlusion/index.md",
+      "sha256": "32dc813fb179accd309e7029424cb03587112bea4db10761b359627882f038f6",
+      "previousSha256": "32dc813fb179accd309e7029424cb03587112bea4db10761b359627882f038f6",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/index.md",
+      "sha256": "cc78c766b4da6e90411988938c404247f4561f076f9b825c334acef94a6bf5c1",
+      "previousSha256": "cc78c766b4da6e90411988938c404247f4561f076f9b825c334acef94a6bf5c1",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/installation/index.md",
+      "sha256": "c2684786f4b65987f50ffbad71514f588156472cbcaf6801a35ccc55b3acd70a",
+      "previousSha256": "c2684786f4b65987f50ffbad71514f588156472cbcaf6801a35ccc55b3acd70a",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/json-to-anki/index.md",
+      "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+      "previousSha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/docs/json-to-anki/index.md",
+        "route": "/es/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "f2c9f4f0a614ed7b62efb94c998f5889942523ef45dc9f5f4b2f5fc9024693ed",
+        "bytes": 11911,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__json-to-anki__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/languages/index.md",
+      "sha256": "4bc4d5ac42b66a76bb63c300af3b6c373a25bd8c572ece54e2bb27509cab1c63",
+      "previousSha256": "4bc4d5ac42b66a76bb63c300af3b6c373a25bd8c572ece54e2bb27509cab1c63",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/media/index.md",
+      "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+      "previousSha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/docs/media/index.md",
+        "route": "/es/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c8d7b57c012fa00186d3cfc282ec3817e7fbf49157bb260d5558efdba5a06a4d",
+        "bytes": 9814,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__media__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/node-api/index.md",
+      "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+      "previousSha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/docs/node-api/index.md",
+        "route": "/es/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c7fc76fac584f77deb1d206183a041fbb76f4798ac878cb441181efb0beac69e",
+        "bytes": 15825,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__node-api__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/node-quickstart/index.md",
+      "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+      "previousSha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/docs/node-quickstart/index.md",
+        "route": "/es/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "17aad51f8ec1636a28ff9ce6432c4cb4777cfda1e3c0ba839de271218b686898",
+        "bytes": 2574,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__node-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/python-api/index.md",
+      "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+      "previousSha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/docs/python-api/index.md",
+        "route": "/es/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "5b79c4be44d64dee2be5aa3256a78a69a33fdbfd66d7396ecaf380e72f7c2956",
+        "bytes": 11256,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__python-api__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/python-diagnostics/index.md",
+      "sha256": "71a0a087d4474e98868848e0dcefedd32067b8a01ab7cd49b1774a0ae5532f83",
+      "previousSha256": "71a0a087d4474e98868848e0dcefedd32067b8a01ab7cd49b1774a0ae5532f83",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/python-migration/index.md",
+      "sha256": "ee0155e3d170643f6e8204354f9ab3152a8b91256dfeeb8b5e32c664afb490e5",
+      "previousSha256": "ee0155e3d170643f6e8204354f9ab3152a8b91256dfeeb8b5e32c664afb490e5",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/python-quickstart/index.md",
+      "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+      "previousSha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/docs/python-quickstart/index.md",
+        "route": "/es/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "926bec14daaed52114a00613ac75186751ab48bf06a4935523a11cccb34adb56",
+        "bytes": 2601,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__python-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/quickstart/index.md",
+      "sha256": "42f01fa3284bb45f1f1b2c2d677092554bb6b41083b66964ed23567128ac419e",
+      "previousSha256": "42f01fa3284bb45f1f1b2c2d677092554bb6b41083b66964ed23567128ac419e",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/rust-api/index.md",
+      "sha256": "da277a083aa616be09ba8696c522f8cced4d7b613619d521fd301acedce5a03c",
+      "previousSha256": "da277a083aa616be09ba8696c522f8cced4d7b613619d521fd301acedce5a03c",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/rust-guide/index.md",
+      "sha256": "205b0d8e65cc17f0e56755dc0e178d5e38bcdc52d2520f28795a78c2fdaa76be",
+      "previousSha256": "205b0d8e65cc17f0e56755dc0e178d5e38bcdc52d2520f28795a78c2fdaa76be",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/templates/index.md",
+      "sha256": "6659e01328ade2f67b2fae0b87eb79b13445647efd5b3a27f80e7f556e39c8be",
+      "previousSha256": "6659e01328ade2f67b2fae0b87eb79b13445647efd5b3a27f80e7f556e39c8be",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/troubleshooting/index.md",
+      "sha256": "092ff59b379d229faf9f469a549b19db43b3662cfe0590e170262ab70ea44a69",
+      "previousSha256": "092ff59b379d229faf9f469a549b19db43b3662cfe0590e170262ab70ea44a69",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/es/docs/updates/index.md",
+      "sha256": "5cdaee4d0df61bd235a7c3926c2738495fb6dc007c9793da1823edfba550d74d",
+      "previousSha256": "716bb096e4fa8887265c66e8db746595c19545c4ecad47a71c78c8b81798e391",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/docs/updates/index.md",
+        "route": "/es/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "5cdaee4d0df61bd235a7c3926c2738495fb6dc007c9793da1823edfba550d74d",
+        "bytes": 9341,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__docs__updates__index.md"
+      },
+      "delta": "--- /es/docs/updates/index.md (previous reviewed)\n+++ /es/docs/updates/index.md (current captured)\n@@ -69,5 +69,5 @@\n La política predeterminada bloquea los hallazgos High y Critical. Tras revisar una categoría concreta, puedes elegir de forma deliberada `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. Esta opción acepta **todos los hallazgos de esa categoría**, conservando su nivel original y sus pruebas. No significa que se hayan aprobado notas concretas de forma individual. Una excepción sin hallazgos coincidentes produce una advertencia; se rechazan los códigos de riesgo desconocidos. No autorices automáticamente todos los códigos que devuelva una comparación.\n \n-La ausencia o corrupción de las pruebas de identidad, un espacio de nombres distinto, los datos no válidos de la versión candidata y los límites de inspección son errores, no categorías de riesgo que se puedan autorizar. Si el análisis no puede terminar, la comparación devuelve un error con las observaciones que haya completado. Establecer una política explícita en una solicitud de creación sin `update_from` es un error de configuración, independientemente del orden de las llamadas a los métodos de configuración.\n+La ausencia o corrupción de las pruebas de identidad, un espacio de nombres distinto, los datos no válidos de la versión candidata y la superación de los límites de inspección son errores, no categorías de riesgo que se puedan autorizar. Si el análisis no puede terminar, la comparación devuelve un error con las observaciones que haya completado. Establecer una política explícita en una solicitud de creación sin `update_from` es un error de configuración, independientemente del orden de las llamadas a los métodos de configuración.\n \n ## Pruebas e identidad\n"
+    },
+    {
+      "route": "/es/llms.txt",
+      "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018",
+      "previousSha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/es/llms.txt",
+        "route": "/es/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "28c3138d5bf5b91db443e69b23a6eb003397b8788390387896f7f179f3fcb018",
+        "bytes": 7283,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/es__llms.txt"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/ja/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "07deb43b3afd49c654c07808ad09c1d4303c835f7d82eff2fc9d425c4a98c48d",
+      "previousSha256": "c284b5d2ca5d730a3cb4ef0823fcd9ba41ee2220483a2b226a6816dcde4691fd",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/blog/stable-ids-and-deck-updates/index.md",
+        "route": "/ja/blog/stable-ids-and-deck-updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "07deb43b3afd49c654c07808ad09c1d4303c835f7d82eff2fc9d425c4a98c48d",
+        "bytes": 4247,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__blog__stable-ids-and-deck-updates__index.md"
+      },
+      "delta": "--- /ja/blog/stable-ids-and-deck-updates/index.md (previous reviewed)\n+++ /ja/blog/stable-ids-and-deck-updates/index.md (current captured)\n@@ -40,5 +40,5 @@\n ## 配布時のオリジナルパッケージを保持する\n \n-生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、対応する基準パッケージではありません。\n+生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、更新の基準パッケージとして使用できません。\n \n [更新ガイド](https://ankiforge.dev/ja/docs/updates/)では、厳密な更新、リスクポリシー、クライアントでのインポートの制約を説明します。\n"
+    },
+    {
+      "route": "/ja/blog/your-first-anki-deck/index.md",
+      "sha256": "233ed098db8f49eda8c1de204b3dbe5ecc4482f239e86ceeb3125df1303eceda",
+      "previousSha256": "233ed098db8f49eda8c1de204b3dbe5ecc4482f239e86ceeb3125df1303eceda",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/ai-anki-cards/index.md",
+      "sha256": "a332335461cfca2b750f06097a027de647b917bb76884a5dffd39aa77127570e",
+      "previousSha256": "a332335461cfca2b750f06097a027de647b917bb76884a5dffd39aa77127570e",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "08138f738270414c83b5f84855b712b05256f7f4978cd068b09bd88f457b02c2",
+      "previousSha256": "08138f738270414c83b5f84855b712b05256f7f4978cd068b09bd88f457b02c2",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/api/index.md",
+      "sha256": "5a1df645c38d4726f0dd42fc214adfa7466596a82fcea3e48255a483c2413240",
+      "previousSha256": "5a1df645c38d4726f0dd42fc214adfa7466596a82fcea3e48255a483c2413240",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/build-guarantees/index.md",
+      "sha256": "2f37e2cd091003ea06f5c6747241fa4d62f98bead59f64e244ced6aac21dee1e",
+      "previousSha256": "1ec193978555d167ed33cf51acabe2c766bbc845eddd60e4a24ac819165239df",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/build-guarantees/index.md",
+        "route": "/ja/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "2f37e2cd091003ea06f5c6747241fa4d62f98bead59f64e244ced6aac21dee1e",
+        "bytes": 7790,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__build-guarantees__index.md"
+      },
+      "delta": "--- /ja/docs/build-guarantees/index.md (previous reviewed)\n+++ /ja/docs/build-guarantees/index.md (current captured)\n@@ -43,7 +43,7 @@\n パッケージの検査だけでは、クライアント側のすべての動作を確認できません。対象の Anki バージョンと設定で、描画、再生、更新のインポートをテストしてください。復習スケジュールとスキーマ変更の制約は[更新](https://ankiforge.dev/ja/docs/updates/)を参照してください。\n \n-## 準備済み公開\n+## 候補ファイルを準備し、確認後に保存する\n \n-準備済み公開は、公開 `0.3.1` パッケージに含まれています。\n+候補を事前に生成し、確認後に保存する機能は、公開 `0.3.1` パッケージに含まれています。\n \n `prepare_publication` は1つの非公開の候補をビルド・検査・比較します。`publish` は同じファイルを使います。オプションと相対保存先は準備時に確定します。プロジェクトを編集しても候補は変わりません。準備だけで保存先が置き換わることはありません。未公開の所有者をドロップまたは閉じると候補が削除されます。\n"
+    },
+    {
+      "route": "/ja/docs/cards/index.md",
+      "sha256": "9a165ffe136ca4b48efde0ddf0d98e032aacd6de40b87a2671b185e4d344fd98",
+      "previousSha256": "9a165ffe136ca4b48efde0ddf0d98e032aacd6de40b87a2671b185e4d344fd98",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/compatibility/index.md",
+      "sha256": "2a518df085892fd262eaf2d262ba09b923f7aa9419be6c9b803150d5b5a4e541",
+      "previousSha256": "f0b20be5b8fa0d92d3bddc9e5ac4151c26c3aef76e29ec6fe31e2b0f3797753a",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/compatibility/index.md",
+        "route": "/ja/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "2a518df085892fd262eaf2d262ba09b923f7aa9419be6c9b803150d5b5a4e541",
+        "bytes": 4223,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__compatibility__index.md"
+      },
+      "delta": "--- /ja/docs/compatibility/index.md (previous reviewed)\n+++ /ja/docs/compatibility/index.md (current captured)\n@@ -17,5 +17,5 @@\n 公開ネイティブパッケージは macOS arm64/x64、Linux x64 GNU/glibc、Windows x64 に対応します。パッケージが存在するだけで、すべてのホストで実行テストが成功したことにはなりません。[Node の検証範囲](https://github.com/morehardy/anki-forge/blob/main/bindings/node/COVERAGE.md)、[Python の検証範囲](https://github.com/morehardy/anki-forge/blob/main/bindings/python/COVERAGE.md)、リリースの証拠に、実施した検査を記録しています。`0.3.1` の成功したリリース実行は [Rust](https://github.com/morehardy/anki-forge/actions/runs/38371221696)、[npm](https://github.com/morehardy/anki-forge/actions/runs/38371222114)、[PyPI](https://github.com/morehardy/anki-forge/actions/runs/38371222047) です。他の Python 実装、free-threaded インタープリター、サブインタープリターは別途検証が必要です。ブラウザー、Electron、Bun、Alpine/musl、ARM64 Linux/Windows は、記録済みの Node 検証範囲外です。\n \n-[メディアの一括インポート](https://ankiforge.dev/ja/docs/media/#batch-media-import)と[準備済み公開](https://ankiforge.dev/ja/docs/updates/#build-once-review-then-publish)のガイドで扱う機能は、公開 `0.3.1` パッケージで使用できます。\n+[メディアの一括インポート](https://ankiforge.dev/ja/docs/media/#batch-media-import)と[候補を確認してから保存する手順](https://ankiforge.dev/ja/docs/updates/#build-once-review-then-publish)のガイドで扱う機能は、公開 `0.3.1` パッケージで使用できます。\n \n ## Anki でのインポートと再生\n"
+    },
+    {
+      "route": "/ja/docs/concepts/index.md",
+      "sha256": "138ed421c4c307d615b9a99f2837cb479300e518b5ea916c5a28e1776aee7b74",
+      "previousSha256": "138ed421c4c307d615b9a99f2837cb479300e518b5ea916c5a28e1776aee7b74",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/csv-to-anki/index.md",
+      "sha256": "ca6f99906e33d492a396ea36a7583ddc989ee17e076d8300953954286a8da965",
+      "previousSha256": "ca6f99906e33d492a396ea36a7583ddc989ee17e076d8300953954286a8da965",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/custom-notetypes/index.md",
+      "sha256": "951f34f55743ef8c447cd08e34c6962d71e63b2a3bafadc5cb796f58ecee84b2",
+      "previousSha256": "951f34f55743ef8c447cd08e34c6962d71e63b2a3bafadc5cb796f58ecee84b2",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/development/index.md",
+      "sha256": "ffd9a695ade9532f08df3347351d3cfb33ef068a186f40f02cd38114e10e51ee",
+      "previousSha256": "ffd9a695ade9532f08df3347351d3cfb33ef068a186f40f02cd38114e10e51ee",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/genanki-migration/index.md",
+      "sha256": "da49c391ba6b6d46e1a491e969009f51b9ccbcf51d9f418e5c592ac3937c6665",
+      "previousSha256": "da49c391ba6b6d46e1a491e969009f51b9ccbcf51d9f418e5c592ac3937c6665",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/image-occlusion/index.md",
+      "sha256": "285bc9c4fb94d4e0cbf3c87fd497be73e3326cd3954c96e401b65dab7c0362a8",
+      "previousSha256": "285bc9c4fb94d4e0cbf3c87fd497be73e3326cd3954c96e401b65dab7c0362a8",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/index.md",
+      "sha256": "5e8316d9aeaa36378e4646bb00883b7a1ab9c18d3a3eecf311250f900f0bc087",
+      "previousSha256": "5e8316d9aeaa36378e4646bb00883b7a1ab9c18d3a3eecf311250f900f0bc087",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/installation/index.md",
+      "sha256": "a845d504d14b9f5fa795ccd492fbb1675f77953d166c443b85f5ccc8736e78b7",
+      "previousSha256": "e5ccefea0c053ef1d9fcfff76799bb13484bee21adc6f5dcbcf412628e00da79",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/installation/index.md",
+        "route": "/ja/docs/installation/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "a845d504d14b9f5fa795ccd492fbb1675f77953d166c443b85f5ccc8736e78b7",
+        "bytes": 2604,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__installation__index.md"
+      },
+      "delta": "--- /ja/docs/installation/index.md (previous reviewed)\n+++ /ja/docs/installation/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# アプリケーションに組み込む\n+# Rust アプリケーションに組み込む\n \n Canonical page: https://ankiforge.dev/ja/docs/installation/\n@@ -15,5 +15,5 @@\n ## Cargo の依存関係\n \n-公開 `ankiforge` crate には、Basic、Cloze、独自のノートタイプ、データを所有するメディア、画像穴埋め、比較、準備済み公開が含まれます。デフォルトの feature は空です。通常のアプリケーションコードでリポジトリ専用の feature を有効にする必要はありません。\n+公開 `ankiforge` crate には、Basic、Cloze、独自のノートタイプ、データを所有するメディア、画像穴埋め、比較、候補ファイルの事前生成が含まれます。デフォルトの feature は空です。通常のアプリケーションコードでリポジトリ専用の feature を有効にする必要はありません。\n \n crate はネイティブの Rust ライブラリです。Rust ツールチェーンに必要な、利用環境のリンカーとビルドツールをインストールしてください。デプロイ先を選ぶ際は[検証済みの環境](https://ankiforge.dev/ja/docs/compatibility/)を参照してください。最小要件は Rust 1.92 です。一覧に載っているプラットフォームでも、すべてのターゲットやサードパーティ製ツールチェーンの設定で動くことを保証するものではありません。\n"
+    },
+    {
+      "route": "/ja/docs/json-to-anki/index.md",
+      "sha256": "1ba2d24ca1b9ed277b5676b4d8229eac98b9ed3ff6bfcae8d4b5bd6a312a665d",
+      "previousSha256": "ee8ff705d6daeb1cd4c33dd876500c8c62803c650d8df0952805597698b13a85",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/json-to-anki/index.md",
+        "route": "/ja/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "1ba2d24ca1b9ed277b5676b4d8229eac98b9ed3ff6bfcae8d4b5bd6a312a665d",
+        "bytes": 12896,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__json-to-anki__index.md"
+      },
+      "delta": "--- /ja/docs/json-to-anki/index.md (previous reviewed)\n+++ /ja/docs/json-to-anki/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Rust、Python、TypeScript で JSON を読み取り、画像と音声を同梱し、解答だけを変更する APKG 更新を確認します。\n \n-JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、配布元の APKG と、回答だけを変更して確認済みの更新版を出力します。どちらの版も **ノート3件、カード3枚、メディアファイル2個**になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。\n+JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、初回配布用の APKG と、解答だけを変更した検証済みの更新版を出力します。どちらの版も **ノート3件、カード3枚、メディアファイル2個**になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。\n \n 管理：Anki Forge メンテナー · 英語原文の確認日：2026-10-25。\n"
+    },
+    {
+      "route": "/ja/docs/languages/index.md",
+      "sha256": "717d18efc700ee52ebe222e275fdc4851cdf09cd5f9fdf21006d15a26adf37f0",
+      "previousSha256": "717d18efc700ee52ebe222e275fdc4851cdf09cd5f9fdf21006d15a26adf37f0",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/media/index.md",
+      "sha256": "78905d1b18380ef50349d2d7111d7c69838fb0702ae5b29705378d04a2f7fbca",
+      "previousSha256": "a7bd520695674de521f87dddcddbf412041dfab5b702937d89b2c7428968821e",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/media/index.md",
+        "route": "/ja/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "78905d1b18380ef50349d2d7111d7c69838fb0702ae5b29705378d04a2f7fbca",
+        "bytes": 11313,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__media__index.md"
+      },
+      "delta": "--- /ja/docs/media/index.md (previous reviewed)\n+++ /ja/docs/media/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Rust、Python、Node.js で画像・音声をインポートしてカードを組み立て、エクスポート名、MIME タイプ、メディア上限を管理します。\n \n-発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と音声を同梱します。Anki Forge は、指定されたファイルを APKG にコピーします。音声合成などによる音声・画像の作成には別のツールが必要です。例では Rust を使います。後半の一括インポートでは Python と Node.js の呼び出しも示します。\n+発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と音声を同梱します。Anki Forge は、指定されたファイルを APKG にコピーします。音声や画像の作成には別のツールが必要です。たとえば、読み上げ音声は音声合成ツールで用意します。例では Rust を使います。後半の一括インポートでは Python と Node.js の呼び出しも示します。\n \n `Media` の値は不変のスナップショットを所有します。ファイルは `Media::file`、ネイティブのバイト列は MIME タイプを明示した `Media::bytes` でインポートします。インポート成功後に元ファイルを変更・削除してもアセットは変わりません。クローンはストレージを共有し、複数のプロジェクトで使えます。\n"
+    },
+    {
+      "route": "/ja/docs/node-api/index.md",
+      "sha256": "1a2dcc809248fc660ae81f50151815b6dbf85f9bb6ac72e5268304b70510f3ae",
+      "previousSha256": "eee60e6c3f13dd1fd655017cdd58bd54d9159fd78c561558dcda452dc6c0a546",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/node-api/index.md",
+        "route": "/ja/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "1a2dcc809248fc660ae81f50151815b6dbf85f9bb6ac72e5268304b70510f3ae",
+        "bytes": 17222,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__node-api__index.md"
+      },
+      "delta": "--- /ja/docs/node-api/index.md (previous reviewed)\n+++ /ja/docs/node-api/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Node SDK の作成メソッド、非同期処理、メディア、所有権、型付きレポート、TypeScript の設定を確認できます。\n \n-`ankiforge` エントリーポイントは、作成用モデルとして Project のみを公開します。型は[公開ソース](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts)、[レポートクラス](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts)、[JSON スナップショットの型宣言](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts)にあります。[クイックスタート](https://ankiforge.dev/ja/docs/node-quickstart/)から始めてください。\n+`ankiforge` の公開 API では、`Project` を中心にノートやメディアを組み立てます。型は[公開ソース](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts)、[レポートクラス](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts)、[JSON スナップショットの型宣言](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts)にあります。[クイックスタート](https://ankiforge.dev/ja/docs/node-quickstart/)から始めてください。\n \n ## プロジェクトとノート\n@@ -103,7 +103,7 @@\n 型付き画像を追加する際は image/\\* MIME が必要です。音声参照には audio/\\* または video/\\* を受け付けます。他の種類は `NOTE.MEDIA_USAGE_INVALID` になります。コンストラクター自体は失敗せず、明示的アセットと直接記述した HTML には影響しません。検査はインポート時に保持した MIME を使い、再生を保証しません。ビルド時の独立した MIME・拡張子検証も引き続き適用されます。対象と詳細の完全な対応表は[設計文書](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)を参照してください。\n \n-## メディアの一括処理と準備済み公開\n+## メディアの一括処理と候補ファイルの事前生成\n \n-メディアの一括処理と準備済み公開は、公開 `0.3.1` パッケージに含まれています。\n+メディアの一括処理と候補ファイルの事前生成は、公開 `0.3.1` パッケージに含まれています。\n \n ### 準備、確認、公開\n"
+    },
+    {
+      "route": "/ja/docs/node-quickstart/index.md",
+      "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6",
+      "previousSha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/node-quickstart/index.md",
+        "route": "/ja/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "bac999e156c163c648e26010ef568e8ad54bda97d93bba618a60c24b1ded6ca6",
+        "bytes": 2860,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__node-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/python-api/index.md",
+      "sha256": "b8233fc2436667a20e66f3106061d3017d19ab09c732db47518a1fda76b72096",
+      "previousSha256": "79ac029749ef1f2f0489447a85f1b61d969a76e619c760df478c2ea60772ab0d",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/python-api/index.md",
+        "route": "/ja/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b8233fc2436667a20e66f3106061d3017d19ab09c732db47518a1fda76b72096",
+        "bytes": 12978,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__python-api__index.md"
+      },
+      "delta": "--- /ja/docs/python-api/index.md (previous reviewed)\n+++ /ja/docs/python-api/index.md (current captured)\n@@ -3,5 +3,5 @@\n Canonical page: https://ankiforge.dev/ja/docs/python-api/\n Language: ja\n-Description: Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、準備済み公開の API を確認できます。\n+Description: Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、候補の事前生成と保存に使う API を確認できます。\n \n この SDK は、ネイティブ拡張を通じて標準の Rust 公開 API を呼び出します。`py.typed` と検証済みの公開シグネチャを含みます。まずは[クイックスタート](https://ankiforge.dev/ja/docs/python-quickstart/)を参照してください。\n@@ -72,7 +72,7 @@\n 型付き画像を追加する場合は image/\\* MIME が必要です。音声参照には audio/\\* または video/\\* を使えます。それ以外のカテゴリでは `NOTE.MEDIA_USAGE_INVALID` が発生します。コンストラクターは引き続き失敗せず、明示的なファイル追加と生の HTML には影響しません。この検査はインポート時に保持した MIME を使うもので、再生できることを保証しません。ビルド時の独立した MIME／拡張子検証も引き続き適用されます。対象と詳細の全項目は[設計文書](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)を参照してください。\n \n-## メディアの一括処理と準備済み公開\n+## メディアの一括処理と候補ファイルの事前生成\n \n-メディアの一括処理と準備済み公開は、公開パッケージ `0.3.1` に含まれています。\n+メディアの一括処理と候補ファイルの事前生成は、公開パッケージ `0.3.1` に含まれています。\n \n ### 準備、確認、公開\n"
+    },
+    {
+      "route": "/ja/docs/python-diagnostics/index.md",
+      "sha256": "d6df1f9e58a2ca63149e935e4e77447e642860894446a80ccf10914b7bf65038",
+      "previousSha256": "d6df1f9e58a2ca63149e935e4e77447e642860894446a80ccf10914b7bf65038",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/python-migration/index.md",
+      "sha256": "3541714fd704afd5a25990680548f43a50a8bba6f0f7df4b9918ffc90b465534",
+      "previousSha256": "32c6100954fb72b8e9fb51eb6d28f22fd52746c780a42acb0698f00ebac31787",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/python-migration/index.md",
+        "route": "/ja/docs/python-migration/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "3541714fd704afd5a25990680548f43a50a8bba6f0f7df4b9918ffc90b465534",
+        "bytes": 2655,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__python-migration__index.md"
+      },
+      "delta": "--- /ja/docs/python-migration/index.md (previous reviewed)\n+++ /ja/docs/python-migration/index.md (current captured)\n@@ -19,5 +19,5 @@\n | 暗黙の HTML | 文字列は Text。HTML には `Content.html` を使う |\n | 安定した識別情報のないマスク | `Mask.rect(key, x, y, width, height)` |\n-| 任意の成果物と ensure\\_success | 成果物が保証された `BuildOutput`。失敗時は構造化エラーを送出 |\n+| 成果物がない場合もある戻り値と ensure\\_success | 成果物が保証された `BuildOutput`。失敗時は構造化エラーを送出 |\n | 診断からレポートの成功・失敗を推測 | Output/Error のスナップショットが実際の結果を示す。Report は観測結果のみ |\n | Diff、lockfile、更新安全性の切り替え | `compare(CompareOptions.against(...))`、`BuildOptions.update_from(...)` |\n"
+    },
+    {
+      "route": "/ja/docs/python-quickstart/index.md",
+      "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+      "previousSha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/python-quickstart/index.md",
+        "route": "/ja/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "fd57758cf838517b015280fb3eccde26c0bd38f5b3a304acf2b64193e4679862",
+        "bytes": 2867,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__python-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/quickstart/index.md",
+      "sha256": "947d442d86cfa882c7ded390c683354088176d692f7e0b23f1db1d79927ea6db",
+      "previousSha256": "0f8a8a7b2573e65a2cca84486b97ca39265b9110ff01cff5ac9aeee15c4d769b",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/quickstart/index.md",
+        "route": "/ja/docs/quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "947d442d86cfa882c7ded390c683354088176d692f7e0b23f1db1d79927ea6db",
+        "bytes": 2405,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__quickstart__index.md"
+      },
+      "delta": "--- /ja/docs/quickstart/index.md (previous reviewed)\n+++ /ja/docs/quickstart/index.md (current captured)\n@@ -3,5 +3,5 @@\n Canonical page: https://ankiforge.dev/ja/docs/quickstart/\n Language: ja\n-Description: Rust の公開パッケージをインストールし、スペイン語のカードを作成して、永続 APKG ファイルを書き出します。\n+Description: Rust の公開パッケージをインストールし、スペイン語のカードを作成して、後から使える APKG ファイルとして保存します。\n \n Rust 1.92 以降を使用します。別のプログラミング言語を使う場合は、[Node／TypeScript または Python](https://ankiforge.dev/ja/docs/languages/)を選んでください。\n"
+    },
+    {
+      "route": "/ja/docs/rust-api/index.md",
+      "sha256": "cff005643d66a68633d81d832a0286b39347097da02bac9cae2e5c08443eafad",
+      "previousSha256": "19020cb9a96d5299ae332e54d0b396cd8e967159d0af254a5db5eb3ba2f0535f",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/rust-api/index.md",
+        "route": "/ja/docs/rust-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "cff005643d66a68633d81d832a0286b39347097da02bac9cae2e5c08443eafad",
+        "bytes": 12253,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__rust-api__index.md"
+      },
+      "delta": "--- /ja/docs/rust-api/index.md (previous reviewed)\n+++ /ja/docs/rust-api/index.md (current captured)\n@@ -74,5 +74,5 @@\n ## 一度確認した候補をそのまま公開する\n \n-準備済み公開 API は、公開 `0.3.1` パッケージに含まれています。\n+候補の事前生成と保存を行う API は、公開 `0.3.1` パッケージに含まれています。\n \n ```rust\n"
+    },
+    {
+      "route": "/ja/docs/rust-guide/index.md",
+      "sha256": "44c4b12aedda29bafc831a0769b3665afcaf1e508d9e69debacd0abc40c013df",
+      "previousSha256": "44c4b12aedda29bafc831a0769b3665afcaf1e508d9e69debacd0abc40c013df",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/templates/index.md",
+      "sha256": "7f0a1091236256bb74c9896008a38b91ff0f2fa242fcba9cc9d65d45e407b585",
+      "previousSha256": "7f0a1091236256bb74c9896008a38b91ff0f2fa242fcba9cc9d65d45e407b585",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/troubleshooting/index.md",
+      "sha256": "b3a4689f138cda1a0761d132f23054b97f3f76d54dc40adc43748cfc6358166c",
+      "previousSha256": "b3a4689f138cda1a0761d132f23054b97f3f76d54dc40adc43748cfc6358166c",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/ja/docs/updates/index.md",
+      "sha256": "c105253030b4a9570a219cd13b0265fcfff5485bc7f45174664311a867d93f6b",
+      "previousSha256": "3b49f7aec157c4441c1a464e85af297756406b11556bd2a23973efd28955e550",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/docs/updates/index.md",
+        "route": "/ja/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c105253030b4a9570a219cd13b0265fcfff5485bc7f45174664311a867d93f6b",
+        "bytes": 10399,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__docs__updates__index.md"
+      },
+      "delta": "--- /ja/docs/updates/index.md (previous reviewed)\n+++ /ja/docs/updates/index.md (current captured)\n@@ -89,5 +89,5 @@\n この API は公開パッケージ `0.3.1` に含まれています。\n \n-一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。準備済み公開では、実際の APKG と確認対象のレポートの対応を保てます。\n+一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。`prepare_publication` で候補を準備し、確認後に `publish` で保存すると、レポートで確認したものと同じ APKG を書き出せます。\n \n ```rust\n"
+    },
+    {
+      "route": "/ja/llms.txt",
+      "sha256": "9eaf1d4a8c6c9b855c9df7ed33bac169659f9d461a099b44c3e7a30aba2ac887",
+      "previousSha256": "ae4d3f3686cf14f64b9dfd0971dc7fb47b477a1145dfac5866a58431a20675ae",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/ja/llms.txt",
+        "route": "/ja/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "9eaf1d4a8c6c9b855c9df7ed33bac169659f9d461a099b44c3e7a30aba2ac887",
+        "bytes": 7718,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/ja__llms.txt"
+      },
+      "delta": "--- /ja/llms.txt (previous reviewed)\n+++ /ja/llms.txt (current captured)\n@@ -17,5 +17,5 @@\n ## クイックスタート\n \n-- [Rust で Anki カードを生成する](https://ankiforge.dev/ja/docs/quickstart/index.md): Rust の公開パッケージをインストールし、スペイン語のカードを作成して、永続 APKG ファイルを書き出します。\n+- [Rust で Anki カードを生成する](https://ankiforge.dev/ja/docs/quickstart/index.md): Rust の公開パッケージをインストールし、スペイン語のカードを作成して、後から使える APKG ファイルとして保存します。\n - [Node.js で Anki カードを生成する](https://ankiforge.dev/ja/docs/node-quickstart/index.md): 公開 Node パッケージをインストールし、完全な JavaScript プログラムで最初の永続 APKG をエクスポートします。\n - [Python で Anki カードを生成する](https://ankiforge.dev/ja/docs/python-quickstart/index.md): 仮想環境に公開 Python パッケージをインストールし、短い完全なプログラムで永続 APKG を作成します。\n@@ -26,5 +26,5 @@\n - [Rust API ガイド](https://ankiforge.dev/ja/docs/rust-api/index.md): 公開される作成メソッド、ビルドの既定値、レポート、診断の動作を確認できます。\n - [Node と TypeScript API](https://ankiforge.dev/ja/docs/node-api/index.md): Node SDK の作成メソッド、非同期処理、メディア、所有権、型付きレポート、TypeScript の設定を確認できます。\n-- [Python API リファレンス](https://ankiforge.dev/ja/docs/python-api/index.md): Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、準備済み公開の API を確認できます。\n+- [Python API リファレンス](https://ankiforge.dev/ja/docs/python-api/index.md): Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、候補の事前生成と保存に使う API を確認できます。\n \n ## 作業別ガイド\n"
+    },
+    {
+      "route": "/llms.txt",
+      "sha256": "4600e2649769c6685b9a21f46cf10857f13526763ec33d993f439743ae9a3262",
+      "previousSha256": "86bf5ec22c73ac98c2f908f0a10553556624781216cca7d9b1a58bc94341201a",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/llms.txt",
+        "route": "/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "4600e2649769c6685b9a21f46cf10857f13526763ec33d993f439743ae9a3262",
+        "bytes": 6099,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/llms.txt"
+      },
+      "delta": "--- /llms.txt (previous reviewed)\n+++ /llms.txt (current captured)\n@@ -3,5 +3,5 @@\n > Anki Forge generates Anki APKG decks from code using Rust, Node / TypeScript or Python.\n \n-Current public package version: 0.3.1. Normal export does not require Anki. Published package APIs differ from source builds. Keep the original previous distribution APKG for updates; Anki import settings and newer local edits can affect the result.\n+Current public package version: 0.3.1. Exporting a deck does not require Anki. The APIs available in published packages differ from those in source builds. For updates, keep the original APKG from the previous release; Anki import settings and newer local edits can affect the result.\n \n - Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)\n"
+    },
+    {
+      "route": "/pt-br/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "ef4552b9ce61d45d075fc7a98702c3ce5fc30fc50ad175dbb504025075842a17",
+      "previousSha256": "157bf6058438b9e6781e6c6c97103cae55145c270f61d628380980f7a0bfe09a",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/blog/stable-ids-and-deck-updates/index.md",
+        "route": "/pt-br/blog/stable-ids-and-deck-updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "ef4552b9ce61d45d075fc7a98702c3ce5fc30fc50ad175dbb504025075842a17",
+        "bytes": 3503,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__blog__stable-ids-and-deck-updates__index.md"
+      },
+      "delta": "--- /pt-br/blog/stable-ids-and-deck-updates/index.md (previous reviewed)\n+++ /pt-br/blog/stable-ids-and-deck-updates/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# A identidade da nota deve durar mais que seu texto\n+# Atualize o conteúdo da nota sem mudar seu ID\n \n Canonical page: https://ankiforge.dev/pt-br/blog/stable-ids-and-deck-updates/\n"
+    },
+    {
+      "route": "/pt-br/blog/your-first-anki-deck/index.md",
+      "sha256": "539f03df2a9742030bc99fb07ee48880d573668212f14b19f3e0a1356a6e30b0",
+      "previousSha256": "539f03df2a9742030bc99fb07ee48880d573668212f14b19f3e0a1356a6e30b0",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/ai-anki-cards/index.md",
+      "sha256": "befedb5ad91afd444191a8637da2d6fcd68f2c38fe9f66f4cb1f4ecb3c5872f2",
+      "previousSha256": "befedb5ad91afd444191a8637da2d6fcd68f2c38fe9f66f4cb1f4ecb3c5872f2",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "2ec11a06b544ce3008769c15e36e1d9a9a0046fcc8067bc76a1ee4054732edff",
+      "previousSha256": "c98ec976915b43039d579d36ac1c7a23ec2804a1bd8aa7a11f164755826c9d8a",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/anki-forge-vs-genanki/index.md",
+        "route": "/pt-br/docs/anki-forge-vs-genanki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "2ec11a06b544ce3008769c15e36e1d9a9a0046fcc8067bc76a1ee4054732edff",
+        "bytes": 4894,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__anki-forge-vs-genanki__index.md"
+      },
+      "delta": "--- /pt-br/docs/anki-forge-vs-genanki/index.md (previous reviewed)\n+++ /pt-br/docs/anki-forge-vs-genanki/index.md (current captured)\n@@ -13,5 +13,5 @@\n | Identidade | Namespace e chaves de nota explícitos; preservação do APKG original para atualizações | GUIDs configuráveis e IDs numéricos de modelos e baralhos; suporte a atualizações por reimportação |\n | Antes da publicação | Resultados de comparação, política de risco e candidato preparado inspecionado | O script e os testes definem a revisão antes da publicação |\n-| Propriedade da mídia | Imagens e sons tipados contêm cópias independentes dos dados | O script fornece os arquivos de mídia e suas referências ao pacote |\n+| Propriedade da mídia | Os valores tipados de imagem e áudio mantêm snapshots independentes dos arquivos de origem; clones compartilham o armazenamento | O script fornece os arquivos de mídia e suas referências ao pacote |\n | Oclusão de imagem por código | Máscaras retangulares com chaves pela API pública | Avalie um modelo ou extensão adequado ao seu fluxo |\n | Custo de execução | Dependências nativas; exige plataforma e interpretador compatíveis | Pode ser mais econômico manter a implantação Python existente |\n"
+    },
+    {
+      "route": "/pt-br/docs/api/index.md",
+      "sha256": "eea15016df138379457402afc4cb5eb552914634d7b00e4ad4874827c1f5d893",
+      "previousSha256": "eea15016df138379457402afc4cb5eb552914634d7b00e4ad4874827c1f5d893",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/build-guarantees/index.md",
+      "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa",
+      "previousSha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/build-guarantees/index.md",
+        "route": "/pt-br/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "314c53fe1ec92e7b779ead90b8963ad00cb3374c8ec9e6b5e8d14728b85fb6fa",
+        "bytes": 6678,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__build-guarantees__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/cards/index.md",
+      "sha256": "fbec8e6e531a78944a2a248b3e08f89a929d9e57013947f50c9d90654051d055",
+      "previousSha256": "fbec8e6e531a78944a2a248b3e08f89a929d9e57013947f50c9d90654051d055",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/compatibility/index.md",
+      "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+      "previousSha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/compatibility/index.md",
+        "route": "/pt-br/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "80a33cadf9e255140417047581ef39ee1cfd4a4c920d4f6b5522b9c194781b5f",
+        "bytes": 4003,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__compatibility__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/concepts/index.md",
+      "sha256": "466336d94d0e35ea6ecc8b1a7f88d54a41908ea15b8d71e9b3990d8c6d809553",
+      "previousSha256": "466336d94d0e35ea6ecc8b1a7f88d54a41908ea15b8d71e9b3990d8c6d809553",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/csv-to-anki/index.md",
+      "sha256": "99c31d0a161dc92ab8a84506c46ae7186c2dc4e1c1b6487461f531d892588a5a",
+      "previousSha256": "99c31d0a161dc92ab8a84506c46ae7186c2dc4e1c1b6487461f531d892588a5a",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/custom-notetypes/index.md",
+      "sha256": "7f2254228555653ee2c603fc13f71ab58dcd59d7620eb3faa50cdb7fb6cdbedd",
+      "previousSha256": "8112b3683338b2ea4407197cb42d92058aab757b098a9fee1c2a290da65ab085",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/custom-notetypes/index.md",
+        "route": "/pt-br/docs/custom-notetypes/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "7f2254228555653ee2c603fc13f71ab58dcd59d7620eb3faa50cdb7fb6cdbedd",
+        "bytes": 3923,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__custom-notetypes__index.md"
+      },
+      "delta": "--- /pt-br/docs/custom-notetypes/index.md (previous reviewed)\n+++ /pt-br/docs/custom-notetypes/index.md (current captured)\n@@ -3,5 +3,5 @@\n Canonical page: https://ankiforge.dev/pt-br/docs/custom-notetypes/\n Language: pt-BR\n-Description: Defina campos, modelos de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis.\n+Description: Defina campos, templates de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis.\n \n Finalize um modelo uma vez e crie notas a partir dele. O `NoteType` retornado é imutável e pode ser reutilizado em funções ou em vários projetos. Uma nota mantém seu modelo, portanto não pode apontar por engano para o nome de um modelo não registrado.\n"
+    },
+    {
+      "route": "/pt-br/docs/development/index.md",
+      "sha256": "256264e9e0723f07ef493842e2dc0570c239dd7a4862aee5b7e6c2e9e7fff1c1",
+      "previousSha256": "256264e9e0723f07ef493842e2dc0570c239dd7a4862aee5b7e6c2e9e7fff1c1",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/genanki-migration/index.md",
+      "sha256": "cd0ff2962e9953e2b9b3cf7fcc75a5534704f2355f880e39ee64befd9235d425",
+      "previousSha256": "e2561e93b9fe7b2fe5b65d557070bd8461058631d1714da1493da59190871ab5",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/genanki-migration/index.md",
+        "route": "/pt-br/docs/genanki-migration/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "cd0ff2962e9953e2b9b3cf7fcc75a5534704f2355f880e39ee64befd9235d425",
+        "bytes": 4146,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__genanki-migration__index.md"
+      },
+      "delta": "--- /pt-br/docs/genanki-migration/index.md (previous reviewed)\n+++ /pt-br/docs/genanki-migration/index.md (current captured)\n@@ -7,5 +7,5 @@\n Ainda está escolhendo uma biblioteca? Leia [Anki Forge ou genanki](https://ankiforge.dev/pt-br/docs/anki-forge-vs-genanki/).\n \n-O Anki Forge usa chaves de dados estáveis, modelos imutáveis validados, cópias independentes de mídia e operações explícitas de geração e atualização. Trata-se de um novo modelo de criação de conteúdo; ele não emula objetos genanki nem as antigas interfaces Deck e lockfile do Anki Forge.\n+O Anki Forge usa chaves de dados estáveis, modelos imutáveis validados, snapshots de mídia que não dependem dos arquivos de origem e operações explícitas de geração e atualização. Trata-se de um novo modelo de criação de conteúdo; ele não emula objetos genanki nem as antigas interfaces Deck e lockfile do Anki Forge.\n \n | Conceito do genanki | Equivalente no Anki Forge |\n@@ -34,5 +34,5 @@\n Escolha chaves a partir de identificadores de negócio persistentes. Renomear um nome de exibição ou alterar o texto de uma definição não deve mudar essas chaves. Não use o hash do conteúdo atual dos campos como identidade, a menos que essa seja uma exigência explícita do seu importador. Para dados sem chaves, atribua e armazene as chaves fora do SDK.\n \n-As expressões dos modelos usam chaves Field. Os nomes de exibição podem ser traduzidos de forma independente; a biblioteca converte as referências às chaves nos nomes de campo do Anki. A finalização do modelo rejeita declarações ausentes ou conflitantes antes que uma nota possa ser adicionada. A adição de notas coleta automaticamente as dependências dos modelos e rejeita definições conflitantes para uma mesma chave de modelo.\n+As expressões dos templates de cartão usam as chaves dos campos (Field). Os nomes de exibição podem ser traduzidos de forma independente; a biblioteca converte as referências às chaves nos nomes de campo do Anki. A finalização do modelo rejeita declarações ausentes ou conflitantes antes que uma nota possa ser adicionada. A adição de notas coleta automaticamente as dependências dos modelos e rejeita definições conflitantes para uma mesma chave de modelo.\n \n Strings representam texto simples; envolva HTML intencional em `Content.html(...)`. Use `media.image()` / `media.sound()` e `Content.sequence(...)` para compor o conteúdo. As cópias dos arquivos permanecem disponíveis mesmo se o arquivo original for removido ou alterado. Declare explicitamente as dependências referenciadas por HTML, CSS ou scripts com `.asset(media)` no construtor do modelo ou `project.add_asset(media)`.\n"
+    },
+    {
+      "route": "/pt-br/docs/image-occlusion/index.md",
+      "sha256": "52c32f7ae04e20fbc1ce364d923f88720b3fdd428746e9a572f70f1fd53be07d",
+      "previousSha256": "52c32f7ae04e20fbc1ce364d923f88720b3fdd428746e9a572f70f1fd53be07d",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/index.md",
+      "sha256": "b98f147a23e0454c96cd95894d1a786338c9685cc83363fed802e14c5de391af",
+      "previousSha256": "8eb6e083e2825d58ba7f45c0535a5d39e5ce879f6760f03a82a2e1597734ec24",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/index.md",
+        "route": "/pt-br/docs/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b98f147a23e0454c96cd95894d1a786338c9685cc83363fed802e14c5de391af",
+        "bytes": 3884,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__index.md"
+      },
+      "delta": "--- /pt-br/docs/index.md (previous reviewed)\n+++ /pt-br/docs/index.md (current captured)\n@@ -3,7 +3,7 @@\n Canonical page: https://ankiforge.dev/pt-br/docs/\n Language: pt-BR\n-Description: Escolha uma linguagem, gere seu primeiro baralho e aprenda a adicionar mídia, modelos e atualizações repetíveis.\n+Description: Escolha uma linguagem de programação, gere seu primeiro baralho e aprenda a adicionar mídia e templates e a atualizar o baralho.\n \n-O Anki Forge transforma notas, modelos e arquivos de mídia em pacotes `.apkg` do Anki. Use a biblioteca quando seu material de estudo estiver em código ou dados estruturados e você precisar gerar e distribuir novas versões dos baralhos.\n+O Anki Forge transforma notas, templates e arquivos de mídia em pacotes `.apkg` do Anki. Use a biblioteca quando seu material de estudo estiver em código ou dados estruturados e você precisar gerar e distribuir novas versões dos baralhos.\n \n ## Comece pela sua linguagem\n@@ -21,5 +21,5 @@\n ## Entenda os componentes\n \n-Uma nota armazena campos; um tipo de nota e seus modelos de cartão transformam esses campos em cartões. Os baralhos agrupam os cartões resultantes no Anki. Os [conceitos fundamentais](https://ankiforge.dev/pt-br/docs/concepts/) explicam essas relações, como `Project` mantém a propriedade dos seus valores e como preservar a identidade das notas.\n+Uma nota armazena campos; um tipo de nota e seus templates de cartão transformam esses campos em cartões. Os baralhos agrupam os cartões resultantes no Anki. Os [conceitos fundamentais](https://ankiforge.dev/pt-br/docs/concepts/) explicam essas relações, como `Project` mantém a propriedade dos seus valores e como preservar a identidade das notas.\n \n ## Adicione o próximo recurso\n@@ -30,5 +30,5 @@\n -   [Basic e Cloze](https://ankiforge.dev/pt-br/docs/cards/): crie cartões de pergunta e resposta ou de preenchimento de lacunas.\n -   [Imagens e áudio](https://ankiforge.dev/pt-br/docs/media/): registre arquivos reais e inclua-os nos cartões.\n--   [Tipos de nota personalizados](https://ankiforge.dev/pt-br/docs/custom-notetypes/) e [pacotes de modelos](https://ankiforge.dev/pt-br/docs/templates/): defina campos, layouts e CSS.\n+-   [Tipos de nota personalizados](https://ankiforge.dev/pt-br/docs/custom-notetypes/) e [pacotes de templates](https://ankiforge.dev/pt-br/docs/templates/): defina campos, layouts e CSS.\n -   [Oclusão de imagem](https://ankiforge.dev/pt-br/docs/image-occlusion/): crie perguntas a partir de regiões de uma imagem.\n -   [Atualização e distribuição](https://ankiforge.dev/pt-br/docs/updates/): preserve as evidências de identidade e revisão entre versões.\n"
+    },
+    {
+      "route": "/pt-br/docs/installation/index.md",
+      "sha256": "0bb2de60760a99080fac163b2025adcac5664d0a3e3d454260e641f7abe3f028",
+      "previousSha256": "a4e048e711cc2b6b627830fef6a114586abbab0c3974ccd11309873e5ae205be",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/installation/index.md",
+        "route": "/pt-br/docs/installation/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "0bb2de60760a99080fac163b2025adcac5664d0a3e3d454260e641f7abe3f028",
+        "bytes": 2291,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__installation__index.md"
+      },
+      "delta": "--- /pt-br/docs/installation/index.md (previous reviewed)\n+++ /pt-br/docs/installation/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# Integre o Anki Forge à sua aplicação\n+# Integre o Anki Forge à sua aplicação Rust\n \n Canonical page: https://ankiforge.dev/pt-br/docs/installation/\n"
+    },
+    {
+      "route": "/pt-br/docs/json-to-anki/index.md",
+      "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+      "previousSha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/json-to-anki/index.md",
+        "route": "/pt-br/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "d960e3b6f242de81ccb7b271bfd9f888f262df20cd6d0b080814455a19f9a18c",
+        "bytes": 11905,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__json-to-anki__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/languages/index.md",
+      "sha256": "5ae18762cb7c406ef648adbc31777a223e129727499d3083c8dae127cadf49f7",
+      "previousSha256": "5ae18762cb7c406ef648adbc31777a223e129727499d3083c8dae127cadf49f7",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/media/index.md",
+      "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992",
+      "previousSha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/media/index.md",
+        "route": "/pt-br/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "3df0798370b6757f862aedb4ce74726c95d90b91ecdf85fd55626eb469bd4992",
+        "bytes": 9379,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__media__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/node-api/index.md",
+      "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+      "previousSha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/node-api/index.md",
+        "route": "/pt-br/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "52facc7a7230913e53b21b81e9411ff9264e2024be69eaeec53bee66b34e6056",
+        "bytes": 14985,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__node-api__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/node-quickstart/index.md",
+      "sha256": "cfc3e49900f057f24d02d19bf3949a06550fbf2d37bc7d5b64ccb50337a3060e",
+      "previousSha256": "39be759ea766c72ed9cefaa0de126ac6143a9c4f166031516a15cce7ef7f11b8",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/node-quickstart/index.md",
+        "route": "/pt-br/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "cfc3e49900f057f24d02d19bf3949a06550fbf2d37bc7d5b64ccb50337a3060e",
+        "bytes": 2543,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__node-quickstart__index.md"
+      },
+      "delta": "--- /pt-br/docs/node-quickstart/index.md (previous reviewed)\n+++ /pt-br/docs/node-quickstart/index.md (current captured)\n@@ -42,5 +42,5 @@\n \n -   [Imagens e áudio](https://ankiforge.dev/pt-br/docs/media/) e [API de mídia do Node](https://ankiforge.dev/pt-br/docs/node-api/#media-and-image-occlusion)\n--   [Tipos de nota personalizados](https://ankiforge.dev/pt-br/docs/custom-notetypes/) e [pacotes de modelos](https://ankiforge.dev/pt-br/docs/templates/)\n+-   [Tipos de nota personalizados](https://ankiforge.dev/pt-br/docs/custom-notetypes/) e [pacotes de templates](https://ankiforge.dev/pt-br/docs/templates/)\n -   [Oclusão de imagem](https://ankiforge.dev/pt-br/docs/image-occlusion/)\n -   [Comparação e atualização](https://ankiforge.dev/pt-br/docs/updates/)\n"
+    },
+    {
+      "route": "/pt-br/docs/python-api/index.md",
+      "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328",
+      "previousSha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/python-api/index.md",
+        "route": "/pt-br/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "4b16bd10cffc82f0eddb385046f188e7b108943e748af0720d1e47d8397ae328",
+        "bytes": 10520,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__python-api__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/python-diagnostics/index.md",
+      "sha256": "6fabf0647bbffeb9be03f960b842e24fd41c9e5f191b62b1c75d54b69e41314f",
+      "previousSha256": "6fabf0647bbffeb9be03f960b842e24fd41c9e5f191b62b1c75d54b69e41314f",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/python-migration/index.md",
+      "sha256": "3dda20b1f9364411df0b92799faa9ad4c2393d3299175388d3d2b5d79176a6b6",
+      "previousSha256": "8bf727800d7731622011849010832598f44efdf7ccc6f1cbb88d3bbeb80225ca",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/python-migration/index.md",
+        "route": "/pt-br/docs/python-migration/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "3dda20b1f9364411df0b92799faa9ad4c2393d3299175388d3d2b5d79176a6b6",
+        "bytes": 2519,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__python-migration__index.md"
+      },
+      "delta": "--- /pt-br/docs/python-migration/index.md (previous reviewed)\n+++ /pt-br/docs/python-migration/index.md (current captured)\n@@ -15,5 +15,5 @@\n | NoteType mutável e add\\_notetype | `NoteType.builder(key)...build()`, seguido de `model.note()` |\n | Referências aos modelos por strings | As notas mantêm a propriedade do modelo validado |\n-| Registro de mídia do projeto | Cópias independentes de `Media.file` / `Media.bytes` |\n+| Registro de mídia do projeto | Snapshots de `Media.file` / `Media.bytes` que não dependem dos arquivos de origem |\n | Mídia já renderizada e métodos de atribuição específicos para cada campo | `Content.sequence`, `media.image()`, `media.sound()`, `Note.field` |\n | HTML implícito | Strings são Text; use `Content.html` |\n@@ -24,3 +24,3 @@\n | Pacote executado em um subprocesso | Binding PyO3 no mesmo processo para a API padrão de Rust |\n \n-Somente APKGs originais distribuídos completos, com as evidências de identidade atuais, servem como base de atualização. Pacotes de modelos antigos e evidências de APKGs anteriores não são recuperados automaticamente. Consulte o [README do SDK](https://github.com/morehardy/anki-forge/blob/main/bindings/python/README.md) e seus exemplos executáveis para seguir o novo fluxo.\n+Somente APKGs originais distribuídos completos, com as evidências de identidade atuais, servem como base de atualização. Pacotes de templates antigos e evidências de APKGs anteriores não são recuperados automaticamente. Consulte o [README do SDK](https://github.com/morehardy/anki-forge/blob/main/bindings/python/README.md) e seus exemplos executáveis para seguir o novo fluxo.\n"
+    },
+    {
+      "route": "/pt-br/docs/python-quickstart/index.md",
+      "sha256": "934645ffd2b7bd299886c13d6c683c75587b58b323e787e0859e1c2e60520721",
+      "previousSha256": "1af1aa375d9b8921627b6bf6244e4af65f2f9e91b07ab7ad47a1b6a528df9a48",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/python-quickstart/index.md",
+        "route": "/pt-br/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "934645ffd2b7bd299886c13d6c683c75587b58b323e787e0859e1c2e60520721",
+        "bytes": 2604,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__python-quickstart__index.md"
+      },
+      "delta": "--- /pt-br/docs/python-quickstart/index.md (previous reviewed)\n+++ /pt-br/docs/python-quickstart/index.md (current captured)\n@@ -41,5 +41,5 @@\n \n -   [Imagens e áudio](https://ankiforge.dev/pt-br/docs/media/) e [API de mídia do Python](https://ankiforge.dev/pt-br/docs/python-api/#media-and-occlusion)\n--   [Tipos de nota personalizados](https://ankiforge.dev/pt-br/docs/custom-notetypes/) e [pacotes de modelos](https://ankiforge.dev/pt-br/docs/templates/)\n+-   [Tipos de nota personalizados](https://ankiforge.dev/pt-br/docs/custom-notetypes/) e [pacotes de templates](https://ankiforge.dev/pt-br/docs/templates/)\n -   [Oclusão de imagem](https://ankiforge.dev/pt-br/docs/image-occlusion/)\n -   [Comparação e atualização](https://ankiforge.dev/pt-br/docs/updates/)\n"
+    },
+    {
+      "route": "/pt-br/docs/quickstart/index.md",
+      "sha256": "2218cb33224bfbe1c126b9ff625b717efd67a836dbae439ba46d422ff9ff609c",
+      "previousSha256": "2218cb33224bfbe1c126b9ff625b717efd67a836dbae439ba46d422ff9ff609c",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/rust-api/index.md",
+      "sha256": "519e42693a5323ae999fc3404afdc99160b044c5891a8265b2daae2724f6694d",
+      "previousSha256": "519e42693a5323ae999fc3404afdc99160b044c5891a8265b2daae2724f6694d",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/rust-guide/index.md",
+      "sha256": "34ae80ef14e2f28fe44eb369fca33ae4fd6e9e560e17d08ec99a19491fc1cec6",
+      "previousSha256": "34ae80ef14e2f28fe44eb369fca33ae4fd6e9e560e17d08ec99a19491fc1cec6",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/pt-br/docs/templates/index.md",
+      "sha256": "d20a9a8f6f57d0102f15cd0020009737856a9a135887f211b0cc5031877d82ee",
+      "previousSha256": "3b1c1ce70b969eccb92a067ffc852d66309668c1e07260c36848957acc16daa9",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/templates/index.md",
+        "route": "/pt-br/docs/templates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "d20a9a8f6f57d0102f15cd0020009737856a9a135887f211b0cc5031877d82ee",
+        "bytes": 6405,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__templates__index.md"
+      },
+      "delta": "--- /pt-br/docs/templates/index.md (previous reviewed)\n+++ /pt-br/docs/templates/index.md (current captured)\n@@ -1,7 +1,7 @@\n-# Reutilize modelos de cartão, CSS e mídia no Anki\n+# Reutilize templates de cartão, CSS e mídia no Anki\n \n Canonical page: https://ankiforge.dev/pt-br/docs/templates/\n Language: pt-BR\n-Description: Carregue um tipo de nota reutilizável de um pacote com modelos, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\n+Description: Carregue um tipo de nota reutilizável de um pacote com templates, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\n \n Reutilize o mesmo design de cartões Anki em vários baralhos: mantenha os templates, o CSS e a mídia de um tipo de nota em um diretório e carregue-o para cartões normais ou Cloze. Os exemplos usam Rust; Python e Node.js carregam pacotes com `NoteType.from_bundle` e `NoteType.fromBundle` (veja a [API de Python](https://ankiforge.dev/pt-br/docs/python-api/#models-and-templates) e a [API de Node](https://ankiforge.dev/pt-br/docs/node-api/#immutable-models)).\n"
+    },
+    {
+      "route": "/pt-br/docs/troubleshooting/index.md",
+      "sha256": "69007540d7bfd207cceea4cc219475709ba6e224c6211790a9b231efd9ce7cc9",
+      "previousSha256": "e9963adc2af3fe64e74d7d799905d4d0a6864a9c7a99d2bbd81ddad4c6de5caf",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/troubleshooting/index.md",
+        "route": "/pt-br/docs/troubleshooting/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "69007540d7bfd207cceea4cc219475709ba6e224c6211790a9b231efd9ce7cc9",
+        "bytes": 5499,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__troubleshooting__index.md"
+      },
+      "delta": "--- /pt-br/docs/troubleshooting/index.md (previous reviewed)\n+++ /pt-br/docs/troubleshooting/index.md (current captured)\n@@ -3,5 +3,5 @@\n Canonical page: https://ankiforge.dev/pt-br/docs/troubleshooting/\n Language: pt-BR\n-Description: Resolva erros de instalação, notas, mídia, modelos, identidade e publicação dos arquivos de saída.\n+Description: Resolva erros de instalação, notas, mídia, templates, identidade e publicação dos arquivos de saída.\n \n Use os valores estruturados `kind` e `code` da operação que falhou, junto com a cadeia de causas e as observações. As mensagens de texto destinam-se a pessoas e podem mudar. Uma operação que falha e uma comparação concluída cuja política bloqueia a publicação são resultados diferentes.\n@@ -34,5 +34,5 @@\n Uma falha na adição é atômica. Corrija a nota ou o modelo e tente novamente; não é preciso desfazer um registro parcial de modelos ou mídia. Os construtores de modelos precisam terminar com `.build()` antes de criar notas personalizadas.\n \n-## Mídia e modelos\n+## Mídia e templates\n \n | Sintoma | Correção |\n@@ -44,5 +44,5 @@\n | Importação de mídia excede um limite | Aumente explicitamente `MediaLimits.max_bytes` antes de importar |\n | Inspeção da geração excede um limite | Ajuste o contador correspondente de `InspectLimits` para a operação |\n-| Falha ao carregar um pacote de modelos | Use bundle-v2, chaves explícitas, modelos baseados em chaves e caminhos internos ao pacote |\n+| Falha ao carregar um pacote de templates | Use bundle-v2, chaves explícitas, templates baseados em chaves e caminhos internos ao pacote |\n | Falha em um retângulo de oclusão | Confira as dimensões de exibição decodificadas, coordenadas finitas e chaves únicas para as máscaras |\n \n"
+    },
+    {
+      "route": "/pt-br/docs/updates/index.md",
+      "sha256": "c0431d013d92d8e8b94c24001c80c38a5b1a69f3a002e9d4d713ee25fea8826d",
+      "previousSha256": "9dcb9de8b4c7af06f7faf76293c7d7bdbd9de98c7f7ceb3d2decbaedfca30fc7",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/docs/updates/index.md",
+        "route": "/pt-br/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c0431d013d92d8e8b94c24001c80c38a5b1a69f3a002e9d4d713ee25fea8826d",
+        "bytes": 9161,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__docs__updates__index.md"
+      },
+      "delta": "--- /pt-br/docs/updates/index.md (previous reviewed)\n+++ /pt-br/docs/updates/index.md (current captured)\n@@ -7,5 +7,5 @@\n Publique correções ou novos cartões para um baralho do Anki que você já distribuiu. IDs de nota estáveis ajudam o Anki Forge e o Anki a reconhecer notas existentes em vez de tratá-las como novas; as opções de importação do Anki e as edições locais mais recentes também influenciam o que será alterado.\n \n-Mantenha estáveis o namespace do projeto e as chaves de notas, modelos, campos e modelos de cartão. Gere cada nova versão a partir do **APKG original distribuído** anterior, que contém evidências completas de identidade em um formato versionado. Guarde o pacote junto com a revisão do seu código-fonte.\n+Mantenha estáveis o namespace do projeto e as chaves de notas, tipos de nota, campos e templates de cartão. Gere cada nova versão a partir do **APKG original distribuído** anterior, que contém evidências completas de identidade em um formato versionado. Guarde o pacote junto com a revisão do seu código-fonte.\n \n ## Execute duas versões e compare\n@@ -69,15 +69,15 @@\n A política padrão bloqueia resultados High e Critical. Depois de revisar uma categoria específica, a aplicação pode optar explicitamente por `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. Essa permissão aceita **todos os resultados da categoria**, preservando seus níveis e evidências originais. Ela não representa a aprovação individual de notas selecionadas. Uma permissão sem resultado correspondente gera um aviso; códigos de risco desconhecidos são rejeitados. Não permita automaticamente todos os códigos retornados por uma comparação.\n \n-Evidências ausentes ou corrompidas, divergência de namespace, dados inválidos do candidato e limites de inspeção são erros que impedem a operação, não categorias de risco que podem ser permitidas. Quando a análise não consegue terminar, a comparação retorna um erro com as observações já concluídas. Informar uma política explícita em uma criação sem `update_from` é um erro de configuração, independentemente da ordem dos métodos de configuração.\n+Evidências ausentes ou corrompidas, divergência de namespace, dados inválidos do candidato e a ultrapassagem dos limites de inspeção são erros que impedem a operação, não categorias de risco que podem ser permitidas. Quando a análise não consegue terminar, a comparação retorna um erro com as observações já concluídas. Informar uma política explícita em uma criação sem `update_from` é um erro de configuração, independentemente da ordem dos métodos de configuração.\n \n ## Evidências e identidade\n \n-O pacote inclui `ankiforge-identity.json` no formato `ankiforge-identity-v1`. Ele vincula IDs de modelos e configurações, GUIDs de notas, posições históricas de campos e modelos de cartão, ordinais de cartões e máscaras, revisões e mídia à coleção real e aos dados do pacote. Uma reexportação pelo Anki não preserva essas evidências e não serve como base de atualização. Evidências ausentes nunca são reconstruídas silenciosamente.\n+O pacote inclui `ankiforge-identity.json` no formato `ankiforge-identity-v1`. Ele vincula IDs de modelos e configurações, GUIDs de notas, posições históricas de campos e templates de cartão, ordinais de cartões e máscaras, revisões e mídia à coleção real e aos dados do pacote. Uma reexportação pelo Anki não preserva essas evidências e não serve como base de atualização. Evidências ausentes nunca são reconstruídas silenciosamente.\n \n-Alterar nomes de exibição ou conteúdo preserva as chaves de identidade. Conteúdo inalterado mantém a revisão da base; conteúdo alterado recebe uma revisão posterior. Reordenar campos ou modelos de cartão preserva as correspondências históricas. Identidades desativadas permanecem reservadas para que a restauração da mesma chave possa reutilizá-las. Uma chave de nota não pode ser transferida para outro modelo, e uma chave de modelo não pode alternar entre os tipos normal e Cloze.\n+Alterar nomes de exibição ou conteúdo preserva as chaves de identidade. Conteúdo inalterado mantém a revisão da base; conteúdo alterado recebe uma revisão posterior. Reordenar campos ou templates de cartão preserva as correspondências históricas. Identidades desativadas permanecem reservadas para que a restauração da mesma chave possa reutilizá-las. Uma chave de nota não pode ser transferida para outro modelo, e uma chave de modelo não pode alternar entre os tipos normal e Cloze.\n \n ## Importação nos clientes e revisão antes da publicação\n \n-Um APKG é um pacote de distribuição, não um mecanismo de sincronização de exclusões. Omitir notas, campos, modelos de cartão ou máscaras não exclui os dados existentes de quem estuda. Mudanças no esquema de campos e modelos de cartão ou no campo de ordenação apresentam alto risco, pois seu comportamento depende das opções de mesclagem e importação do Anki. Mudanças de esquema podem copiar modelos ou atualizar os carimbos de data das notas de destino antes da comparação do conteúdo das notas.\n+Um APKG é um pacote de distribuição, não um mecanismo de sincronização de exclusões. Omitir notas, campos, templates de cartão ou máscaras não exclui os dados existentes de quem estuda. Mudanças no esquema de campos e templates de cartão ou no campo de ordenação apresentam alto risco, pois seu comportamento depende das opções de mesclagem e importação do Anki. Mudanças de esquema podem copiar modelos ou atualizar os carimbos de data das notas de destino antes da comparação do conteúdo das notas.\n \n Teste a primeira importação e as atualizações em uma coleção existente nos clientes que você atende. Confira campos, GUIDs, conjuntos de cartões, edições locais e agendamento existente com as opções pretendidas de mesclagem e atualização de notas. Identidade estável, sozinha, não promete substituir edições locais mais recentes nem restaurar histórico excluído.\n"
+    },
+    {
+      "route": "/pt-br/llms.txt",
+      "sha256": "83727724cc57580fa3b64695c20ab86fceb764a749f65053b991205916a1c928",
+      "previousSha256": "d23c055a04657fba00c21cf67e32ee53fbaa73223334821704eab944406325dc",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/pt-br/llms.txt",
+        "route": "/pt-br/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "83727724cc57580fa3b64695c20ab86fceb764a749f65053b991205916a1c928",
+        "bytes": 7227,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/pt-br__llms.txt"
+      },
+      "delta": "--- /pt-br/llms.txt (previous reviewed)\n+++ /pt-br/llms.txt (current captured)\n@@ -11,5 +11,5 @@\n ## Comece aqui\n \n-- [Crie baralhos do Anki com código](https://ankiforge.dev/pt-br/docs/index.md): Escolha uma linguagem, gere seu primeiro baralho e aprenda a adicionar mídia, modelos e atualizações repetíveis.\n+- [Crie baralhos do Anki com código](https://ankiforge.dev/pt-br/docs/index.md): Escolha uma linguagem de programação, gere seu primeiro baralho e aprenda a adicionar mídia e templates e a atualizar o baralho.\n - [Escolha sua linguagem de programação](https://ankiforge.dev/pt-br/docs/languages/index.md): Instale o pacote público de Rust, Node ou Python e exporte seu primeiro baralho do Anki.\n - [Compatibilidade e ambientes verificados](https://ankiforge.dev/pt-br/docs/compatibility/index.md): Consulte os pacotes públicos, os ambientes testados e as condições de importação e reprodução nos clientes Anki.\n@@ -35,5 +35,5 @@\n - [Gere cartões Basic e Cloze do Anki](https://ankiforge.dev/pt-br/docs/cards/index.md): Gere cartões Basic de pergunta e resposta e cartões Cloze com lacunas usando código. Um exemplo verificado em Rust cria duas notas e três cartões.\n - [Adicione imagens e áudio aos cartões do Anki](https://ankiforge.dev/pt-br/docs/media/index.md): Use Rust, Python ou Node.js para importar arquivos, compor cartões com imagens e áudio e gerenciar nomes de exportação, tipos MIME e limites de mídia.\n-- [Reutilize modelos de cartão, CSS e mídia no Anki](https://ankiforge.dev/pt-br/docs/templates/index.md): Carregue um tipo de nota reutilizável de um pacote com modelos, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\n+- [Reutilize templates de cartão, CSS e mídia no Anki](https://ankiforge.dev/pt-br/docs/templates/index.md): Carregue um tipo de nota reutilizável de um pacote com templates, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\n - [Gere cartões de oclusão de imagem do Anki](https://ankiforge.dev/pt-br/docs/image-occlusion/index.md): Crie cartões de oclusão de imagem com Rust, Python ou Node.js: forneça a imagem e as máscaras retangulares e escolha um dos dois modos de oclusão.\n - [Atualize baralhos do Anki com IDs de nota estáveis](https://ankiforge.dev/pt-br/docs/updates/index.md): Publique uma nova versão de um baralho gerado: preserve os IDs das notas, use o APKG original anterior como base e revise a comparação antes de distribuir.\n@@ -42,5 +42,5 @@\n \n - [Garantias de geração e dos arquivos de saída](https://ankiforge.dev/pt-br/docs/build-guarantees/index.md): Entenda os artefatos temporários, a proteção dos caminhos, os limites de inspeção e a publicação de candidatos revisados.\n-- [Solução de problemas](https://ankiforge.dev/pt-br/docs/troubleshooting/index.md): Resolva erros de instalação, notas, mídia, modelos, identidade e publicação dos arquivos de saída.\n+- [Solução de problemas](https://ankiforge.dev/pt-br/docs/troubleshooting/index.md): Resolva erros de instalação, notas, mídia, templates, identidade e publicação dos arquivos de saída.\n \n ## Optional\n@@ -50,5 +50,5 @@\n - [Compile os SDKs a partir do código-fonte](https://ankiforge.dev/pt-br/docs/development/index.md): Ambiente de desenvolvimento e código-fonte. Compile os SDKs e execute exemplos a partir do repositório, distinguindo os recursos do código-fonte dos pacotes publicados.\n - [Crie seu primeiro baralho Anki com Rust](https://ankiforge.dev/pt-br/blog/your-first-anki-deck/index.md): Artigo histórico, publicado em 2026-09-22. De um pequeno programa em Rust a um cartão de vocabulário em espanhol que você pode abrir no Anki.\n-- [A identidade da nota deve durar mais que seu texto](https://ankiforge.dev/pt-br/blog/stable-ids-and-deck-updates/index.md): Artigo histórico, publicado em 2026-09-22. Como IDs estáveis e uma base de geração trabalham juntos na atualização de um baralho Anki gerado.\n+- [Atualize o conteúdo da nota sem mudar seu ID](https://ankiforge.dev/pt-br/blog/stable-ids-and-deck-updates/index.md): Artigo histórico, publicado em 2026-09-22. Como IDs estáveis e uma base de geração trabalham juntos na atualização de um baralho Anki gerado.\n - [GitHub](https://github.com/morehardy/anki-forge): Repositório do código-fonte e recursos de desenvolvimento.\n - [English](https://ankiforge.dev/llms.txt): Índice da documentação para IA em English.\n"
+    },
+    {
+      "route": "/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "096b5e73dba07ac3de05e0e0c5c0556eda6733000c91d1955a55ba544915fd39",
+      "previousSha256": "50cd652ceef20a48a4c74610a19398b231959ffb9d4dd4076b7337ff7e315161",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+        "route": "/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "096b5e73dba07ac3de05e0e0c5c0556eda6733000c91d1955a55ba544915fd39",
+        "bytes": 2755,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__blog__stable-ids-and-deck-updates__index.md"
+      },
+      "delta": "--- /zh-cn/blog/stable-ids-and-deck-updates/index.md (previous reviewed)\n+++ /zh-cn/blog/stable-ids-and-deck-updates/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# 笔记身份应当比措辞更持久\n+# 修改笔记内容时，保持 ID 不变\n \n Canonical page: https://ankiforge.dev/zh-cn/blog/stable-ids-and-deck-updates/\n@@ -46,5 +46,5 @@\n ## 检查构建与导入\n \n-分发前检查构建报告及其更新安全诊断。如果构建无法协调某条笔记的身份，应调查源数据和基线，不能仅把存在输出文件当作更新正确的证据。\n+分发前检查构建报告及其更新安全诊断。如果构建时无法确认某条笔记与旧版本的对应关系，请检查源数据和基准包；不能仅凭输出文件存在就认定更新正确。\n \n 之后 Anki 会应用自己的导入行为。导入设置、已有笔记内容、本地编辑和 Anki 版本都可能影响结果。稳定身份帮助匹配笔记，但不会覆盖这些选择，也不承诺每次导入都保留本地状态的每一个方面。\n"
+    },
+    {
+      "route": "/zh-cn/blog/your-first-anki-deck/index.md",
+      "sha256": "e82bf53033a3cd2a15d4e2c92dcc936b0be2fb575b83f8e12e78f9e40ef28291",
+      "previousSha256": "e82bf53033a3cd2a15d4e2c92dcc936b0be2fb575b83f8e12e78f9e40ef28291",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/ai-anki-cards/index.md",
+      "sha256": "d41495f72cf015aaa880eb9d85b41be3002512d9997c148bee6da0b4b3086ac6",
+      "previousSha256": "d41495f72cf015aaa880eb9d85b41be3002512d9997c148bee6da0b4b3086ac6",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "4dd2864f6a017f4050296f40525f9d0240594f8f4e613c833f063f5217e8351e",
+      "previousSha256": "461f89203af0dc34a83d059cb9d4d3903ad5d3e163a502cfe2dd5b5566a685fd",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/anki-forge-vs-genanki/index.md",
+        "route": "/zh-cn/docs/anki-forge-vs-genanki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "4dd2864f6a017f4050296f40525f9d0240594f8f4e613c833f063f5217e8351e",
+        "bytes": 3624,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__anki-forge-vs-genanki__index.md"
+      },
+      "delta": "--- /zh-cn/docs/anki-forge-vs-genanki/index.md (previous reviewed)\n+++ /zh-cn/docs/anki-forge-vs-genanki/index.md (current captured)\n@@ -13,5 +13,5 @@\n | 身份 | 显式命名空间和笔记键；更新需保留原始 APKG | 可配置 GUID 和数字模型/牌组 ID；支持重新导入更新 |\n | 发布前 | 比较发现项、风险策略和已检查的预备候选包 | 由自己的脚本和测试定义发布检查 |\n-| 媒体所有权 | 类型化图片/声音携带拥有所有权的快照 | 脚本提供包媒体文件和引用 |\n+| 媒体所有权 | 图片和音频对象持有不可变数据快照，克隆共享存储 | 脚本提供包媒体文件和引用 |\n | 编程式图片遮挡 | 通过公开 API 使用带键矩形遮罩 | 按流程评估合适模型或扩展 |\n | 运行成本 | 需要原生依赖；使用受支持平台和解释器 | 保留现有 Python 部署可能成本更低 |\n"
+    },
+    {
+      "route": "/zh-cn/docs/api/index.md",
+      "sha256": "85b910056bff07406aa95622d2d1fa621c6e26d058b4e43f66509ede662d0b27",
+      "previousSha256": "22b2a28e881312cdf227c8b23bb9fc7c451c06890980ff47cc0979c40ed0a0bd",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/api/index.md",
+        "route": "/zh-cn/docs/api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "85b910056bff07406aa95622d2d1fa621c6e26d058b4e43f66509ede662d0b27",
+        "bytes": 2010,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__api__index.md"
+      },
+      "delta": "--- /zh-cn/docs/api/index.md (previous reviewed)\n+++ /zh-cn/docs/api/index.md (current captured)\n@@ -16,5 +16,5 @@\n ## 稳定笔记身份\n \n-为每条逻辑笔记保留稳定的项目命名空间和笔记键。更新已有版本还需要原始分发 APKG。Anki 重新导出的文件不能替代原包内的完整身份证据。\n+为每条逻辑笔记保留稳定的项目命名空间和笔记键。更新已有版本还需要原始分发 APKG。Anki 重新导出的文件不能替代原包内的完整标识映射与修订信息。\n \n ## 从一个任务开始\n"
+    },
+    {
+      "route": "/zh-cn/docs/build-guarantees/index.md",
+      "sha256": "7bd8533c81b0deff674e1bb630453308d56f1e2fa11f434c313f4935aa63a410",
+      "previousSha256": "2dec4008f04578fbcbfb25525507e7dc93745f3daa63dac338fffab8ef108c22",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/build-guarantees/index.md",
+        "route": "/zh-cn/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "7bd8533c81b0deff674e1bb630453308d56f1e2fa11f434c313f4935aa63a410",
+        "bytes": 4875,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__build-guarantees__index.md"
+      },
+      "delta": "--- /zh-cn/docs/build-guarantees/index.md (previous reviewed)\n+++ /zh-cn/docs/build-guarantees/index.md (current captured)\n@@ -43,5 +43,5 @@\n 包检查不能证明所有客户端行为。请使用目标 Anki 版本和设置测试渲染、播放与更新导入。调度与 schema 更改限制见[更新](https://ankiforge.dev/zh-cn/docs/updates/)。\n \n-## 源码中的预备发布\n+## 准备候选包并在审阅后写入目标文件\n \n 预备发布已包含在公开 `0.3.1` 包中。\n"
+    },
+    {
+      "route": "/zh-cn/docs/cards/index.md",
+      "sha256": "46ceeb701e734b6f104492c2eef7678596fcfa768407346cc53aa00094dac378",
+      "previousSha256": "46ceeb701e734b6f104492c2eef7678596fcfa768407346cc53aa00094dac378",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/compatibility/index.md",
+      "sha256": "754f2bcf9e5dd030f568068ef4d527e8184ab10265cc39c9bce614d2e191a79d",
+      "previousSha256": "34f499bd74d94248de1fdde7b5a747d63f012d57bf3e4c29c71c201b76f54b88",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/compatibility/index.md",
+        "route": "/zh-cn/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "754f2bcf9e5dd030f568068ef4d527e8184ab10265cc39c9bce614d2e191a79d",
+        "bytes": 3129,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__compatibility__index.md"
+      },
+      "delta": "--- /zh-cn/docs/compatibility/index.md (previous reviewed)\n+++ /zh-cn/docs/compatibility/index.md (current captured)\n@@ -23,5 +23,5 @@\n 普通导出不需要安装 Anki。导入、渲染和播放媒体仍取决于目标客户端版本、编解码器和导入设置。2026-10-08 的基准测试通过了 40 项 Anki 导入、内容和代表性渲染检查（每个实现 20 项），并未覆盖所有客户端或 GUI/音频行为。\n \n-更新时保留之前的原始分发 APKG。Anki 重新导出的文件不保留所需身份证据。包中不再包含某条笔记，并不会将其从学习者的集合中删除。字段或模板变化、排序字段、本地编辑和复习历史需要针对客户端测试。\n+更新时保留之前的原始分发 APKG。Anki 重新导出的文件不保留所需标识映射与修订信息。包中不再包含某条笔记，并不会将其从学习者的集合中删除。字段或模板变化、排序字段、本地编辑和复习历史需要针对客户端测试。\n \n 使用[手动客户端场景](https://github.com/morehardy/anki-forge/blob/main/docs/manual-validation/anki-desktop-v1/TEMPLATE.md)及各 oracle 记录的具体 Anki 版本和设置评估自己的分发。客户端条件与单文件发布行为见[更新](https://ankiforge.dev/zh-cn/docs/updates/)和[构建保证](https://ankiforge.dev/zh-cn/docs/build-guarantees/)。\n"
+    },
+    {
+      "route": "/zh-cn/docs/concepts/index.md",
+      "sha256": "6ef6c478b4cf71c9f71e4dffb5f17dc7b9fd51200803450a953e0442b7ae53ee",
+      "previousSha256": "b964d090bf2700988229952e67365f4a3f4948328b925ba0f50a54783df89778",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/concepts/index.md",
+        "route": "/zh-cn/docs/concepts/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "6ef6c478b4cf71c9f71e4dffb5f17dc7b9fd51200803450a953e0442b7ae53ee",
+        "bytes": 3119,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__concepts__index.md"
+      },
+      "delta": "--- /zh-cn/docs/concepts/index.md (previous reviewed)\n+++ /zh-cn/docs/concepts/index.md (current captured)\n@@ -3,5 +3,5 @@\n Canonical page: https://ankiforge.dev/zh-cn/docs/concepts/\n Language: zh-CN\n-Description: 理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。\n+Description: 理解 Project、笔记与媒体的所有权、稳定键，以及更新时如何识别原有笔记。\n \n ## Project 与笔记\n@@ -25,5 +25,5 @@\n ## 媒体所有权\n \n-`Media` 是拥有所有权的快照，文件名由内容确定。只有在预算范围内完成读取与校验后，导入才会成功；之后源文件可以改变或消失。克隆共享存储，可用于多个项目。`with_export_name` 选择固定且可移植的文件名，不会改变已有克隆或内容节点。\n+`Media` 持有媒体数据的不可变快照，并管理其生命周期；导出文件名由内容确定。只有在预算范围内完成读取与校验后，导入才会成功；之后源文件可以改变或消失。克隆共享存储，可用于多个项目。`with_export_name` 选择固定且可移植的文件名，不会改变已有克隆或内容节点。\n \n 类型化引用自动收集媒体。模型或项目上显式声明的资源，即使静态分析无法识别用途，也会被包含。库不会从任意 HTML 或脚本中自动发现文件内容。\n"
+    },
+    {
+      "route": "/zh-cn/docs/csv-to-anki/index.md",
+      "sha256": "be2d5b64a5df7d603129517e460cad11fbac5c6a4e7037b94381fd94e0041428",
+      "previousSha256": "be2d5b64a5df7d603129517e460cad11fbac5c6a4e7037b94381fd94e0041428",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/custom-notetypes/index.md",
+      "sha256": "f34dd1c38da4a42edbdceff9116ea9da2b09fb734a65a41fb317cd656741d682",
+      "previousSha256": "f34dd1c38da4a42edbdceff9116ea9da2b09fb734a65a41fb317cd656741d682",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/development/index.md",
+      "sha256": "956050812e0c79f55142ea8365b5950c92200361fc213083eb4e8deadbf7f07a",
+      "previousSha256": "956050812e0c79f55142ea8365b5950c92200361fc213083eb4e8deadbf7f07a",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/genanki-migration/index.md",
+      "sha256": "5edc72249a4bd8d0426d73495a323909161890811ec107254b4b5184cfaa4e22",
+      "previousSha256": "91dd3c944180673b82f7fcd52b7bb4f24426e859398de6c6b98ca9c83bfbca10",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/genanki-migration/index.md",
+        "route": "/zh-cn/docs/genanki-migration/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "5edc72249a4bd8d0426d73495a323909161890811ec107254b4b5184cfaa4e22",
+        "bytes": 3295,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__genanki-migration__index.md"
+      },
+      "delta": "--- /zh-cn/docs/genanki-migration/index.md (previous reviewed)\n+++ /zh-cn/docs/genanki-migration/index.md (current captured)\n@@ -38,5 +38,5 @@\n 字符串是纯文本；有意加入 HTML 时使用 `Content.html(...)`。通过 `media.image()`、`media.sound()` 和 `Content.sequence(...)` 组合内容。原路径被移除或编辑后，文件快照仍有效。原始 HTML、CSS 或脚本引用的依赖，必须在模型构建器上用 `.asset(media)` 或通过 `project.add_asset(media)` 显式声明。\n \n-后续发布创建具有相同命名空间和数据键的新 Project，并调用 `BuildOptions.to(next_path).update_from(previous_original_apkg)`。原始 APKG 提供完整身份证据。此流程不会从任意旧包恢复身份，也不承诺自动转换已有 genanki 数字 ID/GUID。除非经过单独验证的数据迁移建立了对应关系，否则应把新模型的首次分发视为明确的身份边界。\n+后续发布创建具有相同命名空间和数据键的新 Project，并调用 `BuildOptions.to(next_path).update_from(previous_original_apkg)`。原始 APKG 提供完整标识映射与修订信息。此流程不会从任意旧包恢复身份，也不承诺自动转换已有 genanki 数字 ID/GUID。除非经过单独验证的数据迁移建立了对应关系，否则应把新模型的首次分发视为明确的身份边界。\n \n 参见[入门](https://ankiforge.dev/zh-cn/docs/python-quickstart/)、[API 参考](https://ankiforge.dev/zh-cn/docs/python-api/)和[更新策略](https://ankiforge.dev/zh-cn/docs/python-diagnostics/)。\n"
+    },
+    {
+      "route": "/zh-cn/docs/image-occlusion/index.md",
+      "sha256": "9e799305a38afa3142a800041f4305b28234ef92c606f7cf1490e7aade238e88",
+      "previousSha256": "9e799305a38afa3142a800041f4305b28234ef92c606f7cf1490e7aade238e88",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/index.md",
+      "sha256": "aa51e5ee475f881619fba6741129da7385033b4ffaf200b716797dbc45d8582f",
+      "previousSha256": "30ee017d9f493d9ac91cb82a4c61c05001d36c96fb57819394134b9151636a98",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/index.md",
+        "route": "/zh-cn/docs/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "aa51e5ee475f881619fba6741129da7385033b4ffaf200b716797dbc45d8582f",
+        "bytes": 3165,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__index.md"
+      },
+      "delta": "--- /zh-cn/docs/index.md (previous reviewed)\n+++ /zh-cn/docs/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: 选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。\n \n-Anki Forge 将笔记、模板与媒体生成 Anki `.apkg` 文件。当学习内容保存在代码或结构化数据中，需要反复构建并分发牌组时，可以使用它。\n+Anki Forge 根据笔记、模板和媒体文件生成 Anki `.apkg` 文件。当学习内容保存在代码或结构化数据中，需要反复构建并分发牌组时，可以使用它。\n \n ## 从你的开发语言开始\n"
+    },
+    {
+      "route": "/zh-cn/docs/installation/index.md",
+      "sha256": "765e38ed56cb05e700407fc64521b27c3722ed8fa4a0a5ba96f9fc930b167179",
+      "previousSha256": "c92a6acb0d2d7763e39d59b1d6e6cb9b75b9f0ba2342c94ca417a9737b69fb98",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/installation/index.md",
+        "route": "/zh-cn/docs/installation/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "765e38ed56cb05e700407fc64521b27c3722ed8fa4a0a5ba96f9fc930b167179",
+        "bytes": 1768,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__installation__index.md"
+      },
+      "delta": "--- /zh-cn/docs/installation/index.md (previous reviewed)\n+++ /zh-cn/docs/installation/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# 集成到应用\n+# 集成到 Rust 应用\n \n Canonical page: https://ankiforge.dev/zh-cn/docs/installation/\n"
+    },
+    {
+      "route": "/zh-cn/docs/json-to-anki/index.md",
+      "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+      "previousSha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/json-to-anki/index.md",
+        "route": "/zh-cn/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b570a340650636a11f7b23b0b9812e1f95727b97b1d4b0bf6fbb1d60a950ca91",
+        "bytes": 11012,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__json-to-anki__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/languages/index.md",
+      "sha256": "bd745fd45a07f2e3cbc7a3c326ce0f4af98466ba7dd96384e298d75e206ce504",
+      "previousSha256": "bd745fd45a07f2e3cbc7a3c326ce0f4af98466ba7dd96384e298d75e206ce504",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/media/index.md",
+      "sha256": "38ede3dc1c21a7d7f73548b5bc7da8da5a5214e7f283cdfd4b88f2db8c2c00a6",
+      "previousSha256": "073822607726142b2c185081038befe9988cd7f8dcb295cd648a4a0fa7e7d35c",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/media/index.md",
+        "route": "/zh-cn/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "38ede3dc1c21a7d7f73548b5bc7da8da5a5214e7f283cdfd4b88f2db8c2c00a6",
+        "bytes": 7862,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__media__index.md"
+      },
+      "delta": "--- /zh-cn/docs/media/index.md (previous reviewed)\n+++ /zh-cn/docs/media/index.md (current captured)\n@@ -103,5 +103,5 @@\n ### 批量行为与预算\n \n-Rust 使用 `Media::files(paths)`，Node 使用 `await Media.files(paths)`，Python 使用 `Media.files(paths)`，按输入顺序导入文件，每次调用最多四个工作线程。少于 16 个文件时串行运行。Rust 还提供 `files_with_limits`；Node 和 Python 接受与 `file` 相同的限制。限制按每个资源计算。若某项导入失败，调用会等待已启动的工作完成、释放此批次的快照，并返回输入顺序中的第一个错误。已有媒体所有者继续有效。Python 在导入期间释放 GIL；Node 在事件循环之外执行工作。单文件导入仍立即产生拥有所有权的快照；调用方必须选择批量方法才能获得导入并发。\n+Rust 使用 `Media::files(paths)`，Node 使用 `await Media.files(paths)`，Python 使用 `Media.files(paths)`，按输入顺序导入文件，每次调用最多四个工作线程。少于 16 个文件时串行运行。Rust 还提供 `files_with_limits`；Node 和 Python 接受与 `file` 相同的限制。限制按每个资源计算。若某项导入失败，调用会等待已启动的工作完成、释放此批次的快照，并返回输入顺序中的第一个错误。已有媒体所有者继续有效。Python 在导入期间释放 GIL；Node 在事件循环之外执行工作。单文件导入仍立即返回持有媒体数据快照的对象；调用方必须选择批量方法才能获得导入并发。\n \n 存活快照共享进程级 **64 MiB** 内存预算。单个大于 1 MiB 的资源仍流式写入临时文件。编码媒体在每次预备处理中共享延迟分配的 **16 MiB** 缓冲池，池满后写入临时存储。这些预算不包含其他工作内存，也不是 RSS 上限；并发构建各自可以拥有编码池。\n"
+    },
+    {
+      "route": "/zh-cn/docs/node-api/index.md",
+      "sha256": "bc69ec3d73a3402dc711c5c2b2d3efb6391d7188999ac5d0018e436c85917707",
+      "previousSha256": "ea5560181e0007d84d3bb72679ba4fccfb6239e156c85f0a66dff8ca6f5bd5d9",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/node-api/index.md",
+        "route": "/zh-cn/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "bc69ec3d73a3402dc711c5c2b2d3efb6391d7188999ac5d0018e436c85917707",
+        "bytes": 12221,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__node-api__index.md"
+      },
+      "delta": "--- /zh-cn/docs/node-api/index.md (previous reviewed)\n+++ /zh-cn/docs/node-api/index.md (current captured)\n@@ -46,5 +46,5 @@\n ## 媒体与图片遮挡\n \n-`await Media.file(path, limits?)` 和 `await Media.bytes(Uint8Array, mime, limits?)` 返回拥有所有权的快照。await 成功后源文件可改变或消失。`withExportName(name)` 返回重命名值，不改变之前的克隆或内容。通过属性读取 `filename`、`mediaType` 和 `byteLength`。\n+`await Media.file(path, limits?)` 和 `await Media.bytes(Uint8Array, mime, limits?)` 返回持有媒体数据快照的 `Media` 对象。导入成功后，修改或删除源文件不会改变已导入的媒体数据。`withExportName(name)` 返回重命名值，不改变之前的克隆或内容。通过属性读取 `filename`、`mediaType` 和 `byteLength`。\n \n `media.image()` 与 `.sound()` 返回自动将资源带入项目的类型化 Content。显式 `project.addAsset` 与模型 `builder.asset` 处理原始 HTML/CSS/脚本引用。媒体限制接受 `{ maxBytes }`，默认为 256 MiB；原生字节没有 64 KiB 内联限制。\n"
+    },
+    {
+      "route": "/zh-cn/docs/node-quickstart/index.md",
+      "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+      "previousSha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/node-quickstart/index.md",
+        "route": "/zh-cn/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b950156e48d095b3fc1b15496e9e444dbd3a96e06af26ac615c673e48d444360",
+        "bytes": 2260,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__node-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/python-api/index.md",
+      "sha256": "2674b401ac8bec3cdfb323e9db7e810217036c8a8c4b70d1e8afacd0db245f71",
+      "previousSha256": "d1d28591851c9cdc21a9ebfb0c8835debbb81fe0a57b085d6b79a1c313c26dc0",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/python-api/index.md",
+        "route": "/zh-cn/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "2674b401ac8bec3cdfb323e9db7e810217036c8a8c4b70d1e8afacd0db245f71",
+        "bytes": 8604,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__python-api__index.md"
+      },
+      "delta": "--- /zh-cn/docs/python-api/index.md (previous reviewed)\n+++ /zh-cn/docs/python-api/index.md (current captured)\n@@ -33,5 +33,5 @@\n | 入口 | 行为 |\n | --- | --- |\n-| `Media.file(path, *, limits=MediaLimits())` | 立即读取拥有所有权的快照 |\n+| `Media.file(path, *, limits=MediaLimits())` | 读取媒体数据并返回持有快照的 `Media` 对象 |\n | `Media.bytes(data, media_type, *, limits=MediaLimits())` | 拥有带显式 MIME 类型的字节 |\n | `media.with_export_name(name)` | 返回共享快照的新文件名值；之前的引用保留原名 |\n@@ -72,5 +72,5 @@\n 添加时，类型化图片要求 image/\\* MIME，声音引用接受 audio/\\* 或 video/\\*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)。\n \n-## 源码 API 详情\n+## 批量媒体处理与预备发布\n \n 批量媒体与预备发布已包含在公开 `0.3.1` 包中。\n"
+    },
+    {
+      "route": "/zh-cn/docs/python-diagnostics/index.md",
+      "sha256": "46f5f8cbb5940413144a44cdcd7e54707a896b8b5d83f86bddda4ee629a312c0",
+      "previousSha256": "f2cf9f19e3820a65520b68f835f24ee2c7216f191393eb7496e2b25ba49a43ee",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/python-diagnostics/index.md",
+        "route": "/zh-cn/docs/python-diagnostics/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "46f5f8cbb5940413144a44cdcd7e54707a896b8b5d83f86bddda4ee629a312c0",
+        "bytes": 4744,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__python-diagnostics__index.md"
+      },
+      "delta": "--- /zh-cn/docs/python-diagnostics/index.md (previous reviewed)\n+++ /zh-cn/docs/python-diagnostics/index.md (current captured)\n@@ -36,5 +36,5 @@\n ```\n \n-完成的比较即使发现 High 风险也正常返回。通过 `comparison.allows_publication` 查看策略决定。无法读取的基线、缺失完整身份证据、无效候选包或预算超限会抛出 CompareError；`.report` 包含失败前完成的观察结果。\n+完成的比较即使发现 High 风险也正常返回。通过 `comparison.allows_publication` 查看策略决定。无法读取的基线、缺失完整标识映射与修订信息、无效候选包或预算超限会抛出 CompareError；`.report` 包含失败前完成的观察结果。\n \n 默认策略阻止 High 和 Critical 发现项。审阅特定风险类别后，可显式接受：\n"
+    },
+    {
+      "route": "/zh-cn/docs/python-migration/index.md",
+      "sha256": "dee3ce5ae79e738bc309e44a3bed743f99f7bcc23aa228117e06d55349a0a95a",
+      "previousSha256": "b974fffe335a99894d210100f0171c21e7299ae013265eec61cd085b4344a890",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/python-migration/index.md",
+        "route": "/zh-cn/docs/python-migration/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "dee3ce5ae79e738bc309e44a3bed743f99f7bcc23aa228117e06d55349a0a95a",
+        "bytes": 1878,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__python-migration__index.md"
+      },
+      "delta": "--- /zh-cn/docs/python-migration/index.md (previous reviewed)\n+++ /zh-cn/docs/python-migration/index.md (current captured)\n@@ -24,3 +24,3 @@\n | Runtime 子进程包 | 进程内 PyO3 绑定，调用默认 Rust API |\n \n-只有携带当前身份证据的完整原始分发 APKG 才能作为更新基线。不会自动恢复旧模板包和旧 APKG 证据。新流程见 README 与可执行示例。\n+只有携带当前标识映射与修订信息的完整原始分发 APKG 才能作为更新基线。不会自动恢复旧模板包和旧 APKG 证据。新流程见 README 与可执行示例。\n"
+    },
+    {
+      "route": "/zh-cn/docs/python-quickstart/index.md",
+      "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+      "previousSha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/python-quickstart/index.md",
+        "route": "/zh-cn/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "377d46ccf6e36fb99d67fc9201190a42007a2b7d2149869badfbd5814553bd69",
+        "bytes": 2302,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__python-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/quickstart/index.md",
+      "sha256": "e8771b9e3b9b0e70e7ca09cbebc74fc6a80489d113f8d696521502beb0ceed23",
+      "previousSha256": "e8771b9e3b9b0e70e7ca09cbebc74fc6a80489d113f8d696521502beb0ceed23",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/zh-cn/docs/rust-api/index.md",
+      "sha256": "fe5b4e2084bf2006761490e4d24953947ce1b5ca47d4972acbcbcf7780b61b10",
+      "previousSha256": "5f7cb36f50163e1ab80da13727d6808a8acc92f7b309155883a61d264eeec572",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/rust-api/index.md",
+        "route": "/zh-cn/docs/rust-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "fe5b4e2084bf2006761490e4d24953947ce1b5ca47d4972acbcbcf7780b61b10",
+        "bytes": 8737,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__rust-api__index.md"
+      },
+      "delta": "--- /zh-cn/docs/rust-api/index.md (previous reviewed)\n+++ /zh-cn/docs/rust-api/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: 查找内容编写方法、构建默认值、报告和诊断行为。\n \n-crate 根提供常用值：`Project`、`Note`、`NoteType`、`Field`、`Template`、`Content`、`Media`、`BuildOptions` 和 `BuildOutput`。公开领域模块为 `note`、`schema`、`media`、`build`、`update` 与 `diagnostics`。仓库工具是独立且由 feature 控制的接口；消费者应用不需要它们。\n+crate 根提供常用值：`Project`、`Note`、`NoteType`、`Field`、`Template`、`Content`、`Media`、`BuildOptions` 和 `BuildOutput`。公开领域模块为 `note`、`schema`、`media`、`build`、`update` 与 `diagnostics`。仓库工具是独立且由 feature 控制的接口；使用本库的应用不需要这些工具。\n \n ## 内容编写\n@@ -56,5 +56,5 @@\n `BuildOutput::artifact()` 返回拥有所有权的 `build::ApkgArtifact` 引用。`BuildOutput::report()` 返回观察结果。产物克隆共享临时文件寿命；`persist_to` 返回持久所有者，或返回带发布事实与底层 I/O 来源的 `build::PersistError`。\n \n-`project.compare(update::CompareOptions::against(path))` 返回完成的 `ComparisonReport`，即使高风险发现项阻止其策略。它提供 `findings()`、`highest_risk()`、`policy()`、`diagnostics()` 和 `snapshot()`。`UpdatePolicy::default()` 阻止 High/Critical；`.fail_on(level)` 改变阈值，`.allow(RiskCode)` 接受整个已注册风险类别。它不能接受身份证据缺失或损坏等硬错误。\n+`project.compare(update::CompareOptions::against(path))` 返回完成的 `ComparisonReport`，即使高风险发现项阻止其策略。它提供 `findings()`、`highest_risk()`、`policy()`、`diagnostics()` 和 `snapshot()`。`UpdatePolicy::default()` 阻止 High/Critical；`.fail_on(level)` 改变阈值，`.allow(RiskCode)` 接受整个已注册风险类别。它不能接受标识映射与修订信息缺失或损坏等硬错误。\n \n ## 报告与错误\n@@ -99,3 +99,3 @@\n ```\n \n-预备阶段执行完整的受限检查与比较。直到 `publish` 才发布目标；它使用同一私有候选包并复查基线别名。相对路径在预备调用时绑定。项目编辑不能改变候选包。报告耗时不含审阅等待。释放未发布所有者会清理它；已发布临时输出遵循通常的最后产物所有者清理规则。不能从 JSON 恢复所有者，也不能对已消耗所有者重试。原生构建省略未使用的暂存 manifest，但保留内嵌身份证据与媒体验证。内部暂存工具仍接收完整 manifest 和指纹。\n+预备阶段执行完整的受限检查与比较。直到 `publish` 才发布目标；它使用同一私有候选包并复查基线别名。相对路径在预备调用时绑定。项目编辑不能改变候选包。报告耗时不含审阅等待。释放未发布所有者会清理它；已发布临时输出遵循通常的最后产物所有者清理规则。不能从 JSON 恢复所有者，也不能对已消耗所有者重试。原生构建省略未使用的暂存 manifest，但仍内嵌标识映射与修订信息，并保留媒体验证。内部暂存工具仍接收完整 manifest 和指纹。\n"
+    },
+    {
+      "route": "/zh-cn/docs/rust-guide/index.md",
+      "sha256": "9f1d5eb72f0c176a4a4e2641a8b142155b1ec524deb4302a9932295794e8ea7b",
+      "previousSha256": "f1ecb13c0ba1c9c8468daccbc20caf7a19e6eed9e0a6ac91dc04bd52bfc994f7",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/rust-guide/index.md",
+        "route": "/zh-cn/docs/rust-guide/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "9f1d5eb72f0c176a4a4e2641a8b142155b1ec524deb4302a9932295794e8ea7b",
+        "bytes": 5150,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__rust-guide__index.md"
+      },
+      "delta": "--- /zh-cn/docs/rust-guide/index.md (previous reviewed)\n+++ /zh-cn/docs/rust-guide/index.md (current captured)\n@@ -33,5 +33,5 @@\n 完成的 `NoteType` 不可变且可共享。调用 `model.note()`，按稳定键赋值，再把结果加入项目。笔记持有模型；添加时自动收集模型和媒体。声明与模板规则见[自定义笔记类型](https://ankiforge.dev/zh-cn/docs/custom-notetypes/)。\n \n-`Media::file` 与 `Media::bytes` 获取拥有所有权的快照。导入成功后不再需要保留源文件。`image.image()` 和 `audio.sound()` 生成结构化内容；`Content::sequence` 将它们与文本或 HTML 组合。原始 HTML、CSS 或脚本资源必须通过 `builder.asset` 或 `project.add_asset` 显式包含。参见[媒体](https://ankiforge.dev/zh-cn/docs/media/)和[模板包](https://ankiforge.dev/zh-cn/docs/templates/)。\n+`Media::file` 与 `Media::bytes` 返回持有媒体数据快照的 `Media` 对象。导入成功后不再需要保留源文件。`image.image()` 和 `audio.sound()` 生成结构化内容；`Content::sequence` 将它们与文本或 HTML 组合。原始 HTML、CSS 或脚本资源必须通过 `builder.asset` 或 `project.add_asset` 显式包含。参见[媒体](https://ankiforge.dev/zh-cn/docs/media/)和[模板包](https://ankiforge.dev/zh-cn/docs/templates/)。\n \n ## 输出所有权\n@@ -60,5 +60,5 @@\n `Project` 使用稳定命名空间和可选默认牌组，没有显示标题。`NoteType`、`Field` 与 `Template` 仍支持显示名称。`Project::add` 是原子操作。通过 `AddError::context()` 查看笔记或模型键，通过 `note::AddTarget` 查看原始位置；`detail()` 返回 `note::AddDetail`，说明冲突或不兼容媒体用法。匹配这些非穷尽枚举时，对数据变体使用 `..`，并提供兜底分支。字段的 `content_path` 为 `None` 时指字段本身，`Some([])` 指其根，序列下标则指嵌套节点。分隔符字节范围指向原始 UTF-8 Text/Html 叶节点。\n \n-`Media::image()` 和 `sound()` 保持不会失败。添加时，图片要求 `image/*`，声音引用要求 `audio/*` 或 `video/*`。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。这检查保留的 MIME，并非解码或播放。原始 HTML 和显式资源保持原有行为。导出重命名不会改变 MIME：PNG 改名为 `wrong.mp3` 后可以通过图片添加，但构建的独立探测或扩展名检查仍可能返回 `MEDIA.DECLARED_MIME_MISMATCH`。\n+`Media::image()` 和 `sound()` 本身不会返回错误。添加时，图片要求 `image/*`，声音引用要求 `audio/*` 或 `video/*`。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。这检查保留的 MIME，并非解码或播放。原始 HTML 和显式资源保持原有行为。导出重命名不会改变 MIME：PNG 改名为 `wrong.mp3` 后可以通过图片添加，但构建的独立探测或扩展名检查仍可能返回 `MEDIA.DECLARED_MIME_MISMATCH`。\n \n 工具输入现在要求 `ankiforge-project-v2`，且没有顶层 `name`；v1 被拒绝。契约包为 2.1.0；包身份格式仍为 `ankiforge-identity-v1`。\n"
+    },
+    {
+      "route": "/zh-cn/docs/templates/index.md",
+      "sha256": "54c1ed27fd40ab7f3cba77256cb62f552df1061100f6eebff4d0ed5a2c37ca33",
+      "previousSha256": "31d7234cdf081f6a508a2247e7c06232ceb83c8ccaceb4a8640e4149f72e6157",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/templates/index.md",
+        "route": "/zh-cn/docs/templates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "54c1ed27fd40ab7f3cba77256cb62f552df1061100f6eebff4d0ed5a2c37ca33",
+        "bytes": 5559,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__templates__index.md"
+      },
+      "delta": "--- /zh-cn/docs/templates/index.md (previous reviewed)\n+++ /zh-cn/docs/templates/index.md (current captured)\n@@ -7,5 +7,5 @@\n 在多个牌组中复用同一套 Anki 卡片设计：把笔记类型的模板、CSS 和媒体放在同一目录中，用于普通卡片或 Cloze 卡片。示例使用 Rust；Python 和 Node.js 分别通过 `NoteType.from_bundle` 和 `NoteType.fromBundle` 加载模板包，参见 [Python API](https://ankiforge.dev/zh-cn/docs/python-api/#models-and-templates) 和 [Node API](https://ankiforge.dev/zh-cn/docs/node-api/#immutable-models)。\n \n-模板包是一组可复用的模型声明、模板文本、CSS 和显式媒体依赖闭包。`NoteType::from_bundle(directory)` 校验完整模板包并取得拥有所有权的快照，再返回与内联编写相同的不可变 `NoteType`。它不会部分修改项目。\n+模板包包含可复用的笔记类型定义、模板文本、CSS，以及显式声明的全部媒体依赖。`NoteType::from_bundle(directory)` 校验完整模板包并保存模板包及媒体数据的快照，再返回与内联编写相同的不可变 `NoteType`。它不会部分修改项目。\n \n ## 运行模板包示例\n"
+    },
+    {
+      "route": "/zh-cn/docs/troubleshooting/index.md",
+      "sha256": "98dd59ce04ff08ce201b869477b02181b2acdfb3916dabb9e8595285ed3c094a",
+      "previousSha256": "c161530b7a94a4f5cc66f8e4a7077a0e8301d5fbe904951ac7ed395e3161fabf",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/troubleshooting/index.md",
+        "route": "/zh-cn/docs/troubleshooting/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "98dd59ce04ff08ce201b869477b02181b2acdfb3916dabb9e8595285ed3c094a",
+        "bytes": 3954,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__troubleshooting__index.md"
+      },
+      "delta": "--- /zh-cn/docs/troubleshooting/index.md (previous reviewed)\n+++ /zh-cn/docs/troubleshooting/index.md (current captured)\n@@ -51,5 +51,5 @@\n ## 更新与输出\n \n-基线应为含完整身份证据的原始分发 APKG。Anki 重新导出的包不保留该证据。更新策略不能放行命名空间不匹配或证据损坏。\n+基线应为含完整标识映射与修订信息的原始分发 APKG。Anki 重新导出的包不保留该证据。更新策略不能放行命名空间不匹配或证据损坏。\n \n 完成的比较可以有 `allows_publication == false`。选择显式风险类别放行前，检查原始发现项和证据。不要全部放行。若希望得到相同决策，必须向实际更新构建传入相同策略。在仅新建请求上设置策略会报错。\n"
+    },
+    {
+      "route": "/zh-cn/docs/updates/index.md",
+      "sha256": "fc34d69e7cc123937470cc608900659dd9f1619f81f7f69fca9f392d0fc4fe84",
+      "previousSha256": "7136a920ff3e3de625b16ab7db28aceabfa087da99bc2fb6d74a0ba56dbed408",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/docs/updates/index.md",
+        "route": "/zh-cn/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "fc34d69e7cc123937470cc608900659dd9f1619f81f7f69fca9f392d0fc4fe84",
+        "bytes": 7584,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__docs__updates__index.md"
+      },
+      "delta": "--- /zh-cn/docs/updates/index.md (previous reviewed)\n+++ /zh-cn/docs/updates/index.md (current captured)\n@@ -7,5 +7,5 @@\n 为已经分发的 Anki 牌组发布修正或新增卡片。稳定笔记 ID 帮助 Anki Forge 和 Anki 识别已有笔记，而不是把它们当成新笔记；Anki 导入设置与较新的本地编辑仍会影响最终变化。\n \n-保持项目命名空间和笔记、模型、字段、模板键稳定。每次新版本基于之前的**原始分发 APKG** 构建，该包携带完整、带版本的身份证据。将包和源代码修订一起保存。\n+保持项目命名空间和笔记、模型、字段、模板键稳定。每个新版本都以上一版分发时的**原始 APKG** 为基准构建。包内包含完整的标识映射和修订信息，且这些信息采用带版本号的格式。请将原始包与对应的源码版本一起保存。\n \n ## 运行两个版本并比较\n"
+    },
+    {
+      "route": "/zh-cn/llms.txt",
+      "sha256": "ecc97c9e1ecb1a9ee78b0e2503bf948dbf70c2908eeb8de705580cbf1880d346",
+      "previousSha256": "5c607b18eaf6ba236c2f3f1db26008befea37f87f73c2f7fe1e7a219ade5ff73",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:64269/zh-cn/llms.txt",
+        "route": "/zh-cn/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "ecc97c9e1ecb1a9ee78b0e2503bf948dbf70c2908eeb8de705580cbf1880d346",
+        "bytes": 5964,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-root/bodies/zh-cn__llms.txt"
+      },
+      "delta": "--- /zh-cn/llms.txt (previous reviewed)\n+++ /zh-cn/llms.txt (current captured)\n@@ -50,5 +50,5 @@\n - [从源码构建 SDK](https://ankiforge.dev/zh-cn/docs/development/index.md): 开发/源码环境。 从仓库源码构建 SDK，运行示例并区分公开包与源码功能。\n - [用 Rust 构建第一个 Anki 牌组](https://ankiforge.dev/zh-cn/blog/your-first-anki-deck/index.md): 历史文章，发布于 2026-09-22。 从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。\n-- [笔记身份应当比措辞更持久](https://ankiforge.dev/zh-cn/blog/stable-ids-and-deck-updates/index.md): 历史文章，发布于 2026-09-22。 更新生成的 Anki 牌组时，稳定 ID 与构建基线如何共同发挥作用。\n+- [修改笔记内容时，保持 ID 不变](https://ankiforge.dev/zh-cn/blog/stable-ids-and-deck-updates/index.md): 历史文章，发布于 2026-09-22。 更新生成的 Anki 牌组时，稳定 ID 与构建基线如何共同发挥作用。\n - [GitHub](https://github.com/morehardy/anki-forge): 源码仓库与开发资源。\n - [English](https://ankiforge.dev/llms.txt): English AI 文档索引。\n"
+    }
+  ]
+}

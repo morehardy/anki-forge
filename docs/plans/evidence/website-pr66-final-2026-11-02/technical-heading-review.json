@@ -1,0 +1,726 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/standards_review/pr66-heading-migration-2026-11-02",
+  "status": "reviewed",
+  "scope": "Independent review of the four frozen heading-migration implementation/test/config files, all 12 real migrations, and source/artifact failure boundaries. This does not authorize a new built artifact or alter the frozen source review.",
+  "files": {
+    "website/scripts/heading-migrations.mjs": {
+      "sha256": "5ca389f98250a3bd535f238639140052d37cc09a2dc451f02bc312b2592fb707",
+      "utf8": "import assert from 'node:assert/strict';\nimport { readFile } from 'node:fs/promises';\nimport path from 'node:path';\nimport { fileURLToPath } from 'node:url';\nimport { load } from 'cheerio';\nimport { micromark } from 'micromark';\nimport { configuredLocales, localePath } from '../locale-model.mjs';\nimport { headings, sectionMapping, legacyAliases } from './content-sections.mjs';\n\nconst approved = new WeakSet();\nconst inputKeys = ['sourceHash', 'targetHash', 'technicalDependencyHash'];\nconst repository = fileURLToPath(new URL('../../', import.meta.url));\n\n/** Check a migration against current, independently reviewed source inputs.\n * The CLI first checks the complete source-review evidence, including reports.\n */\nexport function validateHeadingMigrations(document, { pages, reviews, currentInputs, currentSections }) {\n  assert.equal(document.schemaVersion, 1, 'Unknown heading migration schema');\n  assert.ok(Array.isArray(document.entries), 'Heading migrations must contain entries');\n  const seen = new Set();\n  const entries = document.entries.map(candidate => {\n    const entry = structuredClone(candidate);\n    const label = `${entry.pageId}/${entry.locale}`;\n    const page = pages.find(page => page.id === entry.pageId);\n    assert.ok(page && Object.hasOwn(configuredLocales, entry.locale), `${label}: unknown migration page or locale`);\n    assert.equal(entry.route, localePath(page.route, entry.locale), `${label}: migration route is outside its page and locale`);\n    const section = Object.hasOwn(entry, 'sectionId');\n    assert.equal(section, Object.hasOwn(entry, 'headingId'), `${label}: document section and heading must be paired`);\n    assert.notEqual(section, Object.hasOwn(entry, 'containerModule'), `${label}: choose exactly one migration scope`);\n    if (section) {\n      assert.ok(['docs', 'article'].includes(page.type), `${label}: section migration requires a document`);\n      assert.ok(typeof entry.sectionId === 'string' && /^[a-z0-9][a-z0-9-]*$/.test(entry.sectionId), `${label}: semantic section required`);\n      assert.ok(typeof entry.headingId === 'string' && /^[^\\s\"'<>]+$/u.test(entry.headingId), `${label}: native heading required`);\n      assert.equal(entry.requiredLinks, undefined, `${label}: protected links belong to module scope`);\n      assert.equal(entry.requiredExternalLinks, undefined, `${label}: protected external links belong to module scope`);\n      const actual = currentSections?.[entry.pageId]?.[entry.locale];\n      const heading = actual?.headings.find(heading => heading.id === entry.headingId);\n      assert.ok(heading, `${label}: heading is absent from reviewed document source`);\n      assert.equal(entry.toHeading, heading.title, `${label}: heading text differs from reviewed document source`);\n      for (const anchor of [...(entry.anchors || []), entry.headingId]) {\n        const target = actual.mapping[anchor] ?? (anchor === entry.sectionId && Object.values(actual.mapping).includes(anchor) ? anchor : undefined);\n        assert.equal(target, entry.sectionId, `${label}#${anchor}: reviewed semantic section changed`);\n      }\n    } else {\n      assert.ok(typeof entry.containerModule === 'string' && /^[a-z][a-z0-9-]*$/.test(entry.containerModule), `${label}: historic container module required`);\n    }\n    assert.ok(typeof entry.reason === 'string' && entry.reason.trim(), `${label}: reviewed migration reason required`);\n    assert.ok(typeof entry.fromHeading === 'string' && entry.fromHeading.trim(), `${label}: old heading required`);\n    assert.ok(typeof entry.toHeading === 'string' && entry.toHeading.trim() && entry.toHeading !== entry.fromHeading, `${label}: changed heading required`);\n    assert.ok(Array.isArray(entry.anchors) && entry.anchors.length && new Set(entry.anchors).size === entry.anchors.length, `${label}: unique migrated anchors required`);\n    for (const anchor of entry.anchors) {\n      assert.ok(typeof anchor === 'string' && /^[^\\s\"'<>]+$/u.test(anchor), `${label}: invalid migrated anchor`);\n      const key = `${label}#${anchor}`;\n      assert.ok(!seen.has(key), `${key}: overlapping heading migrations`);\n      seen.add(key);\n    }\n    if (!section) {\n      assert.ok(Array.isArray(entry.requiredLinks) && new Set(entry.requiredLinks).size === entry.requiredLinks.length, `${label}: unique protected links required`);\n      const external = entry.requiredExternalLinks ?? [];\n      assert.ok(Array.isArray(external) && new Set(external).size === external.length, `${label}: unique protected external links required`);\n      assert.ok(entry.requiredLinks.length + external.length > 0, `${label}: protected destinations required`);\n      for (const link of entry.requiredLinks) assert.ok(pages.some(destination => localePath(destination.route, entry.locale) === link), `${label}: protected link is outside registered page and locale scope: ${link}`);\n      for (const link of external) {\n        const url = new URL(link);\n        assert.ok(url.protocol === 'https:' && !url.username && !url.password && url.href === link, `${label}: canonical HTTPS external destination required`);\n      }\n    }\n    if (entry.containerModule === 'next') for (const id of ['json-to-anki', 'anki-forge-vs-genanki']) {\n      const destination = pages.find(page => page.id === id);\n      assert.ok(destination && entry.requiredLinks.includes(localePath(destination.route, entry.locale)), `${label}: migration must retain the original local JSON and comparison links`);\n    }\n    const record = reviews.entries?.[entry.pageId]?.[entry.locale];\n    const current = currentInputs[entry.pageId]?.[entry.locale];\n    assert.ok(record && current, `${label}: reviewed current source inputs required`);\n    for (const axis of ['technical', 'linguistic']) {\n      assert.equal(record[axis]?.status, 'reviewed', `${label}: ${axis} source review required`);\n      assert.equal(record[axis]?.reviewerType, 'ai', `${label}: independent ${axis} AI review required`);\n      assert.ok(record[axis].reviewerRun?.trim(), `${label}: ${axis} reviewer identity required`);\n      assert.ok(Array.isArray(record[axis].openIssues) && !record[axis].openIssues.some(issue => ['critical', 'major'].includes(issue.severity)), `${label}: unresolved ${axis} source review issues`);\n    }\n    assert.deepEqual(Object.keys(entry.inputs || {}).sort(), [...inputKeys].sort(), `${label}: source input hash triple required`);\n    for (const key of inputKeys) {\n      assert.match(entry.inputs[key], /^[0-9a-f]{64}$/, `${label}: invalid ${key}`);\n      assert.equal(entry.inputs[key], current[key], `${label}: migration used stale ${key}`);\n      assert.equal(record[key], current[key], `${label}: source review used stale ${key}`);\n    }\n    Object.freeze(entry.anchors);\n    if (entry.requiredLinks) Object.freeze(entry.requiredLinks);\n    if (entry.requiredExternalLinks) Object.freeze(entry.requiredExternalLinks);\n    Object.freeze(entry.inputs);\n    return Object.freeze(entry);\n  });\n  Object.freeze(entries);\n  approved.add(entries);\n  return entries;\n}\n\nexport function assertValidatedHeadingMigrations(entries) {\n  assert.ok(entries.length === 0 || approved.has(entries), 'Heading migrations must be validated against independent source reviews before surface checks');\n}\n\nexport async function loadHeadingMigrations(root = repository) {\n  const filename = path.join(root, 'website/public-surface-migrations.json');\n  const bytes = await readFile(filename, 'utf8').catch(error => {\n    if (error.code === 'ENOENT') return null;\n    throw error;\n  });\n  if (bytes === null) return [];\n  const document = JSON.parse(bytes);\n  assert.equal(document.schemaVersion, 1, 'Unknown heading migration schema');\n  assert.ok(Array.isArray(document.entries), 'Heading migrations must contain entries');\n  if (!document.entries.length) return [];\n  const [{ checkContent }, { pages }, { reviewInputs }] = await Promise.all([\n    import('./check-content.mjs'), import('../site-model.mjs'), import('./content-review-inputs.mjs'),\n  ]);\n  // Never inherit CONTENT_REVIEW_MODE=preview for a compatibility exemption.\n  await checkContent(root, { requireReviews: true });\n  const reviews = JSON.parse(await readFile(path.join(root, 'website/content-reviews.json'), 'utf8'));\n  const currentInputs = {};\n  const currentSections = {};\n  const sections = JSON.parse(await readFile(path.join(root, 'website/section-contracts.json'), 'utf8'));\n  const legacy = JSON.parse(await readFile(path.join(root, 'website/legacy-sections.json'), 'utf8'));\n  for (const entry of document.entries) {\n    const page = pages.find(page => page.id === entry.pageId);\n    assert.ok(page, `${entry.pageId}: unknown migration page`);\n    currentInputs[entry.pageId] ||= {};\n    currentInputs[entry.pageId][entry.locale] = await reviewInputs(page, entry.locale, root);\n    if (Object.hasOwn(entry, 'sectionId')) {\n      const source = await readFile(path.join(root, page.sources[entry.locale]), 'utf8');\n      currentSections[entry.pageId] ||= {};\n      currentSections[entry.pageId][entry.locale] = {\n        mapping: sectionMapping(page.id, entry.locale, source, legacyAliases(legacy, page.id, entry.locale), sections),\n        headings: headings(source).map(heading => ({ id: heading.id, title: load(micromark(heading.title)).text().replace(/\\s+/g, ' ').trim() })),\n      };\n    }\n  }\n  return validateHeadingMigrations(document, { pages, reviews, currentInputs, currentSections });\n}\n"
+    },
+    "website/scripts/public-surface.mjs": {
+      "sha256": "dd32aee56e070af4a466a43d69639b6ec280a3953fb4a1ee63324b39e14b2ba6",
+      "utf8": "import assert from 'node:assert/strict';\nimport { createHash } from 'node:crypto';\nimport { readFile, stat } from 'node:fs/promises';\nimport path from 'node:path';\nimport { load } from 'cheerio';\nimport { assertIndexable } from './indexability.mjs';\nimport { assertValidatedHeadingMigrations } from './heading-migrations.mjs';\n\nconst hash = bytes => createHash('sha256').update(bytes).digest('hex');\nconst text = value => value.replace(/\\s+/g, ' ').trim();\nconst selectors = { downloads: '[download]', search: 'site-search', codeCopy: '[data-copy], .expressive-code .copy button', flips: '[data-flip]', audio: 'audio', updates: '[data-update]' };\nexport function artifactPath(dist, route, base = '/') {\n  const prefix = base === '/' ? '' : base.replace(/\\/$/, '');\n  assert.ok(route.startsWith(prefix + '/'), `Route outside configured base: ${route}`);\n  const relative = decodeURIComponent(route.slice(prefix.length));\n  const file = path.resolve(dist, `.${relative}${relative.endsWith('/') ? 'index.html' : ''}`);\n  assert.ok(file.startsWith(path.resolve(dist) + path.sep), `Route outside artifact: ${route}`);\n  return file;\n}\nfunction headingText($, node) {\n  return text($(node).clone().find('.sl-anchor-link').remove().end().text());\n}\n// An alias belongs next to its task heading, rather than in a collection at the top.\nfunction aliasHeadingNode($, node) {\n  let block = $(node);\n  if (block.parent().is('p') && !block.parent().text().trim()) block = block.parent();\n  for (let next = block.next(); next.length; next = next.next()) {\n    const heading = next.is('h2,h3,h4,h5,h6') ? next : next.children('h2,h3,h4,h5,h6');\n    if (heading.length) return heading.first();\n    if (next.text().trim()) return null;\n  }\n  return null;\n}\nfunction aliasHeading($, node) {\n  const heading = aliasHeadingNode($, node);\n  return heading ? headingText($, heading) : null;\n}\nfunction anchors($) {\n  return $('main[id], main [id]').toArray().map(node => {\n    const alias = $(node).attr('data-section-alias');\n    const heading = $(node).is('h1,h2,h3,h4,h5,h6') ? headingText($, node) : alias ? aliasHeading($, node) : undefined;\n    const containerModule = $(node).closest('[data-module]').attr('data-module');\n    return { id: $(node).attr('id'), ...(alias ? { task: alias } : {}), ...(heading !== undefined ? { heading } : {}), ...($(node).is('h1,h2,h3,h4,h5,h6') ? { headingLevel: node.tagName.toLowerCase() } : {}), ...(containerModule ? { containerModule } : {}) };\n  });\n}\nfunction entityIds($) {\n  const graphs = $('script[type=\"application/ld+json\"][data-anki-forge-schema]').toArray();\n  return graphs.flatMap(node => (JSON.parse($(node).text())['@graph'] || []).map(entity => entity['@id'])).filter(Boolean).sort();\n}\n\n/** Explicit baseline capture only: never invoked by a normal build. */\nexport async function captureSurface(dist, verifiedManifest, provenance) {\n  const manifestBytes = await readFile(verifiedManifest);\n  const manifest = JSON.parse(manifestBytes);\n  assert.equal(manifest.configuration.base, '/', 'Capture the published root artifact, not a preview');\n  const pages = [];\n  for (const entry of manifest.pages.filter(page => page.id !== '404')) {\n    const bytes = await readFile(artifactPath(dist, entry.route));\n    assert.equal(hash(bytes), entry.sha256, `${entry.route}: baseline does not match independent verified manifest`);\n    const $ = load(bytes.toString());\n    assertIndexable($, { route: entry.route });\n    pages.push({ route: entry.route, pageId: entry.id, locale: entry.locale, anchors: anchors($), capabilities: Object.fromEntries(Object.entries(selectors).map(([name, selector]) => [name, $(selector).length])), entities: entityIds($), ...( $('link[rel=\"describedby\"]').length ? { llms: new URL($('link[rel=\"describedby\"]').attr('href')).pathname } : {}), ...( $('link[rel=\"alternate\"][type=\"text/markdown\"]').length ? { markdown: new URL($('link[rel=\"alternate\"][type=\"text/markdown\"]').attr('href')).pathname } : {}) });\n  }\n  for (const entry of manifest.resources) {\n    assert.equal(hash(await readFile(artifactPath(dist, entry.route))), entry.sha256, `${entry.route}: baseline resource differs from verified manifest`);\n  }\n  return { schemaVersion: 1, source: { ...provenance, commit: manifest.commit, inputSha256: manifest.inputSha256, manifestSha256: hash(manifestBytes) }, locales: [...new Set(pages.map(page => page.locale))], pages, machineResources: manifest.resources.filter(resource => /\\/(?:index\\.md|llms\\.txt)$/.test(resource.route)).map(resource => ({ route: resource.route, kind: resource.route.endsWith('llms.txt') ? 'llms' : 'markdown' })) };\n}\n\n/** Compare with an independent historic surface, not today's topic registry. */\nexport async function checkSurface(dist, baseline, configuration, headingMigrations = []) {\n  assertValidatedHeadingMigrations(headingMigrations);\n  assert.equal(baseline.schemaVersion, 1, 'Unknown public surface schema');\n  for (const expected of baseline.pages) {\n    const route = (configuration.base === '/' ? '' : configuration.base) + expected.route;\n    const $ = load(await readFile(artifactPath(dist, route, configuration.base), 'utf8'));\n    assert.equal($('meta[name=\"anki-forge:page-id\"]').attr('content'), expected.pageId, `${route}: historic page identity changed`);\n    assert.equal($('html').attr('lang'), expected.locale, `${route}: historic language changed`);\n    assert.equal($('link[rel=\"canonical\"]').length, 1, `${route}: canonical count`);\n    assert.equal($('link[rel=\"canonical\"]').attr('href'), new URL(route, configuration.site).href, `${route}: historic canonical changed`);\n    assertIndexable($, { route });\n    const actual = new Map(anchors($).map(anchor => [anchor.id, anchor]));\n    function checkHeading(anchor, found, message) {\n      if (found.heading === anchor.heading) return;\n      const migration = headingMigrations.find(entry => entry.pageId === expected.pageId && entry.locale === expected.locale && entry.route === expected.route && entry.anchors.includes(anchor.id) && entry.fromHeading === anchor.heading && entry.toHeading === found.heading);\n      assert.ok(migration, message);\n      const nodes = $('main[id], main [id]').filter((_, node) => $(node).attr('id') === anchor.id);\n      assert.equal(nodes.length, 1, `${route}#${anchor.id}: migrated anchor must remain unique`);\n      const heading = nodes.is('h2,h3,h4,h5,h6') ? nodes : nodes.attr('data-section-alias') ? aliasHeadingNode($, nodes) : null;\n      if (migration.sectionId) {\n        assert.equal(found.containerModule, anchor.containerModule, `${route}#${anchor.id}: section changed its historic module`);\n        assert.ok(heading && heading.attr('id') === migration.headingId, `${route}#${anchor.id}: migrated section lost its reviewed native heading`);\n        assert.equal(heading.closest('[data-module]').attr('data-module'), anchor.containerModule, `${route}#${anchor.id}: section heading changed its historic module`);\n        const native = $('main[id], main [id]').filter((_, node) => $(node).attr('id') === migration.headingId);\n        assert.equal(native.length, 1, `${route}#${anchor.id}: migrated native heading must remain unique`);\n        const canonical = $('main[id], main [id]').filter((_, node) => $(node).attr('id') === migration.sectionId);\n        assert.equal(canonical.length, 1, `${route}#${anchor.id}: semantic section anchor must remain unique`);\n        const target = canonical.is('h2,h3,h4,h5,h6') ? canonical : canonical.attr('data-section-alias') === migration.sectionId ? aliasHeadingNode($, canonical) : null;\n        assert.ok(target && target[0] === heading[0], `${route}#${anchor.id}: canonical section and historic anchor target different headings`);\n        if (!nodes.is('h2,h3,h4,h5,h6')) assert.equal(nodes.attr('data-section-alias'), migration.sectionId, `${route}#${anchor.id}: historic alias changed its semantic section`);\n        return;\n      }\n      assert.equal(anchor.containerModule, migration.containerModule, `${route}#${anchor.id}: migration changed its historic module`);\n      const container = nodes.closest('[data-module]');\n      assert.equal(container.attr('data-module'), migration.containerModule, `${route}#${anchor.id}: migrated anchor moved to another module`);\n      const modules = $('[data-module]').filter((_, node) => $(node).attr('data-module') === migration.containerModule);\n      assert.equal(modules.length, 1, `${route}#${anchor.id}: migrated module must remain unique`);\n      assert.ok(heading && heading.closest('[data-module]')[0] === container[0], `${route}#${anchor.id}: migrated alias is detached from its task heading`);\n      for (const required of migration.requiredLinks) {\n        const destination = new URL((configuration.base === '/' ? '' : configuration.base) + required, configuration.site);\n        assert.ok(container.find('a[href]').toArray().some(node => {\n          const target = new URL($(node).attr('href'), new URL(route, configuration.site));\n          return target.href === destination.href;\n        }), `${route}#${anchor.id}: migrated module lost protected local link ${required}`);\n      }\n      for (const required of migration.requiredExternalLinks || []) {\n        assert.ok(container.find('a[href]').toArray().some(node => new URL($(node).attr('href'), new URL(route, configuration.site)).href === required), `${route}#${anchor.id}: migrated module lost protected external link ${required}`);\n      }\n    }\n    for (const anchor of expected.anchors) {\n      assert.ok(actual.has(anchor.id), `${route}: historic anchor missing: ${anchor.id}`);\n      if (anchor.containerModule) assert.equal(actual.get(anchor.id).containerModule, anchor.containerModule, `${route}#${anchor.id}: historic anchor moved to another module`);\n      if (anchor.heading && !anchor.task) {\n        if (anchor.headingLevel === 'h1') {\n          // The page's top anchor keeps its role even when an independently\n          // reviewed SEO title changes. It cannot move to a loose span or task.\n          assert.equal(actual.get(anchor.id).headingLevel, 'h1', `${route}#${anchor.id}: historic page-title anchor moved away from its H1`);\n        } else {\n          checkHeading(anchor, actual.get(anchor.id), `${route}#${anchor.id}: historic anchor moved away from its task heading; independently review a heading migration`);\n        }\n      }\n      if (anchor.task) {\n        const found = actual.get(anchor.id);\n        assert.equal(found.task, anchor.task, `${route}#${anchor.id}: historic task changed`);\n        if (anchor.task === '_top') {\n          const order = $('main *').toArray();\n          const anchorIndex = order.findIndex(node => $(node).attr('id') === anchor.id);\n          const firstTask = order.findIndex(node => $(node).is('h2,h3,h4,h5,h6'));\n          assert.ok(firstTask === -1 || anchorIndex < firstTask, `${route}#${anchor.id}: historic introductory task moved below another task`);\n        } else {\n          assert.ok(found.heading, `${route}#${anchor.id}: alias is detached from a real task heading`);\n          checkHeading(anchor, found, `${route}#${anchor.id}: historic alias moved to another task; independently review a heading migration`);\n        }\n      }\n    }\n    for (const [name, count] of Object.entries(expected.capabilities)) assert.ok($(selectors[name]).length >= count, `${route}: historic ${name} capability removed`);\n    for (const [key, selector] of [['llms', 'link[rel=\"describedby\"]'], ['markdown', 'link[rel=\"alternate\"][type=\"text/markdown\"]']]) {\n      if (expected[key]) assert.equal($(selector).attr('href'), new URL((configuration.base === '/' ? '' : configuration.base) + expected[key], configuration.site).href, `${route}: historic ${key} discovery removed`);\n    }\n    const actualEntities = entityIds($);\n    for (const id of expected.entities) {\n      const url = new URL(id);\n      const localized = new URL((configuration.base === '/' ? '' : configuration.base) + url.pathname + url.hash, configuration.site).href;\n      assert.ok(actualEntities.includes(localized), `${route}: historic entity ID changed: ${id}`);\n    }\n  }\n  for (const resource of baseline.machineResources) {\n    const route = (configuration.base === '/' ? '' : configuration.base) + resource.route;\n    assert.ok((await stat(artifactPath(dist, route, configuration.base))).size > 0, `${route}: historic machine resource missing`);\n  }\n  return { pages: baseline.pages.length, machineResources: baseline.machineResources.length, source: baseline.source.commit };\n}\n\nexport function releasedLanguages(baseline) { return [...baseline.locales]; }\n"
+    },
+    "website/scripts/public-surface.test.mjs": {
+      "sha256": "6082fbe00010e0a8fa38e3c14ac337ca21d5bf77655645c6a50d8720ad2044cf",
+      "utf8": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';\nimport path from 'node:path';\nimport os from 'node:os';\nimport { checkSurface, captureSurface, artifactPath } from './public-surface.mjs';\nimport { createHash } from 'node:crypto';\nimport { validateHeadingMigrations } from './heading-migrations.mjs';\n\nconst config = { site: 'https://example.test', base: '/' };\nconst html = '<html lang=\"zh-CN\"><head><meta name=\"anki-forge:page-id\" content=\"updates\"><link rel=\"canonical\" href=\"https://example.test/zh-cn/docs/updates/\"></head><body><main><p><span id=\"old-update\" data-section-alias=\"updates\"></span></p><h2 id=\"updates\">更新原始 APKG</h2><p>Preserve the original distributed APKG.</p><a download>APKG</a></main></body></html>';\nconst baseline = { schemaVersion: 1, source: { commit: 'previous-verified-release' }, locales: ['zh-CN'], pages: [{ route: '/zh-cn/docs/updates/', pageId: 'updates', locale: 'zh-CN', anchors: [{ id: 'old-update', task: 'updates', heading: '更新原始 APKG' }, { id: 'updates' }], capabilities: { downloads: 1 }, entities: [] }], machineResources: [{ route: '/zh-cn/docs/updates/index.md', kind: 'markdown' }] };\nasync function fixture(t, text = html) {\n  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-surface-'));\n  t.after(() => rm(directory, { recursive: true, force: true }));\n  const file = artifactPath(directory, baseline.pages[0].route);\n  await mkdir(path.dirname(file), { recursive: true });\n  await writeFile(file, text);\n  await writeFile(path.join(path.dirname(file), 'index.md'), '# Updates\\n');\n  return directory;\n}\ntest('historic pages and machine resources remain independent of a mutable registry', async t => {\n  const directory = await fixture(t);\n  assert.equal((await checkSurface(directory, baseline, config)).pages, 1);\n  // Removing the page from a new registry cannot change this historic expectation.\n  await rm(artifactPath(directory, baseline.pages[0].route));\n  await assert.rejects(checkSurface(directory, baseline, config), /ENOENT/);\n});\nfor (const [name, mutate, message] of [\n  ['missing anchor', text => text.replace('id=\"old-update\"', 'id=\"removed\"'), /historic anchor missing/],\n  ['alias moved to another task', text => text.replace('<h2 id=\"updates\">更新原始 APKG</h2>', '<h2 id=\"different-task\">Other task</h2><h2 id=\"updates\">更新原始 APKG</h2>'), /moved to another task/],\n  ['noindex', text => text.replace('</head>', '<meta name=\"robots\" content=\"noindex\"></head>'), /restriction/],\n  ['lost download', text => text.replace(' download', ''), /downloads capability removed/],\n]) test(`historic surface rejects ${name}`, async t => { await assert.rejects(checkSurface(await fixture(t, mutate(html)), baseline, config), message); });\ntest('historic machine URLs cannot disappear even if HTML still works', async t => {\n  const directory = await fixture(t);\n  await rm(path.join(directory, 'zh-cn/docs/updates/index.md'));\n  await assert.rejects(checkSurface(directory, baseline, config), /ENOENT/);\n});\ntest('a legacy installation alias for the introduction stays before later tasks', async t => {\n  const intro = html.replace('data-section-alias=\"updates\"', 'data-section-alias=\"_top\"');\n  const expected = structuredClone(baseline);\n  expected.pages[0].anchors[0] = { id: 'old-update', task: '_top', heading: null };\n  await assert.doesNotReject(checkSurface(await fixture(t, intro), expected, config));\n  const misplaced = intro.replace('<p><span id=\"old-update\" data-section-alias=\"_top\"></span></p>', '').replace('</h2>', '</h2><p><span id=\"old-update\" data-section-alias=\"_top\"></span></p>');\n  await assert.rejects(checkSurface(await fixture(t, misplaced), expected, config), /introductory task moved/);\n});\ntest('path resolution rejects artifact traversal and a missing deployment base', () => {\n  assert.throws(() => artifactPath('/tmp/artifact', '/../../outside'), /outside artifact/);\n  assert.throws(() => artifactPath('/tmp/artifact', '/docs/', '/project'), /outside configured base/);\n});\ntest('a reviewed page title can change wording while its historic top anchor remains the H1', async t => {\n  const directory = await fixture(t, html.replace('<main>', '<main><h1 id=\"page-title\">A clearer page title</h1>'));\n  const expected = structuredClone(baseline);\n  expected.pages[0].anchors.push({ id: 'page-title', heading: 'Earlier page title', headingLevel: 'h1' });\n  await assert.doesNotReject(checkSurface(directory, expected, config));\n  await writeFile(artifactPath(directory, baseline.pages[0].route), html.replace('<main>', '<main><span id=\"page-title\"></span><h1>Other title</h1>'));\n  await assert.rejects(checkSurface(directory, expected, config), /page-title anchor moved away/);\n});\n\ntest('captured native heading anchors cannot move to a page-top span or another heading', async t => {\n  const directory = await fixture(t);\n  const filename = artifactPath(directory, baseline.pages[0].route);\n  const bytes = await readFile(filename);\n  const manifestFile = path.join(directory, 'manifest.json');\n  await writeFile(manifestFile, JSON.stringify({ configuration: { base: '/' }, commit: 'historic', pages: [{ route: baseline.pages[0].route, id: 'updates', locale: 'zh-CN', sha256: createHash('sha256').update(bytes).digest('hex') }], resources: [] }));\n  const captured = await captureSurface(directory, manifestFile, {});\n  assert.equal(captured.pages[0].anchors.find(anchor => anchor.id === 'updates').heading, '更新原始 APKG');\n  await assert.doesNotReject(checkSurface(directory, captured, config));\n  const withoutLegacy = html.replace('<p><span id=\"old-update\" data-section-alias=\"updates\"></span></p>', '');\n  const nativeOnly = structuredClone(captured);\n  nativeOnly.pages[0].anchors = nativeOnly.pages[0].anchors.filter(anchor => anchor.id !== 'old-update');\n  for (const changed of [\n    withoutLegacy.replace('<main>', '<main><span id=\"updates\"></span>').replace('<h2 id=\"updates\">', '<h2 id=\"new-update\">'),\n    withoutLegacy.replace('<h2 id=\"updates\">更新原始 APKG</h2>', '<h2 id=\"updates\">Other task</h2><h2 id=\"new-update\">更新原始 APKG</h2>'),\n  ]) {\n    await writeFile(filename, changed);\n    await assert.rejects(checkSurface(directory, nativeOnly, config), /historic anchor.*task|historic anchor.*heading/);\n  }\n  await writeFile(filename, withoutLegacy.replace('<h2 id=\"updates\">', '<span id=\"updates\" data-section-alias=\"new-update\"></span><h2 id=\"new-update\">'));\n  await assert.doesNotReject(checkSurface(directory, nativeOnly, config));\n});\n\ntest('a source-reviewed heading rewrite retains its module, aliases and old local destinations', async t => {\n  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-heading-migration-'));\n  t.after(() => rm(directory, { recursive: true, force: true }));\n  const oldHeading = 'From your first deck to the next update';\n  const newHeading = 'Choose your next Anki task';\n  const source = `<html lang=\"en\"><head><meta name=\"anki-forge:page-id\" content=\"home\"><link rel=\"canonical\" href=\"https://example.test/\"></head><main><section data-module=\"next\"><span id=\"workflow-heading\" data-section-alias=\"next-heading\"></span><h2 id=\"next-heading\">${oldHeading}</h2><a href=\"/docs/json-to-anki/\">JSON</a><a href=\"/docs/anki-forge-vs-genanki/\">Compare</a></section></main></html>`;\n  const filename = path.join(directory, 'index.html');\n  await writeFile(filename, source);\n  const manifestFile = path.join(directory, 'manifest.json');\n  await writeFile(manifestFile, JSON.stringify({ configuration: { base: '/' }, commit: 'independent-history', pages: [{ route: '/', id: 'home', locale: 'en', sha256: createHash('sha256').update(source).digest('hex') }], resources: [] }));\n  const historic = await captureSurface(directory, manifestFile, {});\n  assert.ok(historic.pages[0].anchors.every(anchor => anchor.containerModule === 'next'));\n  const inputs = { sourceHash: 'a'.repeat(64), targetHash: 'b'.repeat(64), technicalDependencyHash: 'c'.repeat(64) };\n  const axis = { status: 'reviewed', reviewerType: 'ai', reviewerRun: 'independent-fixture', openIssues: [] };\n  const entry = { pageId: 'home', locale: 'en', route: '/', anchors: ['workflow-heading', 'next-heading'], fromHeading: oldHeading, toHeading: newHeading, reason: 'Independently reviewed task wording', containerModule: 'next', requiredLinks: ['/docs/json-to-anki/', '/docs/anki-forge-vs-genanki/'], inputs };\n  const context = { pages: [{ id: 'home', route: '/' }, { id: 'json-to-anki', route: '/docs/json-to-anki/' }, { id: 'anki-forge-vs-genanki', route: '/docs/anki-forge-vs-genanki/' }], reviews: { entries: { home: { en: { ...inputs, technical: axis, linguistic: axis } } } }, currentInputs: { home: { en: inputs } } };\n  const approved = validateHeadingMigrations({ schemaVersion: 1, entries: [entry] }, context);\n  const changed = source.replace(oldHeading, newHeading);\n  await writeFile(filename, changed);\n  await assert.rejects(checkSurface(directory, historic, config), /historic alias moved/);\n  await assert.rejects(checkSurface(directory, historic, config, [entry]), /validated against independent/);\n  await assert.doesNotReject(checkSurface(directory, historic, config, approved));\n  for (const [mutate, expected] of [\n    [value => value.replace('data-module=\"next\"', 'data-module=\"other\"'), /another module/],\n    [value => value.replace('<span id=\"workflow-heading\" data-section-alias=\"next-heading\"></span>', '').replace('<main>', '<main><span id=\"workflow-heading\" data-section-alias=\"next-heading\"></span>'), /detached|another module/],\n    [value => value.replace('<a href=\"/docs/json-to-anki/\">JSON</a>', ''), /lost protected local link/],\n    [value => value.replace('<a href=\"/docs/json-to-anki/\">JSON</a>', '').replace('</section>', '</section><a href=\"/docs/json-to-anki/\">JSON</a>'), /lost protected local link/],\n    [value => value.replace('href=\"/docs/anki-forge-vs-genanki/\"', 'href=\"https://unrelated.test/docs/anki-forge-vs-genanki/\"'), /lost protected local link/],\n    [value => value.replace(newHeading, 'Another unreviewed heading'), /historic alias moved/],\n  ]) {\n    await writeFile(filename, mutate(changed));\n    await assert.rejects(checkSurface(directory, historic, config, approved), expected);\n  }\n  const prefix = { site: 'https://example.test', base: '/project' };\n  await writeFile(filename, changed.replace('href=\"https://example.test/\"', 'href=\"https://example.test/project/\"').replaceAll('href=\"/docs/', 'href=\"/project/docs/'));\n  await assert.doesNotReject(checkSurface(directory, historic, prefix, approved));\n});\n\ntest('reviewed document heading changes preserve the exact semantic section and native heading', async t => {\n  const oldHeading = 'Prepared publication from source';\n  const newHeading = 'Prepare and publish';\n  const old = html.replace('<p><span id=\"old-update\" data-section-alias=\"updates\"></span></p><h2 id=\"updates\">更新原始 APKG</h2>', `<h2 id=\"updates\">${oldHeading}</h2>`);\n  const directory = await fixture(t, old);\n  const filename = artifactPath(directory, baseline.pages[0].route);\n  const expected = structuredClone(baseline);\n  expected.pages[0].anchors = [{ id: 'updates', heading: oldHeading, headingLevel: 'h2' }];\n  const changed = old.replace(`<h2 id=\"updates\">${oldHeading}</h2>`, `<span id=\"updates\" data-section-alias=\"updates\"></span><h2 id=\"prepare-and-publish\">${newHeading}</h2>`);\n  await writeFile(filename, changed);\n  await assert.rejects(checkSurface(directory, expected, config), /historic anchor moved/);\n  const inputs = { sourceHash: 'a'.repeat(64), targetHash: 'b'.repeat(64), technicalDependencyHash: 'c'.repeat(64) };\n  const axis = { status: 'reviewed', reviewerType: 'ai', reviewerRun: 'independent-document-review', openIssues: [] };\n  const entry = { pageId: 'updates', locale: 'zh-CN', route: '/zh-cn/docs/updates/', anchors: ['updates'], fromHeading: oldHeading, toHeading: newHeading, sectionId: 'updates', headingId: 'prepare-and-publish', reason: 'Reviewed wording change with the same publication task.', inputs };\n  const context = {\n    pages: [{ id: 'updates', type: 'docs', route: '/docs/updates/' }],\n    reviews: { entries: { updates: { 'zh-CN': { ...inputs, technical: axis, linguistic: axis } } } },\n    currentInputs: { updates: { 'zh-CN': inputs } },\n    currentSections: { updates: { 'zh-CN': { mapping: { 'prepare-and-publish': 'updates' }, headings: [{ id: 'prepare-and-publish', title: newHeading }] } } },\n  };\n  const document = { schemaVersion: 1, entries: [entry] };\n  const approved = validateHeadingMigrations(document, context);\n  await assert.doesNotReject(checkSurface(directory, expected, config, approved));\n  for (const mutate of [\n    value => { value.pages[0].type = 'home'; },\n    value => { value.currentSections.updates['zh-CN'].mapping.updates = 'different-task'; },\n    value => { value.currentSections.updates['zh-CN'].mapping['prepare-and-publish'] = 'different-task'; },\n    value => { value.currentSections.updates['zh-CN'].headings = []; },\n  ]) {\n    const invalid = structuredClone(context);\n    mutate(invalid);\n    assert.throws(() => validateHeadingMigrations(document, invalid), /document|section|heading/);\n  }\n  assert.throws(() => validateHeadingMigrations({ schemaVersion: 1, entries: [{ ...entry, containerModule: 'next' }] }, context), /scope/);\n  assert.throws(() => validateHeadingMigrations({ schemaVersion: 1, entries: [{ ...entry, toHeading: 'Unreviewed wording' }] }, context), /heading text/);\n  for (const mutate of [\n    value => value.replace('data-section-alias=\"updates\"', 'data-section-alias=\"other\"'),\n    value => value.replace('<h2 id=\"prepare-and-publish\">', '<p>Detached section</p><h2 id=\"prepare-and-publish\">'),\n    value => value.replace('id=\"prepare-and-publish\"', 'id=\"other-task\"'),\n    value => value.replace(newHeading, 'Unreviewed wording'),\n    value => value.replace('<main>', '<main><span id=\"updates\"></span>'),\n    value => value.replace('<main>', '<main><span id=\"prepare-and-publish\"></span>'),\n    value => value.replace('<h2 id=\"prepare-and-publish\">', '<section data-module=\"other\"><h2 id=\"prepare-and-publish\">').replace('</h2>', '</h2></section>'),\n  ]) {\n    await writeFile(filename, mutate(changed));\n    await assert.rejects(checkSurface(directory, expected, config, approved), /section|heading|unique|moved/);\n  }\n});\n\ntest('a reviewed module with external evidence keeps the exact HTTPS link inside its module', async t => {\n  const directory = await fixture(t);\n  const filename = artifactPath(directory, baseline.pages[0].route);\n  const link = 'https://github.com/example/project/tree/abcdef/evidence';\n  const source = html.replace('<main>', '<main><section data-module=\"performance\">').replace('</main>', `<a href=\"${link}\">Evidence</a></section></main>`);\n  const changed = source.replace('更新原始 APKG', '已审阅的新标题');\n  const expected = structuredClone(baseline);\n  expected.pages[0].anchors = [{ id: 'old-update', task: 'updates', heading: '更新原始 APKG', containerModule: 'performance' }];\n  const inputs = { sourceHash: 'a'.repeat(64), targetHash: 'b'.repeat(64), technicalDependencyHash: 'c'.repeat(64) };\n  const axis = { status: 'reviewed', reviewerType: 'ai', reviewerRun: 'independent-performance-review', openIssues: [] };\n  const entry = { pageId: 'updates', locale: 'zh-CN', route: '/zh-cn/docs/updates/', anchors: ['old-update'], fromHeading: '更新原始 APKG', toHeading: '已审阅的新标题', containerModule: 'performance', requiredLinks: [], requiredExternalLinks: [link], reason: 'Reviewed performance label; evidence URL remains exact.', inputs };\n  const context = { pages: [{ id: 'updates', route: '/docs/updates/' }], reviews: { entries: { updates: { 'zh-CN': { ...inputs, technical: axis, linguistic: axis } } } }, currentInputs: { updates: { 'zh-CN': inputs } } };\n  const approved = validateHeadingMigrations({ schemaVersion: 1, entries: [entry] }, context);\n  await writeFile(filename, changed);\n  await assert.doesNotReject(checkSurface(directory, expected, config, approved));\n  for (const mutate of [\n    value => value.replace(link, link + '-other'),\n    value => value.replace(`<a href=\"${link}\">Evidence</a>`, '').replace('</section>', `</section><a href=\"${link}\">Evidence</a>`),\n  ]) {\n    await writeFile(filename, mutate(changed));\n    await assert.rejects(checkSurface(directory, expected, config, approved), /lost protected external link/);\n  }\n  for (const invalid of ['http://example.test/', 'https://user:password@example.test/']) {\n    assert.throws(() => validateHeadingMigrations({ schemaVersion: 1, entries: [{ ...entry, requiredExternalLinks: [invalid] }] }, context), /HTTPS external destination/);\n  }\n});\n"
+    },
+    "website/public-surface-migrations.json": {
+      "sha256": "c54016a4aa629437ee3cd959eddf3b3c472f6a738aa1f1e067fe8dc19f2d8401",
+      "utf8": "{\n  \"schemaVersion\": 1,\n  \"entries\": [\n    {\n      \"pageId\": \"build-guarantees\",\n      \"locale\": \"en\",\n      \"route\": \"/docs/build-guarantees/\",\n      \"anchors\": [\n        \"prepared-publication-from-source\"\n      ],\n      \"fromHeading\": \"Prepared publication from source\",\n      \"toHeading\": \"Prepare, review and publish\",\n      \"sectionId\": \"prepared-publication-from-source\",\n      \"headingId\": \"prepare-review-and-publish\",\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"9cd8e95b76512c3db60de49dbe560ba1c00d0cbe5aa3f25f5a908cc933912f9c\",\n        \"targetHash\": \"e4051c10f9b129db250be6c282f2573f4db3b66a6bea147cae35362a07e0c27f\",\n        \"technicalDependencyHash\": \"5f26faff8842129701aa1d1531c6cf2c6e2d99607b7e1c6d1f6925145aa746fb\"\n      }\n    },\n    {\n      \"pageId\": \"python-api\",\n      \"locale\": \"en\",\n      \"route\": \"/docs/python-api/\",\n      \"anchors\": [\n        \"source-api-details\"\n      ],\n      \"fromHeading\": \"Source API details\",\n      \"toHeading\": \"Batch media and prepared publication\",\n      \"sectionId\": \"source-api-details\",\n      \"headingId\": \"batch-media-and-prepared-publication\",\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"1caabe07e4f29cc20c637d5d8ca228fded8e9af7d2166a5e72aa3de464839ce2\",\n        \"targetHash\": \"2c3c75a9c312f124b8744d19527e66f48163a2c24882cbfa7a24d6ca6fadcbd4\",\n        \"technicalDependencyHash\": \"a44b04fd43b2d4f0b9c94c0f5f87c3b166a857b33f769f68ae44ba78e93ab077\"\n      }\n    },\n    {\n      \"pageId\": \"blog:stable-ids-and-deck-updates\",\n      \"locale\": \"es\",\n      \"route\": \"/es/blog/stable-ids-and-deck-updates/\",\n      \"anchors\": [\n        \"give-the-next-build-a-baseline\",\n        \"dar-un-paquete-de-referencia-a-la-siguiente-generación\"\n      ],\n      \"fromHeading\": \"Dar un paquete de referencia a la siguiente generación\",\n      \"toHeading\": \"Usar el paquete anterior como referencia\",\n      \"sectionId\": \"give-the-next-build-a-baseline\",\n      \"headingId\": \"usar-el-paquete-anterior-como-referencia\",\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"ff57be40b39195601d1d767a44c83bd1d7fbe143dd0a612883a1d6a7643d9be8\",\n        \"targetHash\": \"e4825c4f54b0acd86c47e4dca043c35350006a2acb58d38bb669671d495d768a\",\n        \"technicalDependencyHash\": \"c650ba82279bced6ae7942f158abcd60c7ae16fb34eea7f3582c6314d9be983a\"\n      }\n    },\n    {\n      \"pageId\": \"home\",\n      \"locale\": \"es\",\n      \"route\": \"/es/\",\n      \"anchors\": [\n        \"install-heading\"\n      ],\n      \"fromHeading\": \"Elige tu lenguaje.\",\n      \"toHeading\": \"Elige tu lenguaje de programación.\",\n      \"containerModule\": \"install\",\n      \"requiredLinks\": [\n        \"/es/docs/quickstart/\",\n        \"/es/docs/node-quickstart/\",\n        \"/es/docs/python-quickstart/\"\n      ],\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0\",\n        \"targetHash\": \"f4047c4584e2c863aabadc6fcf36942b31df66416057e2c5b9832cf2428aca01\",\n        \"technicalDependencyHash\": \"517f4ff608837101488914f477ad8c9c692f91105393e3a7bd9d69b69d30fc10\"\n      }\n    },\n    {\n      \"pageId\": \"home\",\n      \"locale\": \"es\",\n      \"route\": \"/es/\",\n      \"anchors\": [\n        \"performance-heading\"\n      ],\n      \"fromHeading\": \"Medimos la exportación.\",\n      \"toHeading\": \"Tiempos de exportación\",\n      \"containerModule\": \"performance\",\n      \"requiredLinks\": [],\n      \"requiredExternalLinks\": [\n        \"https://github.com/morehardy/anki-forge/tree/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki\"\n      ],\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0\",\n        \"targetHash\": \"f4047c4584e2c863aabadc6fcf36942b31df66416057e2c5b9832cf2428aca01\",\n        \"technicalDependencyHash\": \"517f4ff608837101488914f477ad8c9c692f91105393e3a7bd9d69b69d30fc10\"\n      }\n    },\n    {\n      \"pageId\": \"home\",\n      \"locale\": \"en\",\n      \"route\": \"/\",\n      \"anchors\": [\n        \"install-heading\"\n      ],\n      \"fromHeading\": \"Choose your language.\",\n      \"toHeading\": \"Choose your programming language.\",\n      \"containerModule\": \"install\",\n      \"requiredLinks\": [\n        \"/docs/quickstart/\",\n        \"/docs/node-quickstart/\",\n        \"/docs/python-quickstart/\"\n      ],\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0\",\n        \"targetHash\": \"68faf22196a560dc90d0d7fe731d1f6e6746d2bf59eed7da1943913deec4d080\",\n        \"technicalDependencyHash\": \"f3ae13ca28c74c150d77ba36c3682feff5c17f3b20d2f60cc6ac3feb9c569475\"\n      }\n    },\n    {\n      \"pageId\": \"home\",\n      \"locale\": \"en\",\n      \"route\": \"/\",\n      \"anchors\": [\n        \"performance-heading\"\n      ],\n      \"fromHeading\": \"The export, measured.\",\n      \"toHeading\": \"Export performance\",\n      \"containerModule\": \"performance\",\n      \"requiredLinks\": [],\n      \"requiredExternalLinks\": [\n        \"https://github.com/morehardy/anki-forge/tree/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki\"\n      ],\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0\",\n        \"targetHash\": \"68faf22196a560dc90d0d7fe731d1f6e6746d2bf59eed7da1943913deec4d080\",\n        \"technicalDependencyHash\": \"f3ae13ca28c74c150d77ba36c3682feff5c17f3b20d2f60cc6ac3feb9c569475\"\n      }\n    },\n    {\n      \"pageId\": \"home\",\n      \"locale\": \"en\",\n      \"route\": \"/\",\n      \"anchors\": [\n        \"identity-heading\"\n      ],\n      \"fromHeading\": \"Let your notes evolve.Keep their identity.\",\n      \"toHeading\": \"Let your notes evolve.Keep the same note IDs.\",\n      \"containerModule\": \"updates\",\n      \"requiredLinks\": [\n        \"/docs/updates/\"\n      ],\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0\",\n        \"targetHash\": \"68faf22196a560dc90d0d7fe731d1f6e6746d2bf59eed7da1943913deec4d080\",\n        \"technicalDependencyHash\": \"f3ae13ca28c74c150d77ba36c3682feff5c17f3b20d2f60cc6ac3feb9c569475\"\n      }\n    },\n    {\n      \"pageId\": \"build-guarantees\",\n      \"locale\": \"zh-CN\",\n      \"route\": \"/zh-cn/docs/build-guarantees/\",\n      \"anchors\": [\n        \"prepared-publication-from-source\",\n        \"源码中的预备发布\"\n      ],\n      \"fromHeading\": \"源码中的预备发布\",\n      \"toHeading\": \"准备候选包并在审阅后写入目标文件\",\n      \"sectionId\": \"prepared-publication-from-source\",\n      \"headingId\": \"准备候选包并在审阅后写入目标文件\",\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"9cd8e95b76512c3db60de49dbe560ba1c00d0cbe5aa3f25f5a908cc933912f9c\",\n        \"targetHash\": \"3585bd794f6c566b990d36333b8e3d6307cfc310b4af15f477a34bf043637d51\",\n        \"technicalDependencyHash\": \"537263a1a5f06d974077eab387a7b6eb956949c87c99ded7e9ad74bc71ff4568\"\n      }\n    },\n    {\n      \"pageId\": \"python-api\",\n      \"locale\": \"zh-CN\",\n      \"route\": \"/zh-cn/docs/python-api/\",\n      \"anchors\": [\n        \"source-api-details\",\n        \"源码-api-详情\"\n      ],\n      \"fromHeading\": \"源码 API 详情\",\n      \"toHeading\": \"批量媒体处理与预备发布\",\n      \"sectionId\": \"source-api-details\",\n      \"headingId\": \"批量媒体处理与预备发布\",\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"1caabe07e4f29cc20c637d5d8ca228fded8e9af7d2166a5e72aa3de464839ce2\",\n        \"targetHash\": \"a3a072d5cf78436c99b5319fecf1fe1e531a3dea6939b3558a0bdaa8b30e90d8\",\n        \"technicalDependencyHash\": \"a58b70a281f48010dab014bf1f60c2beb9eefec8f1d6978c602cc6b2f6ce4f7e\"\n      }\n    },\n    {\n      \"pageId\": \"home\",\n      \"locale\": \"zh-CN\",\n      \"route\": \"/zh-cn/\",\n      \"anchors\": [\n        \"examples-heading\"\n      ],\n      \"fromHeading\": \"阅读代码，试用卡片。\",\n      \"toHeading\": \"查看代码，预览卡片。\",\n      \"containerModule\": \"examples\",\n      \"requiredLinks\": [\n        \"/zh-cn/docs/custom-notetypes/\",\n        \"/zh-cn/docs/image-occlusion/\",\n        \"/zh-cn/docs/media/\"\n      ],\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0\",\n        \"targetHash\": \"e43147d7626b78c399cc8534f298c6c14ba9a97e35e892cd34c338aa9c039dc7\",\n        \"technicalDependencyHash\": \"e29f6b8e5d83091f700c16b2a1a603a8eca346efb3b0fafbe090b17dcac1074d\"\n      }\n    },\n    {\n      \"pageId\": \"home\",\n      \"locale\": \"zh-CN\",\n      \"route\": \"/zh-cn/\",\n      \"anchors\": [\n        \"identity-heading\"\n      ],\n      \"fromHeading\": \"让笔记持续完善，保留原有身份。\",\n      \"toHeading\": \"让笔记持续完善，保留原有笔记 ID。\",\n      \"containerModule\": \"updates\",\n      \"requiredLinks\": [\n        \"/zh-cn/docs/updates/\"\n      ],\n      \"reason\": \"Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.\",\n      \"inputs\": {\n        \"sourceHash\": \"6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0\",\n        \"targetHash\": \"e43147d7626b78c399cc8534f298c6c14ba9a97e35e892cd34c338aa9c039dc7\",\n        \"technicalDependencyHash\": \"e29f6b8e5d83091f700c16b2a1a603a8eca346efb3b0fafbe090b17dcac1074d\"\n      }\n    }\n  ]\n}\n"
+    }
+  },
+  "sourceReview": {
+    "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+    "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+    "description": "Frozen independent 204-entry technical review; real current triples and per-entry report digests were rechecked for every migration."
+  },
+  "baselines": [
+    {
+      "path": "website/public-surface-baseline.json",
+      "sha256": "7bbf62b03336e9702d18c2287d86a19191aea01e8f3fe6d203df61aa2755dbee"
+    },
+    {
+      "path": "website/machine-surface-baseline.json",
+      "sha256": "2741648aed79700eb55d851949e9633e7c7c6eb44a1a34284300ab3513ac3ea5"
+    }
+  ],
+  "observations": [
+    {
+      "migration": {
+        "pageId": "build-guarantees",
+        "locale": "en",
+        "route": "/docs/build-guarantees/",
+        "anchors": [
+          "prepared-publication-from-source"
+        ],
+        "fromHeading": "Prepared publication from source",
+        "toHeading": "Prepare, review and publish",
+        "sectionId": "prepared-publication-from-source",
+        "headingId": "prepare-review-and-publish",
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "9cd8e95b76512c3db60de49dbe560ba1c00d0cbe5aa3f25f5a908cc933912f9c",
+          "targetHash": "e4051c10f9b129db250be6c282f2573f4db3b66a6bea147cae35362a07e0c27f",
+          "technicalDependencyHash": "5f26faff8842129701aa1d1531c6cf2c6e2d99607b7e1c6d1f6925145aa746fb"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "prepared-publication-from-source",
+          "heading": "Prepared publication from source",
+          "headingLevel": "h2"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "prepared-publication-from-source",
+          "heading": "Prepared publication from source",
+          "headingLevel": "h2"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "build-guarantees/en/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "build-guarantees/en/linguistic"
+        }
+      },
+      "observation": "Actual historical heading and all listed old IDs remain the same prepared-publication-from-source task in current reviewed source; the visible title is Prepare, review and publish. Native heading ID prepare-review-and-publish was independently checked."
+    },
+    {
+      "migration": {
+        "pageId": "python-api",
+        "locale": "en",
+        "route": "/docs/python-api/",
+        "anchors": [
+          "source-api-details"
+        ],
+        "fromHeading": "Source API details",
+        "toHeading": "Batch media and prepared publication",
+        "sectionId": "source-api-details",
+        "headingId": "batch-media-and-prepared-publication",
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "1caabe07e4f29cc20c637d5d8ca228fded8e9af7d2166a5e72aa3de464839ce2",
+          "targetHash": "2c3c75a9c312f124b8744d19527e66f48163a2c24882cbfa7a24d6ca6fadcbd4",
+          "technicalDependencyHash": "a44b04fd43b2d4f0b9c94c0f5f87c3b166a857b33f769f68ae44ba78e93ab077"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "source-api-details",
+          "heading": "Source API details",
+          "headingLevel": "h2"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "source-api-details",
+          "heading": "Source API details",
+          "headingLevel": "h2"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "python-api/en/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "python-api/en/linguistic"
+        }
+      },
+      "observation": "Actual historical heading and all listed old IDs remain the same source-api-details task in current reviewed source; the visible title is Batch media and prepared publication. Native heading ID batch-media-and-prepared-publication was independently checked."
+    },
+    {
+      "migration": {
+        "pageId": "blog:stable-ids-and-deck-updates",
+        "locale": "es",
+        "route": "/es/blog/stable-ids-and-deck-updates/",
+        "anchors": [
+          "give-the-next-build-a-baseline",
+          "dar-un-paquete-de-referencia-a-la-siguiente-generación"
+        ],
+        "fromHeading": "Dar un paquete de referencia a la siguiente generación",
+        "toHeading": "Usar el paquete anterior como referencia",
+        "sectionId": "give-the-next-build-a-baseline",
+        "headingId": "usar-el-paquete-anterior-como-referencia",
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "ff57be40b39195601d1d767a44c83bd1d7fbe143dd0a612883a1d6a7643d9be8",
+          "targetHash": "e4825c4f54b0acd86c47e4dca043c35350006a2acb58d38bb669671d495d768a",
+          "technicalDependencyHash": "c650ba82279bced6ae7942f158abcd60c7ae16fb34eea7f3582c6314d9be983a"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "give-the-next-build-a-baseline",
+          "task": "give-the-next-build-a-baseline",
+          "heading": "Dar un paquete de referencia a la siguiente generación"
+        },
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "dar-un-paquete-de-referencia-a-la-siguiente-generación",
+          "heading": "Dar un paquete de referencia a la siguiente generación",
+          "headingLevel": "h2"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "blog:stable-ids-and-deck-updates/es/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "blog:stable-ids-and-deck-updates/es/linguistic"
+        }
+      },
+      "observation": "Actual historical heading and all listed old IDs remain the same give-the-next-build-a-baseline task in current reviewed source; the visible title is Usar el paquete anterior como referencia. Native heading ID usar-el-paquete-anterior-como-referencia was independently checked."
+    },
+    {
+      "migration": {
+        "pageId": "home",
+        "locale": "es",
+        "route": "/es/",
+        "anchors": [
+          "install-heading"
+        ],
+        "fromHeading": "Elige tu lenguaje.",
+        "toHeading": "Elige tu lenguaje de programación.",
+        "containerModule": "install",
+        "requiredLinks": [
+          "/es/docs/quickstart/",
+          "/es/docs/node-quickstart/",
+          "/es/docs/python-quickstart/"
+        ],
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+          "targetHash": "f4047c4584e2c863aabadc6fcf36942b31df66416057e2c5b9832cf2428aca01",
+          "technicalDependencyHash": "517f4ff608837101488914f477ad8c9c692f91105393e3a7bd9d69b69d30fc10"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "install-heading",
+          "heading": "Elige tu lenguaje.",
+          "headingLevel": "h2",
+          "containerModule": "install"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "home/es/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "home/es/linguistic"
+        }
+      },
+      "observation": "install remains the original homepage task. New title exactly matches the current reviewed catalog consumed by HomePage/PerformanceEvidence. Protected local destinations match the existing HomePage links within this module."
+    },
+    {
+      "migration": {
+        "pageId": "home",
+        "locale": "es",
+        "route": "/es/",
+        "anchors": [
+          "performance-heading"
+        ],
+        "fromHeading": "Medimos la exportación.",
+        "toHeading": "Tiempos de exportación",
+        "containerModule": "performance",
+        "requiredLinks": [],
+        "requiredExternalLinks": [
+          "https://github.com/morehardy/anki-forge/tree/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki"
+        ],
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+          "targetHash": "f4047c4584e2c863aabadc6fcf36942b31df66416057e2c5b9832cf2428aca01",
+          "technicalDependencyHash": "517f4ff608837101488914f477ad8c9c692f91105393e3a7bd9d69b69d30fc10"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "performance-heading",
+          "heading": "Medimos la exportación.",
+          "headingLevel": "h2",
+          "containerModule": "performance"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "home/es/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "home/es/linguistic"
+        }
+      },
+      "observation": "performance remains the original homepage task. New title exactly matches the current reviewed catalog consumed by HomePage/PerformanceEvidence. The protected external URL is the exact evidenceCommit/dataset URL derived from the reviewed benchmark presentation, not an arbitrary HTTPS destination."
+    },
+    {
+      "migration": {
+        "pageId": "home",
+        "locale": "en",
+        "route": "/",
+        "anchors": [
+          "install-heading"
+        ],
+        "fromHeading": "Choose your language.",
+        "toHeading": "Choose your programming language.",
+        "containerModule": "install",
+        "requiredLinks": [
+          "/docs/quickstart/",
+          "/docs/node-quickstart/",
+          "/docs/python-quickstart/"
+        ],
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+          "targetHash": "68faf22196a560dc90d0d7fe731d1f6e6746d2bf59eed7da1943913deec4d080",
+          "technicalDependencyHash": "f3ae13ca28c74c150d77ba36c3682feff5c17f3b20d2f60cc6ac3feb9c569475"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "install-heading",
+          "heading": "Choose your language.",
+          "headingLevel": "h2",
+          "containerModule": "install"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "install-heading",
+          "heading": "Choose your language.",
+          "headingLevel": "h2",
+          "containerModule": "install"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "home/en/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "home/en/linguistic"
+        }
+      },
+      "observation": "install remains the original homepage task. New title exactly matches the current reviewed catalog consumed by HomePage/PerformanceEvidence. Protected local destinations match the existing HomePage links within this module."
+    },
+    {
+      "migration": {
+        "pageId": "home",
+        "locale": "en",
+        "route": "/",
+        "anchors": [
+          "performance-heading"
+        ],
+        "fromHeading": "The export, measured.",
+        "toHeading": "Export performance",
+        "containerModule": "performance",
+        "requiredLinks": [],
+        "requiredExternalLinks": [
+          "https://github.com/morehardy/anki-forge/tree/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki"
+        ],
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+          "targetHash": "68faf22196a560dc90d0d7fe731d1f6e6746d2bf59eed7da1943913deec4d080",
+          "technicalDependencyHash": "f3ae13ca28c74c150d77ba36c3682feff5c17f3b20d2f60cc6ac3feb9c569475"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "performance-heading",
+          "heading": "The export, measured.",
+          "headingLevel": "h2",
+          "containerModule": "performance"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "performance-heading",
+          "heading": "The export, measured.",
+          "headingLevel": "h2",
+          "containerModule": "performance"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "home/en/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "home/en/linguistic"
+        }
+      },
+      "observation": "performance remains the original homepage task. New title exactly matches the current reviewed catalog consumed by HomePage/PerformanceEvidence. The protected external URL is the exact evidenceCommit/dataset URL derived from the reviewed benchmark presentation, not an arbitrary HTTPS destination."
+    },
+    {
+      "migration": {
+        "pageId": "home",
+        "locale": "en",
+        "route": "/",
+        "anchors": [
+          "identity-heading"
+        ],
+        "fromHeading": "Let your notes evolve.Keep their identity.",
+        "toHeading": "Let your notes evolve.Keep the same note IDs.",
+        "containerModule": "updates",
+        "requiredLinks": [
+          "/docs/updates/"
+        ],
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+          "targetHash": "68faf22196a560dc90d0d7fe731d1f6e6746d2bf59eed7da1943913deec4d080",
+          "technicalDependencyHash": "f3ae13ca28c74c150d77ba36c3682feff5c17f3b20d2f60cc6ac3feb9c569475"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "identity-heading",
+          "heading": "Let your notes evolve.Keep their identity.",
+          "headingLevel": "h2",
+          "containerModule": "updates"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "identity-heading",
+          "heading": "Let your notes evolve.Keep their identity.",
+          "headingLevel": "h2",
+          "containerModule": "updates"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "home/en/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "home/en/linguistic"
+        }
+      },
+      "observation": "updates remains the original homepage task. New title exactly matches the current reviewed catalog consumed by HomePage/PerformanceEvidence. Protected local destinations match the existing HomePage links within this module."
+    },
+    {
+      "migration": {
+        "pageId": "build-guarantees",
+        "locale": "zh-CN",
+        "route": "/zh-cn/docs/build-guarantees/",
+        "anchors": [
+          "prepared-publication-from-source",
+          "源码中的预备发布"
+        ],
+        "fromHeading": "源码中的预备发布",
+        "toHeading": "准备候选包并在审阅后写入目标文件",
+        "sectionId": "prepared-publication-from-source",
+        "headingId": "准备候选包并在审阅后写入目标文件",
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "9cd8e95b76512c3db60de49dbe560ba1c00d0cbe5aa3f25f5a908cc933912f9c",
+          "targetHash": "3585bd794f6c566b990d36333b8e3d6307cfc310b4af15f477a34bf043637d51",
+          "technicalDependencyHash": "537263a1a5f06d974077eab387a7b6eb956949c87c99ded7e9ad74bc71ff4568"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "prepared-publication-from-source",
+          "task": "prepared-publication-from-source",
+          "heading": "源码中的预备发布"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "prepared-publication-from-source",
+          "task": "prepared-publication-from-source",
+          "heading": "源码中的预备发布"
+        },
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "源码中的预备发布",
+          "heading": "源码中的预备发布",
+          "headingLevel": "h2"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "源码中的预备发布",
+          "heading": "源码中的预备发布",
+          "headingLevel": "h2"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "build-guarantees/zh-CN/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "build-guarantees/zh-CN/linguistic"
+        }
+      },
+      "observation": "Actual historical heading and all listed old IDs remain the same prepared-publication-from-source task in current reviewed source; the visible title is 准备候选包并在审阅后写入目标文件. Native heading ID 准备候选包并在审阅后写入目标文件 was independently checked."
+    },
+    {
+      "migration": {
+        "pageId": "python-api",
+        "locale": "zh-CN",
+        "route": "/zh-cn/docs/python-api/",
+        "anchors": [
+          "source-api-details",
+          "源码-api-详情"
+        ],
+        "fromHeading": "源码 API 详情",
+        "toHeading": "批量媒体处理与预备发布",
+        "sectionId": "source-api-details",
+        "headingId": "批量媒体处理与预备发布",
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "1caabe07e4f29cc20c637d5d8ca228fded8e9af7d2166a5e72aa3de464839ce2",
+          "targetHash": "a3a072d5cf78436c99b5319fecf1fe1e531a3dea6939b3558a0bdaa8b30e90d8",
+          "technicalDependencyHash": "a58b70a281f48010dab014bf1f60c2beb9eefec8f1d6978c602cc6b2f6ce4f7e"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "source-api-details",
+          "task": "source-api-details",
+          "heading": "源码 API 详情"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "source-api-details",
+          "task": "source-api-details",
+          "heading": "源码 API 详情"
+        },
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "源码-api-详情",
+          "heading": "源码 API 详情",
+          "headingLevel": "h2"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "源码-api-详情",
+          "heading": "源码 API 详情",
+          "headingLevel": "h2"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "python-api/zh-CN/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "python-api/zh-CN/linguistic"
+        }
+      },
+      "observation": "Actual historical heading and all listed old IDs remain the same source-api-details task in current reviewed source; the visible title is 批量媒体处理与预备发布. Native heading ID 批量媒体处理与预备发布 was independently checked."
+    },
+    {
+      "migration": {
+        "pageId": "home",
+        "locale": "zh-CN",
+        "route": "/zh-cn/",
+        "anchors": [
+          "examples-heading"
+        ],
+        "fromHeading": "阅读代码，试用卡片。",
+        "toHeading": "查看代码，预览卡片。",
+        "containerModule": "examples",
+        "requiredLinks": [
+          "/zh-cn/docs/custom-notetypes/",
+          "/zh-cn/docs/image-occlusion/",
+          "/zh-cn/docs/media/"
+        ],
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+          "targetHash": "e43147d7626b78c399cc8534f298c6c14ba9a97e35e892cd34c338aa9c039dc7",
+          "technicalDependencyHash": "e29f6b8e5d83091f700c16b2a1a603a8eca346efb3b0fafbe090b17dcac1074d"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "examples-heading",
+          "heading": "阅读代码，试用卡片。",
+          "headingLevel": "h2",
+          "containerModule": "examples"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "examples-heading",
+          "heading": "阅读代码，试用卡片。",
+          "headingLevel": "h2",
+          "containerModule": "examples"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "home/zh-CN/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "home/zh-CN/linguistic"
+        }
+      },
+      "observation": "examples remains the original homepage task. New title exactly matches the current reviewed catalog consumed by HomePage/PerformanceEvidence. Protected local destinations match the existing HomePage links within this module."
+    },
+    {
+      "migration": {
+        "pageId": "home",
+        "locale": "zh-CN",
+        "route": "/zh-cn/",
+        "anchors": [
+          "identity-heading"
+        ],
+        "fromHeading": "让笔记持续完善，保留原有身份。",
+        "toHeading": "让笔记持续完善，保留原有笔记 ID。",
+        "containerModule": "updates",
+        "requiredLinks": [
+          "/zh-cn/docs/updates/"
+        ],
+        "reason": "Independent technical and linguistic reviews in website-pr66-final-2026-11-02 verified this wording correction and unchanged task. Preserve the historic anchors and protected destinations.",
+        "inputs": {
+          "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+          "targetHash": "e43147d7626b78c399cc8534f298c6c14ba9a97e35e892cd34c338aa9c039dc7",
+          "technicalDependencyHash": "e29f6b8e5d83091f700c16b2a1a603a8eca346efb3b0fafbe090b17dcac1074d"
+        }
+      },
+      "historical": [
+        {
+          "baseline": "website/public-surface-baseline.json",
+          "id": "identity-heading",
+          "heading": "让笔记持续完善，保留原有身份。",
+          "headingLevel": "h2",
+          "containerModule": "updates"
+        },
+        {
+          "baseline": "website/machine-surface-baseline.json",
+          "id": "identity-heading",
+          "heading": "让笔记持续完善，保留原有身份。",
+          "headingLevel": "h2",
+          "containerModule": "updates"
+        }
+      ],
+      "lineage": {
+        "technical": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-source-review.json",
+          "sha256": "59aa3cebf30451e92e9d697059348d5da885006b06200e485f4010e2ebcf9186",
+          "entry": "home/zh-CN/technical"
+        },
+        "linguistic": {
+          "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+          "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e",
+          "entry": "home/zh-CN/linguistic"
+        }
+      },
+      "observation": "updates remains the original homepage task. New title exactly matches the current reviewed catalog consumed by HomePage/PerformanceEvidence. Protected local destinations match the existing HomePage links within this module."
+    }
+  ],
+  "regressionTests": {
+    "command": "/Users/hp/.nvm/versions/node/v24.19.0/bin/node --test website/scripts/heading-migrations.test.mjs website/scripts/public-surface.test.mjs",
+    "passed": 17,
+    "log": {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/technical-heading-tests.log",
+      "sha256": "3ed3bfca6eca16cc59e97be5531d1b83a3839622cc0dccf5e812c87e12d32ffe"
+    }
+  },
+  "independentCounterexamples": [
+    {
+      "label": "section rejects a local-links field",
+      "result": "rejected"
+    },
+    {
+      "label": "section rejects an external-links field",
+      "result": "rejected"
+    },
+    {
+      "label": "module rejects empty destinations",
+      "result": "rejected"
+    },
+    {
+      "label": "module rejects duplicate external destinations",
+      "result": "rejected"
+    },
+    {
+      "label": "module rejects noncanonical HTTPS spelling",
+      "result": "rejected"
+    },
+    {
+      "label": "external-only module still rejects stale reviewed hashes",
+      "result": "rejected"
+    },
+    {
+      "label": "module local destinations remain scoped to locale",
+      "result": "rejected"
+    },
+    {
+      "label": "actual two-anchor migration accepts same adjacent native heading",
+      "result": "accepted"
+    },
+    {
+      "label": "canonical section redirected to a different adjacent heading",
+      "result": "rejected"
+    },
+    {
+      "label": "duplicate canonical semantic anchor",
+      "result": "rejected"
+    },
+    {
+      "label": "historical alias moved beyond reviewed heading",
+      "result": "rejected"
+    },
+    {
+      "label": "reviewed heading moved to a new module while old aliases remain outside",
+      "result": "rejected"
+    }
+  ],
+  "resolvedReviewConcerns": [
+    "toHeading is tied to normalized actual reviewed document source, not just a declared section ID.",
+    "The actual migrated H2–H6 must retain the historical module, including absence of a module; keeping only the alias outside a new module no longer passes."
+  ],
+  "conclusions": [
+    "Document and module migrations are mutually exclusive; only docs/article can use section migrations, and both source-review axes/current hash triples remain mandatory.",
+    "Historic alias, native heading and canonical section IDs must be unique and target the same actual adjacent task heading.",
+    "Module migrations retain unique historical containers, exact local destinations, and optional canonical HTTPS external destinations inside that same module. The mandatory next-module JSON/comparison links remain enforced.",
+    "All 12 configured old titles/anchors occur in the actual independent baselines; current titles match reviewed source/catalog content. Performance URLs are fixed to the reviewed benchmark evidence commit and dataset."
+  ],
+  "documentedStandardViolations": [],
+  "possibleSmells": [],
+  "openIssues": []
+}

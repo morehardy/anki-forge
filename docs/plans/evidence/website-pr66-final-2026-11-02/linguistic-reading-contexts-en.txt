@@ -1,0 +1,316 @@
+
+FILE docs/build-guarantees.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Build and output guarantees
+2:
+3: `Project::build` returns `BuildOutput` only after a successful operation, with a
+4: guaranteed APKG artifact. A failed operation returns `BuildError` with structured
+5: kind/code, observations, underlying causes and actual publication facts.
+6:
+7: ## Temporary and persistent artifacts
+32: ## Baselines and publication
+62: ## Inspection limits
+70: ## Concurrent work
+71:
+72: Rust builds borrow immutable project state. Owned models and media can be shared
+73: across projects. The Node binding captures a project snapshot when build or
+74: compare is invoked, so later additions do not change that request. Retain the
+75: artifact owner until all readers have finished; closing the last temporary owner
+76: while a separate consumer still needs its path is an application lifetime error.
+77:
+78: Package inspection cannot establish every client-side behavior. Test rendering,
+79: playback and update imports with the intended Anki versions and settings. See
+80: [updates](updates.md) for scheduling and schema-change limits.
+81:
+82: <!-- section: prepared-publication-from-source -->
+83: ## Prepare, review and publish
+84:
+85: Prepared publication is included in the public `0.3.1` packages.
+86:
+87: `prepare_publication` builds, inspects and compares one private candidate;
+88: `publish` uses that same file. Options and relative destinations bind at
+89: preparation. Project edits cannot alter the candidate. Preparation alone does
+90: not replace the destination; dropping or closing an unpublished owner removes it.
+91:
+92: Every publish attempt consumes the owner, including policy or I/O failure.
+93: Reprepare to retry or change the policy/destination. Reports remain readable and
+94: own no files. Node/Python expose idempotent `close()` and an unavailable error
+95: with `closed` or `consumed` reason; closing after publication starts does not
+96: cancel it. Duration excludes review waiting. A late durability failure can
+97: follow successful replacement, so inspect the actual publication facts.
+98:
+99: Follow the [complete example](updates.md#build-once-review-then-publish-from-source)
+100: and the language API references for typed errors and worker behavior.
+
+FILE docs/cards.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Basic and Cloze cards
+2:
+3: Generate Anki Basic (question-and-answer) and Cloze (fill-in-the-blank) cards
+4: from code instead of adding them one at a time in Anki. A Basic note stores front and back fields, which its template uses to generate a question-and-answer card. A Cloze note generates one card for each supported deletion number.
+5: This Rust example creates two notes and three cards. Python and Node.js provide
+6: the same `Note.basic` and `Note.cloze` constructors; see the
+7: [Python API](python/api.md#project-and-note-values) and
+8: [Node API](node/api.md#project-and-notes).
+9:
+10: From the repository root:
+11:
+15:
+16: Open `target/docs-examples/cards.apkg` in Anki. The Basic question is **hola**;
+17: the Cloze cards separately hide **Madrid** and **Spain**.
+18:
+19: ## Author the notes
+20:
+21: This function is extracted from the [complete executable](../anki_forge/examples/docs_workflow.rs).
+22: Its `verify` helper checks the successful output's note/card/media counts.
+23:
+24: <!-- source: anki_forge/examples/docs_workflow.rs#cards -->
+39: <!-- /source -->
+40:
+41: The first argument to `Project::new` is a stable namespace. Each `add` call needs
+42: a stable source-record key. Reusing one key for another note fails; no automatic
+43: content-based key is assigned. A changed answer under the same key remains the
+44: same logical note when building an update from its previous distribution.
+45:
+46: ## Text, fields and card identity
+47:
+48: Both Basic and Cloze strings are Text. Use `Content::html` for intentional HTML;
+49: Cloze deletion syntax is still recognized inside Text. `back_extra` is the
+50: built-in Cloze extra field key. Use the same `Note::field` method for text, HTML,
+51: images and sounds.
+52:
+53: Use `{{c1::answer}}` or `{{c1::answer::hint}}`. A plain sentence supplies no
+54: Cloze question. Supported deletion numbers are 1–500; changing numbers can alter
+55: card identities. Review such changes through [comparison and update policy](updates.md).
+56:
+57: Next, add [media](media.md), a [custom model](custom-notetypes.md), or
+58: [image occlusion](image-occlusion.md).
+
+FILE docs/python/api.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Python API
+2:
+3: The SDK calls the default Rust public API through a native extension. It includes `py.typed` and checked public signatures. Start with the [quickstart](quick-start.md).
+4:
+5: ## Project and note values
+6:
+21: ## Models and templates
+27: ## Media and occlusion
+41: ## Operations and results
+58: ## Errors and concurrency
+64: ## Addition context
+65:
+66: Failed additions leave the project unchanged. Structured context records the
+67: original note/model keys and the target, with optional conflict or media usage
+68: details. Rust exposes `note::{AddContext, AddTarget, AddDetail}` through
+69: `AddError::context()` / `detail()`; SDKs expose `AddError.details` with typed
+70: context/detail. Node fields use camelCase and are deeply frozen; Python uses
+71: snake_case TypedDicts. Tags retain their insertion index; field locations retain
+72: original sequence indices (null/None for the field, [] for its root) and optional
+73: UTF-8 byte ranges. Default-deck errors from build have no note/model keys and
+74: remain available in the source chain.
+75:
+76: Typed images require image/* MIME at addition; sound references accept audio/*
+77: or video/*. Other categories raise `NOTE.MEDIA_USAGE_INVALID`. Constructors stay
+78: infallible; explicit assets and raw HTML are unaffected. The check uses retained
+79: import MIME, and does not certify playback. Build's independent MIME/extension
+80: validation still applies. See [the design](../plans/2026-09-28-rust-api-validation-and-errors-design.md) for the complete target/detail table.
+81:
+82: <!-- section: source-api-details -->
+83: ## Batch media and prepared publication
+84:
+85: Batch media and prepared publication are included in the public `0.3.1` package.
+86:
+87: ### Prepare, review and publish
+88:
+108:
+109: One publish attempt consumes the owner, including policy or I/O failure. Later
+110: calls raise `PreparedPublicationStateError` with code `BUILD.PREPARED_UNAVAILABLE`
+111: and reason `closed` or `consumed`; close does not cancel an already running
+112: publication. Relative paths bind at preparation invocation, and Project changes
+113: cannot modify the reviewed APKG. Reports survive close without retaining files.
+114: Change options or retry by preparing again. Duration excludes review waiting.
+115: Late errors can mean replacement succeeded with unconfirmed durability; inspect
+116: publication facts before deciding what to do. Native binding protocol 1 and
+117: contract bundle 2.1.0 are required; older same-version binaries are rejected.
+
+FILE docs/template-bundles.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Template bundles
+2:
+3: Reuse the same Anki card design across decks: keep a note type's templates, CSS
+4: and media in one directory and load it for normal or Cloze cards. The examples
+5: use Rust; Python and Node.js load bundles with `NoteType.from_bundle` and
+6: `NoteType.fromBundle` (see the [Python API](python/api.md#models-and-templates)
+7: and [Node API](node/api.md#immutable-models)).
+8:
+9: A bundle contains a reusable note type definition, template text, CSS and all explicitly declared media dependencies. `NoteType::from_bundle(directory)` validates the complete bundle and
+10: takes owned snapshots before returning the same immutable `NoteType` used by
+11: inline authoring. It does not partially modify a project.
+12:
+13: ## Run the bundled example
+14:
+18:
+19: The workflow loads the [custom Cloze fixture](../contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml)
+20: and writes `target/docs-examples/template.apkg`. Its template targets
+21: **Languages::Cloze**. One note generates two cards.
+22:
+23: ## Manifest and template references
+24:
+25: The manifest filename is `anki-template.yaml`. Only the new format is accepted:
+26:
+27: <!-- source: contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml -->
+50: <!-- /source -->
+51:
+52: `note_type.key`, field keys and template keys are required stable identifiers.
+53: `name` is optional and defaults to the corresponding key. `cloze_field` selects
+54: a Cloze model; no separate kind declaration is needed. A field without
+55: `required: true` may be omitted. Unknown manifest properties are rejected.
+56:
+57: Every template uses **field keys**, including front, back and browser variants:
+58: `{{cloze:text}}`, `{{extra}}`, and conditional sections such as `{{#extra}}`.
+59: Display names such as Sentence and Extra are generated for Anki after binding.
+60: The loader preserves original file paths and template byte ranges in errors.
+61:
+62: ## Load and reuse a model
+63:
+64: <!-- source: anki_forge/examples/docs_workflow.rs#bundle -->
+81: <!-- /source -->
+82:
+83: For an independent application, this full example expects the same bundle copied
+84: to `fixtures/template-bundle`:
+85:
+100:
+101: The returned model is independent of the source directory. It can be shared with
+102: another project or used after that directory is removed. A load failure returns
+103: no partial model and cleans up its unshared snapshots.
+104:
+105: ## Assets and budgets
+106:
+107: Declare every raw template/CSS/script asset explicitly. Each `assets` entry uses
+108: a path relative to the bundle and a fixed export name:
+109:
+117:
+118: Then templates may use `<img src="badge.png">` and CSS may use
+119: `url('labels.woff')`. The `css_file` property supplies the CSS source file; assets
+120: are not inferred from arbitrary HTML/CSS/JavaScript. Declared assets remain in the
+121: APKG even if no static reference is detected. Export names obey the same
+122: portable-name and Unicode/case collision rules as [Media](media.md).
+123: The complete export name is limited to 255 UTF-8 bytes, including its extension.
+124: The JSON Schema checks syntax and character count; `NoteType::from_bundle`
+125: also enforces the byte budget, file contents and references before returning a
+126: validated model. A successful schema check alone does not guarantee loading.
+127:
+128: Absolute paths, traversal escapes and symlinks outside the bundle are rejected.
+129: The manifest is limited to 256 KiB; each template/CSS text file is limited to
+130: 2 MiB and must be UTF-8. Asset snapshots use the default media budget, or a
+131: caller-supplied `MediaLimits` through `NoteType::from_bundle_with_limits`.
+132: Both preflight lengths and actual bytes read are checked.
+133:
+134: Bundle errors retain kind/code, source path, byte offset where applicable, and
+135: the underlying schema, I/O, YAML, UTF-8 or media error. Model completion validates
+136: schema; adding notes separately checks project-level conflicts. See
+137: [custom note types](custom-notetypes.md) and [troubleshooting](troubleshooting.md).
+
+FILE docs/updates.md (all headings; entire changed prose sections; unchanged code omitted)
+1: # Update and distribute a deck
+2:
+3: Publish corrections or new cards for an Anki deck you have already distributed.
+4: Stable note IDs help Anki Forge and Anki recognize existing notes instead of
+5: treating them as new ones; Anki's import settings and newer local edits still
+6: affect what changes.
+7:
+8: Keep the project namespace and note/model/field/template keys stable. Build each
+9: new release from the previous **original distribution APKG**, which carries
+10: complete versioned identity evidence. Save that package with its source revision.
+11:
+12: ## Run two versions and compare
+13:
+17:
+18: This writes `spanish-v1.apkg` and `spanish-v2.apkg`, compares the changed answer,
+19: and checks the updated package counts. The executable source is:
+20:
+21: <!-- source: anki_forge/examples/docs_workflow.rs#updates -->
+42: <!-- /source -->
+43:
+44: `compare` completes successfully even when findings would block publication.
+45: Read `comparison.policy().allows_publication()` separately from the original
+46: risk level and evidence. `build(...update_from(...))` runs the same analysis and
+47: returns `BuildError` if its policy blocks the candidate, before publication.
+48:
+49: ## Policy and inspection limits
+50:
+51: This full program selects a stricter threshold and uses the same configuration
+52: for comparison and update:
+53:
+76:
+77: The default policy blocks High and Critical findings. After reviewing a specific
+78: category, a caller can deliberately choose
+79: `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. It accepts **all findings
+80: in that category**, retaining their original level and evidence. It does not
+81: claim to approve selected notes individually. An allowance with no matching
+82: finding produces a warning; unknown risk codes are rejected. Do not automatically
+83: allow every code returned by a comparison.
+84:
+85: Missing or corrupt evidence, namespace mismatch, invalid candidate data and
+86: inspection limits are hard errors, not allowable risk categories. Comparison
+87: returns an error with completed observations when analysis cannot finish.
+88: Explicit policy on a create request without `update_from` is a configuration
+89: error regardless of setter order.
+90:
+91: ## Evidence and identity
+92:
+93: The package includes `ankiforge-identity.json` with the
+94: `ankiforge-identity-v1` format. It binds model/config IDs, note GUIDs, historical
+95: field/template slots, card/mask ordinals, revisions and media to the actual
+96: collection and payloads. Anki re-export does not preserve this evidence and is
+97: not a usable update baseline. Missing evidence is never silently reconstructed.
+98:
+99: Display-name and content edits preserve identity keys. Unchanged content keeps
+100: its baseline revision; changed content advances it. Reordering fields/templates
+101: preserves historical mappings. Retired identities remain reserved so that
+102: restoring the same key can reuse them. A note key cannot move to another model,
+103: and a model key cannot change between normal and Cloze kinds.
+104:
+105: ## Client import behavior and release review
+106:
+107: An APKG is a distribution package, not deletion synchronization. Omitting notes,
+108: fields, templates or masks does not delete existing learner data. Field/template
+109: schema changes and sort-field changes are high-risk because Anki merge and import
+110: settings affect their behavior. Schema changes can copy models or update target
+111: note timestamps before note-content comparison.
+112:
+113: Test first import and updates into an existing collection on the clients you
+114: support. Check fields, GUIDs, card sets, local edits and existing scheduling with
+115: the intended merge and note-update settings. Stable identity alone does not
+116: promise that newer local edits are overwritten or deleted history is restored.
+117:
+118: Write candidates to a path separate from the archived baseline. After review,
+119: distribute the accepted package and retain it as the next release's evidence.
+120: See [build guarantees](build-guarantees.md) for ownership and publication facts.
+121:
+122: <a id="build-once-review-then-publish-from-source"></a>
+123:
+124: ## Build once, review then publish
+125:
+126: This API is included in the public `0.3.1` package.
+127:
+128: Build once, inspect the report, then publish the same candidate file. Reviewing
+129: and then running a second ordinary build creates another candidate; prepared
+130: publication keeps the actual APKG tied to the reviewed report.
+131:
+132: <!-- source: anki_forge/examples/docs_publication.rs -->
+158: <!-- /source -->
+159:
+160: From the pinned source checkout, save the complete program above as
+161: `anki_forge/examples/docs_publication.rs` (this guide adds the example; it is not
+162: bundled in `1199196`). Then run:
+163:
+167:
+168: The example writes `spanish-original.apkg` and, when the policy allows publication,
+169: `spanish-reviewed.apkg` to the repository root.
+170: Preparation does not publish the destination. Review the findings and test your
+171: client import before approving distribution; the example automatically publishes
+172: only this simple content edit when its policy allows it. The benchmark does not
+173: measure this workflow.
+174:
+175: See [build lifecycle](build-guarantees.md#prepared-publication-from-source),
+176: [Rust API](rust-api.md#review-once-publish-once),
+177: [Node API](node/api.md#prepare-review-and-publish) and
+178: [Python API](python/api.md#prepare-review-and-publish).

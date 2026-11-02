@@ -1,0 +1,461 @@
+
+FILE docs/es/anki-forge-vs-genanki.md
+1: # Anki Forge frente a genanki
+2:
+3: Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas conservar los datos multimedia sin depender de los archivos originales, obtener diagnósticos estructurados y revisar las comparaciones y la política de riesgos antes de publicar actualizaciones. Conserva un flujo de genanki ya probado si sus scripts de Python, plantillas y recursos multimedia cubren tus necesidades y migrar supone más coste que beneficio.
+4:
+5: | Criterio | Anki Forge | genanki |
+6: | --- | --- | --- |
+7: | Lenguaje de creación | Núcleo en Rust; interfaces de Rust, Python y Node / TypeScript | Python |
+8: | Funciones básicas compartidas | Basic, Cloze, plantillas personalizadas, recursos multimedia y generación de APKG sin conexión | Basic, Cloze, plantillas personalizadas, recursos multimedia y generación de APKG sin conexión |
+9: | Identidad | Espacio de nombres y claves de nota explícitos; conserva el APKG original para actualizar | GUID configurables e ID numéricos de modelo y mazo; admite actualizaciones al volver a importar |
+10: | Antes de publicar | Resultados de comparación, política de riesgos y candidato preparado e inspeccionado | Tu script y tus pruebas definen la revisión previa a la publicación |
+11: | Gestión de recursos multimedia | Las imágenes y los sonidos tipados conservan una copia de sus datos | El script proporciona los archivos multimedia del paquete y sus referencias |
+12: | Oclusión de imágenes por código | Máscaras rectangulares con claves mediante la API pública | Evalúa un modelo o una extensión adecuados para tu flujo |
+13: | Coste de ejecución | Dependencias nativas; requiere una plataforma y un intérprete compatibles | Puede resultar más económico conservar una instalación de Python existente |
+14: | Coste de migración | Valida explícitamente la correspondencia con la identidad anterior, las plantillas y las importaciones | No hay coste de migración si el flujo de genanki ya funciona |
+15:
+16: <!-- section: the-same-small-task -->
+17: ## La misma tarea sencilla
+18:
+19: Para convertir tres preguntas JSON en un mazo con una imagen y un sonido, ambas bibliotecas permiten que Python analice el JSON y cree las notas. Con genanki, elige los ID del modelo y del mazo, asigna valores a los campos y reglas de GUID, añade los archivos multimedia al paquete y escribe el APKG. Con Anki Forge, elige un espacio de nombres y claves de negocio persistentes, incorpora a las notas recursos multimedia cuyos datos conserva el proyecto, genera v1 y después compara y prepara v2 usando el APKG original v1 antes de publicarla. El [tutorial completo de JSON](/docs/json-to-anki/) incluye las implementaciones de Rust, Python y TypeScript y sus comandos de ejecución.
+20:
+21: <!-- section: existing-genanki-decks -->
+22: ## Mazos de genanki existentes
+23:
+24: [genanki admite GUID personalizados](https://github.com/kerrickstaley/genanki#note-guids), recursos multimedia y actualizaciones al volver a importar. No es correcto presentar la identidad estable como una función exclusiva de Anki Forge. La regla predeterminada de GUID puede depender de los campos; elige una regla deliberada si estos van a cambiar.
+25:
+26: Anki Forge no recupera automáticamente ID numéricos ni GUID arbitrarios de genanki. Sin una correspondencia validada por separado, trata tu primera distribución de Anki Forge como el comienzo de una nueva identidad. Ni esta comparación ni la generación correcta de un APKG prometen una migración sin pérdidas ni la conservación de todo el historial de repaso. Lee la [guía de migración](/docs/genanki-migration/) antes de trasladar un mazo existente.
+27:
+28: <!-- section: historical-performance-evidence -->
+29: ## Datos históricos de rendimiento
+30:
+31: La comparación del 2026-10-08 midió la API Project de Rust frente a genanki 0.13.1 en un Apple M1 Pro. Con 1.000 notas Basic, las cinco cargas de trabajo de Rust medidas emplearon entre un 45,7 y un 53,9 % menos de tiempo de exportación; algunas cargas con recursos multimedia usaron más memoria máxima. Consulta el [método, los resultados originales y las limitaciones](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md). La prueba no midió el rendimiento actual de los procesos de Python o Node y no ofrece una garantía equivalente de velocidad para esos SDK ni para otras cargas de trabajo.
+32:
+33: Responsables de Anki Forge · revisión del 2026-10-25 según las API públicas de Anki Forge 0.3.1, la [documentación de genanki](https://github.com/kerrickstaley/genanki) y la medición archivada. Consulta la [compatibilidad del entorno de ejecución](/docs/compatibility/) y [elige un lenguaje](/docs/languages/) para empezar una tarea nueva.
+
+FILE docs/es/build-guarantees.md
+1: # Garantías de generación y de los archivos de salida
+2:
+3: `Project::build` solo devuelve `BuildOutput` después de una operación correcta, con un archivo APKG garantizado. Una operación fallida devuelve `BuildError` con tipo y código estructurados, observaciones, causas subyacentes y los datos reales sobre la publicación.
+4:
+5: <!-- section: temporary-and-persistent-artifacts -->
+6: ## Archivos temporales y persistentes
+7:
+8: Elige explícitamente cómo se conserva el archivo:
+9:
+10: | Solicitud | Conservación del archivo |
+11: | --- | --- |
+12: | `BuildOptions::to(path)` | Destino persistente; permanece tras liberar los objetos que lo gestionan |
+13: | `BuildOptions::temporary()` | Archivo temporal; se elimina al liberar el último objeto que lo mantiene vivo |
+14: | `artifact.persist_to(path)` | Nuevo objeto que conserva un archivo persistente; el objeto original sigue siendo utilizable |
+15:
+16: Mantén vivo el `BuildOutput` o un clon del objeto del archivo mientras leas una ruta temporal. Un informe o una instantánea JSON no alargan la vida del archivo. Rust libera normalmente estos objetos; Node ofrece `artifact.close()` para liberarlos de forma determinista. Copiar la ruta al estado de la aplicación no crea un objeto que conserve el archivo.
+17:
+18: Los objetos de archivo de Rust conservan rutas absolutas, incluso cuando la generación o `persist_to` reciben un destino relativo. Si después cambia el directorio de trabajo del proceso, las lecturas o copias realizadas mediante un objeto existente no se redirigen. Cada nuevo destino de `persist_to` se resuelve con respecto al directorio de trabajo en el momento de esa llamada.
+19:
+20: `BuildReport::snapshot()` solo contiene observaciones. `BuildOutput::snapshot()` y `BuildError::snapshot()` indican además el resultado real. Una instantánea correcta puede incluir una advertencia. No deduzcas el resultado a partir de la gravedad de los diagnósticos, de la existencia de una ruta ni de que un informe contenga hallazgos de comparación.
+21:
+22: <!-- section: baselines-and-publication -->
+23: ## Bases de actualización y publicación
+24:
+25: Para las actualizaciones, conserva el APKG original de distribución anterior como base inmutable y elige otro destino de salida. Las pruebas de la base y el contenido candidato se comprueban antes de publicar. Un rechazo de la política no reemplaza la salida. Las pruebas ausentes o dañadas y el agotamiento de los límites de inspección son fallos.
+26:
+27: La publicación reemplaza el APKG de forma atómica. Esta garantía se aplica a cada archivo; escribir un informe JSON separado de la aplicación es otra operación. La generación normal no escribe un archivo de identidad adicional: las pruebas completas con versión de formato están incorporadas en el paquete de distribución.
+28:
+29: Puede producirse un error tardío después de publicar, por ejemplo al confirmar la persistencia. Por eso, las instantáneas de error registran los datos de `PublicationSnapshot`: `path`, `stage` (`not_published` o `published`), `temporary` y durabilidad (`confirmed` o `unconfirmed`). Comprueba estos datos antes de reintentar o de anunciar que no se ha escrito ningún archivo. `PersistError` también conserva el hecho de la publicación y la causa real de E/S. El reemplazo atómico, por sí solo, no garantiza la durabilidad después de un fallo del sistema.
+30:
+31: La serialización de las instantáneas conserva las rutas nativas sin acceder al sistema de archivos. Las rutas Unicode siguen siendo cadenas JSON. Las rutas Unix que no son UTF-8 utilizan `{"encoding":"unix_bytes","bytes":[...]}`; las rutas de Windows con sustitutos UTF-16 sin pareja utilizan `{"encoding":"windows_wide","units":[...]}`. Los arrays contienen los bytes o las unidades de código nativas exactas. Las rutas de archivos correctos, las rutas de publicación fallida y los detalles de rutas de error de los bindings usan esta representación. Estos valores describen rutas y no mantienen la propiedad de los archivos. Un sistema de archivos puede rechazar una ruta nativa concreta, pero los datos de su fallo de publicación siguen siendo serializables.
+32:
+33: <!-- section: inspection-limits -->
+34: ## Límites de inspección
+35:
+36: Los límites finitos del archivo contenedor, el número de entradas, la expansión, la colección y los recursos multimedia decodificados y la ventana de zstd se aplican por separado a la base y a la versión candidata. Empieza con `InspectLimits::default()` y aumenta deliberadamente el límite pertinente cuando lo necesites. Un límite de cero no significa ilimitado. Estos contadores no aíslan la memoria o la CPU del conjunto del proceso; las importaciones multimedia tienen un límite anterior separado por recurso.
+37:
+38: <!-- section: concurrent-work -->
+39: ## Trabajo concurrente
+40:
+41: Las generaciones en Rust toman prestado el estado inmutable del proyecto. Los modelos y los recursos multimedia cuyos datos se conservan se pueden compartir entre proyectos. El binding de Node captura una instantánea del proyecto al invocar una generación o comparación, por lo que las adiciones posteriores no cambian esa solicitud. Conserva el objeto que mantiene el archivo hasta que todos los lectores hayan terminado; cerrar el último objeto de un archivo temporal mientras otro consumidor todavía necesita su ruta es un error de gestión de vida útil de la aplicación.
+42:
+43: La inspección de paquetes no puede determinar todos los comportamientos del cliente. Prueba la representación, la reproducción y las importaciones de actualizaciones con las versiones de Anki y la configuración previstas. Consulta [las actualizaciones](/docs/updates/) para conocer las limitaciones de la programación de repaso y de los cambios de esquema.
+44:
+45: <!-- section: prepared-publication-from-source -->
+46: ## Publicación preparada
+47:
+48: La publicación preparada está incluida en los paquetes públicos `0.3.1`.
+49:
+50: `prepare_publication` genera, inspecciona y compara una única versión candidata privada; `publish` usa ese mismo archivo. Las opciones y los destinos relativos quedan fijados durante la preparación. Las ediciones del proyecto no pueden cambiar la versión candidata. La preparación por sí sola no reemplaza el destino; liberar o cerrar un objeto de una versión no publicada elimina su archivo.
+51:
+52: Cada intento de publicación consume el objeto que mantiene la versión candidata, incluso si falla la política o la E/S. Vuelve a preparar para reintentar o para cambiar la política o el destino. Los informes siguen siendo legibles y no conservan archivos. Node y Python ofrecen `close()` idempotente y un error de indisponibilidad con motivo `closed` o `consumed`; cerrar después de que empiece la publicación no la cancela. La duración no incluye la espera de revisión. Un fallo tardío de durabilidad puede producirse después de un reemplazo correcto, por lo que debes comprobar los datos reales de la publicación.
+53:
+54: Sigue [el ejemplo completo](/docs/updates/#build-once-review-then-publish-from-source) y las referencias de las API de cada lenguaje para conocer los errores tipados y el funcionamiento de los hilos de trabajo.
+
+FILE docs/es/updates.md
+1: # Actualiza y distribuye un mazo
+2:
+3: Publica correcciones o tarjetas nuevas para un mazo de Anki que ya hayas distribuido. Los ID de nota estables ayudan a Anki Forge y a Anki a reconocer las notas existentes en lugar de tratarlas como nuevas; las opciones de importación de Anki y los cambios locales más recientes también influyen en lo que se actualiza.
+4:
+5: Mantén estables el espacio de nombres del proyecto y las claves de notas, modelos, campos y plantillas. Genera cada versión nueva a partir del **APKG original de distribución** anterior, que contiene pruebas completas de identidad con su versión de formato. Guarda ese paquete junto con la revisión de su código fuente.
+6:
+7: <!-- section: run-two-versions-and-compare -->
+8: ## Genera dos versiones y compáralas
+9:
+13:
+14: Este comando escribe `spanish-v1.apkg` y `spanish-v2.apkg`, compara la respuesta modificada y comprueba los recuentos del paquete actualizado. El código ejecutable es:
+15:
+16: <!-- source: anki_forge/examples/docs_workflow.rs#updates -->
+37: <!-- /source -->
+38:
+39: `compare` termina correctamente incluso cuando sus hallazgos impedirían publicar. Consulta `comparison.policy().allows_publication()` por separado del nivel de riesgo original y de las pruebas. `build(...update_from(...))` ejecuta el mismo análisis y devuelve `BuildError` antes de publicar si su política bloquea la versión candidata.
+40:
+41: <!-- section: policy-and-inspection-limits -->
+42: ## Política y límites de inspección
+43:
+44: Este programa completo elige un umbral más estricto y utiliza la misma configuración para la comparación y la actualización:
+45:
+68:
+69: La política predeterminada bloquea los hallazgos High y Critical. Tras revisar una categoría concreta, puedes elegir de forma deliberada `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. Esta opción acepta **todos los hallazgos de esa categoría**, conservando su nivel original y sus pruebas. No significa que se hayan aprobado notas concretas de forma individual. Una excepción sin hallazgos coincidentes produce una advertencia; se rechazan los códigos de riesgo desconocidos. No autorices automáticamente todos los códigos que devuelva una comparación.
+70:
+71: La ausencia o corrupción de las pruebas de identidad, un espacio de nombres distinto, los datos no válidos de la versión candidata y la superación de los límites de inspección son errores, no categorías de riesgo que se puedan autorizar. Si el análisis no puede terminar, la comparación devuelve un error con las observaciones que haya completado. Establecer una política explícita en una solicitud de creación sin `update_from` es un error de configuración, independientemente del orden de las llamadas a los métodos de configuración.
+72:
+73: <!-- section: evidence-and-identity -->
+74: ## Pruebas e identidad
+75:
+76: El paquete incluye `ankiforge-identity.json` con el formato `ankiforge-identity-v1`. Vincula los ID de modelos y configuraciones, los GUID de notas, las posiciones históricas de campos y plantillas, los números ordinales de tarjetas y máscaras, las revisiones y los recursos multimedia con la colección y los datos reales. La reexportación desde Anki no conserva estas pruebas y no sirve como base de una actualización. Las pruebas ausentes nunca se reconstruyen de forma silenciosa.
+77:
+78: Las ediciones de nombres visibles y contenido conservan las claves de identidad. El contenido que no cambia mantiene la revisión de su base; el contenido modificado avanza de revisión. Reordenar campos o plantillas conserva sus correspondencias históricas. Las identidades retiradas permanecen reservadas para poder reutilizarlas al restaurar la misma clave. Una clave de nota no se puede trasladar a otro modelo, y una clave de modelo no puede cambiar entre los tipos normal y Cloze.
+79:
+80: <!-- section: client-import-behavior-and-release-review -->
+81: ## Importación en el cliente y revisión de versiones
+82:
+83: Un APKG es un paquete de distribución; no sincroniza eliminaciones. Omitir notas, campos, plantillas o máscaras no elimina los datos existentes de quienes estudian. Los cambios de esquema de campos o plantillas y los cambios del campo de ordenación tienen riesgo alto porque su comportamiento depende de cómo Anki combine e importe los datos. Los cambios de esquema pueden copiar modelos o actualizar las marcas de tiempo de las notas de destino antes de comparar su contenido.
+84:
+85: Prueba la primera importación y las actualizaciones de una colección existente en los clientes que admitas. Comprueba los campos, los GUID, los conjuntos de tarjetas, las ediciones locales y la programación de repaso existente con la configuración de combinación y actualización de notas prevista. La identidad estable, por sí sola, no garantiza que se sobrescriban ediciones locales más recientes ni que se restaure un historial eliminado.
+86:
+87: Escribe las versiones candidatas en una ruta distinta de la base archivada. Tras la revisión, distribuye el paquete aceptado y consérvalo como prueba para la siguiente versión. Consulta [las garantías de generación](/docs/build-guarantees/) para conocer cómo se conservan los archivos y cómo se publican.
+88:
+89: <a id="build-once-review-then-publish-from-source"></a>
+90:
+91: <!-- section: build-once-review-then-publish -->
+92: ## Genera una vez, revisa y publica
+93:
+94: Esta API está incluida en el paquete público `0.3.1`.
+95:
+96: Genera una vez, inspecciona el informe y publica después el mismo archivo candidato. Revisar y ejecutar una segunda generación normal crea otra versión candidata; la publicación preparada mantiene el APKG real vinculado al informe revisado.
+97:
+98: <!-- source: anki_forge/examples/docs_publication.rs -->
+124: <!-- /source -->
+125:
+126: En el repositorio descargado y fijado a una revisión, guarda el programa completo anterior como `anki_forge/examples/docs_publication.rs` (esta guía añade el ejemplo; no está incluido en `1199196`). Después ejecuta:
+127:
+131:
+132: El ejemplo escribe `spanish-original.apkg` y, cuando la política permite publicar, `spanish-reviewed.apkg` en la raíz del repositorio. La preparación no publica el archivo de destino. Revisa los hallazgos y prueba la importación en tu cliente antes de aprobar la distribución; el ejemplo solo publica automáticamente esta sencilla edición de contenido cuando su política lo permite. El benchmark no mide este flujo de trabajo.
+133:
+134: Consulta [el ciclo de generación](/docs/build-guarantees/#prepared-publication-from-source), [la API de Rust](/docs/rust-api/#review-once-publish-once), [la API de Node](/docs/node-api/#prepare-review-and-publish) y [la API de Python](/docs/python-api/#prepare-review-and-publish).
+
+FILE website/src/content/blog/es/stable-ids-and-deck-updates.mdx
+1: ---
+2: locale: es
+3: translationKey: stable-ids-and-deck-updates
+4: title: Identidades estables para actualizar mazos de Anki
+5: description: Cómo combinar ID estables y un paquete de referencia al actualizar un mazo de Anki generado.
+6: date: 2026-09-22
+7: category: Engineering
+8: ---
+9:
+10: import CodeBlock from '../../../components/CodeBlock.astro';
+11: import { updateExample } from '../../../lib/examples';
+12: import { sitePath } from '../../../lib/site';
+13:
+14: Un mazo generado rara vez queda terminado tras la primera exportación. Las definiciones mejoran, los ejemplos se aclaran y los errores se corrigen. La siguiente generación necesita saber qué notas siguen siendo las mismas, aunque su contenido haya mejorado.
+15:
+16: Considera este pequeño cambio:
+17:
+18: | Campo | Primera versión | Siguiente versión |
+19: | --- | --- | --- |
+20: | Anverso | hola | hola |
+21: | Reverso | hello | hello; hi |
+22: | ID estable | es:hola | es:hola |
+23:
+24: El significado se ha ampliado. La nota lógica sigue siendo la misma.
+25:
+26: <span id="separate-identity-from-content" data-section-alias="separate-identity-from-content"></span>
+27:
+28: {/* section: separate-identity-from-content */}
+29: ## Separar la identidad del contenido
+30:
+31: Un ID estable explícito proporciona a la nota una clave duradera. Conserva ese ID cuando edites la nota y elige uno nuevo cuando crees una nota lógica diferente.
+32:
+33: La identidad también tiene un contexto de proyecto. Mantén el mismo espacio de nombres del proyecto entre las versiones de un mazo. Un ID de nota por sí solo es únicamente una parte de un flujo de actualización repetible.
+34:
+35: <span id="give-the-next-build-a-baseline" data-section-alias="give-the-next-build-a-baseline"></span>
+36: <span id="dar-un-paquete-de-referencia-a-la-siguiente-generación" data-section-alias="give-the-next-build-a-baseline"></span>
+37:
+38: {/* section: give-the-next-build-a-baseline */}
+39: ## Usar el paquete anterior como referencia
+40:
+41: Un paquete anterior indica a Anki Forge qué se exportó antes. Utilízalo al generar el proyecto revisado:
+42:
+43: <CodeBlock code={updateExample.source} />
+44:
+45: En este fragmento, `project` contiene la nota revisada, `previous` apunta a la versión 1 y `next` es una ruta distinta para la versión 2. El <a href={sitePath('/generated/website_showcase.rs')}>ejemplo completo</a> incluye ambas definiciones del proyecto y verifica que se conserva la identidad de una nota.
+46:
+47: Mantén el paquete de entrada y el de salida en rutas diferentes. Sobrescribir el paquete de referencia elimina las pruebas que necesitas para entender y verificar la publicación.
+48:
+49: <span id="keep-the-original-distributed-package" data-section-alias="keep-the-original-distributed-package"></span>
+50:
+51: {/* section: keep-the-original-distributed-package */}
+52: ## Conservar el paquete original distribuido
+53:
+54: Cada paquete generado contiene pruebas completas de identidad y revisión. La siguiente generación valida esas pruebas frente a la base de datos y los recursos multimedia reales antes de reutilizar identidades. Conserva el paquete original que distribuiste; una reexportación desde Anki no sirve como paquete de referencia compatible.
+55:
+56: La <a href={sitePath('/es/docs/updates/')}>guía de actualización</a> describe las actualizaciones estrictas, las políticas de riesgo y las limitaciones de importación del cliente.
+57:
+58: <span id="inspect-the-build-and-the-import" data-section-alias="inspect-the-build-and-the-import"></span>
+59:
+60: {/* section: inspect-the-build-and-the-import */}
+61: ## Revisar la generación y la importación
+62:
+63: Comprueba el informe de generación y sus diagnósticos de seguridad de actualización antes de distribuir un paquete. Si la generación no puede establecer la correspondencia de identidad de una nota, investiga los datos de origen y el paquete de referencia en lugar de considerar la existencia de un archivo de salida como prueba de que la actualización es correcta.
+64:
+65: Anki aplica después su propio comportamiento de importación. La configuración de importación, el contenido de las notas existentes, las modificaciones locales y la versión de Anki pueden influir en el resultado. La identidad estable ayuda a identificar la nota correspondiente; no anula esas decisiones ni promete que cada importación conserve todos los aspectos del estado local.
+66:
+67: El <a href={sitePath('/es/examples/#updates')}>ejemplo con dos versiones</a> proporciona ambos paquetes para que pruebes una actualización pequeña y fácil de inspeccionar antes de diseñar tu propio proceso de publicación.
+
+FILE website/src/i18n/es.json
+{
+  "home.title": "Generador de tarjetas Anki para desarrolladores",
+  "home.description": "Genera tarjetas y mazos APKG de Anki con las API de código abierto para Python, Node.js y Rust. Empieza con CSV, JSON o un flujo asistido por IA.",
+  "home.hero1": "Genera tarjetas Anki",
+  "home.hero2": "a partir de tus datos.",
+  "home.intro": "Anki Forge es una biblioteca de código abierto para generar archivos APKG de Anki, con un núcleo en Rust y API para Rust, Python y Node.js. Incluye archivos multimedia, usa plantillas propias y revisa las actualizaciones antes de distribuirlas.",
+  "home.first": "Crea tu primer mazo",
+  "home.json": "Crea un mazo desde JSON",
+  "home.choose": "Elige tu lenguaje de programación.",
+  "home.install": "Exporta spanish.apkg con el paquete público {version}. La exportación normal no requiere instalar Anki.",
+  "home.buildWith": "Crea un mazo con {language}",
+  "home.try": "Explora el código. Prueba la tarjeta.",
+  "home.tryDescription": "Explora ejemplos ejecutables en Rust, voltea las tarjetas de muestra y descarga los mazos que generan.",
+  "home.further": "Sigue avanzando",
+  "home.templates": "Plantillas personalizadas",
+  "home.occlusion": "Modos de oclusión",
+  "home.media": "Archivos multimedia y video",
+  "home.evolve1": "Mejora tus notas.",
+  "home.evolve2": "Conserva su identidad.",
+  "home.evolveDescription": "Corrige una definición o añade un ejemplo. Los identificadores estables y una versión anterior ayudan a Anki Forge a reconocer las notas existentes al volver a exportar.",
+  "home.updates": "Cómo actualizar un mazo",
+  "home.features": "Más formas de crear",
+  "home.validateTitle": "Detecta problemas antes de exportar.",
+  "home.validateDescription": "Revisa los diagnósticos de campos ausentes, archivos multimedia y problemas de plantillas. Integra la validación en tu proceso de generación.",
+  "home.validation": "Explora la validación",
+  "home.templateTitle": "Tus tarjetas. Tus plantillas.",
+  "home.templateDescription": "Empieza con Basic y Cloze o define tus propios tipos de nota. Reúne HTML, CSS y archivos multimedia en paquetes de plantillas reutilizables.",
+  "home.templateLink": "Explora las plantillas",
+  "home.nextTitle": "Del primer mazo a la próxima actualización",
+  "home.nextDescription": "Empieza con una hoja CSV, datos JSON o tarjetas redactadas con ayuda de una IA. Sigue una guía completa de exportación, añade archivos multimedia y revisa las actualizaciones.",
+  "home.compare": "Compara con genanki",
+  "nav.home": "Inicio de Anki Forge",
+  "nav.main": "Navegación principal",
+  "nav.mobile": "Navegación móvil",
+  "nav.menu": "Menú",
+  "nav.repository": "Repositorio de GitHub",
+  "nav.theme": "Tema de color",
+  "nav.auto": "Sistema",
+  "nav.light": "Claro",
+  "nav.dark": "Oscuro",
+  "nav.skip": "Saltar al contenido",
+  "footer.description": "Anki Forge. Generación de mazos APKG de Anki con código abierto y un núcleo en Rust.",
+  "footer.label": "Pie de página",
+  "footer.articles": "Artículos",
+  "footer.license": "Licencia MIT",
+  "workbench.label": "Ejemplos de código y tarjetas",
+  "workbench.tabs": "Tipo de tarjeta",
+  "workbench.hint": "Código Rust → vista previa en el navegador",
+  "workbench.source": "Código completo ↗",
+  "workbench.output": "Resultado",
+  "workbench.note": "Vistas previas del contenido exportado. Importa el APKG para comprobarlo en Anki.",
+  "workbench.noScript": "Este es el ejemplo Basic. Consulta todos los ejemplos de tarjetas y descarga sus mazos.",
+  "card.basic": "Basic",
+  "card.cloze": "Cloze",
+  "card.media": "Multimedia",
+  "card.occlusion": "Oclusión de imágenes",
+  "card.direction": "Español → inglés",
+  "card.meaning": "¿Qué significa?",
+  "card.sentence": "Completa la frase",
+  "card.ear": "Entrenamiento auditivo",
+  "card.waveform": "Representación de la onda de un tono sintetizado",
+  "card.cell": "Anatomía celular",
+  "card.hiddenCell": "Corte de una célula animal con una estructura oculta",
+  "card.greeting": "Un saludo en español.",
+  "card.sine": "Un tono sinusoidal sintetizado",
+  "card.concert": "Un la de afinación que dura un segundo.",
+  "card.revealedCell": "Corte de una célula animal con el núcleo de color coral visible",
+  "card.play": "Reproducir el tono de ejemplo",
+  "card.audioFallback": "Tu navegador no admite audio.",
+  "card.downloadTone": "Descargar el tono.",
+  "card.showAnswer": "Mostrar respuesta",
+  "card.showQuestion": "Mostrar pregunta",
+  "card.questionShown": "Pregunta visible.",
+  "card.answer": "Respuesta: {answer}",
+  "update.id": "ID estable de la nota",
+  "update.front": "Anverso",
+  "update.back": "Reverso",
+  "update.try": "Prueba un cambio de contenido.",
+  "update.change": "Actualizar la respuesta",
+  "update.reset": "Restablecer el ejemplo",
+  "update.changed": "Contenido modificado. Mismo ID de nota.",
+  "update.comparison": "Resultado de la comparación",
+  "update.none": "No se detectaron cambios",
+  "update.policy": "Política de publicación",
+  "update.allowed": "permite este cambio",
+  "update.blocked": "bloquea este cambio",
+  "update.v1": "Descargar v1",
+  "update.v2": "Descargar v2",
+  "update.report": "Informe de comparación",
+  "update.warning": "Conserva el APKG original de distribución. Las opciones de importación y los cambios locales más recientes afectan a las actualizaciones.",
+  "update.guide": "Guía de actualizaciones",
+  "copy.button": "Copiar",
+  "copy.install": "Copiar el comando de instalación",
+  "copy.success": "Comando copiado.",
+  "copy.fallback": "Comando seleccionado. Cópialo con el teclado.",
+  "copy.copied": "Copiado",
+  "copy.code": "Copiar código",
+  "copy.codeSuccess": "Código copiado.",
+  "copy.codeFallback": "Código seleccionado. Cópialo con el teclado.",
+  "copy.codeLabel": "Código {language}",
+  "blog.title": "Blog",
+  "blog.description": "Guías prácticas y decisiones de ingeniería de Anki Forge.",
+  "blog.heading": "Ideas y guías para crear mazos.",
+  "blog.rss": "Seguir por RSS ↗",
+  "blog.all": "← Todos los artículos",
+  "blog.continue": "Continuar con la guía →",
+  "blog.read": "Leer el artículo",
+  "blog.readLabel": "Leer el artículo: {title}",
+  "blog.Tutorial": "Tutorial",
+  "blog.Engineering": "Ingeniería",
+  "blog.feedTitle": "Blog de Anki Forge",
+  "error.title": "Página no encontrada",
+  "error.description": "No se ha encontrado esta página. Vuelve a Anki Forge o consulta la guía para crear mazos.",
+  "error.heading": "Esta página no está disponible.",
+  "error.explanation": "Puede que el enlace haya cambiado. Vuelve al inicio o busca lo que necesitas en la guía.",
+  "error.home": "Volver al inicio",
+  "error.guide": "Consultar la guía →",
+  "examples.title": "Ejemplos de tarjetas",
+  "examples.description": "Explora tarjetas Basic, Cloze, multimedia y de oclusión de imágenes creadas con Anki Forge. Consulta su código Rust y descarga los mazos generados.",
+  "examples.heading1": "Un poco de código.",
+  "examples.heading2": "Algo que recordar.",
+  "examples.intro": "Explora el código, voltea las tarjetas y abre los mazos generados en Anki. Estas vistas previas usan los mismos campos que los archivos descargables.",
+  "examples.combined": "Descargar el mazo de cuatro tarjetas",
+  "examples.fullSource": "Leer el código completo",
+  "examples.excerpt": "Fragmento de Rust",
+  "examples.download": "Descargar {file}",
+  "examples.counts": "{notes} · {cards} · {media}",
+  "examples.updateTitle": "Una nota, dos versiones.",
+  "examples.updateDescription": "La segunda versión cambia la respuesta de «hello» a «hello; hi». El programa la compara con el primer paquete y comprueba que el ID de la nota no cambia.",
+  "examples.workflow": "Consultar el proceso de actualización",
+  "examples.limitations": "Las opciones de importación de Anki y los cambios locales afectan a cómo se aplican las actualizaciones. Las vistas previas muestran el contenido y la identidad; Anki determina el estilo de las tarjetas y el comportamiento durante el repaso.",
+  "examples.basic": "Un saludo en español con una pregunta, una respuesta y un ID estable explícito. Empieza aquí para crear tarjetas sencillas de anverso y reverso.",
+  "examples.cloze": "Oculta una palabra en su contexto con la sintaxis Cloze de Anki. Esta nota tiene un solo hueco, por lo que genera una tarjeta.",
+  "examples.media": "Una imagen y un tono reproducible incluidos con la nota. El fragmento usa un tipo de nota para entrenamiento auditivo definido en el código completo.",
+  "examples.occlusion": "Una máscara rectangular con una clave estable oculta el núcleo en un dibujo en corte de una célula. El mazo descargable usa la misma imagen y máscara que esta vista previa.",
+  "ai.title": "Usa Anki Forge con IA.",
+  "ai.description": "Elige un lenguaje de programación, describe la tarea y pega las instrucciones en tu asistente de programación con IA.",
+  "ai.request": "¿Qué tipo de mazo quieres crear?",
+  "ai.placeholder": "Crea un mazo de vocabulario en español con audio.",
+  "ai.privacy": "Opcional. Tu solicitud permanece únicamente en esta página.",
+  "ai.skillQuestion": "¿Tu asistente de programación admite Skills?",
+  "ai.skillLink": "Abrir la Skill de Anki Forge",
+  "ai.noScript": "Copia la plantilla correspondiente a tu lenguaje de programación y sustituye el marcador de la tarea. Los comandos de instalación y la Skill también están disponibles sin JavaScript.",
+  "ai.language": "Lenguaje de programación",
+  "ai.brief": "Instrucciones para la IA",
+  "ai.copy": "Copiar las instrucciones para la IA",
+  "ai.copied": "Instrucciones copiadas. Pégalas en tu asistente de programación con IA.",
+  "ai.fallback": "Instrucciones seleccionadas. Cópialas con el teclado y pégalas en tu asistente de programación con IA.",
+  "ai.install": "Copiar el comando de instalación",
+  "search.loading": "Cargando la búsqueda…",
+  "search.error": "No se pudo cargar la búsqueda. Comprueba la conexión y vuelve a intentarlo.",
+  "copy.noScript": "Sin JavaScript, selecciona el código o los comandos y cópialos con el teclado.",
+  "hero.description": "Tarjetas Basic, Cloze, multimedia y de oclusión de imágenes que se voltean y se combinan en un mazo APKG.",
+  "hero.front": "Anverso",
+  "hero.back": "Reverso",
+  "hero.english": "Inglés",
+  "hero.spanish": "Español",
+  "hero.gap": "Completa el hueco.",
+  "hero.media": "Imagen + audio",
+  "hero.deck": "Mazo de Anki",
+  "hero.cards": "tarjetas",
+  "hero.files": "archivos multimedia",
+  "hero.caption": "Cuatro tipos de tarjeta. ",
+  "hero.oneDeck": "Un mazo de Anki.",
+  "performance.title": "Tiempos de exportación",
+  "performance.workload": "1.000 notas Basic por carga de trabajo",
+  "performance.export": "Exportar {notes} notas de solo texto",
+  "performance.range": "Menos tiempo de exportación en cinco cargas de trabajo medidas",
+  "performance.medians": "Medianas de 10 ejecuciones",
+  "performance.media": "Texto, imágenes y audio.",
+  "performance.faster": "Más rápido en las cinco pruebas.",
+  "performance.description": "Cada prueba usa {notes} notas Basic. Las cinco pruebas abarcan notas de solo texto, archivos multimedia distintos y recursos compartidos entre notas. En estas pruebas, la API de Rust de Anki Forge tardó entre un {minimum} y un {maximum} % menos en exportar que genanki.",
+  "performance.chart": "Medianas del tiempo de exportación en milisegundos",
+  "performance.less": "{value} % menos de tiempo",
+  "performance.more": "{value} % más de tiempo",
+  "performance.basic-mixed-text-v1": "Solo texto",
+  "performance.basic-image-unique-v2": "Una imagen distinta por nota",
+  "performance.basic-audio-unique-v2": "Un audio distinto por nota",
+  "performance.basic-mixed-unique-v2": "Multimedia mixta, recursos únicos",
+  "performance.basic-mixed-shared-v2": "Multimedia mixta, recursos compartidos",
+  "site.title": "Anki Forge | Crea mazos Anki con código",
+  "site.socialAlt": "Anki Forge. Mazos Anki creados con código. Una tarjeta de español: hola, hello.",
+  "social.line1": "Mazos Anki",
+  "social.line2": "creados con código.",
+  "social.description": "Escribe notas. Crea mazos. Conserva su identidad.",
+  "social.languages": "Español → inglés",
+  "social.footer": "Código abierto · Rust · Anki",
+  "performance.method": "Método y mediciones originales",
+  "performance.limitations": "Estas pruebas miden la generación del mazo, no la velocidad de importación o de repaso en Anki. Los resultados pueden variar con otro equipo u otras cargas de trabajo.",
+  "footer.rss": "RSS",
+  "machine.viewMarkdown": "Ver Markdown",
+  "machine.aiIndex": "Índice de documentación para IA",
+  "machine.intro": "Anki Forge genera mazos APKG de Anki a partir de código en Rust, Node.js/TypeScript o Python.",
+  "machine.version": "Versión actual del paquete público: {version}.",
+  "machine.constraints": "La exportación normal no requiere Anki. Las API de los paquetes públicos difieren de las versiones compiladas desde el código fuente. Conserva el APKG original de la distribución anterior para las actualizaciones; las opciones de importación de Anki y los cambios locales más recientes pueden afectar al resultado.",
+  "machine.start": "Empieza aquí",
+  "machine.quickstarts": "Primeros pasos",
+  "machine.api": "Referencias de las API",
+  "machine.tasks": "Guías por tarea",
+  "machine.constraintsGroup": "Limitaciones",
+  "machine.optional": "Optional",
+  "machine.sourceBuild": "Entorno de desarrollo y compilación desde el código fuente.",
+  "machine.history": "Artículo histórico publicado el {date}.",
+  "machine.repository": "Repositorio y recursos de desarrollo.",
+  "machine.otherLanguage": "Índice de documentación para IA en {language}.",
+  "hero.counts": "{cards} / {media}",
+  "count.notes": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} nota",
+      "many": "{count} notas",
+      "other": "{count} notas"
+    }
+  },
+  "count.cards": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} tarjeta",
+      "many": "{count} tarjetas",
+      "other": "{count} tarjetas"
+    }
+  },
+  "count.media": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} archivo multimedia",
+      "many": "{count} archivos multimedia",
+      "other": "{count} archivos multimedia"
+    }
+  },
+  "home.csv": "Convierte CSV a Anki",
+  "home.aiCards": "Crea tarjetas con IA"
+}

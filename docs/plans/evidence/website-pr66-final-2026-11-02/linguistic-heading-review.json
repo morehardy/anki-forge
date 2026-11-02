@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/spec_review/pr66-heading-migration-2026-11-02",
+  "scope": "Independent read-only Spec and linguistic review of the final heading compatibility delta; frozen source-language report remains byte-identical. This is not deployment or complete usage approval.",
+  "status": "reviewed",
+  "sourceReview": {
+    "path": "docs/plans/evidence/website-pr66-final-2026-11-02/linguistic-source-review.json",
+    "sha256": "65716db6e5eed257017a069a49f1d922a90e5cbe12d2b28b1c4f9cb9f6dcfa2e"
+  },
+  "inputs": [
+    {
+      "path": "website/scripts/heading-migrations.mjs",
+      "sha256": "5ca389f98250a3bd535f238639140052d37cc09a2dc451f02bc312b2592fb707"
+    },
+    {
+      "path": "website/scripts/public-surface.mjs",
+      "sha256": "dd32aee56e070af4a466a43d69639b6ec280a3953fb4a1ee63324b39e14b2ba6"
+    },
+    {
+      "path": "website/scripts/public-surface.test.mjs",
+      "sha256": "6082fbe00010e0a8fa38e3c14ac337ca21d5bf77655645c6a50d8720ad2044cf"
+    },
+    {
+      "path": "website/public-surface-migrations.json",
+      "sha256": "c54016a4aa629437ee3cd959eddf3b3c472f6a738aa1f1e067fe8dc19f2d8401"
+    },
+    {
+      "path": "website/public-surface-baseline.json",
+      "sha256": "7bbf62b03336e9702d18c2287d86a19191aea01e8f3fe6d203df61aa2755dbee"
+    }
+  ],
+  "spec": [
+    {
+      "path": "docs/plans/2026-10-27-multilingual-implementation-spec.md",
+      "line": 71,
+      "quote": "未来确需迁移时，以单独审阅的迁移说明、映射与验证证据处理，禁止通过刷新允许列表绕过历史保护。"
+    },
+    {
+      "path": "docs/plans/2026-10-27-multilingual-implementation-spec.md",
+      "line": 75,
+      "quote": "旧锚点除了存在，还必须指向同一任务的正文位置。"
+    },
+    {
+      "path": "docs/plans/2026-10-27-multilingual-implementation-spec.md",
+      "line": 268,
+      "quote": "修订后只允许复用输入确实未变化的检查结果；"
+    }
+  ],
+  "observations": [
+    "Actual diff read: document migrations require mutually exclusive section scope, current source heading ID/text, all historic/native anchors mapped to the same stable section, and source/target/dependency hash triples matching current independently reviewed inputs. loadHeadingMigrations forces complete source checks even in preview mode; the WeakSet prevents passing an unchecked migration array.",
+    "Actual HTML check read: historic alias, native heading and canonical semantic anchor must each be unique and resolve to the same DOM heading. The previous historic module is preserved even when undefined for native Starlight content. Wrong task, detached alias, different module and duplicate IDs remain rejection cases.",
+    "Home module migrations preserve exact registered localized destinations. The new external case accepts canonical HTTPS without credentials and requires that exact URL inside the same unique historic module. The next-module guard still requires both local JSON and comparison destinations; allowing external performance evidence does not replace that guard.",
+    "Read added negative tests for changed source heading, missing source heading, semantic mapping mismatch, illegal home section scope, mixed scopes, alias detachment, wrong native ID, duplicate anchors, module relocation, missing/moved external evidence and HTTP/credentialed URL rejection.",
+    "Twelve configured wording changes are the already reviewed editorial corrections: five document/article sections plus seven home modules. No new product text, task, SDK behavior, destination or benchmark claim is introduced by this checker/config delta."
+  ],
+  "entries": [
+    {
+      "pageId": "build-guarantees",
+      "locale": "en",
+      "anchors": [
+        "prepared-publication-from-source"
+      ],
+      "fromHeading": "Prepared publication from source",
+      "toHeading": "Prepare, review and publish",
+      "scope": {
+        "sectionId": "prepared-publication-from-source",
+        "headingId": "prepare-review-and-publish"
+      },
+      "inputs": {
+        "sourceHash": "9cd8e95b76512c3db60de49dbe560ba1c00d0cbe5aa3f25f5a908cc933912f9c",
+        "targetHash": "e4051c10f9b129db250be6c282f2573f4db3b66a6bea147cae35362a07e0c27f",
+        "technicalDependencyHash": "5f26faff8842129701aa1d1531c6cf2c6e2d99607b7e1c6d1f6925145aa746fb"
+      },
+      "judgment": "Reviewed heading wording retains the same existing task section and adjacent body; native and historical names are explicitly reconciled."
+    },
+    {
+      "pageId": "python-api",
+      "locale": "en",
+      "anchors": [
+        "source-api-details"
+      ],
+      "fromHeading": "Source API details",
+      "toHeading": "Batch media and prepared publication",
+      "scope": {
+        "sectionId": "source-api-details",
+        "headingId": "batch-media-and-prepared-publication"
+      },
+      "inputs": {
+        "sourceHash": "1caabe07e4f29cc20c637d5d8ca228fded8e9af7d2166a5e72aa3de464839ce2",
+        "targetHash": "2c3c75a9c312f124b8744d19527e66f48163a2c24882cbfa7a24d6ca6fadcbd4",
+        "technicalDependencyHash": "a44b04fd43b2d4f0b9c94c0f5f87c3b166a857b33f769f68ae44ba78e93ab077"
+      },
+      "judgment": "Reviewed heading wording retains the same existing task section and adjacent body; native and historical names are explicitly reconciled."
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "es",
+      "anchors": [
+        "give-the-next-build-a-baseline",
+        "dar-un-paquete-de-referencia-a-la-siguiente-generación"
+      ],
+      "fromHeading": "Dar un paquete de referencia a la siguiente generación",
+      "toHeading": "Usar el paquete anterior como referencia",
+      "scope": {
+        "sectionId": "give-the-next-build-a-baseline",
+        "headingId": "usar-el-paquete-anterior-como-referencia"
+      },
+      "inputs": {
+        "sourceHash": "ff57be40b39195601d1d767a44c83bd1d7fbe143dd0a612883a1d6a7643d9be8",
+        "targetHash": "e4825c4f54b0acd86c47e4dca043c35350006a2acb58d38bb669671d495d768a",
+        "technicalDependencyHash": "c650ba82279bced6ae7942f158abcd60c7ae16fb34eea7f3582c6314d9be983a"
+      },
+      "judgment": "Reviewed heading wording retains the same existing task section and adjacent body; native and historical names are explicitly reconciled."
+    },
+    {
+      "pageId": "home",
+      "locale": "es",
+      "anchors": [
+        "install-heading"
+      ],
+      "fromHeading": "Elige tu lenguaje.",
+      "toHeading": "Elige tu lenguaje de programación.",
+      "scope": {
+        "containerModule": "install",
+        "requiredLinks": [
+          "/es/docs/quickstart/",
+          "/es/docs/node-quickstart/",
+          "/es/docs/python-quickstart/"
+        ],
+        "requiredExternalLinks": []
+      },
+      "inputs": {
+        "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+        "targetHash": "f4047c4584e2c863aabadc6fcf36942b31df66416057e2c5b9832cf2428aca01",
+        "technicalDependencyHash": "517f4ff608837101488914f477ad8c9c692f91105393e3a7bd9d69b69d30fc10"
+      },
+      "judgment": "Reviewed home wording clarifies the existing programming-language choice, preview, note-ID retention or measured export result; protected task/evidence destinations are retained."
+    },
+    {
+      "pageId": "home",
+      "locale": "es",
+      "anchors": [
+        "performance-heading"
+      ],
+      "fromHeading": "Medimos la exportación.",
+      "toHeading": "Tiempos de exportación",
+      "scope": {
+        "containerModule": "performance",
+        "requiredLinks": [],
+        "requiredExternalLinks": [
+          "https://github.com/morehardy/anki-forge/tree/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki"
+        ]
+      },
+      "inputs": {
+        "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+        "targetHash": "f4047c4584e2c863aabadc6fcf36942b31df66416057e2c5b9832cf2428aca01",
+        "technicalDependencyHash": "517f4ff608837101488914f477ad8c9c692f91105393e3a7bd9d69b69d30fc10"
+      },
+      "judgment": "Reviewed home wording clarifies the existing programming-language choice, preview, note-ID retention or measured export result; protected task/evidence destinations are retained."
+    },
+    {
+      "pageId": "home",
+      "locale": "en",
+      "anchors": [
+        "install-heading"
+      ],
+      "fromHeading": "Choose your language.",
+      "toHeading": "Choose your programming language.",
+      "scope": {
+        "containerModule": "install",
+        "requiredLinks": [
+          "/docs/quickstart/",
+          "/docs/node-quickstart/",
+          "/docs/python-quickstart/"
+        ],
+        "requiredExternalLinks": []
+      },
+      "inputs": {
+        "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+        "targetHash": "68faf22196a560dc90d0d7fe731d1f6e6746d2bf59eed7da1943913deec4d080",
+        "technicalDependencyHash": "f3ae13ca28c74c150d77ba36c3682feff5c17f3b20d2f60cc6ac3feb9c569475"
+      },
+      "judgment": "Reviewed home wording clarifies the existing programming-language choice, preview, note-ID retention or measured export result; protected task/evidence destinations are retained."
+    },
+    {
+      "pageId": "home",
+      "locale": "en",
+      "anchors": [
+        "performance-heading"
+      ],
+      "fromHeading": "The export, measured.",
+      "toHeading": "Export performance",
+      "scope": {
+        "containerModule": "performance",
+        "requiredLinks": [],
+        "requiredExternalLinks": [
+          "https://github.com/morehardy/anki-forge/tree/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki"
+        ]
+      },
+      "inputs": {
+        "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+        "targetHash": "68faf22196a560dc90d0d7fe731d1f6e6746d2bf59eed7da1943913deec4d080",
+        "technicalDependencyHash": "f3ae13ca28c74c150d77ba36c3682feff5c17f3b20d2f60cc6ac3feb9c569475"
+      },
+      "judgment": "Reviewed home wording clarifies the existing programming-language choice, preview, note-ID retention or measured export result; protected task/evidence destinations are retained."
+    },
+    {
+      "pageId": "home",
+      "locale": "en",
+      "anchors": [
+        "identity-heading"
+      ],
+      "fromHeading": "Let your notes evolve.Keep their identity.",
+      "toHeading": "Let your notes evolve.Keep the same note IDs.",
+      "scope": {
+        "containerModule": "updates",
+        "requiredLinks": [
+          "/docs/updates/"
+        ],
+        "requiredExternalLinks": []
+      },
+      "inputs": {
+        "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+        "targetHash": "68faf22196a560dc90d0d7fe731d1f6e6746d2bf59eed7da1943913deec4d080",
+        "technicalDependencyHash": "f3ae13ca28c74c150d77ba36c3682feff5c17f3b20d2f60cc6ac3feb9c569475"
+      },
+      "judgment": "Reviewed home wording clarifies the existing programming-language choice, preview, note-ID retention or measured export result; protected task/evidence destinations are retained."
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "zh-CN",
+      "anchors": [
+        "prepared-publication-from-source",
+        "源码中的预备发布"
+      ],
+      "fromHeading": "源码中的预备发布",
+      "toHeading": "准备候选包并在审阅后写入目标文件",
+      "scope": {
+        "sectionId": "prepared-publication-from-source",
+        "headingId": "准备候选包并在审阅后写入目标文件"
+      },
+      "inputs": {
+        "sourceHash": "9cd8e95b76512c3db60de49dbe560ba1c00d0cbe5aa3f25f5a908cc933912f9c",
+        "targetHash": "3585bd794f6c566b990d36333b8e3d6307cfc310b4af15f477a34bf043637d51",
+        "technicalDependencyHash": "537263a1a5f06d974077eab387a7b6eb956949c87c99ded7e9ad74bc71ff4568"
+      },
+      "judgment": "Reviewed heading wording retains the same existing task section and adjacent body; native and historical names are explicitly reconciled."
+    },
+    {
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "anchors": [
+        "source-api-details",
+        "源码-api-详情"
+      ],
+      "fromHeading": "源码 API 详情",
+      "toHeading": "批量媒体处理与预备发布",
+      "scope": {
+        "sectionId": "source-api-details",
+        "headingId": "批量媒体处理与预备发布"
+      },
+      "inputs": {
+        "sourceHash": "1caabe07e4f29cc20c637d5d8ca228fded8e9af7d2166a5e72aa3de464839ce2",
+        "targetHash": "a3a072d5cf78436c99b5319fecf1fe1e531a3dea6939b3558a0bdaa8b30e90d8",
+        "technicalDependencyHash": "a58b70a281f48010dab014bf1f60c2beb9eefec8f1d6978c602cc6b2f6ce4f7e"
+      },
+      "judgment": "Reviewed heading wording retains the same existing task section and adjacent body; native and historical names are explicitly reconciled."
+    },
+    {
+      "pageId": "home",
+      "locale": "zh-CN",
+      "anchors": [
+        "examples-heading"
+      ],
+      "fromHeading": "阅读代码，试用卡片。",
+      "toHeading": "查看代码，预览卡片。",
+      "scope": {
+        "containerModule": "examples",
+        "requiredLinks": [
+          "/zh-cn/docs/custom-notetypes/",
+          "/zh-cn/docs/image-occlusion/",
+          "/zh-cn/docs/media/"
+        ],
+        "requiredExternalLinks": []
+      },
+      "inputs": {
+        "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+        "targetHash": "e43147d7626b78c399cc8534f298c6c14ba9a97e35e892cd34c338aa9c039dc7",
+        "technicalDependencyHash": "e29f6b8e5d83091f700c16b2a1a603a8eca346efb3b0fafbe090b17dcac1074d"
+      },
+      "judgment": "Reviewed home wording clarifies the existing programming-language choice, preview, note-ID retention or measured export result; protected task/evidence destinations are retained."
+    },
+    {
+      "pageId": "home",
+      "locale": "zh-CN",
+      "anchors": [
+        "identity-heading"
+      ],
+      "fromHeading": "让笔记持续完善，保留原有身份。",
+      "toHeading": "让笔记持续完善，保留原有笔记 ID。",
+      "scope": {
+        "containerModule": "updates",
+        "requiredLinks": [
+          "/zh-cn/docs/updates/"
+        ],
+        "requiredExternalLinks": []
+      },
+      "inputs": {
+        "sourceHash": "6bc8c36ae25100e7d4ae58702404a55073fdc52f6e43fefe4071927a621bd0b0",
+        "targetHash": "e43147d7626b78c399cc8534f298c6c14ba9a97e35e892cd34c338aa9c039dc7",
+        "technicalDependencyHash": "e29f6b8e5d83091f700c16b2a1a603a8eca346efb3b0fafbe090b17dcac1074d"
+      },
+      "judgment": "Reviewed home wording clarifies the existing programming-language choice, preview, note-ID retention or measured export result; protected task/evidence destinations are retained."
+    }
+  ],
+  "validation": {
+    "actualCurrentSourceInputs": "loadHeadingMigrations completed strict current source/report verification for all 12 entries; all triples independently compared with frozen linguistic report.",
+    "prefixManifest": {
+      "path": "docs/plans/evidence/website-pr66-final-2026-11-02/prefix-site-manifest.json",
+      "sha256": "2568825da22b987d21c323442d57882b17626f1dfc51a2e33f4d9cc86aad88ec"
+    },
+    "inputSha256": "fd6716207f6f5557895553e95f710a27cc66cee6d4bbd1cacf0ddc56b7aceebf",
+    "actualPrefixSurface": "checkSurface passed against the historic public-surface baseline and frozen prefix HTML, including all 12 migrations.",
+    "limits": "Root artifact and full actual usage review are separate later records; no source-report scores or unresolved observations changed."
+  },
+  "openIssues": []
+}

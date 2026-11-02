@@ -1,0 +1,376 @@
+
+rust-basic http://127.0.0.1:63533/anki-forge/pt-br/docs/quickstart/
+Gere cartões do Anki com Rust
+
+Use Rust 1.92 ou posterior. Se preferir outra linguagem, escolha Node / TypeScript ou Python.
+
+Instale a biblioteca
+Seção intitulada “Instale a biblioteca”
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Exporte seu primeiro baralho
+Seção intitulada “Exporte seu primeiro baralho”
+
+Salve este programa completo como src/main.rs:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+O programa grava o arquivo persistente spanish.apkg. Abra-o no Anki, importe-o e estude hola → hello no baralho Spanish. A exportação não exige que o Anki esteja instalado.
+
+O namespace spanish e a chave estável es:hola identificam essa nota mesmo quando seu conteúdo muda. Você também pode baixar o exemplo Basic do site.
+
+Continue
+Seção intitulada “Continue”
+
+Siga o tutorial de JSON para Anki para executar uma tarefa completa com mídia e atualização.
+
+Adicione imagens e áudio, tipos de nota personalizados ou oclusão de imagem. Guarde o APKG original distribuído antes de comparar e publicar uma atualização. Consulte a API de Rust ou os ambientes verificados para saber mais.
+
+Ver Markdown
+
+Editar página
+Anterior
+Escolha sua linguagem de programação
+Próximo
+Integre o Anki Forge à sua aplicação Rust
+
+Anki Forge. Geração de APKGs do Anki com código aberto e núcleo em Rust.
+
+Artigos
+RSS
+Licença MIT
+Índice da documentação para IA
+
+python-basic http://127.0.0.1:63533/anki-forge/pt-br/docs/python-quickstart/
+Gere cartões do Anki com Python
+
+Crie e ative um ambiente virtual e instale o pacote publicado no PyPI:
+
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+No Windows, ative o ambiente com .venv\Scripts\Activate.ps1. Use CPython convencional 3.11 ou posterior e um wheel correspondente à plataforma; as verificações registradas de lançamento abrangem CPython 3.11–3.14. Consulte os ambientes verificados.
+
+Exporte um baralho
+Seção intitulada “Exporte um baralho”
+
+Salve o programa como main.py:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Abra o arquivo persistente spanish.apkg no Anki. Ele contém hola → hello no baralho Spanish. Mantenha o namespace spanish e a chave da nota es:hola estáveis nas próximas edições. A exportação não exige que o Anki esteja instalado.
+
+Continue
+Seção intitulada “Continue”
+
+Para uma planilha de vocabulário, siga CSV para Anki. Para criar rascunhos de cartões a partir de anotações, comece pela criação de cartões com IA.
+
+Para uma tarefa completa com mídia e atualização, siga JSON para Anki.
+
+Imagens e áudio e API de mídia do Python
+Tipos de nota personalizados e pacotes de templates
+Oclusão de imagem
+Comparação e atualização
+API de Python e diagnósticos
+Migração do genanki
+
+Para compilar a extensão nativa, consulte compilação a partir do código-fonte.
+
+Ver Markdown
+
+Editar página
+Anterior
+Gere cartões do Anki com Node.js
+Próximo
+Transição para a nova API de Python
+
+Anki Forge. Geração de APKGs do Anki com código aberto e núcleo em Rust.
+
+Artigos
+RSS
+Licença MIT
+Índice da documentação para IA
+
+node-basic http://127.0.0.1:63533/anki-forge/pt-br/docs/node-quickstart/
+Gere cartões do Anki com Node.js
+
+Use Node.js 22.13 ou posterior. Em um novo diretório de aplicação:
+
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+O comando instala o pacote publicado no npm e a dependência nativa opcional correspondente. Consulte os ambientes verificados para saber quais plataformas foram testadas.
+
+Exporte um baralho
+Seção intitulada “Exporte um baralho”
+
+Salve o programa como main.mjs:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Abra o arquivo persistente spanish.apkg no Anki. Ele contém hola → hello no baralho Spanish. Mantenha o namespace spanish e a chave es:hola estáveis nas próximas edições. Fechar o artefato persistente mantém o arquivo no disco. A exportação não exige que o Anki esteja instalado.
+
+TypeScript e próximas tarefas
+Seção intitulada “TypeScript e próximas tarefas”
+
+O tutorial de JSON para Anki inclui o fluxo completo de compilação e execução em TypeScript.
+
+Use .mjs para ESM ou require('ankiforge') para CommonJS. O pacote inclui declarações de tipos TypeScript; consulte a configuração do TypeScript.
+
+Imagens e áudio e API de mídia do Node
+Tipos de nota personalizados e pacotes de templates
+Oclusão de imagem
+Comparação e atualização
+API de Node e solução de problemas
+
+A compilação e o empacotamento local estão descritos em compilação a partir do código-fonte.
+
+Ver Markdown
+
+Editar página
+Anterior
+Guia de desenvolvimento com Rust
+Próximo
+Gere cartões do Anki com Python
+
+Anki Forge. Geração de APKGs do Anki com código aberto e núcleo em Rust.
+
+Artigos
+RSS
+Licença MIT
+Índice da documentação para IA
+
+json-media http://127.0.0.1:63533/anki-forge/pt-br/docs/json-to-anki/
+Gere e atualize baralhos do Anki a partir de JSON
+
+Leia três perguntas de biologia em JSON, adicione uma imagem e um áudio compartilhados e exporte um APKG original seguido de uma atualização revisada que altera apenas uma resposta. Cada versão deve conter 3 notas, 3 cartões e 2 arquivos de mídia. Escolha um dos SDKs abaixo; cada exemplo é um programa completo. A exportação normal não exige que o Anki esteja instalado.
+
+Mantido pelos mantenedores do Anki Forge · conteúdo revisado em 2026-10-25.
+
+Arquivos de entrada compartilhados
+Seção intitulada “Arquivos de entrada compartilhados”
+
+Baixe v1.json, v2.json, cell.png e tone.wav. A imagem é um diagrama de célula; o áudio é um tom curto gerado, não uma gravação de vocabulário falado. Em cada novo diretório de aplicação, coloque os quatro arquivos em recipe/:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Os dois arquivos JSON contêm namespace, deck e três notes, cada uma com um id durável e os campos front e back. A versão 2 altera somente a primeira resposta. A aplicação lê o JSON; o Anki Forge cuida da criação das notas e da geração do APKG. Para entradas não confiáveis, valide o esquema da sua aplicação antes de construir as notas.
+
+Rust
+Seção intitulada “Rust”
+
+Use Rust 1.92 ou posterior. A leitura de JSON usa serde e serde_json. Instale o pacote público Anki Forge 0.3.1.
+
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Salve como src/main.rs e crie recipe/ no mesmo diretório de Cargo.toml:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Python
+Seção intitulada “Python”
+
+Use CPython convencional 3.11 ou posterior com um wheel para a plataforma; as verificações de lançamento abrangem as versões 3.11–3.14. No Windows, ative o ambiente com .venv\Scripts\Activate.ps1. Instale o pacote público Anki Forge 0.3.1.
+
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Salve como main.py e crie recipe/ no mesmo diretório de main.py:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Node
+Seção intitulada “Node”
+
+Use Node.js 22.13 ou posterior e a dependência nativa opcional correspondente. Este programa compila TypeScript para JavaScript e executa o resultado no Node.js. Instale o pacote público Anki Forge 0.3.1.
+
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Salve como main.mts e crie recipe/ no mesmo diretório de main.mts:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Confira e importe o resultado
+Seção intitulada “Confira e importe o resultado”
+
+O programa escolhido imprime output/<language>/v2.apkg. Guarde v1.apkg no mesmo diretório; comparison.json e review.json registram RISK.NOTE_CHANGED, nenhuma nota adicionada ou removida e policy.allows_publication: true para essa alteração restrita à resposta. Antes de publicar, o programa verifica novamente a política no candidato preparado. Ele se recusa a reutilizar um diretório de saída que já contenha qualquer uma das versões.
+
+Importe v1.apkg no Anki: espere o baralho Biology com três cartões Basic, a imagem da célula e o tom. Depois importe v2.apkg: confira se a primeira resposta mudou para “The basic structural and functional unit of life” e se continuam existindo três notas. O namespace biology-json identifica este projeto de publicação. Cada ID de negócio é uma chave estável da nota; o Anki Forge deriva dessa identidade o GUID usado pelo Anki. Mantenha o namespace e essas três chaves inalterados.
+
+Use o APKG da versão 1 originalmente distribuído como base de atualização, nunca um pacote reexportado pelo Anki. A correspondência durante a importação, as edições locais e o agendamento dependem da versão do Anki, dos tipos de nota e das opções de importação; valide o cliente de destino antes de publicar. Importar um pacote não remove notas omitidas de um pacote posterior. Uma comparação ou geração bem-sucedida não garante o comportamento de todo o histórico de revisão de cada pessoa.
+
+Consulte as condições de atualização, mídia, a navegação das APIs e a escolha de biblioteca.
+
+Ver Markdown
+
+Editar página
+Anterior
+CSV para Anki: gere cartões com Python
+Próximo
+Crie cartões do Anki com apoio de IA
+
+Anki Forge. Geração de APKGs do Anki com código aberto e núcleo em Rust.
+
+Artigos
+RSS
+Licença MIT
+Índice da documentação para IA
+
+original-baseline-update http://127.0.0.1:63533/anki-forge/pt-br/docs/updates/
+Atualize baralhos do Anki com IDs de nota estáveis
+
+Publique correções ou novos cartões para um baralho do Anki que você já distribuiu. IDs de nota estáveis ajudam o Anki Forge e o Anki a reconhecer notas existentes em vez de tratá-las como novas; as opções de importação do Anki e as edições locais mais recentes também influenciam o que será alterado.
+
+Mantenha estáveis o namespace do projeto e as chaves de notas, tipos de nota, campos e templates de cartão. Gere cada nova versão a partir do APKG original distribuído anterior, que contém evidências completas de identidade em um formato versionado. Guarde o pacote junto com a revisão do seu código-fonte.
+
+Execute duas versões e compare
+Seção intitulada “Execute duas versões e compare”
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+O comando grava spanish-v1.apkg e spanish-v2.apkg, compara a resposta alterada e verifica as contagens do pacote atualizado. O código executável é:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+compare é concluído com sucesso mesmo quando os resultados bloqueiam a publicação. Consulte comparison.policy().allows_publication() separadamente do nível de risco original e das evidências. build(...update_from(...)) executa a mesma análise e retorna BuildError se a política bloquear o candidato, antes da publicação.
+
+Política e limites de inspeção
+Seção intitulada “Política e limites de inspeção”
+
+Este programa completo define um limite mais rigoroso e usa a mesma configuração na comparação e na atualização:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+A política padrão bloqueia resultados High e Critical. Depois de revisar uma categoria específica, a aplicação pode optar explicitamente por UpdatePolicy::default().allow(RiskCode::NoteRemoved). Essa permissão aceita todos os resultados da categoria, preservando seus níveis e evidências originais. Ela não representa a aprovação individual de notas selecionadas. Uma permissão sem resultado correspondente gera um aviso; códigos de risco desconhecidos são rejeitados. Não permita automaticamente todos os códigos retornados por uma comparação.
+
+Evidências ausentes ou corrompidas, divergência de namespace, dados inválidos do candidato e a ultrapassagem dos limites de inspeção são erros que impedem a operação, não categorias de risco que podem ser permitidas. Quando a análise não consegue terminar, a comparação retorna um erro com as observações já concluídas. Informar uma política explícita em uma criação sem update_from é um erro de configuração, independentemente da ordem dos métodos de configuração.
+
+Evidências e identidade
+Seção intitulada “Evidências e identidade”
+
+O pacote inclui ankiforge-identity.json no formato ankiforge-identity-v1. Ele vincula IDs de modelos e configurações, GUIDs de notas, posições históricas de campos e templates de cartão, ordinais de cartões e máscaras, revisões e mídia à coleção real e aos dados do pacote. Uma reexportação pelo Anki não preserva essas evidências e não serve como base de atualização. Evidências ausentes nunca são reconstruídas silenciosamente.
+
+Alterar nomes de exibição ou conteúdo preserva as chaves de identidade. Conteúdo inalterado mantém a revisão da base; conteúdo alterado recebe uma revisão posterior. Reordenar campos ou templates de cartão preserva as correspondências históricas. Identidades desativadas permanecem reservadas para que a restauração da mesma chave possa reutilizá-las. Uma chave de nota não pode ser transferida para outro modelo, e uma chave de modelo não pode alternar entre os tipos normal e Cloze.
+
+Importação nos clientes e revisão antes da publicação
+Seção intitulada “Importação nos clientes e revisão antes da publicação”
+
+Um APKG é um pacote de distribuição, não um mecanismo de sincronização de exclusões. Omitir notas, campos, templates de cartão ou máscaras não exclui os dados existentes de quem estuda. Mudanças no esquema de campos e templates de cartão ou no campo de ordenação apresentam alto risco, pois seu comportamento depende das opções de mesclagem e importação do Anki. Mudanças de esquema podem copiar modelos ou atualizar os carimbos de data das notas de destino antes da comparação do conteúdo das notas.
+
+Teste a primeira importação e as atualizações em uma coleção existente nos clientes que você atende. Confira campos, GUIDs, conjuntos de cartões, edições locais e agendamento existente com as opções pretendidas de mesclagem e atualização de notas. Identidade estável, sozinha, não promete substituir edições locais mais recentes nem restaurar histórico excluído.
+
+Grave os candidatos em um caminho separado da base arquivada. Após a revisão, distribua o pacote aprovado e guarde-o como evidência para a próxima versão. Consulte as garantias de geração para entender a propriedade dos arquivos e os detalhes da publicação.
+
+Gere uma vez, revise e publique
+Seção intitulada “Gere uma vez, revise e publique”
+
+Esta API está incluída no pacote público 0.3.1.
+
+Gere uma vez, examine o relatório e publique o mesmo arquivo candidato. Revisar e depois executar uma segunda geração comum cria outro candidato; a publicação preparada mantém o APKG efetivo vinculado ao relatório revisado.
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Na cópia do código-fonte fixada em uma revisão, salve o programa completo acima como anki_forge/examples/docs_publication.rs. Este guia adiciona o exemplo; ele não está incluído em 1199196. Em seguida, execute:
+
+Janela do terminal
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+O exemplo grava spanish-original.apkg e, quando a política permite a publicação, spanish-reviewed.apkg na raiz do repositório. A preparação não publica o arquivo de destino. Revise os resultados e teste a importação no cliente antes de aprovar a distribuição; o exemplo publica automaticamente apenas essa alteração simples de conteúdo quando sua política permite. O benchmark não mede esse fluxo.
+
+Consulte o ciclo de geração, a API de Rust, a API de Node e a API de Python.
+
+Ver Markdown
+
+Editar página
+Anterior
+Gere cartões de oclusão de imagem do Anki
+Próximo
+Guia de desenvolvimento com Rust
+
+Anki Forge. Geração de APKGs do Anki com código aberto e núcleo em Rust.
+
+Artigos
+RSS
+Licença MIT
+Índice da documentação para IA
+
+troubleshooting http://127.0.0.1:63533/anki-forge/pt-br/docs/troubleshooting/
+Solução de problemas
+
+Use os valores estruturados kind e code da operação que falhou, junto com a cadeia de causas e as observações. As mensagens de texto destinam-se a pessoas e podem mudar. Uma operação que falha e uma comparação concluída cuja política bloqueia a publicação são resultados diferentes.
+
+Instalação
+Seção intitulada “Instalação”
+Sintoma	O que verificar
+Rust rejeita a toolchain	Execute rustc --version; use Rust 1.92+ e consulte a versão instalada com cargo tree -i ankiforge
+Node não consegue carregar o pacote nativo	Execute node -p "process.platform + '/' + process.arch" e npm ls ankiforge; reinstale com npm install --include=optional ankiforge@0.3.1
+Node informa divergência entre o código nativo e o wrapper	Use versões correspondentes dos pacotes; reinstale a mesma versão do registro ou recompile ambos a partir da mesma cópia do repositório
+Python não consegue carregar a extensão	Execute python -m pip show ankiforge e python -m pip debug --verbose; confira o interpretador e as tags de sistema operacional e CPU do wheel
+Python seleciona uma distribuição de código-fonte	Escolha um wheel e um interpretador compatíveis ou siga a compilação a partir do código-fonte com um compilador
+
+Consulte os ambientes verificados, a instalação de Node e a instalação de Python.
+
+Modelos e notas
+Seção intitulada “Modelos e notas”
+Sintoma	Correção
+Chave inválida ou vazia	Forneça uma chave estável explícita; os nomes de exibição são separados
+NOTE.KEY_DUPLICATE	Atribua uma chave única a cada registro lógico de origem
+NOTE.FIELD_UNKNOWN	Use a chave do campo, não seu nome de exibição
+NOTE.FIELD_REQUIRED	Preencha os campos declarados com required() antes de adicionar a nota
+NOTE.MODEL_CONFLICT	Reutilize o mesmo modelo finalizado para uma mesma chave de modelo
+Erro de referência no modelo de cartão	Use chaves declaradas nas expressões; examine o intervalo de bytes indicado no código-fonte original
+HTML aparece como texto literal	Use Content::html somente para marcação intencional
+Cartões Cloze ausentes	Use a sintaxe {{c1::answer}} com os números permitidos, de 1 a 500
+
+Uma falha na adição é atômica. Corrija a nota ou o modelo e tente novamente; não é preciso desfazer um registro parcial de modelos ou mídia. Os construtores de modelos precisam terminar com .build() antes de criar notas personalizadas.
+
+Mídia e templates
+Seção intitulada “Mídia e templates”
+Sintoma	Correção
+Falha ao importar um arquivo	Confira a origem no momento de Media::file; a remoção posterior do arquivo de origem é permitida
+Tipo MIME não corresponde ao conteúdo	Informe o tipo MIME real ao construtor que recebe bytes
+Conflito de nomes de exportação	Escolha nomes únicos e portáveis; variantes de maiúsculas/minúsculas e de normalização Unicode entram em conflito
+Recurso de HTML, CSS ou script ausente	Declare-o com asset no modelo ou add_asset no projeto
+Importação de mídia excede um limite	Aumente explicitamente MediaLimits.max_bytes antes de importar
+Inspeção da geração excede um limite	Ajuste o contador correspondente de InspectLimits para a operação
+Falha ao carregar um pacote de templates	Use bundle-v2, chaves explícitas, templates baseados em chaves e caminhos internos ao pacote
+Falha em um retângulo de oclusão	Confira as dimensões de exibição decodificadas, coordenadas finitas e chaves únicas para as máscaras
+
+Os padrões de tratamento de texto são uniformes em todos os tipos de nota. Nós de mídia coletam suas dependências; escrever um nome de arquivo manualmente não importa seus bytes. Mesmo um pacote válido exige testes de reprodução no cliente para o codec ou a fonte que você pretende usar.
+
+Atualizações e arquivos de saída
+Seção intitulada “Atualizações e arquivos de saída”
+
+Use como base um APKG original distribuído com evidências completas de identidade. Pacotes reexportados pelo Anki não preservam essas evidências. Uma divergência de namespace ou evidências corrompidas não podem ser aceitas por uma política de atualização.
+
+Uma comparação concluída pode retornar allows_publication == false. Examine os resultados originais e as evidências antes de permitir explicitamente uma categoria de risco. Não permita todos os resultados indiscriminadamente. A mesma política deve ser passada à geração da atualização se você quiser a mesma decisão. Informar uma política em uma operação que apenas cria um pacote é um erro.
+
+Se um caminho temporário desaparecer, mantenha vivo o objeto de saída ou artefato que controla esse arquivo até que todos os leitores terminem. Relatórios e representações JSON não mantêm a propriedade do arquivo. Em falhas de persistência, examine a etapa de publicação e a durabilidade informadas pelo erro: um erro pode ser retornado depois de o destino já ter sido publicado. Consulte as garantias dos arquivos de saída.
+
+Ver Markdown
+
+Editar página
+Anterior
+Compatibilidade e ambientes verificados
+Próximo
+Diagnósticos de Python
+
+Anki Forge. Geração de APKGs do Anki com código aberto e núcleo em Rust.
+
+Artigos
+RSS
+Licença MIT
+Índice da documentação para IA

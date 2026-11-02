@@ -84,14 +84,27 @@ export async function checkSurface(dist, baseline, configuration, headingMigrati
       if (found.heading === anchor.heading) return;
       const migration = headingMigrations.find(entry => entry.pageId === expected.pageId && entry.locale === expected.locale && entry.route === expected.route && entry.anchors.includes(anchor.id) && entry.fromHeading === anchor.heading && entry.toHeading === found.heading);
       assert.ok(migration, message);
-      assert.equal(anchor.containerModule, migration.containerModule, `${route}#${anchor.id}: migration changed its historic module`);
       const nodes = $('main[id], main [id]').filter((_, node) => $(node).attr('id') === anchor.id);
       assert.equal(nodes.length, 1, `${route}#${anchor.id}: migrated anchor must remain unique`);
+      const heading = nodes.is('h2,h3,h4,h5,h6') ? nodes : nodes.attr('data-section-alias') ? aliasHeadingNode($, nodes) : null;
+      if (migration.sectionId) {
+        assert.equal(found.containerModule, anchor.containerModule, `${route}#${anchor.id}: section changed its historic module`);
+        assert.ok(heading && heading.attr('id') === migration.headingId, `${route}#${anchor.id}: migrated section lost its reviewed native heading`);
+        assert.equal(heading.closest('[data-module]').attr('data-module'), anchor.containerModule, `${route}#${anchor.id}: section heading changed its historic module`);
+        const native = $('main[id], main [id]').filter((_, node) => $(node).attr('id') === migration.headingId);
+        assert.equal(native.length, 1, `${route}#${anchor.id}: migrated native heading must remain unique`);
+        const canonical = $('main[id], main [id]').filter((_, node) => $(node).attr('id') === migration.sectionId);
+        assert.equal(canonical.length, 1, `${route}#${anchor.id}: semantic section anchor must remain unique`);
+        const target = canonical.is('h2,h3,h4,h5,h6') ? canonical : canonical.attr('data-section-alias') === migration.sectionId ? aliasHeadingNode($, canonical) : null;
+        assert.ok(target && target[0] === heading[0], `${route}#${anchor.id}: canonical section and historic anchor target different headings`);
+        if (!nodes.is('h2,h3,h4,h5,h6')) assert.equal(nodes.attr('data-section-alias'), migration.sectionId, `${route}#${anchor.id}: historic alias changed its semantic section`);
+        return;
+      }
+      assert.equal(anchor.containerModule, migration.containerModule, `${route}#${anchor.id}: migration changed its historic module`);
       const container = nodes.closest('[data-module]');
       assert.equal(container.attr('data-module'), migration.containerModule, `${route}#${anchor.id}: migrated anchor moved to another module`);
       const modules = $('[data-module]').filter((_, node) => $(node).attr('data-module') === migration.containerModule);
       assert.equal(modules.length, 1, `${route}#${anchor.id}: migrated module must remain unique`);
-      const heading = nodes.is('h2,h3,h4,h5,h6') ? nodes : nodes.attr('data-section-alias') ? aliasHeadingNode($, nodes) : null;
       assert.ok(heading && heading.closest('[data-module]')[0] === container[0], `${route}#${anchor.id}: migrated alias is detached from its task heading`);
       for (const required of migration.requiredLinks) {
         const destination = new URL((configuration.base === '/' ? '' : configuration.base) + required, configuration.site);
@@ -99,6 +112,9 @@ export async function checkSurface(dist, baseline, configuration, headingMigrati
           const target = new URL($(node).attr('href'), new URL(route, configuration.site));
           return target.href === destination.href;
         }), `${route}#${anchor.id}: migrated module lost protected local link ${required}`);
+      }
+      for (const required of migration.requiredExternalLinks || []) {
+        assert.ok(container.find('a[href]').toArray().some(node => new URL($(node).attr('href'), new URL(route, configuration.site)).href === required), `${route}#${anchor.id}: migrated module lost protected external link ${required}`);
       }
     }
     for (const anchor of expected.anchors) {

@@ -1,0 +1,28 @@
+✖ reviewed document heading changes preserve the exact semantic section and native heading (14.016042ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 245.302041
+
+✖ failing tests:
+
+test at website/scripts/public-surface.test.mjs:122:1
+✖ reviewed document heading changes preserve the exact semantic section and native heading (14.016042ms)
+  AssertionError [ERR_ASSERTION]: updates/zh-CN: historic container module required
+      at file:///Users/hp/Desktop/2026/anki-forge/website/scripts/heading-migrations.mjs:24:12
+      at Array.map (<anonymous>)
+      at validateHeadingMigrations (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/heading-migrations.mjs:18:36)
+      at TestContext.<anonymous> (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/public-surface.test.mjs:143:20)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

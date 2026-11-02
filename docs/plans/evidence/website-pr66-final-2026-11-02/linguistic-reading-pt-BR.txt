@@ -1,0 +1,626 @@
+
+FILE docs/pt-br/anki-forge-vs-genanki.md
+1: # Anki Forge ou genanki
+2:
+3: Considere o Anki Forge ao criar um fluxo repetível de publicação que precise de mídia com propriedade independente, diagnósticos estruturados, comparação e revisão de políticas antes de lançar atualizações. Mantenha um fluxo comprovado com genanki quando os scripts Python, modelos e recursos de mídia existentes já atenderem às suas necessidades e a migração trouxer mais custo do que benefício.
+4:
+5: | Critério | Anki Forge | genanki |
+6: | --- | --- | --- |
+7: | Linguagem de desenvolvimento | Núcleo em Rust; interfaces Rust, Python e Node / TypeScript | Python |
+8: | Recursos básicos em comum | Basic, Cloze, modelos personalizados, mídia e geração de APKG sem conexão | Basic, Cloze, modelos personalizados, mídia e geração de APKG sem conexão |
+9: | Identidade | Namespace e chaves de nota explícitos; preservação do APKG original para atualizações | GUIDs configuráveis e IDs numéricos de modelos e baralhos; suporte a atualizações por reimportação |
+10: | Antes da publicação | Resultados de comparação, política de risco e candidato preparado inspecionado | O script e os testes definem a revisão antes da publicação |
+11: | Propriedade da mídia | Os valores tipados de imagem e áudio mantêm snapshots independentes dos arquivos de origem; clones compartilham o armazenamento | O script fornece os arquivos de mídia e suas referências ao pacote |
+12: | Oclusão de imagem por código | Máscaras retangulares com chaves pela API pública | Avalie um modelo ou extensão adequado ao seu fluxo |
+13: | Custo de execução | Dependências nativas; exige plataforma e interpretador compatíveis | Pode ser mais econômico manter a implantação Python existente |
+14: | Custo de migração | Validação explícita da correspondência de identidades anteriores, dos modelos e das importações | Nenhuma migração para um fluxo genanki que já funciona |
+15:
+16: <!-- section: the-same-small-task -->
+17: ## A mesma tarefa simples
+18:
+19: Para transformar três perguntas em JSON em um baralho com uma imagem e um som, ambas as bibliotecas permitem que Python leia o JSON e crie as notas. Com genanki, escolha os IDs do modelo e do baralho, atribua os valores dos campos e as regras de GUID, adicione os arquivos de mídia ao pacote e grave o APKG. Com Anki Forge, escolha um namespace e chaves de negócio duráveis, componha as notas com mídia de propriedade independente, gere a versão 1 e, antes da publicação, compare e prepare a versão 2 usando o APKG original da versão 1 como base. O [tutorial completo de JSON](/docs/json-to-anki/) inclui implementações em Rust, Python e TypeScript e seus comandos de execução.
+20:
+21: <!-- section: existing-genanki-decks -->
+22: ## Baralhos genanki existentes
+23:
+24: O [genanki permite GUIDs personalizados](https://github.com/kerrickstaley/genanki#note-guids), mídia e atualizações por reimportação. A identidade estável não é uma capacidade exclusiva do Anki Forge. A regra padrão de GUID pode depender dos campos; defina uma regra intencional quando esses campos puderem mudar.
+25:
+26: O Anki Forge não recupera automaticamente IDs numéricos ou GUIDs arbitrários do genanki. Sem uma correspondência validada separadamente, considere a primeira distribuição com Anki Forge como o início de uma nova identidade. Nem esta comparação nem a geração bem-sucedida de um APKG prometem uma migração sem perdas ou a preservação de todo o histórico de revisão. Leia o [guia de migração](/docs/genanki-migration/) antes de migrar um baralho existente.
+27:
+28: <!-- section: historical-performance-evidence -->
+29: ## Medições históricas de desempenho
+30:
+31: A comparação de 2026-10-08 mediu a API Project de Rust em relação ao genanki 0.13.1 em um Apple M1 Pro. Com 1.000 notas Basic, as cinco cargas de trabalho medidas em Rust levaram de 45,7% a 53,9% menos tempo para exportar; algumas cargas com mídia apresentaram picos maiores de uso de memória. Consulte o [método, os resultados brutos e as limitações](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md). A medição não avaliou o desempenho atual dos ambientes Python ou Node e não oferece a mesma garantia de velocidade para esses SDKs ou outras cargas de trabalho.
+32:
+33: Mantenedores do Anki Forge · conteúdo revisado em 2026-10-25 com base nas APIs públicas do Anki Forge 0.3.1, na [documentação do genanki](https://github.com/kerrickstaley/genanki) e na medição arquivada. Consulte a [compatibilidade do ambiente de execução](/docs/compatibility/) e [escolha uma linguagem](/docs/languages/) para começar uma nova tarefa.
+
+FILE docs/pt-br/genanki-migration.md
+1: # Migre os conceitos do genanki
+2:
+3: Ainda está escolhendo uma biblioteca? Leia [Anki Forge ou genanki](/docs/anki-forge-vs-genanki/).
+4:
+5: O Anki Forge usa chaves de dados estáveis, modelos imutáveis validados, snapshots de mídia que não dependem dos arquivos de origem e operações explícitas de geração e atualização. Trata-se de um novo modelo de criação de conteúdo; ele não emula objetos genanki nem as antigas interfaces Deck e lockfile do Anki Forge.
+6:
+7: | Conceito do genanki | Equivalente no Anki Forge |
+8: | --- | --- |
+9: | Model com ID numérico | `NoteType.builder(stable_key)...build()` |
+10: | Nomes dos campos usados como identificadores | Chaves Field estáveis e nomes de exibição separados |
+11: | Note contendo strings dos campos | `model.note().field(key, content)` com um modelo de propriedade da nota |
+12: | Deck como contêiner de notas | Project com baralho padrão; `.deck(name)` opcional por nota |
+13: | Caminhos dos arquivos de mídia do pacote | Valores independentes de `Media.file(path)`, coletados automaticamente pelo conteúdo tipado |
+14: | Gravação do pacote | `project.build(BuildOptions.to(path))` |
+15: | GUID padrão derivado dos campos ou regra personalizada de GUID | Namespace e chave estável da nota explícitos |
+16:
+29:
+30: Escolha chaves a partir de identificadores de negócio persistentes. Renomear um nome de exibição ou alterar o texto de uma definição não deve mudar essas chaves. Não use o hash do conteúdo atual dos campos como identidade, a menos que essa seja uma exigência explícita do seu importador. Para dados sem chaves, atribua e armazene as chaves fora do SDK.
+31:
+32: As expressões dos templates de cartão usam as chaves dos campos (Field). Os nomes de exibição podem ser traduzidos de forma independente; a biblioteca converte as referências às chaves nos nomes de campo do Anki. A finalização do modelo rejeita declarações ausentes ou conflitantes antes que uma nota possa ser adicionada. A adição de notas coleta automaticamente as dependências dos modelos e rejeita definições conflitantes para uma mesma chave de modelo.
+33:
+34: Strings representam texto simples; envolva HTML intencional em `Content.html(...)`. Use `media.image()` / `media.sound()` e `Content.sequence(...)` para compor o conteúdo. As cópias dos arquivos permanecem disponíveis mesmo se o arquivo original for removido ou alterado. Declare explicitamente as dependências referenciadas por HTML, CSS ou scripts com `.asset(media)` no construtor do modelo ou `project.add_asset(media)`.
+35:
+36: Nas versões seguintes do baralho, crie um novo Project com o mesmo namespace e as mesmas chaves de dados e use `BuildOptions.to(next_path).update_from(previous_original_apkg)`. O APKG original fornece evidências completas de identidade. Esse fluxo não recupera a identidade de pacotes antigos arbitrários nem promete a conversão automática dos IDs numéricos ou GUIDs do genanki. Considere a primeira distribuição no novo modelo como uma mudança deliberada de identidade, a menos que uma migração de dados validada separadamente estabeleça a correspondência.
+37:
+38: Consulte o [início rápido](/docs/python-quickstart/), a [referência da API](/docs/python-api/) e a [política de atualização](/docs/python-diagnostics/).
+
+FILE docs/pt-br/index.md
+1: O Anki Forge transforma notas, templates e arquivos de mídia em pacotes `.apkg` do Anki. Use a biblioteca quando seu material de estudo estiver em código ou dados estruturados e você precisar gerar e distribuir novas versões dos baralhos.
+2:
+3: <!-- section: start-with-your-language -->
+4: ## Comece pela sua linguagem
+5:
+6: Instale um pacote publicado e exporte seu primeiro baralho; [escolha por onde começar](/docs/languages/).
+7:
+8: | Linguagem | Primeiro resultado | Próximo passo |
+9: | --- | --- | --- |
+10: | Rust | [Execute o exemplo do primeiro baralho](/docs/quickstart/) | [Integre a biblioteca à sua aplicação](/docs/installation/) |
+11: | Node / TypeScript | [Instale o pacote e crie seu primeiro baralho](/docs/node-quickstart/) | [API e comportamento assíncrono](/docs/node-api/) |
+12: | Python | [Instale o pacote e exporte um baralho](/docs/python-quickstart/) | [API e controle dos arquivos de saída](/docs/python-api/) |
+13:
+14: Prefere ver o resultado primeiro? [Explore os exemplos de cartões](/examples/) e baixe os pacotes gerados.
+15:
+16: <!-- section: understand-the-pieces -->
+17: ## Entenda os componentes
+18:
+19: Uma nota armazena campos; um tipo de nota e seus templates de cartão transformam esses campos em cartões. Os baralhos agrupam os cartões resultantes no Anki. Os [conceitos fundamentais](/docs/concepts/) explicam essas relações, como `Project` mantém a propriedade dos seus valores e como preservar a identidade das notas.
+20:
+21: <!-- section: build-your-next-feature -->
+22: ## Adicione o próximo recurso
+23:
+24: - [CSV para Anki](/docs/csv-to-anki/): transforme uma planilha de vocabulário em um APKG com Python.
+25: - [JSON para Anki](/docs/json-to-anki/): gere cartões com mídia e revise uma atualização em qualquer uma das três linguagens.
+26: - [Criação de cartões com IA](/docs/ai-anki-cards/): faça rascunhos a partir das suas anotações, confira as respostas e exporte um APKG.
+27: - [Basic e Cloze](/docs/cards/): crie cartões de pergunta e resposta ou de preenchimento de lacunas.
+28: - [Imagens e áudio](/docs/media/): registre arquivos reais e inclua-os nos cartões.
+29: - [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de templates](/docs/templates/): defina campos, layouts e CSS.
+30: - [Oclusão de imagem](/docs/image-occlusion/): crie perguntas a partir de regiões de uma imagem.
+31: - [Atualização e distribuição](/docs/updates/): preserve as evidências de identidade e revisão entre versões.
+32:
+33: Os guias de tipos de cartão usam exemplos executáveis em Rust; o tutorial de CSV usa Python e o de JSON abrange as três linguagens. As páginas das APIs de Node e Python explicam as interfaces correspondentes e suas diferenças.
+34:
+35: <!-- section: find-answers-and-contribute -->
+36: ## Encontre respostas e contribua
+37:
+38: Consulte a [solução de problemas](/docs/troubleshooting/) quando uma operação falhar e os [ambientes verificados](/docs/compatibility/) para conhecer os requisitos de execução e as condições de importação nos clientes.
+39:
+40: O Anki Forge usa a licença [MIT](https://github.com/morehardy/anki-forge/blob/main/LICENSE). Relate problemas reproduzíveis no [GitHub](https://github.com/morehardy/anki-forge/issues) ou leia o [guia de contribuição](https://github.com/morehardy/anki-forge/blob/main/docs/development.md).
+
+FILE docs/pt-br/node-quickstart.md
+1: # Gere cartões do Anki com Node.js
+2:
+3: Use Node.js 22.13 ou posterior. Em um novo diretório de aplicação:
+4:
+10:
+11: O comando instala o [pacote publicado no npm](https://www.npmjs.com/package/ankiforge) e a dependência nativa opcional correspondente. Consulte os [ambientes verificados](/docs/compatibility/) para saber quais plataformas foram testadas.
+12:
+13: <!-- section: export-a-deck -->
+14: ## Exporte um baralho
+15:
+16: Salve o programa como `main.mjs`:
+17:
+18: <!-- source: bindings/node/examples/quickstart.mjs -->
+28: <!-- /source -->
+29:
+33:
+34: Abra o arquivo persistente `spanish.apkg` no Anki. Ele contém **hola → hello** no baralho **Spanish**. Mantenha o namespace `spanish` e a chave `es:hola` estáveis nas próximas edições. Fechar o artefato persistente mantém o arquivo no disco. A exportação não exige que o Anki esteja instalado.
+35:
+36: <!-- section: typescript-and-next-tasks -->
+37: ## TypeScript e próximas tarefas
+38:
+39: O [tutorial de JSON para Anki](/docs/json-to-anki/#node) inclui o fluxo completo de compilação e execução em TypeScript.
+40:
+41: Use `.mjs` para ESM ou `require('ankiforge')` para CommonJS. O pacote inclui declarações de tipos TypeScript; consulte a [configuração do TypeScript](/docs/node-api/#typescript).
+42:
+43: - [Imagens e áudio](/docs/media/) e [API de mídia do Node](/docs/node-api/#media-and-image-occlusion)
+44: - [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de templates](/docs/templates/)
+45: - [Oclusão de imagem](/docs/image-occlusion/)
+46: - [Comparação e atualização](/docs/updates/)
+47: - [API de Node](/docs/node-api/) e [solução de problemas](/docs/troubleshooting/)
+48:
+49: A compilação e o empacotamento local estão descritos em [compilação a partir do código-fonte](/docs/development/).
+
+FILE docs/pt-br/python-migration.md
+1: # Transição para a nova API de Python
+2:
+3: Use `python -m pip install ankiforge` e `from ankiforge import ...`. A antiga distribuição `anki-forge` e o nome de importação `anki_forge` não são aliases de compatibilidade. Ao usar uma cópia do código-fonte, recompile a extensão nativa com Maturin depois de alterar os nomes. Consulte o [guia de instalação](/docs/python-quickstart/).
+4:
+5: Não há uma camada de compatibilidade com a API anterior. Substitua as antigas APIs de Deck, registro e execução pelo modelo público que mantém a propriedade dos seus valores:
+6:
+7: | Fluxo anterior | Fluxo atual |
+8: | --- | --- |
+9: | Deck ou Project com ID estável opcional | `Project(namespace, default_deck=...)` |
+10: | `add_note(note)` e identidade derivada do conteúdo | `add(stable_key, note)` |
+11: | NoteType mutável e add_notetype | `NoteType.builder(key)...build()`, seguido de `model.note()` |
+12: | Referências aos modelos por strings | As notas mantêm a propriedade do modelo validado |
+13: | Registro de mídia do projeto | Snapshots de `Media.file` / `Media.bytes` que não dependem dos arquivos de origem |
+14: | Mídia já renderizada e métodos de atribuição específicos para cada campo | `Content.sequence`, `media.image()`, `media.sound()`, `Note.field` |
+15: | HTML implícito | Strings são Text; use `Content.html` |
+16: | Máscaras sem identidade estável | `Mask.rect(key, x, y, width, height)` |
+17: | Artefato opcional e ensure_success | `BuildOutput` com artefato garantido; falhas lançam erros estruturados |
+18: | Resultado deduzido dos diagnósticos | As representações de Output/Error fornecem o resultado real; Report contém apenas observações |
+19: | Opções de diff, lockfile e segurança de atualização | `compare(CompareOptions.against(...))`, `BuildOptions.update_from(...)` |
+20: | Pacote executado em um subprocesso | Binding PyO3 no mesmo processo para a API padrão de Rust |
+21:
+22: Somente APKGs originais distribuídos completos, com as evidências de identidade atuais, servem como base de atualização. Pacotes de templates antigos e evidências de APKGs anteriores não são recuperados automaticamente. Consulte o [README do SDK](https://github.com/morehardy/anki-forge/blob/main/bindings/python/README.md) e seus exemplos executáveis para seguir o novo fluxo.
+
+FILE docs/pt-br/python-quickstart.md
+1: # Gere cartões do Anki com Python
+2:
+3: Crie e ative um ambiente virtual e instale o [pacote publicado no PyPI](https://pypi.org/project/ankiforge/):
+4:
+10:
+11: No Windows, ative o ambiente com `.venv\Scripts\Activate.ps1`. Use CPython convencional 3.11 ou posterior e um wheel correspondente à plataforma; as verificações registradas de lançamento abrangem CPython 3.11–3.14. Consulte os [ambientes verificados](/docs/compatibility/).
+12:
+13: <!-- section: export-a-deck -->
+14: ## Exporte um baralho
+15:
+16: Salve o programa como `main.py`:
+17:
+18: <!-- source: bindings/python/examples/quickstart.py -->
+27: <!-- /source -->
+28:
+32:
+33: Abra o arquivo persistente `spanish.apkg` no Anki. Ele contém **hola → hello** no baralho **Spanish**. Mantenha o namespace `spanish` e a chave da nota `es:hola` estáveis nas próximas edições. A exportação não exige que o Anki esteja instalado.
+34:
+35: <!-- section: continue -->
+36: ## Continue
+37:
+38: Para uma planilha de vocabulário, siga [CSV para Anki](/docs/csv-to-anki/). Para criar rascunhos de cartões a partir de anotações, comece pela [criação de cartões com IA](/docs/ai-anki-cards/).
+39:
+40: Para uma tarefa completa com mídia e atualização, siga [JSON para Anki](/docs/json-to-anki/#python).
+41:
+42: - [Imagens e áudio](/docs/media/) e [API de mídia do Python](/docs/python-api/#media-and-occlusion)
+43: - [Tipos de nota personalizados](/docs/custom-notetypes/) e [pacotes de templates](/docs/templates/)
+44: - [Oclusão de imagem](/docs/image-occlusion/)
+45: - [Comparação e atualização](/docs/updates/)
+46: - [API de Python](/docs/python-api/) e [diagnósticos](/docs/python-diagnostics/)
+47: - [Migração do genanki](/docs/genanki-migration/)
+48:
+49: Para compilar a extensão nativa, consulte [compilação a partir do código-fonte](/docs/development/).
+
+FILE docs/pt-br/troubleshooting.md
+1: # Solução de problemas
+2:
+3: Use os valores estruturados `kind` e `code` da operação que falhou, junto com a cadeia de causas e as observações. As mensagens de texto destinam-se a pessoas e podem mudar. Uma operação que falha e uma comparação concluída cuja política bloqueia a publicação são resultados diferentes.
+4:
+5: <!-- section: installation -->
+6: ## Instalação
+7:
+8: | Sintoma | O que verificar |
+9: | --- | --- |
+10: | Rust rejeita a toolchain | Execute `rustc --version`; use Rust 1.92+ e consulte a versão instalada com `cargo tree -i ankiforge` |
+11: | Node não consegue carregar o pacote nativo | Execute `node -p "process.platform + '/' + process.arch"` e `npm ls ankiforge`; reinstale com `npm install --include=optional ankiforge@0.3.1` |
+12: | Node informa divergência entre o código nativo e o wrapper | Use versões correspondentes dos pacotes; reinstale a mesma versão do registro ou recompile ambos a partir da mesma cópia do repositório |
+13: | Python não consegue carregar a extensão | Execute `python -m pip show ankiforge` e `python -m pip debug --verbose`; confira o interpretador e as tags de sistema operacional e CPU do wheel |
+14: | Python seleciona uma distribuição de código-fonte | Escolha um wheel e um interpretador compatíveis ou siga a [compilação a partir do código-fonte](/docs/development/) com um compilador |
+15:
+16: Consulte os [ambientes verificados](/docs/compatibility/), a [instalação de Node](/docs/node-quickstart/) e a [instalação de Python](/docs/python-quickstart/).
+17:
+18: <!-- section: models-and-notes -->
+19: ## Modelos e notas
+20:
+21: | Sintoma | Correção |
+22: | --- | --- |
+23: | Chave inválida ou vazia | Forneça uma chave estável explícita; os nomes de exibição são separados |
+24: | `NOTE.KEY_DUPLICATE` | Atribua uma chave única a cada registro lógico de origem |
+25: | `NOTE.FIELD_UNKNOWN` | Use a chave do campo, não seu nome de exibição |
+26: | `NOTE.FIELD_REQUIRED` | Preencha os campos declarados com `required()` antes de adicionar a nota |
+27: | `NOTE.MODEL_CONFLICT` | Reutilize o mesmo modelo finalizado para uma mesma chave de modelo |
+28: | Erro de referência no modelo de cartão | Use chaves declaradas nas expressões; examine o intervalo de bytes indicado no código-fonte original |
+29: | HTML aparece como texto literal | Use `Content::html` somente para marcação intencional |
+30: | Cartões Cloze ausentes | Use a sintaxe `{{c1::answer}}` com os números permitidos, de 1 a 500 |
+31:
+32: Uma falha na adição é atômica. Corrija a nota ou o modelo e tente novamente; não é preciso desfazer um registro parcial de modelos ou mídia. Os construtores de modelos precisam terminar com `.build()` antes de criar notas personalizadas.
+33:
+34: <!-- section: media-and-templates -->
+35: ## Mídia e templates
+36:
+37: | Sintoma | Correção |
+38: | --- | --- |
+39: | Falha ao importar um arquivo | Confira a origem no momento de `Media::file`; a remoção posterior do arquivo de origem é permitida |
+40: | Tipo MIME não corresponde ao conteúdo | Informe o tipo MIME real ao construtor que recebe bytes |
+41: | Conflito de nomes de exportação | Escolha nomes únicos e portáveis; variantes de maiúsculas/minúsculas e de normalização Unicode entram em conflito |
+42: | Recurso de HTML, CSS ou script ausente | Declare-o com `asset` no modelo ou `add_asset` no projeto |
+43: | Importação de mídia excede um limite | Aumente explicitamente `MediaLimits.max_bytes` antes de importar |
+44: | Inspeção da geração excede um limite | Ajuste o contador correspondente de `InspectLimits` para a operação |
+45: | Falha ao carregar um pacote de templates | Use bundle-v2, chaves explícitas, templates baseados em chaves e caminhos internos ao pacote |
+46: | Falha em um retângulo de oclusão | Confira as dimensões de exibição decodificadas, coordenadas finitas e chaves únicas para as máscaras |
+47:
+48: Os padrões de tratamento de texto são uniformes em todos os tipos de nota. Nós de mídia coletam suas dependências; escrever um nome de arquivo manualmente não importa seus bytes. Mesmo um pacote válido exige testes de reprodução no cliente para o codec ou a fonte que você pretende usar.
+49:
+50: <!-- section: updates-and-outputs -->
+51: ## Atualizações e arquivos de saída
+52:
+53: Use como base um APKG original distribuído com evidências completas de identidade. Pacotes reexportados pelo Anki não preservam essas evidências. Uma divergência de namespace ou evidências corrompidas não podem ser aceitas por uma política de atualização.
+54:
+55: Uma comparação concluída pode retornar `allows_publication == false`. Examine os resultados originais e as evidências antes de permitir explicitamente uma categoria de risco. Não permita todos os resultados indiscriminadamente. A mesma política deve ser passada à geração da atualização se você quiser a mesma decisão. Informar uma política em uma operação que apenas cria um pacote é um erro.
+56:
+57: Se um caminho temporário desaparecer, mantenha vivo o objeto de saída ou artefato que controla esse arquivo até que todos os leitores terminem. Relatórios e representações JSON não mantêm a propriedade do arquivo. Em falhas de persistência, examine a etapa de publicação e a durabilidade informadas pelo erro: um erro pode ser retornado depois de o destino já ter sido publicado. Consulte as [garantias dos arquivos de saída](/docs/build-guarantees/).
+
+FILE docs/pt-br/updates.md
+1: # Atualize e distribua um baralho
+2:
+3: Publique correções ou novos cartões para um baralho do Anki que você já distribuiu. IDs de nota estáveis ajudam o Anki Forge e o Anki a reconhecer notas existentes em vez de tratá-las como novas; as opções de importação do Anki e as edições locais mais recentes também influenciam o que será alterado.
+4:
+5: Mantenha estáveis o namespace do projeto e as chaves de notas, tipos de nota, campos e templates de cartão. Gere cada nova versão a partir do **APKG original distribuído** anterior, que contém evidências completas de identidade em um formato versionado. Guarde o pacote junto com a revisão do seu código-fonte.
+6:
+7: <!-- section: run-two-versions-and-compare -->
+8: ## Execute duas versões e compare
+9:
+13:
+14: O comando grava `spanish-v1.apkg` e `spanish-v2.apkg`, compara a resposta alterada e verifica as contagens do pacote atualizado. O código executável é:
+15:
+16: <!-- source: anki_forge/examples/docs_workflow.rs#updates -->
+37: <!-- /source -->
+38:
+39: `compare` é concluído com sucesso mesmo quando os resultados bloqueiam a publicação. Consulte `comparison.policy().allows_publication()` separadamente do nível de risco original e das evidências. `build(...update_from(...))` executa a mesma análise e retorna `BuildError` se a política bloquear o candidato, antes da publicação.
+40:
+41: <!-- section: policy-and-inspection-limits -->
+42: ## Política e limites de inspeção
+43:
+44: Este programa completo define um limite mais rigoroso e usa a mesma configuração na comparação e na atualização:
+45:
+68:
+69: A política padrão bloqueia resultados High e Critical. Depois de revisar uma categoria específica, a aplicação pode optar explicitamente por `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. Essa permissão aceita **todos os resultados da categoria**, preservando seus níveis e evidências originais. Ela não representa a aprovação individual de notas selecionadas. Uma permissão sem resultado correspondente gera um aviso; códigos de risco desconhecidos são rejeitados. Não permita automaticamente todos os códigos retornados por uma comparação.
+70:
+71: Evidências ausentes ou corrompidas, divergência de namespace, dados inválidos do candidato e a ultrapassagem dos limites de inspeção são erros que impedem a operação, não categorias de risco que podem ser permitidas. Quando a análise não consegue terminar, a comparação retorna um erro com as observações já concluídas. Informar uma política explícita em uma criação sem `update_from` é um erro de configuração, independentemente da ordem dos métodos de configuração.
+72:
+73: <!-- section: evidence-and-identity -->
+74: ## Evidências e identidade
+75:
+76: O pacote inclui `ankiforge-identity.json` no formato `ankiforge-identity-v1`. Ele vincula IDs de modelos e configurações, GUIDs de notas, posições históricas de campos e templates de cartão, ordinais de cartões e máscaras, revisões e mídia à coleção real e aos dados do pacote. Uma reexportação pelo Anki não preserva essas evidências e não serve como base de atualização. Evidências ausentes nunca são reconstruídas silenciosamente.
+77:
+78: Alterar nomes de exibição ou conteúdo preserva as chaves de identidade. Conteúdo inalterado mantém a revisão da base; conteúdo alterado recebe uma revisão posterior. Reordenar campos ou templates de cartão preserva as correspondências históricas. Identidades desativadas permanecem reservadas para que a restauração da mesma chave possa reutilizá-las. Uma chave de nota não pode ser transferida para outro modelo, e uma chave de modelo não pode alternar entre os tipos normal e Cloze.
+79:
+80: <!-- section: client-import-behavior-and-release-review -->
+81: ## Importação nos clientes e revisão antes da publicação
+82:
+83: Um APKG é um pacote de distribuição, não um mecanismo de sincronização de exclusões. Omitir notas, campos, templates de cartão ou máscaras não exclui os dados existentes de quem estuda. Mudanças no esquema de campos e templates de cartão ou no campo de ordenação apresentam alto risco, pois seu comportamento depende das opções de mesclagem e importação do Anki. Mudanças de esquema podem copiar modelos ou atualizar os carimbos de data das notas de destino antes da comparação do conteúdo das notas.
+84:
+85: Teste a primeira importação e as atualizações em uma coleção existente nos clientes que você atende. Confira campos, GUIDs, conjuntos de cartões, edições locais e agendamento existente com as opções pretendidas de mesclagem e atualização de notas. Identidade estável, sozinha, não promete substituir edições locais mais recentes nem restaurar histórico excluído.
+86:
+87: Grave os candidatos em um caminho separado da base arquivada. Após a revisão, distribua o pacote aprovado e guarde-o como evidência para a próxima versão. Consulte as [garantias de geração](/docs/build-guarantees/) para entender a propriedade dos arquivos e os detalhes da publicação.
+88:
+89: <a id="build-once-review-then-publish-from-source"></a>
+90:
+91: <!-- section: build-once-review-then-publish -->
+92: ## Gere uma vez, revise e publique
+93:
+94: Esta API está incluída no pacote público `0.3.1`.
+95:
+96: Gere uma vez, examine o relatório e publique o mesmo arquivo candidato. Revisar e depois executar uma segunda geração comum cria outro candidato; a publicação preparada mantém o APKG efetivo vinculado ao relatório revisado.
+97:
+98: <!-- source: anki_forge/examples/docs_publication.rs -->
+124: <!-- /source -->
+125:
+126: Na cópia do código-fonte fixada em uma revisão, salve o programa completo acima como `anki_forge/examples/docs_publication.rs`. Este guia adiciona o exemplo; ele não está incluído em `1199196`. Em seguida, execute:
+127:
+131:
+132: O exemplo grava `spanish-original.apkg` e, quando a política permite a publicação, `spanish-reviewed.apkg` na raiz do repositório. A preparação não publica o arquivo de destino. Revise os resultados e teste a importação no cliente antes de aprovar a distribuição; o exemplo publica automaticamente apenas essa alteração simples de conteúdo quando sua política permite. O benchmark não mede esse fluxo.
+133:
+134: Consulte o [ciclo de geração](/docs/build-guarantees/#prepared-publication-from-source), a [API de Rust](/docs/rust-api/#review-once-publish-once), a [API de Node](/docs/node-api/#prepare-review-and-publish) e a [API de Python](/docs/python-api/#prepare-review-and-publish).
+
+FILE website/src/content/blog/pt-br/stable-ids-and-deck-updates.mdx
+1: ---
+2: locale: pt-BR
+3: translationKey: stable-ids-and-deck-updates
+4: title: Atualize o conteúdo da nota sem mudar seu ID
+5: description: Como IDs estáveis e uma base de geração trabalham juntos na atualização de um baralho Anki gerado.
+6: date: 2026-09-22
+7: category: Engineering
+8: ---
+9:
+10: import CodeBlock from '../../../components/CodeBlock.astro';
+11: import { updateExample } from '../../../lib/examples';
+12: import { sitePath } from '../../../lib/site';
+13:
+14: Um baralho gerado raramente está pronto após a primeira exportação. Definições melhoram, exemplos ficam mais claros e erros são corrigidos. A próxima geração precisa saber quais notas continuam sendo as mesmas, agora com conteúdo melhor.
+15:
+16: Considere esta pequena edição:
+17:
+18: | Campo | Primeira versão | Próxima versão |
+19: | --- | --- | --- |
+20: | Frente | hola | hola |
+21: | Verso | hello | hello; hi |
+22: | ID estável | es:hola | es:hola |
+23:
+24: O significado foi ampliado. A nota lógica continua sendo a mesma.
+25:
+26: <span id="separate-identity-from-content" data-section-alias="separate-identity-from-content"></span>
+27:
+28: {/* section: separate-identity-from-content */}
+29: ## Separe a identidade do conteúdo
+30:
+31: Um ID estável explícito dá à nota uma chave durável. Mantenha esse ID ao editar a nota e escolha um novo ID ao criar outra nota lógica.
+32:
+33: A identidade também tem um contexto de projeto. Mantenha o namespace do projeto consistente entre as versões do mesmo baralho. Um ID de nota, sozinho, é apenas uma parte de um fluxo de atualização repetível.
+34:
+35: <span id="give-the-next-build-a-baseline" data-section-alias="give-the-next-build-a-baseline"></span>
+36:
+37: {/* section: give-the-next-build-a-baseline */}
+38: ## Forneça uma base para a próxima geração
+39:
+40: Um pacote anterior informa ao Anki Forge o que já foi exportado. Use-o ao gerar o projeto revisado:
+41:
+42: <CodeBlock code={updateExample.source} />
+43:
+44: Neste trecho, `project` contém a nota revisada, `previous` aponta para a versão 1 e `next` é um caminho separado para a versão 2. O <a href={sitePath('/generated/website_showcase.rs')}>exemplo completo</a> inclui as duas definições do projeto e verifica que a identidade de uma nota foi preservada.
+45:
+46: Mantenha o pacote de entrada e o de saída em caminhos diferentes. Sobrescrever a base remove as evidências necessárias para entender e verificar a versão.
+47:
+48: <span id="keep-the-original-distributed-package" data-section-alias="keep-the-original-distributed-package"></span>
+49:
+50: {/* section: keep-the-original-distributed-package */}
+51: ## Guarde o pacote original distribuído
+52:
+53: Todo pacote gerado contém evidências completas de identidade e revisão. Antes de reutilizar as identidades, a próxima geração valida essas evidências contra o banco de dados e a mídia reais. Preserve o pacote original que você distribuiu; uma reexportação do Anki não é uma base aceita.
+54:
+55: O <a href={sitePath('/pt-br/docs/updates/')}>guia de atualização</a> descreve as atualizações estritas, as políticas de risco e as limitações de importação do cliente.
+56:
+57: <span id="inspect-the-build-and-the-import" data-section-alias="inspect-the-build-and-the-import"></span>
+58:
+59: {/* section: inspect-the-build-and-the-import */}
+60: ## Examine a geração e a importação
+61:
+62: Verifique o relatório de geração e seus diagnósticos de segurança de atualização antes de distribuir um pacote. Se a geração não conseguir reconciliar a identidade de uma nota, investigue a origem e a base, em vez de tratar um arquivo de saída como prova de que a atualização está correta.
+63:
+64: O Anki aplica então seu próprio comportamento de importação. As configurações de importação, o conteúdo das notas existentes, as edições locais e a versão do Anki podem influenciar o resultado. A identidade estável ajuda a encontrar a nota correspondente; não substitui essas escolhas nem promete que toda importação preserve todos os aspectos do estado local.
+65:
+66: O <a href={sitePath('/pt-br/examples/#updates')}>exemplo com duas versões</a> fornece os dois pacotes para você experimentar uma atualização pequena e fácil de inspecionar antes de definir seu próprio processo de publicação.
+
+FILE website/src/i18n/pt-BR.json
+{
+  "home.title": "Gerador de cartões do Anki para desenvolvedores",
+  "home.description": "Gere cartões e baralhos APKG do Anki com APIs de código aberto em Python, Node.js e Rust. Comece com CSV, JSON ou um fluxo com apoio de IA.",
+  "home.hero1": "Gere cartões do Anki",
+  "home.hero2": "a partir dos seus dados.",
+  "home.intro": "O Anki Forge é uma biblioteca de código aberto para gerar APKGs do Anki, com núcleo em Rust e interfaces Rust, Python e Node.js. Inclua mídia, use templates personalizados e revise atualizações antes de distribuí-las.",
+  "home.first": "Crie seu primeiro baralho",
+  "home.json": "Gere a partir de JSON",
+  "home.choose": "Escolha sua linguagem de programação.",
+  "home.install": "Exporte spanish.apkg com o pacote público {version}. A exportação normal não exige instalar o Anki.",
+  "home.buildWith": "Crie com {language}",
+  "home.try": "Veja o código. Experimente o cartão.",
+  "home.tryDescription": "Alterne entre exemplos executáveis em Rust, vire os cartões e baixe os baralhos gerados.",
+  "home.further": "Vá além",
+  "home.templates": "Templates personalizados",
+  "home.occlusion": "Modos de oclusão",
+  "home.media": "Mídia e vídeo",
+  "home.evolve1": "Aprimore suas notas.",
+  "home.evolve2": "Mantenha os mesmos IDs.",
+  "home.evolveDescription": "Corrija uma definição ou acrescente um exemplo. Mantenha os IDs das notas e use o APKG original da versão anterior para que o Anki Forge reconheça as notas existentes na próxima exportação.",
+  "home.updates": "Entenda as atualizações de baralhos",
+  "home.features": "Mais possibilidades de criação",
+  "home.validateTitle": "Encontre problemas antes de exportar.",
+  "home.validateDescription": "Consulte diagnósticos de campos obrigatórios não preenchidos e problemas de mídia ou templates. Inclua a validação no seu processo de geração.",
+  "home.validation": "Conheça a validação",
+  "home.templateTitle": "Seus cartões. Seus templates.",
+  "home.templateDescription": "Comece com Basic e Cloze ou defina seus próprios tipos de nota. Reúna HTML, CSS e mídia em pacotes de templates reutilizáveis.",
+  "home.templateLink": "Explore os templates",
+  "home.nextTitle": "Do primeiro baralho à próxima atualização",
+  "home.nextDescription": "Comece com uma planilha CSV, dados JSON ou rascunhos criados com um assistente de IA. Siga um tutorial completo de exportação e depois adicione mídia e revise atualizações.",
+  "home.compare": "Compare com genanki",
+  "nav.home": "Página inicial do Anki Forge",
+  "nav.main": "Navegação principal",
+  "nav.mobile": "Navegação em dispositivos móveis",
+  "nav.menu": "Menu",
+  "nav.repository": "Repositório no GitHub",
+  "nav.theme": "Tema de cores",
+  "nav.auto": "Sistema",
+  "nav.light": "Claro",
+  "nav.dark": "Escuro",
+  "nav.skip": "Pular para o conteúdo",
+  "footer.description": "Anki Forge. Geração de APKGs do Anki com código aberto e núcleo em Rust.",
+  "footer.label": "Rodapé",
+  "footer.articles": "Artigos",
+  "footer.license": "Licença MIT",
+  "workbench.label": "Exemplos de código e cartões",
+  "workbench.tabs": "Tipo de cartão",
+  "workbench.hint": "Código Rust → prévia no navegador",
+  "workbench.source": "Código completo ↗",
+  "workbench.output": "Saída",
+  "workbench.note": "Prévias do conteúdo exportado no navegador; importe o APKG para conferir no Anki.",
+  "workbench.noScript": "Este é o exemplo Basic. Veja todos os exemplos de cartões e baixe os baralhos.",
+  "card.basic": "Basic",
+  "card.cloze": "Cloze",
+  "card.media": "Mídia",
+  "card.occlusion": "Oclusão de imagem",
+  "card.direction": "Espanhol → inglês",
+  "card.meaning": "O que isso significa?",
+  "card.sentence": "Complete a frase",
+  "card.ear": "Treinamento auditivo",
+  "card.waveform": "Forma de onda ilustrativa de um tom sintetizado",
+  "card.cell": "Anatomia celular",
+  "card.hiddenCell": "Corte de uma célula animal com uma estrutura oculta",
+  "card.greeting": "Uma saudação em espanhol.",
+  "card.sine": "Um tom senoidal sintetizado",
+  "card.concert": "Um tom de lá de referência com duração de um segundo.",
+  "card.revealedCell": "Corte de uma célula animal mostrando o núcleo em cor coral",
+  "card.play": "Reproduzir o tom de exemplo",
+  "card.audioFallback": "Seu navegador não oferece suporte a áudio.",
+  "card.downloadTone": "Baixe o tom.",
+  "card.showAnswer": "Mostrar resposta",
+  "card.showQuestion": "Mostrar pergunta",
+  "card.questionShown": "Pergunta exibida.",
+  "card.answer": "Resposta: {answer}",
+  "update.id": "ID estável da nota",
+  "update.front": "Frente",
+  "update.back": "Verso",
+  "update.try": "Experimente alterar o conteúdo.",
+  "update.change": "Atualizar a resposta",
+  "update.reset": "Restaurar o exemplo",
+  "update.changed": "Conteúdo alterado. Mesmo ID de nota.",
+  "update.comparison": "Comparação real",
+  "update.none": "Nenhuma alteração detectada",
+  "update.policy": "Política de publicação",
+  "update.allowed": "permite esta alteração",
+  "update.blocked": "bloqueia esta alteração",
+  "update.v1": "Baixar v1",
+  "update.v2": "Baixar v2",
+  "update.report": "Relatório de comparação",
+  "update.warning": "Guarde o APKG original distribuído. As opções de importação e as edições locais mais recentes afetam as atualizações.",
+  "update.guide": "Guia de atualização",
+  "copy.button": "Copiar",
+  "copy.install": "Copiar comando de instalação",
+  "copy.success": "Comando copiado.",
+  "copy.fallback": "Comando selecionado. Copie-o com o teclado.",
+  "copy.copied": "Copiado",
+  "copy.code": "Copiar código",
+  "copy.codeSuccess": "Código copiado.",
+  "copy.codeFallback": "Código selecionado. Copie-o com o teclado.",
+  "copy.codeLabel": "Código em {language}",
+  "blog.title": "Blog",
+  "blog.description": "Guias práticos e decisões de engenharia do Anki Forge.",
+  "blog.heading": "Como criar e manter suas notas.",
+  "blog.rss": "Acompanhe por RSS ↗",
+  "blog.all": "← Todos os artigos",
+  "blog.continue": "Continue com o guia →",
+  "blog.read": "Ler artigo",
+  "blog.readLabel": "Ler artigo: {title}",
+  "blog.Tutorial": "Tutorial",
+  "blog.Engineering": "Engenharia",
+  "blog.feedTitle": "Blog do Anki Forge",
+  "error.title": "Página não encontrada",
+  "error.description": "Esta página não foi encontrada. Volte ao Anki Forge ou consulte o guia de criação de baralhos.",
+  "error.heading": "Esta página não está disponível.",
+  "error.explanation": "O endereço pode ter mudado. Volte à página inicial ou encontre o que precisa no guia.",
+  "error.home": "Voltar ao início",
+  "error.guide": "Consultar o guia →",
+  "examples.title": "Exemplos de cartões",
+  "examples.description": "Explore cartões Basic, Cloze, com mídia e de oclusão de imagem criados com Anki Forge. Leia o código Rust e baixe os baralhos gerados.",
+  "examples.heading1": "Um pouco de código.",
+  "examples.heading2": "Algo para lembrar.",
+  "examples.intro": "Explore o código, vire os cartões e abra os baralhos gerados no Anki. Estas prévias usam os mesmos campos dos arquivos para download.",
+  "examples.combined": "Baixar o baralho com quatro cartões",
+  "examples.fullSource": "Ler o código completo",
+  "examples.excerpt": "Trecho em Rust",
+  "examples.download": "Baixar {file}",
+  "examples.counts": "{notes} · {cards} · {media}",
+  "examples.updateTitle": "Uma nota, duas versões.",
+  "examples.updateDescription": "A segunda versão altera a resposta de “hello” para “hello; hi”. O programa compara o resultado com o primeiro pacote e verifica se o ID da nota foi mantido.",
+  "examples.workflow": "Leia o fluxo de atualização",
+  "examples.limitations": "As opções de importação do Anki e as edições locais afetam a aplicação das atualizações. As prévias mostram o conteúdo e a identidade; o estilo dos cartões e o comportamento de revisão dependem do Anki.",
+  "examples.basic": "Uma saudação em espanhol com pergunta, resposta e ID estável explícito. Comece aqui para criar cartões simples de frente e verso.",
+  "examples.cloze": "Oculte uma palavra no contexto com a sintaxe Cloze do Anki. Esta nota tem uma lacuna e, por isso, gera um cartão.",
+  "examples.media": "Uma imagem e um tom que pode ser reproduzido, incluídos no pacote com a nota. O trecho usa um tipo de nota para treinamento auditivo definido no código completo.",
+  "examples.occlusion": "Um retângulo com chave estável oculta o núcleo na ilustração de uma célula em corte. O baralho para download usa a mesma imagem e máscara desta prévia.",
+  "ai.title": "Use o Anki Forge com IA.",
+  "ai.description": "Escolha uma linguagem de programação, descreva sua tarefa e cole as instruções no seu assistente de programação com IA.",
+  "ai.request": "Que tipo de baralho você quer criar?",
+  "ai.placeholder": "Crie um baralho de vocabulário em espanhol com áudio.",
+  "ai.privacy": "Opcional. Sua solicitação permanece apenas nesta página.",
+  "ai.skillQuestion": "Seu assistente de programação oferece suporte a Skills?",
+  "ai.skillLink": "Abra a Skill do Anki Forge",
+  "ai.noScript": "Copie um dos modelos de instruções abaixo e substitua o espaço reservado à tarefa. Os comandos de instalação e a Skill também estão disponíveis sem JavaScript.",
+  "ai.language": "Linguagem de programação",
+  "ai.brief": "Instruções para a IA",
+  "ai.copy": "Copiar instruções para a IA",
+  "ai.copied": "Instruções copiadas. Cole-as no seu assistente de programação com IA.",
+  "ai.fallback": "Instruções selecionadas. Copie-as com o teclado e cole-as no seu assistente de programação com IA.",
+  "ai.install": "Copiar comando de instalação",
+  "search.loading": "Carregando a busca…",
+  "search.error": "Não foi possível carregar a busca. Verifique sua conexão e tente novamente.",
+  "copy.noScript": "Sem JavaScript, selecione o código ou os comandos e copie-os com o teclado.",
+  "hero.description": "Cartões Basic, Cloze, com mídia e de oclusão de imagem se viram e se juntam em um baralho APKG.",
+  "hero.front": "Frente",
+  "hero.back": "Verso",
+  "hero.english": "Inglês",
+  "hero.spanish": "Espanhol",
+  "hero.gap": "Preencha a lacuna.",
+  "hero.media": "Imagem + áudio",
+  "hero.deck": "Baralho do Anki",
+  "hero.cards": "cartões",
+  "hero.files": "mídia",
+  "hero.caption": "Quatro tipos de cartão. ",
+  "hero.oneDeck": "Um baralho do Anki.",
+  "performance.title": "Tempo de exportação",
+  "performance.workload": "1.000 notas Basic por carga de trabalho",
+  "performance.export": "Exporte {notes} notas somente com texto",
+  "performance.range": "Menor tempo de exportação nas cinco cargas de trabalho medidas",
+  "performance.medians": "Medianas de 10 execuções",
+  "performance.media": "Texto, imagens e áudio.",
+  "performance.faster": "Mais rápido nos cinco testes.",
+  "performance.description": "Cada teste usa {notes} notas Basic. Os cinco testes abrangem notas só com texto, arquivos de mídia diferentes e mídia compartilhada entre notas. Nesses testes, a API Rust do Anki Forge levou de {minimum}% a {maximum}% menos tempo para exportar do que o genanki.",
+  "performance.chart": "Medianas do tempo de exportação em milissegundos",
+  "performance.less": "{value}% menos tempo",
+  "performance.more": "{value}% mais tempo",
+  "performance.basic-mixed-text-v1": "Somente texto",
+  "performance.basic-image-unique-v2": "Uma imagem diferente por nota",
+  "performance.basic-audio-unique-v2": "Um áudio diferente por nota",
+  "performance.basic-mixed-unique-v2": "Imagens e áudio sem compartilhamento",
+  "performance.basic-mixed-shared-v2": "Imagens e áudio compartilhados",
+  "site.title": "Anki Forge | Crie baralhos do Anki com código",
+  "site.socialAlt": "Anki Forge. Baralhos do Anki criados com código. Um cartão de espanhol: hola, hello.",
+  "social.line1": "Baralhos do Anki",
+  "social.line2": "criados com código.",
+  "social.description": "Escreva notas. Gere baralhos. Preserve a identidade.",
+  "social.languages": "Espanhol → inglês",
+  "social.footer": "Código aberto · Rust · Anki",
+  "performance.method": "Método e medições originais",
+  "performance.limitations": "Os resultados medem a geração de baralhos, não a velocidade de importação ou revisão no Anki; outros equipamentos e cargas de trabalho podem apresentar resultados diferentes.",
+  "footer.rss": "RSS",
+  "machine.viewMarkdown": "Ver Markdown",
+  "machine.aiIndex": "Índice da documentação para IA",
+  "machine.intro": "O Anki Forge gera baralhos APKG do Anki a partir de código em Rust, Node / TypeScript ou Python.",
+  "machine.version": "Versão atual dos pacotes públicos: {version}.",
+  "machine.constraints": "A exportação normal não exige o Anki. As APIs dos pacotes publicados diferem das compilações do código-fonte. Guarde o APKG original distribuído da versão anterior para atualizações; as opções de importação do Anki e as edições locais mais recentes podem afetar o resultado.",
+  "machine.start": "Comece aqui",
+  "machine.quickstarts": "Guias de início rápido",
+  "machine.api": "Referências das APIs",
+  "machine.tasks": "Guias por tarefa",
+  "machine.constraintsGroup": "Limitações",
+  "machine.optional": "Optional",
+  "machine.sourceBuild": "Ambiente de desenvolvimento e código-fonte.",
+  "machine.history": "Artigo histórico, publicado em {date}.",
+  "machine.repository": "Repositório do código-fonte e recursos de desenvolvimento.",
+  "machine.otherLanguage": "Índice da documentação para IA em {language}.",
+  "hero.counts": "{cards} / {media}",
+  "count.notes": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} nota",
+      "many": "{count} notas",
+      "other": "{count} notas"
+    }
+  },
+  "count.cards": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} cartão",
+      "many": "{count} cartões",
+      "other": "{count} cartões"
+    }
+  },
+  "count.media": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} arquivo de mídia",
+      "many": "{count} arquivos de mídia",
+      "other": "{count} arquivos de mídia"
+    }
+  },
+  "home.csv": "Converta CSV para Anki",
+  "home.aiCards": "Crie cartões com IA"
+}

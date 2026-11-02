@@ -1,0 +1,1120 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/spec_review/pr66-final-linguistic-2026-11-02",
+  "entries": [
+    {
+      "pageId": "home",
+      "locale": "en",
+      "id": "L008-en",
+      "status": "resolved",
+      "file": "website/src/i18n/en.json",
+      "line": 141,
+      "currentText": "Does your coding assistant support Skills?",
+      "judgment": "Direct question order fixes the old declarative-question syntax.",
+      "priorIssue": {
+        "id": "L008-en",
+        "pageId": "home",
+        "locale": "en",
+        "sectionId": "ai-quickstart",
+        "file": "website/src/i18n/en.json",
+        "line": 141,
+        "span": "Your coding assistant supports Skills?",
+        "category": "fluency/syntax",
+        "severity": "minor",
+        "explanation": "Declarative-question order sounds conversationally surprised; a neutral product prompt uses a direct question.",
+        "proposedFix": "Does your coding assistant support Skills?",
+        "evidence": [
+          "website/src/i18n/en.json:141"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spanish_spec/independent-linguistic-es-integration-2026-10-31"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "json-to-anki",
+      "locale": "pt-BR",
+      "id": "json-to-anki/pt-BR/0",
+      "status": "retained",
+      "file": "docs/pt-br/json-to-anki.md",
+      "line": 5,
+      "currentText": "Mantido pelos mantenedores do Anki Forge · conteúdo revisado em 2026-10-25.",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "severity": "minor",
+        "criterion": "register",
+        "file": "docs/pt-br/json-to-anki.md",
+        "line": 5,
+        "span": "Mantido pelos mantenedores do Anki Forge",
+        "issue": "The maintenance byline repeats the same root (mantido/mantenedores), which sounds redundant but does not affect the task.",
+        "suggestion": "Mantenedores do Anki Forge · conteúdo revisado em 2026-10-25.",
+        "blocking": false,
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "csv-to-anki",
+      "locale": "zh-CN",
+      "id": "L015-zh-csv-bom",
+      "status": "retained",
+      "file": "docs/zh-cn/csv-to-anki.md",
+      "line": 28,
+      "currentText": "脚本支持部分表格软件导出的 UTF-8 BOM，拒绝重复 ID、缺失值、多余列和空数据。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L015-zh-csv-bom",
+        "pageId": "csv-to-anki",
+        "locale": "zh-CN",
+        "sectionId": "prepare-csv",
+        "file": "docs/zh-cn/csv-to-anki.md",
+        "line": 28,
+        "span": "脚本支持部分表格软件导出的 UTF-8 BOM",
+        "category": "fluency/technical-object",
+        "severity": "minor",
+        "explanation": "脚本读取的是带BOM的CSV，直接说支持BOM略省略对象；不会妨碍按示例操作。",
+        "proposedFix": "脚本支持带 BOM 的 UTF-8 CSV；部分表格软件会以这种格式导出。",
+        "evidence": [
+          "docs/zh-cn/csv-to-anki.md:28"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/final-34-topic-delta",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "rust-guide",
+      "locale": "zh-CN",
+      "id": "L007-rust-guide",
+      "status": "resolved",
+      "file": "docs/zh-cn/rust-guide.md",
+      "line": 58,
+      "currentText": "`Media::image()` 和 `sound()` 本身不会返回错误。",
+      "judgment": "本身不会返回错误 replaces the unnatural 保持不会失败 without changing subsequent validation conditions.",
+      "priorIssue": {
+        "id": "L007-rust-guide",
+        "pageId": "rust-guide",
+        "locale": "zh-CN",
+        "sectionId": "addition-errors-and-media-categories",
+        "file": "docs/zh-cn/rust-guide.md",
+        "line": 58,
+        "span": "`Media::image()` 和 `sound()` 保持不会失败。",
+        "category": "fluency/syntax",
+        "severity": "minor",
+        "explanation": "“保持不会失败”不自然，方法名本身已经明确对象。",
+        "proposedFix": "`Media::image()` 和 `sound()` 本身不会失败。",
+        "evidence": [
+          "docs/zh-cn/rust-guide.md:58"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spanish_spec/independent-linguistic-es-integration-2026-10-31"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "templates",
+      "locale": "zh-CN",
+      "id": "L011-zh-templates",
+      "status": "retained",
+      "file": "website/search-terms.json",
+      "line": 549,
+      "currentText": "        \"按字段键引用模板\",",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L011-zh-templates",
+        "pageId": "templates",
+        "locale": "zh-CN",
+        "sectionId": "search-terms",
+        "file": "website/search-terms.json",
+        "line": 549,
+        "span": "按字段键引用模板",
+        "category": "terminology/reference-direction",
+        "severity": "minor",
+        "explanation": "“模板引用字段键”的方向应更清楚；当前短语可能被读作通过字段键引用整个模板。",
+        "proposedFix": "模板中的字段键引用",
+        "evidence": [
+          "website/search-terms.json:549"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "templates",
+      "locale": "zh-CN",
+      "id": "L019-zh-templates-intro",
+      "status": "retained",
+      "file": "docs/zh-cn/templates.md",
+      "line": 3,
+      "currentText": "在多个牌组中复用同一套 Anki 卡片设计：把笔记类型的模板、CSS 和媒体放在同一目录中，用于普通卡片或 Cloze 卡片。示例使用 Rust；Python 和 Node.js 分别通过 `NoteType.from_bundle` 和 `NoteType.fromBundle` 加载模板包，参见 [Python API](../python/api.md#models-and-templates) 和 [Node API](../node/api.md#immutable-models)。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L019-zh-templates-intro",
+        "pageId": "templates",
+        "locale": "zh-CN",
+        "sectionId": "_top",
+        "file": "docs/zh-cn/templates.md",
+        "line": 3,
+        "span": "把笔记类型的模板、CSS 和媒体放在同一目录中，用于普通卡片或 Cloze 卡片",
+        "category": "fluency/syntax",
+        "severity": "minor",
+        "explanation": "省掉了英文中的“加载”一步，“用于”的主语变成目录，句子略松散。",
+        "proposedFix": "把笔记类型的模板、CSS 和媒体放进同一目录，再加载为普通或 Cloze 笔记类型。",
+        "evidence": [
+          "docs/zh-cn/templates.md:3"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-29/task-descriptions",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "templates",
+      "locale": "zh-CN",
+      "id": "L020-zh-templates-description",
+      "status": "retained",
+      "file": "website/site-model.mjs",
+      "line": 77,
+      "currentText": "    \"description\": {\"en\": \"Load a reusable Anki note type from one bundle of card templates, CSS and media, for normal or Cloze cards, with Rust, Python or Node.js.\", \"zh-CN\": \"从一个模板包加载可复用的 Anki 笔记类型，包含卡片模板、CSS 和媒体，支持普通与 Cloze 卡片，可使用 Rust、Python 或 Node.js。\", \"es\": \"Carga un tipo de nota de Anki reutilizable desde un paquete de plantillas, CSS y recursos multimedia, para tarjetas normales o Cloze, con Rust, Python o Node.js.\", \"pt-BR\": \"Carregue um tipo de nota reutilizável de um pacote com templates, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\", \"ja\": \"Rust、Python、Node.js でテンプレート、CSS、メディアのバンドルから、通常・Cloze カード用の再使用可能なノートタイプを読み込みます。\", \"de\": \"Lade einen wiederverwendbaren Anki-Notiztyp aus einem Paket mit Kartenvorlagen, CSS und Medien – für normale oder Cloze-Karten mit Rust, Python oder Node.js.\"}",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L020-zh-templates-description",
+        "pageId": "templates",
+        "locale": "zh-CN",
+        "sectionId": "metadata",
+        "file": "website/site-model.mjs",
+        "line": 77,
+        "span": "从一个模板包加载可复用的 Anki 笔记类型，包含卡片模板、CSS 和媒体，支持普通与 Cloze 卡片，可使用 Rust、Python 或 Node.js。",
+        "category": "fluency/syntax",
+        "severity": "minor",
+        "explanation": "四个逗号分句机械串联，“包含卡片模板、CSS 和媒体”挂在模板包还是笔记类型上不清楚；语言简报要求避免这种堆叠。",
+        "proposedFix": "把卡片模板、CSS 和媒体放进一个模板包，用 Rust、Python 或 Node.js 加载为可复用的 Anki 笔记类型，支持普通卡片与 Cloze 卡片。",
+        "evidence": [
+          "website/site-model.mjs:77"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-29/task-descriptions",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "cards",
+      "locale": "zh-CN",
+      "id": "L016-zh-CN",
+      "status": "retained",
+      "file": "docs/zh-cn/cards.md",
+      "line": 3,
+      "currentText": "用代码批量生成 Anki 问答（Basic）卡片和 Cloze 填空（挖空）卡片，无需在 Anki 中逐张添加。Basic 笔记有正面和背面。Cloze 笔记针对每个受支持的填空编号生成一张卡片。本例用 Rust 创建两条笔记和三张卡片。Python 和 Node.js 提供相同的 `Note.basic` 与 `Note.cloze` 构造方法，参见 [Python API](../python/api.md#project-and-note-values) 和 [Node API](../node/api.md#project-and-notes)。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L016-zh-CN",
+        "pageId": "cards",
+        "locale": "zh-CN",
+        "sectionId": "_top",
+        "file": "docs/zh-cn/cards.md",
+        "line": 3,
+        "span": "Cloze 填空（挖空）卡片",
+        "category": "fluency/consistency",
+        "severity": "minor",
+        "explanation": "三个名称（Cloze、填空、挖空）叠在一起，括号用法与前面“问答（Basic）卡片”不一致，读起来像堆关键词；不影响理解。",
+        "proposedFix": "用代码批量生成 Anki 问答（Basic）卡片和 Cloze 填空卡片（也叫挖空卡片），无需在 Anki 中逐张添加。",
+        "evidence": [
+          "docs/zh-cn/cards.md:3"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-29/task-descriptions",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "media",
+      "locale": "en",
+      "id": "L018-en",
+      "status": "retained",
+      "file": "docs/media.md",
+      "line": 6,
+      "currentText": "text-to-speech, requires a separate tool. The examples use Rust; batch import",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L018-en",
+        "pageId": "media",
+        "locale": "en",
+        "sectionId": "_top",
+        "file": "docs/media.md",
+        "line": 6,
+        "span": "The examples use Rust; batch import",
+        "category": "usability/cross-reference",
+        "severity": "minor",
+        "explanation": "\"batch import below also shows the Python and Node.js calls\" is a bare, unlinked section reference without article, and it is the only pointer for Python and Node.js readers. The description promises Rust, Python or Node.js, and the sibling pages changed in the same commit link the Python and Node API sections.",
+        "proposedFix": "The examples use Rust; for Python and Node.js see the [Python API](python/api.md#media-and-occlusion) and [Node API](node/api.md#media-and-image-occlusion). [Batch media import](#batch-media-import) below shows both calls.",
+        "evidence": [
+          "docs/media.md:6"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-29/task-descriptions",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "media",
+      "locale": "zh-CN",
+      "id": "L007-media",
+      "status": "retained",
+      "file": "docs/zh-cn/media.md",
+      "line": 86,
+      "currentText": "构造函数保持不会失败。`Project::add` 检查导入时保留的 MIME：图片要求 `image/*`，声音引用接受 `audio/*` 和 `video/*`。`application/octet-stream`、文本、字体和 PDF 的类型化用法会返回 `NOTE.MEDIA_USAGE_INVALID`；用于原始 HTML/CSS 时应注册为显式资源。有效但未知的图片或视频 MIME 声明可以通过类别校验，但这并不认证解码器或播放器支持这些字节。重命名文件不会改变已保留的 MIME。构建仍会探测暂存字节并独立校验导出扩展名：名为 `wrong.mp3` 的 PNG 可以通过图片添加，却在构建时返回 `MEDIA.DECLARED_MIME_MISMATCH`。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L007-media",
+        "pageId": "media",
+        "locale": "zh-CN",
+        "sectionId": "typed-image-and-sound-usage",
+        "file": "docs/zh-cn/media.md",
+        "line": 86,
+        "span": "构造函数保持不会失败",
+        "category": "fluency/syntax",
+        "severity": "minor",
+        "explanation": "“保持不会失败”机械对应stay infallible，中文宜直接陈述构造函数本身不会失败。",
+        "proposedFix": "这些构造函数本身不会失败；媒体类别在添加笔记时检查。",
+        "evidence": [
+          "docs/zh-cn/media.md:86"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "media",
+      "locale": "zh-CN",
+      "id": "L018-zh-CN",
+      "status": "retained",
+      "file": "docs/zh-cn/media.md",
+      "line": 3,
+      "currentText": "把图片和音频打包进生成的 Anki 卡片，例如带发音音频的单词卡或示意图题目。Anki Forge 将你提供的文件复制进 APKG；生成音频或图片（例如语音合成）需要使用其他工具。示例使用 Rust；下文的批量导入也给出了 Python 和 Node.js 调用。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L018-zh-CN",
+        "pageId": "media",
+        "locale": "zh-CN",
+        "sectionId": "_top",
+        "file": "docs/zh-cn/media.md",
+        "line": 3,
+        "span": "下文的批量导入也给出了 Python 和 Node.js 调用",
+        "category": "usability/cross-reference",
+        "severity": "minor",
+        "explanation": "“批量导入”未点明是小节，“给出了……调用”缺中心语；描述承诺支持 Rust、Python 或 Node.js，但正文没有像同批修改的其他页面那样给出 Python/Node API 链接。",
+        "proposedFix": "示例使用 Rust；Python 和 Node.js 的用法见 [Python API](../python/api.md#media-and-occlusion) 和 [Node API](../node/api.md#media-and-image-occlusion)，下文“批量媒体导入”一节也列出了两者的调用方式。",
+        "evidence": [
+          "docs/zh-cn/media.md:3"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-29/task-descriptions",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "media",
+      "locale": "es",
+      "id": "L024-es-media-batch-link",
+      "status": "retained",
+      "file": "docs/es/media.md",
+      "line": 3,
+      "currentText": "Incluye imágenes y audio en las tarjetas Anki que generes, por ejemplo, tarjetas de vocabulario con audio de pronunciación o preguntas sobre diagramas. Anki Forge copia al APKG los archivos que proporciones; para crear el audio o las imágenes, por ejemplo mediante síntesis de voz, necesitas otra herramienta. Los ejemplos usan Rust; la sección de importación por lotes también muestra las llamadas de Python y Node.js.",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L024-es-media-batch-link",
+        "pageId": "media",
+        "locale": "es",
+        "sectionId": "_top",
+        "file": "docs/es/media.md",
+        "line": 3,
+        "span": "la sección de importación por lotes también muestra las llamadas de Python y Node.js",
+        "category": "usability/navigation",
+        "severity": "minor",
+        "explanation": "The opening pointer to the Python/Node calls names a later section without linking it. That section exists and is discoverable, so this is a minor navigation cost.",
+        "proposedFix": "Link importación por lotes to the existing batch-media-import section.",
+        "evidence": [
+          "docs/es/media.md:3"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/spanish_spec/independent-linguistic-es-integration-2026-10-31",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "en",
+      "id": "L017-en",
+      "status": "retained",
+      "file": "docs/image-occlusion.md",
+      "line": 9,
+      "currentText": "Create a structured image-occlusion note from an owned image and rectangles.",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L017-en",
+        "pageId": "image-occlusion",
+        "locale": "en",
+        "sectionId": "_top",
+        "file": "docs/image-occlusion.md",
+        "line": 9,
+        "span": "Create a structured image-occlusion note from an owned image and rectangles.",
+        "category": "style/redundancy",
+        "severity": "minor",
+        "explanation": "The new lead already says image + rectangle coordinates -> note, so this retained opening sentence repeats it straight away. In the lead, \"ready to import\" modifies \"a note\", although the APKG is what gets imported.",
+        "proposedFix": "Lead: \"... and Anki Forge builds a note with one card per mask, packaged in an APKG you can import.\" Second paragraph: \"The note takes an owned image snapshot, and each mask needs a stable key that continues to identify the same region through later versions.\"",
+        "evidence": [
+          "docs/image-occlusion.md:9"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-29/task-descriptions",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "zh-CN",
+      "id": "L017-zh-CN",
+      "status": "retained",
+      "file": "docs/zh-cn/image-occlusion.md",
+      "line": 5,
+      "currentText": "使用拥有所有权的图像与矩形创建结构化图片遮挡笔记。每个遮罩需要稳定键，在后续版本中继续标识同一区域。笔记通过普通 `add(key, note)` 加入项目。示例使用 Rust；Python 和 Node.js 提供相同的构建器，参见 [Python API](../python/api.md#media-and-occlusion) 和 [Node API](../node/api.md#media-and-image-occlusion)。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L017-zh-CN",
+        "pageId": "image-occlusion",
+        "locale": "zh-CN",
+        "sectionId": "_top",
+        "file": "docs/zh-cn/image-occlusion.md",
+        "line": 5,
+        "span": "使用拥有所有权的图像与矩形创建结构化图片遮挡笔记。",
+        "category": "style/redundancy",
+        "severity": "minor",
+        "explanation": "新导语已说明“提供图片和矩形坐标→生成笔记”，紧接的保留句又重复一遍，且“图像”与导语的“图片”混用；导语里“批量”出现两次，“可直接导入”的主语落在笔记上（实际导入的是 APKG）。",
+        "proposedFix": "导语：用代码生成 Anki 图片遮挡（图片挖空）卡片：提供图片和矩形坐标，Anki Forge 会生成一条笔记（每个遮罩对应一张卡片），并打包成可直接导入的 APKG。……　第二段：笔记持有图片快照的所有权；每个遮罩需要稳定键，在后续版本中继续标识同一区域。",
+        "evidence": [
+          "docs/zh-cn/image-occlusion.md:5"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-29/task-descriptions",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "es",
+      "id": "L023-es-image-occlusion-intro",
+      "status": "retained",
+      "file": "docs/es/image-occlusion.md",
+      "line": 3,
+      "currentText": "Genera tarjetas de oclusión de imágenes de Anki desde código: proporciona una imagen y las coordenadas de los rectángulos, y Anki Forge crea una nota con una tarjeta por máscara, lista para importar. Así puedes generar preguntas sobre diagramas por lotes sin dibujar las máscaras en el editor de Anki. La biblioteca no detecta las etiquetas de la imagen; debes proporcionar las coordenadas.",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L023-es-image-occlusion-intro",
+        "pageId": "image-occlusion",
+        "locale": "es",
+        "sectionId": "_top",
+        "file": "docs/es/image-occlusion.md",
+        "line": 3,
+        "span": "una nota con una tarjeta por máscara, lista para importar",
+        "category": "fluency/redundancy-and-modifier",
+        "severity": "minor",
+        "explanation": "The two opening paragraphs repeat image/rectangle setup. Lista para importar grammatically qualifies nota, while the run section correctly directs users to import the APKG. Context resolves the intended workflow.",
+        "proposedFix": "State that the generated APKG is ready to import and combine repeated setup sentences.",
+        "evidence": [
+          "docs/es/image-occlusion.md:3",
+          "docs/es/image-occlusion.md:5"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/spanish_spec/independent-linguistic-es-integration-2026-10-31",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "ja",
+      "id": "JA-L08-image-intro",
+      "status": "retained",
+      "file": "docs/ja/image-occlusion.md",
+      "line": 3,
+      "currentText": "プログラムから Anki の画像穴埋めカードを生成します。画像と矩形の座標を渡すと、Anki Forge はマスクごとに1枚のカードを持つ、インポート可能なノートを作ります。Anki のエディターでマスクを描かずに、図の問題をまとめて作成できます。画像内のラベルを自動検出する機能はありません。座標は呼び出し側で指定します。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "JA-L08-image-intro",
+        "severity": "minor",
+        "criterion": "usability",
+        "file": "docs/ja/image-occlusion.md",
+        "line": 3,
+        "span": "インポート可能なノートを作ります",
+        "issue": "The modifier calls the note importable, while the later executable task correctly identifies the APKG as the imported artifact. The next paragraph also repeats the image/rectangle setup. This follows a known minor source phrasing issue and does not prevent the task.",
+        "suggestion": "Say that the note is packaged in an importable APKG and combine repeated setup wording.",
+        "blocking": false,
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "updates",
+      "locale": "en",
+      "id": "L014-en-reexport",
+      "status": "retained",
+      "file": "website/search-terms.json",
+      "line": 224,
+      "currentText": "        \"Anki re-export baseline\",",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L014-en-reexport",
+        "pageId": "updates",
+        "locale": "en",
+        "sectionId": "search-terms",
+        "file": "website/search-terms.json",
+        "line": 224,
+        "span": "Anki re-export baseline",
+        "category": "context/qualifier",
+        "severity": "minor",
+        "explanation": "As a retrieval topic it names the rejected baseline case, but it is clearer with the documented restriction explicit. The page and other terms already require an original distribution APKG.",
+        "proposedFix": "invalid Anki re-export baseline",
+        "evidence": [
+          "website/search-terms.json:224"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "updates",
+      "locale": "zh-CN",
+      "id": "L021-zh-updates-intro",
+      "status": "retained",
+      "file": "docs/zh-cn/updates.md",
+      "line": 3,
+      "currentText": "为已经分发的 Anki 牌组发布修正或新增卡片。稳定笔记 ID 帮助 Anki Forge 和 Anki 识别已有笔记，而不是把它们当成新笔记；Anki 导入设置与较新的本地编辑仍会影响最终变化。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L021-zh-updates-intro",
+        "pageId": "updates",
+        "locale": "zh-CN",
+        "sectionId": "_top",
+        "file": "docs/zh-cn/updates.md",
+        "line": 3,
+        "span": "稳定笔记 ID 帮助 Anki Forge 和 Anki 识别已有笔记",
+        "category": "fluency/translationese",
+        "severity": "minor",
+        "explanation": "“帮助……识别”直译自 help X recognize；同句后半“仍会影响最终变化”含义偏虚。",
+        "proposedFix": "笔记 ID 保持稳定，Anki Forge 和 Anki 才能识别已有笔记，不会把它们当作新笔记；最终更新哪些内容，仍取决于 Anki 的导入设置以及本地是否有更新的修改。",
+        "evidence": [
+          "docs/zh-cn/updates.md:3"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-29/task-descriptions",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "updates",
+      "locale": "zh-CN",
+      "id": "L022-zh-updates-description",
+      "status": "retained",
+      "file": "website/site-model.mjs",
+      "line": 133,
+      "currentText": "    \"description\": {\"en\": \"Release a new version of a generated Anki deck: keep stable note IDs, build from the previous original APKG and review the comparison before publishing.\", \"zh-CN\": \"发布生成牌组的新版本：保持稳定笔记 ID，以上一版原始 APKG 为基线构建，并在分发前检查比较结果。\", \"es\": \"Publica una nueva versión de un mazo de Anki generado: conserva los ID de nota estables, parte del APKG original anterior y revisa la comparación antes de distribuirlo.\", \"pt-BR\": \"Publique uma nova versão de um baralho gerado: preserve os IDs das notas, use o APKG original anterior como base e revise a comparação antes de distribuir.\", \"ja\": \"ノート ID を維持し、前回配布時のオリジナル APKG を基準にビルドして、比較を確認してから新バージョンを配布します。\", \"de\": \"Veröffentliche eine neue Stapelversion: Behalte stabile Notiz-IDs bei, verwende das ursprüngliche APKG der Vorgängerversion als Basis und prüfe den Vergleich vor der Verteilung.\"}",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L022-zh-updates-description",
+        "pageId": "updates",
+        "locale": "zh-CN",
+        "sectionId": "metadata",
+        "file": "website/site-model.mjs",
+        "line": 133,
+        "span": "发布生成牌组的新版本",
+        "category": "fluency/ambiguity",
+        "severity": "minor",
+        "explanation": "“生成牌组”可读作动宾短语“生成（一个）牌组”，和“发布”连读有歧义。",
+        "proposedFix": "为生成的 Anki 牌组发布新版本：保持稳定笔记 ID，以上一版原始 APKG 为基线构建，并在分发前检查比较结果。",
+        "evidence": [
+          "website/site-model.mjs:133"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-29/task-descriptions",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "en",
+      "id": "L002-en",
+      "status": "resolved",
+      "file": "docs/build-guarantees.md",
+      "line": 83,
+      "currentText": "## Prepare, review and publish",
+      "judgment": "The workflow heading no longer wrongly implies a source-only feature; following public 0.3.1 statement and historic anchor remain.",
+      "priorIssue": {
+        "id": "L002-en",
+        "pageId": "build-guarantees",
+        "locale": "en",
+        "sectionId": "prepared-publication-from-source",
+        "file": "docs/build-guarantees.md",
+        "line": 82,
+        "span": "Prepared publication from source",
+        "category": "context/scope",
+        "severity": "minor",
+        "explanation": "标题的源码限定与下句公开包已包含的适用范围冲突；正文已澄清，故不判为无法完成任务。",
+        "proposedFix": "Prepared publication",
+        "evidence": [
+          "docs/build-guarantees.md:82"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spanish_spec/independent-linguistic-es-integration-2026-10-31"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "zh-CN",
+      "id": "L002-zh-CN",
+      "status": "resolved",
+      "file": "docs/zh-cn/build-guarantees.md",
+      "line": 42,
+      "currentText": "## 准备候选包并在审阅后写入目标文件",
+      "judgment": "The heading names preparation and later saving instead of wrongly implying source-only availability; public 0.3.1 remains explicit.",
+      "priorIssue": {
+        "id": "L002-zh-CN",
+        "pageId": "build-guarantees",
+        "locale": "zh-CN",
+        "sectionId": "prepared-publication-from-source",
+        "file": "docs/zh-cn/build-guarantees.md",
+        "line": 41,
+        "span": "源码中的预备发布",
+        "category": "context/scope",
+        "severity": "minor",
+        "explanation": "标题的源码限定与下句公开包已包含的适用范围冲突；正文已澄清，故不判为无法完成任务。",
+        "proposedFix": "预备发布",
+        "evidence": [
+          "docs/zh-cn/build-guarantees.md:41"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spanish_spec/independent-linguistic-es-integration-2026-10-31"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "en",
+      "id": "L005-en",
+      "status": "retained",
+      "file": "docs/troubleshooting.md",
+      "line": 49,
+      "currentText": "| IO rectangle fails | Check decoded display dimensions, finite coordinates and unique mask keys |",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L005-en",
+        "pageId": "troubleshooting",
+        "locale": "en",
+        "sectionId": "media-and-templates",
+        "file": "docs/troubleshooting.md",
+        "line": 49,
+        "span": "IO rectangle fails",
+        "category": "terminology/abbreviation",
+        "severity": "minor",
+        "explanation": "未展开的IO易被识别为I/O；此行实际为图片遮挡矩形错误。",
+        "proposedFix": "Image Occlusion rectangle fails",
+        "evidence": [
+          "docs/troubleshooting.md:49"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "zh-CN",
+      "id": "L005-zh-CN",
+      "status": "retained",
+      "file": "docs/zh-cn/troubleshooting.md",
+      "line": 43,
+      "currentText": "| IO 矩形失败 | 检查解码后显示尺寸、有限坐标和唯一遮罩键 |",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L005-zh-CN",
+        "pageId": "troubleshooting",
+        "locale": "zh-CN",
+        "sectionId": "media-and-templates",
+        "file": "docs/zh-cn/troubleshooting.md",
+        "line": 43,
+        "span": "IO 矩形失败",
+        "category": "terminology/abbreviation",
+        "severity": "minor",
+        "explanation": "未展开的IO易被识别为I/O；此行实际为图片遮挡矩形错误。",
+        "proposedFix": "图片遮挡矩形无效",
+        "evidence": [
+          "docs/zh-cn/troubleshooting.md:43"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "en",
+      "id": "L006-en",
+      "status": "retained",
+      "file": "docs/rust-api.md",
+      "line": 81,
+      "currentText": "`BuildOutput::artifact()` returns an owned `build::ApkgArtifact` reference.",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L006-en",
+        "pageId": "rust-api",
+        "locale": "en",
+        "sectionId": "build-compare-and-output",
+        "file": "docs/rust-api.md",
+        "line": 81,
+        "span": "returns an owned `build::ApkgArtifact` reference",
+        "category": "terminology/ownership",
+        "severity": "minor",
+        "explanation": "owned直接修饰reference有歧义；应明确返回引用，产物对象持有文件。",
+        "proposedFix": "returns a reference to the owned `build::ApkgArtifact`",
+        "evidence": [
+          "docs/rust-api.md:81"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "en",
+      "id": "L010-en",
+      "status": "retained",
+      "file": "docs/rust-api.md",
+      "line": 87,
+      "currentText": "`ComparisonReport` even if high-risk findings block its policy. It exposes",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L010-en",
+        "pageId": "rust-api",
+        "locale": "en",
+        "sectionId": "build-compare-and-output",
+        "file": "docs/rust-api.md",
+        "line": 87,
+        "span": "even if high-risk findings block its policy",
+        "category": "fluency/semantic-subject",
+        "severity": "minor",
+        "explanation": "The policy blocks publication, rather than findings blocking the policy. Nearby sentences explain it, so the local ambiguity is minor.",
+        "proposedFix": "even if its policy blocks publication because of high-risk findings",
+        "evidence": [
+          "docs/rust-api.md:87"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "zh-CN",
+      "id": "L006-zh-CN",
+      "status": "retained",
+      "file": "docs/zh-cn/rust-api.md",
+      "line": 52,
+      "currentText": "`BuildOutput::artifact()` 返回拥有所有权的 `build::ApkgArtifact` 引用。`BuildOutput::report()` 返回观察结果。产物克隆共享临时文件寿命；`persist_to` 返回持久所有者，或返回带发布事实与底层 I/O 来源的 `build::PersistError`。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L006-zh-CN",
+        "pageId": "rust-api",
+        "locale": "zh-CN",
+        "sectionId": "build-compare-and-output",
+        "file": "docs/zh-cn/rust-api.md",
+        "line": 52,
+        "span": "返回拥有所有权的 `build::ApkgArtifact` 引用",
+        "category": "terminology/ownership",
+        "severity": "minor",
+        "explanation": "owned直接修饰reference有歧义；应明确返回引用，产物对象持有文件。",
+        "proposedFix": "返回对 `build::ApkgArtifact` 产物所有者的引用",
+        "evidence": [
+          "docs/zh-cn/rust-api.md:52"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "zh-CN",
+      "id": "L007-rust-api",
+      "status": "retained",
+      "file": "docs/zh-cn/rust-api.md",
+      "line": 68,
+      "currentText": "添加时，类型化图片要求 image/* MIME，声音引用接受 audio/* 或 video/*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](../plans/2026-09-28-rust-api-validation-and-errors-design.md)。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L007-rust-api",
+        "pageId": "rust-api",
+        "locale": "zh-CN",
+        "sectionId": "addition-context",
+        "file": "docs/zh-cn/rust-api.md",
+        "line": 68,
+        "span": "构造函数保持不会失败",
+        "category": "fluency/syntax",
+        "severity": "minor",
+        "explanation": "“保持不会失败”机械对应stay infallible，中文宜直接陈述构造函数本身不会失败。",
+        "proposedFix": "这些构造函数本身不会失败；媒体类别在添加笔记时检查。",
+        "evidence": [
+          "docs/zh-cn/rust-api.md:68"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "ja",
+      "id": "JA-L07-rust-api",
+      "status": "retained",
+      "file": "docs/ja/rust-api.md",
+      "line": 72,
+      "currentText": "追加に失敗してもプロジェクトは変わりません。構造化コンテキストには元のノート・モデルのキーと対象を記録し、必要に応じて競合やメディア使用の詳細を付けます。Rust では `AddError::context()` / `detail()` を通じて `note::{AddContext, AddTarget, AddDetail}` を取得できます。SDK では `AddError.details` が型付きの context/detail を提供します。Node のフィールドは camelCase で、深く凍結されています。Python は snake_case の TypedDict を使います。タグは挿入時のインデックスを保持します。フィールドの位置は、元のシーケンスインデックス（フィールド自体は null/None、ルートは []）と任意の UTF-8 バイト範囲を保持します。ビルド時の既定デッキのエラーはノート・モデルのキーを持たず、原因チェーンから確認できます。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "JA-L07-rust-api",
+        "severity": "minor",
+        "criterion": "syntax",
+        "file": "docs/ja/rust-api.md",
+        "line": 72,
+        "span": "深く凍結",
+        "issue": "Literal rendering of deeply frozen is understandable in the JS context but less natural than the already used Japanese explanation in the Python API.",
+        "suggestion": "Use 入れ子も含めて不変です or 入れ子の値も含めて凍結されています.",
+        "blocking": false,
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "node-api",
+      "locale": "zh-CN",
+      "id": "L007-node-api",
+      "status": "retained",
+      "file": "docs/zh-cn/node-api.md",
+      "line": 99,
+      "currentText": "添加时，类型化图片要求 image/* MIME，声音引用接受 audio/* 或 video/*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](../plans/2026-09-28-rust-api-validation-and-errors-design.md)。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L007-node-api",
+        "pageId": "node-api",
+        "locale": "zh-CN",
+        "sectionId": "addition-context",
+        "file": "docs/zh-cn/node-api.md",
+        "line": 99,
+        "span": "构造函数保持不会失败",
+        "category": "fluency/syntax",
+        "severity": "minor",
+        "explanation": "“保持不会失败”机械对应stay infallible，中文宜直接陈述构造函数本身不会失败。",
+        "proposedFix": "这些构造函数本身不会失败；媒体类别在添加笔记时检查。",
+        "evidence": [
+          "docs/zh-cn/node-api.md:99"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "node-api",
+      "locale": "ja",
+      "id": "JA-L07-node-api",
+      "status": "retained",
+      "file": "docs/ja/node-api.md",
+      "line": 104,
+      "currentText": "追加に失敗してもプロジェクトは変わりません。構造化コンテキストには元のノート・モデルのキーと対象を記録し、必要に応じて競合やメディア使用の詳細を付けます。Rust では `AddError::context()` / `detail()` を通じて `note::{AddContext, AddTarget, AddDetail}` を取得できます。SDK では `AddError.details` が型付きの context/detail を提供します。Node のフィールドは camelCase で深く凍結されています。Python は snake_case の TypedDict を使います。タグは挿入時のインデックスを保持します。フィールドの位置は、元のシーケンスインデックス（フィールド自体は null/None、ルートは []）と任意の UTF-8 バイト範囲を保持します。ビルド時の既定デッキのエラーはノート・モデルのキーを持たず、原因チェーンから確認できます。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "JA-L07-node-api",
+        "severity": "minor",
+        "criterion": "syntax",
+        "file": "docs/ja/node-api.md",
+        "line": 104,
+        "span": "深く凍結",
+        "issue": "Literal rendering of deeply frozen is understandable in the JS context but less natural than the already used Japanese explanation in the Python API.",
+        "suggestion": "Use 入れ子も含めて不変です or 入れ子の値も含めて凍結されています.",
+        "blocking": false,
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "python-api",
+      "locale": "en",
+      "id": "L003-en",
+      "status": "resolved",
+      "file": "docs/python/api.md",
+      "line": 83,
+      "currentText": "## Batch media and prepared publication",
+      "judgment": "The heading names the public capabilities rather than source-only API; source-api-details anchor retained.",
+      "priorIssue": {
+        "id": "L003-en",
+        "pageId": "python-api",
+        "locale": "en",
+        "sectionId": "source-api-details",
+        "file": "docs/python/api.md",
+        "line": 82,
+        "span": "Source API details",
+        "category": "context/scope",
+        "severity": "minor",
+        "explanation": "该段正文说公开0.3.1包含预备发布；标题却暗示源码API。保留旧锚点即可改显示标题。",
+        "proposedFix": "Batch media and prepared publication",
+        "evidence": [
+          "docs/python/api.md:82"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spanish_spec/independent-linguistic-es-integration-2026-10-31"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "id": "L003-zh-CN",
+      "status": "resolved",
+      "file": "docs/zh-cn/python-api.md",
+      "line": 71,
+      "currentText": "## 批量媒体处理与预备发布",
+      "judgment": "The heading no longer suggests source-only API; public 0.3.1 and source-api-details identity retained.",
+      "priorIssue": {
+        "id": "L003-zh-CN",
+        "pageId": "python-api",
+        "locale": "zh-CN",
+        "sectionId": "source-api-details",
+        "file": "docs/zh-cn/python-api.md",
+        "line": 70,
+        "span": "源码 API 详情",
+        "category": "context/scope",
+        "severity": "minor",
+        "explanation": "该段正文说公开0.3.1包含预备发布；标题却暗示源码API。保留旧锚点即可改显示标题。",
+        "proposedFix": "批量媒体与预备发布",
+        "evidence": [
+          "docs/zh-cn/python-api.md:70"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spanish_spec/independent-linguistic-es-integration-2026-10-31"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "id": "L007-python-api",
+      "status": "retained",
+      "file": "docs/zh-cn/python-api.md",
+      "line": 68,
+      "currentText": "添加时，类型化图片要求 image/* MIME，声音引用接受 audio/* 或 video/*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](../plans/2026-09-28-rust-api-validation-and-errors-design.md)。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L007-python-api",
+        "pageId": "python-api",
+        "locale": "zh-CN",
+        "sectionId": "addition-context",
+        "file": "docs/zh-cn/python-api.md",
+        "line": 68,
+        "span": "构造函数保持不会失败",
+        "category": "fluency/syntax",
+        "severity": "minor",
+        "explanation": "“保持不会失败”机械对应stay infallible，中文宜直接陈述构造函数本身不会失败。",
+        "proposedFix": "这些构造函数本身不会失败；媒体类别在添加笔记时检查。",
+        "evidence": [
+          "docs/zh-cn/python-api.md:68"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "en",
+      "id": "L004-en",
+      "status": "retained",
+      "file": "docs/python/genanki-migration.md",
+      "line": 5,
+      "currentText": "AnkiForge uses stable data keys, validated immutable models, owned media snapshots and explicit build/update operations. This is a new authoring model; it does not emulate genanki objects or the removed AnkiForge Deck/lockfile interfaces.",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L004-en",
+        "pageId": "genanki-migration",
+        "locale": "en",
+        "sectionId": "_top",
+        "file": "docs/python/genanki-migration.md",
+        "line": 5,
+        "span": "AnkiForge",
+        "category": "terminology/brand",
+        "severity": "minor",
+        "explanation": "非代码品牌拼写与全站Anki Forge不一致。",
+        "proposedFix": "将正文及表头的AnkiForge统一为Anki Forge，代码/API标识符保持不变。",
+        "evidence": [
+          "docs/python/genanki-migration.md:5"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "zh-CN",
+      "id": "L004-zh-CN",
+      "status": "retained",
+      "file": "docs/zh-cn/genanki-migration.md",
+      "line": 5,
+      "currentText": "AnkiForge 使用稳定数据键、已校验的不可变模型、拥有所有权的媒体快照以及显式构建和更新操作。这是一套新的内容编写模型，不模拟 genanki 对象，也不模拟已移除的 AnkiForge Deck/lockfile 接口。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L004-zh-CN",
+        "pageId": "genanki-migration",
+        "locale": "zh-CN",
+        "sectionId": "_top",
+        "file": "docs/zh-cn/genanki-migration.md",
+        "line": 5,
+        "span": "AnkiForge",
+        "category": "terminology/brand",
+        "severity": "minor",
+        "explanation": "非代码品牌拼写与全站Anki Forge不一致。",
+        "proposedFix": "将正文及表头的AnkiForge统一为Anki Forge，代码/API标识符保持不变。",
+        "evidence": [
+          "docs/zh-cn/genanki-migration.md:5"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "id": "L012-zh-first-git",
+      "status": "retained",
+      "file": "website/search-terms.json",
+      "line": 864,
+      "currentText": "        \"在 Git 中重复编写\",",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L012-zh-first-git",
+        "pageId": "blog:your-first-anki-deck",
+        "locale": "zh-CN",
+        "sectionId": "search-terms",
+        "file": "website/search-terms.json",
+        "line": 864,
+        "span": "在 Git 中重复编写",
+        "category": "fluency/register",
+        "severity": "minor",
+        "explanation": "“重复编写”是重复劳动，不能自然表达可重复的编写/构建流程。",
+        "proposedFix": "用 Git 管理可重复构建流程",
+        "evidence": [
+          "website/search-terms.json:864"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "id": "L013-zh-first-errors",
+      "status": "retained",
+      "file": "website/search-terms.json",
+      "line": 868,
+      "currentText": "        \"传播类型化失败\",",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L013-zh-first-errors",
+        "pageId": "blog:your-first-anki-deck",
+        "locale": "zh-CN",
+        "sectionId": "search-terms",
+        "file": "website/search-terms.json",
+        "line": 868,
+        "span": "传播类型化失败",
+        "category": "fluency/register",
+        "severity": "minor",
+        "explanation": "传播失败可以理解，但中文Rust文体通常直接说传播带类型的错误；typed不是键入答案。",
+        "proposedFix": "传播带类型的错误",
+        "evidence": [
+          "website/search-terms.json:868"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "zh-CN",
+      "id": "L009-zh",
+      "status": "retained",
+      "file": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+      "line": 32,
+      "currentText": "身份还具有项目上下文。同一牌组的各次发布应保持项目命名空间一致。仅笔记 ID 本身只是可重复更新流程的一部分。",
+      "judgment": "The original span and its relevant meaning remain; the new changes do not resolve the recorded nonblocking concern. Preserve its original severity and explanation.",
+      "priorIssue": {
+        "id": "L009-zh",
+        "pageId": "blog:stable-ids-and-deck-updates",
+        "locale": "zh-CN",
+        "sectionId": "separate-identity-from-content",
+        "file": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+        "line": 32,
+        "span": "仅笔记 ID 本身只是可重复更新流程的一部分。",
+        "category": "fluency/redundancy",
+        "severity": "minor",
+        "explanation": "“仅…本身只是”重复限定，读起来不顺。",
+        "proposedFix": "笔记 ID 只是可重复更新流程的一部分。",
+        "evidence": [
+          "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx:32"
+        ],
+        "resolution": "unresolved",
+        "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/full-source-1",
+        "revalidatedBy": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+      },
+      "verifierRun": "/root/spec_review/pr66-final-linguistic-2026-11-02"
+    }
+  ],
+  "resolved": 6,
+  "retained": 32
+}

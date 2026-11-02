@@ -1,0 +1,664 @@
+
+FILE docs/build-guarantees.md
+1: # Build and output guarantees
+2:
+3: `Project::build` returns `BuildOutput` only after a successful operation, with a
+4: guaranteed APKG artifact. A failed operation returns `BuildError` with structured
+5: kind/code, observations, underlying causes and actual publication facts.
+6:
+7: ## Temporary and persistent artifacts
+8:
+9: Choose the ownership model explicitly:
+10:
+11: | Request | Ownership |
+12: | --- | --- |
+13: | `BuildOptions::to(path)` | Persistent destination; survives handle cleanup |
+14: | `BuildOptions::temporary()` | Temporary file; deleted with its last artifact owner |
+15: | `artifact.persist_to(path)` | New persistent owner; original owner remains usable |
+16:
+17: Keep the `BuildOutput` or a cloned artifact alive while reading a temporary
+18: path. A report or JSON snapshot does not extend file lifetime. Rust drops owners
+19: normally; Node exposes `artifact.close()` for deterministic release. Copying the
+20: path into application state does not create an owner.
+21:
+22: Rust artifact handles retain absolute paths, including when the build or
+23: `persist_to` uses a relative destination. Later changes to the process working
+24: directory do not redirect reads or copies from an existing handle. Each new
+25: `persist_to` destination is resolved against the directory at that call.
+26:
+27: `BuildReport::snapshot()` contains only observations. `BuildOutput::snapshot()`
+28: and `BuildError::snapshot()` additionally state the real outcome. A warning can
+29: appear in a successful snapshot. Do not infer outcome from diagnostic severity,
+30: a path's existence, or whether a report has comparison findings.
+31:
+32: ## Baselines and publication
+33:
+34: For updates, retain the previous original distribution APKG as an immutable
+35: baseline and choose a separate output destination. Baseline evidence and
+36: candidate content are checked before publication. Policy rejection does not
+37: replace the output. Missing or corrupt evidence and exhausted inspection budgets
+38: are hard failures.
+39:
+40: Publication uses atomic replacement of the APKG. This is a per-file guarantee;
+41: writing an application's separate JSON report is a separate operation. The
+42: ordinary build does not write an additional identity file: complete versioned
+43: evidence is embedded in the distribution package.
+44:
+45: A late error can occur after publication, for example while confirming
+46: persistence. Error snapshots therefore record `PublicationSnapshot` facts:
+47: `path`, `stage` (`not_published` or `published`), `temporary`, and durability
+48: (`confirmed` or `unconfirmed`). Check these facts before retrying or announcing
+49: that no file was written. `PersistError` also preserves its publication fact and
+50: actual I/O source. Atomic replacement alone does not establish durability after
+51: a crash.
+52:
+53: Snapshot serialization preserves native paths without accessing the filesystem.
+54: Unicode paths remain JSON strings. Non-UTF-8 Unix paths use
+55: `{"encoding":"unix_bytes","bytes":[...]}`; Windows paths with unpaired UTF-16
+56: surrogates use `{"encoding":"windows_wide","units":[...]}`. The arrays contain
+57: the exact native bytes or code units. Success artifact paths, failure publication
+58: paths, and binding error-path details all use this representation. These values
+59: describe paths and do not retain artifact ownership. A filesystem may reject a
+60: particular native path, but its publication failure facts remain serializable.
+61:
+62: ## Inspection limits
+63:
+64: Finite archive, entry-count, expansion, decoded collection/media and zstd-window
+65: budgets apply independently to baseline and candidate. Start with
+66: `InspectLimits::default()` and deliberately raise a relevant limit when needed.
+67: A limit of zero is not unlimited. These counters are not a process-wide memory
+68: or CPU sandbox; media imports have a separate earlier per-asset budget.
+69:
+70: ## Concurrent work
+71:
+72: Rust builds borrow immutable project state. Owned models and media can be shared
+73: across projects. The Node binding captures a project snapshot when build or
+74: compare is invoked, so later additions do not change that request. Retain the
+75: artifact owner until all readers have finished; closing the last temporary owner
+76: while a separate consumer still needs its path is an application lifetime error.
+77:
+78: Package inspection cannot establish every client-side behavior. Test rendering,
+79: playback and update imports with the intended Anki versions and settings. See
+80: [updates](updates.md) for scheduling and schema-change limits.
+81:
+82: <!-- section: prepared-publication-from-source -->
+83: ## Prepare, review and publish
+84:
+85: Prepared publication is included in the public `0.3.1` packages.
+86:
+87: `prepare_publication` builds, inspects and compares one private candidate;
+88: `publish` uses that same file. Options and relative destinations bind at
+89: preparation. Project edits cannot alter the candidate. Preparation alone does
+90: not replace the destination; dropping or closing an unpublished owner removes it.
+91:
+92: Every publish attempt consumes the owner, including policy or I/O failure.
+93: Reprepare to retry or change the policy/destination. Reports remain readable and
+94: own no files. Node/Python expose idempotent `close()` and an unavailable error
+95: with `closed` or `consumed` reason; closing after publication starts does not
+96: cancel it. Duration excludes review waiting. A late durability failure can
+97: follow successful replacement, so inspect the actual publication facts.
+98:
+99: Follow the [complete example](updates.md#build-once-review-then-publish-from-source)
+100: and the language API references for typed errors and worker behavior.
+
+FILE docs/cards.md
+1: # Basic and Cloze cards
+2:
+3: Generate Anki Basic (question-and-answer) and Cloze (fill-in-the-blank) cards
+4: from code instead of adding them one at a time in Anki. A Basic note stores front and back fields, which its template uses to generate a question-and-answer card. A Cloze note generates one card for each supported deletion number.
+5: This Rust example creates two notes and three cards. Python and Node.js provide
+6: the same `Note.basic` and `Note.cloze` constructors; see the
+7: [Python API](python/api.md#project-and-note-values) and
+8: [Node API](node/api.md#project-and-notes).
+9:
+10: From the repository root:
+11:
+15:
+16: Open `target/docs-examples/cards.apkg` in Anki. The Basic question is **hola**;
+17: the Cloze cards separately hide **Madrid** and **Spain**.
+18:
+19: ## Author the notes
+20:
+21: This function is extracted from the [complete executable](../anki_forge/examples/docs_workflow.rs).
+22: Its `verify` helper checks the successful output's note/card/media counts.
+23:
+24: <!-- source: anki_forge/examples/docs_workflow.rs#cards -->
+39: <!-- /source -->
+40:
+41: The first argument to `Project::new` is a stable namespace. Each `add` call needs
+42: a stable source-record key. Reusing one key for another note fails; no automatic
+43: content-based key is assigned. A changed answer under the same key remains the
+44: same logical note when building an update from its previous distribution.
+45:
+46: ## Text, fields and card identity
+47:
+48: Both Basic and Cloze strings are Text. Use `Content::html` for intentional HTML;
+49: Cloze deletion syntax is still recognized inside Text. `back_extra` is the
+50: built-in Cloze extra field key. Use the same `Note::field` method for text, HTML,
+51: images and sounds.
+52:
+53: Use `{{c1::answer}}` or `{{c1::answer::hint}}`. A plain sentence supplies no
+54: Cloze question. Supported deletion numbers are 1–500; changing numbers can alter
+55: card identities. Review such changes through [comparison and update policy](updates.md).
+56:
+57: Next, add [media](media.md), a [custom model](custom-notetypes.md), or
+58: [image occlusion](image-occlusion.md).
+
+FILE docs/python/api.md
+1: # Python API
+2:
+3: The SDK calls the default Rust public API through a native extension. It includes `py.typed` and checked public signatures. Start with the [quickstart](quick-start.md).
+4:
+5: ## Project and note values
+6:
+7: | Entry | Behavior |
+8: | --- | --- |
+9: | `Project(namespace, *, default_deck=None)` | Validates the explicit stable namespace and configures the default deck |
+10: | `project.add(key, note)` | Atomically collects the note, model and owned media; duplicate note keys fail |
+11: | `project.add_asset(media)` | Includes an explicit raw HTML/CSS/script dependency |
+12: | `len(project)` | Number of successfully added notes |
+13: | `Note.basic(front, back)` | Built-in Basic model; strings mean Text |
+14: | `Note.cloze(text)` | Built-in Cloze model; strings mean Text and retain cloze syntax |
+15: | `note.field(key, content)` | Returns a new note with the field assignment; key validation occurs on add |
+16: | `note.deck(name)` / `.tag(tag)` / `.tags(tags)` | Returns a configured note |
+17: | `note.note_type` | The immutable owned model |
+18:
+19: Ordinary strings become Text. `Content.text(value)` and `Content.html(value)` are explicit constructors; `Content.sequence(iterable)` composes strings and content without rendering or losing media dependencies. A field does not accept a raw filename as a media reference.
+20:
+21: ## Models and templates
+22:
+23: `NoteType.builder(key)` returns an immutable builder. Its `.name`, `.field`, `.template`, `.css`, `.cloze_field` and `.asset` methods return updated builders. `.build()` validates the complete definition and returns an immutable NoteType. `model.note()` creates a note owning that model. `NoteType.from_bundle(path, limits=MediaLimits())` loads the same model and its assets from the current bundle format; the optional budget applies separately to each asset before reading.
+24:
+25: `Field(key, name=None, required=False, sort=False)` separates the stable key from the display name. `Template(key, front, back, name=None, browser_front=None, browser_back=None, target_deck=None, generation=GenerationRule())` uses field keys in every source string. `GenerationRule.all(keys)` and `.any(keys)` configure card generation. The default infers Anki's field-presence condition. A builder's `.cloze_field(key)` declares custom cloze generation.
+26:
+27: ## Media and occlusion
+28:
+29: | Entry | Behavior |
+30: | --- | --- |
+31: | `Media.file(path, *, limits=MediaLimits())` | Reads an owned snapshot immediately |
+32: | `Media.bytes(data, media_type, *, limits=MediaLimits())` | Owns bytes with an explicit MIME type |
+33: | `media.with_export_name(name)` | Returns a new filename value sharing the snapshot; previous references retain their names |
+34: | `media.filename`, `media.media_type`, `len(media)` | Read-only snapshot metadata |
+35: | `media.image()` / `.sound()` | Typed content that retains the snapshot |
+36:
+37: `MediaLimits(max_bytes=256 << 20)` controls each import before snapshot creation. Large media can spill to owned temporary storage. Naming conflicts are validated across all explicit and automatically collected assets.
+38:
+39: `Note.image_occlusion(media)` returns an ImageOcclusionBuilder. Chain `.mask(Mask.rect(key, x, y, width, height))`, optionally `.mode(OcclusionMode.HIDE_ONE_GUESS_ONE)`, then `.build()`. The default mode is `HIDE_ALL_GUESS_ONE`. Completion decodes the image and validates stable mask keys and finite in-bounds pixel coordinates. On the returned Note, set `header`, `back_extra` or `comments` normally. The generated `image` and `occlusion` fields cannot be assigned manually.
+40:
+41: ## Operations and results
+42:
+43: | Entry | Result |
+44: | --- | --- |
+45: | `project.build(BuildOptions.to(path))` | BuildOutput with a guaranteed persistent artifact |
+46: | `project.build(BuildOptions.temporary())` | BuildOutput with an owned temporary artifact |
+47: | `options.update_from(path)` | Returns options for updating from complete baseline evidence |
+48: | `project.compare(CompareOptions.against(path))` | Completed ComparisonReport, including a separate publication policy decision |
+49: | `options.update_policy(policy)` | Applies explicit risk policy to Update/Compare; invalid for Create |
+50: | `options.inspect_limits(limits)` | Applies finite limits independently to baseline and candidate |
+51:
+52: BuildOutput has `.artifact`, `.report` and `.snapshot()`. BuildReport exposes `.counts` (BuildCounts with notes/cards/media), `.diagnostics`, `.comparison` and `.snapshot()`. A report has no outcome or file owner. ComparisonReport exposes `.findings`, `.policy`, `.allows_publication` and `.snapshot()`. Snapshots are ordinary JSON-serializable dictionaries and contain no artifact ownership.
+53:
+54: ApkgArtifact exposes `.path`, `.persist_to(path)` and `.close()`. Copying it with `copy.copy` retains another owner; a context manager releases that owner on exit. Temporary output disappears when its last owner is released. Persistent paths survive handle cleanup. A failed persist keeps the source handle usable.
+55:
+56: `UpdatePolicy()` blocks High and Critical findings. `.fail_on(RiskLevel.MEDIUM)` changes the threshold. `.allow('RISK.NOTE_REMOVED')` explicitly accepts the whole registered category, preserving evidence. Unknown codes fail immediately. `InspectLimits` exposes all finite byte/count budgets, including `max_identity_bytes`; it cannot disable required inspections.
+57:
+58: ## Errors and concurrency
+59:
+60: Failures raise SchemaError, AddError, MediaError, ImageOcclusionError, TemplateBundleError, CompareError, PolicyError, BuildError or PersistError. Each exposes `kind`, `code`, `details`, structured observations in `source_details`, and source-chain text in `causes`, and retains the native exception as `__cause__`. I/O causes retain a chained OSError where available. BuildError provides `.report` and `.snapshot()`; CompareError provides partial `.report`; PersistError details include actual publication facts.
+61:
+62: Native Project operations release the GIL and reject simultaneous use of the same object with `BINDING.PROJECT_BUSY`; independent projects can run concurrently. After a process fork, recreate all native values and handles. Inherited handles reject operations with `BINDING.FORKED_OBJECT`, and their cleanup cannot remove parent-owned files. Child-created values operate and clean up normally. See [diagnostics](diagnostics.md).
+63:
+64: ## Addition context
+65:
+66: Failed additions leave the project unchanged. Structured context records the
+67: original note/model keys and the target, with optional conflict or media usage
+68: details. Rust exposes `note::{AddContext, AddTarget, AddDetail}` through
+69: `AddError::context()` / `detail()`; SDKs expose `AddError.details` with typed
+70: context/detail. Node fields use camelCase and are deeply frozen; Python uses
+71: snake_case TypedDicts. Tags retain their insertion index; field locations retain
+72: original sequence indices (null/None for the field, [] for its root) and optional
+73: UTF-8 byte ranges. Default-deck errors from build have no note/model keys and
+74: remain available in the source chain.
+75:
+76: Typed images require image/* MIME at addition; sound references accept audio/*
+77: or video/*. Other categories raise `NOTE.MEDIA_USAGE_INVALID`. Constructors stay
+78: infallible; explicit assets and raw HTML are unaffected. The check uses retained
+79: import MIME, and does not certify playback. Build's independent MIME/extension
+80: validation still applies. See [the design](../plans/2026-09-28-rust-api-validation-and-errors-design.md) for the complete target/detail table.
+81:
+82: <!-- section: source-api-details -->
+83: ## Batch media and prepared publication
+84:
+85: Batch media and prepared publication are included in the public `0.3.1` package.
+86:
+87: ### Prepare, review and publish
+88:
+108:
+109: One publish attempt consumes the owner, including policy or I/O failure. Later
+110: calls raise `PreparedPublicationStateError` with code `BUILD.PREPARED_UNAVAILABLE`
+111: and reason `closed` or `consumed`; close does not cancel an already running
+112: publication. Relative paths bind at preparation invocation, and Project changes
+113: cannot modify the reviewed APKG. Reports survive close without retaining files.
+114: Change options or retry by preparing again. Duration excludes review waiting.
+115: Late errors can mean replacement succeeded with unconfirmed durability; inspect
+116: publication facts before deciding what to do. Native binding protocol 1 and
+117: contract bundle 2.1.0 are required; older same-version binaries are rejected.
+
+FILE docs/template-bundles.md
+1: # Template bundles
+2:
+3: Reuse the same Anki card design across decks: keep a note type's templates, CSS
+4: and media in one directory and load it for normal or Cloze cards. The examples
+5: use Rust; Python and Node.js load bundles with `NoteType.from_bundle` and
+6: `NoteType.fromBundle` (see the [Python API](python/api.md#models-and-templates)
+7: and [Node API](node/api.md#immutable-models)).
+8:
+9: A bundle contains a reusable note type definition, template text, CSS and all explicitly declared media dependencies. `NoteType::from_bundle(directory)` validates the complete bundle and
+10: takes owned snapshots before returning the same immutable `NoteType` used by
+11: inline authoring. It does not partially modify a project.
+12:
+13: ## Run the bundled example
+14:
+18:
+19: The workflow loads the [custom Cloze fixture](../contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml)
+20: and writes `target/docs-examples/template.apkg`. Its template targets
+21: **Languages::Cloze**. One note generates two cards.
+22:
+23: ## Manifest and template references
+24:
+25: The manifest filename is `anki-template.yaml`. Only the new format is accepted:
+26:
+27: <!-- source: contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml -->
+50: <!-- /source -->
+51:
+52: `note_type.key`, field keys and template keys are required stable identifiers.
+53: `name` is optional and defaults to the corresponding key. `cloze_field` selects
+54: a Cloze model; no separate kind declaration is needed. A field without
+55: `required: true` may be omitted. Unknown manifest properties are rejected.
+56:
+57: Every template uses **field keys**, including front, back and browser variants:
+58: `{{cloze:text}}`, `{{extra}}`, and conditional sections such as `{{#extra}}`.
+59: Display names such as Sentence and Extra are generated for Anki after binding.
+60: The loader preserves original file paths and template byte ranges in errors.
+61:
+62: ## Load and reuse a model
+63:
+64: <!-- source: anki_forge/examples/docs_workflow.rs#bundle -->
+81: <!-- /source -->
+82:
+83: For an independent application, this full example expects the same bundle copied
+84: to `fixtures/template-bundle`:
+85:
+100:
+101: The returned model is independent of the source directory. It can be shared with
+102: another project or used after that directory is removed. A load failure returns
+103: no partial model and cleans up its unshared snapshots.
+104:
+105: ## Assets and budgets
+106:
+107: Declare every raw template/CSS/script asset explicitly. Each `assets` entry uses
+108: a path relative to the bundle and a fixed export name:
+109:
+117:
+118: Then templates may use `<img src="badge.png">` and CSS may use
+119: `url('labels.woff')`. The `css_file` property supplies the CSS source file; assets
+120: are not inferred from arbitrary HTML/CSS/JavaScript. Declared assets remain in the
+121: APKG even if no static reference is detected. Export names obey the same
+122: portable-name and Unicode/case collision rules as [Media](media.md).
+123: The complete export name is limited to 255 UTF-8 bytes, including its extension.
+124: The JSON Schema checks syntax and character count; `NoteType::from_bundle`
+125: also enforces the byte budget, file contents and references before returning a
+126: validated model. A successful schema check alone does not guarantee loading.
+127:
+128: Absolute paths, traversal escapes and symlinks outside the bundle are rejected.
+129: The manifest is limited to 256 KiB; each template/CSS text file is limited to
+130: 2 MiB and must be UTF-8. Asset snapshots use the default media budget, or a
+131: caller-supplied `MediaLimits` through `NoteType::from_bundle_with_limits`.
+132: Both preflight lengths and actual bytes read are checked.
+133:
+134: Bundle errors retain kind/code, source path, byte offset where applicable, and
+135: the underlying schema, I/O, YAML, UTF-8 or media error. Model completion validates
+136: schema; adding notes separately checks project-level conflicts. See
+137: [custom note types](custom-notetypes.md) and [troubleshooting](troubleshooting.md).
+
+FILE docs/updates.md
+1: # Update and distribute a deck
+2:
+3: Publish corrections or new cards for an Anki deck you have already distributed.
+4: Stable note IDs help Anki Forge and Anki recognize existing notes instead of
+5: treating them as new ones; Anki's import settings and newer local edits still
+6: affect what changes.
+7:
+8: Keep the project namespace and note/model/field/template keys stable. Build each
+9: new release from the previous **original distribution APKG**, which carries
+10: complete versioned identity evidence. Save that package with its source revision.
+11:
+12: ## Run two versions and compare
+13:
+17:
+18: This writes `spanish-v1.apkg` and `spanish-v2.apkg`, compares the changed answer,
+19: and checks the updated package counts. The executable source is:
+20:
+21: <!-- source: anki_forge/examples/docs_workflow.rs#updates -->
+42: <!-- /source -->
+43:
+44: `compare` completes successfully even when findings would block publication.
+45: Read `comparison.policy().allows_publication()` separately from the original
+46: risk level and evidence. `build(...update_from(...))` runs the same analysis and
+47: returns `BuildError` if its policy blocks the candidate, before publication.
+48:
+49: ## Policy and inspection limits
+50:
+51: This full program selects a stricter threshold and uses the same configuration
+52: for comparison and update:
+53:
+76:
+77: The default policy blocks High and Critical findings. After reviewing a specific
+78: category, a caller can deliberately choose
+79: `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. It accepts **all findings
+80: in that category**, retaining their original level and evidence. It does not
+81: claim to approve selected notes individually. An allowance with no matching
+82: finding produces a warning; unknown risk codes are rejected. Do not automatically
+83: allow every code returned by a comparison.
+84:
+85: Missing or corrupt evidence, namespace mismatch, invalid candidate data and
+86: inspection limits are hard errors, not allowable risk categories. Comparison
+87: returns an error with completed observations when analysis cannot finish.
+88: Explicit policy on a create request without `update_from` is a configuration
+89: error regardless of setter order.
+90:
+91: ## Evidence and identity
+92:
+93: The package includes `ankiforge-identity.json` with the
+94: `ankiforge-identity-v1` format. It binds model/config IDs, note GUIDs, historical
+95: field/template slots, card/mask ordinals, revisions and media to the actual
+96: collection and payloads. Anki re-export does not preserve this evidence and is
+97: not a usable update baseline. Missing evidence is never silently reconstructed.
+98:
+99: Display-name and content edits preserve identity keys. Unchanged content keeps
+100: its baseline revision; changed content advances it. Reordering fields/templates
+101: preserves historical mappings. Retired identities remain reserved so that
+102: restoring the same key can reuse them. A note key cannot move to another model,
+103: and a model key cannot change between normal and Cloze kinds.
+104:
+105: ## Client import behavior and release review
+106:
+107: An APKG is a distribution package, not deletion synchronization. Omitting notes,
+108: fields, templates or masks does not delete existing learner data. Field/template
+109: schema changes and sort-field changes are high-risk because Anki merge and import
+110: settings affect their behavior. Schema changes can copy models or update target
+111: note timestamps before note-content comparison.
+112:
+113: Test first import and updates into an existing collection on the clients you
+114: support. Check fields, GUIDs, card sets, local edits and existing scheduling with
+115: the intended merge and note-update settings. Stable identity alone does not
+116: promise that newer local edits are overwritten or deleted history is restored.
+117:
+118: Write candidates to a path separate from the archived baseline. After review,
+119: distribute the accepted package and retain it as the next release's evidence.
+120: See [build guarantees](build-guarantees.md) for ownership and publication facts.
+121:
+122: <a id="build-once-review-then-publish-from-source"></a>
+123:
+124: ## Build once, review then publish
+125:
+126: This API is included in the public `0.3.1` package.
+127:
+128: Build once, inspect the report, then publish the same candidate file. Reviewing
+129: and then running a second ordinary build creates another candidate; prepared
+130: publication keeps the actual APKG tied to the reviewed report.
+131:
+132: <!-- source: anki_forge/examples/docs_publication.rs -->
+158: <!-- /source -->
+159:
+160: From the pinned source checkout, save the complete program above as
+161: `anki_forge/examples/docs_publication.rs` (this guide adds the example; it is not
+162: bundled in `1199196`). Then run:
+163:
+167:
+168: The example writes `spanish-original.apkg` and, when the policy allows publication,
+169: `spanish-reviewed.apkg` to the repository root.
+170: Preparation does not publish the destination. Review the findings and test your
+171: client import before approving distribution; the example automatically publishes
+172: only this simple content edit when its policy allows it. The benchmark does not
+173: measure this workflow.
+174:
+175: See [build lifecycle](build-guarantees.md#prepared-publication-from-source),
+176: [Rust API](rust-api.md#review-once-publish-once),
+177: [Node API](node/api.md#prepare-review-and-publish) and
+178: [Python API](python/api.md#prepare-review-and-publish).
+
+FILE website/src/i18n/en.json
+{
+  "home.title": "Anki flashcard generator for developers",
+  "home.description": "Generate Anki flashcards and APKG decks with open-source Python, Node.js and Rust APIs. Start with CSV, JSON or an AI-assisted workflow.",
+  "home.hero1": "Generate Anki flashcards",
+  "home.hero2": "from your data.",
+  "home.intro": "Anki Forge is an open-source Anki APKG generation library with a Rust core and Rust, Python and Node.js interfaces. Package media, use custom templates and review updates before distribution.",
+  "home.first": "Build your first deck",
+  "home.json": "Build from JSON",
+  "home.choose": "Choose your programming language.",
+  "home.install": "Export spanish.apkg with Anki Forge {version}. You do not need to install Anki to export a deck.",
+  "home.buildWith": "Build with {language}",
+  "home.try": "See the code. Try the card.",
+  "home.tryDescription": "Switch between runnable Rust examples, flip the previews, and download the decks they produce.",
+  "home.further": "Go further",
+  "home.templates": "Custom templates",
+  "home.occlusion": "Occlusion modes",
+  "home.media": "Media and video",
+  "home.evolve1": "Let your notes evolve.",
+  "home.evolve2": "Keep the same note IDs.",
+  "home.evolveDescription": "Correct a definition or add an example. Keep stable note IDs and use the original APKG from the previous release so Anki Forge can match existing notes when you export again.",
+  "home.updates": "Understand deck updates",
+  "home.features": "More ways to build",
+  "home.validateTitle": "Catch problems before export.",
+  "home.validateDescription": "Inspect diagnostics for missing fields, media, and template problems. Make validation part of your build.",
+  "home.validation": "Explore validation",
+  "home.templateTitle": "Your cards. Your templates.",
+  "home.templateDescription": "Start with Basic and Cloze, or define your own note types. Keep HTML, CSS, and media in reusable template bundles.",
+  "home.templateLink": "Explore templates",
+  "home.nextTitle": "From your first deck to the next update",
+  "home.nextDescription": "Start with a CSV spreadsheet, JSON data or cards drafted with an AI assistant. Follow a complete export recipe, then add media and review updates.",
+  "home.compare": "Compare with genanki",
+  "nav.home": "Anki Forge home",
+  "nav.main": "Main navigation",
+  "nav.mobile": "Mobile navigation",
+  "nav.menu": "Menu",
+  "nav.repository": "GitHub repository",
+  "nav.theme": "Color theme",
+  "nav.auto": "System",
+  "nav.light": "Light",
+  "nav.dark": "Dark",
+  "nav.skip": "Skip to content",
+  "footer.description": "Anki Forge. Open source Anki APKG generation, powered by Rust.",
+  "footer.label": "Footer",
+  "footer.articles": "Articles",
+  "footer.license": "MIT license",
+  "workbench.label": "Code and card examples",
+  "workbench.tabs": "Card type",
+  "workbench.hint": "Rust source → browser preview",
+  "workbench.source": "Full source ↗",
+  "workbench.output": "Output",
+  "workbench.note": "Browser previews of exported content; import the APKG to check it in Anki.",
+  "workbench.noScript": "This is the Basic example. View all card examples and download their decks.",
+  "card.basic": "Basic",
+  "card.cloze": "Cloze",
+  "card.media": "Media",
+  "card.occlusion": "Image Occlusion",
+  "card.direction": "Spanish → English",
+  "card.meaning": "What does this mean?",
+  "card.sentence": "Complete the sentence",
+  "card.ear": "Ear training",
+  "card.waveform": "Illustrative waveform of a synthesized tone",
+  "card.cell": "Cell anatomy",
+  "card.hiddenCell": "Animal cell cross section with one structure hidden",
+  "card.greeting": "A greeting in Spanish.",
+  "card.sine": "A synthesized sine tone",
+  "card.concert": "One second of concert A.",
+  "card.revealedCell": "Animal cell cross section showing its coral-colored nucleus",
+  "card.play": "Play the example pitch",
+  "card.audioFallback": "Your browser does not support audio.",
+  "card.downloadTone": "Download the tone.",
+  "card.showAnswer": "Show answer",
+  "card.showQuestion": "Show question",
+  "card.questionShown": "Question shown.",
+  "card.answer": "Answer: {answer}",
+  "update.id": "Stable note ID",
+  "update.front": "Front",
+  "update.back": "Back",
+  "update.try": "Try a content change.",
+  "update.change": "Update the answer",
+  "update.reset": "Reset example",
+  "update.changed": "Content changed. Same note ID.",
+  "update.comparison": "Comparison results",
+  "update.none": "No changes detected",
+  "update.policy": "Publication policy",
+  "update.allowed": "allows this change",
+  "update.blocked": "blocks this change",
+  "update.v1": "Download v1",
+  "update.v2": "Download v2",
+  "update.report": "Comparison report",
+  "update.warning": "Keep the original distribution APKG. Import settings and newer local edits affect updates.",
+  "update.guide": "Update guide",
+  "copy.button": "Copy",
+  "copy.install": "Copy install command",
+  "copy.success": "Command copied.",
+  "copy.fallback": "Command selected. Copy it with your keyboard.",
+  "copy.copied": "Copied",
+  "copy.code": "Copy code",
+  "copy.codeSuccess": "Code copied.",
+  "copy.codeFallback": "Code selected. Copy it with your keyboard.",
+  "copy.codeLabel": "{language} code",
+  "blog.title": "Blog",
+  "blog.description": "Practical guides and engineering decisions behind Anki Forge.",
+  "blog.heading": "Notes on making notes.",
+  "blog.rss": "Follow with RSS ↗",
+  "blog.all": "← All articles",
+  "blog.continue": "Continue with the guide →",
+  "blog.read": "Read article",
+  "blog.readLabel": "Read article: {title}",
+  "blog.Tutorial": "Tutorial",
+  "blog.Engineering": "Engineering",
+  "blog.feedTitle": "Anki Forge Blog",
+  "error.title": "Page not found",
+  "error.description": "This page could not be found. Return to Anki Forge or browse the authoring guide.",
+  "error.heading": "This page is missing.",
+  "error.explanation": "The link may have changed. You can return home or find what you need in the guide.",
+  "error.home": "Back home",
+  "error.guide": "Browse the guide →",
+  "examples.title": "Card examples",
+  "examples.description": "Explore Basic, Cloze, media, and Image Occlusion cards built with Anki Forge. Read their Rust source and download the generated Anki decks.",
+  "examples.heading1": "A little code.",
+  "examples.heading2": "Something to remember.",
+  "examples.intro": "Explore the source, flip the cards, and open the generated decks in Anki. These web previews use the same fields as the downloads.",
+  "examples.combined": "Download the four-card deck",
+  "examples.fullSource": "Read the complete source",
+  "examples.excerpt": "Rust excerpt",
+  "examples.download": "Download {file}",
+  "examples.counts": "{notes} · {cards} · {media}",
+  "examples.updateTitle": "One note, two versions.",
+  "examples.updateDescription": "The second build changes the answer from “hello” to “hello; hi”. It compares against the first package and checks that the note identity is preserved.",
+  "examples.workflow": "Read the update workflow",
+  "examples.limitations": "Anki’s import settings and local edits affect how updates are applied. The previews show content and identity; card styling and review behavior come from Anki.",
+  "examples.basic": "A Spanish greeting with a question, an answer, and an explicit stable ID. Start here for simple front-and-back cards.",
+  "examples.cloze": "Hide a word in context with Anki’s cloze syntax. This note has one deletion, so it generates one card.",
+  "examples.media": "An image and a playable tone, packaged with the note. This excerpt uses an ear-training note type defined in the full source.",
+  "examples.occlusion": "A keyed rectangle hides the nucleus in an illustrated cell cross section. The downloadable deck uses the same image and mask as this preview.",
+  "ai.title": "Use Anki Forge with AI.",
+  "ai.description": "Choose a programming language, describe your task, then paste the prompt into your AI coding assistant.",
+  "ai.request": "What kind of deck would you like to create?",
+  "ai.placeholder": "Create a Spanish vocabulary deck with audio.",
+  "ai.privacy": "Optional. Your request is kept only in this page.",
+  "ai.skillQuestion": "Does your coding assistant support Skills?",
+  "ai.skillLink": "Open the Anki Forge Skill",
+  "ai.noScript": "Copy a language template below and replace the task placeholder. The installation commands and Skill are also available without JavaScript.",
+  "ai.language": "Programming language",
+  "ai.brief": "AI brief",
+  "ai.copy": "Copy prompt for AI",
+  "ai.copied": "Prompt copied. Paste it into your AI coding assistant.",
+  "ai.fallback": "Prompt selected. Copy it with your keyboard, then paste it into your AI coding assistant.",
+  "ai.install": "Copy install command",
+  "search.loading": "Loading search…",
+  "search.error": "Search could not load. Check your connection and try again.",
+  "copy.noScript": "Without JavaScript, select code or commands and copy them with your keyboard.",
+  "hero.description": "Basic, Cloze, Media and Image Occlusion cards flip and combine into an APKG deck.",
+  "hero.front": "Front",
+  "hero.back": "Back",
+  "hero.english": "English",
+  "hero.spanish": "Spanish",
+  "hero.gap": "Fill the gap.",
+  "hero.media": "Image + audio",
+  "hero.deck": "Anki deck",
+  "hero.cards": "cards",
+  "hero.files": "media",
+  "hero.caption": "Four card types. ",
+  "hero.oneDeck": "One Anki deck.",
+  "performance.title": "Export performance",
+  "performance.workload": "1,000 Basic notes per workload",
+  "performance.export": "Export {notes} text-only notes",
+  "performance.range": "Less export time across five measured workloads",
+  "performance.medians": "10-run medians",
+  "performance.media": "Text, images, audio.",
+  "performance.faster": "Faster in all five tests.",
+  "performance.description": "Each test uses {notes} Basic notes. The five tests cover text-only notes, separate media files and shared media. In these tests, the Anki Forge Rust API took {minimum}–{maximum}% less time to export than genanki.",
+  "performance.chart": "Median export times in milliseconds",
+  "performance.less": "{value}% less time",
+  "performance.more": "{value}% more time",
+  "performance.basic-mixed-text-v1": "Text only",
+  "performance.basic-image-unique-v2": "Unique images",
+  "performance.basic-audio-unique-v2": "Unique audio",
+  "performance.basic-mixed-unique-v2": "Mixed, unique media",
+  "performance.basic-mixed-shared-v2": "Mixed, shared media",
+  "site.title": "Anki Forge | Build Anki decks from code",
+  "site.socialAlt": "Anki Forge. Anki decks, built from code. A Spanish flashcard: hola, hello.",
+  "social.line1": "Anki decks,",
+  "social.line2": "built from code.",
+  "social.description": "Write notes. Build decks. Keep their identity.",
+  "social.languages": "Spanish → English",
+  "social.footer": "Open source · Rust · Anki",
+  "performance.method": "Method and original measurements",
+  "performance.limitations": "These results measure deck generation, not Anki import or review speed; other hardware and workloads may differ.",
+  "footer.rss": "RSS",
+  "machine.viewMarkdown": "View Markdown",
+  "machine.aiIndex": "AI documentation index",
+  "machine.intro": "Anki Forge generates Anki APKG decks from code using Rust, Node / TypeScript or Python.",
+  "machine.version": "Current public package version: {version}.",
+  "machine.constraints": "Exporting a deck does not require Anki. The APIs available in published packages differ from those in source builds. For updates, keep the original APKG from the previous release; Anki import settings and newer local edits can affect the result.",
+  "machine.start": "Start here",
+  "machine.quickstarts": "Quickstarts",
+  "machine.api": "API references",
+  "machine.tasks": "Task guides",
+  "machine.constraintsGroup": "Constraints",
+  "machine.optional": "Optional",
+  "machine.sourceBuild": "Development/source environment.",
+  "machine.history": "Historical article, published {date}.",
+  "machine.repository": "Source repository and development resources.",
+  "machine.otherLanguage": "{language} AI documentation index.",
+  "hero.counts": "{cards} / {media}",
+  "count.notes": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} note",
+      "other": "{count} notes"
+    }
+  },
+  "count.cards": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} card",
+      "other": "{count} cards"
+    }
+  },
+  "count.media": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "one": "{count} media file",
+      "other": "{count} media files"
+    }
+  },
+  "home.csv": "Convert CSV to Anki",
+  "home.aiCards": "Create cards with AI"
+}

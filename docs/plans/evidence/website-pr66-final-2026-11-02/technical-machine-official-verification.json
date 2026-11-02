@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/standards_review/pr66-machine-verifier-2026-11-02",
+  "outcomes": [
+    {
+      "environment": "prefix",
+      "status": "passed",
+      "result": {
+        "schemaVersion": 1,
+        "status": "passed",
+        "environment": "prefix",
+        "inputSha256": "fd6716207f6f5557895553e95f710a27cc66cee6d4bbd1cacf0ddc56b7aceebf",
+        "configuration": {
+          "site": "https://morehardy.github.io",
+          "base": "/anki-forge",
+          "customDomain": ""
+        },
+        "releaseLocales": [
+          "en",
+          "zh-CN",
+          "es",
+          "pt-BR",
+          "ja",
+          "de"
+        ],
+        "currentManifestSha256": "2568825da22b987d21c323442d57882b17626f1dfc51a2e33f4d9cc86aad88ec",
+        "configSha256": "deb4fb994c475252a98c5772718ce4e5cb94599cf2b0be990e640fbdda317505",
+        "reports": [
+          {
+            "kind": "usage-tasks",
+            "path": "docs/plans/evidence/website-pr66-final-2026-11-02/usage-tasks-prefix.json",
+            "sha256": "382a4220321243f4723127ccd0fa67e31499e61c2c1248b78f691fce82ceb1d4",
+            "bytes": 1702691,
+            "reviewerRun": "/root/spec_review/pr66-final-usage-prefix-2026-11-02",
+            "originManifestSha256": "2568825da22b987d21c323442d57882b17626f1dfc51a2e33f4d9cc86aad88ec",
+            "originCommit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+            "currentManifestSha256": "2568825da22b987d21c323442d57882b17626f1dfc51a2e33f4d9cc86aad88ec",
+            "reused": false,
+            "resourceScopeSha256": "b3abe287f62a50f11713b347f25913c44d2c56ee416c18433e16afd714e74351"
+          },
+          {
+            "kind": "machine-read",
+            "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-read-prefix.json",
+            "sha256": "e3e2ea9b4e4fd2106a7bb3e435995b0ada86fcb744fd392c15eef4f6b1ee4e4c",
+            "bytes": 112770,
+            "reviewerRun": "/root/standards_review/pr66-current-machine-prefix-2026-11-02",
+            "originManifestSha256": "2568825da22b987d21c323442d57882b17626f1dfc51a2e33f4d9cc86aad88ec",
+            "originCommit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+            "currentManifestSha256": "2568825da22b987d21c323442d57882b17626f1dfc51a2e33f4d9cc86aad88ec",
+            "reused": false,
+            "resourceScopeSha256": "0220b341836acec47a245672b6b5ef332cc4a9b518109b17e790062ee8afecf4"
+          }
+        ]
+      }
+    },
+    {
+      "environment": "root",
+      "status": "passed",
+      "result": {
+        "schemaVersion": 1,
+        "status": "passed",
+        "environment": "root",
+        "inputSha256": "fd6716207f6f5557895553e95f710a27cc66cee6d4bbd1cacf0ddc56b7aceebf",
+        "configuration": {
+          "site": "https://ankiforge.dev",
+          "base": "/",
+          "customDomain": "ankiforge.dev"
+        },
+        "releaseLocales": [
+          "en",
+          "zh-CN",
+          "es",
+          "pt-BR",
+          "ja",
+          "de"
+        ],
+        "currentManifestSha256": "84f934bc3b63ea20ce0ba994d42f94e6827d2a1488d575d0cb33aa4791011642",
+        "configSha256": "deb4fb994c475252a98c5772718ce4e5cb94599cf2b0be990e640fbdda317505",
+        "reports": [
+          {
+            "kind": "usage-tasks",
+            "path": "docs/plans/evidence/website-pr66-final-2026-11-02/usage-tasks-root.json",
+            "sha256": "a1d264d345ad808a1d9448abe867026526787ec4cde9ddcd0cbb375344ba71d4",
+            "bytes": 1696425,
+            "reviewerRun": "/root/spec_review/pr66-final-usage-root-2026-11-02",
+            "originManifestSha256": "84f934bc3b63ea20ce0ba994d42f94e6827d2a1488d575d0cb33aa4791011642",
+            "originCommit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+            "currentManifestSha256": "84f934bc3b63ea20ce0ba994d42f94e6827d2a1488d575d0cb33aa4791011642",
+            "reused": false,
+            "resourceScopeSha256": "c75f7a3e7fd4a56dc61c53316bd86669143a8d7c262b3812ae8b603aa987f773"
+          },
+          {
+            "kind": "machine-read",
+            "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-read-root.json",
+            "sha256": "2b16f3c14afec8e06bd192ec76f63d1f58c04280a6264c017a737f77bfb81797",
+            "bytes": 118685,
+            "reviewerRun": "/root/standards_review/pr66-current-machine-root-2026-11-02",
+            "originManifestSha256": "84f934bc3b63ea20ce0ba994d42f94e6827d2a1488d575d0cb33aa4791011642",
+            "originCommit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+            "currentManifestSha256": "84f934bc3b63ea20ce0ba994d42f94e6827d2a1488d575d0cb33aa4791011642",
+            "reused": false,
+            "resourceScopeSha256": "5cb5349e7e883945e2e3c8a1748070434db213818b5145d1071359479293959f"
+          }
+        ]
+      }
+    }
+  ]
+}

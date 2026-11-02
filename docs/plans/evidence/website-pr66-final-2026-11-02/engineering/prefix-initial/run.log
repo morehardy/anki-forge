@@ -1,0 +1,22 @@
+Release acceptance: running check:content
+Release acceptance: running check:site
+Release acceptance: running check:surface
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: check:surface failed; inspect 03-check-surface.log
+
+'failed' !== 'passed'
+
+    at runReleaseEvidence (file:///Users/hp/Desktop/2026/anki-forge/website/scripts/release-evidence.mjs:196:14)
+    at async file:///Users/hp/Desktop/2026/anki-forge/website/scripts/release-evidence.mjs:302:23 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'failed',
+  expected: 'passed',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

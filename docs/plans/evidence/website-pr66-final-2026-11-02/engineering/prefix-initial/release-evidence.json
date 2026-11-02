@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-engineering",
+  "status": "failed",
+  "engineeringStatus": "failed",
+  "engineeringOnly": true,
+  "startedAt": "2026-11-02T07:41:37.506Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "checks": [
+    {
+      "name": "check:content",
+      "command": [
+        "npm",
+        "run",
+        "check:content"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 4082,
+      "log": {
+        "file": "01-check-content.log",
+        "sha256": "a1389801725ed2ad44fc0ec79d1d44e234e28bcf301c29f2188742fc483de3a3",
+        "bytes": 327
+      }
+    },
+    {
+      "name": "check:site",
+      "command": [
+        "npm",
+        "run",
+        "check:site"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "signal": null,
+      "durationMs": 3374,
+      "log": {
+        "file": "02-check-site.log",
+        "sha256": "b64b11b1add4fcf80d134e67c21803d15603069f9d9f2819c37ada1c2e73b695",
+        "bytes": 340
+      }
+    },
+    {
+      "name": "check:surface",
+      "command": [
+        "npm",
+        "run",
+        "check:surface"
+      ],
+      "status": "failed",
+      "exitCode": 1,
+      "signal": null,
+      "durationMs": 267,
+      "log": {
+        "file": "03-check-surface.log",
+        "sha256": "76baa9186e3174724d27af5c19d502553cc8bb919ef97061ded9b04848180f44",
+        "bytes": 950
+      }
+    }
+  ],
+  "identity": {
+    "commit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+    "inputSha256": "5156bdd08f99e7a4701b979c1d33455cc2df43d7b2037447d6761f2d79622cd3",
+    "configuration": {
+      "site": "https://morehardy.github.io",
+      "base": "/anki-forge",
+      "customDomain": ""
+    },
+    "releaseLocales": [
+      "en",
+      "zh-CN",
+      "es",
+      "pt-BR",
+      "ja",
+      "de"
+    ]
+  },
+  "manifestSha256": "c46bb2935c4d02dd4faf2ca276f8957b6adca6f12e7cb28c8348ba74d2f3b236",
+  "artifactSha256": "a9d2c7ab0228e942115cd6ed29ff7aaae75cb07feb8430033a2338b9309b1487",
+  "fileCount": 705,
+  "artifactUnchanged": true,
+  "finishedAt": "2026-11-02T07:41:45.582Z",
+  "error": "check:surface failed; inspect 03-check-surface.log\n\n'failed' !== 'passed'\n"
+}

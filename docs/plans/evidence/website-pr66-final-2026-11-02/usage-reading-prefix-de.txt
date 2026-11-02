@@ -1,0 +1,376 @@
+
+rust-basic http://127.0.0.1:63533/anki-forge/de/docs/quickstart/
+Anki-Karten mit Rust erzeugen
+
+Verwende Rust ab Version 1.92. Für eine andere Programmiersprache wähle Node / TypeScript oder Python.
+
+Installieren
+Abschnitt „Installieren“
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Deinen ersten Stapel exportieren
+Abschnitt „Deinen ersten Stapel exportieren“
+
+Speichere dieses vollständige Programm als src/main.rs:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Das Programm schreibt die dauerhaft gespeicherte Datei spanish.apkg. Öffne sie in Anki, importiere sie und lerne hola → hello im Stapel Spanish. Für den Export muss Anki nicht installiert sein.
+
+Der Namensraum spanish und der stabile Schlüssel es:hola kennzeichnen diese Notiz auch nach späteren Inhaltsänderungen. Du kannst auch das Basic-Beispiel der Website herunterladen.
+
+Nächste Schritte
+Abschnitt „Nächste Schritte“
+
+Die Anleitung für JSON zu Anki zeigt einen vollständigen Ablauf mit Medien und Aktualisierungen.
+
+Ergänze Bilder und Audio, eigene Notiztypen oder Bildverdeckung. Bewahre das ursprünglich verteilte APKG auf, bevor du eine Aktualisierung vergleichst und veröffentlichst. Einzelheiten findest du in der Rust-API und unter geprüfte Umgebungen.
+
+Markdown anzeigen
+
+Seite bearbeiten
+Vorherige Seite
+Deine Programmiersprache wählen
+Nächste Seite
+Anki Forge in deine Rust-Anwendung integrieren
+
+Anki Forge. Anki-APKGs mit Open Source und Rust erzeugen.
+
+Artikel
+RSS
+MIT-Lizenz
+KI-Dokumentationsindex
+
+python-basic http://127.0.0.1:63533/anki-forge/de/docs/python-quickstart/
+Anki-Karten mit Python erzeugen
+
+Erstelle und aktiviere eine virtuelle Umgebung und installiere anschließend das veröffentlichte PyPI-Paket:
+
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Unter Windows aktivierst du die Umgebung mit .venv\Scripts\Activate.ps1. Verwende gewöhnliches CPython ab Version 3.11 und ein passendes Wheel für deine Plattform. CPython 3.11–3.14 sind durch dokumentierte Release-Prüfungen abgedeckt; siehe geprüfte Umgebungen.
+
+Einen Stapel exportieren
+Abschnitt „Einen Stapel exportieren“
+
+Speichere Folgendes als main.py:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Öffne die dauerhaft gespeicherte Datei spanish.apkg in Anki. Sie enthält hola → hello im Stapel Spanish. Behalte den Namensraum spanish und den Notizschlüssel es:hola für spätere Änderungen bei. Für den Export muss Anki nicht installiert sein.
+
+Nächste Schritte
+Abschnitt „Nächste Schritte“
+
+Für eine Vokabeltabelle folge CSV zu Anki. Um Kartenentwürfe aus Aufzeichnungen zu erstellen, beginne mit Karten mit KI-Unterstützung erstellen.
+
+Eine vollständige Aufgabe mit Medien und Aktualisierung findest du unter JSON zu Anki.
+
+Bilder und Audio und Python-Medien-API
+Eigene Notiztypen und Vorlagenpakete
+Bildverdeckung
+Vergleichen und aktualisieren
+Python-API und Diagnostik
+Von genanki umsteigen
+
+Für native Builds aus dem Quellcode verwende Aus dem Quellcode bauen.
+
+Markdown anzeigen
+
+Seite bearbeiten
+Vorherige Seite
+Anki-Karten mit Node.js erzeugen
+Nächste Seite
+Umstieg auf die neue Python-API
+
+Anki Forge. Anki-APKGs mit Open Source und Rust erzeugen.
+
+Artikel
+RSS
+MIT-Lizenz
+KI-Dokumentationsindex
+
+node-basic http://127.0.0.1:63533/anki-forge/de/docs/node-quickstart/
+Anki-Karten mit Node.js erzeugen
+
+Verwende Node.js ab Version 22.13. Führe in einem neuen Anwendungsverzeichnis Folgendes aus:
+
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Dadurch werden das veröffentlichte npm-Paket und die passende native optionale Abhängigkeit installiert. Die abgedeckten Plattformen findest du unter geprüfte Umgebungen.
+
+Einen Stapel exportieren
+Abschnitt „Einen Stapel exportieren“
+
+Speichere Folgendes als main.mjs:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Öffne die dauerhaft gespeicherte Datei spanish.apkg in Anki. Sie enthält hola → hello im Stapel Spanish. Behalte den Namensraum spanish und den Schlüssel es:hola für spätere Änderungen bei. Wenn du das persistente Artefakt schließt, bleibt die Datei auf dem Datenträger. Für den Export muss Anki nicht installiert sein.
+
+TypeScript und nächste Aufgaben
+Abschnitt „TypeScript und nächste Aufgaben“
+
+Die JSON-zu-Anki-Anleitung enthält einen vollständigen TypeScript-Ablauf zum Kompilieren und Ausführen.
+
+Verwende .mjs für ESM oder require('ankiforge') für CommonJS. TypeScript-Deklarationen sind im Paket enthalten; siehe TypeScript-Konfiguration.
+
+Bilder und Audio und Node-Medien-API
+Eigene Notiztypen und Vorlagenpakete
+Bildverdeckung
+Vergleichen und aktualisieren
+Node-API und Fehlersuche
+
+Builds aus dem Quellcode und lokale Paketerstellung beschreibt Aus dem Quellcode bauen.
+
+Markdown anzeigen
+
+Seite bearbeiten
+Vorherige Seite
+Inhalte mit Rust erstellen
+Nächste Seite
+Anki-Karten mit Python erzeugen
+
+Anki Forge. Anki-APKGs mit Open Source und Rust erzeugen.
+
+Artikel
+RSS
+MIT-Lizenz
+KI-Dokumentationsindex
+
+json-media http://127.0.0.1:63533/anki-forge/de/docs/json-to-anki/
+Anki-Stapel aus JSON erzeugen und aktualisieren
+
+Lies drei Biologiefragen aus JSON ein, ergänze ein gemeinsames Bild und einen Audioclip und exportiere ein ursprüngliches APKG sowie eine geprüfte Aktualisierung, die nur eine Antwort ändert. Jede Version soll 3 Notizen, 3 Karten und 2 Mediendateien enthalten. Wähle unten ein SDK; jedes Beispiel ist ein vollständiges Programm. Für den normalen Export muss Anki nicht installiert sein.
+
+Gepflegt von den Anki-Forge-Maintainern · englische Vorlage geprüft am 2026-10-25.
+
+Gemeinsame Eingabedateien
+Abschnitt „Gemeinsame Eingabedateien“
+
+Lade v1.json, v2.json, cell.png und tone.wav herunter. Das Bild zeigt eine Zelle; die Audiodatei enthält einen kurzen erzeugten Ton, keine gesprochene Vokabel. Lege diese vier Dateien in jedem neuen Anwendungsverzeichnis unter recipe/ ab:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Beide JSON-Dateien enthalten namespace, deck und drei notes mit dauerhaft verwendeten Werten für id, front und back. v2 ändert ausschließlich die erste Antwort. Die aufrufende Anwendung liest das JSON ein; Anki Forge übernimmt die Erstellung der Notizen und des APKG. Prüfe nicht vertrauenswürdige Eingaben gegen das Schema deiner Anwendung, bevor du daraus Notizen erstellst.
+
+Rust
+Abschnitt „Rust“
+
+Verwende Rust ab Version 1.92. Das JSON wird mit serde und serde_json eingelesen. Das Beispiel nutzt das veröffentlichte Paket Anki Forge 0.3.1.
+
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Speichere den folgenden Code als src/main.rs. Lege recipe/ neben Cargo.toml an:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Python
+Abschnitt „Python“
+
+Verwende reguläres CPython ab Version 3.11 mit einem Wheel für deine Plattform. Die Release-Prüfungen decken 3.11–3.14 ab. Unter Windows aktivierst du die virtuelle Umgebung mit .venv\Scripts\Activate.ps1. Das Beispiel nutzt das veröffentlichte Paket Anki Forge 0.3.1.
+
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Speichere den folgenden Code als main.py und lege daneben das Verzeichnis recipe/ an:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Node
+Abschnitt „Node“
+
+Benötigt werden Node.js ab Version 22.13 und die passende native optionale Abhängigkeit. Dieses Programm kompiliert TypeScript zu JavaScript und führt es mit Node.js aus. Es nutzt das veröffentlichte Paket Anki Forge 0.3.1.
+
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Speichere den folgenden Code als main.mts und lege daneben das Verzeichnis recipe/ an:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Ergebnis prüfen und importieren
+Abschnitt „Ergebnis prüfen und importieren“
+
+Das gewählte Programm gibt output/<language>/v2.apkg aus. Bewahre v1.apkg daneben auf. Für diese reine Antwortänderung dokumentieren comparison.json und review.json den Befund RISK.NOTE_CHANGED, keine hinzugefügten oder entfernten Notizen und policy.allows_publication: true. Vor der Veröffentlichung prüft das Programm die Richtlinie erneut am vorbereiteten Kandidaten. Ein Ausgabeverzeichnis, das bereits eine der beiden Versionen enthält, wird nicht wiederverwendet.
+
+Importiere zunächst v1.apkg in Anki: Im Stapel Biology sollten drei Basic-Karten mit dem Zellbild und dem Ton erscheinen. Importiere danach v2.apkg. Prüfe, dass die erste Antwort nun „The basic structural and functional unit of life“ lautet und es weiterhin drei Notizen gibt. Der Namensraum biology-json kennzeichnet dieses Veröffentlichungsprojekt. Jede fachliche ID dient als stabiler Notizschlüssel; daraus leitet Anki Forge die von Anki verwendete GUID ab. Behalte den Namensraum und diese drei Schlüssel unverändert bei.
+
+Verwende als Aktualisierungsbasis das ursprünglich verteilte v1-APKG, niemals einen erneuten Export aus Anki. Wie der Client Einträge beim Import zuordnet und mit lokalen Änderungen sowie der Lernplanung umgeht, hängt von der Anki-Version, den Notiztypen und den Importeinstellungen ab. Prüfe den vorgesehenen Client vor einer Veröffentlichung. Beim Import eines Pakets werden Notizen, die in einem späteren Paket fehlen, nicht gelöscht. Ein erfolgreicher Vergleich oder Build garantiert nicht den Erhalt jedes individuellen Lernstands.
+
+Weitere Informationen findest du unter Aktualisierungsbedingungen, Medien, API-Übersicht und Bibliotheksvergleich.
+
+Markdown anzeigen
+
+Seite bearbeiten
+Vorherige Seite
+CSV zu Anki: Karten mit Python erzeugen
+Nächste Seite
+Anki-Karten mit KI-Unterstützung: von Aufzeichnungen zum APKG
+
+Anki Forge. Anki-APKGs mit Open Source und Rust erzeugen.
+
+Artikel
+RSS
+MIT-Lizenz
+KI-Dokumentationsindex
+
+original-baseline-update http://127.0.0.1:63533/anki-forge/de/docs/updates/
+Anki-Stapel mit stabilen Notiz-IDs aktualisieren
+
+Veröffentliche Korrekturen oder neue Karten für einen Anki-Stapel, den du bereits verteilt hast. Stabile Notiz-IDs helfen Anki Forge und Anki dabei, vorhandene Notizen wiederzuerkennen, statt sie als neue Notizen zu behandeln. Was tatsächlich geändert wird, hängt jedoch auch von den Importeinstellungen in Anki und neueren lokalen Bearbeitungen ab.
+
+Behalte den Projektnamensraum sowie die Schlüssel für Notizen, Modelle, Felder und Vorlagen unverändert bei. Erzeuge jede neue Version auf Basis des vorherigen ursprünglich verteilten APKG, das vollständige, versionierte Identitätsnachweise enthält. Bewahre das Paket zusammen mit der zugehörigen Quellcoderevision auf.
+
+Zwei Versionen erzeugen und vergleichen
+Abschnitt „Zwei Versionen erzeugen und vergleichen“
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Dies schreibt spanish-v1.apkg und spanish-v2.apkg, vergleicht die geänderte Antwort und prüft die Anzahlen im aktualisierten Paket. Der ausgeführte Quellcode lautet:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+compare wird auch dann erfolgreich abgeschlossen, wenn seine Befunde eine Veröffentlichung verhindern würden. Lies comparison.policy().allows_publication() getrennt vom ursprünglichen Risikograd und den zugehörigen Nachweisen aus. build(...update_from(...)) führt dieselbe Analyse durch. Blockiert die Richtlinie den Kandidaten, gibt die Methode vor der Veröffentlichung einen BuildError zurück.
+
+Richtlinie und Prüfgrenzen
+Abschnitt „Richtlinie und Prüfgrenzen“
+
+Dieses vollständige Programm wählt einen strengeren Schwellenwert und verwendet dieselbe Konfiguration für Vergleich und Aktualisierung:
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Die Standardrichtlinie blockiert Befunde der Stufen High und Critical. Nach Prüfung einer bestimmten Kategorie kann die aufrufende Anwendung bewusst UpdatePolicy::default().allow(RiskCode::NoteRemoved) wählen. Damit werden alle Befunde dieser Kategorie zugelassen; ihre ursprüngliche Stufe und ihre Nachweise bleiben erhalten. Die Freigabe gilt nicht einzeln für ausgewählte Notizen. Eine Freigabe ohne passenden Befund erzeugt eine Warnung, unbekannte Risikocodes werden abgewiesen. Gib nicht automatisch jeden Code frei, den ein Vergleich zurückgibt.
+
+Fehlende oder beschädigte Nachweise, ein abweichender Namensraum, ungültige Kandidatendaten und überschrittene Prüfgrenzen sind Fehler, keine freigebbaren Risikokategorien. Kann die Analyse nicht abgeschlossen werden, gibt der Vergleich einen Fehler mit den bereits gewonnenen Prüfergebnissen zurück. Eine explizite Richtlinie bei einer Neuanlage ohne update_from ist unabhängig von der Reihenfolge der Setter ein Konfigurationsfehler.
+
+Nachweise und Identität
+Abschnitt „Nachweise und Identität“
+
+Das Paket enthält ankiforge-identity.json im Format ankiforge-identity-v1. Es verknüpft Modell- und Konfigurations-IDs, Notiz-GUIDs, historische Feld- und Vorlagenpositionen, Karten- und Maskenordnungsnummern, Revisionen und Medien mit der tatsächlichen Sammlung und den enthaltenen Daten. Ein erneuter Export aus Anki erhält diese Nachweise nicht und ist daher keine geeignete Aktualisierungsbasis. Fehlende Nachweise werden niemals stillschweigend rekonstruiert.
+
+Änderungen an Anzeigenamen und Inhalten erhalten die Identitätsschlüssel. Unveränderte Inhalte behalten die Revision der Basisversion; geänderte Inhalte erhalten eine fortgeschriebene Revision. Das Umordnen von Feldern oder Vorlagen erhält die historischen Zuordnungen. Ausgemusterte Identitäten bleiben reserviert, damit sie bei Wiederherstellung desselben Schlüssels erneut verwendet werden können. Ein Notizschlüssel kann nicht zu einem anderen Modell wechseln; ein Modellschlüssel kann nicht zwischen dem normalen Typ und Cloze wechseln.
+
+Client-Import und Prüfung vor der Veröffentlichung
+Abschnitt „Client-Import und Prüfung vor der Veröffentlichung“
+
+Ein APKG ist ein Verteilungspaket, keine Synchronisierung von Löschungen. Wenn Notizen, Felder, Vorlagen oder Masken fehlen, werden die vorhandenen Daten der Lernenden nicht gelöscht. Änderungen am Feld- oder Vorlagenschema und am Sortierfeld gelten als hohes Risiko, weil die Zusammenführungs- und Importeinstellungen von Anki das Verhalten beeinflussen. Schemaänderungen können Modelle kopieren oder die Zeitstempel der Zielnotizen aktualisieren, bevor deren Inhalte verglichen werden.
+
+Teste den ersten Import und Aktualisierungen einer vorhandenen Sammlung auf den von dir unterstützten Clients. Prüfe Felder, GUIDs, Kartenbestände, lokale Änderungen und die bestehende Lernplanung mit den vorgesehenen Einstellungen für Zusammenführung und Notizaktualisierung. Stabile Identitäten allein garantieren weder das Überschreiben neuerer lokaler Änderungen noch die Wiederherstellung gelöschter Verlaufsdaten.
+
+Schreibe Kandidaten an einen anderen Pfad als die archivierte Basisversion. Verteile nach der Prüfung das freigegebene Paket und bewahre es als Nachweis für die nächste Version auf. Angaben zu Dateibesitz und Veröffentlichung findest du unter Build-Garantien.
+
+Einmal bauen, prüfen und dann veröffentlichen
+Abschnitt „Einmal bauen, prüfen und dann veröffentlichen“
+
+Diese API ist im veröffentlichten Paket 0.3.1 enthalten.
+
+Erzeuge den Build einmal, prüfe den Bericht und veröffentliche anschließend dieselbe Kandidatendatei. Wer nach der Prüfung einen zweiten gewöhnlichen Build ausführt, erzeugt einen anderen Kandidaten. Bei der vorbereiteten Veröffentlichung bleibt das tatsächliche APKG an den geprüften Bericht gebunden.
+
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Speichere das vollständige Programm oben im festgelegten Quellcode-Checkout als anki_forge/examples/docs_publication.rs. Dieses Beispiel wird durch die Anleitung ergänzt und ist nicht in 1199196 enthalten. Führe anschließend Folgendes aus:
+
+Terminal-Fenster
+[Rendered code/command: captured and separately bound in browser-tour.json]
+
+Das Beispiel schreibt spanish-original.apkg und, sofern die Richtlinie die Veröffentlichung erlaubt, spanish-reviewed.apkg in das Stammverzeichnis des Repositorys. Die Vorbereitung veröffentlicht noch nichts am Zielpfad. Prüfe die Befunde und teste den Import auf deinem Client, bevor du die Verteilung freigibst. Das Beispiel veröffentlicht nur diese einfache Inhaltsänderung automatisch, wenn seine Richtlinie sie zulässt. Der Benchmark misst diesen Ablauf nicht.
+
+Weitere Informationen: Build-Lebenszyklus, Rust-API, Node-API und Python-API.
+
+Markdown anzeigen
+
+Seite bearbeiten
+Vorherige Seite
+Anki-Karten mit Bildverdeckung erzeugen
+Nächste Seite
+Inhalte mit Rust erstellen
+
+Anki Forge. Anki-APKGs mit Open Source und Rust erzeugen.
+
+Artikel
+RSS
+MIT-Lizenz
+KI-Dokumentationsindex
+
+troubleshooting http://127.0.0.1:63533/anki-forge/de/docs/troubleshooting/
+Fehlersuche
+
+Nutze die strukturierten Angaben kind und code des fehlgeschlagenen Vorgangs sowie dessen Ursachenverkettung und Beobachtungen. Anzeigetext ist für Menschen gedacht und kann sich ändern. Ein fehlgeschlagener Vorgang und ein abgeschlossener Vergleich, dessen Richtlinie die Veröffentlichung blockiert, sind unterschiedliche Ergebnisse.
+
+Installation
+Abschnitt „Installation“
+Symptom	Prüfung
+Rust weist die Toolchain zurück	Führe rustc --version aus; verwende Rust ab Version 1.92 und prüfe die installierte Version mit cargo tree -i ankiforge
+Node kann sein natives Paket nicht laden	Führe node -p "process.platform + '/' + process.arch" und npm ls ankiforge aus; installiere mit npm install --include=optional ankiforge@0.3.1 neu
+Node meldet unterschiedliche Versionen von nativer Bibliothek und Wrapper	Verwende passende Paketversionen; installiere beide aus derselben Registry-Version neu oder baue beide aus demselben Repository-Stand
+Python kann seine Erweiterung nicht laden	Führe python -m pip show ankiforge und python -m pip debug --verbose aus; prüfe Interpreter sowie Betriebssystem-/CPU-Tags des Wheels
+Python wählt eine Quelldistribution	Wähle ein passendes Wheel bzw. einen passenden Interpreter oder folge Aus dem Quellcode bauen mit einem Compiler
+
+Siehe geprüfte Umgebungen, Node-Einrichtung und Python-Einrichtung.
+
+Modelle und Notizen
+Abschnitt „Modelle und Notizen“
+Symptom	Korrektur
+Ungültiger oder leerer Schlüssel	Gib einen ausdrücklichen stabilen Schlüssel an; Anzeigenamen sind davon getrennt
+NOTE.KEY_DUPLICATE	Gib jedem logischen Quelldatensatz einen eindeutigen Schlüssel
+NOTE.FIELD_UNKNOWN	Weise dem Feld über seinen Schlüssel einen Wert zu, nicht über seinen Anzeigenamen
+NOTE.FIELD_REQUIRED	Fülle Felder, die mit required() deklariert sind, vor dem Hinzufügen
+NOTE.MODEL_CONFLICT	Verwende für denselben Modellschlüssel dasselbe abgeschlossene Modell
+Fehler bei Vorlagenreferenzen	Verwende deklarierte Schlüssel in Vorlagen; prüfe den ursprünglichen Bytebereich der Quelle
+HTML wird wörtlich angezeigt	Verwende Content::html nur für bewusst eingebundenes Markup
+Cloze-Karten fehlen	Gib Syntax wie {{c1::answer}} mit unterstützten Nummern von 1–500 an
+
+Ein Fehler beim Hinzufügen ist atomar. Korrigiere die Notiz oder das Modell und versuche es erneut; du musst keine teilweise erfolgte Modell- oder Medienregistrierung rückgängig machen. Modell-Builder müssen mit .build() abgeschlossen werden, bevor sie eigene Notizen erzeugen können.
+
+Medien und Vorlagen
+Abschnitt „Medien und Vorlagen“
+Symptom	Korrektur
+Dateiimport schlägt fehl	Prüfe die Quelle zum Zeitpunkt von Media::file; spätere Löschung der Quelldatei wird unterstützt
+MIME-Typ und Inhalt passen nicht zusammen	Übergib dem Bytes-Konstruktor den tatsächlichen MIME-Typ
+Konflikt beim Exportnamen	Wähle eindeutige portable Namen; Varianten in Groß-/Kleinschreibung und Unicode-Normalisierung verursachen Konflikte
+Ressource aus direktem HTML, CSS oder Skript fehlt	Deklariere sie mit asset am Modell oder add_asset am Projekt
+Medienimport überschreitet ein Limit	Erhöhe MediaLimits.max_bytes vor dem Import ausdrücklich
+Build-Inspektion überschreitet ein Limit	Passe den betroffenen Zähler in InspectLimits für diesen Vorgang an
+Vorlagenpaket kann nicht geladen werden	Verwende bundle-v2, ausdrückliche Schlüssel, schlüsselbasierte Vorlagen und Pfade innerhalb des Pakets
+Rechteck für Bildverdeckung ist ungültig	Prüfe die dekodierten Anzeigeabmessungen, endliche Koordinaten und eindeutige Maskenschlüssel
+
+Die Textvorgaben sind für alle Notizarten gleich. Medienknoten sammeln Abhängigkeiten; einen Dateinamen von Hand einzutragen importiert dessen Bytes nicht. Auch ein gültiges Paket benötigt Wiedergabetests im Client für die vorgesehenen Codecs und Schriftarten.
+
+Aktualisierungen und Ausgaben
+Abschnitt „Aktualisierungen und Ausgaben“
+
+Verwende als Basis das ursprünglich verteilte APKG mit vollständigen Identitätsnachweisen. Aus Anki erneut exportierte Pakete erhalten diese Nachweise nicht. Ein abweichender Namensraum oder beschädigte Nachweise lassen sich nicht durch eine Aktualisierungsrichtlinie freigeben.
+
+Ein abgeschlossener Vergleich kann allows_publication == false ergeben. Prüfe die ursprünglichen Befunde und Nachweise, bevor du eine Risikokategorie ausdrücklich freigibst. Gib nicht pauschal alle Ergebnisse frei. Für dieselbe Entscheidung musst du dieselbe Richtlinie auch an den tatsächlichen Aktualisierungs-Build übergeben. Eine Richtlinie bei einer reinen Erstellungsanfrage ist ein Fehler.
+
+Wenn ein temporärer Pfad verschwunden ist, halte seinen Ausgabe- oder Artefaktbesitzer, bis alle Leser fertig sind. Berichte und JSON-Snapshots sind keine Besitzer. Prüfe bei Fehlern beim dauerhaften Speichern die Veröffentlichungsphase und Dauerhaftigkeit im Fehler: Ein Fehler kann zurückgegeben werden, nachdem das Ziel bereits veröffentlicht wurde. Siehe Ausgabegarantien.
+
+Markdown anzeigen
+
+Seite bearbeiten
+Vorherige Seite
+Kompatibilität und geprüfte Umgebungen
+Nächste Seite
+Python-Diagnostik
+
+Anki Forge. Anki-APKGs mit Open Source und Rust erzeugen.
+
+Artikel
+RSS
+MIT-Lizenz
+KI-Dokumentationsindex

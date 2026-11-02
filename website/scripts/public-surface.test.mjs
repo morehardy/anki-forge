@@ -118,3 +118,79 @@ test('a source-reviewed heading rewrite retains its module, aliases and old loca
   await writeFile(filename, changed.replace('href="https://example.test/"', 'href="https://example.test/project/"').replaceAll('href="/docs/', 'href="/project/docs/'));
   await assert.doesNotReject(checkSurface(directory, historic, prefix, approved));
 });
+
+test('reviewed document heading changes preserve the exact semantic section and native heading', async t => {
+  const oldHeading = 'Prepared publication from source';
+  const newHeading = 'Prepare and publish';
+  const old = html.replace('<p><span id="old-update" data-section-alias="updates"></span></p><h2 id="updates">更新原始 APKG</h2>', `<h2 id="updates">${oldHeading}</h2>`);
+  const directory = await fixture(t, old);
+  const filename = artifactPath(directory, baseline.pages[0].route);
+  const expected = structuredClone(baseline);
+  expected.pages[0].anchors = [{ id: 'updates', heading: oldHeading, headingLevel: 'h2' }];
+  const changed = old.replace(`<h2 id="updates">${oldHeading}</h2>`, `<span id="updates" data-section-alias="updates"></span><h2 id="prepare-and-publish">${newHeading}</h2>`);
+  await writeFile(filename, changed);
+  await assert.rejects(checkSurface(directory, expected, config), /historic anchor moved/);
+  const inputs = { sourceHash: 'a'.repeat(64), targetHash: 'b'.repeat(64), technicalDependencyHash: 'c'.repeat(64) };
+  const axis = { status: 'reviewed', reviewerType: 'ai', reviewerRun: 'independent-document-review', openIssues: [] };
+  const entry = { pageId: 'updates', locale: 'zh-CN', route: '/zh-cn/docs/updates/', anchors: ['updates'], fromHeading: oldHeading, toHeading: newHeading, sectionId: 'updates', headingId: 'prepare-and-publish', reason: 'Reviewed wording change with the same publication task.', inputs };
+  const context = {
+    pages: [{ id: 'updates', type: 'docs', route: '/docs/updates/' }],
+    reviews: { entries: { updates: { 'zh-CN': { ...inputs, technical: axis, linguistic: axis } } } },
+    currentInputs: { updates: { 'zh-CN': inputs } },
+    currentSections: { updates: { 'zh-CN': { mapping: { 'prepare-and-publish': 'updates' }, headings: [{ id: 'prepare-and-publish', title: newHeading }] } } },
+  };
+  const document = { schemaVersion: 1, entries: [entry] };
+  const approved = validateHeadingMigrations(document, context);
+  await assert.doesNotReject(checkSurface(directory, expected, config, approved));
+  for (const mutate of [
+    value => { value.pages[0].type = 'home'; },
+    value => { value.currentSections.updates['zh-CN'].mapping.updates = 'different-task'; },
+    value => { value.currentSections.updates['zh-CN'].mapping['prepare-and-publish'] = 'different-task'; },
+    value => { value.currentSections.updates['zh-CN'].headings = []; },
+  ]) {
+    const invalid = structuredClone(context);
+    mutate(invalid);
+    assert.throws(() => validateHeadingMigrations(document, invalid), /document|section|heading/);
+  }
+  assert.throws(() => validateHeadingMigrations({ schemaVersion: 1, entries: [{ ...entry, containerModule: 'next' }] }, context), /scope/);
+  assert.throws(() => validateHeadingMigrations({ schemaVersion: 1, entries: [{ ...entry, toHeading: 'Unreviewed wording' }] }, context), /heading text/);
+  for (const mutate of [
+    value => value.replace('data-section-alias="updates"', 'data-section-alias="other"'),
+    value => value.replace('<h2 id="prepare-and-publish">', '<p>Detached section</p><h2 id="prepare-and-publish">'),
+    value => value.replace('id="prepare-and-publish"', 'id="other-task"'),
+    value => value.replace(newHeading, 'Unreviewed wording'),
+    value => value.replace('<main>', '<main><span id="updates"></span>'),
+    value => value.replace('<main>', '<main><span id="prepare-and-publish"></span>'),
+    value => value.replace('<h2 id="prepare-and-publish">', '<section data-module="other"><h2 id="prepare-and-publish">').replace('</h2>', '</h2></section>'),
+  ]) {
+    await writeFile(filename, mutate(changed));
+    await assert.rejects(checkSurface(directory, expected, config, approved), /section|heading|unique|moved/);
+  }
+});
+
+test('a reviewed module with external evidence keeps the exact HTTPS link inside its module', async t => {
+  const directory = await fixture(t);
+  const filename = artifactPath(directory, baseline.pages[0].route);
+  const link = 'https://github.com/example/project/tree/abcdef/evidence';
+  const source = html.replace('<main>', '<main><section data-module="performance">').replace('</main>', `<a href="${link}">Evidence</a></section></main>`);
+  const changed = source.replace('更新原始 APKG', '已审阅的新标题');
+  const expected = structuredClone(baseline);
+  expected.pages[0].anchors = [{ id: 'old-update', task: 'updates', heading: '更新原始 APKG', containerModule: 'performance' }];
+  const inputs = { sourceHash: 'a'.repeat(64), targetHash: 'b'.repeat(64), technicalDependencyHash: 'c'.repeat(64) };
+  const axis = { status: 'reviewed', reviewerType: 'ai', reviewerRun: 'independent-performance-review', openIssues: [] };
+  const entry = { pageId: 'updates', locale: 'zh-CN', route: '/zh-cn/docs/updates/', anchors: ['old-update'], fromHeading: '更新原始 APKG', toHeading: '已审阅的新标题', containerModule: 'performance', requiredLinks: [], requiredExternalLinks: [link], reason: 'Reviewed performance label; evidence URL remains exact.', inputs };
+  const context = { pages: [{ id: 'updates', route: '/docs/updates/' }], reviews: { entries: { updates: { 'zh-CN': { ...inputs, technical: axis, linguistic: axis } } } }, currentInputs: { updates: { 'zh-CN': inputs } } };
+  const approved = validateHeadingMigrations({ schemaVersion: 1, entries: [entry] }, context);
+  await writeFile(filename, changed);
+  await assert.doesNotReject(checkSurface(directory, expected, config, approved));
+  for (const mutate of [
+    value => value.replace(link, link + '-other'),
+    value => value.replace(`<a href="${link}">Evidence</a>`, '').replace('</section>', `</section><a href="${link}">Evidence</a>`),
+  ]) {
+    await writeFile(filename, mutate(changed));
+    await assert.rejects(checkSurface(directory, expected, config, approved), /lost protected external link/);
+  }
+  for (const invalid of ['http://example.test/', 'https://user:password@example.test/']) {
+    assert.throws(() => validateHeadingMigrations({ schemaVersion: 1, entries: [{ ...entry, requiredExternalLinks: [invalid] }] }, context), /HTTPS external destination/);
+  }
+});

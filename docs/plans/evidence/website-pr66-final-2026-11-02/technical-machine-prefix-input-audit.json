@@ -1,0 +1,2334 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/standards_review/pr66-machine-prefix-2026-11-02",
+  "status": "verified-bytes-awaiting-semantic-review",
+  "manifest": {
+    "path": "docs/plans/evidence/website-pr66-final-2026-11-02/prefix-site-manifest.json",
+    "sha256": "2568825da22b987d21c323442d57882b17626f1dfc51a2e33f4d9cc86aad88ec",
+    "commit": "09d431830568345a9e6ae2bd1cda2154af5a08e1",
+    "inputSha256": "fd6716207f6f5557895553e95f710a27cc66cee6d4bbd1cacf0ddc56b7aceebf"
+  },
+  "capture": {
+    "path": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/observations.json",
+    "sha256": "a41793c357c10a0f5d2c1620a2a3ce96163f3b972d3e83529a049ce9cf901a69",
+    "captureRun": "/root/pr66-machine-observations-prefix-2026-11-02",
+    "readOrigin": "http://127.0.0.1:62813"
+  },
+  "previousReview": {
+    "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/machine-read-prefix.json",
+    "sha256": "ec4839f1097e38f5265949bafc6d791e4f53bba45779715ccacf8991118f16ed",
+    "originManifest": {
+      "path": "docs/plans/evidence/multilingual-review-fixes-2026-11-01/prefix-site-manifest.json",
+      "sha256": "1067fdcf3d4c9e43c058628d0ad9557a91055c6c0764a1970623072c94097612",
+      "commit": "6d4625639fc1477222b41880d29724c162baa3be",
+      "description": "Actual frozen isolated-candidate manifest whose archive files were served and read in this run."
+    }
+  },
+  "method": "Reviewer independently re-read all 192 new archive files and the actual previously reviewed archive files as bytes. Current response bodies were captured over HTTP by the coordinator; each saved response was matched to its actual new archive bytes. This audit only verifies byte identity and retains exact changed-text deltas, without asserting semantic pass.",
+  "records": [
+    {
+      "route": "/anki-forge/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "6d8f67b9b7aef15c53417003ae0f9edf810f289dffb0c089b173dab587c9530b",
+      "previousSha256": "6d8f67b9b7aef15c53417003ae0f9edf810f289dffb0c089b173dab587c9530b",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/blog/your-first-anki-deck/index.md",
+      "sha256": "da294c14fd14e0978edb1108330e32c42f25fd23011728f81a1fd092543971d9",
+      "previousSha256": "da294c14fd14e0978edb1108330e32c42f25fd23011728f81a1fd092543971d9",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "c04913d1ae3800e1b02511df95e7d0aaf2fb87450c1798c6de36b5393d5ffcaf",
+      "previousSha256": "c04913d1ae3800e1b02511df95e7d0aaf2fb87450c1798c6de36b5393d5ffcaf",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/blog/your-first-anki-deck/index.md",
+      "sha256": "1278b44326027408b849fcc73eeef10895fec6e03c656501dd47e482c71bf1f8",
+      "previousSha256": "1278b44326027408b849fcc73eeef10895fec6e03c656501dd47e482c71bf1f8",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/ai-anki-cards/index.md",
+      "sha256": "f50fcb4ecef97a029366412358792b262e6f5805d32cef4d92320166a5933a73",
+      "previousSha256": "f50fcb4ecef97a029366412358792b262e6f5805d32cef4d92320166a5933a73",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "b488609ceb0853019edf5bd0064fe5cb50cb219c4afbb1902d28d82f25d9c2dc",
+      "previousSha256": "89f9fec7f177d5f9ae78cb48dd94ae45763625aa2ac12452812f0b64af1f5743",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/anki-forge-vs-genanki/index.md",
+        "route": "/anki-forge/de/docs/anki-forge-vs-genanki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b488609ceb0853019edf5bd0064fe5cb50cb219c4afbb1902d28d82f25d9c2dc",
+        "bytes": 4891,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__anki-forge-vs-genanki__index.md"
+      },
+      "delta": "--- /anki-forge/de/docs/anki-forge-vs-genanki/index.md (previous reviewed)\n+++ /anki-forge/de/docs/anki-forge-vs-genanki/index.md (current captured)\n@@ -13,5 +13,5 @@\n | Identität | Ausdrücklicher Namensraum und Notizschlüssel; ursprüngliches APKG für Aktualisierungen aufbewahren | Konfigurierbare GUIDs und numerische Modell-/Stapel-IDs; Aktualisierungen beim erneuten Import |\n | Vor der Veröffentlichung | Vergleichsbefunde, Risikorichtlinie und geprüfter vorbereiteter Kandidat | Dein Skript und deine Tests legen die Veröffentlichungsprüfung fest |\n-| Besitz von Mediendaten | Typisierte Bilder und Audio tragen Snapshots mit eigenem Datenbesitz | Das Skript liefert Mediendateien und Referenzen für das Paket |\n+| Besitz von Mediendaten | Typisierte Bild- und Audioobjekte verwalten unveränderliche Snapshots der Mediendaten | Das Skript liefert Mediendateien und Referenzen für das Paket |\n | Bildverdeckung per Code | Rechteckmasken mit Schlüsseln über die öffentliche API | Prüfe ein für deinen Ablauf geeignetes Modell oder eine Erweiterung |\n | Laufzeitaufwand | Native Abhängigkeiten; unterstützte Plattform und Interpreter verwenden | Eine bestehende Python-Bereitstellung beizubehalten kann günstiger sein |\n"
+    },
+    {
+      "route": "/anki-forge/de/docs/api/index.md",
+      "sha256": "49e483040a6c344416830f059d5597228f14b633d4ae26cf05c31b9dce070036",
+      "previousSha256": "49e483040a6c344416830f059d5597228f14b633d4ae26cf05c31b9dce070036",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/build-guarantees/index.md",
+      "sha256": "060ee702c8a6b98db5f6f589f26e28d5d8cf9219fd06743ce90b71a1b7951eb6",
+      "previousSha256": "9ea30a53e973ca00be3884e7b2a731316b1030c54c58e7285f890f8319e1379f",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/build-guarantees/index.md",
+        "route": "/anki-forge/de/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "060ee702c8a6b98db5f6f589f26e28d5d8cf9219fd06743ce90b71a1b7951eb6",
+        "bytes": 6779,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__build-guarantees__index.md"
+      },
+      "delta": "--- /anki-forge/de/docs/build-guarantees/index.md (previous reviewed)\n+++ /anki-forge/de/docs/build-guarantees/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Verstehe temporäre Artefakte, Pfadschutz, Inspektionsgrenzen und die Veröffentlichung geprüfter Kandidaten.\n \n-`Project::build` liefert `BuildOutput` nur nach einem erfolgreichen Vorgang mit einem garantierten APKG-Artefakt. Ein fehlgeschlagener Vorgang liefert `BuildError` mit strukturierter Art und Code, Beobachtungen, zugrunde liegenden Ursachen und tatsächlichen Veröffentlichungsfakten.\n+`Project::build` liefert `BuildOutput` nur nach einem erfolgreichen Vorgang mit einem garantierten APKG-Artefakt. Ein fehlgeschlagener Vorgang liefert `BuildError` mit strukturierten Angaben zu Fehlerart und Fehlercode, Beobachtungen, zugrunde liegenden Ursachen und tatsächlichen Veröffentlichungsfakten.\n \n ## Temporäre und persistente Artefakte\n@@ -37,5 +37,5 @@\n Endliche Budgets für Archive, Eintragsanzahl, Entpackung, dekodierte Sammlung und Medien sowie zstd-Fenster gelten unabhängig für Basisversion und Kandidat. Beginne mit `InspectLimits::default()` und erhöhe bei Bedarf gezielt das passende Limit. Null bedeutet nicht unbegrenzt. Diese Zähler sind keine prozessweite Speicher- oder CPU-Sandbox; Medienimporte haben ein separates, vorgelagertes Budget pro Datei.\n \n-## Parallele Arbeit\n+## Nebenläufige Vorgänge\n \n Rust-Builds leihen unveränderlichen Projektzustand aus. Modelle und Medien mit eigenem Datenbesitz können zwischen Projekten geteilt werden. Das Node-Binding erfasst beim Aufruf von Build oder Vergleich einen Projektsnapshot, sodass später hinzugefügte Inhalte die Anfrage nicht verändern. Halte den Artefaktbesitzer, bis alle Leser fertig sind. Den letzten temporären Besitzer zu schließen, während ein separater Nutzer noch dessen Pfad benötigt, ist ein Fehler der Lebensdauerverwaltung in der Anwendung.\n"
+    },
+    {
+      "route": "/anki-forge/de/docs/cards/index.md",
+      "sha256": "cce3f7b9204e56f1b87d37a2ebc540ba8d6bc9db177c5020aecc43ef6ffd5df9",
+      "previousSha256": "cce3f7b9204e56f1b87d37a2ebc540ba8d6bc9db177c5020aecc43ef6ffd5df9",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/compatibility/index.md",
+      "sha256": "807f090e9d53cd8536b8df037e7f3dbf9e64c3526fca85445509ff9855af67e6",
+      "previousSha256": "807f090e9d53cd8536b8df037e7f3dbf9e64c3526fca85445509ff9855af67e6",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/compatibility/index.md",
+        "route": "/anki-forge/de/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "807f090e9d53cd8536b8df037e7f3dbf9e64c3526fca85445509ff9855af67e6",
+        "bytes": 4011,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__compatibility__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/concepts/index.md",
+      "sha256": "0a4e7158b313bb3d29e84818039646ead3e36390307abff4369f8b7092017eb3",
+      "previousSha256": "bba60d55d5c6e4689d4199cb18cf1da2eacf2dab1eee827aa610d52bce3f7523",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/concepts/index.md",
+        "route": "/anki-forge/de/docs/concepts/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "0a4e7158b313bb3d29e84818039646ead3e36390307abff4369f8b7092017eb3",
+        "bytes": 4205,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__concepts__index.md"
+      },
+      "delta": "--- /anki-forge/de/docs/concepts/index.md (previous reviewed)\n+++ /anki-forge/de/docs/concepts/index.md (current captured)\n@@ -9,5 +9,5 @@\n Ein `Project` steht für eine Veröffentlichung mit einem stabilen Namensraum. Es kann Notizen mehreren Anki-Stapeln zuordnen: `default_deck` legt den Standard fest, `Note::deck` überschreibt ihn. Ein Stapel ist ein Ziel für Karten und kein zusätzlicher Container für das Erstellen von Inhalten, Medien oder Builds.\n \n-Eine `Note` enthält ihr Modell und ihre Inhalte. `project.add(key, note)` weist ihr einen erforderlichen stabilen Quellschlüssel zu und sammelt Abhängigkeiten atomar. Doppelte Schlüssel, unbekannte Felder sowie widersprüchliche Modelle oder Medien führen zu einem Fehler, ohne den Zustand teilweise zu verändern. Der Projektnamensraum und die Datensatzschlüssel müssen Änderungen und einer Umordnung der Quelldaten standhalten. Anzeigenamen und Texte sind keine Identitätsschlüssel.\n+Eine `Note` enthält ihr Modell und ihre Inhalte. `project.add(key, note)` weist ihr einen erforderlichen stabilen Quellschlüssel zu und sammelt Abhängigkeiten atomar. Doppelte Schlüssel, unbekannte Felder sowie widersprüchliche Modelle oder Medien führen zu einem Fehler, ohne den Zustand teilweise zu verändern. Behalte den Projektnamensraum und die Datensatzschlüssel bei, wenn du Quelldaten bearbeitest oder neu sortierst. Anzeigenamen und Texte sind keine Identitätsschlüssel.\n \n ## Modelle, Felder und Vorlagen\n"
+    },
+    {
+      "route": "/anki-forge/de/docs/csv-to-anki/index.md",
+      "sha256": "7acbbbcb58ba4fe0de2c89d6b1635d2ebffcc1885d998d0cac9751facc4f594c",
+      "previousSha256": "ef0f84edcc464546f314f14ac6febed728b213c15f27c8168616196b425f7691",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/csv-to-anki/index.md",
+        "route": "/anki-forge/de/docs/csv-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "7acbbbcb58ba4fe0de2c89d6b1635d2ebffcc1885d998d0cac9751facc4f594c",
+        "bytes": 6484,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__csv-to-anki__index.md"
+      },
+      "delta": "--- /anki-forge/de/docs/csv-to-anki/index.md (previous reviewed)\n+++ /anki-forge/de/docs/csv-to-anki/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Wandle eine UTF-8-Vokabeltabelle mit einem vollständigen Python-Skript in ein Anki-APKG um – mit CSV-Beispiel, stabilen Notiz-IDs und Importprüfungen.\n \n-Wandle mit Python und Anki Forge eine Vokabeltabelle in eine Anki-Datei im Format `.apkg` um. Dieses Beispiel liest eine UTF-8-CSV-Datei mit den Spalten `id`, `front` und `back`, erstellt Basic-Karten mit Frage und Antwort und exportiert einen teilbaren Stapel. Der CSV-Parser aus Pythons Standardbibliothek liest die Tabelle; Anki Forge erstellt das Paket. Für den Export muss Anki nicht installiert sein.\n+Wandle mit Python und Anki Forge eine Vokabeltabelle in eine Anki-Datei im Format `.apkg` um. Dieses Beispiel liest eine UTF-8-CSV-Datei mit den Spalten `id`, `front` und `back`, erstellt Basic-Karten mit Frage und Antwort und exportiert einen Stapel, den du weitergeben kannst. Der CSV-Parser aus Pythons Standardbibliothek liest die Tabelle; Anki Forge erstellt das Paket. Für den Export muss Anki nicht installiert sein.\n \n Für den einmaligen Import einer Tabelle unterstützt Anki bereits [Textdateien mit Trennzeichen](https://docs.ankiweb.net/manual/importing/text-files). Verwende diese Anleitung, wenn du ein wiederholbar ausführbares Skript, eigene Notiz-IDs und ein verteilbares APKG benötigst. Eine Excel-Datei im Format `.xlsx` musst du zunächst als UTF-8-CSV speichern.\n"
+    },
+    {
+      "route": "/anki-forge/de/docs/custom-notetypes/index.md",
+      "sha256": "2b546bc045a7b2620b5e0fb5e1467768c55a90a3e4526e584a50b80433c9eb27",
+      "previousSha256": "2b546bc045a7b2620b5e0fb5e1467768c55a90a3e4526e584a50b80433c9eb27",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/development/index.md",
+      "sha256": "bdbb3effa1c69c9c412145e7729573a1eb1e47b2d67a7d4a6665be36fb59dad0",
+      "previousSha256": "bdbb3effa1c69c9c412145e7729573a1eb1e47b2d67a7d4a6665be36fb59dad0",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/genanki-migration/index.md",
+      "sha256": "3a7b4f4039bb14e7916c5a315cbccca4bd518352c77d19f794c7e1db3745f3ce",
+      "previousSha256": "3a7b4f4039bb14e7916c5a315cbccca4bd518352c77d19f794c7e1db3745f3ce",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/image-occlusion/index.md",
+      "sha256": "c6a55829c21033da88cde754f1eeeb227293680fc0f9c7c598ccd9037096b54e",
+      "previousSha256": "c6a55829c21033da88cde754f1eeeb227293680fc0f9c7c598ccd9037096b54e",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/index.md",
+      "sha256": "350473c3db14762eec9e5baad8c5cc8029194069e77057f5d8dbac4d7b2ac9cc",
+      "previousSha256": "350473c3db14762eec9e5baad8c5cc8029194069e77057f5d8dbac4d7b2ac9cc",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/installation/index.md",
+      "sha256": "4d425ac7db5af80f11997889bf1e645f7214f61a6ece4fb7e75a06d5fd2565b8",
+      "previousSha256": "5b1e007ace21e1eb16d3a66acebe0f6e8c934693f4073870076fd03faa44c74c",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/installation/index.md",
+        "route": "/anki-forge/de/docs/installation/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "4d425ac7db5af80f11997889bf1e645f7214f61a6ece4fb7e75a06d5fd2565b8",
+        "bytes": 2494,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__installation__index.md"
+      },
+      "delta": "--- /anki-forge/de/docs/installation/index.md (previous reviewed)\n+++ /anki-forge/de/docs/installation/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# Anki Forge in deine Anwendung integrieren\n+# Anki Forge in deine Rust-Anwendung integrieren\n \n Canonical page: https://morehardy.github.io/anki-forge/de/docs/installation/\n"
+    },
+    {
+      "route": "/anki-forge/de/docs/json-to-anki/index.md",
+      "sha256": "1a89e59c2fe15eff7da2d3d996398342ead4166e29ed7e325dff064524ca23de",
+      "previousSha256": "1a89e59c2fe15eff7da2d3d996398342ead4166e29ed7e325dff064524ca23de",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/json-to-anki/index.md",
+        "route": "/anki-forge/de/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "1a89e59c2fe15eff7da2d3d996398342ead4166e29ed7e325dff064524ca23de",
+        "bytes": 12333,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__json-to-anki__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/languages/index.md",
+      "sha256": "84cba06100115a4f4ec5f56056926a1f3491d3931f3d33007c6787f7bb516ab2",
+      "previousSha256": "84cba06100115a4f4ec5f56056926a1f3491d3931f3d33007c6787f7bb516ab2",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/media/index.md",
+      "sha256": "779d3187a7e9802dade1de5a67f519cded59956632faa0aa49b5d74ce9c0efac",
+      "previousSha256": "c22ca07ea208d6b5104d2dfd8fa6deb5afe31e8986c6fed36ad4d6bc51377808",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/media/index.md",
+        "route": "/anki-forge/de/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "779d3187a7e9802dade1de5a67f519cded59956632faa0aa49b5d74ce9c0efac",
+        "bytes": 9719,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__media__index.md"
+      },
+      "delta": "--- /anki-forge/de/docs/media/index.md (previous reviewed)\n+++ /anki-forge/de/docs/media/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Importiere mit Rust, Python oder Node.js Dateien, kombiniere Karteninhalte und verwalte Exportnamen, MIME-Typen und Medienbudgets.\n \n-Bündle Bilder und Audio in erzeugten Anki-Karten, etwa Vokabelkarten mit Aussprache oder Diagrammfragen. Anki Forge kopiert die bereitgestellten Dateien in das APKG. Zum Erzeugen von Audio oder Bildern, etwa durch Sprachsynthese, benötigst du ein separates Werkzeug. Die Beispiele verwenden Rust; der unten beschriebene Stapelimport zeigt auch die Python- und Node.js-Aufrufe.\n+Bündle Bilder und Audio in erzeugten Anki-Karten, etwa Vokabelkarten mit Aussprache oder Diagrammfragen. Anki Forge kopiert die bereitgestellten Dateien in das APKG. Zum Erzeugen von Audio oder Bildern, etwa durch Sprachsynthese, benötigst du ein separates Werkzeug. Die Beispiele verwenden Rust; der unten beschriebene Import mehrerer Mediendateien zeigt auch die Python- und Node.js-Aufrufe.\n \n Ein `Media`\\-Wert besitzt einen unveränderlichen Snapshot. Importiere Dateien mit `Media::file` oder native Bytes mit einem ausdrücklichen MIME-Typ über `Media::bytes`. Nach erfolgreichem Import können Änderungen oder das Löschen der Quelldatei die Mediendatei nicht mehr verändern. Klone teilen sich den Speicher und können in mehreren Projekten verwendet werden.\n@@ -101,5 +101,5 @@\n Node verwendet `await Media.files(['first.png', 'second.png'])`; Python verwendet `Media.files(['first.png', 'second.png'])`.\n \n-### Verhalten und Budgets des Stapelimports\n+### Verhalten und Limits beim Import mehrerer Mediendateien\n \n Verwende `Media::files(paths)` in Rust, `await Media.files(paths)` in Node oder `Media.files(paths)` in Python, um Dateien in Eingabereihenfolge mit höchstens vier Arbeitern pro Aufruf zu importieren. Gruppen mit weniger als 16 Dateien werden seriell verarbeitet. Rust bietet außerdem `files_with_limits`; Node und Python akzeptieren dieselben Limits wie `file`. Das Limit gilt pro Mediendatei. Schlägt ein Import fehl, wartet der Aufruf auf bereits begonnene Arbeit, gibt die Snapshots der Gruppe frei und liefert den ersten Fehler in Eingabereihenfolge. Bestehende Medienbesitzer bleiben gültig. Python gibt während des Imports den GIL frei; Node führt die Arbeit außerhalb der Ereignisschleife aus. Einzeldateiimporte bleiben sofortige Snapshots mit eigenem Datenbesitz; für parallele Importe müssen Aufrufer ausdrücklich die Stapelmethode wählen.\n"
+    },
+    {
+      "route": "/anki-forge/de/docs/node-api/index.md",
+      "sha256": "a9b33a1ef625407c9ec83ba4efeaff0ea967c542a732cad342ba7ef1fe6ce637",
+      "previousSha256": "dfa8cd51865871b0061784cabb66ece639d7fa9c82c56e19fad417667965d40e",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/node-api/index.md",
+        "route": "/anki-forge/de/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "a9b33a1ef625407c9ec83ba4efeaff0ea967c542a732cad342ba7ef1fe6ce637",
+        "bytes": 15292,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__node-api__index.md"
+      },
+      "delta": "--- /anki-forge/de/docs/node-api/index.md (previous reviewed)\n+++ /anki-forge/de/docs/node-api/index.md (current captured)\n@@ -103,5 +103,5 @@\n Typisierte Bilder verlangen beim Hinzufügen den MIME-Typ `image/*`; Audioreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien lösen `NOTE.MEDIA_USAGE_INVALID` aus. Konstruktoren bleiben unfehlbar; ausdrücklich deklarierte Medien und direktes HTML sind nicht betroffen. Die Prüfung verwendet den beim Import gespeicherten MIME-Typ und bestätigt keine Wiedergabefähigkeit. Die unabhängige MIME-/Endungsprüfung des Builds gilt weiterhin. Die vollständige Ziel-/Detailtabelle findest du im [Entwurf](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).\n \n-## Medienimport im Stapel und vorbereitete Veröffentlichung\n+## Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten\n \n Medienimport im Stapel und vorbereitete Veröffentlichung sind im veröffentlichten Paket `0.3.1` enthalten.\n"
+    },
+    {
+      "route": "/anki-forge/de/docs/node-quickstart/index.md",
+      "sha256": "01461a686c3bf1095f37417e9508e8d08e3dd4f9efcd2c1b93ab9377b398f37b",
+      "previousSha256": "01461a686c3bf1095f37417e9508e8d08e3dd4f9efcd2c1b93ab9377b398f37b",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/node-quickstart/index.md",
+        "route": "/anki-forge/de/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "01461a686c3bf1095f37417e9508e8d08e3dd4f9efcd2c1b93ab9377b398f37b",
+        "bytes": 2771,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__node-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/python-api/index.md",
+      "sha256": "ff05f8bb688bb85d39889d9572e5f827fce588aea7fa9851d017faf1445c2c4d",
+      "previousSha256": "1b7533d7199027aa63e4522ca5af484f99c509172baeedca3c5e4f645a480d79",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/python-api/index.md",
+        "route": "/anki-forge/de/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "ff05f8bb688bb85d39889d9572e5f827fce588aea7fa9851d017faf1445c2c4d",
+        "bytes": 11496,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__python-api__index.md"
+      },
+      "delta": "--- /anki-forge/de/docs/python-api/index.md (previous reviewed)\n+++ /anki-forge/de/docs/python-api/index.md (current captured)\n@@ -72,5 +72,5 @@\n Typisierte Bilder benötigen beim Hinzufügen einen MIME-Typ aus `image/*`. Tonreferenzen akzeptieren `audio/*` oder `video/*`. Andere Kategorien führen zu `NOTE.MEDIA_USAGE_INVALID`. Die Konstruktoren bleiben unfehlbar; explizite Dateien und direktes HTML sind nicht betroffen. Die Prüfung nutzt den beim Import gespeicherten MIME-Typ und bestätigt nicht die Abspielbarkeit. Die unabhängige MIME-/Dateiendungsprüfung beim Build gilt weiterhin. Die vollständige Tabelle der Ziele und Details steht im [Entwurfsdokument](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md).\n \n-## Stapelverarbeitung von Medien und vorbereitete Veröffentlichung\n+## Mehrere Mediendateien importieren und die Veröffentlichung vorbereiten\n \n Die Stapelverarbeitung von Medien und die vorbereitete Veröffentlichung sind im veröffentlichten Paket `0.3.1` enthalten.\n"
+    },
+    {
+      "route": "/anki-forge/de/docs/python-diagnostics/index.md",
+      "sha256": "d7d130da08be9582f2321fe676362fbc37781d42303ad4ed77e30e861cbbd498",
+      "previousSha256": "d7d130da08be9582f2321fe676362fbc37781d42303ad4ed77e30e861cbbd498",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/python-migration/index.md",
+      "sha256": "e158ff9a354d794439ae20a0edb307bf90c1ecdaf9b08218e0f2e71667f0af1f",
+      "previousSha256": "e158ff9a354d794439ae20a0edb307bf90c1ecdaf9b08218e0f2e71667f0af1f",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/python-quickstart/index.md",
+      "sha256": "e4484200649722bee10f98a4bcddc595eabb2883a71412ddc7e1bcff1f983fe0",
+      "previousSha256": "e4484200649722bee10f98a4bcddc595eabb2883a71412ddc7e1bcff1f983fe0",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/python-quickstart/index.md",
+        "route": "/anki-forge/de/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "e4484200649722bee10f98a4bcddc595eabb2883a71412ddc7e1bcff1f983fe0",
+        "bytes": 2852,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__python-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/quickstart/index.md",
+      "sha256": "7e009b261fccb3a98cd71a4d91b3cc7100ce46bcbe134e9af2654e5052dd74a6",
+      "previousSha256": "7e009b261fccb3a98cd71a4d91b3cc7100ce46bcbe134e9af2654e5052dd74a6",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/rust-api/index.md",
+      "sha256": "0d82b30dff9b03ad22aa83a7b266e4b59ea006d36c2cf390df9be18f2cef25bd",
+      "previousSha256": "0d82b30dff9b03ad22aa83a7b266e4b59ea006d36c2cf390df9be18f2cef25bd",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/rust-guide/index.md",
+      "sha256": "163dec7ca20af2545a3f5b030e65b3ea3ba21b8c2c33e36b9d7ffc02addf66d3",
+      "previousSha256": "163dec7ca20af2545a3f5b030e65b3ea3ba21b8c2c33e36b9d7ffc02addf66d3",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/templates/index.md",
+      "sha256": "be144f7df48b83942f0fc9a1b08841d519977011b47082e959c4a5471b7461af",
+      "previousSha256": "be144f7df48b83942f0fc9a1b08841d519977011b47082e959c4a5471b7461af",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/troubleshooting/index.md",
+      "sha256": "a0b8c69fdb9fc4d2dc619826fa621fb4e67be8d523975c4131f9b6e9ba481342",
+      "previousSha256": "a0b8c69fdb9fc4d2dc619826fa621fb4e67be8d523975c4131f9b6e9ba481342",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/docs/updates/index.md",
+      "sha256": "8eeff44204fe9676247ce2a25e58873ea4c120fdcebc83b85e28c48f30df43c8",
+      "previousSha256": "8eeff44204fe9676247ce2a25e58873ea4c120fdcebc83b85e28c48f30df43c8",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/docs/updates/index.md",
+        "route": "/anki-forge/de/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "8eeff44204fe9676247ce2a25e58873ea4c120fdcebc83b85e28c48f30df43c8",
+        "bytes": 9637,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__docs__updates__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/de/llms.txt",
+      "sha256": "d5185f233372e7f328e4161aa494fc25db9609b15b094bd1e7270c84ef6cb88a",
+      "previousSha256": "8c18df6e583f8239c933715fd8193e410b68ff8d32d8e70fc8a7fc4af0ba3210",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/de/llms.txt",
+        "route": "/anki-forge/de/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "d5185f233372e7f328e4161aa494fc25db9609b15b094bd1e7270c84ef6cb88a",
+        "bytes": 7660,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__de__llms.txt"
+      },
+      "delta": "--- /anki-forge/de/llms.txt (previous reviewed)\n+++ /anki-forge/de/llms.txt (current captured)\n@@ -28,5 +28,5 @@\n - [Python-API](https://morehardy.github.io/anki-forge/de/docs/python-api/index.md): Project, Medien, Build-Optionen, Berichte und die Kontrolle über die Lebensdauer temporärer Artefakte in Python.\n \n-## Aufgabenanleitungen\n+## Anleitungen nach Aufgabe\n \n - [CSV zu Anki: Karten mit Python erzeugen](https://morehardy.github.io/anki-forge/de/docs/csv-to-anki/index.md): Wandle eine UTF-8-Vokabeltabelle mit einem vollständigen Python-Skript in ein Anki-APKG um – mit CSV-Beispiel, stabilen Notiz-IDs und Importprüfungen.\n"
+    },
+    {
+      "route": "/anki-forge/docs/ai-anki-cards/index.md",
+      "sha256": "8101e2d8972fcd07b57ce89310a72db50ae33c1cbc9b2ab8989c6119478c612d",
+      "previousSha256": "8101e2d8972fcd07b57ce89310a72db50ae33c1cbc9b2ab8989c6119478c612d",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "8206e190781c310eed6cf352735be5029db0426ead23c590de5b77c8d6217d9b",
+      "previousSha256": "8206e190781c310eed6cf352735be5029db0426ead23c590de5b77c8d6217d9b",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/api/index.md",
+      "sha256": "c6f03886dc61421de202632f779007fad7c4b36ca528128f230ec785228dcad6",
+      "previousSha256": "c6f03886dc61421de202632f779007fad7c4b36ca528128f230ec785228dcad6",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/build-guarantees/index.md",
+      "sha256": "d365afba67c22e358082e9fc029cfc40a48d31587e433dd45400f27fee6589f7",
+      "previousSha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/build-guarantees/index.md",
+        "route": "/anki-forge/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "d365afba67c22e358082e9fc029cfc40a48d31587e433dd45400f27fee6589f7",
+        "bytes": 5603,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__build-guarantees__index.md"
+      },
+      "delta": "--- /anki-forge/docs/build-guarantees/index.md (previous reviewed)\n+++ /anki-forge/docs/build-guarantees/index.md (current captured)\n@@ -43,5 +43,5 @@\n Package inspection cannot establish every client-side behavior. Test rendering, playback and update imports with the intended Anki versions and settings. See [updates](https://morehardy.github.io/anki-forge/docs/updates/) for scheduling and schema-change limits.\n \n-## Prepared publication from source\n+## Prepare, review and publish\n \n Prepared publication is included in the public `0.3.1` packages.\n"
+    },
+    {
+      "route": "/anki-forge/docs/cards/index.md",
+      "sha256": "bb30b78eb61fa771fe1a83916c33002dc14bfce39e2c9603ce4333818a59a77f",
+      "previousSha256": "efaf643e3347ead616a817c0cec98e2abe5b9b9cd167754bbbad5f564132a8fb",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/cards/index.md",
+        "route": "/anki-forge/docs/cards/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "bb30b78eb61fa771fe1a83916c33002dc14bfce39e2c9603ce4333818a59a77f",
+        "bytes": 3034,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__cards__index.md"
+      },
+      "delta": "--- /anki-forge/docs/cards/index.md (previous reviewed)\n+++ /anki-forge/docs/cards/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Generate Anki Basic question-and-answer and Cloze fill-in-the-blank cards from code. A verified Rust example builds two notes and three cards.\n \n-Generate Anki Basic (question-and-answer) and Cloze (fill-in-the-blank) cards from code instead of adding them one at a time in Anki. A Basic note has a front and back. A Cloze note generates one card for each supported deletion number. This Rust example creates two notes and three cards. Python and Node.js provide the same `Note.basic` and `Note.cloze` constructors; see the [Python API](https://morehardy.github.io/anki-forge/docs/python-api/#project-and-note-values) and [Node API](https://morehardy.github.io/anki-forge/docs/node-api/#project-and-notes).\n+Generate Anki Basic (question-and-answer) and Cloze (fill-in-the-blank) cards from code instead of adding them one at a time in Anki. A Basic note stores front and back fields, which its template uses to generate a question-and-answer card. A Cloze note generates one card for each supported deletion number. This Rust example creates two notes and three cards. Python and Node.js provide the same `Note.basic` and `Note.cloze` constructors; see the [Python API](https://morehardy.github.io/anki-forge/docs/python-api/#project-and-note-values) and [Node API](https://morehardy.github.io/anki-forge/docs/node-api/#project-and-notes).\n \n From the repository root:\n"
+    },
+    {
+      "route": "/anki-forge/docs/compatibility/index.md",
+      "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+      "previousSha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/compatibility/index.md",
+        "route": "/anki-forge/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+        "bytes": 3374,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__compatibility__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/concepts/index.md",
+      "sha256": "d19a7fdaed78bbbcf9f8d81f510a505d7ff3de219a3bfef151216b159906b22c",
+      "previousSha256": "d19a7fdaed78bbbcf9f8d81f510a505d7ff3de219a3bfef151216b159906b22c",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/csv-to-anki/index.md",
+      "sha256": "4b87db9d89416ba5ff1ee07c559c2e1d24d16013e28dbe1ec5945408fb6f68dc",
+      "previousSha256": "4b87db9d89416ba5ff1ee07c559c2e1d24d16013e28dbe1ec5945408fb6f68dc",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/custom-notetypes/index.md",
+      "sha256": "139ffbf1d5f353efe77366f9ba308fce46358b8df1005ea7af45377504619dbb",
+      "previousSha256": "139ffbf1d5f353efe77366f9ba308fce46358b8df1005ea7af45377504619dbb",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/development/index.md",
+      "sha256": "f3a9d4015939e9ead7a166834eb1a65d3a7b736408cbdb3e5280f3858ab4a99d",
+      "previousSha256": "f3a9d4015939e9ead7a166834eb1a65d3a7b736408cbdb3e5280f3858ab4a99d",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/genanki-migration/index.md",
+      "sha256": "005e556007d6ba329468d2e5feb94c0f9e96a322450de13de45328b32309f551",
+      "previousSha256": "005e556007d6ba329468d2e5feb94c0f9e96a322450de13de45328b32309f551",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/image-occlusion/index.md",
+      "sha256": "ec272077b737326e8a5ec26ba3801cd11bdcef2d8445667a89f1563dcf61e198",
+      "previousSha256": "ec272077b737326e8a5ec26ba3801cd11bdcef2d8445667a89f1563dcf61e198",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/index.md",
+      "sha256": "7eecdc87b955477c31ac4d4e145a6a602490d8080fa3aa16da0a44d3fa4d253d",
+      "previousSha256": "7eecdc87b955477c31ac4d4e145a6a602490d8080fa3aa16da0a44d3fa4d253d",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/installation/index.md",
+      "sha256": "cf97fa2b22f57801f9761355026ec40acd17745e8db3bcca18561811fcc068cc",
+      "previousSha256": "b3c3981d48f92e6bca07e4b2080545bfe6221278f3cd56ea810f8317b34ec4c5",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/installation/index.md",
+        "route": "/anki-forge/docs/installation/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "cf97fa2b22f57801f9761355026ec40acd17745e8db3bcca18561811fcc068cc",
+        "bytes": 2061,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__installation__index.md"
+      },
+      "delta": "--- /anki-forge/docs/installation/index.md (previous reviewed)\n+++ /anki-forge/docs/installation/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# Add to your application\n+# Add Anki Forge to a Rust application\n \n Canonical page: https://morehardy.github.io/anki-forge/docs/installation/\n"
+    },
+    {
+      "route": "/anki-forge/docs/json-to-anki/index.md",
+      "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+      "previousSha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/json-to-anki/index.md",
+        "route": "/anki-forge/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+        "bytes": 11313,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__json-to-anki__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/languages/index.md",
+      "sha256": "fef006176fde2d5f83ac5fcc5092eaaf74efd2f527d775d66ef9136f1d91a89c",
+      "previousSha256": "fef006176fde2d5f83ac5fcc5092eaaf74efd2f527d775d66ef9136f1d91a89c",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/media/index.md",
+      "sha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817",
+      "previousSha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/media/index.md",
+        "route": "/anki-forge/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "e83a50600d721a865600e6398954bfd0aacdd1ec82e43972af4644de563cb817",
+        "bytes": 8188,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__media__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/node-api/index.md",
+      "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+      "previousSha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/node-api/index.md",
+        "route": "/anki-forge/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+        "bytes": 13196,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__node-api__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/node-quickstart/index.md",
+      "sha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a",
+      "previousSha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/node-quickstart/index.md",
+        "route": "/anki-forge/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "050e925e3bd6263981394e1fc017613185492c2f70f2f9601f5bc01c3a3d772a",
+        "bytes": 2472,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__node-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/python-api/index.md",
+      "sha256": "fce41da29bd84f62260357fa3a4b0400476612367a96c92429698d5790dab7fd",
+      "previousSha256": "ce891dfa12abf6e099c563ce509a95f1cab9164bebaff3552e4a0940c56ef886",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/python-api/index.md",
+        "route": "/anki-forge/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "fce41da29bd84f62260357fa3a4b0400476612367a96c92429698d5790dab7fd",
+        "bytes": 9338,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__python-api__index.md"
+      },
+      "delta": "--- /anki-forge/docs/python-api/index.md (previous reviewed)\n+++ /anki-forge/docs/python-api/index.md (current captured)\n@@ -72,5 +72,5 @@\n Typed images require image/\\* MIME at addition; sound references accept audio/\\* or video/\\*. Other categories raise `NOTE.MEDIA_USAGE_INVALID`. Constructors stay infallible; explicit assets and raw HTML are unaffected. The check uses retained import MIME, and does not certify playback. Build’s independent MIME/extension validation still applies. See [the design](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md) for the complete target/detail table.\n \n-## Source API details\n+## Batch media and prepared publication\n \n Batch media and prepared publication are included in the public `0.3.1` package.\n"
+    },
+    {
+      "route": "/anki-forge/docs/python-diagnostics/index.md",
+      "sha256": "a10a07013ba9f1f12b9efb2028fe5714db6f1610b6c9f7f6a03a7f063429eac8",
+      "previousSha256": "a10a07013ba9f1f12b9efb2028fe5714db6f1610b6c9f7f6a03a7f063429eac8",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/python-migration/index.md",
+      "sha256": "88d11532da9c30cd6891b2f333fb3b5434033c0acf494a77517185230ef792d6",
+      "previousSha256": "88d11532da9c30cd6891b2f333fb3b5434033c0acf494a77517185230ef792d6",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/python-quickstart/index.md",
+      "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf",
+      "previousSha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/python-quickstart/index.md",
+        "route": "/anki-forge/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b51f2210978fd71244207675cc4ab94b65e3ead342072189dc78cac88718f6bf",
+        "bytes": 2542,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__python-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/quickstart/index.md",
+      "sha256": "a4589b5cfe58886981f88d083ec139619da5534106993ffc644683b9a644ba49",
+      "previousSha256": "a4589b5cfe58886981f88d083ec139619da5534106993ffc644683b9a644ba49",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/rust-api/index.md",
+      "sha256": "58c8b1e0a4a213a2f9a03b0854a1fc2bd32beb0d24c1e50a1b0ff3eeaad6acca",
+      "previousSha256": "58c8b1e0a4a213a2f9a03b0854a1fc2bd32beb0d24c1e50a1b0ff3eeaad6acca",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/rust-guide/index.md",
+      "sha256": "22fa47e05a0b6317dc2db79efce21ea71b2dde7162e7d024e44e27fc0c1d6a0b",
+      "previousSha256": "22fa47e05a0b6317dc2db79efce21ea71b2dde7162e7d024e44e27fc0c1d6a0b",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/templates/index.md",
+      "sha256": "718573d317c11183da32b6d16751699a63208b4f2f5eb326409fbd8dcc2ae863",
+      "previousSha256": "394354438402e8adf3e91884f22b070a96c11ad8d3cb67315e60b3578538dafe",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/templates/index.md",
+        "route": "/anki-forge/docs/templates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "718573d317c11183da32b6d16751699a63208b4f2f5eb326409fbd8dcc2ae863",
+        "bytes": 5827,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__templates__index.md"
+      },
+      "delta": "--- /anki-forge/docs/templates/index.md (previous reviewed)\n+++ /anki-forge/docs/templates/index.md (current captured)\n@@ -7,5 +7,5 @@\n Reuse the same Anki card design across decks: keep a note type’s templates, CSS and media in one directory and load it for normal or Cloze cards. The examples use Rust; Python and Node.js load bundles with `NoteType.from_bundle` and `NoteType.fromBundle` (see the [Python API](https://morehardy.github.io/anki-forge/docs/python-api/#models-and-templates) and [Node API](https://morehardy.github.io/anki-forge/docs/node-api/#immutable-models)).\n \n-A bundle is a reusable model declaration, template text, CSS and explicit media closure. `NoteType::from_bundle(directory)` validates the complete bundle and takes owned snapshots before returning the same immutable `NoteType` used by inline authoring. It does not partially modify a project.\n+A bundle contains a reusable note type definition, template text, CSS and all explicitly declared media dependencies. `NoteType::from_bundle(directory)` validates the complete bundle and takes owned snapshots before returning the same immutable `NoteType` used by inline authoring. It does not partially modify a project.\n \n ## Run the bundled example\n"
+    },
+    {
+      "route": "/anki-forge/docs/troubleshooting/index.md",
+      "sha256": "1b3fce42ef630b797dbdc7f58f031448d6039c394810980b70daec3cc643e595",
+      "previousSha256": "1b3fce42ef630b797dbdc7f58f031448d6039c394810980b70daec3cc643e595",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/docs/updates/index.md",
+      "sha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54",
+      "previousSha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/docs/updates/index.md",
+        "route": "/anki-forge/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "235c9a79c6d41dd7ff28193b1cd90780154db0831addf174092f9f4fe66cfa54",
+        "bytes": 8172,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__docs__updates__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "e1f76b3d8805b1219d84f3e601bd9195bcf3fe56a0d1db7b626ed9768aa16a31",
+      "previousSha256": "1e75c2eb18271c625fd8174131a72bce8ffd96d2a40f83342c38fb0628d7f2fa",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/blog/stable-ids-and-deck-updates/index.md",
+        "route": "/anki-forge/es/blog/stable-ids-and-deck-updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "e1f76b3d8805b1219d84f3e601bd9195bcf3fe56a0d1db7b626ed9768aa16a31",
+        "bytes": 3768,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__blog__stable-ids-and-deck-updates__index.md"
+      },
+      "delta": "--- /anki-forge/es/blog/stable-ids-and-deck-updates/index.md (previous reviewed)\n+++ /anki-forge/es/blog/stable-ids-and-deck-updates/index.md (current captured)\n@@ -24,5 +24,5 @@\n La identidad también tiene un contexto de proyecto. Mantén el mismo espacio de nombres del proyecto entre las versiones de un mazo. Un ID de nota por sí solo es únicamente una parte de un flujo de actualización repetible.\n \n-## Dar un paquete de referencia a la siguiente generación\n+## Usar el paquete anterior como referencia\n \n Un paquete anterior indica a Anki Forge qué se exportó antes. Utilízalo al generar el proyecto revisado:\n"
+    },
+    {
+      "route": "/anki-forge/es/blog/your-first-anki-deck/index.md",
+      "sha256": "d63713c6a08c0a9ded170220dac67977f2facde2cd8ae2e40972e13426b462a2",
+      "previousSha256": "d63713c6a08c0a9ded170220dac67977f2facde2cd8ae2e40972e13426b462a2",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/ai-anki-cards/index.md",
+      "sha256": "6da84ae75592d1e8ab7a16159892f2b9ec4ab6cb309c4790d53d7c44cadae168",
+      "previousSha256": "6da84ae75592d1e8ab7a16159892f2b9ec4ab6cb309c4790d53d7c44cadae168",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "6270c1b396640bd93ebd5021d1fb7128c90322133ef9d5d8402363382155274b",
+      "previousSha256": "0006bfe328855c5321ba708cb9f1b8cda040ef6891fcf64a3f14afd7c7512316",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/docs/anki-forge-vs-genanki/index.md",
+        "route": "/anki-forge/es/docs/anki-forge-vs-genanki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "6270c1b396640bd93ebd5021d1fb7128c90322133ef9d5d8402363382155274b",
+        "bytes": 5066,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__docs__anki-forge-vs-genanki__index.md"
+      },
+      "delta": "--- /anki-forge/es/docs/anki-forge-vs-genanki/index.md (previous reviewed)\n+++ /anki-forge/es/docs/anki-forge-vs-genanki/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Compara la creación de APKG, los entornos de ejecución, la revisión de actualizaciones y los costes de migración de Anki Forge y genanki.\n \n-Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas que el proyecto conserve los recursos multimedia, diagnósticos estructurados, comparaciones y una revisión de políticas antes de publicar actualizaciones. Conserva un flujo de genanki ya probado si sus scripts de Python, plantillas y recursos multimedia cubren tus necesidades y migrar supone más coste que beneficio.\n+Considera Anki Forge si estás diseñando un flujo de publicación reproducible y necesitas conservar los datos multimedia sin depender de los archivos originales, obtener diagnósticos estructurados y revisar las comparaciones y la política de riesgos antes de publicar actualizaciones. Conserva un flujo de genanki ya probado si sus scripts de Python, plantillas y recursos multimedia cubren tus necesidades y migrar supone más coste que beneficio.\n \n | Criterio | Anki Forge | genanki |\n"
+    },
+    {
+      "route": "/anki-forge/es/docs/api/index.md",
+      "sha256": "c1caf257197c1608b27771e79cf2a6c37d111a261fb48669d6e70b7d1426bf4a",
+      "previousSha256": "c1caf257197c1608b27771e79cf2a6c37d111a261fb48669d6e70b7d1426bf4a",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/build-guarantees/index.md",
+      "sha256": "6c78d78d7905e783c7ed09694c936b00d719b2d673a3c78b609ef1ad1a6522e3",
+      "previousSha256": "58fc03fb554576073e2660e8d6c3ca9070397554a43701336b4f59ae65b9628c",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/docs/build-guarantees/index.md",
+        "route": "/anki-forge/es/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "6c78d78d7905e783c7ed09694c936b00d719b2d673a3c78b609ef1ad1a6522e3",
+        "bytes": 7161,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__docs__build-guarantees__index.md"
+      },
+      "delta": "--- /anki-forge/es/docs/build-guarantees/index.md (previous reviewed)\n+++ /anki-forge/es/docs/build-guarantees/index.md (current captured)\n@@ -51,3 +51,3 @@\n Cada intento de publicación consume el objeto que mantiene la versión candidata, incluso si falla la política o la E/S. Vuelve a preparar para reintentar o para cambiar la política o el destino. Los informes siguen siendo legibles y no conservan archivos. Node y Python ofrecen `close()` idempotente y un error de indisponibilidad con motivo `closed` o `consumed`; cerrar después de que empiece la publicación no la cancela. La duración no incluye la espera de revisión. Un fallo tardío de durabilidad puede producirse después de un reemplazo correcto, por lo que debes comprobar los datos reales de la publicación.\n \n-Sigue [el ejemplo completo](https://morehardy.github.io/anki-forge/es/docs/updates/#build-once-review-then-publish-from-source) y las referencias de las API de cada lenguaje para conocer los errores tipados y el funcionamiento de los trabajadores.\n+Sigue [el ejemplo completo](https://morehardy.github.io/anki-forge/es/docs/updates/#build-once-review-then-publish-from-source) y las referencias de las API de cada lenguaje para conocer los errores tipados y el funcionamiento de los hilos de trabajo.\n"
+    },
+    {
+      "route": "/anki-forge/es/docs/cards/index.md",
+      "sha256": "e9e4414e49cb0a24472e64c140dd05ef25fd3671ff3ef62bf0bc3f54744ab4cb",
+      "previousSha256": "e9e4414e49cb0a24472e64c140dd05ef25fd3671ff3ef62bf0bc3f54744ab4cb",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/compatibility/index.md",
+      "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+      "previousSha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/docs/compatibility/index.md",
+        "route": "/anki-forge/es/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "54806f1164173f934ada1a6d78d17394745021bdbe04db13a283e987edabb561",
+        "bytes": 4176,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__docs__compatibility__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/concepts/index.md",
+      "sha256": "27fe0659feeb4577ce85fd3628479371705cff5cc362ec55c9d01321fc8aaa50",
+      "previousSha256": "27fe0659feeb4577ce85fd3628479371705cff5cc362ec55c9d01321fc8aaa50",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/csv-to-anki/index.md",
+      "sha256": "90ca8ad6a8acf7eb8736394ea0cc04129715b65e61c825bcc45fa6fb28356e64",
+      "previousSha256": "90ca8ad6a8acf7eb8736394ea0cc04129715b65e61c825bcc45fa6fb28356e64",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/custom-notetypes/index.md",
+      "sha256": "2c22f3c99f4ac0719b15ff5a5cb73ef428f0c9bb4c7bf36de8a826b61caafb0c",
+      "previousSha256": "2c22f3c99f4ac0719b15ff5a5cb73ef428f0c9bb4c7bf36de8a826b61caafb0c",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/development/index.md",
+      "sha256": "b62bc3d0e4bab808e22666e1b7a2009b89e43929e674ed464ba086c9ac823d6e",
+      "previousSha256": "b62bc3d0e4bab808e22666e1b7a2009b89e43929e674ed464ba086c9ac823d6e",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/genanki-migration/index.md",
+      "sha256": "44834bdc82d9309b5a3ecbd87d40b3fcb3805b39acf108b580af17834c062b24",
+      "previousSha256": "44834bdc82d9309b5a3ecbd87d40b3fcb3805b39acf108b580af17834c062b24",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/image-occlusion/index.md",
+      "sha256": "27783ea8e03a4f237589e58c2e7dc1fc83e828038867b3fe3d0e27bf7b8e569a",
+      "previousSha256": "27783ea8e03a4f237589e58c2e7dc1fc83e828038867b3fe3d0e27bf7b8e569a",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/index.md",
+      "sha256": "cb689d0a1caf659fc7c634f0ccb483cea5fd5223133c2d3ef7fc524378bbea78",
+      "previousSha256": "cb689d0a1caf659fc7c634f0ccb483cea5fd5223133c2d3ef7fc524378bbea78",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/installation/index.md",
+      "sha256": "f95dd3110b15f05d62f87e171901228ec2c67962906eb2f51b5fe8e0058889bd",
+      "previousSha256": "f95dd3110b15f05d62f87e171901228ec2c67962906eb2f51b5fe8e0058889bd",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/json-to-anki/index.md",
+      "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c",
+      "previousSha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/docs/json-to-anki/index.md",
+        "route": "/anki-forge/es/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "ac0c5c094049dde93ae1d8b691871293ba56e90f54cba513c02315e54c60317c",
+        "bytes": 12064,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__docs__json-to-anki__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/languages/index.md",
+      "sha256": "0d484d10b25a387f86fa053fa6e2adf90792be161437af41bdf3c38046c0b6dd",
+      "previousSha256": "0d484d10b25a387f86fa053fa6e2adf90792be161437af41bdf3c38046c0b6dd",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/media/index.md",
+      "sha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929",
+      "previousSha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/docs/media/index.md",
+        "route": "/anki-forge/es/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c1c0ed4093fed42f6a41d9ee024c5985408616630ce960f7ac087b6e1056b929",
+        "bytes": 9848,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__docs__media__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/node-api/index.md",
+      "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84",
+      "previousSha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/docs/node-api/index.md",
+        "route": "/anki-forge/es/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "a0523c1f5a84d58ca95318d19f76f68d53dc313ad1bb31811e452c8febad4b84",
+        "bytes": 15876,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__docs__node-api__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/node-quickstart/index.md",
+      "sha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3",
+      "previousSha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/docs/node-quickstart/index.md",
+        "route": "/anki-forge/es/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "d1554e89001efd6edcc9affc425966718318aafccf671655665946023873f0f3",
+        "bytes": 2795,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__docs__node-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/python-api/index.md",
+      "sha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69",
+      "previousSha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/docs/python-api/index.md",
+        "route": "/anki-forge/es/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "7493fb166b3dc9950e6d0cd69effa9ac27ad5c9ba3e14e5821dc96275ef01a69",
+        "bytes": 11307,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__docs__python-api__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/python-diagnostics/index.md",
+      "sha256": "7bf8512118b5e1083203d72dcf536ae4ec7c5ac39a0cfea8f366fd6dabcdf4db",
+      "previousSha256": "7bf8512118b5e1083203d72dcf536ae4ec7c5ac39a0cfea8f366fd6dabcdf4db",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/python-migration/index.md",
+      "sha256": "be79c1233d8ac8c731d5cf8cd62ce253d3e99388f9f443d59018802e11f256f3",
+      "previousSha256": "be79c1233d8ac8c731d5cf8cd62ce253d3e99388f9f443d59018802e11f256f3",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/python-quickstart/index.md",
+      "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a",
+      "previousSha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/docs/python-quickstart/index.md",
+        "route": "/anki-forge/es/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "2d6caa1320b91eaced0c721903f3c8a6d5def92d20d76275a61758fc9d34ac2a",
+        "bytes": 2856,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__docs__python-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/quickstart/index.md",
+      "sha256": "5d8ed767c6669c95fb97104543bd4327ee183c41e3844c9c5a291d586f928ad3",
+      "previousSha256": "5d8ed767c6669c95fb97104543bd4327ee183c41e3844c9c5a291d586f928ad3",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/rust-api/index.md",
+      "sha256": "5268e0ddb2a9726a23652133de2cad5aa5c8ea6681382440a7ce472c2f3fa958",
+      "previousSha256": "5268e0ddb2a9726a23652133de2cad5aa5c8ea6681382440a7ce472c2f3fa958",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/rust-guide/index.md",
+      "sha256": "eeaff8a038b36bf7151d8ca3655a4c12aa65fdb68281c54559850a4d71c50624",
+      "previousSha256": "eeaff8a038b36bf7151d8ca3655a4c12aa65fdb68281c54559850a4d71c50624",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/templates/index.md",
+      "sha256": "331364d195d3c82a4c14c41d37ce46fe487221ee3e92794c1dbc93c69af94bb3",
+      "previousSha256": "331364d195d3c82a4c14c41d37ce46fe487221ee3e92794c1dbc93c69af94bb3",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/troubleshooting/index.md",
+      "sha256": "a2a3a42bcd7a6ab2b511bf9e736667ad8b302dc8781e428008bd200420be5b4f",
+      "previousSha256": "a2a3a42bcd7a6ab2b511bf9e736667ad8b302dc8781e428008bd200420be5b4f",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/es/docs/updates/index.md",
+      "sha256": "b9b2cc72ed62f822aec0e9e7fc16b34cadf78f6868148360aaaef472ed09a952",
+      "previousSha256": "09df198c4cfd581ffd8d14cfa4a7b645a698bb553aae251234efff8b108d4bf8",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/docs/updates/index.md",
+        "route": "/anki-forge/es/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b9b2cc72ed62f822aec0e9e7fc16b34cadf78f6868148360aaaef472ed09a952",
+        "bytes": 9443,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__docs__updates__index.md"
+      },
+      "delta": "--- /anki-forge/es/docs/updates/index.md (previous reviewed)\n+++ /anki-forge/es/docs/updates/index.md (current captured)\n@@ -69,5 +69,5 @@\n La política predeterminada bloquea los hallazgos High y Critical. Tras revisar una categoría concreta, puedes elegir de forma deliberada `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. Esta opción acepta **todos los hallazgos de esa categoría**, conservando su nivel original y sus pruebas. No significa que se hayan aprobado notas concretas de forma individual. Una excepción sin hallazgos coincidentes produce una advertencia; se rechazan los códigos de riesgo desconocidos. No autorices automáticamente todos los códigos que devuelva una comparación.\n \n-La ausencia o corrupción de las pruebas de identidad, un espacio de nombres distinto, los datos no válidos de la versión candidata y los límites de inspección son errores, no categorías de riesgo que se puedan autorizar. Si el análisis no puede terminar, la comparación devuelve un error con las observaciones que haya completado. Establecer una política explícita en una solicitud de creación sin `update_from` es un error de configuración, independientemente del orden de las llamadas a los métodos de configuración.\n+La ausencia o corrupción de las pruebas de identidad, un espacio de nombres distinto, los datos no válidos de la versión candidata y la superación de los límites de inspección son errores, no categorías de riesgo que se puedan autorizar. Si el análisis no puede terminar, la comparación devuelve un error con las observaciones que haya completado. Establecer una política explícita en una solicitud de creación sin `update_from` es un error de configuración, independientemente del orden de las llamadas a los métodos de configuración.\n \n ## Pruebas e identidad\n"
+    },
+    {
+      "route": "/anki-forge/es/llms.txt",
+      "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d",
+      "previousSha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/es/llms.txt",
+        "route": "/anki-forge/es/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "ec6c5e608dd3326eaef4429812804dabb1290ff4f8f14f4c98fc4d0598f54c0d",
+        "bytes": 7793,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__es__llms.txt"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "27889b9b84c108a76bfed3450fb624286424e412766f4f87cdec2d2014eb621e",
+      "previousSha256": "ee594693e3eb0407d94666c6b5da88bc1fded3a16fef692176bca3dfa6c17b3b",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/blog/stable-ids-and-deck-updates/index.md",
+        "route": "/anki-forge/ja/blog/stable-ids-and-deck-updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "27889b9b84c108a76bfed3450fb624286424e412766f4f87cdec2d2014eb621e",
+        "bytes": 4315,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__blog__stable-ids-and-deck-updates__index.md"
+      },
+      "delta": "--- /anki-forge/ja/blog/stable-ids-and-deck-updates/index.md (previous reviewed)\n+++ /anki-forge/ja/blog/stable-ids-and-deck-updates/index.md (current captured)\n@@ -40,5 +40,5 @@\n ## 配布時のオリジナルパッケージを保持する\n \n-生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、対応する基準パッケージではありません。\n+生成するすべてのパッケージには、完全な識別情報とリビジョンの証拠が含まれます。次のビルドでは、識別情報を再使用する前に、それらの証拠を実際のデータベースとメディアに照らして検証します。配布したオリジナルパッケージを保存してください。Anki から再エクスポートしたファイルは、更新の基準パッケージとして使用できません。\n \n [更新ガイド](https://morehardy.github.io/anki-forge/ja/docs/updates/)では、厳密な更新、リスクポリシー、クライアントでのインポートの制約を説明します。\n"
+    },
+    {
+      "route": "/anki-forge/ja/blog/your-first-anki-deck/index.md",
+      "sha256": "631e800eb152dbb484c781f9fd2e1760e5174be420c59664066ebed744490f87",
+      "previousSha256": "631e800eb152dbb484c781f9fd2e1760e5174be420c59664066ebed744490f87",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/ai-anki-cards/index.md",
+      "sha256": "2e5b420c62be33ab6ab6d9a7dbb29369adb25b322c26af15f9af8fa37c7579aa",
+      "previousSha256": "2e5b420c62be33ab6ab6d9a7dbb29369adb25b322c26af15f9af8fa37c7579aa",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "e39308bb4bf191a1a65acdec3f1c3cec9579fe7922ac1c3accb6e0d3206329c9",
+      "previousSha256": "e39308bb4bf191a1a65acdec3f1c3cec9579fe7922ac1c3accb6e0d3206329c9",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/api/index.md",
+      "sha256": "cceb5e5237186743b653895831b5079dc8ecf475180a1a16adae3b63232b5673",
+      "previousSha256": "cceb5e5237186743b653895831b5079dc8ecf475180a1a16adae3b63232b5673",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/build-guarantees/index.md",
+      "sha256": "c7841c160a0d0295411b2d5627410d26e93e51a49cf76aa7d82c794fd0e1e1fb",
+      "previousSha256": "f1bffb4ba69bec9584fb4f5d57103b4105b264524752a984182668cd2045e255",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/build-guarantees/index.md",
+        "route": "/anki-forge/ja/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c7841c160a0d0295411b2d5627410d26e93e51a49cf76aa7d82c794fd0e1e1fb",
+        "bytes": 7841,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__build-guarantees__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/build-guarantees/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/build-guarantees/index.md (current captured)\n@@ -43,7 +43,7 @@\n パッケージの検査だけでは、クライアント側のすべての動作を確認できません。対象の Anki バージョンと設定で、描画、再生、更新のインポートをテストしてください。復習スケジュールとスキーマ変更の制約は[更新](https://morehardy.github.io/anki-forge/ja/docs/updates/)を参照してください。\n \n-## 準備済み公開\n+## 候補ファイルを準備し、確認後に保存する\n \n-準備済み公開は、公開 `0.3.1` パッケージに含まれています。\n+候補を事前に生成し、確認後に保存する機能は、公開 `0.3.1` パッケージに含まれています。\n \n `prepare_publication` は1つの非公開の候補をビルド・検査・比較します。`publish` は同じファイルを使います。オプションと相対保存先は準備時に確定します。プロジェクトを編集しても候補は変わりません。準備だけで保存先が置き換わることはありません。未公開の所有者をドロップまたは閉じると候補が削除されます。\n"
+    },
+    {
+      "route": "/anki-forge/ja/docs/cards/index.md",
+      "sha256": "0d245a2517435ac3215170422ea139e7858e0cf38dc784601fd33d306636accb",
+      "previousSha256": "0d245a2517435ac3215170422ea139e7858e0cf38dc784601fd33d306636accb",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/compatibility/index.md",
+      "sha256": "52d890b6eda66d3bab3423a6be5ee374f3b106487f517a386b17a1aa0465ab7d",
+      "previousSha256": "309088006af4caa693e6fb8b92eb6ccb085a6a8ede3279ddffe19e189110beee",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/compatibility/index.md",
+        "route": "/anki-forge/ja/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "52d890b6eda66d3bab3423a6be5ee374f3b106487f517a386b17a1aa0465ab7d",
+        "bytes": 4359,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__compatibility__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/compatibility/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/compatibility/index.md (current captured)\n@@ -17,5 +17,5 @@\n 公開ネイティブパッケージは macOS arm64/x64、Linux x64 GNU/glibc、Windows x64 に対応します。パッケージが存在するだけで、すべてのホストで実行テストが成功したことにはなりません。[Node の検証範囲](https://github.com/morehardy/anki-forge/blob/main/bindings/node/COVERAGE.md)、[Python の検証範囲](https://github.com/morehardy/anki-forge/blob/main/bindings/python/COVERAGE.md)、リリースの証拠に、実施した検査を記録しています。`0.3.1` の成功したリリース実行は [Rust](https://github.com/morehardy/anki-forge/actions/runs/38371221696)、[npm](https://github.com/morehardy/anki-forge/actions/runs/38371222114)、[PyPI](https://github.com/morehardy/anki-forge/actions/runs/38371222047) です。他の Python 実装、free-threaded インタープリター、サブインタープリターは別途検証が必要です。ブラウザー、Electron、Bun、Alpine/musl、ARM64 Linux/Windows は、記録済みの Node 検証範囲外です。\n \n-[メディアの一括インポート](https://morehardy.github.io/anki-forge/ja/docs/media/#batch-media-import)と[準備済み公開](https://morehardy.github.io/anki-forge/ja/docs/updates/#build-once-review-then-publish)のガイドで扱う機能は、公開 `0.3.1` パッケージで使用できます。\n+[メディアの一括インポート](https://morehardy.github.io/anki-forge/ja/docs/media/#batch-media-import)と[候補を確認してから保存する手順](https://morehardy.github.io/anki-forge/ja/docs/updates/#build-once-review-then-publish)のガイドで扱う機能は、公開 `0.3.1` パッケージで使用できます。\n \n ## Anki でのインポートと再生\n"
+    },
+    {
+      "route": "/anki-forge/ja/docs/concepts/index.md",
+      "sha256": "4f08d0583b1e8355f8bb83b0d756118c336f20dd93106329f0adf297ba2482c6",
+      "previousSha256": "4f08d0583b1e8355f8bb83b0d756118c336f20dd93106329f0adf297ba2482c6",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/csv-to-anki/index.md",
+      "sha256": "808923aee7e79aca33f63dfd39d77dac70437acf6768cba1c9661a45775b28df",
+      "previousSha256": "808923aee7e79aca33f63dfd39d77dac70437acf6768cba1c9661a45775b28df",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/custom-notetypes/index.md",
+      "sha256": "04b21b38940ea18e554e1ec2fc520fa42bf2625b083f815f55f03e5e31c15094",
+      "previousSha256": "04b21b38940ea18e554e1ec2fc520fa42bf2625b083f815f55f03e5e31c15094",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/development/index.md",
+      "sha256": "2d3023b9a31da475971214d0380dda676f724f6e4939e202d6146b4639ce6ec2",
+      "previousSha256": "2d3023b9a31da475971214d0380dda676f724f6e4939e202d6146b4639ce6ec2",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/genanki-migration/index.md",
+      "sha256": "4b281a1e07383523e9dbec98b95672768b7d24e9458f997d1cfaff5088027046",
+      "previousSha256": "4b281a1e07383523e9dbec98b95672768b7d24e9458f997d1cfaff5088027046",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/image-occlusion/index.md",
+      "sha256": "cf55864ad55c5ac7be9bd7352096ffd4a58e50c4351eba2d4907581d605a3fb9",
+      "previousSha256": "cf55864ad55c5ac7be9bd7352096ffd4a58e50c4351eba2d4907581d605a3fb9",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/index.md",
+      "sha256": "881d8b6e811225424d84a030134952732cf734a43847e5aa34a625499d1eac3f",
+      "previousSha256": "881d8b6e811225424d84a030134952732cf734a43847e5aa34a625499d1eac3f",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/installation/index.md",
+      "sha256": "3b07b38605db66b81df26e3b381392a35d7c1374793501700507719558a9d0ce",
+      "previousSha256": "ef35ff4ee09a4832f809bfa52818313e0f8b693e92507b6272d409eac2901110",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/installation/index.md",
+        "route": "/anki-forge/ja/docs/installation/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "3b07b38605db66b81df26e3b381392a35d7c1374793501700507719558a9d0ce",
+        "bytes": 2757,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__installation__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/installation/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/installation/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# アプリケーションに組み込む\n+# Rust アプリケーションに組み込む\n \n Canonical page: https://morehardy.github.io/anki-forge/ja/docs/installation/\n@@ -15,5 +15,5 @@\n ## Cargo の依存関係\n \n-公開 `ankiforge` crate には、Basic、Cloze、独自のノートタイプ、データを所有するメディア、画像穴埋め、比較、準備済み公開が含まれます。デフォルトの feature は空です。通常のアプリケーションコードでリポジトリ専用の feature を有効にする必要はありません。\n+公開 `ankiforge` crate には、Basic、Cloze、独自のノートタイプ、データを所有するメディア、画像穴埋め、比較、候補ファイルの事前生成が含まれます。デフォルトの feature は空です。通常のアプリケーションコードでリポジトリ専用の feature を有効にする必要はありません。\n \n crate はネイティブの Rust ライブラリです。Rust ツールチェーンに必要な、利用環境のリンカーとビルドツールをインストールしてください。デプロイ先を選ぶ際は[検証済みの環境](https://morehardy.github.io/anki-forge/ja/docs/compatibility/)を参照してください。最小要件は Rust 1.92 です。一覧に載っているプラットフォームでも、すべてのターゲットやサードパーティ製ツールチェーンの設定で動くことを保証するものではありません。\n"
+    },
+    {
+      "route": "/anki-forge/ja/docs/json-to-anki/index.md",
+      "sha256": "dacec422e610b238e4d185172e12033e339b74905682915e5c33c2b9080dc284",
+      "previousSha256": "474a8dd1ed55ff3a415dff3e58950c46fa29470f7fdf48d902c935a863d97d74",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/json-to-anki/index.md",
+        "route": "/anki-forge/ja/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "dacec422e610b238e4d185172e12033e339b74905682915e5c33c2b9080dc284",
+        "bytes": 13049,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__json-to-anki__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/json-to-anki/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/json-to-anki/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Rust、Python、TypeScript で JSON を読み取り、画像と音声を同梱し、解答だけを変更する APKG 更新を確認します。\n \n-JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、配布元の APKG と、回答だけを変更して確認済みの更新版を出力します。どちらの版も **ノート3件、カード3枚、メディアファイル2個**になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。\n+JSON にある生物学の問題を3問読み込み、共通の画像と音声を追加して、初回配布用の APKG と、解答だけを変更した検証済みの更新版を出力します。どちらの版も **ノート3件、カード3枚、メディアファイル2個**になります。以下から SDK を1つ選んでください。各例はそのまま使える完全なプログラムです。通常のエクスポートに Anki のインストールは必要ありません。\n \n 管理：Anki Forge メンテナー · 英語原文の確認日：2026-10-25。\n"
+    },
+    {
+      "route": "/anki-forge/ja/docs/languages/index.md",
+      "sha256": "94f170807eeaab2ab74f3750320e6b0bce4af9e407309ea73c4490060c6e4de8",
+      "previousSha256": "94f170807eeaab2ab74f3750320e6b0bce4af9e407309ea73c4490060c6e4de8",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/media/index.md",
+      "sha256": "1374c52f20eebdb6d17e1f19e64f67a79517e008d072dedb387777601edb391f",
+      "previousSha256": "4e9ec3cd8b26c1b851c4fefe807cf68860d070c4ca847dafd7bfa5878fac1177",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/media/index.md",
+        "route": "/anki-forge/ja/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "1374c52f20eebdb6d17e1f19e64f67a79517e008d072dedb387777601edb391f",
+        "bytes": 11347,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__media__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/media/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/media/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Rust、Python、Node.js で画像・音声をインポートしてカードを組み立て、エクスポート名、MIME タイプ、メディア上限を管理します。\n \n-発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と音声を同梱します。Anki Forge は、指定されたファイルを APKG にコピーします。音声合成などによる音声・画像の作成には別のツールが必要です。例では Rust を使います。後半の一括インポートでは Python と Node.js の呼び出しも示します。\n+発音音声付きの語彙カードや図を使った問題など、生成する Anki カードに画像と音声を同梱します。Anki Forge は、指定されたファイルを APKG にコピーします。音声や画像の作成には別のツールが必要です。たとえば、読み上げ音声は音声合成ツールで用意します。例では Rust を使います。後半の一括インポートでは Python と Node.js の呼び出しも示します。\n \n `Media` の値は不変のスナップショットを所有します。ファイルは `Media::file`、ネイティブのバイト列は MIME タイプを明示した `Media::bytes` でインポートします。インポート成功後に元ファイルを変更・削除してもアセットは変わりません。クローンはストレージを共有し、複数のプロジェクトで使えます。\n"
+    },
+    {
+      "route": "/anki-forge/ja/docs/node-api/index.md",
+      "sha256": "8aa77f2fafb1af29f6268553af8510bc3b4e16e89f77dd69d7d04c3cb174fa5e",
+      "previousSha256": "f9c259ce5d0a1bf34e736d0d755d290464f2cede2fd6638946fa61d69fd6479b",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/node-api/index.md",
+        "route": "/anki-forge/ja/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "8aa77f2fafb1af29f6268553af8510bc3b4e16e89f77dd69d7d04c3cb174fa5e",
+        "bytes": 17273,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__node-api__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/node-api/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/node-api/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: Node SDK の作成メソッド、非同期処理、メディア、所有権、型付きレポート、TypeScript の設定を確認できます。\n \n-`ankiforge` エントリーポイントは、作成用モデルとして Project のみを公開します。型は[公開ソース](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts)、[レポートクラス](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts)、[JSON スナップショットの型宣言](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts)にあります。[クイックスタート](https://morehardy.github.io/anki-forge/ja/docs/node-quickstart/)から始めてください。\n+`ankiforge` の公開 API では、`Project` を中心にノートやメディアを組み立てます。型は[公開ソース](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/index.ts)、[レポートクラス](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/report.ts)、[JSON スナップショットの型宣言](https://github.com/morehardy/anki-forge/blob/main/bindings/node/src/snapshots.ts)にあります。[クイックスタート](https://morehardy.github.io/anki-forge/ja/docs/node-quickstart/)から始めてください。\n \n ## プロジェクトとノート\n@@ -103,7 +103,7 @@\n 型付き画像を追加する際は image/\\* MIME が必要です。音声参照には audio/\\* または video/\\* を受け付けます。他の種類は `NOTE.MEDIA_USAGE_INVALID` になります。コンストラクター自体は失敗せず、明示的アセットと直接記述した HTML には影響しません。検査はインポート時に保持した MIME を使い、再生を保証しません。ビルド時の独立した MIME・拡張子検証も引き続き適用されます。対象と詳細の完全な対応表は[設計文書](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)を参照してください。\n \n-## メディアの一括処理と準備済み公開\n+## メディアの一括処理と候補ファイルの事前生成\n \n-メディアの一括処理と準備済み公開は、公開 `0.3.1` パッケージに含まれています。\n+メディアの一括処理と候補ファイルの事前生成は、公開 `0.3.1` パッケージに含まれています。\n \n ### 準備、確認、公開\n"
+    },
+    {
+      "route": "/anki-forge/ja/docs/node-quickstart/index.md",
+      "sha256": "9fdebe1ec79bd7edc441096c0792e527f16e2a6e189b4cf3fcd9ec377926205c",
+      "previousSha256": "9fdebe1ec79bd7edc441096c0792e527f16e2a6e189b4cf3fcd9ec377926205c",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/node-quickstart/index.md",
+        "route": "/anki-forge/ja/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "9fdebe1ec79bd7edc441096c0792e527f16e2a6e189b4cf3fcd9ec377926205c",
+        "bytes": 3081,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__node-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-api/index.md",
+      "sha256": "a4dbe2b60bf17adc083ec31bc12abdb7772324864c1d79f1194a4d0aa60251fa",
+      "previousSha256": "3b64c671e514a509e8c03315374b2b5b57cda7749aea81d7f19a9561aad5b0b2",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/python-api/index.md",
+        "route": "/anki-forge/ja/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "a4dbe2b60bf17adc083ec31bc12abdb7772324864c1d79f1194a4d0aa60251fa",
+        "bytes": 13029,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__python-api__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/python-api/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/python-api/index.md (current captured)\n@@ -3,5 +3,5 @@\n Canonical page: https://morehardy.github.io/anki-forge/ja/docs/python-api/\n Language: ja\n-Description: Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、準備済み公開の API を確認できます。\n+Description: Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、候補の事前生成と保存に使う API を確認できます。\n \n この SDK は、ネイティブ拡張を通じて標準の Rust 公開 API を呼び出します。`py.typed` と検証済みの公開シグネチャを含みます。まずは[クイックスタート](https://morehardy.github.io/anki-forge/ja/docs/python-quickstart/)を参照してください。\n@@ -72,7 +72,7 @@\n 型付き画像を追加する場合は image/\\* MIME が必要です。音声参照には audio/\\* または video/\\* を使えます。それ以外のカテゴリでは `NOTE.MEDIA_USAGE_INVALID` が発生します。コンストラクターは引き続き失敗せず、明示的なファイル追加と生の HTML には影響しません。この検査はインポート時に保持した MIME を使うもので、再生できることを保証しません。ビルド時の独立した MIME／拡張子検証も引き続き適用されます。対象と詳細の全項目は[設計文書](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)を参照してください。\n \n-## メディアの一括処理と準備済み公開\n+## メディアの一括処理と候補ファイルの事前生成\n \n-メディアの一括処理と準備済み公開は、公開パッケージ `0.3.1` に含まれています。\n+メディアの一括処理と候補ファイルの事前生成は、公開パッケージ `0.3.1` に含まれています。\n \n ### 準備、確認、公開\n"
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-diagnostics/index.md",
+      "sha256": "88a1557d90afb2814b4679b20fc1afa9d968a5c092cc0198997c638af2ff21e9",
+      "previousSha256": "88a1557d90afb2814b4679b20fc1afa9d968a5c092cc0198997c638af2ff21e9",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-migration/index.md",
+      "sha256": "3710accf7545e898f2b98239c8f316ac9a0b4355aa6e1d1735d9257637f30937",
+      "previousSha256": "a203d986d9220b0c55a260179a539c255560e32d0cf9359029c6bef84b699717",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/python-migration/index.md",
+        "route": "/anki-forge/ja/docs/python-migration/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "3710accf7545e898f2b98239c8f316ac9a0b4355aa6e1d1735d9257637f30937",
+        "bytes": 2672,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__python-migration__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/python-migration/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/python-migration/index.md (current captured)\n@@ -19,5 +19,5 @@\n | 暗黙の HTML | 文字列は Text。HTML には `Content.html` を使う |\n | 安定した識別情報のないマスク | `Mask.rect(key, x, y, width, height)` |\n-| 任意の成果物と ensure\\_success | 成果物が保証された `BuildOutput`。失敗時は構造化エラーを送出 |\n+| 成果物がない場合もある戻り値と ensure\\_success | 成果物が保証された `BuildOutput`。失敗時は構造化エラーを送出 |\n | 診断からレポートの成功・失敗を推測 | Output/Error のスナップショットが実際の結果を示す。Report は観測結果のみ |\n | Diff、lockfile、更新安全性の切り替え | `compare(CompareOptions.against(...))`、`BuildOptions.update_from(...)` |\n"
+    },
+    {
+      "route": "/anki-forge/ja/docs/python-quickstart/index.md",
+      "sha256": "46cf182f9dc3ece8c209bfc32bf65a46882105374b055df39b0b587711ece0c4",
+      "previousSha256": "46cf182f9dc3ece8c209bfc32bf65a46882105374b055df39b0b587711ece0c4",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/python-quickstart/index.md",
+        "route": "/anki-forge/ja/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "46cf182f9dc3ece8c209bfc32bf65a46882105374b055df39b0b587711ece0c4",
+        "bytes": 3122,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__python-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/quickstart/index.md",
+      "sha256": "a7bc6860fc267e2049700b03f6c715e920ed2a32a085a9b4fb3938a82703b9be",
+      "previousSha256": "ad059136372c44f733df698766d2cd42bbe8f27eaea8e3a733fb5c32c2ab53f8",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/quickstart/index.md",
+        "route": "/anki-forge/ja/docs/quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "a7bc6860fc267e2049700b03f6c715e920ed2a32a085a9b4fb3938a82703b9be",
+        "bytes": 2575,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__quickstart__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/quickstart/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/quickstart/index.md (current captured)\n@@ -3,5 +3,5 @@\n Canonical page: https://morehardy.github.io/anki-forge/ja/docs/quickstart/\n Language: ja\n-Description: Rust の公開パッケージをインストールし、スペイン語のカードを作成して、永続 APKG ファイルを書き出します。\n+Description: Rust の公開パッケージをインストールし、スペイン語のカードを作成して、後から使える APKG ファイルとして保存します。\n \n Rust 1.92 以降を使用します。別のプログラミング言語を使う場合は、[Node／TypeScript または Python](https://morehardy.github.io/anki-forge/ja/docs/languages/)を選んでください。\n"
+    },
+    {
+      "route": "/anki-forge/ja/docs/rust-api/index.md",
+      "sha256": "e17338e19780955a86be1b084dbce929d0030e326e0c33442c5dda075486e194",
+      "previousSha256": "340eca06ee46dc6de96b2143202e10cfc43ae5e09f63deb5bc6b46fff2ff2f64",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/rust-api/index.md",
+        "route": "/anki-forge/ja/docs/rust-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "e17338e19780955a86be1b084dbce929d0030e326e0c33442c5dda075486e194",
+        "bytes": 12304,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__rust-api__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/rust-api/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/rust-api/index.md (current captured)\n@@ -74,5 +74,5 @@\n ## 一度確認した候補をそのまま公開する\n \n-準備済み公開 API は、公開 `0.3.1` パッケージに含まれています。\n+候補の事前生成と保存を行う API は、公開 `0.3.1` パッケージに含まれています。\n \n ```rust\n"
+    },
+    {
+      "route": "/anki-forge/ja/docs/rust-guide/index.md",
+      "sha256": "a45613b0f7ef560475f5072d729ae9f0c6bd4786c537c1f4239593fba6a7e4c2",
+      "previousSha256": "a45613b0f7ef560475f5072d729ae9f0c6bd4786c537c1f4239593fba6a7e4c2",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/templates/index.md",
+      "sha256": "4c66968bf145daa9b80bd51763e128cbe45f9188f781dfcf085e16d3072adb00",
+      "previousSha256": "4c66968bf145daa9b80bd51763e128cbe45f9188f781dfcf085e16d3072adb00",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/troubleshooting/index.md",
+      "sha256": "ea6fe0bc78933b3ef5df2e692aa28e81b78220813c8797485e7919e409dc6748",
+      "previousSha256": "ea6fe0bc78933b3ef5df2e692aa28e81b78220813c8797485e7919e409dc6748",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/ja/docs/updates/index.md",
+      "sha256": "fe80a6908897a962b8510af0fbee110d9f9d4963832ac80dd8d2018544dc9c53",
+      "previousSha256": "0b9d3365dd9e0432c63ac6f5cc3b3153d94fabab373db0ac9963b81cb1d89eec",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/docs/updates/index.md",
+        "route": "/anki-forge/ja/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "fe80a6908897a962b8510af0fbee110d9f9d4963832ac80dd8d2018544dc9c53",
+        "bytes": 10501,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__docs__updates__index.md"
+      },
+      "delta": "--- /anki-forge/ja/docs/updates/index.md (previous reviewed)\n+++ /anki-forge/ja/docs/updates/index.md (current captured)\n@@ -89,5 +89,5 @@\n この API は公開パッケージ `0.3.1` に含まれています。\n \n-一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。準備済み公開では、実際の APKG と確認対象のレポートの対応を保てます。\n+一度ビルドしたらレポートを確認し、その同じ候補ファイルを公開します。確認後に通常のビルドをもう一度行うと、別の候補が生成されます。`prepare_publication` で候補を準備し、確認後に `publish` で保存すると、レポートで確認したものと同じ APKG を書き出せます。\n \n ```rust\n"
+    },
+    {
+      "route": "/anki-forge/ja/llms.txt",
+      "sha256": "3145b8f74114903e44daca25840c2360c38e4a851a4a5f763316c28352c72a28",
+      "previousSha256": "1857d0a6a97fbb2d8e1c50568c380af303a49660fbdf8475d43e60b072c4eb39",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/ja/llms.txt",
+        "route": "/anki-forge/ja/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "3145b8f74114903e44daca25840c2360c38e4a851a4a5f763316c28352c72a28",
+        "bytes": 8228,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__ja__llms.txt"
+      },
+      "delta": "--- /anki-forge/ja/llms.txt (previous reviewed)\n+++ /anki-forge/ja/llms.txt (current captured)\n@@ -17,5 +17,5 @@\n ## クイックスタート\n \n-- [Rust で Anki カードを生成する](https://morehardy.github.io/anki-forge/ja/docs/quickstart/index.md): Rust の公開パッケージをインストールし、スペイン語のカードを作成して、永続 APKG ファイルを書き出します。\n+- [Rust で Anki カードを生成する](https://morehardy.github.io/anki-forge/ja/docs/quickstart/index.md): Rust の公開パッケージをインストールし、スペイン語のカードを作成して、後から使える APKG ファイルとして保存します。\n - [Node.js で Anki カードを生成する](https://morehardy.github.io/anki-forge/ja/docs/node-quickstart/index.md): 公開 Node パッケージをインストールし、完全な JavaScript プログラムで最初の永続 APKG をエクスポートします。\n - [Python で Anki カードを生成する](https://morehardy.github.io/anki-forge/ja/docs/python-quickstart/index.md): 仮想環境に公開 Python パッケージをインストールし、短い完全なプログラムで永続 APKG を作成します。\n@@ -26,5 +26,5 @@\n - [Rust API ガイド](https://morehardy.github.io/anki-forge/ja/docs/rust-api/index.md): 公開される作成メソッド、ビルドの既定値、レポート、診断の動作を確認できます。\n - [Node と TypeScript API](https://morehardy.github.io/anki-forge/ja/docs/node-api/index.md): Node SDK の作成メソッド、非同期処理、メディア、所有権、型付きレポート、TypeScript の設定を確認できます。\n-- [Python API リファレンス](https://morehardy.github.io/anki-forge/ja/docs/python-api/index.md): Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、準備済み公開の API を確認できます。\n+- [Python API リファレンス](https://morehardy.github.io/anki-forge/ja/docs/python-api/index.md): Python のノートとモデル、メディア、ビルドと比較、エラー、並行処理、候補の事前生成と保存に使う API を確認できます。\n \n ## 作業別ガイド\n"
+    },
+    {
+      "route": "/anki-forge/llms.txt",
+      "sha256": "f5b259b4c92ea378239d98b301967459f522b3fb4424b9f1339db0f97a31c08e",
+      "previousSha256": "39ef6f469b3a915799fba43e07994a6d4be2aec51aff39be071b9f6b4e939b7c",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/llms.txt",
+        "route": "/anki-forge/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "f5b259b4c92ea378239d98b301967459f522b3fb4424b9f1339db0f97a31c08e",
+        "bytes": 6609,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__llms.txt"
+      },
+      "delta": "--- /anki-forge/llms.txt (previous reviewed)\n+++ /anki-forge/llms.txt (current captured)\n@@ -3,5 +3,5 @@\n > Anki Forge generates Anki APKG decks from code using Rust, Node / TypeScript or Python.\n \n-Current public package version: 0.3.1. Normal export does not require Anki. Published package APIs differ from source builds. Keep the original previous distribution APKG for updates; Anki import settings and newer local edits can affect the result.\n+Current public package version: 0.3.1. Exporting a deck does not require Anki. The APIs available in published packages differ from those in source builds. For updates, keep the original APKG from the previous release; Anki import settings and newer local edits can affect the result.\n \n - Rust: `cargo add ankiforge@0.3.1` (Rust 1.92+)\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "0ad6eb120248deb7bb383b4fc8368f05813f701ef9a74ca63e5be06e0dc6fac1",
+      "previousSha256": "e1d7a15146849e09c6ecba5080013177766622a3779d2f1782d43691527f9a15",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/blog/stable-ids-and-deck-updates/index.md",
+        "route": "/anki-forge/pt-br/blog/stable-ids-and-deck-updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "0ad6eb120248deb7bb383b4fc8368f05813f701ef9a74ca63e5be06e0dc6fac1",
+        "bytes": 3571,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__blog__stable-ids-and-deck-updates__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/blog/stable-ids-and-deck-updates/index.md (previous reviewed)\n+++ /anki-forge/pt-br/blog/stable-ids-and-deck-updates/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# A identidade da nota deve durar mais que seu texto\n+# Atualize o conteúdo da nota sem mudar seu ID\n \n Canonical page: https://morehardy.github.io/anki-forge/pt-br/blog/stable-ids-and-deck-updates/\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/blog/your-first-anki-deck/index.md",
+      "sha256": "8eb7f675ad1e1b48596191a559ccf30bac2eefeead6c74921c580c9daa767bfb",
+      "previousSha256": "8eb7f675ad1e1b48596191a559ccf30bac2eefeead6c74921c580c9daa767bfb",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/ai-anki-cards/index.md",
+      "sha256": "fa6da584c9949a289bee500a838cf64e5e9627d0bd6f3b9029e6788c6882b939",
+      "previousSha256": "fa6da584c9949a289bee500a838cf64e5e9627d0bd6f3b9029e6788c6882b939",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "1905b63bb1d196730eb1eff5bf0ffa900b5ffddd933956ac8e5b3b4ea3fa5c38",
+      "previousSha256": "61b173ad656a907ff9e0850a1a356f6aac8e4a486339855f0eaafc1b1d17962b",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/anki-forge-vs-genanki/index.md",
+        "route": "/anki-forge/pt-br/docs/anki-forge-vs-genanki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "1905b63bb1d196730eb1eff5bf0ffa900b5ffddd933956ac8e5b3b4ea3fa5c38",
+        "bytes": 4979,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__anki-forge-vs-genanki__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/anki-forge-vs-genanki/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/anki-forge-vs-genanki/index.md (current captured)\n@@ -13,5 +13,5 @@\n | Identidade | Namespace e chaves de nota explícitos; preservação do APKG original para atualizações | GUIDs configuráveis e IDs numéricos de modelos e baralhos; suporte a atualizações por reimportação |\n | Antes da publicação | Resultados de comparação, política de risco e candidato preparado inspecionado | O script e os testes definem a revisão antes da publicação |\n-| Propriedade da mídia | Imagens e sons tipados contêm cópias independentes dos dados | O script fornece os arquivos de mídia e suas referências ao pacote |\n+| Propriedade da mídia | Os valores tipados de imagem e áudio mantêm snapshots independentes dos arquivos de origem; clones compartilham o armazenamento | O script fornece os arquivos de mídia e suas referências ao pacote |\n | Oclusão de imagem por código | Máscaras retangulares com chaves pela API pública | Avalie um modelo ou extensão adequado ao seu fluxo |\n | Custo de execução | Dependências nativas; exige plataforma e interpretador compatíveis | Pode ser mais econômico manter a implantação Python existente |\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/api/index.md",
+      "sha256": "c8ca239fc099efb286f5bec1effe8cd34f25ebc3e2ed209961cdb70988d8303f",
+      "previousSha256": "c8ca239fc099efb286f5bec1effe8cd34f25ebc3e2ed209961cdb70988d8303f",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/build-guarantees/index.md",
+      "sha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0",
+      "previousSha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/build-guarantees/index.md",
+        "route": "/anki-forge/pt-br/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "efed59362c605c1d935d26eaafca493322f14003a0160819ea11aa70d23972b0",
+        "bytes": 6729,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__build-guarantees__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/cards/index.md",
+      "sha256": "dec3990451d9de964ca7f8966900ef8cf63c74f6639817fd7f94975bdea0871d",
+      "previousSha256": "dec3990451d9de964ca7f8966900ef8cf63c74f6639817fd7f94975bdea0871d",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/compatibility/index.md",
+      "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf",
+      "previousSha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/compatibility/index.md",
+        "route": "/anki-forge/pt-br/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "77595af8941f6d1813f826946558c9148bee81495f1e6c60ef6b0ec7ae0bd3cf",
+        "bytes": 4139,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__compatibility__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/concepts/index.md",
+      "sha256": "0e0d67eb233d1d024b3a51d29d9287f30e4a510fc74eabc3c15379b16b861c02",
+      "previousSha256": "0e0d67eb233d1d024b3a51d29d9287f30e4a510fc74eabc3c15379b16b861c02",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/csv-to-anki/index.md",
+      "sha256": "597af138257f6a90fb7b5f005ed20554231e270f67981f75eda8947dc0abb7f5",
+      "previousSha256": "597af138257f6a90fb7b5f005ed20554231e270f67981f75eda8947dc0abb7f5",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/custom-notetypes/index.md",
+      "sha256": "f1790f96b4bc06721b6e97231d077ae4f35111a0eea50dc639e0154b2187a508",
+      "previousSha256": "3b85cf74e373f4d6afeeb7624da6b53934239b05f77c45c52cf21adc88594e70",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/custom-notetypes/index.md",
+        "route": "/anki-forge/pt-br/docs/custom-notetypes/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "f1790f96b4bc06721b6e97231d077ae4f35111a0eea50dc639e0154b2187a508",
+        "bytes": 3974,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__custom-notetypes__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/custom-notetypes/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/custom-notetypes/index.md (current captured)\n@@ -3,5 +3,5 @@\n Canonical page: https://morehardy.github.io/anki-forge/pt-br/docs/custom-notetypes/\n Language: pt-BR\n-Description: Defina campos, modelos de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis.\n+Description: Defina campos, templates de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis.\n \n Finalize um modelo uma vez e crie notas a partir dele. O `NoteType` retornado é imutável e pode ser reutilizado em funções ou em vários projetos. Uma nota mantém seu modelo, portanto não pode apontar por engano para o nome de um modelo não registrado.\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/development/index.md",
+      "sha256": "144273065ae13e279aa3fdde993350ab6053ebca7df9a44d56029e42794da378",
+      "previousSha256": "144273065ae13e279aa3fdde993350ab6053ebca7df9a44d56029e42794da378",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/genanki-migration/index.md",
+      "sha256": "f58aeaef9d05167586e1440aab46b849190fa9dae9869e6c645ee66a30fb606d",
+      "previousSha256": "58cea5878a14cb2ebcad5a9e8b3f40643a3db6165e7c8a13fa6d0c4decbfbd4e",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/genanki-migration/index.md",
+        "route": "/anki-forge/pt-br/docs/genanki-migration/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "f58aeaef9d05167586e1440aab46b849190fa9dae9869e6c645ee66a30fb606d",
+        "bytes": 4231,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__genanki-migration__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/genanki-migration/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/genanki-migration/index.md (current captured)\n@@ -7,5 +7,5 @@\n Ainda está escolhendo uma biblioteca? Leia [Anki Forge ou genanki](https://morehardy.github.io/anki-forge/pt-br/docs/anki-forge-vs-genanki/).\n \n-O Anki Forge usa chaves de dados estáveis, modelos imutáveis validados, cópias independentes de mídia e operações explícitas de geração e atualização. Trata-se de um novo modelo de criação de conteúdo; ele não emula objetos genanki nem as antigas interfaces Deck e lockfile do Anki Forge.\n+O Anki Forge usa chaves de dados estáveis, modelos imutáveis validados, snapshots de mídia que não dependem dos arquivos de origem e operações explícitas de geração e atualização. Trata-se de um novo modelo de criação de conteúdo; ele não emula objetos genanki nem as antigas interfaces Deck e lockfile do Anki Forge.\n \n | Conceito do genanki | Equivalente no Anki Forge |\n@@ -34,5 +34,5 @@\n Escolha chaves a partir de identificadores de negócio persistentes. Renomear um nome de exibição ou alterar o texto de uma definição não deve mudar essas chaves. Não use o hash do conteúdo atual dos campos como identidade, a menos que essa seja uma exigência explícita do seu importador. Para dados sem chaves, atribua e armazene as chaves fora do SDK.\n \n-As expressões dos modelos usam chaves Field. Os nomes de exibição podem ser traduzidos de forma independente; a biblioteca converte as referências às chaves nos nomes de campo do Anki. A finalização do modelo rejeita declarações ausentes ou conflitantes antes que uma nota possa ser adicionada. A adição de notas coleta automaticamente as dependências dos modelos e rejeita definições conflitantes para uma mesma chave de modelo.\n+As expressões dos templates de cartão usam as chaves dos campos (Field). Os nomes de exibição podem ser traduzidos de forma independente; a biblioteca converte as referências às chaves nos nomes de campo do Anki. A finalização do modelo rejeita declarações ausentes ou conflitantes antes que uma nota possa ser adicionada. A adição de notas coleta automaticamente as dependências dos modelos e rejeita definições conflitantes para uma mesma chave de modelo.\n \n Strings representam texto simples; envolva HTML intencional em `Content.html(...)`. Use `media.image()` / `media.sound()` e `Content.sequence(...)` para compor o conteúdo. As cópias dos arquivos permanecem disponíveis mesmo se o arquivo original for removido ou alterado. Declare explicitamente as dependências referenciadas por HTML, CSS ou scripts com `.asset(media)` no construtor do modelo ou `project.add_asset(media)`.\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/image-occlusion/index.md",
+      "sha256": "a11c45b2d3c8edd9ae75287da7dd9aa61c407d757b5141c5f4967578a997c8c7",
+      "previousSha256": "a11c45b2d3c8edd9ae75287da7dd9aa61c407d757b5141c5f4967578a997c8c7",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/index.md",
+      "sha256": "dd0a69d49361b1d9f906651f36e6e1b18ba9f089018cd5e1b8576a6e28005754",
+      "previousSha256": "bf74bbb9a554ed2feff9bdd9e6f8a6c9aa58197b461e58c4f439918d951be83c",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/index.md",
+        "route": "/anki-forge/pt-br/docs/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "dd0a69d49361b1d9f906651f36e6e1b18ba9f089018cd5e1b8576a6e28005754",
+        "bytes": 4241,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/index.md (current captured)\n@@ -3,7 +3,7 @@\n Canonical page: https://morehardy.github.io/anki-forge/pt-br/docs/\n Language: pt-BR\n-Description: Escolha uma linguagem, gere seu primeiro baralho e aprenda a adicionar mídia, modelos e atualizações repetíveis.\n+Description: Escolha uma linguagem de programação, gere seu primeiro baralho e aprenda a adicionar mídia e templates e a atualizar o baralho.\n \n-O Anki Forge transforma notas, modelos e arquivos de mídia em pacotes `.apkg` do Anki. Use a biblioteca quando seu material de estudo estiver em código ou dados estruturados e você precisar gerar e distribuir novas versões dos baralhos.\n+O Anki Forge transforma notas, templates e arquivos de mídia em pacotes `.apkg` do Anki. Use a biblioteca quando seu material de estudo estiver em código ou dados estruturados e você precisar gerar e distribuir novas versões dos baralhos.\n \n ## Comece pela sua linguagem\n@@ -21,5 +21,5 @@\n ## Entenda os componentes\n \n-Uma nota armazena campos; um tipo de nota e seus modelos de cartão transformam esses campos em cartões. Os baralhos agrupam os cartões resultantes no Anki. Os [conceitos fundamentais](https://morehardy.github.io/anki-forge/pt-br/docs/concepts/) explicam essas relações, como `Project` mantém a propriedade dos seus valores e como preservar a identidade das notas.\n+Uma nota armazena campos; um tipo de nota e seus templates de cartão transformam esses campos em cartões. Os baralhos agrupam os cartões resultantes no Anki. Os [conceitos fundamentais](https://morehardy.github.io/anki-forge/pt-br/docs/concepts/) explicam essas relações, como `Project` mantém a propriedade dos seus valores e como preservar a identidade das notas.\n \n ## Adicione o próximo recurso\n@@ -30,5 +30,5 @@\n -   [Basic e Cloze](https://morehardy.github.io/anki-forge/pt-br/docs/cards/): crie cartões de pergunta e resposta ou de preenchimento de lacunas.\n -   [Imagens e áudio](https://morehardy.github.io/anki-forge/pt-br/docs/media/): registre arquivos reais e inclua-os nos cartões.\n--   [Tipos de nota personalizados](https://morehardy.github.io/anki-forge/pt-br/docs/custom-notetypes/) e [pacotes de modelos](https://morehardy.github.io/anki-forge/pt-br/docs/templates/): defina campos, layouts e CSS.\n+-   [Tipos de nota personalizados](https://morehardy.github.io/anki-forge/pt-br/docs/custom-notetypes/) e [pacotes de templates](https://morehardy.github.io/anki-forge/pt-br/docs/templates/): defina campos, layouts e CSS.\n -   [Oclusão de imagem](https://morehardy.github.io/anki-forge/pt-br/docs/image-occlusion/): crie perguntas a partir de regiões de uma imagem.\n -   [Atualização e distribuição](https://morehardy.github.io/anki-forge/pt-br/docs/updates/): preserve as evidências de identidade e revisão entre versões.\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/installation/index.md",
+      "sha256": "fd2a63390efd87993909022b3df21fd0478053c3db795f04bbe0ca988d179097",
+      "previousSha256": "4ea85076d76ad43b67a27eae8d7b4e063b7bfac1cae03b1a07c7046512e64bb0",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/installation/index.md",
+        "route": "/anki-forge/pt-br/docs/installation/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "fd2a63390efd87993909022b3df21fd0478053c3db795f04bbe0ca988d179097",
+        "bytes": 2444,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__installation__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/installation/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/installation/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# Integre o Anki Forge à sua aplicação\n+# Integre o Anki Forge à sua aplicação Rust\n \n Canonical page: https://morehardy.github.io/anki-forge/pt-br/docs/installation/\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/json-to-anki/index.md",
+      "sha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7",
+      "previousSha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/json-to-anki/index.md",
+        "route": "/anki-forge/pt-br/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b065e2421f1ff5111d8262b303a05c7c919fa057c78eacd11f0a65c4b70c7ff7",
+        "bytes": 12058,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__json-to-anki__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/languages/index.md",
+      "sha256": "0e50187553c7e2cb69f4c71400fdc70712fcf11e3eeedab75a911083657e6308",
+      "previousSha256": "0e50187553c7e2cb69f4c71400fdc70712fcf11e3eeedab75a911083657e6308",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/media/index.md",
+      "sha256": "1df6e3c05e16aae47653b10aa6196fb87ff57d7d67c5f31f07558dbac2d7d3b4",
+      "previousSha256": "1df6e3c05e16aae47653b10aa6196fb87ff57d7d67c5f31f07558dbac2d7d3b4",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/media/index.md",
+        "route": "/anki-forge/pt-br/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "1df6e3c05e16aae47653b10aa6196fb87ff57d7d67c5f31f07558dbac2d7d3b4",
+        "bytes": 9413,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__media__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/node-api/index.md",
+      "sha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c",
+      "previousSha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/node-api/index.md",
+        "route": "/anki-forge/pt-br/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "13e6d6ac009a4fcd05f8af9e4ec31038a466b629587eeddc92186126d0a1877c",
+        "bytes": 15036,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__node-api__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/node-quickstart/index.md",
+      "sha256": "0e4f8662bf201e81387f2d4a530581c48eff946a4954c5eaed8b8dca69f29e9c",
+      "previousSha256": "8c2f21a3473fd252ae669f45fd68ef0442fafb54c0e56f51e02ac91b8e06510f",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/node-quickstart/index.md",
+        "route": "/anki-forge/pt-br/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "0e4f8662bf201e81387f2d4a530581c48eff946a4954c5eaed8b8dca69f29e9c",
+        "bytes": 2764,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__node-quickstart__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/node-quickstart/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/node-quickstart/index.md (current captured)\n@@ -42,5 +42,5 @@\n \n -   [Imagens e áudio](https://morehardy.github.io/anki-forge/pt-br/docs/media/) e [API de mídia do Node](https://morehardy.github.io/anki-forge/pt-br/docs/node-api/#media-and-image-occlusion)\n--   [Tipos de nota personalizados](https://morehardy.github.io/anki-forge/pt-br/docs/custom-notetypes/) e [pacotes de modelos](https://morehardy.github.io/anki-forge/pt-br/docs/templates/)\n+-   [Tipos de nota personalizados](https://morehardy.github.io/anki-forge/pt-br/docs/custom-notetypes/) e [pacotes de templates](https://morehardy.github.io/anki-forge/pt-br/docs/templates/)\n -   [Oclusão de imagem](https://morehardy.github.io/anki-forge/pt-br/docs/image-occlusion/)\n -   [Comparação e atualização](https://morehardy.github.io/anki-forge/pt-br/docs/updates/)\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-api/index.md",
+      "sha256": "8b828d3ea22b4521f7a319782b98e71bd245a22e9407cea0932ce8d8aaabad26",
+      "previousSha256": "8b828d3ea22b4521f7a319782b98e71bd245a22e9407cea0932ce8d8aaabad26",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/python-api/index.md",
+        "route": "/anki-forge/pt-br/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "8b828d3ea22b4521f7a319782b98e71bd245a22e9407cea0932ce8d8aaabad26",
+        "bytes": 10571,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__python-api__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-diagnostics/index.md",
+      "sha256": "36554be8297e3ee539af8f814c551e6d7609f3ccda5f5ebf7864b3408af160cf",
+      "previousSha256": "36554be8297e3ee539af8f814c551e6d7609f3ccda5f5ebf7864b3408af160cf",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-migration/index.md",
+      "sha256": "9482dc32825426760f28a297458a6f1b75e22c65aea481083ba8e52c47827ec8",
+      "previousSha256": "d18a17158288d3876618ce8195f215e8bd63044ff38b8f0d94c6a7f5fa430e4a",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/python-migration/index.md",
+        "route": "/anki-forge/pt-br/docs/python-migration/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "9482dc32825426760f28a297458a6f1b75e22c65aea481083ba8e52c47827ec8",
+        "bytes": 2553,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__python-migration__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/python-migration/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/python-migration/index.md (current captured)\n@@ -15,5 +15,5 @@\n | NoteType mutável e add\\_notetype | `NoteType.builder(key)...build()`, seguido de `model.note()` |\n | Referências aos modelos por strings | As notas mantêm a propriedade do modelo validado |\n-| Registro de mídia do projeto | Cópias independentes de `Media.file` / `Media.bytes` |\n+| Registro de mídia do projeto | Snapshots de `Media.file` / `Media.bytes` que não dependem dos arquivos de origem |\n | Mídia já renderizada e métodos de atribuição específicos para cada campo | `Content.sequence`, `media.image()`, `media.sound()`, `Note.field` |\n | HTML implícito | Strings são Text; use `Content.html` |\n@@ -24,3 +24,3 @@\n | Pacote executado em um subprocesso | Binding PyO3 no mesmo processo para a API padrão de Rust |\n \n-Somente APKGs originais distribuídos completos, com as evidências de identidade atuais, servem como base de atualização. Pacotes de modelos antigos e evidências de APKGs anteriores não são recuperados automaticamente. Consulte o [README do SDK](https://github.com/morehardy/anki-forge/blob/main/bindings/python/README.md) e seus exemplos executáveis para seguir o novo fluxo.\n+Somente APKGs originais distribuídos completos, com as evidências de identidade atuais, servem como base de atualização. Pacotes de templates antigos e evidências de APKGs anteriores não são recuperados automaticamente. Consulte o [README do SDK](https://github.com/morehardy/anki-forge/blob/main/bindings/python/README.md) e seus exemplos executáveis para seguir o novo fluxo.\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/python-quickstart/index.md",
+      "sha256": "9b4832ffd24ad5f18ae3e8fff9632e271f59c33143211550f7fa36fe1d9d5eb3",
+      "previousSha256": "75d3a00cc4fabc9a1537a65b1d692f9cd06becd28687d45ee456df9cccfba68c",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/python-quickstart/index.md",
+        "route": "/anki-forge/pt-br/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "9b4832ffd24ad5f18ae3e8fff9632e271f59c33143211550f7fa36fe1d9d5eb3",
+        "bytes": 2859,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__python-quickstart__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/python-quickstart/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/python-quickstart/index.md (current captured)\n@@ -41,5 +41,5 @@\n \n -   [Imagens e áudio](https://morehardy.github.io/anki-forge/pt-br/docs/media/) e [API de mídia do Python](https://morehardy.github.io/anki-forge/pt-br/docs/python-api/#media-and-occlusion)\n--   [Tipos de nota personalizados](https://morehardy.github.io/anki-forge/pt-br/docs/custom-notetypes/) e [pacotes de modelos](https://morehardy.github.io/anki-forge/pt-br/docs/templates/)\n+-   [Tipos de nota personalizados](https://morehardy.github.io/anki-forge/pt-br/docs/custom-notetypes/) e [pacotes de templates](https://morehardy.github.io/anki-forge/pt-br/docs/templates/)\n -   [Oclusão de imagem](https://morehardy.github.io/anki-forge/pt-br/docs/image-occlusion/)\n -   [Comparação e atualização](https://morehardy.github.io/anki-forge/pt-br/docs/updates/)\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/quickstart/index.md",
+      "sha256": "4a023c9502f46e4920d347a88805098dca6a62ddee5ae09fcf8c6a91d5698065",
+      "previousSha256": "4a023c9502f46e4920d347a88805098dca6a62ddee5ae09fcf8c6a91d5698065",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/rust-api/index.md",
+      "sha256": "d593654160c9b3bef85e2e403661969c06c07fee009876c59a71ca141308d8e3",
+      "previousSha256": "d593654160c9b3bef85e2e403661969c06c07fee009876c59a71ca141308d8e3",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/rust-guide/index.md",
+      "sha256": "455802a84df3306570d2249c32afb8008f0134a6922861e8cef086c34be63902",
+      "previousSha256": "455802a84df3306570d2249c32afb8008f0134a6922861e8cef086c34be63902",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/templates/index.md",
+      "sha256": "db87d3156b7ddd37dc48d51fd7e0b3ede66919874ee4160be71469c0d884fd40",
+      "previousSha256": "1beb0896f9fc0fffb3279db591a836c8e6b6bd806a7e0f425a434c7a3329fa39",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/templates/index.md",
+        "route": "/anki-forge/pt-br/docs/templates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "db87d3156b7ddd37dc48d51fd7e0b3ede66919874ee4160be71469c0d884fd40",
+        "bytes": 6507,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__templates__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/templates/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/templates/index.md (current captured)\n@@ -1,7 +1,7 @@\n-# Reutilize modelos de cartão, CSS e mídia no Anki\n+# Reutilize templates de cartão, CSS e mídia no Anki\n \n Canonical page: https://morehardy.github.io/anki-forge/pt-br/docs/templates/\n Language: pt-BR\n-Description: Carregue um tipo de nota reutilizável de um pacote com modelos, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\n+Description: Carregue um tipo de nota reutilizável de um pacote com templates, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\n \n Reutilize o mesmo design de cartões Anki em vários baralhos: mantenha os templates, o CSS e a mídia de um tipo de nota em um diretório e carregue-o para cartões normais ou Cloze. Os exemplos usam Rust; Python e Node.js carregam pacotes com `NoteType.from_bundle` e `NoteType.fromBundle` (veja a [API de Python](https://morehardy.github.io/anki-forge/pt-br/docs/python-api/#models-and-templates) e a [API de Node](https://morehardy.github.io/anki-forge/pt-br/docs/node-api/#immutable-models)).\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/troubleshooting/index.md",
+      "sha256": "85b1666845bf141ffe889409315ca10afbbc8f32dfbe512f07b6c8ca8220d95d",
+      "previousSha256": "8437693cf9d96cf631b8d56254869f566332066d652396e80f74d7ee3d21440d",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/troubleshooting/index.md",
+        "route": "/anki-forge/pt-br/docs/troubleshooting/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "85b1666845bf141ffe889409315ca10afbbc8f32dfbe512f07b6c8ca8220d95d",
+        "bytes": 5601,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__troubleshooting__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/troubleshooting/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/troubleshooting/index.md (current captured)\n@@ -3,5 +3,5 @@\n Canonical page: https://morehardy.github.io/anki-forge/pt-br/docs/troubleshooting/\n Language: pt-BR\n-Description: Resolva erros de instalação, notas, mídia, modelos, identidade e publicação dos arquivos de saída.\n+Description: Resolva erros de instalação, notas, mídia, templates, identidade e publicação dos arquivos de saída.\n \n Use os valores estruturados `kind` e `code` da operação que falhou, junto com a cadeia de causas e as observações. As mensagens de texto destinam-se a pessoas e podem mudar. Uma operação que falha e uma comparação concluída cuja política bloqueia a publicação são resultados diferentes.\n@@ -34,5 +34,5 @@\n Uma falha na adição é atômica. Corrija a nota ou o modelo e tente novamente; não é preciso desfazer um registro parcial de modelos ou mídia. Os construtores de modelos precisam terminar com `.build()` antes de criar notas personalizadas.\n \n-## Mídia e modelos\n+## Mídia e templates\n \n | Sintoma | Correção |\n@@ -44,5 +44,5 @@\n | Importação de mídia excede um limite | Aumente explicitamente `MediaLimits.max_bytes` antes de importar |\n | Inspeção da geração excede um limite | Ajuste o contador correspondente de `InspectLimits` para a operação |\n-| Falha ao carregar um pacote de modelos | Use bundle-v2, chaves explícitas, modelos baseados em chaves e caminhos internos ao pacote |\n+| Falha ao carregar um pacote de templates | Use bundle-v2, chaves explícitas, templates baseados em chaves e caminhos internos ao pacote |\n | Falha em um retângulo de oclusão | Confira as dimensões de exibição decodificadas, coordenadas finitas e chaves únicas para as máscaras |\n \n"
+    },
+    {
+      "route": "/anki-forge/pt-br/docs/updates/index.md",
+      "sha256": "e6de316a63e882ac7644033cf17d1b833bf4950e9857b98469e4882359ec799b",
+      "previousSha256": "aabb6df552b57393d144397e8fca791d7a61ca3aa1e4b9718ba2ebd443f9cac7",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/docs/updates/index.md",
+        "route": "/anki-forge/pt-br/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "e6de316a63e882ac7644033cf17d1b833bf4950e9857b98469e4882359ec799b",
+        "bytes": 9263,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__docs__updates__index.md"
+      },
+      "delta": "--- /anki-forge/pt-br/docs/updates/index.md (previous reviewed)\n+++ /anki-forge/pt-br/docs/updates/index.md (current captured)\n@@ -7,5 +7,5 @@\n Publique correções ou novos cartões para um baralho do Anki que você já distribuiu. IDs de nota estáveis ajudam o Anki Forge e o Anki a reconhecer notas existentes em vez de tratá-las como novas; as opções de importação do Anki e as edições locais mais recentes também influenciam o que será alterado.\n \n-Mantenha estáveis o namespace do projeto e as chaves de notas, modelos, campos e modelos de cartão. Gere cada nova versão a partir do **APKG original distribuído** anterior, que contém evidências completas de identidade em um formato versionado. Guarde o pacote junto com a revisão do seu código-fonte.\n+Mantenha estáveis o namespace do projeto e as chaves de notas, tipos de nota, campos e templates de cartão. Gere cada nova versão a partir do **APKG original distribuído** anterior, que contém evidências completas de identidade em um formato versionado. Guarde o pacote junto com a revisão do seu código-fonte.\n \n ## Execute duas versões e compare\n@@ -69,15 +69,15 @@\n A política padrão bloqueia resultados High e Critical. Depois de revisar uma categoria específica, a aplicação pode optar explicitamente por `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. Essa permissão aceita **todos os resultados da categoria**, preservando seus níveis e evidências originais. Ela não representa a aprovação individual de notas selecionadas. Uma permissão sem resultado correspondente gera um aviso; códigos de risco desconhecidos são rejeitados. Não permita automaticamente todos os códigos retornados por uma comparação.\n \n-Evidências ausentes ou corrompidas, divergência de namespace, dados inválidos do candidato e limites de inspeção são erros que impedem a operação, não categorias de risco que podem ser permitidas. Quando a análise não consegue terminar, a comparação retorna um erro com as observações já concluídas. Informar uma política explícita em uma criação sem `update_from` é um erro de configuração, independentemente da ordem dos métodos de configuração.\n+Evidências ausentes ou corrompidas, divergência de namespace, dados inválidos do candidato e a ultrapassagem dos limites de inspeção são erros que impedem a operação, não categorias de risco que podem ser permitidas. Quando a análise não consegue terminar, a comparação retorna um erro com as observações já concluídas. Informar uma política explícita em uma criação sem `update_from` é um erro de configuração, independentemente da ordem dos métodos de configuração.\n \n ## Evidências e identidade\n \n-O pacote inclui `ankiforge-identity.json` no formato `ankiforge-identity-v1`. Ele vincula IDs de modelos e configurações, GUIDs de notas, posições históricas de campos e modelos de cartão, ordinais de cartões e máscaras, revisões e mídia à coleção real e aos dados do pacote. Uma reexportação pelo Anki não preserva essas evidências e não serve como base de atualização. Evidências ausentes nunca são reconstruídas silenciosamente.\n+O pacote inclui `ankiforge-identity.json` no formato `ankiforge-identity-v1`. Ele vincula IDs de modelos e configurações, GUIDs de notas, posições históricas de campos e templates de cartão, ordinais de cartões e máscaras, revisões e mídia à coleção real e aos dados do pacote. Uma reexportação pelo Anki não preserva essas evidências e não serve como base de atualização. Evidências ausentes nunca são reconstruídas silenciosamente.\n \n-Alterar nomes de exibição ou conteúdo preserva as chaves de identidade. Conteúdo inalterado mantém a revisão da base; conteúdo alterado recebe uma revisão posterior. Reordenar campos ou modelos de cartão preserva as correspondências históricas. Identidades desativadas permanecem reservadas para que a restauração da mesma chave possa reutilizá-las. Uma chave de nota não pode ser transferida para outro modelo, e uma chave de modelo não pode alternar entre os tipos normal e Cloze.\n+Alterar nomes de exibição ou conteúdo preserva as chaves de identidade. Conteúdo inalterado mantém a revisão da base; conteúdo alterado recebe uma revisão posterior. Reordenar campos ou templates de cartão preserva as correspondências históricas. Identidades desativadas permanecem reservadas para que a restauração da mesma chave possa reutilizá-las. Uma chave de nota não pode ser transferida para outro modelo, e uma chave de modelo não pode alternar entre os tipos normal e Cloze.\n \n ## Importação nos clientes e revisão antes da publicação\n \n-Um APKG é um pacote de distribuição, não um mecanismo de sincronização de exclusões. Omitir notas, campos, modelos de cartão ou máscaras não exclui os dados existentes de quem estuda. Mudanças no esquema de campos e modelos de cartão ou no campo de ordenação apresentam alto risco, pois seu comportamento depende das opções de mesclagem e importação do Anki. Mudanças de esquema podem copiar modelos ou atualizar os carimbos de data das notas de destino antes da comparação do conteúdo das notas.\n+Um APKG é um pacote de distribuição, não um mecanismo de sincronização de exclusões. Omitir notas, campos, templates de cartão ou máscaras não exclui os dados existentes de quem estuda. Mudanças no esquema de campos e templates de cartão ou no campo de ordenação apresentam alto risco, pois seu comportamento depende das opções de mesclagem e importação do Anki. Mudanças de esquema podem copiar modelos ou atualizar os carimbos de data das notas de destino antes da comparação do conteúdo das notas.\n \n Teste a primeira importação e as atualizações em uma coleção existente nos clientes que você atende. Confira campos, GUIDs, conjuntos de cartões, edições locais e agendamento existente com as opções pretendidas de mesclagem e atualização de notas. Identidade estável, sozinha, não promete substituir edições locais mais recentes nem restaurar histórico excluído.\n"
+    },
+    {
+      "route": "/anki-forge/pt-br/llms.txt",
+      "sha256": "469174d87d33e753dc6bfab0c6fdc7ae972ae0b0be3b7bd4f58af8eb20d04dd4",
+      "previousSha256": "ae03883c2b862c1e1d8ccb824b5c41e11d58d3ba041bda7e3853b3f6fd7e7ce4",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/pt-br/llms.txt",
+        "route": "/anki-forge/pt-br/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "469174d87d33e753dc6bfab0c6fdc7ae972ae0b0be3b7bd4f58af8eb20d04dd4",
+        "bytes": 7737,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__pt-br__llms.txt"
+      },
+      "delta": "--- /anki-forge/pt-br/llms.txt (previous reviewed)\n+++ /anki-forge/pt-br/llms.txt (current captured)\n@@ -11,5 +11,5 @@\n ## Comece aqui\n \n-- [Crie baralhos do Anki com código](https://morehardy.github.io/anki-forge/pt-br/docs/index.md): Escolha uma linguagem, gere seu primeiro baralho e aprenda a adicionar mídia, modelos e atualizações repetíveis.\n+- [Crie baralhos do Anki com código](https://morehardy.github.io/anki-forge/pt-br/docs/index.md): Escolha uma linguagem de programação, gere seu primeiro baralho e aprenda a adicionar mídia e templates e a atualizar o baralho.\n - [Escolha sua linguagem de programação](https://morehardy.github.io/anki-forge/pt-br/docs/languages/index.md): Instale o pacote público de Rust, Node ou Python e exporte seu primeiro baralho do Anki.\n - [Compatibilidade e ambientes verificados](https://morehardy.github.io/anki-forge/pt-br/docs/compatibility/index.md): Consulte os pacotes públicos, os ambientes testados e as condições de importação e reprodução nos clientes Anki.\n@@ -35,5 +35,5 @@\n - [Gere cartões Basic e Cloze do Anki](https://morehardy.github.io/anki-forge/pt-br/docs/cards/index.md): Gere cartões Basic de pergunta e resposta e cartões Cloze com lacunas usando código. Um exemplo verificado em Rust cria duas notas e três cartões.\n - [Adicione imagens e áudio aos cartões do Anki](https://morehardy.github.io/anki-forge/pt-br/docs/media/index.md): Use Rust, Python ou Node.js para importar arquivos, compor cartões com imagens e áudio e gerenciar nomes de exportação, tipos MIME e limites de mídia.\n-- [Reutilize modelos de cartão, CSS e mídia no Anki](https://morehardy.github.io/anki-forge/pt-br/docs/templates/index.md): Carregue um tipo de nota reutilizável de um pacote com modelos, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\n+- [Reutilize templates de cartão, CSS e mídia no Anki](https://morehardy.github.io/anki-forge/pt-br/docs/templates/index.md): Carregue um tipo de nota reutilizável de um pacote com templates, CSS e mídia para cartões normais ou Cloze, usando Rust, Python ou Node.js.\n - [Gere cartões de oclusão de imagem do Anki](https://morehardy.github.io/anki-forge/pt-br/docs/image-occlusion/index.md): Crie cartões de oclusão de imagem com Rust, Python ou Node.js: forneça a imagem e as máscaras retangulares e escolha um dos dois modos de oclusão.\n - [Atualize baralhos do Anki com IDs de nota estáveis](https://morehardy.github.io/anki-forge/pt-br/docs/updates/index.md): Publique uma nova versão de um baralho gerado: preserve os IDs das notas, use o APKG original anterior como base e revise a comparação antes de distribuir.\n@@ -42,5 +42,5 @@\n \n - [Garantias de geração e dos arquivos de saída](https://morehardy.github.io/anki-forge/pt-br/docs/build-guarantees/index.md): Entenda os artefatos temporários, a proteção dos caminhos, os limites de inspeção e a publicação de candidatos revisados.\n-- [Solução de problemas](https://morehardy.github.io/anki-forge/pt-br/docs/troubleshooting/index.md): Resolva erros de instalação, notas, mídia, modelos, identidade e publicação dos arquivos de saída.\n+- [Solução de problemas](https://morehardy.github.io/anki-forge/pt-br/docs/troubleshooting/index.md): Resolva erros de instalação, notas, mídia, templates, identidade e publicação dos arquivos de saída.\n \n ## Optional\n@@ -50,5 +50,5 @@\n - [Compile os SDKs a partir do código-fonte](https://morehardy.github.io/anki-forge/pt-br/docs/development/index.md): Ambiente de desenvolvimento e código-fonte. Compile os SDKs e execute exemplos a partir do repositório, distinguindo os recursos do código-fonte dos pacotes publicados.\n - [Crie seu primeiro baralho Anki com Rust](https://morehardy.github.io/anki-forge/pt-br/blog/your-first-anki-deck/index.md): Artigo histórico, publicado em 2026-09-22. De um pequeno programa em Rust a um cartão de vocabulário em espanhol que você pode abrir no Anki.\n-- [A identidade da nota deve durar mais que seu texto](https://morehardy.github.io/anki-forge/pt-br/blog/stable-ids-and-deck-updates/index.md): Artigo histórico, publicado em 2026-09-22. Como IDs estáveis e uma base de geração trabalham juntos na atualização de um baralho Anki gerado.\n+- [Atualize o conteúdo da nota sem mudar seu ID](https://morehardy.github.io/anki-forge/pt-br/blog/stable-ids-and-deck-updates/index.md): Artigo histórico, publicado em 2026-09-22. Como IDs estáveis e uma base de geração trabalham juntos na atualização de um baralho Anki gerado.\n - [GitHub](https://github.com/morehardy/anki-forge): Repositório do código-fonte e recursos de desenvolvimento.\n - [English](https://morehardy.github.io/anki-forge/llms.txt): Índice da documentação para IA em English.\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+      "sha256": "3c9b278c869f9c681e12233064719b9235710b4ad422e1b6f8db1c83926818da",
+      "previousSha256": "3217388bfa54c918234c83b8a5ca6c007b512094537f3e4e511ddbc8433b58ba",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+        "route": "/anki-forge/zh-cn/blog/stable-ids-and-deck-updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "3c9b278c869f9c681e12233064719b9235710b4ad422e1b6f8db1c83926818da",
+        "bytes": 2823,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__blog__stable-ids-and-deck-updates__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/blog/stable-ids-and-deck-updates/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/blog/stable-ids-and-deck-updates/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# 笔记身份应当比措辞更持久\n+# 修改笔记内容时，保持 ID 不变\n \n Canonical page: https://morehardy.github.io/anki-forge/zh-cn/blog/stable-ids-and-deck-updates/\n@@ -46,5 +46,5 @@\n ## 检查构建与导入\n \n-分发前检查构建报告及其更新安全诊断。如果构建无法协调某条笔记的身份，应调查源数据和基线，不能仅把存在输出文件当作更新正确的证据。\n+分发前检查构建报告及其更新安全诊断。如果构建时无法确认某条笔记与旧版本的对应关系，请检查源数据和基准包；不能仅凭输出文件存在就认定更新正确。\n \n 之后 Anki 会应用自己的导入行为。导入设置、已有笔记内容、本地编辑和 Anki 版本都可能影响结果。稳定身份帮助匹配笔记，但不会覆盖这些选择，也不承诺每次导入都保留本地状态的每一个方面。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/blog/your-first-anki-deck/index.md",
+      "sha256": "e252130841688a1b0d4f69a236e3b483d2f8396e6058faab943e6f2d71035a23",
+      "previousSha256": "e252130841688a1b0d4f69a236e3b483d2f8396e6058faab943e6f2d71035a23",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/ai-anki-cards/index.md",
+      "sha256": "1cd43e83fceafef9fd1e1522b7e708561b857779817131fc6304c138829d92f1",
+      "previousSha256": "1cd43e83fceafef9fd1e1522b7e708561b857779817131fc6304c138829d92f1",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/anki-forge-vs-genanki/index.md",
+      "sha256": "940a5349a4b69c9d6235476023f36650501a3e52fa597ea5afbd8879694e3fc9",
+      "previousSha256": "5ba210b2c52e35a2a322747bcf26a03e1d4dfbfc01b6ca1a4c806a90136ea914",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/anki-forge-vs-genanki/index.md",
+        "route": "/anki-forge/zh-cn/docs/anki-forge-vs-genanki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "940a5349a4b69c9d6235476023f36650501a3e52fa597ea5afbd8879694e3fc9",
+        "bytes": 3709,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__anki-forge-vs-genanki__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/anki-forge-vs-genanki/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/anki-forge-vs-genanki/index.md (current captured)\n@@ -13,5 +13,5 @@\n | 身份 | 显式命名空间和笔记键；更新需保留原始 APKG | 可配置 GUID 和数字模型/牌组 ID；支持重新导入更新 |\n | 发布前 | 比较发现项、风险策略和已检查的预备候选包 | 由自己的脚本和测试定义发布检查 |\n-| 媒体所有权 | 类型化图片/声音携带拥有所有权的快照 | 脚本提供包媒体文件和引用 |\n+| 媒体所有权 | 图片和音频对象持有不可变数据快照，克隆共享存储 | 脚本提供包媒体文件和引用 |\n | 编程式图片遮挡 | 通过公开 API 使用带键矩形遮罩 | 按流程评估合适模型或扩展 |\n | 运行成本 | 需要原生依赖；使用受支持平台和解释器 | 保留现有 Python 部署可能成本更低 |\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/api/index.md",
+      "sha256": "e10b5a94f94ac4741b94096f47b4acdd6124e7876236c38fa86def200271f5ce",
+      "previousSha256": "880fae34a0944068b466078c49069e5df2c3c5000b4b0560ca96339572fd7540",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/api/index.md",
+        "route": "/anki-forge/zh-cn/docs/api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "e10b5a94f94ac4741b94096f47b4acdd6124e7876236c38fa86def200271f5ce",
+        "bytes": 2299,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__api__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/api/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/api/index.md (current captured)\n@@ -16,5 +16,5 @@\n ## 稳定笔记身份\n \n-为每条逻辑笔记保留稳定的项目命名空间和笔记键。更新已有版本还需要原始分发 APKG。Anki 重新导出的文件不能替代原包内的完整身份证据。\n+为每条逻辑笔记保留稳定的项目命名空间和笔记键。更新已有版本还需要原始分发 APKG。Anki 重新导出的文件不能替代原包内的完整标识映射与修订信息。\n \n ## 从一个任务开始\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/build-guarantees/index.md",
+      "sha256": "827dce8afcc0551c24f9ec6ccff6ed7bac0d31bafdc40ed8eeda819b16dc9ca1",
+      "previousSha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/build-guarantees/index.md",
+        "route": "/anki-forge/zh-cn/docs/build-guarantees/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "827dce8afcc0551c24f9ec6ccff6ed7bac0d31bafdc40ed8eeda819b16dc9ca1",
+        "bytes": 4926,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__build-guarantees__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/build-guarantees/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/build-guarantees/index.md (current captured)\n@@ -43,5 +43,5 @@\n 包检查不能证明所有客户端行为。请使用目标 Anki 版本和设置测试渲染、播放与更新导入。调度与 schema 更改限制见[更新](https://morehardy.github.io/anki-forge/zh-cn/docs/updates/)。\n \n-## 源码中的预备发布\n+## 准备候选包并在审阅后写入目标文件\n \n 预备发布已包含在公开 `0.3.1` 包中。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/cards/index.md",
+      "sha256": "74e1976beb7ea5055a8c1602c06b3d6bdd133d6f420802506cc289956d31e03f",
+      "previousSha256": "74e1976beb7ea5055a8c1602c06b3d6bdd133d6f420802506cc289956d31e03f",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/compatibility/index.md",
+      "sha256": "282f19677991f30825f40bf431d7c0db998eefe34589311ed76ab63c4660fa08",
+      "previousSha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/compatibility/index.md",
+        "route": "/anki-forge/zh-cn/docs/compatibility/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "282f19677991f30825f40bf431d7c0db998eefe34589311ed76ab63c4660fa08",
+        "bytes": 3265,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__compatibility__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/compatibility/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/compatibility/index.md (current captured)\n@@ -23,5 +23,5 @@\n 普通导出不需要安装 Anki。导入、渲染和播放媒体仍取决于目标客户端版本、编解码器和导入设置。2026-10-08 的基准测试通过了 40 项 Anki 导入、内容和代表性渲染检查（每个实现 20 项），并未覆盖所有客户端或 GUI/音频行为。\n \n-更新时保留之前的原始分发 APKG。Anki 重新导出的文件不保留所需身份证据。包中不再包含某条笔记，并不会将其从学习者的集合中删除。字段或模板变化、排序字段、本地编辑和复习历史需要针对客户端测试。\n+更新时保留之前的原始分发 APKG。Anki 重新导出的文件不保留所需标识映射与修订信息。包中不再包含某条笔记，并不会将其从学习者的集合中删除。字段或模板变化、排序字段、本地编辑和复习历史需要针对客户端测试。\n \n 使用[手动客户端场景](https://github.com/morehardy/anki-forge/blob/main/docs/manual-validation/anki-desktop-v1/TEMPLATE.md)及各 oracle 记录的具体 Anki 版本和设置评估自己的分发。客户端条件与单文件发布行为见[更新](https://morehardy.github.io/anki-forge/zh-cn/docs/updates/)和[构建保证](https://morehardy.github.io/anki-forge/zh-cn/docs/build-guarantees/)。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/concepts/index.md",
+      "sha256": "027e6456d2f823ea27abfb3003c25f53ef52f81e62aca19b2e5e52698463a3b7",
+      "previousSha256": "451addbf0e79e73f0d6627396b3d7adfc68b15584dbc1126092814f0c9446633",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/concepts/index.md",
+        "route": "/anki-forge/zh-cn/docs/concepts/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "027e6456d2f823ea27abfb3003c25f53ef52f81e62aca19b2e5e52698463a3b7",
+        "bytes": 3170,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__concepts__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/concepts/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/concepts/index.md (current captured)\n@@ -3,5 +3,5 @@\n Canonical page: https://morehardy.github.io/anki-forge/zh-cn/docs/concepts/\n Language: zh-CN\n-Description: 理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。\n+Description: 理解 Project、笔记与媒体的所有权、稳定键，以及更新时如何识别原有笔记。\n \n ## Project 与笔记\n@@ -25,5 +25,5 @@\n ## 媒体所有权\n \n-`Media` 是拥有所有权的快照，文件名由内容确定。只有在预算范围内完成读取与校验后，导入才会成功；之后源文件可以改变或消失。克隆共享存储，可用于多个项目。`with_export_name` 选择固定且可移植的文件名，不会改变已有克隆或内容节点。\n+`Media` 持有媒体数据的不可变快照，并管理其生命周期；导出文件名由内容确定。只有在预算范围内完成读取与校验后，导入才会成功；之后源文件可以改变或消失。克隆共享存储，可用于多个项目。`with_export_name` 选择固定且可移植的文件名，不会改变已有克隆或内容节点。\n \n 类型化引用自动收集媒体。模型或项目上显式声明的资源，即使静态分析无法识别用途，也会被包含。库不会从任意 HTML 或脚本中自动发现文件内容。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/csv-to-anki/index.md",
+      "sha256": "f35c352e1898e3a3472182e73d38ea867ef225ec2c34c3e740849bb95b2098f8",
+      "previousSha256": "f35c352e1898e3a3472182e73d38ea867ef225ec2c34c3e740849bb95b2098f8",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/custom-notetypes/index.md",
+      "sha256": "c7ed665205b3d78511fac92c204326b5812d7fd95eb60cf94afea5374918aaa4",
+      "previousSha256": "c7ed665205b3d78511fac92c204326b5812d7fd95eb60cf94afea5374918aaa4",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/development/index.md",
+      "sha256": "01c9084eb7893f4b389c1103e1da747d8580fed287727cdaeab29d1b67cb3c75",
+      "previousSha256": "01c9084eb7893f4b389c1103e1da747d8580fed287727cdaeab29d1b67cb3c75",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/genanki-migration/index.md",
+      "sha256": "84c25b0df6b4c4f3f03eb1345d4479bbea3938737c0c61a751866089e84dee03",
+      "previousSha256": "cf2424e077177bb6d365efa09b6f085cc130355f8fd326b02f9edbe9e1377168",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/genanki-migration/index.md",
+        "route": "/anki-forge/zh-cn/docs/genanki-migration/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "84c25b0df6b4c4f3f03eb1345d4479bbea3938737c0c61a751866089e84dee03",
+        "bytes": 3380,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__genanki-migration__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/genanki-migration/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/genanki-migration/index.md (current captured)\n@@ -38,5 +38,5 @@\n 字符串是纯文本；有意加入 HTML 时使用 `Content.html(...)`。通过 `media.image()`、`media.sound()` 和 `Content.sequence(...)` 组合内容。原路径被移除或编辑后，文件快照仍有效。原始 HTML、CSS 或脚本引用的依赖，必须在模型构建器上用 `.asset(media)` 或通过 `project.add_asset(media)` 显式声明。\n \n-后续发布创建具有相同命名空间和数据键的新 Project，并调用 `BuildOptions.to(next_path).update_from(previous_original_apkg)`。原始 APKG 提供完整身份证据。此流程不会从任意旧包恢复身份，也不承诺自动转换已有 genanki 数字 ID/GUID。除非经过单独验证的数据迁移建立了对应关系，否则应把新模型的首次分发视为明确的身份边界。\n+后续发布创建具有相同命名空间和数据键的新 Project，并调用 `BuildOptions.to(next_path).update_from(previous_original_apkg)`。原始 APKG 提供完整标识映射与修订信息。此流程不会从任意旧包恢复身份，也不承诺自动转换已有 genanki 数字 ID/GUID。除非经过单独验证的数据迁移建立了对应关系，否则应把新模型的首次分发视为明确的身份边界。\n \n 参见[入门](https://morehardy.github.io/anki-forge/zh-cn/docs/python-quickstart/)、[API 参考](https://morehardy.github.io/anki-forge/zh-cn/docs/python-api/)和[更新策略](https://morehardy.github.io/anki-forge/zh-cn/docs/python-diagnostics/)。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/image-occlusion/index.md",
+      "sha256": "dd3c0aa40c86d1de08993aea2b8fc29cbcda95e9209043129c65d633db51c1a8",
+      "previousSha256": "dd3c0aa40c86d1de08993aea2b8fc29cbcda95e9209043129c65d633db51c1a8",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/index.md",
+      "sha256": "c20257c291baf83a38e2c32066a308f5400b017bfa9bb438f26490da35e4c86b",
+      "previousSha256": "4a79f1acd50ff846fb4db7fdd0f3589bc980077deb6c3b92525a5085851606f2",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/index.md",
+        "route": "/anki-forge/zh-cn/docs/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c20257c291baf83a38e2c32066a308f5400b017bfa9bb438f26490da35e4c86b",
+        "bytes": 3522,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: 选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。\n \n-Anki Forge 将笔记、模板与媒体生成 Anki `.apkg` 文件。当学习内容保存在代码或结构化数据中，需要反复构建并分发牌组时，可以使用它。\n+Anki Forge 根据笔记、模板和媒体文件生成 Anki `.apkg` 文件。当学习内容保存在代码或结构化数据中，需要反复构建并分发牌组时，可以使用它。\n \n ## 从你的开发语言开始\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/installation/index.md",
+      "sha256": "fa0c719c36227cda67de929d81faa05ddadff6d64327b8785146361af9d15c19",
+      "previousSha256": "28bd793b373696100ba69a341690bcb008fb08b562446b631f7cd28c87192a35",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/installation/index.md",
+        "route": "/anki-forge/zh-cn/docs/installation/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "fa0c719c36227cda67de929d81faa05ddadff6d64327b8785146361af9d15c19",
+        "bytes": 1921,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__installation__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/installation/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/installation/index.md (current captured)\n@@ -1,3 +1,3 @@\n-# 集成到应用\n+# 集成到 Rust 应用\n \n Canonical page: https://morehardy.github.io/anki-forge/zh-cn/docs/installation/\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/json-to-anki/index.md",
+      "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+      "previousSha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/json-to-anki/index.md",
+        "route": "/anki-forge/zh-cn/docs/json-to-anki/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+        "bytes": 11165,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__json-to-anki__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/languages/index.md",
+      "sha256": "a041ad9e5b93395a69c3d4e65e69ce3e10535518d3199948bc281a0eeba0f1ac",
+      "previousSha256": "a041ad9e5b93395a69c3d4e65e69ce3e10535518d3199948bc281a0eeba0f1ac",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/media/index.md",
+      "sha256": "dc169cb4da105e53b08ebf5d6443f986c2baa1c39a280a8ffd46212efdf4e4eb",
+      "previousSha256": "a3a1d049675679579fa5da49d0846a3fc4e74db2f7d1a1f9730174e72a90e9f1",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/media/index.md",
+        "route": "/anki-forge/zh-cn/docs/media/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "dc169cb4da105e53b08ebf5d6443f986c2baa1c39a280a8ffd46212efdf4e4eb",
+        "bytes": 7896,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__media__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/media/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/media/index.md (current captured)\n@@ -103,5 +103,5 @@\n ### 批量行为与预算\n \n-Rust 使用 `Media::files(paths)`，Node 使用 `await Media.files(paths)`，Python 使用 `Media.files(paths)`，按输入顺序导入文件，每次调用最多四个工作线程。少于 16 个文件时串行运行。Rust 还提供 `files_with_limits`；Node 和 Python 接受与 `file` 相同的限制。限制按每个资源计算。若某项导入失败，调用会等待已启动的工作完成、释放此批次的快照，并返回输入顺序中的第一个错误。已有媒体所有者继续有效。Python 在导入期间释放 GIL；Node 在事件循环之外执行工作。单文件导入仍立即产生拥有所有权的快照；调用方必须选择批量方法才能获得导入并发。\n+Rust 使用 `Media::files(paths)`，Node 使用 `await Media.files(paths)`，Python 使用 `Media.files(paths)`，按输入顺序导入文件，每次调用最多四个工作线程。少于 16 个文件时串行运行。Rust 还提供 `files_with_limits`；Node 和 Python 接受与 `file` 相同的限制。限制按每个资源计算。若某项导入失败，调用会等待已启动的工作完成、释放此批次的快照，并返回输入顺序中的第一个错误。已有媒体所有者继续有效。Python 在导入期间释放 GIL；Node 在事件循环之外执行工作。单文件导入仍立即返回持有媒体数据快照的对象；调用方必须选择批量方法才能获得导入并发。\n \n 存活快照共享进程级 **64 MiB** 内存预算。单个大于 1 MiB 的资源仍流式写入临时文件。编码媒体在每次预备处理中共享延迟分配的 **16 MiB** 缓冲池，池满后写入临时存储。这些预算不包含其他工作内存，也不是 RSS 上限；并发构建各自可以拥有编码池。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/node-api/index.md",
+      "sha256": "89a2b4e0e9c18d1acb7fd52eb8977a576a92c9d4e8fcfafc49c3ffc29fbea637",
+      "previousSha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/node-api/index.md",
+        "route": "/anki-forge/zh-cn/docs/node-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "89a2b4e0e9c18d1acb7fd52eb8977a576a92c9d4e8fcfafc49c3ffc29fbea637",
+        "bytes": 12272,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__node-api__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/node-api/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/node-api/index.md (current captured)\n@@ -46,5 +46,5 @@\n ## 媒体与图片遮挡\n \n-`await Media.file(path, limits?)` 和 `await Media.bytes(Uint8Array, mime, limits?)` 返回拥有所有权的快照。await 成功后源文件可改变或消失。`withExportName(name)` 返回重命名值，不改变之前的克隆或内容。通过属性读取 `filename`、`mediaType` 和 `byteLength`。\n+`await Media.file(path, limits?)` 和 `await Media.bytes(Uint8Array, mime, limits?)` 返回持有媒体数据快照的 `Media` 对象。导入成功后，修改或删除源文件不会改变已导入的媒体数据。`withExportName(name)` 返回重命名值，不改变之前的克隆或内容。通过属性读取 `filename`、`mediaType` 和 `byteLength`。\n \n `media.image()` 与 `.sound()` 返回自动将资源带入项目的类型化 Content。显式 `project.addAsset` 与模型 `builder.asset` 处理原始 HTML/CSS/脚本引用。媒体限制接受 `{ maxBytes }`，默认为 256 MiB；原生字节没有 64 KiB 内联限制。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/node-quickstart/index.md",
+      "sha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154",
+      "previousSha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/node-quickstart/index.md",
+        "route": "/anki-forge/zh-cn/docs/node-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "51bcf4269ae6c33641219506254a01c8e83450e1d2a796dc3a6ea40d53a0c154",
+        "bytes": 2481,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__node-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-api/index.md",
+      "sha256": "a3e647c84fbb23a70d84e03c809cc02d4dcabdfbf48f9b9aa32b6e37df526cb9",
+      "previousSha256": "d58028202432d624b0963444ca00ab1e237133b68fdac85dbe973db2b4066b31",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/python-api/index.md",
+        "route": "/anki-forge/zh-cn/docs/python-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "a3e647c84fbb23a70d84e03c809cc02d4dcabdfbf48f9b9aa32b6e37df526cb9",
+        "bytes": 8655,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__python-api__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/python-api/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/python-api/index.md (current captured)\n@@ -33,5 +33,5 @@\n | 入口 | 行为 |\n | --- | --- |\n-| `Media.file(path, *, limits=MediaLimits())` | 立即读取拥有所有权的快照 |\n+| `Media.file(path, *, limits=MediaLimits())` | 读取媒体数据并返回持有快照的 `Media` 对象 |\n | `Media.bytes(data, media_type, *, limits=MediaLimits())` | 拥有带显式 MIME 类型的字节 |\n | `media.with_export_name(name)` | 返回共享快照的新文件名值；之前的引用保留原名 |\n@@ -72,5 +72,5 @@\n 添加时，类型化图片要求 image/\\* MIME，声音引用接受 audio/\\* 或 video/\\*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md)。\n \n-## 源码 API 详情\n+## 批量媒体处理与预备发布\n \n 批量媒体与预备发布已包含在公开 `0.3.1` 包中。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-diagnostics/index.md",
+      "sha256": "ee0965ef34758e48807a477ebd8f3435d7ea5c654ce982128f2ddb36ed1c24cd",
+      "previousSha256": "d5bc61661406445cf34edf58cbf08cc99e5435a37a57f3727d3609d194ac1d87",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/python-diagnostics/index.md",
+        "route": "/anki-forge/zh-cn/docs/python-diagnostics/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "ee0965ef34758e48807a477ebd8f3435d7ea5c654ce982128f2ddb36ed1c24cd",
+        "bytes": 4761,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__python-diagnostics__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/python-diagnostics/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/python-diagnostics/index.md (current captured)\n@@ -36,5 +36,5 @@\n ```\n \n-完成的比较即使发现 High 风险也正常返回。通过 `comparison.allows_publication` 查看策略决定。无法读取的基线、缺失完整身份证据、无效候选包或预算超限会抛出 CompareError；`.report` 包含失败前完成的观察结果。\n+完成的比较即使发现 High 风险也正常返回。通过 `comparison.allows_publication` 查看策略决定。无法读取的基线、缺失完整标识映射与修订信息、无效候选包或预算超限会抛出 CompareError；`.report` 包含失败前完成的观察结果。\n \n 默认策略阻止 High 和 Critical 发现项。审阅特定风险类别后，可显式接受：\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-migration/index.md",
+      "sha256": "e646d2a695eaa3ee18f7d7add1dd783a95c9efabe6a7bfa1b4db0c3f7a06d8fb",
+      "previousSha256": "ca21f5bc334209e841c6695f286a6c9e21ca97e92860f70eeb828df5f763e95a",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/python-migration/index.md",
+        "route": "/anki-forge/zh-cn/docs/python-migration/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "e646d2a695eaa3ee18f7d7add1dd783a95c9efabe6a7bfa1b4db0c3f7a06d8fb",
+        "bytes": 1895,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__python-migration__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/python-migration/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/python-migration/index.md (current captured)\n@@ -24,3 +24,3 @@\n | Runtime 子进程包 | 进程内 PyO3 绑定，调用默认 Rust API |\n \n-只有携带当前身份证据的完整原始分发 APKG 才能作为更新基线。不会自动恢复旧模板包和旧 APKG 证据。新流程见 README 与可执行示例。\n+只有携带当前标识映射与修订信息的完整原始分发 APKG 才能作为更新基线。不会自动恢复旧模板包和旧 APKG 证据。新流程见 README 与可执行示例。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/python-quickstart/index.md",
+      "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74",
+      "previousSha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74",
+      "changed": false,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/python-quickstart/index.md",
+        "route": "/anki-forge/zh-cn/docs/python-quickstart/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "958c81f5483a6194200fa860f611c798519c2733b3c0aafefd96060589bedd74",
+        "bytes": 2557,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__python-quickstart__index.md"
+      },
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/quickstart/index.md",
+      "sha256": "e58a9ecd751d00c6f4cbc16c2d65ec532164a8df0d9c49c2964b3dee6731a5cd",
+      "previousSha256": "e58a9ecd751d00c6f4cbc16c2d65ec532164a8df0d9c49c2964b3dee6731a5cd",
+      "changed": false,
+      "capture": null,
+      "delta": ""
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/rust-api/index.md",
+      "sha256": "253c887d8b2b2b3506b363dbf67685d39c19034c930d510388dda4e7abcf58a9",
+      "previousSha256": "b37f9144eeff8e220a94f7273b54abf824f9a4af9e28fa3c462a19de4caa2061",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/rust-api/index.md",
+        "route": "/anki-forge/zh-cn/docs/rust-api/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "253c887d8b2b2b3506b363dbf67685d39c19034c930d510388dda4e7abcf58a9",
+        "bytes": 8788,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__rust-api__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/rust-api/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/rust-api/index.md (current captured)\n@@ -5,5 +5,5 @@\n Description: 查找内容编写方法、构建默认值、报告和诊断行为。\n \n-crate 根提供常用值：`Project`、`Note`、`NoteType`、`Field`、`Template`、`Content`、`Media`、`BuildOptions` 和 `BuildOutput`。公开领域模块为 `note`、`schema`、`media`、`build`、`update` 与 `diagnostics`。仓库工具是独立且由 feature 控制的接口；消费者应用不需要它们。\n+crate 根提供常用值：`Project`、`Note`、`NoteType`、`Field`、`Template`、`Content`、`Media`、`BuildOptions` 和 `BuildOutput`。公开领域模块为 `note`、`schema`、`media`、`build`、`update` 与 `diagnostics`。仓库工具是独立且由 feature 控制的接口；使用本库的应用不需要这些工具。\n \n ## 内容编写\n@@ -56,5 +56,5 @@\n `BuildOutput::artifact()` 返回拥有所有权的 `build::ApkgArtifact` 引用。`BuildOutput::report()` 返回观察结果。产物克隆共享临时文件寿命；`persist_to` 返回持久所有者，或返回带发布事实与底层 I/O 来源的 `build::PersistError`。\n \n-`project.compare(update::CompareOptions::against(path))` 返回完成的 `ComparisonReport`，即使高风险发现项阻止其策略。它提供 `findings()`、`highest_risk()`、`policy()`、`diagnostics()` 和 `snapshot()`。`UpdatePolicy::default()` 阻止 High/Critical；`.fail_on(level)` 改变阈值，`.allow(RiskCode)` 接受整个已注册风险类别。它不能接受身份证据缺失或损坏等硬错误。\n+`project.compare(update::CompareOptions::against(path))` 返回完成的 `ComparisonReport`，即使高风险发现项阻止其策略。它提供 `findings()`、`highest_risk()`、`policy()`、`diagnostics()` 和 `snapshot()`。`UpdatePolicy::default()` 阻止 High/Critical；`.fail_on(level)` 改变阈值，`.allow(RiskCode)` 接受整个已注册风险类别。它不能接受标识映射与修订信息缺失或损坏等硬错误。\n \n ## 报告与错误\n@@ -99,3 +99,3 @@\n ```\n \n-预备阶段执行完整的受限检查与比较。直到 `publish` 才发布目标；它使用同一私有候选包并复查基线别名。相对路径在预备调用时绑定。项目编辑不能改变候选包。报告耗时不含审阅等待。释放未发布所有者会清理它；已发布临时输出遵循通常的最后产物所有者清理规则。不能从 JSON 恢复所有者，也不能对已消耗所有者重试。原生构建省略未使用的暂存 manifest，但保留内嵌身份证据与媒体验证。内部暂存工具仍接收完整 manifest 和指纹。\n+预备阶段执行完整的受限检查与比较。直到 `publish` 才发布目标；它使用同一私有候选包并复查基线别名。相对路径在预备调用时绑定。项目编辑不能改变候选包。报告耗时不含审阅等待。释放未发布所有者会清理它；已发布临时输出遵循通常的最后产物所有者清理规则。不能从 JSON 恢复所有者，也不能对已消耗所有者重试。原生构建省略未使用的暂存 manifest，但仍内嵌标识映射与修订信息，并保留媒体验证。内部暂存工具仍接收完整 manifest 和指纹。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/rust-guide/index.md",
+      "sha256": "b359a9b7c5954d1cd4bfd99f0b84230ff564dcd6583b8b03ec60fd1ac58219a6",
+      "previousSha256": "20f03c68b89b004e838146ad296e86bc196208fcba81695e7aedc2435aeb4e5e",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/rust-guide/index.md",
+        "route": "/anki-forge/zh-cn/docs/rust-guide/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "b359a9b7c5954d1cd4bfd99f0b84230ff564dcd6583b8b03ec60fd1ac58219a6",
+        "bytes": 5235,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__rust-guide__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/rust-guide/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/rust-guide/index.md (current captured)\n@@ -33,5 +33,5 @@\n 完成的 `NoteType` 不可变且可共享。调用 `model.note()`，按稳定键赋值，再把结果加入项目。笔记持有模型；添加时自动收集模型和媒体。声明与模板规则见[自定义笔记类型](https://morehardy.github.io/anki-forge/zh-cn/docs/custom-notetypes/)。\n \n-`Media::file` 与 `Media::bytes` 获取拥有所有权的快照。导入成功后不再需要保留源文件。`image.image()` 和 `audio.sound()` 生成结构化内容；`Content::sequence` 将它们与文本或 HTML 组合。原始 HTML、CSS 或脚本资源必须通过 `builder.asset` 或 `project.add_asset` 显式包含。参见[媒体](https://morehardy.github.io/anki-forge/zh-cn/docs/media/)和[模板包](https://morehardy.github.io/anki-forge/zh-cn/docs/templates/)。\n+`Media::file` 与 `Media::bytes` 返回持有媒体数据快照的 `Media` 对象。导入成功后不再需要保留源文件。`image.image()` 和 `audio.sound()` 生成结构化内容；`Content::sequence` 将它们与文本或 HTML 组合。原始 HTML、CSS 或脚本资源必须通过 `builder.asset` 或 `project.add_asset` 显式包含。参见[媒体](https://morehardy.github.io/anki-forge/zh-cn/docs/media/)和[模板包](https://morehardy.github.io/anki-forge/zh-cn/docs/templates/)。\n \n ## 输出所有权\n@@ -60,5 +60,5 @@\n `Project` 使用稳定命名空间和可选默认牌组，没有显示标题。`NoteType`、`Field` 与 `Template` 仍支持显示名称。`Project::add` 是原子操作。通过 `AddError::context()` 查看笔记或模型键，通过 `note::AddTarget` 查看原始位置；`detail()` 返回 `note::AddDetail`，说明冲突或不兼容媒体用法。匹配这些非穷尽枚举时，对数据变体使用 `..`，并提供兜底分支。字段的 `content_path` 为 `None` 时指字段本身，`Some([])` 指其根，序列下标则指嵌套节点。分隔符字节范围指向原始 UTF-8 Text/Html 叶节点。\n \n-`Media::image()` 和 `sound()` 保持不会失败。添加时，图片要求 `image/*`，声音引用要求 `audio/*` 或 `video/*`。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。这检查保留的 MIME，并非解码或播放。原始 HTML 和显式资源保持原有行为。导出重命名不会改变 MIME：PNG 改名为 `wrong.mp3` 后可以通过图片添加，但构建的独立探测或扩展名检查仍可能返回 `MEDIA.DECLARED_MIME_MISMATCH`。\n+`Media::image()` 和 `sound()` 本身不会返回错误。添加时，图片要求 `image/*`，声音引用要求 `audio/*` 或 `video/*`。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。这检查保留的 MIME，并非解码或播放。原始 HTML 和显式资源保持原有行为。导出重命名不会改变 MIME：PNG 改名为 `wrong.mp3` 后可以通过图片添加，但构建的独立探测或扩展名检查仍可能返回 `MEDIA.DECLARED_MIME_MISMATCH`。\n \n 工具输入现在要求 `ankiforge-project-v2`，且没有顶层 `name`；v1 被拒绝。契约包为 2.1.0；包身份格式仍为 `ankiforge-identity-v1`。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/templates/index.md",
+      "sha256": "3f68b3611953bc3b97b10f439f31dc3386143d973cbb45e909d9b87ae1ecf980",
+      "previousSha256": "5ac0ef4ce517e1ed0bab4d448e531ffda7636d52b281286c7af5413d9e4a4658",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/templates/index.md",
+        "route": "/anki-forge/zh-cn/docs/templates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "3f68b3611953bc3b97b10f439f31dc3386143d973cbb45e909d9b87ae1ecf980",
+        "bytes": 5661,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__templates__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/templates/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/templates/index.md (current captured)\n@@ -7,5 +7,5 @@\n 在多个牌组中复用同一套 Anki 卡片设计：把笔记类型的模板、CSS 和媒体放在同一目录中，用于普通卡片或 Cloze 卡片。示例使用 Rust；Python 和 Node.js 分别通过 `NoteType.from_bundle` 和 `NoteType.fromBundle` 加载模板包，参见 [Python API](https://morehardy.github.io/anki-forge/zh-cn/docs/python-api/#models-and-templates) 和 [Node API](https://morehardy.github.io/anki-forge/zh-cn/docs/node-api/#immutable-models)。\n \n-模板包是一组可复用的模型声明、模板文本、CSS 和显式媒体依赖闭包。`NoteType::from_bundle(directory)` 校验完整模板包并取得拥有所有权的快照，再返回与内联编写相同的不可变 `NoteType`。它不会部分修改项目。\n+模板包包含可复用的笔记类型定义、模板文本、CSS，以及显式声明的全部媒体依赖。`NoteType::from_bundle(directory)` 校验完整模板包并保存模板包及媒体数据的快照，再返回与内联编写相同的不可变 `NoteType`。它不会部分修改项目。\n \n ## 运行模板包示例\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/troubleshooting/index.md",
+      "sha256": "c840799a16862ed6f8ef6f002b7952174d110c0048df5c37bd1f2fc23d5f9b1f",
+      "previousSha256": "eded273eb7c8857eba71344ea82e8e8f21ba2f149404eaf1ee6c439e1407ee99",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/troubleshooting/index.md",
+        "route": "/anki-forge/zh-cn/docs/troubleshooting/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "c840799a16862ed6f8ef6f002b7952174d110c0048df5c37bd1f2fc23d5f9b1f",
+        "bytes": 4056,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__troubleshooting__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/troubleshooting/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/troubleshooting/index.md (current captured)\n@@ -51,5 +51,5 @@\n ## 更新与输出\n \n-基线应为含完整身份证据的原始分发 APKG。Anki 重新导出的包不保留该证据。更新策略不能放行命名空间不匹配或证据损坏。\n+基线应为含完整标识映射与修订信息的原始分发 APKG。Anki 重新导出的包不保留该证据。更新策略不能放行命名空间不匹配或证据损坏。\n \n 完成的比较可以有 `allows_publication == false`。选择显式风险类别放行前，检查原始发现项和证据。不要全部放行。若希望得到相同决策，必须向实际更新构建传入相同策略。在仅新建请求上设置策略会报错。\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/docs/updates/index.md",
+      "sha256": "25b4f537d00a520167960e61f91a41cd3400db6c3e175102f20ef27a0a26cc0a",
+      "previousSha256": "202f116788465686ef6e979e5629a3439ca603ecb7966f5356792fc0d370fe98",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/docs/updates/index.md",
+        "route": "/anki-forge/zh-cn/docs/updates/index.md",
+        "status": 200,
+        "contentType": "text/markdown; charset=utf-8",
+        "sha256": "25b4f537d00a520167960e61f91a41cd3400db6c3e175102f20ef27a0a26cc0a",
+        "bytes": 7686,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__docs__updates__index.md"
+      },
+      "delta": "--- /anki-forge/zh-cn/docs/updates/index.md (previous reviewed)\n+++ /anki-forge/zh-cn/docs/updates/index.md (current captured)\n@@ -7,5 +7,5 @@\n 为已经分发的 Anki 牌组发布修正或新增卡片。稳定笔记 ID 帮助 Anki Forge 和 Anki 识别已有笔记，而不是把它们当成新笔记；Anki 导入设置与较新的本地编辑仍会影响最终变化。\n \n-保持项目命名空间和笔记、模型、字段、模板键稳定。每次新版本基于之前的**原始分发 APKG** 构建，该包携带完整、带版本的身份证据。将包和源代码修订一起保存。\n+保持项目命名空间和笔记、模型、字段、模板键稳定。每个新版本都以上一版分发时的**原始 APKG** 为基准构建。包内包含完整的标识映射和修订信息，且这些信息采用带版本号的格式。请将原始包与对应的源码版本一起保存。\n \n ## 运行两个版本并比较\n"
+    },
+    {
+      "route": "/anki-forge/zh-cn/llms.txt",
+      "sha256": "8960ab17e462cd416469f0837e7bbb30768e59d30e4ddd73739a42aac905a968",
+      "previousSha256": "b0c3f76984192a2de0f0b29951c505b6289cfa6a4ceb9394a57497eb15d8b3d2",
+      "changed": true,
+      "capture": {
+        "url": "http://127.0.0.1:62813/anki-forge/zh-cn/llms.txt",
+        "route": "/anki-forge/zh-cn/llms.txt",
+        "status": 200,
+        "contentType": "text/plain; charset=utf-8",
+        "sha256": "8960ab17e462cd416469f0837e7bbb30768e59d30e4ddd73739a42aac905a968",
+        "bytes": 6474,
+        "bodyPath": "docs/plans/evidence/website-pr66-final-2026-11-02/machine-prefix/bodies/anki-forge__zh-cn__llms.txt"
+      },
+      "delta": "--- /anki-forge/zh-cn/llms.txt (previous reviewed)\n+++ /anki-forge/zh-cn/llms.txt (current captured)\n@@ -50,5 +50,5 @@\n - [从源码构建 SDK](https://morehardy.github.io/anki-forge/zh-cn/docs/development/index.md): 开发/源码环境。 从仓库源码构建 SDK，运行示例并区分公开包与源码功能。\n - [用 Rust 构建第一个 Anki 牌组](https://morehardy.github.io/anki-forge/zh-cn/blog/your-first-anki-deck/index.md): 历史文章，发布于 2026-09-22。 从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。\n-- [笔记身份应当比措辞更持久](https://morehardy.github.io/anki-forge/zh-cn/blog/stable-ids-and-deck-updates/index.md): 历史文章，发布于 2026-09-22。 更新生成的 Anki 牌组时，稳定 ID 与构建基线如何共同发挥作用。\n+- [修改笔记内容时，保持 ID 不变](https://morehardy.github.io/anki-forge/zh-cn/blog/stable-ids-and-deck-updates/index.md): 历史文章，发布于 2026-09-22。 更新生成的 Anki 牌组时，稳定 ID 与构建基线如何共同发挥作用。\n - [GitHub](https://github.com/morehardy/anki-forge): 源码仓库与开发资源。\n - [English](https://morehardy.github.io/anki-forge/llms.txt): English AI 文档索引。\n"
+    }
+  ]
+}
