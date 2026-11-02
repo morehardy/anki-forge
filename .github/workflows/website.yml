@@ -195,13 +195,17 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - name: Capture the current live pages before deployment
+        id: indexnow-baseline
+        continue-on-error: true
+        run: node website/scripts/indexnow.mjs capture website/verified/previous-site-manifest.json
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
       - uses: actions/download-artifact@v4
         with:
           name: website-verified-manifest
@@ -209,6 +213,16 @@ jobs:
       - run: npm ci --prefix website
       - name: Independently verify the deployed production URLs and artifact identity
         run: node website/scripts/check-live-site.mjs website/verified/site-manifest.json
+      - name: Notify IndexNow of added, changed and deleted pages
+        if: success() && steps.indexnow-baseline.outcome == 'success'
+        continue-on-error: true
+        run: node website/scripts/indexnow.mjs submit website/verified/site-manifest.json website/verified/previous-site-manifest.json
+      - name: Preserve IndexNow manifests for inspection or retry
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-indexnow-manifests
+          path: website/verified/*.json
       - name: Verify live search and interactive capabilities
         timeout-minutes: 10
         env:

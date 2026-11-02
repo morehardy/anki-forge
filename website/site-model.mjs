@@ -81,7 +81,7 @@ const documents = [
     "route": "/docs/api/",
     "name": "api",
     "title": {"en": "Public API overview", "zh-CN": "公开 API 总览", "es": "Resumen de la API pública", "pt-BR": "Visão geral das APIs públicas", "ja": "公開 API の概要", "de": "Überblick über die öffentliche API"},
-    "description": {"en": "Find Rust, Python and Node APIs for authoring, media, diagnostics and updates.", "zh-CN": "查找 Rust、Node 和 Python 的内容编写、媒体、诊断与更新 API。", "es": "Encuentra las API de Rust, Python y Node para crear notas, añadir recursos multimedia, diagnosticar errores y revisar actualizaciones.", "pt-BR": "Encontre as APIs de Rust, Python e Node para criar notas, incluir mídia, diagnosticar erros e revisar atualizações.", "ja": "作成、メディア、診断、更新に使う Rust、Python、Node の API を探せます。", "de": "Finde die Rust-, Python- und Node-APIs für Inhaltserstellung, Medien, Diagnostik und Aktualisierungen."}
+    "description": {"en": "Explore Anki Forge APIs for Rust, Python and Node.js: create notes, package images and audio, diagnose failures, and compare deck updates before distribution.", "zh-CN": "查找 Rust、Node 和 Python 的内容编写、媒体、诊断与更新 API。", "es": "Encuentra las API de Rust, Python y Node para crear notas, añadir recursos multimedia, diagnosticar errores y revisar actualizaciones.", "pt-BR": "Encontre as APIs de Rust, Python e Node para criar notas, incluir mídia, diagnosticar erros e revisar atualizações.", "ja": "作成、メディア、診断、更新に使う Rust、Python、Node の API を探せます。", "de": "Finde die Rust-, Python- und Node-APIs für Inhaltserstellung, Medien, Diagnostik und Aktualisierungen."}
   },
   {
     "source": "docs/installation.md",
@@ -109,7 +109,7 @@ const documents = [
     "route": "/docs/custom-notetypes/",
     "name": "custom-notetypes",
     "title": {"en": "Custom note types", "zh-CN": "自定义笔记类型", "es": "Crea tipos de nota personalizados para Anki", "pt-BR": "Crie tipos de nota personalizados", "ja": "独自のノートタイプ", "de": "Eigene Notiztypen"},
-    "description": {"en": "Declare fields, card templates and generation rules for your own content.", "zh-CN": "为自己的内容定义字段、卡片模板与生成规则。", "es": "Define campos, plantillas y reglas de generación con claves estables y modelos inmutables reutilizables.", "pt-BR": "Defina campos, templates de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis.", "ja": "独自コンテンツのフィールド、カードテンプレート、生成ルールを定義します。", "de": "Definiere Felder, Kartenvorlagen und Erzeugungsregeln für deine Inhalte mit stabilen Schlüsseln und wiederverwendbaren unveränderlichen Modellen."}
+    "description": {"en": "Define custom Anki note types with Rust: declare fields, card templates and generation rules, validate stable keys, and reuse immutable models across projects.", "zh-CN": "为自己的内容定义字段、卡片模板与生成规则。", "es": "Define campos, plantillas y reglas de generación con claves estables y modelos inmutables reutilizables.", "pt-BR": "Defina campos, templates de cartão e regras de geração para seu conteúdo, com chaves estáveis e modelos imutáveis reutilizáveis.", "ja": "独自コンテンツのフィールド、カードテンプレート、生成ルールを定義します。", "de": "Definiere Felder, Kartenvorlagen und Erzeugungsregeln für deine Inhalte mit stabilen Schlüsseln und wiederverwendbaren unveränderlichen Modellen."}
   },
   {
     "source": "docs/media.md",
