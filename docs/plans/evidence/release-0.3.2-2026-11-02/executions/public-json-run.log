@@ -1,0 +1,38 @@
+$ PIP_NO_CACHE_DIR=1 node website/scripts/verify-public-recipe.mjs all docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json
+    Blocking waiting for file lock on package cache
+    Updating crates.io index
+    Blocking waiting for file lock on package cache
+     Locking 193 packages to latest compatible versions
+      Adding prost v0.13.5 (available: v0.14.4)
+      Adding rusqlite v0.32.1 (available: v0.41.1)
+      Adding unicase v2.6.0 (available: v2.10.0)
+      Adding zip v2.6.1 (available: v9.2.3)
+      Adding zstd v0.13.4 (available: v0.14.3)
+/private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/ankiforge-public-recipe-4K5qXp/rust/output/rust/v2.apkg
+Verified 3 notes, 3 cards, 2 exact media assets; stable identities; one answer change; compare and publication allowed.
+Verified public rust 0.3.1; evidence: /Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/rust
+Collecting ankiforge==0.3.1
+  Downloading ankiforge-0.3.1-cp311-abi3-macosx_11_0_arm64.whl.metadata (3.4 kB)
+Downloading ankiforge-0.3.1-cp311-abi3-macosx_11_0_arm64.whl (3.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.9/3.9 MB 1.5 MB/s  0:00:03
+Installing collected packages: ankiforge
+Successfully installed ankiforge-0.3.1
+
+[notice] A new release of pip is available: 26.1.1 -> 26.3
+[notice] To update, run: /private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/ankiforge-public-recipe-4K5qXp/python/.venv/bin/python -m pip install --upgrade pip
+/private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/ankiforge-public-recipe-4K5qXp/python/output/python/v2.apkg
+Verified 3 notes, 3 cards, 2 exact media assets; stable identities; one answer change; compare and publication allowed.
+Verified public python 0.3.1; evidence: /Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/python
+npm warn Unknown user config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+added 5 packages, and audited 6 packages in 2s
+
+found 0 vulnerabilities
+npm warn Unknown user config "home". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+geo-recipe-consumer@ /private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/ankiforge-public-recipe-4K5qXp/node
+`-- ankiforge@0.3.1
+
+/private/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/ankiforge-public-recipe-4K5qXp/node/output/node/v2.apkg
+Verified 3 notes, 3 cards, 2 exact media assets; stable identities; one answer change; compare and publication allowed.
+Verified public node 0.3.1; evidence: /Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/node
+exit=0

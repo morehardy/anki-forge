@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/usage_release_review/release-0.3.2-2026-11-02",
+  "executedAt": "2026-11-03T03:51:33.806852+00:00",
+  "auditedAt": "2026-11-03T05:09:21.021206+00:00",
+  "description": "Fresh executions by this independent reviewer for the release-0.3.2 website artifact (commit 75a8748c). Nothing from the previous cycle is rebound: basic Rust/Python/Node public 0.3.1 consumers, duplicate-key troubleshooting reproduction, public JSON recipe v1/v2 in all three SDKs (website/scripts/verify-public-recipe.mjs), the consumer inspector plus this reviewer's own Python APKG decoder.",
+  "sourceBindings": [
+    {
+      "path": "anki_forge/examples/target_api_basic.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+    },
+    {
+      "path": "bindings/python/examples/quickstart.py",
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+    },
+    {
+      "path": "bindings/node/examples/quickstart.mjs",
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/inspection.rs",
+      "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+      "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+    },
+    {
+      "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+      "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+    },
+    {
+      "path": "anki_forge/examples/json_to_anki.rs",
+      "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+    },
+    {
+      "path": "bindings/python/examples/json_to_anki.py",
+      "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+    },
+    {
+      "path": "bindings/node/examples/json_to_anki.mts",
+      "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v1.json",
+      "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/v2.json",
+      "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/cell.png",
+      "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+    },
+    {
+      "path": "docs/recipes/json-to-anki/tone.wav",
+      "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "sha256": "dac6ae81fa370de32f37efe46480baafa88bc725b90a301e2213e6f0cee34699"
+    },
+    {
+      "path": "docs/zh-cn/troubleshooting.md",
+      "sha256": "99e54b3bfe63fe4014cdfb7f501b9ded114baee3fca48e7f81e887ef777fb9ed"
+    },
+    {
+      "path": "website/scripts/verify-public-recipe.mjs",
+      "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+    }
+  ],
+  "dependencyBindings": [
+    {
+      "path": "docs/ai-quickstart.json",
+      "sha256": "624c774313fc949da3aa744b0742c5aa43f5e81c46ae6aa6491a25b7d5a35980"
+    },
+    {
+      "path": "bindings/python/pyproject.toml",
+      "sha256": "bc418449f4e3f7d32634481e8c03eb77f2428bee0fa7d99ca4a8f907ac96571c"
+    },
+    {
+      "path": "bindings/node/package.json",
+      "sha256": "7116e3fe2f2091f63274816df5cadbd72376ad6ea6f6d3e452be125d59b31d7f"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "90e252f8acdad1786b20bc0dc13ce58b0affc4e1867c6b74f2c8a4587e02efb6"
+    },
+    {
+      "path": "website/package.json",
+      "sha256": "94af91f490858f922fbe2d5e7310ca01d79367d4dbe86f5e3f3a20891dc60616"
+    },
+    {
+      "path": "website/package-lock.json",
+      "sha256": "5ef84e59d80182d2660c9e98f4dc741b8420a24306936b552dae19b9d94ae761"
+    }
+  ],
+  "bindingsChangedSincePreviousCycle": [
+    "bindings/python/pyproject.toml",
+    "bindings/node/package.json",
+    "Cargo.lock"
+  ],
+  "bindingChangeAssessment": "bindings/python/pyproject.toml, bindings/node/package.json and Cargo.lock changed only by the 0.3.1->0.3.2 package version bump of the unreleased workspace packages. The website still teaches, and these executions installed, the published 0.3.1 packages (docs/ai-quickstart.json publicVersion 0.3.1, unchanged). All other bound sources/examples/recipe inputs are byte-identical to the previous cycle.",
+  "registryStateAtAudit": {
+    "crates.io": [
+      "0.3.1",
+      "0.3.0",
+      "0.2.0",
+      "0.1.0"
+    ],
+    "pypi": [
+      "0.2.0",
+      "0.3.0",
+      "0.3.1"
+    ],
+    "npm": {
+      "latest": "0.3.1",
+      "next": "0.3.1"
+    }
+  },
+  "publicJsonCompleted": true,
+  "readConclusions": {
+    "basic": "Fresh documented cargo add / pip install / npm install of public 0.3.1 (crates.io, files.pythonhosted.org wheel, registry.npmjs.org) each yielded a decoded Spanish hola/hello Basic package: 1 note, 1 card, 0 media.",
+    "json": "Fresh public 0.3.1 Rust/Python/Node recipe runs: six new APKGs decoded by the consumer inspector and independently by this reviewer's Python decoder: 3 notes/3 cards/2 media byte-identical to cell.png and tone.wav; repeated invocation refused to overwrite v1.",
+    "update": "All three comparison.json/review.json pairs: RISK.NOTE_CHANGED only (low), identical baseline/candidate counts, publication allowed; GUIDs stable and exactly one note changed between v1 and v2.",
+    "troubleshooting": "Fresh duplicate-key program reproduced NOTE.KEY_DUPLICATE (note key \"source:1\" already exists); a distinct second key recovered a decoded package containing 2 notes/2 cards.",
+    "generatedDownloads": "The website /generated/*.apkg downloads changed only in build-time modification timestamps; showcase.json only in crateVersion 0.3.1->0.3.2, sourceCommit and dependent digests (see generated-download-inspection.json)."
+  },
+  "evidenceFiles": [
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/execution-inputs.json",
+      "sha256": "b5cb9c80c5976c96211992e03b083985f34d4413351b4edcc50857bd03e2face"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/node/basic.log",
+      "sha256": "5edd56783c9b4349cc0e5118e8def563f67818c7bac4d06a35d866965a57374b"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/node/install.log",
+      "sha256": "431757e20ab18a52f21b727d5acf03d9655fb8787526574b3507e2d4a031dcd2"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/node/main.mjs",
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/node/package-lock.json",
+      "sha256": "eeae72f76f5128348b47857a892268152608517087613c91c791b6e0865e01fb"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/node/package.json",
+      "sha256": "a805da3b91fb732216e59a2fee76aeba14c99db130358030c4695715bf3e7733"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/node/spanish.apkg",
+      "sha256": "4cd77ac35a01e1fe2288cfb8c10084e2e0658352e7cb00c91ad0f9e0bdd12352"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/python/basic.log",
+      "sha256": "f8f668aa46e0409016f4a6dc20604f82e7c86d8f9e359b461e990cce69fcb485"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/python/duplicate-key.py",
+      "sha256": "fa5c946e65f320e94409e36691a501980d0860a1143402740642278f04f23849"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/python/install.log",
+      "sha256": "2f2a2bf0835496a12ff6f297286c50888d38876265b134717379bcfbb042c82c"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/python/main.py",
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/python/pip-report.json",
+      "sha256": "288bd16bd60ad6806c558b71d7c9d492e0fe2f28f460d33db8d8d8abc0b2c50a"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/python/recovered.apkg",
+      "sha256": "cf95f266b3efeadeacf90da79d586dc433f9b7a08f09f962d33ba65dd0f7c797"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/python/spanish.apkg",
+      "sha256": "0e1a2918d043de6ea3d85d5df3b07db7743f509e1901b439e68e9f5f962eb6db"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/python/troubleshooting.log",
+      "sha256": "69c009804462786cdc3f7f3238c74eeb88be5ce15117f28a9a69ce7dba243aca"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/python/venv.log",
+      "sha256": "8066fe9a843cb80ecded3a0b4165d4f8be5c56ec50a93d973f7a4f3953086993"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/rust/Cargo.lock",
+      "sha256": "b366f88ee9d724aa6ed6aeecabfcdc903b3c37c10df9f984dc08c1a8d9cf5fe3"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/rust/Cargo.toml",
+      "sha256": "bc0ded2c84ce19323956ca4f555c8138c4a7d2d4e80354ca312deb7c379b0098"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/rust/basic.log",
+      "sha256": "d91836fe4465857f4bc5d882e7589a0d46aae5b4423f92d7560bda34890526be"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/rust/inspection-node.log",
+      "sha256": "69b22ee0323eb9689714ffd3933132847de904ec6bdd271353c0990794ce8343"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/rust/inspection-python.log",
+      "sha256": "6eabb3281cb93f3355fcfb2fa9a11df1b8967b6502706e25c62d4faee03988f6"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/rust/inspection-rust.log",
+      "sha256": "adf2e67324a888d897d29f8e3b6611cde84319ae1bc69c8c3b6414745a559c9b"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/rust/install.log",
+      "sha256": "d064d52897bfacf5ca4e005121948e13b59c70d43195f964d9f9e7446ca9655e"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/rust/spanish.apkg",
+      "sha256": "86a3ea30cdd90d4258bd41173e6691714629f810d4f5b1e4b9399669714a2c13"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/basic/rust/src/main.rs",
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json-run.log",
+      "sha256": "71525c765bc864fd14fde3230aecc46d3eddce29d3aaa7b831f86c5a98f5129b"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/node/comparison.json",
+      "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/node/installation.json",
+      "sha256": "8bc17e83c796b54fa47e4a9f1887e80cdf32f1e00805eff07aaaacc7650aa0eb"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/node/review.json",
+      "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/node/v1.apkg",
+      "sha256": "25fca729ec50e660f5fd627f082b35ee66b3b679595cbd77c232f5b47e946160"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/node/v2.apkg",
+      "sha256": "ca41a2c2ebd8dd627d5dff3b13d79dd58806316a22951c26c84d1e6ac06fc239"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/python/comparison.json",
+      "sha256": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/python/installation.json",
+      "sha256": "dda3bfd1948a7bec366d932e132c8f8014399ef7a0772580cd0d222a156f715f"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/python/review.json",
+      "sha256": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/python/v1.apkg",
+      "sha256": "a60d71cdb82544fbecf96f29ca8a26a10da7b55979b993dff7c30fcaa6f60a46"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/python/v2.apkg",
+      "sha256": "f22acfe31e76ddf2a5c680310ef8ef06aaca03ec14b717a85409fb7b963121f3"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/rust/Cargo.lock",
+      "sha256": "29a55bb3c869dc1c8dc106658c6237d3d516767ce60115894a6e36a36928e674"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/rust/comparison.json",
+      "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/rust/installation.json",
+      "sha256": "b32a1c95beee0cf297a3e04761aef21c279e8343b6261f891d5b73f1c9489bba"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/rust/review.json",
+      "sha256": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/rust/v1.apkg",
+      "sha256": "821351bc5c753587470828db51ce1bccc3c0ccce48f3431550f301396dd74481"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/executions/public-json/rust/v2.apkg",
+      "sha256": "9e5ce89615de92693431930913199ba96dc117c56125753f959c072f693f9f59"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/usage-json-inspection.log",
+      "sha256": "264f8d30dc9cb6f19c6793df4b9e8ac8bf299d66ab56d7b7a9a3325405d07a66"
+    },
+    {
+      "path": "docs/plans/evidence/release-0.3.2-2026-11-02/generated-download-inspection.json",
+      "sha256": "b126576335c1b8e236842aa97cee82891f0eb21ee75b331dc924b4cb27bc4b30"
+    }
+  ]
+}

@@ -1,0 +1,1120 @@
+{
+ "schemaVersion": 1,
+ "reviewerRun": "/root/usage_release_review/release-0.3.2-2026-11-02",
+ "environments": {
+  "root": {
+   "cell-anatomy.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "0": {
+      "old": "6f84b946fb9a557e558449c737e567c3030f3ee9e5244f10e223489315087229",
+      "new": "6f84b946fb9a557e558449c737e567c3030f3ee9e5244f10e223489315087229",
+      "identical": true
+     },
+     "ankiforge-identity.json": {
+      "old": "107ac51f6df4b6483581c3bf91863493677392f0e5324d725a2fc2b99b12ab28",
+      "new": "7b3e3ae2093c9fdc678f388eb972c460a0e91d45bf975d52907af592b58ce48f",
+      "identical": false
+     },
+     "collection.anki21b": {
+      "old": "48da9753e51eee134c151cfe571abf0f5c7a73182d10ed6c4e0e7737e5ba4fb1",
+      "new": "cadb640955d8052ca3cb48b751e9a45232e4d9f9d4941fbed2625dc86103fbfe",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "b59a2a17a56a1f340ce5fbd7a77bb4f967553e849ed1032a3d19d75e21b2625c",
+      "new": "b59a2a17a56a1f340ce5fbd7a77bb4f967553e849ed1032a3d19d75e21b2625c",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616513,
+     1793682268
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "ear-training.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "0": {
+      "old": "bcacf4fc442ae13a30aa6f48c467530cc4109faa335dc631ec8e64477a8ccf21",
+      "new": "bcacf4fc442ae13a30aa6f48c467530cc4109faa335dc631ec8e64477a8ccf21",
+      "identical": true
+     },
+     "1": {
+      "old": "c6f168d79e509514c85a7a4e3bca5a8ee81370d1b623cb77b4ddafacf648484b",
+      "new": "c6f168d79e509514c85a7a4e3bca5a8ee81370d1b623cb77b4ddafacf648484b",
+      "identical": true
+     },
+     "ankiforge-identity.json": {
+      "old": "8048acee865bc69017d1f5c0ca18c785c77b6aa836236b0b28bd2ecabbdfbf73",
+      "new": "13f8104361eeddab5f3ea90d408ea6fdf667efb254b36a048db0eab114d19eac",
+      "identical": false
+     },
+     "collection.anki21b": {
+      "old": "2110f85330ef095ee49fe133563d1bf4807045c15e7ba251054b62549878cc66",
+      "new": "bb45b9540262611d011bd8c23cfdb41d3eafc35a89bc695b81a7156e90559897",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "364633ccb86541b2a9fc79cfd45027e15577d32ae2050b34bcc55a482e820130",
+      "new": "364633ccb86541b2a9fc79cfd45027e15577d32ae2050b34bcc55a482e820130",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616513,
+     1793682268
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "showcase.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "0": {
+      "old": "6f84b946fb9a557e558449c737e567c3030f3ee9e5244f10e223489315087229",
+      "new": "6f84b946fb9a557e558449c737e567c3030f3ee9e5244f10e223489315087229",
+      "identical": true
+     },
+     "1": {
+      "old": "bcacf4fc442ae13a30aa6f48c467530cc4109faa335dc631ec8e64477a8ccf21",
+      "new": "bcacf4fc442ae13a30aa6f48c467530cc4109faa335dc631ec8e64477a8ccf21",
+      "identical": true
+     },
+     "2": {
+      "old": "c6f168d79e509514c85a7a4e3bca5a8ee81370d1b623cb77b4ddafacf648484b",
+      "new": "c6f168d79e509514c85a7a4e3bca5a8ee81370d1b623cb77b4ddafacf648484b",
+      "identical": true
+     },
+     "ankiforge-identity.json": {
+      "old": "44af858ce81f0dd821ab500b73c5ec9c1aaa2592bd379480b104c68b0570c44f",
+      "new": "073a580fa662c84b48af537a42f24faf1b1a35088c25f62ca3f2237d543ee943",
+      "identical": false
+     },
+     "collection.anki21b": {
+      "old": "c8b127f9393101ad6eb4ac4fd0586263dc2d4ad7805fcee663ddcca7cc067048",
+      "new": "a138c0177539552a8b32dc333edca00b89e9f17ad11f7fe47e1c16ed1b98c81b",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "7093b527b50bb00eeccffc00fd3538467fa29eca5b90c6cc478daca9ec2886de",
+      "new": "7093b527b50bb00eeccffc00fd3538467fa29eca5b90c6cc478daca9ec2886de",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 4,
+     "cards": 4,
+     "notetypes": 4,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616513,
+     1793682268
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "sound.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "collection.anki21b": {
+      "old": "9e2ceaa3bd8f1bcebdee2aac44e48cba992e1c398a91a52d68ff1f5a341d7960",
+      "new": "9afc8a6f40870f941f99c7304d28536debec66bdc3d3d683665dc2fb18d4551e",
+      "identical": false
+     },
+     "ankiforge-identity.json": {
+      "old": "6bc5b307487f92ecd946e4c7517eb28d7de52ae88cf1ef179b329cbaca3bb4fe",
+      "new": "fd0200072b430cd1df677abb72deb9a10b52b120d61fc230249c34d2f30df7a9",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "new": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616513,
+     1793682268
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "spanish-v1.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "collection.anki21b": {
+      "old": "6a2ab9e59f5aab3bc6b6d570bd136f4b835c3ed29dc4570206613cda29fdf553",
+      "new": "53c42fb0b6269ef0217aa6d9b3e8c860c70250b09e4a54e4006acff4b74f2703",
+      "identical": false
+     },
+     "ankiforge-identity.json": {
+      "old": "0ec8baa5914f85723d79f9a6d1089293ab5df53ca0bd082ec155eaa5717b093e",
+      "new": "a32b21bb7d9dbae35e129d3b4c3c94b2587c34fbdb6c6e35a73ff5b5a93366c5",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "new": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616513,
+     1793682268
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "spanish-v2.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "collection.anki21b": {
+      "old": "fcedf241ff235d143ab50b62d0653e8e2fae97fa303ac3813adeebd2ad3d8cac",
+      "new": "567d59e7a9c7cf6ae3a99f2f2fea836546499b48c7fed985ac48c8b2d967851f",
+      "identical": false
+     },
+     "ankiforge-identity.json": {
+      "old": "51149bc0daa26c6112014b22d83ea6a1c47590fed8d3ef3c977143f9019c7d23",
+      "new": "482af0b10cfe09b49ea32a2310ae59b3e6c8aefaa5dfca61b9dc55f4b3cdeab7",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "new": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616514,
+      "new": 1793682269
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616514,
+     1793682269
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "spanish.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "collection.anki21b": {
+      "old": "6a2ab9e59f5aab3bc6b6d570bd136f4b835c3ed29dc4570206613cda29fdf553",
+      "new": "53c42fb0b6269ef0217aa6d9b3e8c860c70250b09e4a54e4006acff4b74f2703",
+      "identical": false
+     },
+     "ankiforge-identity.json": {
+      "old": "0ec8baa5914f85723d79f9a6d1089293ab5df53ca0bd082ec155eaa5717b093e",
+      "new": "a32b21bb7d9dbae35e129d3b4c3c94b2587c34fbdb6c6e35a73ff5b5a93366c5",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "new": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616513,
+      "new": 1793682268
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616513,
+     1793682268
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "showcase.json": {
+    "diffLines": [
+     "-  \"bytes\": 245027,",
+     "+  \"bytes\": 245029,",
+     "-  \"sha256\": \"69b753296597f7e37b920ff0dd07ce4dbbfe832478f6fadd2cb26dbfd265bad7\"",
+     "+  \"sha256\": \"95c2003c2e1448158972f3d593981aadd06b2ab17d44995f904c3423a17b68bb\"",
+     "- \"crateVersion\": \"0.3.1\",",
+     "+ \"crateVersion\": \"0.3.2\",",
+     "-   \"bytes\": 57321,",
+     "+   \"bytes\": 57324,",
+     "-   \"sha256\": \"606de559e7d3d0261f2bae0fe7c6ae90a07038eafa141b0d4db6981995152888\",",
+     "+   \"sha256\": \"e4b4badc56fddcc60d4e4b33eb82f697a88de8f54e321d7c23c98a2c636bde13\",",
+     "-   \"bytes\": 57426,",
+     "+   \"bytes\": 57428,",
+     "-   \"sha256\": \"0eadd08f70bc4dc6eaca31d2e5d61d73b23c93ac70aee5f44180dcbfb050928c\",",
+     "+   \"sha256\": \"60e88fbb0229faa5b92731a877bb7f83661ed4a90c183f7da8ff68f8e13075b3\",",
+     "-   \"bytes\": 61995,",
+     "+   \"bytes\": 61997,",
+     "-   \"sha256\": \"5603535c07444e76bf48791833816efff076c37a162612d4833d9cd7e33539a2\",",
+     "+   \"sha256\": \"7c765a59dc8adb496afed385a19d35b76a01ba95ab634dca6cbac712af5e0532\",",
+     "-   \"bytes\": 237196,",
+     "+   \"bytes\": 237193,",
+     "-   \"sha256\": \"4a2ae3ba35f946c735c45283aca3358f252fa595367d91d5b1e34e82c41ca0f3\",",
+     "+   \"sha256\": \"ad712d75a6876bd89dea13bb193791ccf3a6f5ad0783425a4cf397afd87931fe\",",
+     "- \"sourceCommit\": \"8fd9b1f1f2dc22dfd40acddbb1a712d54f3a409b\",",
+     "+ \"sourceCommit\": \"75a8748cc694f409c0060ccd17fc1d3270a8e077\",",
+     "-    \"bytes\": 57321,",
+     "+    \"bytes\": 57324,",
+     "-    \"sha256\": \"606de559e7d3d0261f2bae0fe7c6ae90a07038eafa141b0d4db6981995152888\"",
+     "+    \"sha256\": \"e4b4badc56fddcc60d4e4b33eb82f697a88de8f54e321d7c23c98a2c636bde13\"",
+     "-    \"bytes\": 57326,",
+     "+    \"bytes\": 57327,",
+     "-    \"sha256\": \"158cc93e1a5498f93da595682f961e2887ccdff8bc7a465949e0472f66382097\"",
+     "+    \"sha256\": \"81251557079194028fddcd35dced2bda57bbee01c299ab6cb326768daf13641a\""
+    ],
+    "oldSha256": "720d9649868844d90634c1ed8cde7f79e860a29091114c02c5fe6dc9bca88344",
+    "newSha256": "193c924c1d2e6b00341085b518885d68b3323774282cd8787c84a0c4ac8003ee"
+   }
+  },
+  "prefix": {
+   "cell-anatomy.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "0": {
+      "old": "6f84b946fb9a557e558449c737e567c3030f3ee9e5244f10e223489315087229",
+      "new": "6f84b946fb9a557e558449c737e567c3030f3ee9e5244f10e223489315087229",
+      "identical": true
+     },
+     "ankiforge-identity.json": {
+      "old": "3e8cecf44e3ee4cf1493cab05786083a522317bdeb43cced6bb70260554a439e",
+      "new": "019e9354ed7d2f990675ca71a60a8a2aeaaa8c6e96dbd9ee7bb29d98d3f92ea0",
+      "identical": false
+     },
+     "collection.anki21b": {
+      "old": "233cfee95641d1f9650ebbea910c6978b2885f30482052f58e13a4f7ffe7d8a4",
+      "new": "029773db1a763463f9196e52885c0b0a34b9aec1fd74d00305108acaa5151d75",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "b59a2a17a56a1f340ce5fbd7a77bb4f967553e849ed1032a3d19d75e21b2625c",
+      "new": "b59a2a17a56a1f340ce5fbd7a77bb4f967553e849ed1032a3d19d75e21b2625c",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616317,
+     1793682402
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "ear-training.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "0": {
+      "old": "bcacf4fc442ae13a30aa6f48c467530cc4109faa335dc631ec8e64477a8ccf21",
+      "new": "bcacf4fc442ae13a30aa6f48c467530cc4109faa335dc631ec8e64477a8ccf21",
+      "identical": true
+     },
+     "1": {
+      "old": "c6f168d79e509514c85a7a4e3bca5a8ee81370d1b623cb77b4ddafacf648484b",
+      "new": "c6f168d79e509514c85a7a4e3bca5a8ee81370d1b623cb77b4ddafacf648484b",
+      "identical": true
+     },
+     "ankiforge-identity.json": {
+      "old": "f7ddd472491dc024404b15a56644d97c1dd423faf8fa65855f6c6ef6f813842a",
+      "new": "cf9774aa88ccf5f2887319a458cd1580751eaf9eae5141089b3da8a5e11e42f1",
+      "identical": false
+     },
+     "collection.anki21b": {
+      "old": "bf7cccee5a471138dc468dfb4d1a97d3be4df0a0d32706f2fc08488456e60844",
+      "new": "6bf384dbe72afb6c399763ad5bd3a1d637283d6cf706e4cb0e1875d4c18881e1",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "364633ccb86541b2a9fc79cfd45027e15577d32ae2050b34bcc55a482e820130",
+      "new": "364633ccb86541b2a9fc79cfd45027e15577d32ae2050b34bcc55a482e820130",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616317,
+     1793682402
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "showcase.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "0": {
+      "old": "6f84b946fb9a557e558449c737e567c3030f3ee9e5244f10e223489315087229",
+      "new": "6f84b946fb9a557e558449c737e567c3030f3ee9e5244f10e223489315087229",
+      "identical": true
+     },
+     "1": {
+      "old": "bcacf4fc442ae13a30aa6f48c467530cc4109faa335dc631ec8e64477a8ccf21",
+      "new": "bcacf4fc442ae13a30aa6f48c467530cc4109faa335dc631ec8e64477a8ccf21",
+      "identical": true
+     },
+     "2": {
+      "old": "c6f168d79e509514c85a7a4e3bca5a8ee81370d1b623cb77b4ddafacf648484b",
+      "new": "c6f168d79e509514c85a7a4e3bca5a8ee81370d1b623cb77b4ddafacf648484b",
+      "identical": true
+     },
+     "ankiforge-identity.json": {
+      "old": "e5c183ed88a5b79b5a1cdf068ace503682811362cf5a94c01bfd0fabed4b4112",
+      "new": "5ad4db5091904b68091bc5678b8651a9360fe5c701c0fcc842339d78ea045b31",
+      "identical": false
+     },
+     "collection.anki21b": {
+      "old": "7b4bda75ebc836119bcde9f2574d9c29cf7f1f6eabe9d99d596c15fda3a28be2",
+      "new": "5773cf657d57fdef6c5ac6eacfaa82d5d46a8039688c0ad8be4ee4607bf94cc3",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "7093b527b50bb00eeccffc00fd3538467fa29eca5b90c6cc478daca9ec2886de",
+      "new": "7093b527b50bb00eeccffc00fd3538467fa29eca5b90c6cc478daca9ec2886de",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 4,
+     "cards": 4,
+     "notetypes": 4,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616317,
+     1793682402
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "sound.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "collection.anki21b": {
+      "old": "21bb580a8c9e906960be0b5f317bb6311bfa51b51336df02e4ecc8df0cb2ec76",
+      "new": "615913757514a2bd84fb50c2d095ab9f0e49fbb3ba48b10cce37f1ac1319a7d1",
+      "identical": false
+     },
+     "ankiforge-identity.json": {
+      "old": "9bd0a3e171ae5d9b9185c976f28c2c33fa24a1128626a8fb3279f61324d2e71f",
+      "new": "12e13eccdbdd0f64a1c9405f4a5e399a35d0c0f7f083b9f7d5287bcf595a7a05",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "new": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616317,
+     1793682402
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "spanish-v1.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "collection.anki21b": {
+      "old": "2e88e017e4bc61f4fbe9a4621a407e67b211be6149a11253ff7758966c024fe4",
+      "new": "51390632b653c39f107dbf66cda97be02e0a6404982e2ef76c821f1f4d2720a8",
+      "identical": false
+     },
+     "ankiforge-identity.json": {
+      "old": "18f2df0b3863bc0ba6f6a307535a092ea1863ddb49cb1386e5407fb5f9bbcca6",
+      "new": "4188d21ea21f8dfdf51b1765aaf8d555dab924d7ca91976a855a03840eb360a1",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "new": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616317,
+     1793682402
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "spanish-v2.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "collection.anki21b": {
+      "old": "ea7a019a4f374c05b78202df283ea5278b727126853cfae4a360d56e915a649b",
+      "new": "d17faee2acca85e3d75831c55999666e7844e3741c847567f1f61d73d99fecac",
+      "identical": false
+     },
+     "ankiforge-identity.json": {
+      "old": "6530e507ea2120fa3a540bf748cfff41f213995709b49bbe86741b6e936fdd36",
+      "new": "c204745f8ffe279b98c1dae2cdfb1584274fbd80f0c8bff3f1f66f4d2714eb4a",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "new": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616318,
+      "new": 1793682403
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616318,
+     1793682403
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "spanish.apkg": {
+    "entries": {
+     "meta": {
+      "old": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "new": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+      "identical": true
+     },
+     "collection.anki21b": {
+      "old": "2e88e017e4bc61f4fbe9a4621a407e67b211be6149a11253ff7758966c024fe4",
+      "new": "51390632b653c39f107dbf66cda97be02e0a6404982e2ef76c821f1f4d2720a8",
+      "identical": false
+     },
+     "ankiforge-identity.json": {
+      "old": "18f2df0b3863bc0ba6f6a307535a092ea1863ddb49cb1386e5407fb5f9bbcca6",
+      "new": "4188d21ea21f8dfdf51b1765aaf8d555dab924d7ca91976a855a03840eb360a1",
+      "identical": false
+     },
+     "collection.anki2": {
+      "old": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "new": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+      "identical": true
+     },
+     "media": {
+      "old": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "new": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd",
+      "identical": true
+     }
+    },
+    "counts": {
+     "notes": 1,
+     "cards": 1,
+     "notetypes": 1,
+     "decks": 2
+    },
+    "identityEqualIgnoringTimesAndHashes": true,
+    "sqliteCellDifferences": [
+     {
+      "table": "notes",
+      "column": "mod",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "notetypes",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     },
+     {
+      "table": "templates",
+      "column": "mtime_secs",
+      "old": 1793616317,
+      "new": 1793682402
+     }
+    ],
+    "nonTimestampSqliteDifferences": [],
+    "identityMtimeOldNew": [
+     1793616317,
+     1793682402
+    ],
+    "onlyBuildTimestampChanged": true
+   },
+   "showcase.json": {
+    "diffLines": [
+     "-  \"bytes\": 245025,",
+     "+  \"bytes\": 245028,",
+     "-  \"sha256\": \"e93b5d20c9fb9e80c0eda27379e400f3103effe868c89ba7ded872fbf782ccdf\"",
+     "+  \"sha256\": \"c3332c5214fbdc1bf5e8297b487fa18f88d6b726a1aba613a986fc4f3c580f91\"",
+     "- \"crateVersion\": \"0.3.1\",",
+     "+ \"crateVersion\": \"0.3.2\",",
+     "-   \"bytes\": 57321,",
+     "+   \"bytes\": 57322,",
+     "-   \"sha256\": \"c286852cbc9fa7c0838e290284dd0b26f533c50442f75d220c8e6e7b9288b730\",",
+     "+   \"sha256\": \"3ffd45cc6fa1074b5d3bba3b5648c20e7d5372f36ad24bf4d168cd6ccdb6b53d\",",
+     "-   \"bytes\": 57427,",
+     "+   \"bytes\": 57428,",
+     "-   \"sha256\": \"de4b53114df001dd169988331ec2e6f2cc237d8f96285323891801919cc2055a\",",
+     "+   \"sha256\": \"16314cb9e57ad8b19b9182709aed58ba6612114a2cf7fa1517cde55c2113b387\",",
+     "-   \"bytes\": 61994,",
+     "+   \"bytes\": 61997,",
+     "-   \"sha256\": \"b7ef946d23260389972832125358d467472afecc77eaef7e649371117e730a57\",",
+     "+   \"sha256\": \"4360fb2fcf4f7f70ee49059d55951f0f2ac6760c0fa74843e376d289ef4a79c9\",",
+     "-   \"sha256\": \"4ed418fc9714774c34951881e0c77876d6c8f417789254cb31994f7c84ded3d8\",",
+     "+   \"sha256\": \"8714a6c933d700f762d6ac79187407d429849508a2d1ceb6ad6197110c8c4a79\",",
+     "- \"sourceCommit\": \"8fd9b1f1f2dc22dfd40acddbb1a712d54f3a409b\",",
+     "+ \"sourceCommit\": \"75a8748cc694f409c0060ccd17fc1d3270a8e077\",",
+     "-    \"bytes\": 57321,",
+     "+    \"bytes\": 57322,",
+     "-    \"sha256\": \"c286852cbc9fa7c0838e290284dd0b26f533c50442f75d220c8e6e7b9288b730\"",
+     "+    \"sha256\": \"3ffd45cc6fa1074b5d3bba3b5648c20e7d5372f36ad24bf4d168cd6ccdb6b53d\"",
+     "-    \"sha256\": \"2417c999e691a1089bfef9e25a59a046d1925e494ae6100aabf9bf5f85101e66\"",
+     "+    \"sha256\": \"eeeef5a0b7e47fa986c6ce9a8331ff0f1299329c671f4613ac0e485559f6ae9d\""
+    ],
+    "oldSha256": "b0922898d4eada196357fd527da7d90d20117734d8f12c10d1c098117a81c0ed",
+    "newSha256": "1b782091ecf1baeaf455323d6e2856eb38272b37b353b24617e648eeed8415f9"
+   }
+  }
+ },
+ "conclusion": "All changed APKGs differ only in build-time modification timestamps (SQLite mod/mtime columns and identity mtime_secs, with the dependent collection/identity BLAKE3 digests); notes, cards, fields, templates, GUIDs, IDs, content hashes and media bytes are identical. showcase.json changes only crateVersion 0.3.1->0.3.2, sourceCommit and the dependent download sizes/digests.",
+ "onlyMetadataChanged": true
+}

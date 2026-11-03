@@ -4,6 +4,23 @@ All notable changes to the Rust Distribution are documented here. The crate
 follows Semantic Versioning; before 1.0, breaking public API changes require a
 new minor release.
 
+## [0.3.2] - 2026-11-02
+
+### Security and dependencies
+
+- Upgrade `zip` to 9.1.2 and `zstd` to 0.14.3 to take patched releases for
+  published ZIP and zstd security advisories. Deflate output keeps the flate2
+  Rust backend with Zopfli support.
+- Fix media preparation so bytes from a rejected media source cannot enter the
+  next payload processed on the same worker.
+
+### Documentation and distribution
+
+- Link the CSV to Anki, JSON to Anki and AI-assisted flashcard guides from the
+  crates.io, PyPI and npm package READMEs, and publish matching Rust, Node and
+  Python patch packages. Public authoring APIs and embedded contract bundle
+  2.1.0 are unchanged from 0.3.1.
+
 ## [0.3.1] - 2026-10-13
 
 ### Documentation and distribution

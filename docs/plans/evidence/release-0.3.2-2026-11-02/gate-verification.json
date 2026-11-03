@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "configPath": "website/post-build-reviews.config.json",
+  "verifiedAt": "2026-11-03T05:10:18.027Z",
+  "results": {
+    "root": {
+      "schemaVersion": 1,
+      "status": "passed",
+      "environment": "root",
+      "inputSha256": "57aae622327a0eff480aa03505572d7dd6906ac2fbbaf7a82ed189b9b06d1eec",
+      "configuration": {
+        "site": "https://ankiforge.dev",
+        "base": "/",
+        "customDomain": "ankiforge.dev"
+      },
+      "releaseLocales": [
+        "en",
+        "zh-CN",
+        "es",
+        "pt-BR",
+        "ja",
+        "de"
+      ],
+      "currentManifestSha256": "50dd79ccb195106dccd90bcaf39c8d0435b07499f07d62728b3198cad19095d1",
+      "configSha256": "c53f303e6fb0c1253f6d0b65315c9b7402d8cd8728d3d606ca9f9d4739233098",
+      "reports": [
+        {
+          "kind": "usage-tasks",
+          "path": "docs/plans/evidence/release-0.3.2-2026-11-02/usage-tasks-root.json",
+          "sha256": "7a85efd8eddffbd6fd5795acaf59c4f343cb6d43a99a6593c5012444ea8284fe",
+          "bytes": 448211,
+          "reviewerRun": "/root/usage_release_review/release-0.3.2-root-2026-11-02",
+          "originManifestSha256": "50dd79ccb195106dccd90bcaf39c8d0435b07499f07d62728b3198cad19095d1",
+          "originCommit": "75a8748cc694f409c0060ccd17fc1d3270a8e077",
+          "currentManifestSha256": "50dd79ccb195106dccd90bcaf39c8d0435b07499f07d62728b3198cad19095d1",
+          "reused": false,
+          "resourceScopeSha256": "2660312f51f914d2280860b2ba503abd2546a34e5194953805692a812704ab3e"
+        },
+        {
+          "kind": "machine-read",
+          "path": "docs/plans/evidence/release-0.3.2-2026-11-02/machine-read-root.json",
+          "sha256": "2e0a559871757b3a58e704101b76c5b3035217ef3641d56de0a070d03567e8bc",
+          "bytes": 117370,
+          "reviewerRun": "/root/standards_review/release-0.3.2-machine-root-2026-11-02",
+          "originManifestSha256": "50dd79ccb195106dccd90bcaf39c8d0435b07499f07d62728b3198cad19095d1",
+          "originCommit": "75a8748cc694f409c0060ccd17fc1d3270a8e077",
+          "currentManifestSha256": "50dd79ccb195106dccd90bcaf39c8d0435b07499f07d62728b3198cad19095d1",
+          "reused": false,
+          "resourceScopeSha256": "93bbf76659884988b68c54f2b523896fbdf532b51980c7709d9a98a24f5100b5"
+        }
+      ]
+    },
+    "prefix": {
+      "schemaVersion": 1,
+      "status": "passed",
+      "environment": "prefix",
+      "inputSha256": "57aae622327a0eff480aa03505572d7dd6906ac2fbbaf7a82ed189b9b06d1eec",
+      "configuration": {
+        "site": "https://morehardy.github.io",
+        "base": "/anki-forge",
+        "customDomain": ""
+      },
+      "releaseLocales": [
+        "en",
+        "zh-CN",
+        "es",
+        "pt-BR",
+        "ja",
+        "de"
+      ],
+      "currentManifestSha256": "20c855cec2ed35fe1363a1793937b48a8bd020cd5eeca7636a3ce642e3613834",
+      "configSha256": "c53f303e6fb0c1253f6d0b65315c9b7402d8cd8728d3d606ca9f9d4739233098",
+      "reports": [
+        {
+          "kind": "usage-tasks",
+          "path": "docs/plans/evidence/release-0.3.2-2026-11-02/usage-tasks-prefix.json",
+          "sha256": "1c16a83b2f49a2521d569c9b19acdcd46d3ce363aa8dbf0488dd883aee70c00a",
+          "bytes": 454034,
+          "reviewerRun": "/root/usage_release_review/release-0.3.2-prefix-2026-11-02",
+          "originManifestSha256": "20c855cec2ed35fe1363a1793937b48a8bd020cd5eeca7636a3ce642e3613834",
+          "originCommit": "75a8748cc694f409c0060ccd17fc1d3270a8e077",
+          "currentManifestSha256": "20c855cec2ed35fe1363a1793937b48a8bd020cd5eeca7636a3ce642e3613834",
+          "reused": false,
+          "resourceScopeSha256": "51d032696cd276cbfe79f58bdae8ab3bca66ca22c17b030b65f25f328d044be2"
+        },
+        {
+          "kind": "machine-read",
+          "path": "docs/plans/evidence/release-0.3.2-2026-11-02/machine-read-prefix.json",
+          "sha256": "9302d0193e86bf3e6d853d2d58cc47c2f64399511cd5f5c57d69431116c9bcf2",
+          "bytes": 121663,
+          "reviewerRun": "/root/standards_review/release-0.3.2-machine-prefix-2026-11-02",
+          "originManifestSha256": "20c855cec2ed35fe1363a1793937b48a8bd020cd5eeca7636a3ce642e3613834",
+          "originCommit": "75a8748cc694f409c0060ccd17fc1d3270a8e077",
+          "currentManifestSha256": "20c855cec2ed35fe1363a1793937b48a8bd020cd5eeca7636a3ce642e3613834",
+          "reused": false,
+          "resourceScopeSha256": "25098a8d93b2abcc46260a951da5de71fe4f9beba21192e2279aa9a3ef273540"
+        }
+      ]
+    }
+  }
+}
