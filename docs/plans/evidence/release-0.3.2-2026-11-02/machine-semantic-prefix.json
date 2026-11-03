@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/standards_review/release-0.3.2-machine-prefix-2026-11-02",
+  "status": "passed",
+  "openIssues": [],
+  "method": "FRESH in this review (2026-11-02, commit 75a8748c): the frozen prefix artifact was served over loopback HTTP; for every locale each task started from that locale llms.txt and followed the Markdown URLs listed in it (54 HTTP reads, each hashed against the manifest); all 192 index.md/llms.txt resources were byte-compared with the previously reviewed bing-seo artifact (all identical); this reviewer read the llms entries and representative localized Markdown (e.g. ja llms, pt-BR compatibility, ja node-api, zh-CN python-quickstart, de updates, es llms) and re-checked every retained answer's literal commands/identifiers against the freshly fetched bodies (61/61 present). RETAINED: the detailed localized answer texts (originally authored in the website-pr66 review and retained in the bing-seo review), justified only by the exact byte identity of every document read; Sources lines were rewritten to the actual fresh URLs. This is not claimed as newly authored answers or a new complete reread of every long reference. REBIND: the browser tour/HTTP reads, artifact comparison and download inspection were re-run against the rebuilt artifact (inputSha256 57aae622...) whose only input change is website/post-build-reviews.config.json pointing at these reports (rebuild-input-verification.json; all HTML/Markdown/llms bytes identical to the first release-0.3.2 build, only /generated timestamps differ). The SDK executions of this review were kept because every source/dependency binding still matches the current files.",
+  "changedResources": [],
+  "personalReading": "Read the fetched llms entries (public version line 0.3.1 and the three install commands, consistent with the registries where 0.3.1 is still the latest published version) and representative localized Markdown for all four tasks; no statement contradicts the fresh SDK executions of this review (public 0.3.1 install paths, 3/3/2 JSON recipe counts, RISK.NOTE_CHANGED low-risk update, identity sidecar ankiforge-identity.json).",
+  "factCheck": {
+    "answers": 24,
+    "literalSpans": 61,
+    "missing": 0,
+    "perTask": [
+      {
+        "locale": "en",
+        "id": "python-install",
+        "readRoutes": [
+          "/anki-forge/llms.txt",
+          "/anki-forge/docs/python-quickstart/index.md",
+          "/anki-forge/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 6,
+        "missing": 0
+      },
+      {
+        "locale": "en",
+        "id": "node-api",
+        "readRoutes": [
+          "/anki-forge/llms.txt",
+          "/anki-forge/docs/node-api/index.md",
+          "/anki-forge/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "en",
+        "id": "json-update",
+        "readRoutes": [
+          "/anki-forge/llms.txt",
+          "/anki-forge/docs/json-to-anki/index.md",
+          "/anki-forge/docs/updates/index.md",
+          "/anki-forge/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "en",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/anki-forge/llms.txt",
+          "/anki-forge/docs/compatibility/index.md",
+          "/anki-forge/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      },
+      {
+        "locale": "zh-CN",
+        "id": "python-install",
+        "readRoutes": [
+          "/anki-forge/zh-cn/llms.txt",
+          "/anki-forge/zh-cn/docs/python-quickstart/index.md",
+          "/anki-forge/zh-cn/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 5,
+        "missing": 0
+      },
+      {
+        "locale": "zh-CN",
+        "id": "node-api",
+        "readRoutes": [
+          "/anki-forge/zh-cn/llms.txt",
+          "/anki-forge/zh-cn/docs/node-api/index.md",
+          "/anki-forge/zh-cn/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "zh-CN",
+        "id": "json-update",
+        "readRoutes": [
+          "/anki-forge/zh-cn/llms.txt",
+          "/anki-forge/zh-cn/docs/json-to-anki/index.md",
+          "/anki-forge/zh-cn/docs/updates/index.md",
+          "/anki-forge/zh-cn/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "zh-CN",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/anki-forge/zh-cn/llms.txt",
+          "/anki-forge/zh-cn/docs/compatibility/index.md",
+          "/anki-forge/zh-cn/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      },
+      {
+        "locale": "es",
+        "id": "python-install",
+        "readRoutes": [
+          "/anki-forge/es/llms.txt",
+          "/anki-forge/es/docs/python-quickstart/index.md",
+          "/anki-forge/es/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 5,
+        "missing": 0
+      },
+      {
+        "locale": "es",
+        "id": "node-api",
+        "readRoutes": [
+          "/anki-forge/es/llms.txt",
+          "/anki-forge/es/docs/node-api/index.md",
+          "/anki-forge/es/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "es",
+        "id": "json-update",
+        "readRoutes": [
+          "/anki-forge/es/llms.txt",
+          "/anki-forge/es/docs/json-to-anki/index.md",
+          "/anki-forge/es/docs/updates/index.md",
+          "/anki-forge/es/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "es",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/anki-forge/es/llms.txt",
+          "/anki-forge/es/docs/compatibility/index.md",
+          "/anki-forge/es/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      },
+      {
+        "locale": "pt-BR",
+        "id": "python-install",
+        "readRoutes": [
+          "/anki-forge/pt-br/llms.txt",
+          "/anki-forge/pt-br/docs/python-quickstart/index.md",
+          "/anki-forge/pt-br/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 5,
+        "missing": 0
+      },
+      {
+        "locale": "pt-BR",
+        "id": "node-api",
+        "readRoutes": [
+          "/anki-forge/pt-br/llms.txt",
+          "/anki-forge/pt-br/docs/node-api/index.md",
+          "/anki-forge/pt-br/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "pt-BR",
+        "id": "json-update",
+        "readRoutes": [
+          "/anki-forge/pt-br/llms.txt",
+          "/anki-forge/pt-br/docs/json-to-anki/index.md",
+          "/anki-forge/pt-br/docs/updates/index.md",
+          "/anki-forge/pt-br/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "pt-BR",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/anki-forge/pt-br/llms.txt",
+          "/anki-forge/pt-br/docs/compatibility/index.md",
+          "/anki-forge/pt-br/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      },
+      {
+        "locale": "ja",
+        "id": "python-install",
+        "readRoutes": [
+          "/anki-forge/ja/llms.txt",
+          "/anki-forge/ja/docs/python-quickstart/index.md",
+          "/anki-forge/ja/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 5,
+        "missing": 0
+      },
+      {
+        "locale": "ja",
+        "id": "node-api",
+        "readRoutes": [
+          "/anki-forge/ja/llms.txt",
+          "/anki-forge/ja/docs/node-api/index.md",
+          "/anki-forge/ja/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "ja",
+        "id": "json-update",
+        "readRoutes": [
+          "/anki-forge/ja/llms.txt",
+          "/anki-forge/ja/docs/json-to-anki/index.md",
+          "/anki-forge/ja/docs/updates/index.md",
+          "/anki-forge/ja/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "ja",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/anki-forge/ja/llms.txt",
+          "/anki-forge/ja/docs/compatibility/index.md",
+          "/anki-forge/ja/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      },
+      {
+        "locale": "de",
+        "id": "python-install",
+        "readRoutes": [
+          "/anki-forge/de/llms.txt",
+          "/anki-forge/de/docs/python-quickstart/index.md",
+          "/anki-forge/de/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 5,
+        "missing": 0
+      },
+      {
+        "locale": "de",
+        "id": "node-api",
+        "readRoutes": [
+          "/anki-forge/de/llms.txt",
+          "/anki-forge/de/docs/node-api/index.md",
+          "/anki-forge/de/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "de",
+        "id": "json-update",
+        "readRoutes": [
+          "/anki-forge/de/llms.txt",
+          "/anki-forge/de/docs/json-to-anki/index.md",
+          "/anki-forge/de/docs/updates/index.md",
+          "/anki-forge/de/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "de",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/anki-forge/de/llms.txt",
+          "/anki-forge/de/docs/compatibility/index.md",
+          "/anki-forge/de/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      }
+    ]
+  },
+  "limits": [
+    "Local artifact reading is not production MIME or live publication verification.",
+    "This machine-read review itself does not claim SDK execution or Anki GUI import/playback testing (SDK executions are recorded in the usage-tasks review)."
+  ]
+}

@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/standards_review/release-0.3.2-machine-root-2026-11-02",
+  "status": "passed",
+  "openIssues": [],
+  "method": "FRESH in this review (2026-11-02, commit 75a8748c): the frozen root artifact was served over loopback HTTP; for every locale each task started from that locale llms.txt and followed the Markdown URLs listed in it (54 HTTP reads, each hashed against the manifest); all 192 index.md/llms.txt resources were byte-compared with the previously reviewed bing-seo artifact (all identical); this reviewer read the llms entries and representative localized Markdown (e.g. ja llms, pt-BR compatibility, ja node-api, zh-CN python-quickstart, de updates, es llms) and re-checked every retained answer's literal commands/identifiers against the freshly fetched bodies (61/61 present). RETAINED: the detailed localized answer texts (originally authored in the website-pr66 review and retained in the bing-seo review), justified only by the exact byte identity of every document read; Sources lines were rewritten to the actual fresh URLs. This is not claimed as newly authored answers or a new complete reread of every long reference. REBIND: the browser tour/HTTP reads, artifact comparison and download inspection were re-run against the rebuilt artifact (inputSha256 57aae622...) whose only input change is website/post-build-reviews.config.json pointing at these reports (rebuild-input-verification.json; all HTML/Markdown/llms bytes identical to the first release-0.3.2 build, only /generated timestamps differ). The SDK executions of this review were kept because every source/dependency binding still matches the current files.",
+  "changedResources": [],
+  "personalReading": "Read the fetched llms entries (public version line 0.3.1 and the three install commands, consistent with the registries where 0.3.1 is still the latest published version) and representative localized Markdown for all four tasks; no statement contradicts the fresh SDK executions of this review (public 0.3.1 install paths, 3/3/2 JSON recipe counts, RISK.NOTE_CHANGED low-risk update, identity sidecar ankiforge-identity.json).",
+  "factCheck": {
+    "answers": 24,
+    "literalSpans": 61,
+    "missing": 0,
+    "perTask": [
+      {
+        "locale": "en",
+        "id": "python-install",
+        "readRoutes": [
+          "/llms.txt",
+          "/docs/python-quickstart/index.md",
+          "/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 6,
+        "missing": 0
+      },
+      {
+        "locale": "en",
+        "id": "node-api",
+        "readRoutes": [
+          "/llms.txt",
+          "/docs/node-api/index.md",
+          "/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "en",
+        "id": "json-update",
+        "readRoutes": [
+          "/llms.txt",
+          "/docs/json-to-anki/index.md",
+          "/docs/updates/index.md",
+          "/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "en",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/llms.txt",
+          "/docs/compatibility/index.md",
+          "/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      },
+      {
+        "locale": "zh-CN",
+        "id": "python-install",
+        "readRoutes": [
+          "/zh-cn/llms.txt",
+          "/zh-cn/docs/python-quickstart/index.md",
+          "/zh-cn/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 5,
+        "missing": 0
+      },
+      {
+        "locale": "zh-CN",
+        "id": "node-api",
+        "readRoutes": [
+          "/zh-cn/llms.txt",
+          "/zh-cn/docs/node-api/index.md",
+          "/zh-cn/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "zh-CN",
+        "id": "json-update",
+        "readRoutes": [
+          "/zh-cn/llms.txt",
+          "/zh-cn/docs/json-to-anki/index.md",
+          "/zh-cn/docs/updates/index.md",
+          "/zh-cn/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "zh-CN",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/zh-cn/llms.txt",
+          "/zh-cn/docs/compatibility/index.md",
+          "/zh-cn/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      },
+      {
+        "locale": "es",
+        "id": "python-install",
+        "readRoutes": [
+          "/es/llms.txt",
+          "/es/docs/python-quickstart/index.md",
+          "/es/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 5,
+        "missing": 0
+      },
+      {
+        "locale": "es",
+        "id": "node-api",
+        "readRoutes": [
+          "/es/llms.txt",
+          "/es/docs/node-api/index.md",
+          "/es/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "es",
+        "id": "json-update",
+        "readRoutes": [
+          "/es/llms.txt",
+          "/es/docs/json-to-anki/index.md",
+          "/es/docs/updates/index.md",
+          "/es/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "es",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/es/llms.txt",
+          "/es/docs/compatibility/index.md",
+          "/es/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      },
+      {
+        "locale": "pt-BR",
+        "id": "python-install",
+        "readRoutes": [
+          "/pt-br/llms.txt",
+          "/pt-br/docs/python-quickstart/index.md",
+          "/pt-br/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 5,
+        "missing": 0
+      },
+      {
+        "locale": "pt-BR",
+        "id": "node-api",
+        "readRoutes": [
+          "/pt-br/llms.txt",
+          "/pt-br/docs/node-api/index.md",
+          "/pt-br/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "pt-BR",
+        "id": "json-update",
+        "readRoutes": [
+          "/pt-br/llms.txt",
+          "/pt-br/docs/json-to-anki/index.md",
+          "/pt-br/docs/updates/index.md",
+          "/pt-br/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "pt-BR",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/pt-br/llms.txt",
+          "/pt-br/docs/compatibility/index.md",
+          "/pt-br/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      },
+      {
+        "locale": "ja",
+        "id": "python-install",
+        "readRoutes": [
+          "/ja/llms.txt",
+          "/ja/docs/python-quickstart/index.md",
+          "/ja/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 5,
+        "missing": 0
+      },
+      {
+        "locale": "ja",
+        "id": "node-api",
+        "readRoutes": [
+          "/ja/llms.txt",
+          "/ja/docs/node-api/index.md",
+          "/ja/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "ja",
+        "id": "json-update",
+        "readRoutes": [
+          "/ja/llms.txt",
+          "/ja/docs/json-to-anki/index.md",
+          "/ja/docs/updates/index.md",
+          "/ja/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "ja",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/ja/llms.txt",
+          "/ja/docs/compatibility/index.md",
+          "/ja/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      },
+      {
+        "locale": "de",
+        "id": "python-install",
+        "readRoutes": [
+          "/de/llms.txt",
+          "/de/docs/python-quickstart/index.md",
+          "/de/docs/compatibility/index.md"
+        ],
+        "checkedLiteralSpans": 5,
+        "missing": 0
+      },
+      {
+        "locale": "de",
+        "id": "node-api",
+        "readRoutes": [
+          "/de/llms.txt",
+          "/de/docs/node-api/index.md",
+          "/de/docs/node-quickstart/index.md"
+        ],
+        "checkedLiteralSpans": 2,
+        "missing": 0
+      },
+      {
+        "locale": "de",
+        "id": "json-update",
+        "readRoutes": [
+          "/de/llms.txt",
+          "/de/docs/json-to-anki/index.md",
+          "/de/docs/updates/index.md",
+          "/de/docs/media/index.md"
+        ],
+        "checkedLiteralSpans": 3,
+        "missing": 0
+      },
+      {
+        "locale": "de",
+        "id": "compatibility-constraints",
+        "readRoutes": [
+          "/de/llms.txt",
+          "/de/docs/compatibility/index.md",
+          "/de/docs/build-guarantees/index.md"
+        ],
+        "checkedLiteralSpans": 0,
+        "missing": 0
+      }
+    ]
+  },
+  "limits": [
+    "Local artifact reading is not production MIME or live publication verification.",
+    "This machine-read review itself does not claim SDK execution or Anki GUI import/playback testing (SDK executions are recorded in the usage-tasks review)."
+  ]
+}
